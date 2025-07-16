@@ -14,12 +14,12 @@ export default function CarDetail({ car }) {
             <Image src={car.images[0]?.url||'/cover.jpg'} alt={car.title} width={600} height={400} className="object-cover rounded" />
             <div className="grid grid-cols-5 gap-1 mt-2">
               {car.images.slice(0,10).map((img,i)=>(
-                <Image key={i} src={img.url} alt={car.title} width={120} height={80} className="object-cover" />
+                <Image key={i} src={img.url || '/cover.jpg'} alt={car.title} width={120} height={80} className="object-cover" />
               ))}
             </div>
           </div>
           <div className="flex-1">
-            <p className="text-orange-600 text-2xl mb-2">฿{Number(car.variants.edges[0].node.price).toLocaleString()}</p>
+            <p className="text-orange-600 text-2xl mb-2">฿{Number(car.variants.edges[0].node.price.amount).toLocaleString()}</p>
             <p className="whitespace-pre-wrap">{car.description}</p>
             <div className="mt-4 space-x-2">
               <a href="https://lin.ee/cJuakxZ" className="bg-green-600 text-white px-4 py-2 rounded inline-block">สอบถามผ่าน LINE</a>
