@@ -27,5 +27,12 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const markdown = fs.readFileSync(path.join(process.cwd(), 'content/blog', params.slug+'.md'), 'utf-8');
   const { data:frontmatter, content } = matter(markdown);
-  return { props: { frontmatter: { ...frontmatter, slug: params.slug }, content } };
+  // Ensure date is a string for Next.js serialization
+  let safeFrontmatter = { ...frontmatter, slug: params.slug };
+  if (safeFrontmatter.date instanceof Date) {
+    safeFrontmatter.date = safeFrontmatter.date.toISOString();
+  } else if (typeof safeFrontmatter.date === 'object' && safeFrontmatter.date && safeFrontmatter.date.toString) {
+    safeFrontmatter.date = safeFrontmatter.date.toString();
+  }
+  return { props: { frontmatter: safeFrontmatter, content } };
 }
