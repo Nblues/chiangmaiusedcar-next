@@ -15,7 +15,7 @@ export default function AllCars({ cars }) {
               <Image src={car.images[0]?.url||'/cover.jpg'} alt={car.title} width={400} height={300} className="object-cover" />
               <div className="p-2">
                 <h2 className="font-semibold">{car.title}</h2>
-                <p className="text-orange-600">฿{Number(car.variants.edges[0].node.price.amount).toLocaleString()}</p>
+                <p className="text-orange-600">฿{Number(car.price.amount).toLocaleString()}</p>
               </div>
             </Link>
           ))}

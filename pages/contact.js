@@ -11,6 +11,18 @@ export default function Contact() {
         <p>LINE: <a href="https://lin.ee/cJuakxZ" className="text-green-600">@ครูหนึ่งรถสวย</a></p>
         <p>Facebook: <a href="https://www.facebook.com/nuengblues" className="text-blue-600">nuengblues</a></p>
         <p>Email: <a href="mailto:kn2carcenter@gmail.com">kn2carcenter@gmail.com</a></p>
+        <div className="mt-6">
+          <iframe
+            title="Google Map"
+            width="100%"
+            height="350"
+            style={{ border: 0 }}
+            loading="lazy"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBQZWDYWFwmz9keRDqlpOzYYbutXUX_zEo&q=320+หมู่+2+ต.สันพระเนตร+อ.สันทราย+จ.เชียงใหม่+50210">
+          </iframe>
+        </div>
       </main>
     </>
   );
