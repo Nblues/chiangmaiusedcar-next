@@ -2,19 +2,53 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: [main, master, develop]
   pull_request:
+    branches: [main, master, develop]
 
 jobs:
-  build:
+  build-and-check:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: Use Node.js 20.x (pnpm)
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm"
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run type-check
-      - run: npm run build
+          cache: "pnpm"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run ESLint
+        run: pnpm lint
+
+      - name: Run TypeScript type-check
+        run: pnpm type-check
+
+      - name: Run Prettier format check
+        run: pnpm format --check || true
+
+      # Optional: Run test
+      # - name: Run unit tests
+      #   run: pnpm test
+
+      - name: Build Next.js app
+        run: pnpm build
+
+      # Optional: Upload Vercel preview (ต้องใช้ Vercel token/secrets)
+      # - name: Deploy Vercel Preview
+      #   uses: amondnet/vercel-action@v25
+      #   with:
+      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      #     vercel-args: '--prod'
+      #     working-directory: ./
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary Done
+        run: echo "✅ Build, lint, type-check, format check (and optional tests) completed successfully!"

@@ -5,7 +5,7 @@
   "typescript.disableAutomaticTypeAcquisition": true,
   "typescript.preferences.includeCompletionsWithSnippetText": false,
   "typescript.tsdk": "node_modules/typescript/lib",
-  
+
   // Editor performance
   "editor.semanticHighlighting.enabled": false,
   "editor.suggest.snippetsPreventQuickSuggestions": false,
@@ -15,7 +15,7 @@
     "comments": false,
     "strings": false
   },
-  
+
   // File watching optimization
   "files.exclude": {
     "**/node_modules": true,
@@ -40,30 +40,30 @@
     "**/dist/**": true,
     "**/build/**": true
   },
-  
+
   // Memory optimization
   "extensions.autoUpdate": false,
   "extensions.autoCheckUpdates": false,
-  
+
   // Terminal settings
   "terminal.integrated.enablePersistentSessions": false,
   "terminal.integrated.persistentSessionReviveProcess": "never",
-  
+
   // Git performance
   "git.enabled": true,
   "git.autorefresh": false,
   "git.autofetch": false,
-  
+
   // Disable telemetry
   "telemetry.telemetryLevel": "off",
-  
+
   // Format and lint
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  
+
   // Next.js specific
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -76,5 +76,6 @@
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "CodeGPT.apiKey": "OpenAI"
 }

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ออฟไลน์ - ครูหนึ่งรถสวย</title>
+    <style>
+      body {
+        font-family: 'Prompt', sans-serif;
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 20px;
+      }
+      .offline-container {
+        text-align: center;
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+      }
+      h1 {
+        color: #ffb200;
+        margin-bottom: 20px;
+      }
+      p {
+        color: #666;
+        line-height: 1.6;
+      }
+      .retry-btn {
+        background-color: #ffb200;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+        font-weight: 600;
+      }
+      .retry-btn:hover {
+        background-color: #e6a200;
+      }
+      .car-icon {
+        font-size: 60px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="offline-container">
+      <div class="car-icon">🚗</div>
+      <h1>คุณกำลังออฟไลน์</h1>
+      <p>ไม่สามารถเชื่อมต่ออินเทอร์เน็ตได้ในขณะนี้</p>
+      <p>กรุณาตรวจสอบการเชื่อมต่อและลองใหม่อีกครั้ง</p>
+      <button class="retry-btn" onclick="window.location.reload()">ลองใหม่</button>
+    </div>
+
+    <script>
+      // Check connection periodically
+      setInterval(() => {
+        if (navigator.onLine) {
+          window.location.reload();
+        }
+      }, 5000);
+    </script>
+  </body>
+</html>

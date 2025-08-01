@@ -1,0 +1,30 @@
+@import url("/fonts/prompt.css");
+
+/* @tailwind directives require Tailwind CSS build process. Uncomment if using Tailwind CSS. */
+/* @tailwind base; */
+/* @tailwind components; */
+/* @tailwind utilities; */
+
+/* ===== Global Styling ===== */
+body {
+  font-family: 'Prompt', sans-serif;
+  color: #1a202c; /* Replace with your primary color */
+  background-color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Animation: Slide In ===== */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.animate-slideIn {
+  animation: slideIn 0.25s ease-out both;
+}

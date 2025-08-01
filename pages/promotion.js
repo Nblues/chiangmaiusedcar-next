@@ -1,0 +1,64 @@
+import SEO from '../components/SEO';
+
+export default function Promotion() {
+  return (
+    <>
+      <SEO
+        title="โปรโมชัน ฟรีดาวน์ ผ่อนถูก | ครูหนึ่งรถสวย"
+        description="โปรโมชันรถมือสองเชียงใหม่ ฟรีดาวน์ ของแถมจัดเต็ม | ครูหนึ่งรถสวย"
+        keywords="โปรโมชันรถมือสอง, รถมือสองเชียงใหม่, รถบ้านฟรีดาวน์, โปรรถมือสอง ฟรีดาวน์, รถมือสองราคาถูก, รถบ้านฟรีดาวน์ เชียงใหม่, รถมือสองผ่อนถูก, ของแถมรถมือสอง"
+        url="/promotion"
+      />
+      <main className="max-w-4xl mx-auto p-4 font-prompt" suppressHydrationWarning>
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
+          โปรโมชัน ฟรีดาวน์ ผ่อนถูก
+        </h1>
+
+        <div className="text-center mb-6">
+          <p className="text-lg text-gray-700">
+            รับข้อเสนอสุดพิเศษสำหรับลูกค้าทุกท่านที่ออกรถกับเรา
+          </p>
+        </div>
+
+        <div className="space-y-10">
+          {/* โปรโมชันล่าสุด */}
+          <section aria-labelledby="latest-promo">
+            <h2 id="latest-promo" className="text-xl font-semibold mb-4 text-accent">
+              โปรโมชันล่าสุด
+            </h2>
+            <ul className="space-y-2 list-disc list-inside text-gray-800">
+              <li>ฟรีตรวจเช็คระยะ เปลี่ยนถ่ายของเหลวก่อนส่งมอบ</li>
+              <li>ฟรีค่าจัดไฟแนนซ์และค่าโอนกรรมสิทธิ์</li>
+              <li>ฟรีบริการสปารถยนต์: ซักฟอกเบาะ พรม ห้องโดยสาร ห้องเครื่อง ขัดสีเต็มระบบ</li>
+              <li>ฟรีค่าจัดส่งทั่วประเทศ</li>
+            </ul>
+          </section>
+
+          {/* การรับประกัน */}
+          <section aria-labelledby="warranty-info">
+            <h2 id="warranty-info" className="text-xl font-semibold mb-4 text-accent">
+              การรับประกัน
+            </h2>
+            <div className="bg-yellow-50 border border-yellow-300 p-4 rounded-xl text-center shadow">
+              <p className="mb-2 text-gray-700">ออกรถกับครูหนึ่งรถสวยวันนี้</p>
+              <p className="text-lg font-bold text-yellow-800">
+                รับประกันเครื่องยนต์ และเกียร์ 1 ปีเต็ม ไม่จำกัดระยะทาง
+              </p>
+            </div>
+          </section>
+
+          {/* เครดิตดีดอกเบี้ยต่ำ */}
+          <section aria-labelledby="credit-offer">
+            <h2 id="credit-offer" className="text-xl font-semibold mb-4 text-accent">
+              สิทธิพิเศษสำหรับลูกค้าเครดิตดี
+            </h2>
+            <div className="bg-green-50 border border-green-300 p-4 rounded-xl text-center shadow">
+              <p className="text-xl font-semibold text-green-700">ดอกเบี้ยเริ่มต้น 4.50% ต่อปี</p>
+              <p className="text-sm text-gray-600 mt-2">เงื่อนไขเป็นไปตามที่ไฟแนนซ์กำหนด</p>
+            </div>
+          </section>
+        </div>
+      </main>
+    </>
+  );
+}
