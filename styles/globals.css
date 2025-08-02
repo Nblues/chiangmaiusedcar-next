@@ -2,5 +2,83 @@
 @tailwind components;
 @tailwind utilities;
 
-/* custom */
-body { @apply font-sans text-gray-800; }
+/* Base styles with improved accessibility */
+body { 
+  @apply font-sans text-text-primary bg-white; 
+}
+
+/* Button and link components with proper contrast and accessibility */
+@layer components {
+  /* Primary button styling */
+  .btn-primary {
+    @apply bg-primary-600 text-text-inverse px-4 py-2 rounded-md font-medium;
+    @apply hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+    @apply transition-colors duration-200 ease-in-out;
+  }
+
+  /* Secondary button styling */
+  .btn-secondary {
+    @apply bg-secondary-100 text-text-primary border border-secondary-300 px-4 py-2 rounded-md font-medium;
+    @apply hover:bg-secondary-200 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2;
+    @apply transition-colors duration-200 ease-in-out;
+  }
+
+  /* Success/action button (for LINE, WhatsApp) */
+  .btn-success {
+    @apply bg-success-600 text-text-inverse px-4 py-2 rounded-md font-medium;
+    @apply hover:bg-success-700 focus:outline-none focus:ring-2 focus:ring-success-500 focus:ring-offset-2;
+    @apply transition-colors duration-200 ease-in-out;
+  }
+
+  /* Info button (for Facebook, social) */
+  .btn-info {
+    @apply bg-info-600 text-text-inverse px-4 py-2 rounded-md font-medium;
+    @apply hover:bg-info-700 focus:outline-none focus:ring-2 focus:ring-info-500 focus:ring-offset-2;
+    @apply transition-colors duration-200 ease-in-out;
+  }
+
+  /* Link styling with proper contrast */
+  .link-primary {
+    @apply text-primary-600 hover:text-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1;
+    @apply transition-colors duration-200 ease-in-out underline-offset-2 hover:underline;
+  }
+
+  .link-success {
+    @apply text-success-600 hover:text-success-700 focus:outline-none focus:ring-2 focus:ring-success-500 focus:ring-offset-1;
+    @apply transition-colors duration-200 ease-in-out underline-offset-2 hover:underline;
+  }
+
+  .link-info {
+    @apply text-info-600 hover:text-info-700 focus:outline-none focus:ring-2 focus:ring-info-500 focus:ring-offset-1;
+    @apply transition-colors duration-200 ease-in-out underline-offset-2 hover:underline;
+  }
+
+  /* Card styling with better contrast */
+  .card {
+    @apply bg-white border border-secondary-200 rounded-lg shadow-sm;
+    @apply hover:shadow-md focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2;
+    @apply transition-shadow duration-200 ease-in-out;
+  }
+
+  /* Navigation link styling */
+  .nav-link {
+    @apply text-text-inverse hover:text-primary-100 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-600;
+    @apply transition-colors duration-200 ease-in-out;
+  }
+}
+
+/* Force generate utility classes that might not be detected */
+@layer utilities {
+  .bg-primary-700 { background-color: rgb(194 65 12); }
+  .bg-secondary-200 { background-color: rgb(226 232 240); }
+  .bg-success-700 { background-color: rgb(21 128 61); }
+  .bg-info-700 { background-color: rgb(29 78 216); }
+  .text-primary-100 { color: rgb(255 237 213); }
+  .text-primary-700 { color: rgb(194 65 12); }
+  .text-success-700 { color: rgb(21 128 61); }
+  .text-info-700 { color: rgb(29 78 216); }
+  .ring-primary-500 { --tw-ring-color: rgb(249 115 22); }
+  .ring-secondary-500 { --tw-ring-color: rgb(100 116 139); }
+  .ring-success-500 { --tw-ring-color: rgb(34 197 94); }
+  .ring-info-500 { --tw-ring-color: rgb(59 130 246); }
+}
