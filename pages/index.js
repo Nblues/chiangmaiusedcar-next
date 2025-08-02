@@ -109,17 +109,16 @@ export default function Home({ cars }) {
 
       {/* HERO Card */}
       <section id="hero" className="relative">
-        <div className="hero-card mx-auto my-6 flex flex-col md:flex-row items-center gap-6 px-6 py-8 rounded-2xl border border-orange-300 bg-white shadow-lg">
+        <div className="hero-card mx-auto my-6 flex flex-col md:flex-row items-center gap-6 px-6 py-8 rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
           <div className="flex-1">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2">
               รถมือสองเชียงใหม่
             </h1>
-            <h2 className="text-xl md:text-2xl font-bold text-orange-600 mb-4">
+            <h2 className="text-xl md:text-2xl font-bold text-orange-500 mb-4">
               คุณภาพระดับพรีเมียม
             </h2>
-            <p className="text-base leading-relaxed text-gray-800 font-medium">
-              ครูหนึ่งรถสวย ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่ ฟรีดาวน์ ผ่อนสบาย
-              ออกรถง่ายไม่ยุ่งยาก
+            <p className="text-base leading-relaxed">
+              ครูหนึ่งรถสวย ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่ ฟรีดาวน์ ผ่อนถูก รับประกันหลังการขาย
             </p>
           </div>
           <div className="flex flex-col gap-4 w-full md:w-auto md:min-w-[200px]">
@@ -167,69 +166,21 @@ export default function Home({ cars }) {
         id="recommended-cars"
       >
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-prompt">
-            รถแนะนำเข้าใหม่วันนี้
-          </h2>
-          <div className="max-w-4xl mx-auto font-prompt">
-            <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 border border-gray-200">
-              <p className="text-xl md:text-2xl text-gray-800 font-medium leading-relaxed mb-6">
-                www.chiangmaiusedcar.com
-              </p>
-
-              <div className="grid grid-cols-3 md:grid-cols-9 gap-2 mb-6">
-                <div className="text-center p-2 bg-gray-50 rounded-lg h-12 flex flex-col justify-center">
-                  <div className="font-bold text-xs text-gray-900">รถบ้านแท้</div>
-                  <div className="text-xs font-bold text-red-600">เกรด A</div>
-                </div>
-                <div className="text-center p-2 bg-gray-50 rounded-lg h-12 flex flex-col justify-center">
-                  <div className="font-bold text-xs text-gray-900">มือเดียว</div>
-                  <div className="text-xs font-bold text-red-600">สวยกริบ</div>
-                </div>
-                <div className="text-center p-2 bg-gray-50 rounded-lg h-12 flex flex-col justify-center">
-                  <div className="font-bold text-xs text-gray-900">ไมล์น้อย</div>
-                  <div className="text-xs font-bold text-red-600">ใช้งานน้อย</div>
-                </div>
-                <div className="text-center p-2 bg-gray-50 rounded-lg h-12 flex flex-col justify-center">
-                  <div className="font-bold text-xs text-gray-900">ประวัติดี</div>
-                  <div className="text-xs font-bold text-red-600">ตรวจสอบได้</div>
-                </div>
-                <div className="text-center p-2 bg-gray-50 rounded-lg h-12 flex flex-col justify-center">
-                  <div className="font-bold text-xs text-gray-900">ไม่มีชนหนัก</div>
-                  <div className="text-xs font-bold text-red-600">ไม่จมน้ำ</div>
-                </div>
-                <div className="text-center p-2 bg-gray-50 rounded-lg h-12 flex flex-col justify-center">
-                  <div className="font-bold text-xs text-gray-900">โอนฟรี</div>
-                  <div className="text-xs font-bold text-red-600">ส่งฟรีทั่วไทย</div>
-                </div>
-                <div className="text-center p-2 bg-gray-50 rounded-lg h-12 flex flex-col justify-center">
-                  <div className="font-bold text-xs text-gray-900">รับประกัน 1 ปี</div>
-                  <div className="text-xs font-bold text-red-600">ไม่จำกัด ก.ม.</div>
-                </div>
-                <div className="text-center p-2 bg-gray-50 rounded-lg h-12 flex flex-col justify-center">
-                  <div className="font-bold text-xs text-gray-900">รถมีเล่ม</div>
-                  <div className="text-xs font-bold text-red-600">ถูกกฎหมาย</div>
-                </div>
-                <div className="text-center p-2 bg-gray-50 rounded-lg h-12 flex flex-col justify-center">
-                  <div className="font-bold text-xs text-gray-900">ซื้อโดยตรง</div>
-                  <div className="text-xs font-bold text-red-600">จากเจ้าของ</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4 font-prompt">รถแนะนำ</h2>
+          <p className="text-lg text-gold max-w-2xl mx-auto font-prompt">
+            รถมือสองคุณภาพดีที่คัดสรรมาเป็นพิเศษ พร้อมรับประกันและบริการหลังการขาย
+          </p>
         </div>
-        <section
-          aria-label="รถเข้าใหม่แนะนำวันนี้"
-          className="grid gap-8 grid-cols-2 lg:grid-cols-4"
-        >
+        <section aria-label="รถแนะนำ" className="grid gap-8 grid-cols-2 lg:grid-cols-4">
           {safeCars.slice(0, 8).map(car => (
             <article
               key={car.id}
-              className="group bg-white rounded-3xl shadow-2xl hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
+              className="group bg-white rounded-3xl shadow-2xl hover:shadow-gold transition-all duration-300 overflow-hidden border-2 border-gold/40 hover:border-primary flex flex-col h-full relative font-prompt"
               itemScope
               itemType="https://schema.org/Product"
             >
               <Link href={`/car/${car.handle}`} className="block focus:outline-none" tabIndex={0}>
-                <figure className="relative w-full h-48 md:h-56 flex items-center justify-center overflow-hidden bg-orange-600/10">
+                <figure className="relative w-full h-48 md:h-56 flex items-center justify-center overflow-hidden bg-gold/10">
                   <Image
                     src={
                       Array.isArray(car.images) && car.images.length > 0
@@ -239,11 +190,11 @@ export default function Home({ cars }) {
                     alt={car.title}
                     width={400}
                     height={300}
-                    className="w-full h-full object-contain transition-transform duration-300 border-b-2 border-orange-600 bg-white"
+                    className="w-full h-full object-contain transition-transform duration-300 border-b-2 border-gold bg-white"
                     itemProp="image"
                     loading="lazy"
                   />
-                  <figcaption className="absolute top-4 left-4 bg-orange-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
+                  <figcaption className="absolute top-4 left-4 bg-gold text-primary px-4 py-1 rounded-full text-xs font-bold shadow-lg">
                     รถแนะนำ
                   </figcaption>
                   {car.tags?.includes('ใหม่') && (
@@ -252,47 +203,46 @@ export default function Home({ cars }) {
                     </span>
                   )}
                 </figure>
-                <div className="p-4 flex flex-col flex-1">
+                <div className="p-6 flex flex-col flex-1">
                   <h3
-                    className="font-extrabold text-xl text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt"
+                    className="font-extrabold text-xl text-primary mb-2 group-hover:text-gold transition-colors line-clamp-2 font-prompt"
                     itemProp="name"
                   >
                     {car.title}
                   </h3>
-                  <div className="flex items-center justify-between mb-3">
-                    <p
-                      className="text-2xl font-bold text-orange-600 font-prompt"
-                      itemProp="offers"
-                      itemScope
-                      itemType="https://schema.org/Offer"
-                    >
-                      <span itemProp="price">฿{Number(car.price.amount).toLocaleString()}</span>
-                      <meta itemProp="priceCurrency" content="THB" />
-                    </p>
-                    <span className="text-xs bg-orange-600 text-white px-2 py-1 rounded-full font-bold shadow-sm whitespace-nowrap">
-                      ส่งฟรี!
-                    </span>
-                  </div>
-                  <ul className="text-sm text-gray-800 mb-3 space-y-1 font-prompt font-medium">
-                    {car.tags?.includes('ฟรีดาวน์') && (
-                      <li className="text-blue-600">✓ ฟรีดาวน์</li>
-                    )}
-                    {car.tags?.includes('ผ่อนถูก') && <li className="text-blue-600">✓ ผ่อนถูก</li>}
-                    <li className="text-gray-900">✓ รับประกัน 1 ปี</li>
+                  <p
+                    className="text-2xl font-bold text-gold mb-4 font-prompt"
+                    itemProp="offers"
+                    itemScope
+                    itemType="https://schema.org/Offer"
+                  >
+                    <span itemProp="price">฿{Number(car.price.amount).toLocaleString()}</span>
+                    <meta itemProp="priceCurrency" content="THB" />
+                  </p>
+                  <ul className="text-sm text-black mb-4 space-y-1 font-prompt">
+                    {car.tags?.includes('ฟรีดาวน์') && <li>ฟรีดาวน์</li>}
+                    {car.tags?.includes('ผ่อนถูก') && <li>ผ่อนถูก</li>}
+                    <li>รับประกัน 1 ปี</li>
                   </ul>
-                  <div className="flex gap-2 mt-auto">
+                  <div className="flex items-center justify-between mt-auto mb-2">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gold/20 text-primary border border-gold">
+                      รับประกัน 1 ปี
+                    </span>
+                    <span className="text-xs text-gold">SEO 2025</span>
+                  </div>
+                  <div className="flex gap-2 mt-2">
                     <a
                       href="https://lin.ee/cJuakxZ"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow"
+                      className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full px-2 py-1 text-xs font-semibold shadow"
                       aria-label="สอบถามผ่าน LINE ครูหนึ่งรถสวย"
                     >
                       LINE
                     </a>
                     <a
                       href={`tel:0940649018`}
-                      className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow"
+                      className="flex-1 flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow"
                       aria-label="โทร 094-064-9018"
                     >
                       โทร
@@ -317,13 +267,13 @@ export default function Home({ cars }) {
                     >
                       แชร์
                     </button>
-                    {/* บันทึก/Unsave - ไอคอนดาว */}
+                    {/* บันทึก/Unsave */}
                     <button
                       type="button"
-                      className={`flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border transition-all duration-200 ${
+                      className={`flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border ${
                         saved.includes(car.id)
-                          ? 'bg-orange-600 text-white border-orange-600 shadow-lg'
-                          : 'bg-white text-gray-600 border-gray-300 hover:border-orange-600 hover:text-orange-600'
+                          ? 'bg-pink-600 text-white'
+                          : 'bg-white text-pink-600 border-pink-400'
                       }`}
                       onClick={e => {
                         e.preventDefault();
@@ -332,15 +282,9 @@ export default function Home({ cars }) {
                       aria-label={saved.includes(car.id) ? 'ลบออกจากที่บันทึก' : 'บันทึกรถ'}
                       title="บันทึกดูทีหลัง"
                     >
-                      <svg
-                        className="w-4 h-4"
-                        fill={saved.includes(car.id) ? 'currentColor' : 'none'}
-                        stroke="currentColor"
-                        strokeWidth={saved.includes(car.id) ? 0 : 2}
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                      </svg>
+                      <span className="material-icons" style={{ fontSize: 16 }}>
+                        {saved.includes(car.id) ? 'favorite' : 'favorite_border'}
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -351,7 +295,7 @@ export default function Home({ cars }) {
         <div className="text-center mt-12">
           <Link
             href="/all-cars"
-            className="inline-flex items-center bg-gray-900 hover:bg-orange-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 border-2 border-orange-600 font-prompt"
+            className="inline-flex items-center bg-primary hover:bg-gold text-white hover:text-black px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 border-2 border-gold font-prompt"
             aria-label="ดูรถทั้งหมด ครูหนึ่งรถสวย"
           >
             <span>ดูรถทั้งหมด</span>
@@ -368,136 +312,62 @@ export default function Home({ cars }) {
 
       {/* รีวิว Facebook 9 รีวิวจริง */}
       {showFbReviews && (
-        <section className="max-w-7xl mx-auto py-12 px-6">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-prompt">
-              รีวิวจากลูกค้าจริง
-            </h2>
-            <p className="text-lg text-orange-600 font-prompt">
-              ความประทับใจจากลูกค้าที่เลือกใช้บริการ ครูหนึ่งรถสวย
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <section className="max-w-6xl mx-auto py-8">
+          <h2 className="text-xl font-bold mb-4 text-primary font-prompt text-center">
+            รีวิวจากลูกค้าจริงบน Facebook
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
-              {
-                url: 'https://www.facebook.com/oonmaxx/posts/pfbid0YcUhHBngfrZmqz4SWWF5rKkVFzrTSMyw4dzayqhbcnEFviMCEwWPc9vhqcQ5Fnzvl',
-                embed:
-                  'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Foonmaxx%2Fposts%2Fpfbid0YcUhHBngfrZmqz4SWWF5rKkVFzrTSMyw4dzayqhbcnEFviMCEwWPc9vhqcQ5Fnzvl&show_text=true&width=500',
-              },
-              {
-                url: 'https://www.facebook.com/tai.thanchanok.7/posts/pfbid02o1H8XvSfrYBy3SJyHAjGQySsunfzAtL7pZha7pLCQnXj4GQXVQisp7mMXczdVrLol',
-                embed:
-                  'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Ftai.thanchanok.7%2Fposts%2Fpfbid02o1H8XvSfrYBy3SJyHAjGQySsunfzAtL7pZha7pLCQnXj4GQXVQisp7mMXczdVrLol&show_text=true&width=500',
-              },
-              {
-                url: 'https://www.facebook.com/nongnoo.kookkook/posts/pfbid0tpxVdnyyomBdnd2UECRPa567pYnev2b2fTe9jcmVtK6mTWSQFTM8PmyQQRXx8Kqjl',
-                embed:
-                  'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fnongnoo.kookkook%2Fposts%2Fpfbid0tpxVdnyyomBdnd2UECRPa567pYnev2b2fTe9jcmVtK6mTWSQFTM8PmyQQRXx8Kqjl&show_text=true&width=500',
-              },
-              {
-                url: 'https://www.facebook.com/NaowaratUpachal/posts/pfbid0K9xEwV4KmtjFaQvZ7g7PsVchrPE1vko4esuchpSuuvBNrwVfhJ1KMkiqhYhxKhtSl',
-                embed:
-                  'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FNaowaratUpachal%2Fposts%2Fpfbid0K9xEwV4KmtjFaQvZ7g7PsVchrPE1vko4esuchpSuuvBNrwVfhJ1KMkiqhYhxKhtSl&show_text=true&width=500',
-              },
-              {
-                url: 'https://www.facebook.com/nongtee.myson/posts/pfbid02xgQBPEGhpPyeVemBEymTBUDmByZ33GJh2fvcWCfoznu5MjhQ82ZDptUXC53RHz5el',
-                embed:
-                  'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fnongtee.myson%2Fposts%2Fpfbid02xgQBPEGhpPyeVemBEymTBUDmByZ33GJh2fvcWCfoznu5MjhQ82ZDptUXC53RHz5el&show_text=true&width=500',
-              },
-              {
-                url: 'https://www.facebook.com/permalink.php?story_fbid=pfbid0XmfHjMnKrL6i2tn5W3UyJSHdx9K6wqY99bqfsBDR5rpGMrcj2mGufNtfYVY2nbFQl&id=100004184059361',
-                embed:
-                  'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0XmfHjMnKrL6i2tn5W3UyJSHdx9K6wqY99bqfsBDR5rpGMrcj2mGufNtfYVY2nbFQl%26id%3D100004184059361&show_text=true&width=500',
-              },
-              {
-                url: 'https://www.facebook.com/na.mo.payya.ym/posts/pfbid0ssojKSqnysqj4tidSPBTVfteipcWvDU1weJCE8doDAZKKq8S74vuyUy2qihwEww7l',
-                embed:
-                  'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fna.mo.payya.ym%2Fposts%2Fpfbid0ssojKSqnysqj4tidSPBTVfteipcWvDU1weJCE8doDAZKKq8S74vuyUy2qihwEww7l&show_text=true&width=500',
-              },
-              {
-                url: 'https://www.facebook.com/malee.daengprasert/posts/pfbid0LRfqmX9JGEZZvvFBnfK8GABoZmdSVB7VjAiWA8TfgvR7FHzed7h9XyD4pCpJLkGJl',
-                embed:
-                  'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fmalee.daengprasert%2Fposts%2Fpfbid0LRfqmX9JGEZZvvFBnfK8GABoZmdSVB7VjAiWA8TfgvR7FHzed7h9XyD4pCpJLkGJl&show_text=true&width=500',
-              },
-              {
-                url: 'https://www.facebook.com/chalida.twoslim/posts/pfbid02aZHpp5tcQUdhhT4SiR4c4zZv4HhrBGEEUiEuSYSNzzc1PF9yTiTrRgqZYwNXER31l',
-                embed:
-                  'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fchalida.twoslim%2Fposts%2Fpfbid02aZHpp5tcQUdhhT4SiR4c4zZv4HhrBGEEUiEuSYSNzzc1PF9yTiTrRgqZYwNXER31l&show_text=true&width=500',
-              },
-            ].map((review, i) => (
-              <article
+              // 9 embed url (copy ของคุณเองมาได้เลย)
+              'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Foonmaxx%2Fposts%2Fpfbid0YcUhHBngfrZmqz4SWWF5rKkVFzrTSMyw4dzayqhbcnEFviMCEwWPc9vhqcQ5Fnzvl&show_text=true&width=500',
+              'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Ftai.thanchanok.7%2Fposts%2Fpfbid02o1H8XvSfrYBy3SJyHAjGQySsunfzAtL7pZha7pLCQnXj4GQXVQisp7mMXczdVrLol&show_text=true&width=500',
+              'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fnongnoo.kookkook%2Fposts%2Fpfbid0tpxVdnyyomBdnd2UECRPa567pYnev2b2fTe9jcmVtK6mTWSQFTM8PmyQQRXx8Kqjl&show_text=true&width=500',
+              'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FNaowaratUpachal%2Fposts%2Fpfbid0K9xEwV4KmtjFaQvZ7g7PsVchrPE1vko4esuchpSuuvBNrwVfhJ1KMkiqhYhxKhtSl&show_text=true&width=500',
+              'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fnongtee.myson%2Fposts%2Fpfbid02xgQBPEGhpPyeVemBEymTBUDmByZ33GJh2fvcWCfoznu5MjhQ82ZDptUXC53RHz5el&show_text=true&width=500',
+              'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0XmfHjMnKrL6i2tn5W3UyJSHdx9K6wqY99bqfsBDR5rpGMrcj2mGufNtfYVY2nbFQl%26id%3D100004184059361&show_text=true&width=500',
+              'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fna.mo.payya.ym%2Fposts%2Fpfbid0ssojKSqnysqj4tidSPBTVfteipcWvDU1weJCE8doDAZKKq8S74vuyUy2qihwEww7l&show_text=true&width=500',
+              'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fmalee.daengprasert%2Fposts%2Fpfbid0LRfqmX9JGEZZvvFBnfK8GABoZmdSVB7VjAiWA8TfgvR7FHzed7h9XyD4pCpJLkGJl&show_text=true&width=500',
+              'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fchalida.twoslim%2Fposts%2Fpfbid02aZHpp5tcQUdhhT4SiR4c4zZv4HhrBGEEUiEuSYSNzzc1PF9yTiTrRgqZYwNXER31l&show_text=true&width=500',
+            ].map((src, i) => (
+              <iframe
                 key={i}
-                className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-60"
-              >
-                <div className="relative h-full">
-                  <iframe
-                    src={review.embed}
-                    width="100%"
-                    height="100%"
-                    className="w-full h-full"
-                    style={{ border: 'none', overflow: 'hidden' }}
-                    scrolling="no"
-                    frameBorder="0"
-                    allowFullScreen={true}
-                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                    title={`รีวิวลูกค้า ${i + 1} - ครูหนึ่งรถสวย`}
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 pointer-events-none">
-                    <a
-                      href={review.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg transition-colors pointer-events-auto z-10"
-                      aria-label={`ดูรีวิวเต็มบน Facebook - รีวิว ${i + 1}`}
-                    >
-                      ดูเต็ม
-                    </a>
-                  </div>
-                </div>
-              </article>
+                src={src}
+                width="100%"
+                height="180"
+                style={{ border: 'none', overflow: 'hidden', maxWidth: 500 }}
+                scrolling="no"
+                frameBorder="0"
+                allowFullScreen={true}
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                title={`Facebook Review ${i + 1}`}
+                loading="lazy"
+              ></iframe>
             ))}
-          </div>
-          <div className="text-center mt-8">
-            <a
-              href="https://www.facebook.com/chiangmaiusedcar"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
-              aria-label="ดูรีวิวเพิ่มเติมบน Facebook ครูหนึ่งรถสวย"
-            >
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-              </svg>
-              <span>ดูรีวิวเพิ่มเติม</span>
-            </a>
           </div>
         </section>
       )}
 
       {/* FAQ Section */}
       <section className="bg-gray-50 py-8 mt-6 rounded-2xl max-w-4xl mx-auto shadow">
-        <h2 className="text-xl font-bold mb-4 text-gray-900 font-prompt px-4">คำถามที่พบบ่อย</h2>
-        <div className="space-y-4 px-4">
+        <h2 className="text-xl font-bold mb-4 text-primary font-prompt">คำถามที่พบบ่อย</h2>
+        <div className="space-y-4">
           <details className="bg-white rounded-xl p-4 shadow">
-            <summary className="font-bold text-gray-900 cursor-pointer">ดาวน์ 0% จริงไหม?</summary>
-            <div className="text-gray-700 pt-2 font-medium">
+            <summary className="font-bold text-primary cursor-pointer">ดาวน์ 0% จริงไหม?</summary>
+            <div className="text-gray-700 pt-2">
               จริง! ลูกค้าสามารถออกรถฟรีดาวน์ตามโปรโมชันและไฟแนนซ์
             </div>
           </details>
           <details className="bg-white rounded-xl p-4 shadow">
-            <summary className="font-bold text-gray-900 cursor-pointer">
+            <summary className="font-bold text-primary cursor-pointer">
               ติดเครดิตบูโรออกได้ไหม?
             </summary>
-            <div className="text-gray-700 pt-2 font-medium">
+            <div className="text-gray-700 pt-2">
               สอบถามข้อมูลได้ทาง LINE, ส่วนมากไฟแนนซ์ให้โอกาส! แจ้งรายละเอียดกับทีมงาน
             </div>
           </details>
           <details className="bg-white rounded-xl p-4 shadow">
-            <summary className="font-bold text-gray-900 cursor-pointer">มีรับประกันไหม?</summary>
-            <div className="text-gray-700 pt-2 font-medium">
-              รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม
-            </div>
+            <summary className="font-bold text-primary cursor-pointer">มีรับประกันไหม?</summary>
+            <div className="text-gray-700 pt-2">รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม</div>
           </details>
         </div>
       </section>
