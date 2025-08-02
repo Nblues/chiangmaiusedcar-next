@@ -8,6 +8,7 @@ import MobileMenu from './MobileMenu';
 const navLinks = [
   { href: '/', label: 'หน้าแรก' },
   { href: '/all-cars', label: 'รถทั้งหมด' },
+  { href: '/credit-check', label: 'เช็คเครดิต' },
   { href: '/promotion', label: 'โปรโมชัน' },
   { href: '/blog', label: 'บทความ' },
   { href: '/contact', label: 'ติดต่อ' },
@@ -62,11 +63,21 @@ export default function Navbar() {
         </div>
         {/* Mobile Hamburger */}
         <button
-          className="md:hidden p-2"
+          className="md:hidden p-2 text-primary hover:text-accent transition-colors duration-200 relative"
           aria-label="เปิดเมนู"
           onClick={() => setMobileOpen(!mobileOpen)}
         >
-          {mobileOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+          {mobileOpen ? (
+            <div className="relative">
+              <X className="w-7 h-7" />
+              {/* กากบาทเล็กๆ สีส้มสำหรับปิดเมนู */}
+              <div className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-accent border-2 border-white rounded-full flex items-center justify-center shadow-md">
+                <span className="text-white text-xs font-bold">×</span>
+              </div>
+            </div>
+          ) : (
+            <Menu className="w-7 h-7" />
+          )}
         </button>
       </div>
       {/* Mobile Menu Dropdown */}

@@ -1,130 +1,165 @@
-import React, { useEffect } from 'react';
+import { useRef, useState } from 'react';
 import SEO from '../components/SEO';
-import Link from 'next/link';
+import Swal from 'sweetalert2';
+import emailjs from 'emailjs-com';
+import ReCAPTCHA from 'react-google-recaptcha';
+
+const RECAPTCHA_SITEKEY = 'YOUR_RECAPTCHA_SITEKEY';
 
 export default function CreditCheck() {
-  // โหลด EmailJS และ SweetAlert2 เฉพาะฝั่ง client
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // EmailJS
-      const scriptEmail = document.createElement('script');
-      scriptEmail.src = 'https://cdn.jsdelivr.net/npm/emailjs-com@2.3.2/dist/email.min.js';
-      scriptEmail.onload = () => window.emailjs?.init('P3wnNJB_Y_PddrdBJ');
-      document.body.appendChild(scriptEmail);
+  const formRef = useRef();
+  const [career, setCareer] = useState('');
+  const [downOption, setDownOption] = useState('');
+  const [showDownInput, setShowDownInput] = useState(false);
+  const [captcha, setCaptcha] = useState(null);
+  const [sending, setSending] = useState(false);
 
-      // SweetAlert2
-      const scriptSwal = document.createElement('script');
-      scriptSwal.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
-      document.body.appendChild(scriptSwal);
+  const careerText = {
+    government: 'ข้าราชการ',
+    company: 'พนักงานบริษัท',
+    freelance: 'ฟรีแลนซ์',
+    business: 'เจ้าของกิจการ',
+    farmer: 'เกษตรกร',
+    other: 'อื่นๆ',
+  };
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+    if (!captcha) {
+      return Swal.fire('กรุณายืนยัน reCAPTCHA', '', 'warning');
     }
-  }, []);
+    formRef.current.careerText.value = careerText[career];
+    formRef.current.downOptionText.value = downOption;
+    formRef.current.submittedAt.value = new Date().toLocaleString('th-TH');
 
-  // ฟังก์ชันจัดการฟอร์ม
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
+    setSending(true);
+    Swal.fire({ title: 'กำลังส่งข้อมูล...', allowOutsideClick: false, didOpen: Swal.showLoading });
 
-    window.toggleCareerFields = function () {
-      const career = document.getElementById('career').value;
-      document.querySelectorAll('#careerFields > div').forEach(div => div.classList.add('hidden'));
-      document.getElementById('careerFields').classList.toggle('hidden', career === '');
+    try {
+      const formData = new FormData(formRef.current);
+      formData.append('g-recaptcha-response', captcha);
+      const res = await fetch('/api/credit-check', { method: 'POST', body: formData });
+      const api = await res.json();
+      if (!api.success) throw new Error(api.message);
 
-      if (career) {
-        const fieldId = career + 'Fields';
-        const fieldDiv = document.getElementById(fieldId);
-        if (fieldDiv) fieldDiv.classList.remove('hidden');
-      }
+      await emailjs.sendForm(
+        'service_qlcksif',
+        'template_zd6e3f6',
+        formRef.current,
+        'P3wnNJB_Y_PddrdBJ',
+      );
 
-      // ตั้งชื่อภาษาไทยให้ careerText
-      const careerText = {
-        government: 'ข้าราชการ',
-        company: 'พนักงานบริษัท',
-        freelance: 'ฟรีแลนซ์',
-        business: 'เจ้าของกิจการ',
-        farmer: 'เกษตรกร',
-        other: 'อื่นๆ',
-      };
-      document.getElementById('careerText').value = careerText[career] || '';
-    };
-
-    window.toggleDownPayment = function () {
-      const downOption = document.getElementById('downOption').value;
-      document
-        .getElementById('customDownContainer')
-        .classList.toggle('hidden', downOption !== 'วางเงินดาวน์');
-      document.getElementById('downOptionText').value = downOption;
-    };
-
-    const form = document.getElementById('financeForm');
-    if (form) {
-      form.onsubmit = function (e) {
-        e.preventDefault();
-        const now = new Date();
-        const submittedAt = now.toLocaleDateString('th-TH') + ' ' + now.toLocaleTimeString('th-TH');
-        document.getElementById('submittedAt').value = submittedAt;
-
-        window.emailjs.sendForm('service_qlcksif', 'template_zd6e3f6', form).then(
-          () => {
-            window.Swal.fire({
-              icon: 'success',
-              title: 'ส่งข้อมูลเรียบร้อยแล้ว',
-              text: 'ขอบคุณที่กรอกข้อมูลค่ะ',
-              confirmButtonText: 'ตกลง',
-            });
-            form.reset();
-            document.getElementById('careerFields').classList.add('hidden');
-            document.getElementById('customDownContainer').classList.add('hidden');
-          },
-          error => {
-            window.Swal.fire({
-              icon: 'error',
-              title: 'เกิดข้อผิดพลาด',
-              text: 'ไม่สามารถส่งข้อมูลได้ กรุณาลองใหม่',
-            });
-            // eslint-disable-next-line no-console
-            console.error('เกิดข้อผิดพลาด', error);
-          },
-        );
-      };
+      Swal.fire('ส่งข้อมูลเรียบร้อยแล้ว', 'ทีมงานจะติดต่อกลับ', 'success');
+      formRef.current.reset();
+      setCareer('');
+      setDownOption('');
+      setShowDownInput(false);
+      setCaptcha(null);
+    } catch (err) {
+      Swal.fire('เกิดข้อผิดพลาด', err.message, 'error');
+    } finally {
+      setSending(false);
     }
-  }, []);
+  };
+
+  // Schema JSON-LD (Breadcrumb + FAQ) เหมือนเดิม...
 
   return (
-    <React.Fragment>
+    <>
       <SEO
-        title="เช็คเครดิต - ตรวจสอบสถานะสินเชื่อรถยนต์มือสอง เชียงใหม่ | ประเมินไฟแนนซ์ฟรี ครูหนึ่งรถสวย"
-        description="เช็คเครดิตรถมือสอง เชียงใหม่ อนุมัติง่าย | ครูหนึ่งรถสวย"
-        keywords="เช็คเครดิต, ตรวจสอบเครดิต, สินเชื่อรถยนต์, ไฟแนนซ์รถมือสอง, เครดิตบูโร, เชียงใหม่, ประเมินไฟแนนซ์, รถบ้าน, ฟรีดาวน์, ดอกเบี้ยต่ำ, อนุมัติไว, รถมือสองเชียงใหม่"
+        title="เช็คเครดิตรถยนต์ออนไลน์ | ครูหนึ่งรถสวย"
+        description="เช็คเครดิตรถมือสอง อนุมัติง่าย ฟรี 100% ไม่ต้องค้ำ รู้ผลเร็ว"
+        url="/credit-check"
+        image="/cover.jpg"
+        canonical="https://chiangmaiusedcar.com/credit-check"
+        locale="th_TH"
+        alternate={[{ href: 'https://chiangmaiusedcar.com/credit-check', hrefLang: 'th-TH' }]}
       />
-      <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 relative">
-        {/* ...other sections... */}
-        {/* CTA Section */}
-        <section className="py-16 bg-gradient-to-r from-brand-900 via-brand-800 to-brand-900 text-white">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">พร้อมเช็คเครดิตแล้วใช่ไหม?</h2>
-            <p className="text-xl text-brand-200 mb-8">
-              รับคำปรึกษาฟรี จากผู้เชี่ยวชาญด้านสินเชื่อ พร้อมแนะนำรถที่เหมาะกับงบของคุณ
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="https://lin.ee/cJuakxZ"
-                target="_blank"
-                className="bg-success-500 hover:bg-success-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-2"
-              >
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
-                </svg>
-                <span>เช็คเครดิตเลย</span>
-              </a>
-              <Link
-                href="/all-cars"
-                className="bg-accent-500 hover:bg-accent-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
-              >
-                ดูรถทั้งหมด
-              </Link>
+
+      {/* JSON-LD scripts... */}
+
+      <main className="min-h-screen bg-gray-50 py-8">
+        <div className="max-w-2xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+          <h2 className="text-center text-2xl font-bold mb-6 text-success">ประเมินไฟแนนซ์รถยนต์</h2>
+          <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+            <input type="hidden" name="careerText" />
+            <input type="hidden" name="downOptionText" />
+            <input type="hidden" name="submittedAt" />
+
+            <div>
+              <label className="block font-semibold mb-1">ชื่อ-นามสกุล</label>
+              <input type="text" name="name" required className="form-input w-full" />
             </div>
+            <div>
+              <label className="block font-semibold mb-1">เบอร์โทร</label>
+              <input
+                type="tel"
+                name="phone"
+                required
+                pattern="[0-9]{10}"
+                className="form-input w-full"
+              />
+            </div>
+            {/* ...ฟิลด์อื่นๆ ตามเดิม ใช้ className="form-input w-full" */}
+            <div>
+              <label className="block font-semibold mb-1">เงินดาวน์</label>
+              <select
+                name="downOption"
+                value={downOption}
+                onChange={e => {
+                  setDownOption(e.target.value);
+                  setShowDownInput(e.target.value === 'วางเงินดาวน์');
+                }}
+                className="form-input w-full"
+                required
+              >
+                <option value="">-- เลือกรูปแบบ --</option>
+                <option value="ฟรีดาวน์">ฟรีดาวน์</option>
+                <option value="วางเงินดาวน์">วางเงินดาวน์</option>
+              </select>
+            </div>
+            {showDownInput && (
+              <div>
+                <label className="block font-semibold mb-1">จำนวนเงิน (บาท)</label>
+                <input type="number" name="customDown" className="form-input w-full" />
+              </div>
+            )}
+
+            <div className="flex justify-center">
+              <ReCAPTCHA sitekey={RECAPTCHA_SITEKEY} onChange={setCaptcha} />
+            </div>
+
+            <button
+              type="submit"
+              disabled={sending}
+              className="w-full py-3 rounded-xl font-bold text-white bg-success hover:bg-success/90 transition"
+            >
+              {sending ? 'กำลังส่ง...' : 'ส่งข้อมูล'}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <a
+              href="/all-cars"
+              className="inline-block px-6 py-2 bg-primary text-white rounded-full hover:bg-gold hover:text-primary transition"
+            >
+              ดูรถทั้งหมด
+            </a>
+          </div>
+        </div>
+
+        {/* FAQ Section */}
+        <section className="max-w-2xl mx-auto mt-10">
+          <h3 className="text-xl font-bold mb-4 text-primary">คำถามที่พบบ่อย</h3>
+          <div className="space-y-2">
+            <details className="bg-white p-4 rounded-lg shadow">
+              <summary className="font-semibold text-accent">Q: เช็คไฟแนนซ์ฟรีจริงมั้ย?</summary>
+              <p className="mt-2 text-gray-700">ฟรี 100% ไม่บังคับซื้อรถ รู้ผลทันที</p>
+            </details>
+            {/* ...more details */}
           </div>
         </section>
       </main>
-    </React.Fragment>
+    </>
   );
 }

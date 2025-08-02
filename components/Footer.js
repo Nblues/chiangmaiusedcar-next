@@ -1,5 +1,5 @@
-import React from "react";
-import Link from "next/link";
+import React from 'react';
+import Link from 'next/link';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -169,7 +169,7 @@ export default function Footer() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  โปรโมชั่น
+                  โปรโมชัน
                 </Link>
               </li>
               <li>
@@ -207,7 +207,7 @@ export default function Footer() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  ติดต่อเรา
+                  ติดต่อ
                 </Link>
               </li>
             </ul>

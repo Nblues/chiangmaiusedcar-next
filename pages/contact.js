@@ -169,8 +169,8 @@ export default function CreditCheck() {
       </div>
 
       <main className="min-h-screen py-6 bg-gray-50">
-        <div className="bg-white max-w-2xl mx-auto p-4 md:p-8 rounded-2xl shadow-lg">
-          <h2 className="text-center text-2xl font-bold mb-6 text-green-600">
+        <div className="bg-white max-w-2xl mx-auto p-4 md:p-8 rounded-2xl shadow-lg border border-gold/20">
+          <h2 className="text-center text-2xl font-bold mb-6 text-primary">
             แบบฟอร์มประเมินไฟแนนซ์รถยนต์
           </h2>
           <form ref={formRef} id="financeForm" onSubmit={handleSubmit} autoComplete="off">
@@ -178,50 +178,48 @@ export default function CreditCheck() {
             <input type="hidden" name="downOptionText" />
             <input type="hidden" name="submittedAt" />
 
-            <div className="mb-2">
-              <label className="font-semibold">ชื่อ-นามสกุล</label>
+            <div className="mb-4">
+              <label className="form-label">ชื่อ-นามสกุล</label>
               <input
                 type="text"
                 name="name"
                 required
-                className="form-input mt-1 block w-full rounded-md border-gray-300"
+                className="form-input"
+                placeholder="กรุณากรอกชื่อ-นามสกุล"
               />
             </div>
-            <div className="mb-2">
-              <label className="font-semibold">เบอร์โทรศัพท์</label>
+            <div className="mb-4">
+              <label className="form-label">เบอร์โทรศัพท์</label>
               <input
                 type="tel"
                 name="phone"
                 pattern="[0-9]{10}"
                 placeholder="เช่น 0812345678"
                 required
-                className="form-input mt-1 block w-full rounded-md border-gray-300"
+                className="form-input"
               />
             </div>
-            <div className="mb-2">
-              <label className="font-semibold">เพศ</label>
-              <select
-                name="gender"
-                required
-                className="form-input mt-1 block w-full rounded-md border-gray-300"
-              >
+            <div className="mb-4">
+              <label className="form-label">เพศ</label>
+              <select name="gender" required className="form-select">
                 <option value="">-- เลือกเพศ --</option>
                 <option value="ชาย">ชาย</option>
                 <option value="หญิง">หญิง</option>
                 <option value="อื่นๆ">อื่นๆ</option>
               </select>
             </div>
-            <div className="mb-2">
-              <label className="font-semibold">อายุ</label>
+            <div className="mb-4">
+              <label className="form-label">อายุ</label>
               <input
                 type="number"
                 name="age"
                 required
-                className="form-input mt-1 block w-full rounded-md border-gray-300"
+                className="form-input"
+                placeholder="กรุณากรอกอายุ"
               />
             </div>
-            <div className="mb-2">
-              <label className="font-semibold">อาชีพ</label>
+            <div className="mb-4">
+              <label className="form-label">อาชีพ</label>
               <select
                 id="career"
                 name="career"
@@ -231,7 +229,7 @@ export default function CreditCheck() {
                   setCareerFields(e.target.value);
                 }}
                 required
-                className="form-input mt-1 block w-full rounded-md border-gray-300"
+                className="form-select"
               >
                 <option value="">-- เลือกอาชีพ --</option>
                 <option value="government">ข้าราชการ</option>
@@ -245,29 +243,71 @@ export default function CreditCheck() {
 
             {/* เงื่อนไขอาชีพ */}
             {careerFields === 'government' && (
-              <div className="bg-green-50 rounded-xl p-3 mb-2">
-                <label>หน่วยงานที่ทำงาน</label>
-                <input type="text" name="govAgency" className="form-input" />
-                <label>ตำแหน่ง</label>
-                <input type="text" name="govPosition" className="form-input" />
-                <label>อายุราชการ (ปี)</label>
-                <input type="number" name="govYears" className="form-input" />
-                <label>รายได้ต่อเดือน (บาท)</label>
-                <input type="number" name="govIncome" className="form-input" />
+              <div className="form-section-government">
+                <h3 className="text-primary font-bold mb-3">ข้อมูลข้าราชการ</h3>
+                <label className="form-label">หน่วยงานที่ทำงาน</label>
+                <input
+                  type="text"
+                  name="govAgency"
+                  className="form-input mb-3"
+                  placeholder="ระบุหน่วยงาน"
+                />
+                <label className="form-label">ตำแหน่ง</label>
+                <input
+                  type="text"
+                  name="govPosition"
+                  className="form-input mb-3"
+                  placeholder="ระบุตำแหน่ง"
+                />
+                <label className="form-label">อายุราชการ (ปี)</label>
+                <input
+                  type="number"
+                  name="govYears"
+                  className="form-input mb-3"
+                  placeholder="จำนวนปี"
+                />
+                <label className="form-label">รายได้ต่อเดือน (บาท)</label>
+                <input
+                  type="number"
+                  name="govIncome"
+                  className="form-input"
+                  placeholder="รายได้ต่อเดือน"
+                />
               </div>
             )}
             {careerFields === 'company' && (
-              <div className="bg-blue-50 rounded-xl p-3 mb-2">
-                <label>บริษัทที่ทำงาน</label>
-                <input type="text" name="companyName" className="form-input" />
-                <label>ตำแหน่ง</label>
-                <input type="text" name="companyPosition" className="form-input" />
-                <label>อายุงาน (ปี)</label>
-                <input type="number" name="companyYears" className="form-input" />
-                <label>รายได้ต่อเดือน (บาท)</label>
-                <input type="number" name="companyIncome" className="form-input" />
-                <label>ประเภทเอกสารรายได้</label>
-                <select name="companySalaryProof" className="form-input">
+              <div className="form-section-company">
+                <h3 className="text-accent font-bold mb-3">ข้อมูลพนักงานบริษัท</h3>
+                <label className="form-label">บริษัทที่ทำงาน</label>
+                <input
+                  type="text"
+                  name="companyName"
+                  className="form-input mb-3"
+                  placeholder="ชื่อบริษัท"
+                />
+                <label className="form-label">ตำแหน่ง</label>
+                <input
+                  type="text"
+                  name="companyPosition"
+                  className="form-input mb-3"
+                  placeholder="ตำแหน่งงาน"
+                />
+                <label className="form-label">อายุงาน (ปี)</label>
+                <input
+                  type="number"
+                  name="companyYears"
+                  className="form-input mb-3"
+                  placeholder="จำนวนปี"
+                />
+                <label className="form-label">รายได้ต่อเดือน (บาท)</label>
+                <input
+                  type="number"
+                  name="companyIncome"
+                  className="form-input mb-3"
+                  placeholder="รายได้ต่อเดือน"
+                />
+                <label className="form-label">ประเภทเอกสารรายได้</label>
+                <select name="companySalaryProof" className="form-select">
                   <option value="">-- เลือกประเภท --</option>
                   <option value="มีสลิปเงินเดือน">มีสลิปเงินเดือน</option>
                   <option value="หนังสือรับรองเงินเดือน">หนังสือรับรองเงินเดือน</option>
@@ -276,25 +316,57 @@ export default function CreditCheck() {
               </div>
             )}
             {careerFields === 'freelance' && (
-              <div className="bg-yellow-50 rounded-xl p-3 mb-2">
-                <label>สาขางานที่ทำ</label>
-                <input type="text" name="freelanceField" className="form-input" />
-                <label>อายุงาน (ปี)</label>
-                <input type="number" name="freelanceYears" className="form-input" />
-                <label>รายได้ต่อเดือน (บาท)</label>
-                <input type="number" name="freelanceIncome" className="form-input" />
+              <div className="form-section-freelance">
+                <h3 className="text-gold font-bold mb-3">ข้อมูลฟรีแลนซ์</h3>
+                <label className="form-label">สาขางานที่ทำ</label>
+                <input
+                  type="text"
+                  name="freelanceField"
+                  className="form-input mb-3"
+                  placeholder="สาขาอาชีพ"
+                />
+                <label className="form-label">อายุงาน (ปี)</label>
+                <input
+                  type="number"
+                  name="freelanceYears"
+                  className="form-input mb-3"
+                  placeholder="จำนวนปี"
+                />
+                <label className="form-label">รายได้ต่อเดือน (บาท)</label>
+                <input
+                  type="number"
+                  name="freelanceIncome"
+                  className="form-input"
+                  placeholder="รายได้ต่อเดือน"
+                />
               </div>
             )}
             {careerFields === 'business' && (
-              <div className="bg-orange-50 rounded-xl p-3 mb-2">
-                <label>ชื่อกิจการ</label>
-                <input type="text" name="businessName" className="form-input" />
-                <label>อายุกิจการ (ปี)</label>
-                <input type="number" name="businessYears" className="form-input" />
-                <label>รายได้ต่อเดือน (บาท)</label>
-                <input type="number" name="businessIncome" className="form-input" />
-                <label>ทะเบียนพาณิชย์</label>
-                <select name="businessLicense" className="form-input">
+              <div className="form-section-business">
+                <h3 className="text-success font-bold mb-3">ข้อมูลเจ้าของกิจการ</h3>
+                <label className="form-label">ชื่อกิจการ</label>
+                <input
+                  type="text"
+                  name="businessName"
+                  className="form-input mb-3"
+                  placeholder="ชื่อธุรกิจ"
+                />
+                <label className="form-label">อายุกิจการ (ปี)</label>
+                <input
+                  type="number"
+                  name="businessYears"
+                  className="form-input mb-3"
+                  placeholder="จำนวนปี"
+                />
+                <label className="form-label">รายได้ต่อเดือน (บาท)</label>
+                <input
+                  type="number"
+                  name="businessIncome"
+                  className="form-input mb-3"
+                  placeholder="รายได้ต่อเดือน"
+                />
+                <label className="form-label">ทะเบียนพาณิชย์</label>
+                <select name="businessLicense" className="form-select">
                   <option value="">-- มีทะเบียนพาณิชย์ไหม --</option>
                   <option value="มี">มี</option>
                   <option value="ไม่มี">ไม่มี</option>
@@ -302,15 +374,31 @@ export default function CreditCheck() {
               </div>
             )}
             {careerFields === 'farmer' && (
-              <div className="bg-lime-50 rounded-xl p-3 mb-2">
-                <label>ประเภทการเกษตร</label>
-                <input type="text" name="farmType" className="form-input" />
-                <label>จำนวนไร่</label>
-                <input type="number" name="farmArea" className="form-input" />
-                <label>รายได้ต่อปี (บาท)</label>
-                <input type="number" name="farmIncome" className="form-input" />
-                <label>สมุดเกษตรกร</label>
-                <select name="farmerBook" className="form-input">
+              <div className="form-section-farmer">
+                <h3 className="text-green-600 font-bold mb-3">ข้อมูลเกษตรกร</h3>
+                <label className="form-label">ประเภทการเกษตร</label>
+                <input
+                  type="text"
+                  name="farmType"
+                  className="form-input mb-3"
+                  placeholder="เช่น ข้าว, ข้าวโพด"
+                />
+                <label className="form-label">จำนวนไร่</label>
+                <input
+                  type="number"
+                  name="farmArea"
+                  className="form-input mb-3"
+                  placeholder="จำนวนไร่"
+                />
+                <label className="form-label">รายได้ต่อปี (บาท)</label>
+                <input
+                  type="number"
+                  name="farmIncome"
+                  className="form-input mb-3"
+                  placeholder="รายได้ต่อปี"
+                />
+                <label className="form-label">สมุดเกษตรกร</label>
+                <select name="farmerBook" className="form-select">
                   <option value="">-- มีสมุดเกษตรกรไหม --</option>
                   <option value="มี">มี</option>
                   <option value="ไม่มี">ไม่มี</option>
@@ -318,30 +406,38 @@ export default function CreditCheck() {
               </div>
             )}
             {careerFields === 'other' && (
-              <div className="bg-gray-100 rounded-xl p-3 mb-2">
-                <label>ระบุอาชีพ</label>
-                <input type="text" name="otherCareer" className="form-input" />
-                <label>รายได้ต่อเดือน (บาท)</label>
-                <input type="number" name="otherIncome" className="form-input" />
+              <div className="form-section-other">
+                <h3 className="text-gray-600 font-bold mb-3">ข้อมูลอาชีพอื่นๆ</h3>
+                <label className="form-label">ระบุอาชีพ</label>
+                <input
+                  type="text"
+                  name="otherCareer"
+                  className="form-input mb-3"
+                  placeholder="ระบุอาชีพของคุณ"
+                />
+                <label className="form-label">รายได้ต่อเดือน (บาท)</label>
+                <input
+                  type="number"
+                  name="otherIncome"
+                  className="form-input"
+                  placeholder="รายได้ต่อเดือน"
+                />
               </div>
             )}
 
-            <div className="mb-2">
-              <label className="font-semibold">จังหวัดที่อาศัย</label>
+            <div className="mb-4">
+              <label className="form-label">จังหวัดที่อาศัย</label>
               <input
                 type="text"
                 name="province"
                 required
-                className="form-input mt-1 block w-full rounded-md border-gray-300"
+                className="form-input"
+                placeholder="เช่น เชียงใหม่"
               />
             </div>
-            <div className="mb-2">
-              <label className="font-semibold">สถานะเครดิต</label>
-              <select
-                name="creditStatus"
-                required
-                className="form-input mt-1 block w-full rounded-md border-gray-300"
-              >
+            <div className="mb-4">
+              <label className="form-label">สถานะเครดิต</label>
+              <select name="creditStatus" required className="form-select">
                 <option value="">-- เลือกสถานะเครดิต --</option>
                 <option value="มีเครดิต">มีเครดิต</option>
                 <option value="ไม่มีเครดิต">ไม่มีเครดิต</option>
@@ -384,10 +480,10 @@ export default function CreditCheck() {
 
             <button
               type="submit"
-              className="bg-green-600 hover:bg-green-700 text-white font-bold text-lg mt-5 py-3 rounded-xl w-full transition"
+              className="btn-primary w-full text-lg py-4 font-bold"
               disabled={sending}
             >
-              {sending ? 'กำลังส่ง...' : 'ส่งข้อมูล'}
+              {sending ? 'กำลังส่งข้อมูล...' : 'ส่งข้อมูลประเมิน'}
             </button>
           </form>
 
