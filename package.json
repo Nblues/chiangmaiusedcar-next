@@ -10,23 +10,29 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@fontsource/prompt": "^5.2.6",
     "@vercel/analytics": "^1.2.2",
     "date-fns": "^4.1.0",
+    "emailjs-com": "^3.2.0",
+    "framer-motion": "^12.23.12",
     "gray-matter": "^4.0.3",
+    "lucide-react": "^0.536.0",
     "next": "14.2.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-markdown": "^10.1.0"
+    "react-google-recaptcha": "^3.1.0",
+    "react-markdown": "^10.1.0",
+    "sweetalert2": "^11.22.2"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
     "@types/react": "^18.2.73",
     "@types/react-dom": "^18.2.23",
-    "autoprefixer": "^10.4.19",
+    "autoprefixer": "^10.4.21",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.10",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.1",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5.4.3"
   }
 }

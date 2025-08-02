@@ -1,14 +1,46 @@
 import SEO from '../components/SEO';
+import Head from 'next/head';
 
 export default function Promotion() {
+  const baseUrl = 'https://chiangraiusedcar.com';
+  const pageUrl = `${baseUrl}/promotion`;
+  const pageTitle = 'โปรโมชัน ฟรีดาวน์ ผ่อนถูก | ครูหนึ่งรถสวย';
+  const pageDescription = 'โปรโมชันรถมือสองเชียงใหม่ ฟรีดาวน์ ของแถมจัดเต็ม | ครูหนึ่งรถสวย';
+  const pageImage = `${baseUrl}/cover.jpg`;
+
   return (
     <>
       <SEO
-        title="โปรโมชัน ฟรีดาวน์ ผ่อนถูก | ครูหนึ่งรถสวย"
-        description="โปรโมชันรถมือสองเชียงใหม่ ฟรีดาวน์ ของแถมจัดเต็ม | ครูหนึ่งรถสวย"
+        title={pageTitle}
+        description={pageDescription}
         keywords="โปรโมชันรถมือสอง, รถมือสองเชียงใหม่, รถบ้านฟรีดาวน์, โปรรถมือสอง ฟรีดาวน์, รถมือสองราคาถูก, รถบ้านฟรีดาวน์ เชียงใหม่, รถมือสองผ่อนถูก, ของแถมรถมือสอง"
         url="/promotion"
       />
+      <Head>
+        <link rel="canonical" href={pageUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content={pageImage} />
+        <meta property="og:url" content={pageUrl} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content={pageImage} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebPage',
+              name: pageTitle,
+              description: pageDescription,
+              url: pageUrl,
+            }),
+          }}
+        />
+      </Head>
+
       <main className="max-w-4xl mx-auto p-4 font-prompt" suppressHydrationWarning>
         <h1 className="text-2xl md:text-3xl font-bold mb-6 text-primary">
           โปรโมชัน ฟรีดาวน์ ผ่อนถูก

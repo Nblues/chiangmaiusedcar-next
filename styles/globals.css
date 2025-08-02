@@ -1,30 +1,35 @@
-@import url("/fonts/prompt.css");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* @tailwind directives require Tailwind CSS build process. Uncomment if using Tailwind CSS. */
-/* @tailwind base; */
-/* @tailwind components; */
-/* @tailwind utilities; */
+@import '@fontsource/prompt/400.css';
 
-/* ===== Global Styling ===== */
+/* ---- เพิ่ม custom css ได้ตรงนี้ ---- */
+
+/* ตัวอย่าง: ปุ่มหลัก */
+.btn-primary {
+  @apply bg-orange-400 text-white font-bold py-2 px-6 rounded-full shadow hover:bg-orange-500 transition;
+}
+
+.btn-secondary {
+  @apply border-2 border-blue-900 text-blue-900 font-bold py-2 px-6 rounded-full shadow hover:bg-blue-900 hover:text-white transition;
+}
+
 body {
   font-family: 'Prompt', sans-serif;
-  color: #1a202c; /* Replace with your primary color */
-  background-color: #fff;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===== Animation: Slide In ===== */
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+/* Hide scroll bar */
+::-webkit-scrollbar {
+  width: 0.6em;
+  background: transparent;
 }
-.animate-slideIn {
-  animation: slideIn 0.25s ease-out both;
+::-webkit-scrollbar-thumb {
+  background: #ffb20055;
+  border-radius: 99px;
+}
+
+/* Responsive grid (ตัวอย่าง) */
+.grid-cols-auto {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
