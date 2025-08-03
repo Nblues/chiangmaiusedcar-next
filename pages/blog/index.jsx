@@ -103,7 +103,9 @@ export default function Blog({ posts: initialPosts }) {
                       <h2 className="text-2xl font-bold text-white mb-2 font-prompt">
                         ไม่พบบทความ
                       </h2>
-                      <p className="text-gray-300 text-lg">ไม่พบบทความที่ตรงกับ &ldquo;{searchQuery}&rdquo;</p>
+                      <p className="text-gray-300 text-lg">
+                        ไม่พบบทความที่ตรงกับ &ldquo;{searchQuery}&rdquo;
+                      </p>
                       <p className="text-gray-400 text-sm mt-2">
                         ลองค้นหาด้วยคำอื่น หรือดูบทความทั้งหมด
                       </p>
