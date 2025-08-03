@@ -4,11 +4,6 @@
   "framework": "nextjs",
   "installCommand": "pnpm install",
   "devCommand": "pnpm dev",
-  "functions": {
-    "pages/api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "headers": [
     {
       "source": "/api/(.*)",
