@@ -4,7 +4,6 @@
   "framework": "nextjs",
   "installCommand": "pnpm install",
   "devCommand": "pnpm dev",
-  "regions": ["sin1", "hkg1"],
   "functions": {
     "pages/api/**/*.js": {
       "runtime": "nodejs18.x"
