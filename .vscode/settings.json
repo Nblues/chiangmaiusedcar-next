@@ -6,6 +6,19 @@
   "typescript.preferences.includeCompletionsWithSnippetText": false,
   "typescript.tsdk": "node_modules/typescript/lib",
 
+  // File associations for JSX in .js files
+  "files.associations": {
+    "*.js": "javascriptreact"
+  },
+
+  // ESLint configuration
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
   // Editor performance
   "editor.semanticHighlighting.enabled": false,
   "editor.suggest.snippetsPreventQuickSuggestions": false,

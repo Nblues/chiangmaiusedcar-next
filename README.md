@@ -12,5 +12,5 @@ npm run type-check  # ts syntax check
 npm run build       # production build
 ```
 
-Husky runs `lint` and `type-check` before every commit.
-Push to **main** → GitHub Action verifies build → Vercel auto‑deploys.
+Husky runs `lint` and `type-check` before every commit. Push to **main** → GitHub Action verifies build → Vercel
+auto‑deploys.

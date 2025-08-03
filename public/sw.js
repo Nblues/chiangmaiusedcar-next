@@ -9,7 +9,21 @@ const VERSION = 'v1.0.0';
 const CACHE_NAME = APP_PREFIX + VERSION;
 
 // Assets to cache on install
-const FILES_TO_CACHE = ['/', '/offline.html'];
+const FILES_TO_CACHE = [
+  '/',
+  '/offline.html',
+  '/all-cars',
+  '/logo/logo_main.png',
+  '/herobanner/kn2carbanner.png'
+];
+
+// Routes that should be cached with network-first strategy
+const CACHE_ROUTES = [
+  /^\/all-cars.*$/,
+  /^\/car\/.*$/,
+  /^\/_next\/data\/.*\/all-cars\.json.*$/,
+  /^\/_next\/static\/.*$/
+];
 
 // Install event
 self.addEventListener('install', e => {
@@ -44,21 +58,43 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
-// Fetch event with network-first strategy
+// Fetch event with enhanced caching for pagination
 self.addEventListener('fetch', e => {
   console.log('[ServiceWorker] Fetch', e.request.url);
 
   // Skip non-GET requests
   if (e.request.method !== 'GET') return;
 
+  // Check if request matches our cache routes
+  const shouldCache = CACHE_ROUTES.some(pattern => pattern.test(e.request.url));
+
   e.respondWith(
     (async () => {
       try {
+        // For pagination and car data, use stale-while-revalidate strategy
+        if (shouldCache) {
+          const cachedResponse = await caches.match(e.request);
+          
+          // Return cached response immediately if available
+          if (cachedResponse) {
+            // Revalidate in background
+            fetch(e.request).then(networkResponse => {
+              if (networkResponse && networkResponse.status === 200) {
+                caches.open(CACHE_NAME).then(cache => {
+                  cache.put(e.request, networkResponse.clone());
+                });
+              }
+            }).catch(err => console.log('[ServiceWorker] Background fetch failed:', err));
+            
+            return cachedResponse;
+          }
+        }
+
         // Try network first
         const networkResponse = await fetch(e.request);
 
-        // Cache successful responses
-        if (networkResponse && networkResponse.status === 200) {
+        // Cache successful responses for our routes
+        if (networkResponse && networkResponse.status === 200 && shouldCache) {
           const cache = await caches.open(CACHE_NAME);
           cache.put(e.request, networkResponse.clone());
         }

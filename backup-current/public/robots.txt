@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://chiangmaiusedcar.com
-
-# Sitemaps
-Sitemap: https://chiangmaiusedcar.com/sitemap.xml

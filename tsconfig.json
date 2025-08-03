@@ -7,14 +7,15 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
+    "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "allowSyntheticDefaultImports": true,
     "types": ["node"],
-    "esModuleInterop": true,
     "plugins": [
       {
         "name": "next"
@@ -23,22 +24,14 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@components/*": ["components/*"],
-      "@lib/*": ["lib/*"],
-      "@styles/*": ["styles/*"],
-      "@utils/*": ["utils/*"],
-      "@public/*": ["public/*"]
+      "@/components/*": ["components/*"],
+      "@/lib/*": ["lib/*"],
+      "@/styles/*": ["styles/*"],
+      "@/pages/*": ["pages/*"],
+      "@/public/*": ["public/*"],
+      "@/content/*": ["content/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"],
-  "dependencies": {
-    "next": "14.2.10",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "typescript": "^5.0.0",
-    "react-markdown": "^10.1.0",
-    "gray-matter": "^4.0.3",
-    "date-fns": "^4.1.0"
-  }
+  "exclude": ["node_modules", ".next", "out", "dist"]
 }

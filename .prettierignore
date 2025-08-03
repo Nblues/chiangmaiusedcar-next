@@ -1,0 +1,77 @@
+# ========================
+# 🚫 Build & Output
+# ========================
+.next/
+out/
+build/
+dist/
+node_modules/
+
+# ========================
+# 📦 Lock Files
+# ========================
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# ========================
+# 🛑 Generated Files
+# ========================
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# ========================
+# 🔄 Temporary/Backup
+# ========================
+backup-*/
+deployment-*/
+deployment_source/
+
+# ========================
+# 🗂️ Binary Files
+# ========================
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.ico
+*.svg
+*.woff
+*.woff2
+*.ttf
+*.eot
+
+# ========================
+# 📝 Specific Files
+# ========================
+public/robots.txt
+public/sitemap*.xml
+public/manifest.json
+public/sw.js
+.env*
+*.log
+desktop.ini
+suspect-ssr.txt
+pages/project*.ini
+pages/project*.txt
+
+# ========================
+# 📦 Archive Files
+# ========================
+*.zip
+*.tar
+*.gz
+*.rar
+
+# ========================
+# 🧠 IDE Files
+# ========================
+.vscode/
+.idea/
+
+# ========================
+# 🔍 Config with Special Format
+# ========================
+.husky/
+public/sw.js

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://chiangmaiusedcar.com</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://chiangmaiusedcar.com/herobanner/kn2carbanner.png</image:loc>
+      <image:caption>ครูหนึ่งรถสวย - รถมือสองเชียงใหม่</image:caption>
+      <image:title>หน้าแรกครูหนึ่งรถสวย</image:title>
+      <image:license>https://chiangmaiusedcar.com/terms</image:license>
+    </image:image>
+    <image:image>
+      <image:loc>https://chiangmaiusedcar.com/herobanner/team.png</image:loc>
+      <image:caption>ทีมงานครูหนึ่งรถสวย</image:caption>
+      <image:title>เกี่ยวกับครูหนึ่งรถสวย</image:title>
+      <image:license>https://chiangmaiusedcar.com/terms</image:license>
+    </image:image>
+    <image:image>
+      <image:loc>https://chiangmaiusedcar.com/logo/logo_main.png</image:loc>
+      <image:caption>โลโก้ครูหนึ่งรถสวย</image:caption>
+      <image:title>ครูหนึ่งรถสวย Logo</image:title>
+      <image:license>https://chiangmaiusedcar.com/terms</image:license>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://chiangmaiusedcar.com/about</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://chiangmaiusedcar.com/herobanner/team.png</image:loc>
+      <image:caption>ทีมงานครูหนึ่งรถสวย - ประสบการณ์ 10+ ปี</image:caption>
+      <image:title>เกี่ยวกับครูหนึ่งรถสวย</image:title>
+      <image:license>https://chiangmaiusedcar.com/terms</image:license>
+    </image:image>
+  </url>
+</urlset>

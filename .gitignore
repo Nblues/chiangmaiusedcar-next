@@ -36,7 +36,10 @@ test-results.xml
 # 🛑 Sensitive/Private Files
 # ========================
 .env
-.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 *.pem
 *.key
 *.crt
@@ -77,4 +80,47 @@ Thumbs.db
 *.log
 npm-debug.log*
 yarn-debug.log*
-yarn
+yarn-error.log*
+
+# ========================
+# 🗂️ Temporary/Backup Files
+# ========================
+*.tmp
+*.temp
+*.bak
+*~
+.backup/
+backup-*/
+deployment_source/
+deployment-*/
+
+# ========================
+# 🔄 Project Specific
+# ========================
+suspect-ssr.txt
+project\ dave.*
+
+# ========================
+# 🔍 Trace & Debug Files
+# ========================
+*.trace
+.trace
+trace.json
+
+# ========================
+# 📊 Performance & Monitoring
+# ========================
+.lighthouse/
+lighthouse-report.html
+
+# ========================
+# 🔐 Security & Auth
+# ========================
+.auth/
+auth.json
+
+# ========================
+# 📱 Mobile & PWA
+# ========================
+.expo/
+expo-env.d.ts

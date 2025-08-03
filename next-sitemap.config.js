@@ -10,34 +10,39 @@ module.exports = {
       {
         userAgent: '*',
         allow: '/',
-        disallow: [
-          '/admin',
-          '/api',
-          '/_next',
-          '/secret',
-          '/private/*',
-          '/drafts',
-        ],
+        disallow: ['/admin*', '/api*', '/_next*', '/secret*', '/private*', '/drafts*'],
+      },
+      {
+        userAgent: 'Googlebot-Image',
+        allow: '/',
       },
     ],
     additionalSitemaps: [
-      'https://chiangmaiusedcar.com/sitemap.xml',
-      'https://chiangmaiusedcar.com/server-sitemap.xml',
+      'https://chiangmaiusedcar.com/sitemap-0.xml',
+      'https://chiangmaiusedcar.com/sitemap-images.xml',
     ],
   },
-  exclude: [
-    '/admin',
-    '/api',
-    '/_next',
-    '/secret',
-    '/private/*',
-    '/drafts',
-  ],
+  exclude: ['/admin*', '/api*', '/_next*', '/secret*', '/private*', '/drafts*', '/404', '/500'],
   transform: async (config, path) => {
+    // กำหนด priority ตามประเภทหน้า
+    let priority = 0.7;
+    let changefreq = 'daily';
+
+    if (path === '/') {
+      priority = 1.0;
+      changefreq = 'daily';
+    } else if (path.startsWith('/car/')) {
+      priority = 0.8;
+      changefreq = 'weekly';
+    } else if (path.startsWith('/blog/')) {
+      priority = 0.6;
+      changefreq = 'weekly';
+    }
+
     return {
       loc: path,
-      changefreq: 'daily',
-      priority: path === '/' ? 1.0 : 0.7,
+      changefreq,
+      priority,
       lastmod: new Date().toISOString(),
       alternateRefs: [
         {

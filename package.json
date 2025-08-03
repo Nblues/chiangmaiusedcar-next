@@ -3,15 +3,20 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3000",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "postbuild": "next-sitemap && node scripts/generate-image-sitemap.js && node scripts/generate-pagination-sitemap.js",
+    "generate-sitemap": "node scripts/generate-image-sitemap.js && node scripts/generate-pagination-sitemap.js"
   },
   "dependencies": {
     "@fontsource/prompt": "^5.2.6",
     "@vercel/analytics": "^1.2.2",
+    "axios": "^1.11.0",
     "date-fns": "^4.1.0",
     "emailjs-com": "^3.2.0",
     "framer-motion": "^12.23.12",
@@ -29,10 +34,13 @@
     "@types/react": "^18.2.73",
     "@types/react-dom": "^18.2.23",
     "autoprefixer": "^10.4.21",
+    "cssnano": "^7.1.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.10",
+    "next-sitemap": "^4.2.3",
     "postcss": "^8.5.6",
+    "prettier": "3.3.3",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.5"
   }
 }

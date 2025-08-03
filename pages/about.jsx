@@ -1,0 +1,312 @@
+import React, { useState } from 'react';
+import Image from 'next/image';
+import SEO from '../components/SEO';
+
+export default function About() {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const features = [
+    {
+      title: 'รถบ้านแท้ 100%',
+      description: 'คัดสรรรถคุณภาพดีจากเจ้าของขายตรง ไม่ผ่านคนกลาง',
+    },
+    {
+      title: 'ฟรีดาวน์ 0%',
+      description: 'ออกรถได้ไม่ต้องวางเงินดาวน์ ตามเงื่อนไขไฟแนนซ์',
+    },
+    {
+      title: 'รับประกัน 1 ปี',
+      description: 'รับประกันเครื่องยนต์และเกียร์ไม่จำกัดกิโลเมตร',
+    },
+    {
+      title: 'ส่งฟรีทั่วไทย',
+      description: 'บริการส่งรถถึงบ้านฟรีทุกจังหวัด',
+    },
+    {
+      title: 'เอกสารครบถ้วน',
+      description: 'รถมีเล่มทะเบียน พร้บ. และเอกสารถูกต้องตามกฎหมาย',
+    },
+    {
+      title: 'ประสบการณ์ 10+ ปี',
+      description: 'ความเชี่ยวชาญในธุรกิจรถมือสองมากกว่า 10 ปี',
+    },
+  ];
+
+  return (
+    <div>
+      <SEO
+        title="เกี่ยวกับครูหนึ่งรถสวย - ผู้เชี่ยวชาญรถมือสองเชียงใหม่ 10+ ปี"
+        description="เรื่องราวครูหนึ่งรถสวย จากอาจารย์สอนดนตรีสู่ผู้เชี่ยวชาญรถมือสอง Facebook 1M+ TikTok 150K+ YouTube 40K+ ติดตาม รับประกัน 1 ปี ส่งฟรีทั่วประเทศ โทร 094-064-9018"
+        keywords="ครูหนึ่งรถสวย, ประวัติครูหนึ่ง, รถมือสองเชียงใหม่, รถมือสองเชียงราย, Facebook KN2car, TikTok krunueng_usedcar, YouTube chiangraiusedcar, Lemon8, รับประกันรถมือสอง, ส่งรถฟรีทั่วประเทศ, รถบ้านแท้, Toyota Vios, ไฟแนนซ์รถมือสอง, Google Business, LINE Official"
+        url="https://chiangmaiusedcar.com/about"
+        image="https://chiangmaiusedcar.com/herobanner/team.png"
+        type="profile"
+      />
+
+      {/* Hero Section with Image */}
+      <section>
+        {/* Text Section - ย้ายมาอยู่ด้านบน */}
+        <div className="bg-accent text-white py-8 md:py-12">
+          <div className="text-center px-6">
+            <h1 className="text-3xl md:text-5xl font-bold mb-4 font-prompt">
+              เกี่ยวกับ ครูหนึ่งรถสวย
+            </h1>
+            <p className="text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
+              เพราะอะไรถึงได้รับความไว้วางใจจากลูกค้าทั่วประเทศมากกว่า 1 ล้านติดตาม
+            </p>
+          </div>
+        </div>
+
+        {/* Image Section - เต็มขนาดไม่มี overlay */}
+        <div className="relative w-full h-[400px] md:h-[500px] bg-gray-100 border border-gray-200">
+          {!imageLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <div className="animate-pulse space-y-4 w-full max-w-md mx-auto p-8">
+                <div className="h-16 bg-gray-300 rounded-lg"></div>
+                <div className="h-8 bg-gray-300 rounded w-3/4 mx-auto"></div>
+                <div className="h-4 bg-gray-300 rounded w-1/2 mx-auto"></div>
+              </div>
+            </div>
+          )}
+          <Image
+            src="/herobanner/team.png"
+            alt="ทีมงานครูหนึ่งรถสวย"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+            className={`object-contain transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            loading="lazy"
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+            onLoad={() => setImageLoaded(true)}
+            onError={() => console.error('Image failed to load')}
+          />
+        </div>
+      </section>
+
+      {/* Story Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-8 font-prompt">
+              เรื่องราวของเรา
+            </h2>
+            <div className="space-y-6 text-gray-700 font-prompt text-lg leading-relaxed">
+              <p>
+                <strong>ครูหนึ่งรถสวย</strong>{' '}
+                เริ่มต้นจากความหลงใหลในรถยนต์และความต้องการหารถคุณภาพดีให้ลูกค้า ย้อนไปเมื่อ 10
+                กว่าปีที่แล้ว จากอาจารย์สอนดนตรีที่มีความต้องการหารถยนต์ไว้ใช้สัก 1 คัน
+                ด้วยการรวบรวมเงินที่เหลือและได้คุณพ่อคุณแม่ช่วยสมทบเงินมาซื้อรถ{' '}
+                <strong> Toyota Vios 1.5 E</strong>
+                โฉมแรกสีบรอนซ์ทองในราคา 150,000 บาท ซึ่งใช้งานได้ดีจนขายต่อเปลี่ยนคันใหม่
+              </p>
+              <p>
+                จากประสบการณ์การซื้อรถครั้งแรกที่ต้องเสี่ยงดวง เพราะขาดความรู้เรื่องรถยนต์
+                จึงเป็นแรงบันดาลใจให้เริ่มเข้าสู่วงการรถมือสองในฐานะนายหน้า ได้ค่าคอมมิชชั่นคันละ
+                5,000 บาท ในช่วงที่วงการรถมือสองเชียงใหม่และทั่วประเทศกำลังบูม วันหนึ่งขายได้ 3-4
+                คัน ทำให้เริ่มคุ้นเคยกับไฟแนนซ์ สำนักงานขนส่งทั่วภาคเหนือ และรู้จักคนในวงการรถมือสอง
+              </p>
+              <p>
+                เมื่อได้เปิด<strong> เต็นท์รถเองที่อำเภอเวียงป่าเป้า จังหวัดเชียงราย</strong>{' '}
+                ขายดีมากจนต้องวิ่งส่งรถให้ลูกค้าทั่วภาคเหนือจนหัวหมุน แทบไม่มีเวลาพักผ่อน
+                รองเท้าขาดพื้นทะลุเป็นคู่ๆ กลางวันสอนดนตรี กลางคืนยังต้องเล่นดนตรีอีก
+                เรียกว่าในแต่ละวันพอหัวถึงหมอนก็น๊อคหลับภายใน 3 วินาที
+              </p>
+              <p>
+                จุดเด่นคือเป็นคนพูดจริงทำจริง คำไหนคำนั้น จนลูกค้าประทับใจในการดูแลหลังการขาย
+                ด้วยความจริงใจ จนมาถึงยุคของการสร้างตัวตนบนอินเทอร์เน็ต เป็นคนแรกๆ
+                ที่ออกมาให้ความรู้เกี่ยวกับรถยนต์ทุกด้าน ไม่ว่าจะเป็นกฎหมาย วิธีการใช้งาน
+                การบำรุงรักษา และสอนวิธีดูรถ
+              </p>
+              <p>
+                ด้วยเนื้อหาคุณภาพที่ตอบโจทย์ผู้คน ทำให้มีผู้ติดตาม
+                <strong> Facebook ครูหนึ่งรถสวย 1 ล้านคน </strong>
+                และ<strong> TikTok 150,000 คน </strong>{' '}
+                จากการซื้อขายทั่วภาคเหนือจึงขยายย้ายมาเปิดที่เชียงใหม่เพราะสะดวกในการประสานงานมากกว่าที่เดิมต้องใช้เวลาเดินทางไกลเพื่อปรับรูปแบบธุรกิจให้เป็นซื้อขายรถมือสองออนไลน์ทั่วประเทศ
+                พร้อมบริการ<strong>จัดส่งฟรีทั่วประเทศ</strong> โดยลูกค้า 90% ไม่ต้องมาดูรถ
+                เพราะเชื่อมั่นในคุณภาพ
+              </p>
+              <p>
+                วันนี้ <strong>ครูหนึ่งรถสวย</strong> มีทีมขาย ทีมจัดส่ง
+                ทีมบริการจัดสินเชื่อให้ทั่วประเทศ คัดเลือกเฉพาะ
+                <strong>รถบ้านแท้ 90% รถมือเดียว</strong> ไม่มีรถประมูล พร้อม
+                <strong>รับประกันเครื่องเกียร์ 1 ปี ไม่จำกัดกิโลเมตร</strong> เป้าหมายของเราคือ{' '}
+                <em>&ldquo;การทำให้รถมือสองซื้อง่าย ปลอดภัย อุ่นใจ ไว้ใจได้&rdquo;</em>
+                เพราะเข้าใจความรู้สึกของคนที่ไม่มีความรู้เรื่องรถในตอนซื้อครั้งแรก
+              </p>
+              <p>
+                ลูกค้าสามารถ<strong> ขอดูตรวจสอบเล่มทะเบียนได้ทุกคันทุกหน้าแบบไม่มีปกปิด </strong>{' '}
+                ปัญหาทุกอย่างจะไม่เกิด ถ้าหากต้นทางคัดเลือกรถคุณภาพเกรด A มาขาย
+                เพราะเข้าใจความรู้สึกในตอนนั้นดีว่าคนที่ไม่มีความรู้เรื่องรถเลย
+                เวลาไปเลือกซื้อรถมันรู้สึกยังไง จึงอยากให้ทุกคนอุ่นใจทุกครั้งที่เลือก{' '}
+                <strong>&ldquo;ครูหนึ่งรถสวย&rdquo;</strong>
+              </p>
+              <p>
+                พวกเราและทีมงานเดินทางกันมาร่วม 10 ปีในวงการรถมือสอง เป้าหมายต่อไปของเราคือ
+                <strong>&ldquo;การทำให้รถมือสองซื้อง่าย ปลอดภัย อุ่นใจ ไว้ใจได้&rdquo;</strong>{' '}
+                โดยจะมีการซื้อขายผ่านแพลตฟอร์มที่คิด และพัฒนาโดยครูหนึ่งและทีมงานเอง
+                และยังให้ทุกคนได้มีโอกาสมีสิทธิ์แบบผมในตอนแรกๆ ที่มีค่าคอมมิชชั่น
+                มีรายได้มีโอกาสสร้างเนื้อสร้างตัว
+              </p>
+              <p>
+                มาถึงตรงนี้แล้ว สิ่งเดียวที่พอจะบอกได้ว่า
+                อะไรที่ทำให้ครูหนึ่งรถสวยได้รับความไว้วางใจจากลูกค้าทั่วประเทศ มากกว่า 1
+                ล้านผู้ติดตาม เคล็ดลับคือ <strong>&ldquo;ความจริงใจ&rdquo;</strong> นั่นเองครับ
+              </p>
+              <p className="text-xl font-semibold text-primary italic">
+                &ldquo;โอกาสมีอยู่ทุกที่ เงินมีอยู่ทุกที่ในอากาศ อยู่ที่คุณจะเห็นมันหรือไม่&rdquo;
+                <br />
+                ร่วมอุดมการณ์เดียวกันกับพวกเราได้เร็วๆนี้
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto mt-12">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent">1M+</div>
+                <div className="text-sm text-gray-600">Facebook Followers</div>
+                <a
+                  href="https://www.facebook.com/KN2car"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-blue-600 hover:underline"
+                >
+                  @KN2car
+                </a>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent">150K+</div>
+                <div className="text-sm text-gray-600">TikTok Followers</div>
+                <a
+                  href="https://www.tiktok.com/@krunueng_usedcar"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-blue-600 hover:underline"
+                >
+                  @krunueng_usedcar
+                </a>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent">40K+</div>
+                <div className="text-sm text-gray-600">YouTube Subscribers</div>
+                <a
+                  href="https://youtube.com/@chiangraiusedcar"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-blue-600 hover:underline"
+                >
+                  @chiangraiusedcar
+                </a>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-accent">26K+</div>
+                <div className="text-sm text-gray-600">Lemon8 Followers</div>
+                <a
+                  href="https://s.lemon8-app.com/al/GgUmdUUsrT"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-blue-600 hover:underline"
+                >
+                  Lemon8 Profile
+                </a>
+              </div>
+            </div>
+
+            {/* เพิ่มส่วนโซเชียลมีเดียเพิ่มเติม */}
+            <div className="mt-8 p-6 bg-white rounded-xl border border-gray-200">
+              <h3 className="text-xl font-bold text-primary mb-4 text-center font-prompt">
+                ติดตามเราได้ที่
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <a
+                  href="https://www.facebook.com/nuengblues"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 font-medium"
+                >
+                  Facebook ส่วนตัว (100K+ ติดตาม)
+                </a>
+                <a
+                  href="https://lin.ee/8ugfzstD"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-green-600 hover:text-green-800 font-medium"
+                >
+                  LINE Official Account
+                </a>
+                <a
+                  href="https://g.co/kgs/Fe9dhXt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-red-600 hover:text-red-800 font-medium"
+                >
+                  Google Business Profile
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 bg-white border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4 font-prompt">
+              จุดเด่นของเรา
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto font-prompt">
+              เหตุผลที่ลูกค้าเลือกเชื่อมั่นและกลับมาใช้บริการซ้ำ
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300"
+              >
+                <h3 className="text-xl font-bold text-primary mb-3 font-prompt">{feature.title}</h3>
+                <p className="text-gray-600 font-prompt">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 bg-accent text-white">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 font-prompt">
+            ซื้อรถมือสองที่ไหนดี ให้ปลอดภัย ไม่ถูกหลอกขายรถย้อมแม้ว?
+          </h2>
+          <p className="text-xl mb-8 font-prompt">
+            ลองติดต่อสอบถามครูหนึ่งรถสวยได้เลยให้คำปรึกษาฟรี
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="https://lin.ee/8ugfzstD"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-semibold transition-colors duration-300 font-prompt"
+            >
+              แชท LINE เลย
+            </a>
+            <a
+              href="tel:094-0649018"
+              className="bg-white text-accent hover:bg-gray-100 px-8 py-3 rounded-full font-semibold transition-colors duration-300 font-prompt"
+            >
+              โทร 094-064-9018
+            </a>
+            <a
+              href="https://g.co/kgs/Fe9dhXt"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-primary hover:bg-blue-800 text-white px-8 py-3 rounded-full font-semibold transition-colors duration-300 font-prompt"
+            >
+              Google Maps
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

@@ -2,14 +2,16 @@
 
 ## ภาพรวมสถาปัตยกรรม
 
-เว็บไซต์รถมือสองเชียงใหม่ ครูหนึ่งรถสวย สร้างด้วย Next.js 14 ใช้สถาปัตยกรรม **Pages Router** แบบ hybrid SSR/client-side rendering รวมกับ Shopify เป็น headless CMS สำหรับจัดการข้อมูลรถยนต์
+เว็บไซต์รถมือสองเชียงใหม่ ครูหนึ่งรถสวย สร้างด้วย Next.js 14 ใช้สถาปัตยกรรม **Pages Router** แบบ hybrid SSR/client-side
+rendering รวมกับ Shopify เป็น headless CMS สำหรับจัดการข้อมูลรถยนต์
 
 ### โครงสร้างหลัก
 
 - **Pages Router**: การจัดการเส้นทางหลักใน `/pages` (ไม่ใช่ App Router)
 - **การรวม Shopify**: ข้อมูลรถเก็บเป็น Shopify products พร้อม custom metafields
 - **เนื้อหาสองภาษา**: หลักภาษาไทย บางส่วนภาษาอังกฤษ ใช้หลักการตั้งชื่อแบบไทยเป็นหลัก
-- **สถาปัตยกรรมคอมโพเนนต์**: Functional components พร้อม hooks, ปิด SSR สำหรับ UI components เพื่อป้องกัน hydration mismatches
+- **สถาปัตยกรรมคอมโพเนนต์**: Functional components พร้อม hooks, ปิด SSR สำหรับ UI components เพื่อป้องกัน hydration
+  mismatches
 
 ## ขั้นตอนการพัฒนา
 
