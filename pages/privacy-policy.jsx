@@ -1,6 +1,4 @@
 import SEO from '../components/SEO';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
 export default function PrivacyPolicy() {
   return (
@@ -10,15 +8,14 @@ export default function PrivacyPolicy() {
         description="นโยบายความเป็นส่วนตัวของ ครูหนึ่งรถสวย เราให้ความสำคัญกับการปกป้องข้อมูลส่วนบุคคลของลูกค้า"
         canonical="https://chiangmaiusedcar.com/privacy-policy"
       />
-      <Navbar />
-      
+
       <main className="min-h-screen bg-gray-50 py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-lg shadow-lg p-8">
             <h1 className="text-3xl font-bold text-primary mb-8 text-center">
               นโยบายความเป็นส่วนตัว
             </h1>
-            
+
             <div className="prose prose-lg max-w-none">
               <div className="text-gray-600 mb-6">
                 <strong>วันที่มีผลบังคับใช้:</strong> 4 สิงหาคม 2567
@@ -38,10 +35,10 @@ export default function PrivacyPolicy() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-primary mb-4">2. วัตถุประสงค์ในการใช้ข้อมูล</h2>
-                <p className="text-gray-700 mb-4">
-                  เราใช้ข้อมูลของท่านเพื่อ:
-                </p>
+                <h2 className="text-2xl font-semibold text-primary mb-4">
+                  2. วัตถุประสงค์ในการใช้ข้อมูล
+                </h2>
+                <p className="text-gray-700 mb-4">เราใช้ข้อมูลของท่านเพื่อ:</p>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
                   <li>ติดต่อตอบกลับคำถามและให้บริการ</li>
                   <li>ประมวลผลใบสมัครขอสินเชื่อรถยนต์</li>
@@ -66,9 +63,7 @@ export default function PrivacyPolicy() {
 
               <section className="mb-8">
                 <h2 className="text-2xl font-semibold text-primary mb-4">4. การรักษาความปลอดภัย</h2>
-                <p className="text-gray-700 mb-4">
-                  เราใช้มาตรการรักษาความปลอดภัยที่เหมาะสม เช่น:
-                </p>
+                <p className="text-gray-700 mb-4">เราใช้มาตรการรักษาความปลอดภัยที่เหมาะสม เช่น:</p>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
                   <li>การเข้ารหัสข้อมูล (SSL/TLS)</li>
                   <li>การจำกัดการเข้าถึงข้อมูลเฉพาะผู้ที่จำเป็น</li>
@@ -78,10 +73,10 @@ export default function PrivacyPolicy() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-primary mb-4">5. สิทธิของเจ้าของข้อมูล</h2>
-                <p className="text-gray-700 mb-4">
-                  ท่านมีสิทธิ์ดังต่อไปนี้:
-                </p>
+                <h2 className="text-2xl font-semibold text-primary mb-4">
+                  5. สิทธิของเจ้าของข้อมูล
+                </h2>
+                <p className="text-gray-700 mb-4">ท่านมีสิทธิ์ดังต่อไปนี้:</p>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
                   <li>ขอเข้าถึงและขอสำเนาข้อมูลส่วนบุคคล</li>
                   <li>ขอแก้ไขข้อมูลส่วนบุคคลที่ไม่ถูกต้อง</li>
@@ -94,9 +89,7 @@ export default function PrivacyPolicy() {
 
               <section className="mb-8">
                 <h2 className="text-2xl font-semibold text-primary mb-4">6. การใช้ Cookies</h2>
-                <p className="text-gray-700 mb-4">
-                  เว็บไซต์ของเราใช้ Cookies เพื่อ:
-                </p>
+                <p className="text-gray-700 mb-4">เว็บไซต์ของเราใช้ Cookies เพื่อ:</p>
                 <ul className="list-disc list-inside text-gray-700 space-y-2">
                   <li>จดจำการตั้งค่าของผู้ใช้</li>
                   <li>วิเคราะห์การใช้งานเว็บไซต์</li>
@@ -109,9 +102,12 @@ export default function PrivacyPolicy() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-primary mb-4">7. การเปลี่ยนแปลงนโยบาย</h2>
+                <h2 className="text-2xl font-semibold text-primary mb-4">
+                  7. การเปลี่ยนแปลงนโยบาย
+                </h2>
                 <p className="text-gray-700">
-                  เราอาจปรับปรุงนโยบายความเป็นส่วนตัวนี้เป็นครั้งคราว การเปลี่ยนแปลงจะมีผลทันทีที่เผยแพร่บนเว็บไซต์ 
+                  เราอาจปรับปรุงนโยบายความเป็นส่วนตัวนี้เป็นครั้งคราว
+                  การเปลี่ยนแปลงจะมีผลทันทีที่เผยแพร่บนเว็บไซต์
                   เราแนะนำให้ท่านตรวจสอบนโยบายนี้เป็นประจำ
                 </p>
               </section>
@@ -122,19 +118,27 @@ export default function PrivacyPolicy() {
                   หากมีคำถามเกี่ยวกับนโยบายความเป็นส่วนตัว กรุณาติดต่อ:
                 </p>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-gray-700"><strong>ครูหนึ่งรถสวย</strong></p>
-                  <p className="text-gray-700">320 หมู่ 2 ต.สันพระเนตร อ.สันทราย จ.เชียงใหม่ 50210</p>
-                  <p className="text-gray-700"><strong>โทร:</strong> 094-064-9018</p>
-                  <p className="text-gray-700"><strong>อีเมล:</strong> info@chiangmaiusedcar.com</p>
-                  <p className="text-gray-700"><strong>เวลาทำการ:</strong> เปิดทุกวัน 09:00-20:00 น.</p>
+                  <p className="text-gray-700">
+                    <strong>ครูหนึ่งรถสวย</strong>
+                  </p>
+                  <p className="text-gray-700">
+                    320 หมู่ 2 ต.สันพระเนตร อ.สันทราย จ.เชียงใหม่ 50210
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>โทร:</strong> 094-064-9018
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>อีเมล:</strong> info@chiangmaiusedcar.com
+                  </p>
+                  <p className="text-gray-700">
+                    <strong>เวลาทำการ:</strong> เปิดทุกวัน 09:00-20:00 น.
+                  </p>
                 </div>
               </section>
             </div>
           </div>
         </div>
       </main>
-
-      <Footer />
     </>
   );
 }
