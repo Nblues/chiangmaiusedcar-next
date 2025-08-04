@@ -43,24 +43,24 @@ export default function Promotion() {
       </Head>
 
       <main
-        className="max-w-4xl mx-auto p-4 font-prompt bg-gradient-to-br from-primary to-primary-600 text-white min-h-screen"
+        className="max-w-4xl mx-auto p-4 font-prompt bg-gradient-to-br from-primary to-primary-600 text-accent min-h-screen"
         suppressHydrationWarning
       >
-        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-white">
+        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-accent">
           โปรโมชัน ฟรีดาวน์ ผ่อนถูก
         </h1>
 
         <div className="text-center mb-6">
-          <p className="text-lg text-white">รับข้อเสนอสุดพิเศษสำหรับลูกค้าทุกท่านที่ออกรถกับเรา</p>
+          <p className="text-lg text-accent">รับข้อเสนอสุดพิเศษสำหรับลูกค้าทุกท่านที่ออกรถกับเรา</p>
         </div>
 
         <div className="space-y-10">
           {/* โปรโมชันล่าสุด */}
           <section aria-labelledby="latest-promo">
-            <h2 id="latest-promo" className="text-xl font-semibold mb-4 text-white">
+            <h2 id="latest-promo" className="text-xl font-semibold mb-4 text-accent">
               โปรโมชันล่าสุด
             </h2>
-            <ul className="space-y-2 list-disc list-inside text-white">
+            <ul className="space-y-2 list-disc list-inside text-accent">
               <li>ฟรีตรวจเช็คระยะ เปลี่ยนถ่ายของเหลวก่อนส่งมอบ</li>
               <li>ฟรีค่าจัดไฟแนนซ์และค่าโอนกรรมสิทธิ์</li>
               <li>ฟรีบริการสปารถยนต์: ซักฟอกเบาะ พรม ห้องโดยสาร ห้องเครื่อง ขัดสีเต็มระบบ</li>
@@ -70,7 +70,7 @@ export default function Promotion() {
 
           {/* การรับประกัน */}
           <section aria-labelledby="warranty-info">
-            <h2 id="warranty-info" className="text-xl font-semibold mb-4 text-white">
+            <h2 id="warranty-info" className="text-xl font-semibold mb-4 text-accent">
               การรับประกัน
             </h2>
             <div className="bg-yellow-50 border border-yellow-300 p-4 rounded-xl text-center shadow">
@@ -83,7 +83,7 @@ export default function Promotion() {
 
           {/* เครดิตดีดอกเบี้ยต่ำ */}
           <section aria-labelledby="credit-offer">
-            <h2 id="credit-offer" className="text-xl font-semibold mb-4 text-white">
+            <h2 id="credit-offer" className="text-xl font-semibold mb-4 text-accent">
               สิทธิพิเศษสำหรับลูกค้าเครดิตดี
             </h2>
             <div className="bg-green-50 border border-green-300 p-4 rounded-xl text-center shadow">

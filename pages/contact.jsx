@@ -69,7 +69,7 @@ export default function Contact() {
     email: 'info@chiangmaiusedcar.com',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '320 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี',
+      streetAddress: 'เลขที่ 320 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี',
       addressLocality: 'สันพระเนตร',
       addressRegion: 'เชียงใหม่',
       postalCode: '50210',
@@ -395,13 +395,13 @@ export default function Contact() {
               </h3>
               <div className="space-y-3">
                 <p className="text-gray-700">
-                  320 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี
+                  เลขที่ 320 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี
                   <br />
-                  ตำบลสันพระเนตร อำเภอสันทราย จังหวัดเชียงใหม่ 50210
+                  ตำบลสันพระเนตร อำเภอสันทราย เชียงใหม่ 50210
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <a
-                    href="https://www.google.com/maps/place/ครูหนึ่งรถสวย+รถมือสอง/@18.7986111,99.0144444,17z"
+                    href="https://www.google.com/maps/search/เลขที่+320+หมู่+2+ถนนสมโภชเชียงใหม่+700+ปี+ตำบลสันพระเนตร+อำเภอสันทราย+เชียงใหม่+50210"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-4 py-2 bg-red-600 text-white rounded-full text-sm font-semibold hover:bg-red-700 transform hover:scale-105 transition-all duration-300"

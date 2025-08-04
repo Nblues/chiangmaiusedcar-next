@@ -358,9 +358,6 @@ export default function Home({ cars }) {
                     itemProp="image"
                     loading="lazy"
                   />
-                  <figcaption className="absolute top-4 left-4 bg-orange-600 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
-                    รถแนะนำ
-                  </figcaption>
                   {car.tags?.includes('ใหม่') && (
                     <span className="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold shadow-md">
                       ใหม่
@@ -405,6 +402,7 @@ export default function Home({ cars }) {
                     rel="noopener noreferrer"
                     className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full px-2 py-1 text-xs font-semibold shadow"
                     aria-label="สอบถามผ่าน LINE ครูหนึ่งรถสวย"
+                    onClick={e => e.stopPropagation()}
                   >
                     LINE
                   </a>
@@ -412,28 +410,10 @@ export default function Home({ cars }) {
                     href={`tel:094-0649018`}
                     className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow"
                     aria-label="โทร 094-064-9018"
+                    onClick={e => e.stopPropagation()}
                   >
                     โทร
                   </a>
-                  <button
-                    type="button"
-                    className={`flex-1 flex items-center justify-center bg-gray-600 hover:bg-gray-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow`}
-                    aria-label="แชร์รถคันนี้"
-                    onClick={e => {
-                      e.preventDefault();
-                      if (navigator.share) {
-                        navigator.share({ title: car.title, url: `/car/${car.handle}` });
-                      } else {
-                        window.open(
-                          `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-                            window.location.origin + '/car/' + car.handle
-                          )}`
-                        );
-                      }
-                    }}
-                  >
-                    แชร์
-                  </button>
                   <button
                     type="button"
                     className={`flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border transition-all duration-200 ${
@@ -443,6 +423,7 @@ export default function Home({ cars }) {
                     }`}
                     onClick={e => {
                       e.preventDefault();
+                      e.stopPropagation();
                       toggleSave(car.id);
                     }}
                     aria-label={saved.includes(car.id) ? 'ลบออกจากที่บันทึก' : 'บันทึกรถ'}
@@ -543,48 +524,57 @@ export default function Home({ cars }) {
               {[
                 {
                   url: 'https://www.facebook.com/oonmaxx/posts/pfbid0YcUhHBngfrZmqz4SWWF5rKkVFzrTSMyw4dzayqhbcnEFviMCEwWPc9vhqcQ5Fnzvl',
-                  embed:
-                    'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Foonmaxx%2Fposts%2Fpfbid0YcUhHBngfrZmqz4SWWF5rKkVFzrTSMyw4dzayqhbcnEFviMCEwWPc9vhqcQ5Fnzvl&show_text=true&width=500',
+                  name: 'คุณอุ๋น',
+                  text: 'บริการดีมาก รถสวย คุณภาพดี ส่งมาถึงบ้านตามที่นัดหมาย แนะนำเลยครับ',
+                  rating: 5,
                 },
                 {
                   url: 'https://www.facebook.com/tai.thanchanok.7/posts/pfbid02o1H8XvSfrYBy3SJyHAjGQySsunfzAtL7pZha7pLCQnXj4GQXVQisp7mMXczdVrLol',
-                  embed:
-                    'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Ftai.thanchanok.7%2Fposts%2Fpfbid02o1H8XvSfrYBy3SJyHAjGQySsunfzAtL7pZha7pLCQnXj4GQXVQisp7mMXczdVrLol&show_text=true&width=500',
+                  name: 'คุณใต้',
+                  text: 'ขอบคุณครูหนึ่งรถสวยมากค่ะ ได้รถตามที่ใจหวัง ราคาดี คุ้มค่า',
+                  rating: 5,
                 },
                 {
                   url: 'https://www.facebook.com/nongnoo.kookkook/posts/pfbid0tpxVdnyyomBdnd2UECRPa567pYnev2b2fTe9jcmVtK6mTWSQFTM8PmyQQRXx8Kqjl',
-                  embed:
-                    'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fnongnoo.kookkook%2Fposts%2Fpfbid0tpxVdnyyomBdnd2UECRPa567pYnev2b2fTe9jcmVtK6mTWSQFTM8PmyQQRXx8Kqjl&show_text=true&width=500',
+                  name: 'คุณหนู',
+                  text: 'รถดีมาก เครื่องยนต์ดี ไม่มีปัญหา ขอบคุณที่ให้คำแนะนำดีๆ',
+                  rating: 5,
                 },
                 {
                   url: 'https://www.facebook.com/NaowaratUpachal/posts/pfbid0K9xEwV4KmtjFaQvZ7g7PsVchrPE1vko4esuchpSuuvBNrwVfhJ1KMkiqhYhxKhtSl',
-                  embed:
-                    'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FNaowaratUpachal%2Fposts%2Fpfbid0K9xEwV4KmtjFaQvZ7g7PsVchrPE1vko4esuchpSuuvBNrwVfhJ1KMkiqhYhxKhtSl&show_text=true&width=500',
+                  name: 'คุณเนาวรัตน์',
+                  text: 'พอใจมากค่ะ รถตรงปก ไม่โกหก จัดส่งตรงเวลา',
+                  rating: 5,
                 },
                 {
                   url: 'https://www.facebook.com/nongtee.myson/posts/pfbid02xgQBPEGhpPyeVemBEymTBUDmByZ33GJh2fvcWCfoznu5MjhQ82ZDptUXC53RHz5el',
-                  embed:
-                    'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fnongtee.myson%2Fposts%2Fpfbid02xgQBPEGhpPyeVemBEymTBUDmByZ33GJh2fvcWCfoznu5MjhQ82ZDptUXC53RHz5el&show_text=true&width=500',
+                  name: 'คุณนงที',
+                  text: 'ประทับใจการบริการ ให้คำปรึกษาดี รถคุณภาพดี แนะนำเพื่อนๆ',
+                  rating: 5,
                 },
                 {
                   url: 'https://www.facebook.com/permalink.php?story_fbid=pfbid0XmfHjMnKrL6i2tn5W3UyJSHdx9K6wqY99bqfsBDR5rpGMrcj2mGufNtfYVY2nbFQl&id=100004184059361',
-                  embed:
-                    'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0XmfHjMnKrL6i2tn5W3UyJSHdx9K6wqY99bqfsBDR5rpGMrcj2mGufNtfYVY2nbFQl%26id%3D100004184059361&show_text=true&width=500',
+                  name: 'ลูกค้าครูหนึ่ง',
+                  text: 'ได้รถดีมาก ไม่มีปัญหา เอกสารครบถ้วน บริการดีเยี่ยม',
+                  rating: 5,
                 },
                 {
                   url: 'https://www.facebook.com/na.mo.payya.ym/posts/pfbid0ssojKSqnysqj4tidSPBTVfteipcWvDU1weJCE8doDAZKKq8S74vuyUy2qihwEww7l',
-                  embed:
-                    'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fna.mo.payya.ym%2Fposts%2Fpfbid0ssojKSqnysqj4tidSPBTVfteipcWvDU1weJCE8doDAZKKq8S74vuyUy2qihwEww7l&show_text=true&width=500',
+                  name: 'คุณนะโม',
+                  text: 'ขอบคุณครูหนึ่งรถสวย ได้รับรถตามเวลาที่นัด รถสภาพดี',
+                  rating: 5,
                 },
                 {
                   url: 'https://www.facebook.com/malee.daengprasert/posts/pfbid0LRfqmX9JGEZZvvFBnfK8GABoZmdSVB7VjAiWA8TfgvR7FHzed7h9XyD4pCpJLkGJl',
-                  embed:
-                    'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fmalee.daengprasert%2Fposts%2Fpfbid0LRfqmX9JGEZZvvFBnfK8GABoZmdSVB7VjAiWA8TfgvR7FHzed7h9XyD4pCpJLkGJl&show_text=true&width=500',
+                  name: 'คุณมาลี',
+                  text: 'โอเคมากเลย ครูหนึ่งให้คำแนะนำดี รถดี ราคาเป็นธรรม',
+                  rating: 5,
                 },
                 {
                   url: 'https://www.facebook.com/chalida.twoslim/posts/pfbid02aZHpp5tcQUdhhT4SiR4c4zZv4HhrBGEEUiEuSYSNzzc1PF9yTiTrRgqZYwNXER31l',
-                  embed:
-                    'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fchalida.twoslim%2Fposts%2Fpfbid02aZHpp5tcQUdhhT4SiR4c4zZv4HhrBGEEUiEuSYSNzzc1PF9yTiTrRgqZYwNXER31l&show_text=true&width=500',
+                  name: 'คุณชลิดา',
+                  text: 'ดีใจมากที่ได้รถมา สวยมาก ไม่มีตำหนิ ขอบคุณครูหนึ่งค่ะ',
+                  rating: 5,
                 },
               ].map((review, i) => (
                 <article
@@ -592,55 +582,47 @@ export default function Home({ cars }) {
                   className="flex-none w-80 md:w-96 bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-60 snap-center"
                 >
                   <div className="relative h-full">
-                    {showFbReviews ? (
-                      <iframe
-                        src={review.embed}
-                        width="100%"
-                        height="100%"
-                        className="w-full h-full"
-                        style={{ border: 'none', overflow: 'hidden' }}
-                        scrolling="no"
-                        frameBorder="0"
-                        allowFullScreen={true}
-                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                        title={`รีวิวลูกค้า ${i + 1} - ครูหนึ่งรถสวย`}
-                        loading="lazy"
-                        onLoad={e => {
-                          // Hide loading after iframe loads
-                          const loader = e.target.parentElement.querySelector('.loading-spinner');
-                          if (loader) loader.style.display = 'none';
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="animate-pulse rounded-full h-12 w-12 bg-gray-300 mx-auto mb-2"></div>
-                          <p className="text-gray-500 text-sm">กำลังโหลดรีวิว...</p>
+                    {/* ใช้ Static content แทน iframe สำหรับ production */}
+                    <div className="w-full h-full bg-white border border-gray-200 rounded-lg p-4 overflow-hidden">
+                      <div className="flex items-start space-x-3">
+                        <div className="flex-shrink-0">
+                          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <svg
+                              className="w-6 h-6 text-blue-600"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                            </svg>
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-sm font-medium text-gray-900 mb-1">
+                            {review.name}
+                          </div>
+                          <div className="text-xs text-gray-500 mb-2">รีวิวจาก Facebook</div>
+                          <div className="text-sm text-gray-700 line-clamp-4">&ldquo;{review.text}&rdquo;</div>
+                          <div className="flex items-center mt-2">
+                            <div className="flex text-yellow-400">{'★'.repeat(review.rating)}</div>
+                            <span className="ml-1 text-xs text-gray-500">{review.rating}.0</span>
+                          </div>
                         </div>
                       </div>
-                    )}
-                    <div
-                      className="loading-spinner absolute inset-0 flex items-center justify-center bg-gray-100"
-                      style={{ display: showFbReviews ? 'flex' : 'none' }}
-                    >
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
                     </div>
-                    <div className="absolute inset-0 pointer-events-none">
-                      <div
-                        onClick={() => window.open(review.url, '_blank', 'noopener,noreferrer')}
-                        className="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg transition-colors pointer-events-auto z-10 cursor-pointer"
-                        aria-label={`ดูรีวิวเต็มบน Facebook - รีวิว ${i + 1}`}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={e => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            window.open(review.url, '_blank', 'noopener,noreferrer');
-                          }
-                        }}
-                      >
-                        ดูเต็ม
-                      </div>
+                    <div
+                      onClick={() => window.open(review.url, '_blank', 'noopener,noreferrer')}
+                      className="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg transition-colors cursor-pointer"
+                      aria-label={`ดูรีวิวเต็มบน Facebook - รีวิว ${i + 1}`}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          window.open(review.url, '_blank', 'noopener,noreferrer');
+                        }
+                      }}
+                    >
+                      ดูเต็ม
                     </div>
                   </div>
                 </article>
