@@ -1,0 +1,36 @@
+# ===================================================
+# 🌟 VERCEL ENVIRONMENT VARIABLES
+# ===================================================
+# คัดลอกค่าเหล่านี้ไปใส่ใน Vercel Dashboard
+# Settings > Environment Variables
+
+# 🛒 Shopify Configuration
+SHOPIFY_DOMAIN=kn-goodcar.com
+SHOPIFY_STOREFRONT_TOKEN=bb70cb008199a94b83c98df0e45ada67
+
+# 🔒 reCAPTCHA Configuration  
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=6LevqZkrAAAAAPAsPmJk_qUo6kGlvGsy2xdvvL1A
+RECAPTCHA_SECRET_KEY=6LevqZkrAAAAAKl6fMzyeYyHFOEMLATFnilQCj_U
+
+# 📧 EmailJS Configuration
+NEXT_PUBLIC_EMAILJS_SERVICE_ID=service_qlcksif
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=template_zd6e3f6
+NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=P3wnNJB_Y_PddrdBJ
+
+# 🌐 Site Configuration
+SITE_URL=https://chiangmaiusedcar.com
+
+# ===================================================
+# 📋 DEPLOYMENT CHECKLIST
+# ===================================================
+# □ Set all environment variables in Vercel
+# □ Configure custom domain: chiangmaiusedcar.com  
+# □ Set up SSL certificate (automatic in Vercel)
+# □ Test all forms (contact, reCAPTCHA)
+# □ Test Shopify integration
+# □ Verify SEO meta tags
+# □ Check sitemap.xml
+# □ Test mobile responsiveness
+# □ Verify Google Analytics
+# □ Test social media links
+# □ Check image optimization

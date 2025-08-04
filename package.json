@@ -11,7 +11,11 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "postbuild-disabled": "next-sitemap; node scripts/generate-image-sitemap.js || true; node scripts/generate-pagination-sitemap.js || true",
-    "generate-sitemap": "node scripts/generate-image-sitemap.js && node scripts/generate-pagination-sitemap.js"
+    "generate-sitemap": "node scripts/generate-image-sitemap.js && node scripts/generate-pagination-sitemap.js",
+    "deploy": "vercel --prod",
+    "deploy:preview": "vercel",
+    "build:analyze": "cross-env ANALYZE=true next build",
+    "production": "npm run build && npm run start"
   },
   "dependencies": {
     "@fontsource/prompt": "^5.2.6",
