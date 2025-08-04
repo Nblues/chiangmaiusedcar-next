@@ -47,9 +47,9 @@ function SimilarCars({ currentCar, allCars = [] }) {
         {similarCars.map(car => (
           <article
             key={car.id}
-            className="group bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-200 hover:border-accent"
+            className="group bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-200 hover:border-accent flex flex-col h-full"
           >
-            <Link href={`/car/${car.handle}`} className="block">
+            <Link href={`/car/${car.handle}`} className="flex flex-col h-full">
               <figure className="relative w-full h-40 bg-white">
                 <Image
                   src={
@@ -66,7 +66,7 @@ function SimilarCars({ currentCar, allCars = [] }) {
                 />
               </figure>
 
-              <div className="p-4">
+              <div className="p-4 flex flex-col flex-grow">
                 <h3 className="font-bold text-sm text-gray-900 mb-2 group-hover:text-accent transition-colors line-clamp-2 font-prompt">
                   {car.title}
                 </h3>
@@ -74,8 +74,8 @@ function SimilarCars({ currentCar, allCars = [] }) {
                   <p className="text-lg font-bold text-accent font-prompt">
                     ฿{Number(car.price.amount).toLocaleString()}
                   </p>
-                </div>{' '}
-                <div className="text-xs text-gray-600 space-y-1">
+                </div>
+                <div className="text-xs text-gray-600 space-y-1 flex-grow">
                   {car.vendor && (
                     <div>
                       ยี่ห้อ: <span className="font-medium">{car.vendor}</span>
