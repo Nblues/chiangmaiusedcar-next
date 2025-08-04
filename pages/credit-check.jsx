@@ -12,7 +12,7 @@ const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), {
 });
 
 // ใส่ Site Key ที่ได้จากการสมัคร reCAPTCHA
-const RECAPTCHA_SITEKEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+const RECAPTCHA_SITEKEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LevqZkrAAAAAPAsPmJk_qUo6kGlvGsy2xdvvL1A';
 
 export default function CreditCheck() {
   const formRef = useRef();
@@ -426,9 +426,16 @@ export default function CreditCheck() {
               )}
 
               {/* reCAPTCHA */}
-              {isClient && (
+              {isClient && RECAPTCHA_SITEKEY && (
                 <div className="flex justify-center">
                   <ReCAPTCHA sitekey={RECAPTCHA_SITEKEY} onChange={setCaptcha} />
+                </div>
+              )}
+
+              {/* Message if reCAPTCHA is not available */}
+              {isClient && !RECAPTCHA_SITEKEY && (
+                <div className="flex justify-center">
+                  <p className="text-red-600">reCAPTCHA is not configured. Please contact support.</p>
                 </div>
               )}
 

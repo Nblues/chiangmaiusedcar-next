@@ -10,8 +10,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const secretKey = process.env.RECAPTCHA_SECRET_KEY || '6LevqZkrAAAAAKl6fMzyeYyHFOEMLATFnilQCj_U';
-    
+    const secretKey =
+      process.env.RECAPTCHA_SECRET_KEY || '6LevqZkrAAAAAKl6fMzyeYyHFOEMLATFnilQCj_U';
+
     const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
       method: 'POST',
       headers: {
@@ -25,17 +26,17 @@ export default async function handler(req, res) {
     if (data.success) {
       return res.status(200).json({ success: true, score: data.score });
     } else {
-      return res.status(400).json({ 
-        success: false, 
+      return res.status(400).json({
+        success: false,
         message: 'reCAPTCHA verification failed',
-        errors: data['error-codes'] 
+        errors: data['error-codes'],
       });
     }
   } catch (error) {
     console.error('reCAPTCHA verification error:', error);
-    return res.status(500).json({ 
-      success: false, 
-      message: 'Internal server error' 
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error',
     });
   }
 }
