@@ -601,7 +601,9 @@ export default function Home({ cars }) {
                             {review.name}
                           </div>
                           <div className="text-xs text-gray-500 mb-2">รีวิวจาก Facebook</div>
-                          <div className="text-sm text-gray-700 line-clamp-4">&ldquo;{review.text}&rdquo;</div>
+                          <div className="text-sm text-gray-700 line-clamp-4">
+                            &ldquo;{review.text}&rdquo;
+                          </div>
                           <div className="flex items-center mt-2">
                             <div className="flex text-yellow-400">{'★'.repeat(review.rating)}</div>
                             <span className="ml-1 text-xs text-gray-500">{review.rating}.0</span>

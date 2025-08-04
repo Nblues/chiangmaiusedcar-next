@@ -11,13 +11,11 @@ function MyApp({ Component, pageProps }) {
   // รองรับ layout แบบเฉพาะหน้าถ้ามี
   const getLayout = Component.getLayout || (page => page);
 
-  return getLayout(
+  return (
     <>
-      <div className="relative z-0 min-h-screen flex flex-col">
+      <div className="relative z-0 min-h-screen flex flex-col" suppressHydrationWarning>
         <Navbar />
-        <main className="flex-1">
-          <Component {...pageProps} />
-        </main>
+        <main className="flex-1">{getLayout(<Component {...pageProps} />)}</main>
         <Footer />
       </div>
       <Analytics />
