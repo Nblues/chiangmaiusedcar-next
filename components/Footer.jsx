@@ -94,7 +94,7 @@ export default function Footer() {
                 </div>
                 <div>
                   <p className="text-white font-medium">เวลาทำการ</p>
-                  <p className="text-gray-300 text-sm">เปิดทุกวัน 8:00 - 18:00 น.</p>
+                  <p className="text-gray-300 text-sm">เปิดทุกวัน 09:00 - 20:00 น.</p>
                 </div>
               </div>
             </div>

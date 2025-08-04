@@ -1,8 +1,6 @@
-import dynamic from 'next/dynamic';
 import SEO from '../components/SEO';
-
-const Navbar = dynamic(() => import('../components/Navbar'), { ssr: false });
-const Footer = dynamic(() => import('../components/Footer'), { ssr: false });
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 export default function TermsOfService() {
   return (
@@ -175,7 +173,7 @@ export default function TermsOfService() {
                   <p className="text-gray-700">320 หมู่ 2 ต.สันพระเนตร อ.สันทราย จ.เชียงใหม่ 50210</p>
                   <p className="text-gray-700"><strong>โทร:</strong> 094-064-9018</p>
                   <p className="text-gray-700"><strong>อีเมล:</strong> info@chiangmaiusedcar.com</p>
-                  <p className="text-gray-700"><strong>เวลาทำการ:</strong> จันทร์-อาทิตย์ 8:00-18:00 น.</p>
+                  <p className="text-gray-700"><strong>เวลาทำการ:</strong> เปิดทุกวัน 09:00-20:00 น.</p>
                 </div>
               </section>
 
