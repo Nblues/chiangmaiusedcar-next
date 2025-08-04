@@ -42,7 +42,7 @@ export default function Promotion() {
         />
       </Head>
 
-      <main className="max-w-4xl mx-auto p-4 font-prompt text-white" suppressHydrationWarning>
+      <main className="max-w-4xl mx-auto p-4 font-prompt bg-gradient-to-br from-primary to-primary-600 text-white min-h-screen" suppressHydrationWarning>
         <h1 className="text-2xl md:text-3xl font-bold mb-6 text-white">
           โปรโมชัน ฟรีดาวน์ ผ่อนถูก
         </h1>

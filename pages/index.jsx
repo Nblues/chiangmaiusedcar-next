@@ -626,15 +626,21 @@ export default function Home({ cars }) {
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
                     </div>
                     <div className="absolute inset-0 pointer-events-none">
-                      <a
-                        href={review.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg transition-colors pointer-events-auto z-10"
+                      <div
+                        onClick={() => window.open(review.url, '_blank', 'noopener,noreferrer')}
+                        className="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg transition-colors pointer-events-auto z-10 cursor-pointer"
                         aria-label={`ดูรีวิวเต็มบน Facebook - รีวิว ${i + 1}`}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            window.open(review.url, '_blank', 'noopener,noreferrer');
+                          }
+                        }}
                       >
                         ดูเต็ม
-                      </a>
+                      </div>
                     </div>
                   </div>
                 </article>
