@@ -1,15 +1,5 @@
 {
   "framework": "nextjs",
   "buildCommand": "pnpm build",
-  "installCommand": "pnpm install",
-  "functions": {
-    "pages/api/**/*.js": {
-      "runtime": "nodejs20.x"
-    }
-  },
-  "build": {
-    "env": {
-      "NODE_VERSION": "20.x"
-    }
-  }
+  "installCommand": "pnpm install"
 }
