@@ -11,9 +11,9 @@ export default function Document() {
         <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
 
-        {/* Preload logo & banner */}
-        <link rel="preload" href="/logo.webp" as="image" type="image/webp" />
-        <link rel="preload" href="/herobanner/kn2carsbanner.png" as="image" type="image/png" />
+        {/* Preload critical images - เฉพาะที่ใช้งานจริง */}
+        <link rel="preload" href="/herobanner/kn2carbanner.png" as="image" type="image/png" />
+        <link rel="preload" href="/logo/logo_main.png" as="image" type="image/png" />
 
         {/* Google Fonts: Prompt */}
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />

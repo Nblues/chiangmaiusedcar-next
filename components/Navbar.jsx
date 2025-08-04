@@ -88,7 +88,6 @@ export default function Navbar() {
                   }`}
                   onClick={() => setMobileOpen(false)}
                 >
-                  <span className="mr-2">{item.icon}</span>
                   {item.label}
                 </Link>
               ))}

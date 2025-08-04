@@ -351,7 +351,7 @@ export default function Home({ cars }) {
                         ? car.images[0]?.url
                         : '/cover.jpg'
                     }
-                    alt={car.title}
+                    alt={`${car.title} - รถมือสองคุณภาพดี ราคา ${Number(car.price.amount).toLocaleString()} บาท`}
                     width={400}
                     height={300}
                     className="w-full h-full object-contain transition-transform duration-300 border-b-2 border-orange-600 bg-white"

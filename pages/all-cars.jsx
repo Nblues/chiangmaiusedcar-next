@@ -21,7 +21,11 @@ export default function AllCars({ cars }) {
 
   useEffect(() => {
     setMounted(true);
-    setSaved(JSON.parse(localStorage.getItem('savedCars') || '[]'));
+
+    // ป้องกัน hydration mismatch โดยเช็ค window object
+    if (typeof window !== 'undefined') {
+      setSaved(JSON.parse(localStorage.getItem('savedCars') || '[]'));
+    }
 
     // อ่านพารามิเตอร์จาก URL
     const { query } = router;
@@ -72,7 +76,7 @@ export default function AllCars({ cars }) {
   }, [searchTerm, priceRange, brandFilter, cars]);
 
   function toggleSave(carId) {
-    if (!mounted) return; // ป้องกันการเรียกใช้ก่อน mount
+    if (!mounted || typeof window === 'undefined') return; // ป้องกันการเรียกใช้ก่อน mount และ SSR
 
     let s = JSON.parse(localStorage.getItem('savedCars') || '[]');
     if (s.includes(carId)) s = s.filter(id => id !== carId);
@@ -114,9 +118,15 @@ export default function AllCars({ cars }) {
     event.preventDefault();
     setCurrentPage(page);
 
-    // อัพเดต URL โดยไม่รีโหลดหน้า
-    const newUrl = getPageUrl(page);
-    router.push(newUrl, undefined, { shallow: true, scroll: false });
+    // อัพเดต URL โดยไม่รีโหลดหน้า - เพิ่มการป้องกัน error
+    try {
+      const newUrl = getPageUrl(page);
+      router.push(newUrl, undefined, { shallow: true, scroll: false });
+    } catch (error) {
+      console.warn('Router navigation failed:', error);
+      // Fallback to direct page change without URL update
+      setCurrentPage(page);
+    }
   };
 
   const generatePageNumbers = () => {
@@ -156,20 +166,6 @@ export default function AllCars({ cars }) {
             <link rel="next" href={`https://chiangmaiusedcar.com${getPageUrl(currentPage + 1)}`} />
           )}
           <link rel="canonical" href={`https://chiangmaiusedcar.com${getPageUrl(currentPage)}`} />
-
-          {/* Performance Preloads for better UX */}
-          {currentPage < totalPages && (
-            <link
-              rel="prefetch"
-              href={`/_next/data/development/all-cars.json?page=${currentPage + 1}`}
-            />
-          )}
-          {currentPage > 1 && (
-            <link
-              rel="prefetch"
-              href={`/_next/data/development/all-cars.json?page=${currentPage - 1}`}
-            />
-          )}
         </Head>
       )}
 
@@ -292,6 +288,10 @@ export default function AllCars({ cars }) {
                   setPriceRange('all');
                   setBrandFilter('all');
                   setCurrentPage(1);
+                  // อัพเดต URL เมื่อรีเซ็ต
+                  if (mounted) {
+                    router.push('/all-cars', undefined, { shallow: true });
+                  }
                 }}
                 className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg transition-colors duration-300 font-prompt"
               >
@@ -350,7 +350,8 @@ export default function AllCars({ cars }) {
                     key={car.id}
                     className="group bg-white rounded-2xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
                   >
-                    <Link href={`/car/${car.handle}`} className="block focus:outline-none">
+                    {/* Main Car Link - คลิกได้ทั้งส่วนรูปและข้อมูล */}
+                    <Link href={`/car/${car.handle}`} className="block focus:outline-none flex-1">
                       <figure className="relative w-full h-32 md:h-48 flex items-center justify-center overflow-hidden bg-orange-600/10">
                         <Image
                           src={
@@ -358,14 +359,14 @@ export default function AllCars({ cars }) {
                               ? car.images[0]?.url
                               : '/cover.jpg'
                           }
-                          alt={car.title}
+                          alt={`${car.title} - รถมือสองคุณภาพดี ราคา ${Number(car.price.amount).toLocaleString()} บาท`}
                           width={400}
                           height={300}
                           className="w-full h-full object-contain transition-transform duration-300 border-b-2 border-orange-600 bg-white"
                           loading="lazy"
                         />
                       </figure>
-                      <div className="p-3 md:p-4 flex flex-col flex-1">
+                      <div className="p-3 md:p-4 flex flex-col">
                         <h3 className="font-extrabold text-sm md:text-lg text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt">
                           {car.title}
                         </h3>
@@ -386,49 +387,52 @@ export default function AllCars({ cars }) {
                           )}
                           <li className="text-gray-900">✓ รับประกัน 1 ปี</li>
                         </ul>
-                        <div className="flex gap-1 md:gap-2 mt-auto">
-                          <a
-                            href="https://lin.ee/8ugfzstD"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full px-2 py-1 text-xs font-semibold shadow"
-                            onClick={e => e.stopPropagation()}
-                          >
-                            LINE
-                          </a>
-                          <a
-                            href={`tel:094-0649018`}
-                            className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow"
-                            onClick={e => e.stopPropagation()}
-                          >
-                            โทร
-                          </a>
-                          <button
-                            type="button"
-                            className={`flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border transition-all duration-200 ${
-                              mounted && saved.includes(car.id)
-                                ? 'bg-orange-600 text-white border-orange-600 shadow-lg'
-                                : 'bg-white text-gray-600 border-gray-300 hover:border-orange-600 hover:text-orange-600'
-                            }`}
-                            onClick={e => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              toggleSave(car.id);
-                            }}
-                          >
-                            <svg
-                              className="w-3 md:w-4 h-3 md:h-4"
-                              fill={mounted && saved.includes(car.id) ? 'currentColor' : 'none'}
-                              stroke="currentColor"
-                              strokeWidth={mounted && saved.includes(car.id) ? 0 : 2}
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                            </svg>
-                          </button>
-                        </div>
                       </div>
                     </Link>
+
+                    {/* Action Buttons - แยกออกจาก Link เพื่อป้องกัน nested anchor */}
+                    <div className="flex gap-1 md:gap-2 p-3 pt-0 md:p-4 md:pt-0">
+                      <button
+                        type="button"
+                        className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
+                        onClick={() =>
+                          window.open('https://lin.ee/8ugfzstD', '_blank', 'noopener,noreferrer')
+                        }
+                      >
+                        LINE
+                      </button>
+                      <button
+                        type="button"
+                        className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
+                        onClick={() => window.open('tel:094-0649018', '_self')}
+                      >
+                        โทร
+                      </button>
+                      <button
+                        type="button"
+                        className={`flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border transition-all duration-200 ${
+                          mounted && saved.includes(car.id)
+                            ? 'bg-orange-600 text-white border-orange-600 shadow-lg'
+                            : 'bg-white text-gray-600 border-gray-300 hover:border-orange-600 hover:text-orange-600'
+                        }`}
+                        onClick={e => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          toggleSave(car.id);
+                        }}
+                        aria-label={`${mounted && saved.includes(car.id) ? 'ยกเลิก' : ''}บันทึกรถ ${car.title}`}
+                      >
+                        <svg
+                          className="w-3 md:w-4 h-3 md:h-4"
+                          fill={mounted && saved.includes(car.id) ? 'currentColor' : 'none'}
+                          stroke="currentColor"
+                          strokeWidth={mounted && saved.includes(car.id) ? 0 : 2}
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                        </svg>
+                      </button>
+                    </div>
                   </article>
                 ))}
               </div>

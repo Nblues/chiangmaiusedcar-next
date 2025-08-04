@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@fontsource/prompt": "^5.2.6",
+    "@next/third-parties": "^15.4.5",
     "@vercel/analytics": "^1.2.2",
     "axios": "^1.11.0",
     "date-fns": "^4.1.0",

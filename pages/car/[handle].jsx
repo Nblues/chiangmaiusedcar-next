@@ -21,19 +21,23 @@ function CarDetailPage({ car, allCars }) {
 
   // Handle keyboard navigation และ preload รูปถัดไป
   useEffect(() => {
-    if (!car) return; // Early return protection
+    if (!car || typeof window === 'undefined') return; // Early return protection
 
-    // Preload รูป 2-3 รูปแรกเพื่อลดการหน่วง
+    // Preload รูป 2-3 รูปแรกเพื่อลดการหน่วง - ป้องกัน duplicate preload
     if (carImages.length > 1) {
-      const preloadImages = carImages.slice(0, Math.min(3, carImages.length));
-      preloadImages.forEach((img, index) => {
-        if (index > 0) {
-          // ข้ามรูปแรกเพราะโหลดแล้ว
+      const preloadImages = carImages.slice(1, Math.min(4, carImages.length)); // เริ่มจากรูปที่ 2
+      const preloadedUrls = new Set();
+      
+      preloadImages.forEach((img) => {
+        if (!preloadedUrls.has(img.url)) {
           const link = document.createElement('link');
           link.rel = 'preload';
           link.as = 'image';
           link.href = img.url;
+          link.onload = () => console.log(`Preloaded: ${img.url}`);
+          link.onerror = () => console.warn(`Failed to preload: ${img.url}`);
           document.head.appendChild(link);
+          preloadedUrls.add(img.url);
         }
       });
     }
