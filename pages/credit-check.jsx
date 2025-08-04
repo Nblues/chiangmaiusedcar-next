@@ -12,8 +12,7 @@ const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), {
 });
 
 // ใส่ Site Key ที่ได้จากการสมัคร reCAPTCHA
-const RECAPTCHA_SITEKEY =
-  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LevqZkrAAAAAPAsPmJk_qUo6kGlvGsy2xdvvL1A';
+const RECAPTCHA_SITEKEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
 export default function CreditCheck() {
   const formRef = useRef();
@@ -44,19 +43,35 @@ export default function CreditCheck() {
       return Swal.fire('กรุณายืนยัน reCAPTCHA', '', 'warning');
     }
 
-    // Set hidden field values
-    formRef.current.careerText.value = careerText[career];
-    formRef.current.downOptionText.value = downOption;
-    formRef.current.submittedAt.value = new Date().toLocaleString('th-TH');
-
     setSending(true);
     Swal.fire({
-      title: 'กำลังส่งข้อมูล...',
+      title: 'กำลังตรวจสอบข้อมูล...',
       allowOutsideClick: false,
       didOpen: Swal.showLoading,
     });
 
     try {
+      // Verify reCAPTCHA first
+      const recaptchaResponse = await fetch('/api/verify-recaptcha', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: captcha }),
+      });
+
+      const recaptchaData = await recaptchaResponse.json();
+
+      if (!recaptchaData.success) {
+        throw new Error('reCAPTCHA verification failed');
+      }
+
+      // Set hidden field values
+      formRef.current.careerText.value = careerText[career];
+      formRef.current.downOptionText.value = downOption;
+      formRef.current.submittedAt.value = new Date().toLocaleString('th-TH');
+
+      // Send email
       await emailjs.sendForm(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'service_qlcksif',
         process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'template_zd6e3f6',

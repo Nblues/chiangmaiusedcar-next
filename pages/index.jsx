@@ -632,7 +632,7 @@ export default function Home({ cars }) {
                         aria-label={`ดูรีวิวเต็มบน Facebook - รีวิว ${i + 1}`}
                         role="button"
                         tabIndex={0}
-                        onKeyDown={(e) => {
+                        onKeyDown={e => {
                           if (e.key === 'Enter' || e.key === ' ') {
                             e.preventDefault();
                             window.open(review.url, '_blank', 'noopener,noreferrer');
