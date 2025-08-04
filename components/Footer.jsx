@@ -478,13 +478,13 @@ export default function Footer() {
             </p>
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
               <Link
-                href="/privacy"
+                href="/privacy-policy"
                 className="text-gray-400 hover:text-accent-400 text-sm transition-colors"
               >
                 นโยบายความเป็นส่วนตัว
               </Link>
               <Link
-                href="/terms"
+                href="/terms-of-service"
                 className="text-gray-400 hover:text-accent-400 text-sm transition-colors"
               >
                 ข้อกำหนดการใช้งาน
