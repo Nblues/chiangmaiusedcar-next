@@ -70,10 +70,16 @@ async function generateImageSitemap() {
   xml += `</urlset>`;
 
   // เขียนไฟล์
-  const outputPath = path.join(process.cwd(), 'public', 'sitemap-images.xml');
-  fs.writeFileSync(outputPath, xml);
-
-  console.log('✅ Image sitemap generated at /public/sitemap-images.xml');
+  try {
+    const outputPath = path.join(process.cwd(), 'public', 'sitemap-images.xml');
+    fs.writeFileSync(outputPath, xml);
+    console.log('✅ Image sitemap generated at /public/sitemap-images.xml');
+  } catch (error) {
+    console.warn('⚠️ Could not write image sitemap:', error.message);
+  }
 }
 
-generateImageSitemap().catch(console.error);
+generateImageSitemap().catch(error => {
+  console.warn('⚠️ Image sitemap generation failed:', error.message);
+  process.exit(0); // Exit with success code to not break build
+});
