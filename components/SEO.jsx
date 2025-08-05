@@ -26,7 +26,7 @@ export default function SEO({
   const metaDesc = description || defaultDescription;
   const metaKeywords = keywords || defaultKeywords;
 
-  // Default image for social sharing
+  // Default image for social sharing - ใช้ hero banner ที่มีอยู่
   const defaultImage = `${site}/herobanner/kn2carbanner.png`;
   const metaImage = image || defaultImage;
 
@@ -54,6 +54,7 @@ export default function SEO({
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:type" content="image/png" />
+      <meta property="og:image:alt" content={metaTitle} />
       <meta property="fb:app_id" content="393815362560599" />
 
       {/* Twitter Card Meta Tags */}
@@ -63,6 +64,7 @@ export default function SEO({
       <meta name="twitter:site" content="@krunueng_usedcar" />
       <meta name="twitter:creator" content="@krunueng_usedcar" />
       <meta name="twitter:image" content={metaImage} />
+      <meta name="twitter:image:alt" content={metaTitle} />
 
       {/* Additional SEO Meta Tags */}
       <meta name="theme-color" content="#6366f1" />

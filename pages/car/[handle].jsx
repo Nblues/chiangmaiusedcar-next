@@ -27,8 +27,8 @@ function CarDetailPage({ car, allCars }) {
     if (carImages.length > 1) {
       const preloadImages = carImages.slice(1, Math.min(4, carImages.length)); // เริ่มจากรูปที่ 2
       const preloadedUrls = new Set();
-      
-      preloadImages.forEach((img) => {
+
+      preloadImages.forEach(img => {
         if (!preloadedUrls.has(img.url)) {
           const link = document.createElement('link');
           link.rel = 'preload';
