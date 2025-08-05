@@ -174,15 +174,11 @@ export default function Home({ cars }) {
       />
 
       <header className="relative w-full min-h-[50vh] md:min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-r from-orange-100 to-blue-100">
-        <Image
+        <img
           src="/herobanner/kn2carbanner.png"
           alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-          fill
           className="absolute inset-0 w-full h-full object-cover z-0"
-          priority
-          quality={90}
-          sizes="100vw"
-          unoptimized={false}
+          loading="eager"
         />
       </header>
 
