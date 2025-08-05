@@ -3,7 +3,7 @@ const nextConfig = {
   // Basic settings only for production build
   poweredByHeader: false,
   reactStrictMode: true,
-  
+
   // Image optimization - enhanced setup
   images: {
     remotePatterns: [
