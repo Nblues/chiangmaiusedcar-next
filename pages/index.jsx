@@ -481,9 +481,9 @@ export default function Home({ cars }) {
             </p>
           </div>
           <div className="relative overflow-hidden">
-            {/* Left Arrow Button */}
+            {/* Desktop Arrow Buttons - ซ่อนในมือถือ */}
             <button
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-700 hover:text-primary rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
+              className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-700 hover:text-primary rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
               onClick={() => {
                 const container = document.querySelector('.reviews-scroll-container');
                 container.scrollBy({ left: -320, behavior: 'smooth' });
@@ -500,9 +500,8 @@ export default function Home({ cars }) {
               </svg>
             </button>
 
-            {/* Right Arrow Button */}
             <button
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-700 hover:text-primary rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
+              className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-700 hover:text-primary rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
               onClick={() => {
                 const container = document.querySelector('.reviews-scroll-container');
                 container.scrollBy({ left: 320, behavior: 'smooth' });
@@ -521,7 +520,7 @@ export default function Home({ cars }) {
 
             {/* Horizontal Scroll Container */}
             <div
-              className="reviews-scroll-container flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4 mx-12"
+              className="reviews-scroll-container flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4 mx-0 md:mx-12 px-4 md:px-0"
               style={{
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none',
@@ -586,16 +585,16 @@ export default function Home({ cars }) {
               ].map((review, i) => (
                 <article
                   key={i}
-                  className="flex-none w-80 md:w-96 bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-60 snap-center"
+                  className="flex-none w-72 sm:w-80 md:w-96 bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-44 sm:h-48 md:h-60 snap-center"
                 >
                   <div className="relative h-full">
                     {/* ใช้ Static content แทน iframe สำหรับ production */}
-                    <div className="w-full h-full bg-white border border-gray-200 rounded-lg p-4 overflow-hidden">
-                      <div className="flex items-start space-x-3">
+                    <div className="w-full h-full bg-white border border-gray-200 rounded-lg p-3 md:p-4 overflow-hidden">
+                      <div className="flex items-start space-x-2 md:space-x-3">
                         <div className="flex-shrink-0">
-                          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                          <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center">
                             <svg
-                              className="w-6 h-6 text-blue-600"
+                              className="w-4 h-4 md:w-6 md:h-6 text-blue-600"
                               fill="currentColor"
                               viewBox="0 0 24 24"
                             >
@@ -604,15 +603,15 @@ export default function Home({ cars }) {
                           </div>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="text-sm font-medium text-gray-900 mb-1">
+                          <div className="text-xs md:text-sm font-medium text-gray-900 mb-1">
                             {review.name}
                           </div>
-                          <div className="text-xs text-gray-500 mb-2">รีวิวจาก Facebook</div>
-                          <div className="text-sm text-gray-700 line-clamp-4">
+                          <div className="text-xs text-gray-500 mb-1 md:mb-2">รีวิวจาก Facebook</div>
+                          <div className="text-xs md:text-sm text-gray-700 line-clamp-3 md:line-clamp-4">
                             &ldquo;{review.text}&rdquo;
                           </div>
-                          <div className="flex items-center mt-2">
-                            <div className="flex text-yellow-400">{'★'.repeat(review.rating)}</div>
+                          <div className="flex items-center mt-1 md:mt-2">
+                            <div className="flex text-yellow-400 text-xs md:text-sm">{'★'.repeat(review.rating)}</div>
                             <span className="ml-1 text-xs text-gray-500">{review.rating}.0</span>
                           </div>
                         </div>
@@ -620,7 +619,7 @@ export default function Home({ cars }) {
                     </div>
                     <div
                       onClick={() => window.open(review.url, '_blank', 'noopener,noreferrer')}
-                      className="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full text-xs font-semibold shadow-lg transition-colors cursor-pointer"
+                      className="absolute bottom-1 md:bottom-2 right-1 md:right-2 bg-blue-600 hover:bg-blue-700 text-white px-2 md:px-3 py-1 rounded-full text-xs font-semibold shadow-lg transition-colors cursor-pointer"
                       aria-label={`ดูรีวิวเต็มบน Facebook - รีวิว ${i + 1}`}
                       role="button"
                       tabIndex={0}
@@ -638,10 +637,11 @@ export default function Home({ cars }) {
               ))}
             </div>
 
-            {/* Scroll Indicator */}
+            {/* Scroll Indicator - ปรับข้อความให้เหมาะสมกับมือถือ */}
             <div className="text-center mt-4">
               <p className="text-sm text-gray-500 font-prompt">
-                คลิกปุ่มลูกศร หรือ เลื่อนดูรีวิวเพิ่มเติม
+                <span className="md:hidden">เลื่อนดูรีวิวเพิ่มเติม</span>
+                <span className="hidden md:inline">คลิกปุ่มลูกศร หรือ เลื่อนดูรีวิวเพิ่มเติม</span>
               </p>
             </div>
           </div>
