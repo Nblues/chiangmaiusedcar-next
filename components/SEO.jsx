@@ -55,6 +55,16 @@ export default function SEO({
       <meta property="og:image:height" content="630" />
       <meta property="og:image:type" content="image/png" />
       <meta property="og:image:alt" content={metaTitle} />
+      <meta property="og:image:secure_url" content={metaImage} />
+      {carData && (
+        <>
+          <meta property="product:price:amount" content={carData.price?.amount || '0'} />
+          <meta property="product:price:currency" content={carData.price?.currencyCode || 'THB'} />
+          <meta property="product:brand" content={carData.brand || ''} />
+          <meta property="product:condition" content="used" />
+          <meta property="product:availability" content={carData.availableForSale ? 'in stock' : 'out of stock'} />
+        </>
+      )}
       <meta property="fb:app_id" content="393815362560599" />
 
       {/* Twitter Card Meta Tags */}

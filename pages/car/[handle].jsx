@@ -186,24 +186,29 @@ function CarDetailPage({ car, allCars }) {
         ).toLocaleString()} บาท`}
         image={currentImage.url}
         keywords={`รถมือสอง, ${car.title}, ${car.vendor}, ${car.model}, ${car.year}, รถบ้าน, ฟรีดาวน์, ผ่อนถูก, เชียงใหม่`}
-        url={`https://chiangmaiusedcar.com/car/${car.handle}`}
-        canonical={`https://chiangmaiusedcar.com/car/${car.handle}`}
-        hreflang={[{ href: `https://chiangmaiusedcar.com/car/${car.handle}`, locale: 'th-TH' }]}
-        structuredData={{
-          '@context': 'https://schema.org',
-          '@type': 'Vehicle',
-          name: car.title,
+        url={`/car/${car.handle}`}
+        type="product"
+        carData={{
+          title: car.title,
+          description: car.description,
+          images: carImages,
           brand: car.vendor,
           model: car.model,
-          vehicleModelDate: car.year,
+          year: car.year,
           color: car.color,
-          mileageFromOdometer: car.mileage,
-          offers: {
-            '@type': 'Offer',
-            price: car.price?.amount,
-            priceCurrency: 'THB',
-            availability: 'https://schema.org/InStock',
-          },
+          mileage: car.mileage,
+          transmission: car.transmission,
+          fuel_type: car.fuel_type,
+          engine: car.engine,
+          displacement: car.displacement,
+          seats: car.seats,
+          province: car.province,
+          condition: car.condition,
+          warranty: car.warranty,
+          price: car.price,
+          availableForSale: car.availableForSale,
+          sku: car.id,
+          id: car.id
         }}
       />
       {/* Schema.org JSON-LD */}
