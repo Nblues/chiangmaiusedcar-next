@@ -339,12 +339,12 @@ export default function Home({ cars }) {
           {safeCars.slice(0, 8).map(car => (
             <article
               key={car.id}
-              className="group bg-white rounded-3xl shadow-2xl hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
+              className="group bg-white rounded-2xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
               itemScope
               itemType="https://schema.org/Product"
             >
-              <Link href={`/car/${car.handle}`} className="block focus:outline-none" tabIndex={0}>
-                <figure className="relative w-full h-48 md:h-56 flex items-center justify-center overflow-hidden bg-orange-600/10">
+              <Link href={`/car/${car.handle}`} className="block focus:outline-none flex-1" tabIndex={0}>
+                <figure className="relative w-full h-32 md:h-48 flex items-center justify-center overflow-hidden bg-orange-600/10">
                   <Image
                     src={
                       Array.isArray(car.images) && car.images.length > 0
@@ -364,16 +364,16 @@ export default function Home({ cars }) {
                     </span>
                   )}
                 </figure>
-                <div className="p-4 flex flex-col flex-1">
+                <div className="p-3 md:p-4 flex flex-col">
                   <h3
-                    className="font-extrabold text-xl text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt"
+                    className="font-extrabold text-sm md:text-lg text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt"
                     itemProp="name"
                   >
                     {car.title}
                   </h3>
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center justify-between mb-2 md:mb-3">
                     <p
-                      className="text-2xl font-bold text-orange-600 font-prompt"
+                      className="text-lg md:text-xl font-bold text-orange-600 font-prompt"
                       itemProp="offers"
                       itemScope
                       itemType="https://schema.org/Offer"
@@ -381,11 +381,11 @@ export default function Home({ cars }) {
                       <span itemProp="price">฿{Number(car.price.amount).toLocaleString()}</span>
                       <meta itemProp="priceCurrency" content="THB" />
                     </p>
-                    <span className="text-xs bg-orange-600 text-white px-2 py-1 rounded-full font-bold shadow-sm whitespace-nowrap">
+                    <span className="text-xs bg-orange-600 text-white px-2 py-1 rounded-full font-bold shadow-sm">
                       ส่งฟรี!
                     </span>
                   </div>
-                  <ul className="text-sm text-gray-800 mb-3 space-y-1 font-prompt font-medium">
+                  <ul className="text-xs md:text-sm text-gray-800 mb-2 md:mb-3 space-y-1 font-prompt font-medium">
                     {car.tags?.includes('ฟรีดาวน์') && (
                       <li className="text-blue-600">✓ ฟรีดาวน์</li>
                     )}
@@ -394,13 +394,13 @@ export default function Home({ cars }) {
                   </ul>
                 </div>
               </Link>
-              <div className="px-4 pb-4">
-                <div className="flex gap-2">
+              <div className="flex gap-1 md:gap-2 p-3 pt-0 md:p-4 md:pt-0">
+                <div className="flex gap-1 md:gap-2 w-full">
                   <a
                     href="https://lin.ee/8ugfzstD"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full px-2 py-1 text-xs font-semibold shadow"
+                    className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
                     aria-label="สอบถามผ่าน LINE ครูหนึ่งรถสวย"
                     onClick={e => e.stopPropagation()}
                   >
@@ -408,7 +408,7 @@ export default function Home({ cars }) {
                   </a>
                   <a
                     href={`tel:094-0649018`}
-                    className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow"
+                    className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
                     aria-label="โทร 094-064-9018"
                     onClick={e => e.stopPropagation()}
                   >
@@ -430,7 +430,7 @@ export default function Home({ cars }) {
                     title="บันทึกดูทีหลัง"
                   >
                     <svg
-                      className="w-4 h-4"
+                      className="w-3 md:w-4 h-3 md:h-4"
                       fill={saved.includes(car.id) ? 'currentColor' : 'none'}
                       stroke="currentColor"
                       strokeWidth={saved.includes(car.id) ? 0 : 2}
