@@ -208,7 +208,7 @@ function CarDetailPage({ car, allCars }) {
           price: car.price,
           availableForSale: car.availableForSale,
           sku: car.id,
-          id: car.id
+          id: car.id,
         }}
       />
       {/* Schema.org JSON-LD */}

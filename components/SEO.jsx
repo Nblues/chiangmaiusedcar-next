@@ -26,7 +26,7 @@ export default function SEO({
   const metaDesc = description || defaultDescription;
   const metaKeywords = keywords || defaultKeywords;
 
-  // Default image for social sharing - ใช้ hero banner ที่มีอยู่
+  // Default image for social sharing - ใช้ hero banner เป็นค่าเริ่มต้น
   const defaultImage = `${site}/herobanner/kn2carbanner.png`;
   const metaImage = image || defaultImage;
 
@@ -62,7 +62,10 @@ export default function SEO({
           <meta property="product:price:currency" content={carData.price?.currencyCode || 'THB'} />
           <meta property="product:brand" content={carData.brand || ''} />
           <meta property="product:condition" content="used" />
-          <meta property="product:availability" content={carData.availableForSale ? 'in stock' : 'out of stock'} />
+          <meta
+            property="product:availability"
+            content={carData.availableForSale ? 'in stock' : 'out of stock'}
+          />
         </>
       )}
       <meta property="fb:app_id" content="393815362560599" />
