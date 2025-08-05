@@ -606,12 +606,16 @@ export default function Home({ cars }) {
                           <div className="text-xs md:text-sm font-medium text-gray-900 mb-1">
                             {review.name}
                           </div>
-                          <div className="text-xs text-gray-500 mb-1 md:mb-2">รีวิวจาก Facebook</div>
+                          <div className="text-xs text-gray-500 mb-1 md:mb-2">
+                            รีวิวจาก Facebook
+                          </div>
                           <div className="text-xs md:text-sm text-gray-700 line-clamp-3 md:line-clamp-4">
                             &ldquo;{review.text}&rdquo;
                           </div>
                           <div className="flex items-center mt-1 md:mt-2">
-                            <div className="flex text-yellow-400 text-xs md:text-sm">{'★'.repeat(review.rating)}</div>
+                            <div className="flex text-yellow-400 text-xs md:text-sm">
+                              {'★'.repeat(review.rating)}
+                            </div>
                             <span className="ml-1 text-xs text-gray-500">{review.rating}.0</span>
                           </div>
                         </div>

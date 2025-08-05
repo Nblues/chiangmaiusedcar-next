@@ -421,7 +421,7 @@ function CarDetailPage({ car, allCars }) {
             {/* คำอธิบาย - จัดรูปแบบให้อ่านง่าย */}
             {car.description && (
               <div className="mb-6">
-                <h3 className="text-lg font-bold text-gray-900 mb-3 font-prompt">รายละเอียดรถ</h3>
+                <h3 className="text-lg font-bold text-gray-900 mb-3 font-prompt">คำอธิบาย</h3>
                 <div className="text-base leading-relaxed text-gray-700 font-prompt bg-gray-50 p-6 rounded-lg">
                   {car.description.split('\n').map((paragraph, index) => {
                     const trimmed = paragraph.trim();
