@@ -11,8 +11,10 @@
 
 ### 🌐 URLs ที่ใช้งานได้
 
-- **Production URL**: https://chiangmaiusedcar-next-88tv7rxyb-chiangmaiusedcars-projects.vercel.app
-- **Vercel Inspect**: https://vercel.com/chiangmaiusedcars-projects/chiangmaiusedcar-next/3cCGuoxDSYvXGGnHqVch6u9wDoxb
+- **Production URL**: https://chiangmaiusedcar-next-1kd6aefky-chiangmaiusedcars-projects.vercel.app
+- **Custom Domain**: https://chiangmaiusedcar.com (ใช้งานได้แล้ว)
+- **Alternative**: https://www.chiangmaiusedcar.com
+- **Vercel Inspect**: https://vercel.com/chiangmaiusedcars-projects/chiangmaiusedcar-next/6x1tmeaVMaYjZRoTnQAqwB8CiueA
 
 ### 🔧 การแก้ปัญหาที่ทำ
 
@@ -55,28 +57,32 @@ Route (pages)                                Size     First Load JS
 
 ### ⚠️ หมายเหตุสำคัญ
 
-1. Domain `chiangmaiusedcar.com` ถูกใช้ใน project เดิมอยู่แล้ว
-2. ตอนนี้ใช้ Vercel subdomain ชั่วคราว
-3. Environment variables ถูกตั้งค่าไว้แล้วใน Vercel dashboard
+1. ✅ Domain `chiangmaiusedcar.com` ใช้งานได้แล้ว!
+2. ✅ เว็บไซต์ทำงานได้ปกติทั้ง production URLs
+3. ✅ Environment variables ถูกตั้งค่าครบถ้วนแล้ว
+4. ⚡ Build time ลดลงเหลือ 22 วินาที (ปรับปรุงจาก >5 นาที)
 
-### 🔄 ขั้นตอนต่อไป (Optional)
+### 🔄 ขั้นตอนต่อไป (ทำเสร็จแล้ว ✅)
 
-1. **ตั้งค่า Custom Domain**:
+1. **✅ Custom Domain ใช้งานได้**:
+   - Domain `chiangmaiusedcar.com` ทำงานปกติแล้ว
+   - ทั้ง www และ non-www สามารถเข้าถึงได้
 
-   - เข้า Vercel Dashboard
-   - ไปที่ Project Settings > Domains
-   - ย้าย domain จาก project เดิมมายัง project ใหม่
-
-2. **ตั้งค่า Environment Variables** (ถ้าจำเป็น):
-   - ใช้ไฟล์ VERCEL_ENV_VARIABLES.txt ที่เตรียมไว้
-   - อัปเดตใน Vercel Dashboard > Settings > Environment Variables
+2. **✅ Environment Variables**:
+   - ตั้งค่าครบถ้วนใน Vercel แล้ว
+   - Shopify, reCAPTCHA, EmailJS ทำงานปกติ
 
 ### 📊 Performance
 
-- **Build Time**: 37 วินาที (ปรับปรุงจาก >5 นาที)
+- **Build Time**: 22 วินาที (ปรับปรุงจาก >5 นาที) 🚀
 - **Bundle Size**: ลดลง ~10%
 - **Memory Usage**: ลดลง ~60%
+- **Domain**: ✅ `chiangmaiusedcar.com` ใช้งานได้แล้ว!
 
-## ✅ การ Deploy สำเร็จแล้ว!
+## ✅ การ Deploy สำเร็จสมบูรณ์!
 
-เว็บไซต์ ครูหนึ่งรถสวย พร้อมใช้งานแล้วที่ URL ด้านบน
+🎉 **เว็บไซต์ ครูหนึ่งรถสวย พร้อมใช้งานแล้ว**
+- **หลัก**: https://chiangmaiusedcar.com
+- **สำรอง**: https://www.chiangmaiusedcar.com
+
+**ทุกอย่างทำงานได้ปกติ: รถยนต์, การค้นหา, บล็อก, ติดต่อ, การคำนวณ!**
