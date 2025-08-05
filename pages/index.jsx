@@ -180,6 +180,10 @@ export default function Home({ cars }) {
           fill
           className="absolute inset-0 w-full h-full object-cover z-0"
           priority
+          quality={85}
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGBkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+          sizes="100vw"
         />
       </header>
 
@@ -343,7 +347,11 @@ export default function Home({ cars }) {
               itemScope
               itemType="https://schema.org/Product"
             >
-              <Link href={`/car/${car.handle}`} className="block focus:outline-none flex-1" tabIndex={0}>
+              <Link
+                href={`/car/${car.handle}`}
+                className="block focus:outline-none flex-1"
+                tabIndex={0}
+              >
                 <figure className="relative w-full h-32 md:h-48 flex items-center justify-center overflow-hidden bg-orange-600/10">
                   <Image
                     src={
