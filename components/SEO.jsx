@@ -58,7 +58,10 @@ export default function SEO({
       <meta property="og:image:secure_url" content={metaImage} />
       {carData && (
         <>
-          <meta property="product:price:amount" content={carData.price?.amount || '0'} />
+          <meta
+            property="product:price:amount"
+            content={carData.price?.amount ? carData.price.amount.toString() : '0'}
+          />
           <meta property="product:price:currency" content={carData.price?.currencyCode || 'THB'} />
           <meta property="product:brand" content={carData.brand || ''} />
           <meta property="product:condition" content="used" />
@@ -176,7 +179,9 @@ export default function SEO({
               color: carData.color || 'Unknown',
               offers: {
                 '@type': 'Offer',
-                price: carData.price?.amount || '0',
+                price: carData.price?.amount
+                  ? parseFloat(carData.price.amount.toString().replace(/[^0-9.-]/g, ''))
+                  : 0,
                 priceCurrency: carData.price?.currencyCode || 'THB',
                 availability: carData.availableForSale
                   ? 'https://schema.org/InStock'

@@ -1,0 +1,117 @@
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import '../styles/globals.css';
+import { Analytics } from '@vercel/analytics/next';
+import { GoogleAnalytics } from '@next/third-parties/google';
+
+// Import components
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import CookieConsent from '../components/CookieConsent';
+import PWAInstallPrompt from '../components/PWAInstallPrompt';
+
+// Main App component - optimized for Fast Refresh
+function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+
+  // Initialize app functionality
+  useEffect(() => {
+    console.log('App initialized with maximum performance');
+
+    // Service Worker Registration
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then(registration => {
+          console.log('SW registered:', registration);
+        })
+        .catch(error => {
+          console.error('SW registration failed:', error);
+        });
+    }
+
+    // Google Analytics Consent Mode
+    if (typeof window !== 'undefined') {
+      window.gtag =
+        window.gtag ||
+        function () {
+          (window.dataLayer = window.dataLayer || []).push(arguments);
+        };
+
+      window.gtag('consent', 'default', {
+        analytics_storage: 'denied',
+        ad_storage: 'denied',
+        functionality_storage: 'granted',
+        security_storage: 'granted',
+      });
+    }
+  }, []);
+
+  // Router events for navigation tracking
+  useEffect(() => {
+    const handleRouteStart = url => {
+      console.log(`Route change started to: ${url}`);
+    };
+
+    const handleRouteComplete = url => {
+      console.log(`Route change completed to: ${url}`);
+    };
+
+    const handleRouteError = (err, url) => {
+      console.error(`Route change error to ${url}:`, err);
+    };
+
+    // Add router event listeners
+    router.events.on('routeChangeStart', handleRouteStart);
+    router.events.on('routeChangeComplete', handleRouteComplete);
+    router.events.on('routeChangeError', handleRouteError);
+
+    // Cleanup function
+    return () => {
+      router.events.off('routeChangeStart', handleRouteStart);
+      router.events.off('routeChangeComplete', handleRouteComplete);
+      router.events.off('routeChangeError', handleRouteError);
+    };
+  }, [router.events]);
+
+  return (
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Navbar />
+      <main className="flex-1 bg-gray-50">
+        <Component {...pageProps} />
+      </main>
+      <Footer />
+      <CookieConsent />
+      <PWAInstallPrompt />
+      <Analytics />
+      <GoogleAnalytics gaId="G-81DK266FDR" />
+    </div>
+  );
+}
+
+// Enhanced Web Vitals function with performance monitoring
+export function reportWebVitals(metric) {
+  const { name, value, id, delta } = metric;
+
+  // Log all metrics in development
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`[Web Vitals] ${name}:`, {
+      value: Math.round(value),
+      delta: Math.round(delta),
+      id,
+    });
+  }
+
+  // Send to analytics in production
+  if (process.env.NODE_ENV === 'production' && typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', name, {
+      custom_parameter_1: Math.round(value),
+      custom_parameter_2: id,
+    });
+  }
+}
+
+// Export with Fast Refresh metadata
+MyApp.displayName = 'MyApp';
+
+export default MyApp;

@@ -1,0 +1,258 @@
+/* Image Layout Utilities */
+
+/* Responsive Container */
+.image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Aspect Ratio Classes */
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
+.aspect-4-3 {
+  aspect-ratio: 4 / 3;
+}
+
+.aspect-16-9 {
+  aspect-ratio: 16 / 9;
+}
+
+.aspect-21-9 {
+  aspect-ratio: 21 / 9;
+}
+
+/* Car Image Specific Ratios */
+.aspect-car-thumbnail {
+  aspect-ratio: 4 / 3;
+}
+
+.aspect-car-detail {
+  aspect-ratio: 16 / 10;
+}
+
+.aspect-car-gallery {
+  aspect-ratio: 1 / 1;
+}
+
+/* Responsive Image Grid */
+.image-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+@media (min-width: 640px) {
+  .image-grid {
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .image-grid {
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
+}
+
+/* Car Grid Specific */
+.car-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .car-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .car-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .car-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Image Hover Effects */
+.image-hover-scale {
+  transition: transform 0.3s ease;
+}
+
+.image-hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.image-hover-zoom {
+  overflow: hidden;
+}
+
+.image-hover-zoom img {
+  transition: transform 0.3s ease;
+}
+
+.image-hover-zoom:hover img {
+  transform: scale(1.1);
+}
+
+/* Loading States */
+.image-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Blur Placeholder */
+.image-blur-placeholder {
+  filter: blur(10px);
+  transition: filter 0.3s ease;
+}
+
+.image-blur-placeholder.loaded {
+  filter: blur(0);
+}
+
+/* Image Overlay */
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.image-container:hover .image-overlay {
+  opacity: 1;
+}
+
+/* Responsive Text Overlay */
+.image-text-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+  color: white;
+  padding: 2rem 1rem 1rem;
+}
+
+/* Badge Overlay */
+.image-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+/* Gallery Styles */
+.image-gallery {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.image-gallery.dense {
+  grid-auto-rows: 200px;
+}
+
+.image-gallery .image-item:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+@media (max-width: 640px) {
+  .image-gallery .image-item:first-child {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+}
+
+/* Lightbox Styles */
+.image-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.image-lightbox img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+/* Accessibility */
+.image-container:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .image-container {
+    break-inside: avoid;
+  }
+
+  .image-hover-scale,
+  .image-hover-zoom {
+    transform: none !important;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .image-loading {
+    background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .image-hover-scale,
+  .image-hover-zoom img,
+  .image-overlay,
+  .image-blur-placeholder {
+    transition: none;
+  }
+
+  .image-loading {
+    animation: none;
+    background: #f0f0f0;
+  }
+}

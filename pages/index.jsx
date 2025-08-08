@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SEO from '../components/SEO';
+import Breadcrumb from '../components/Breadcrumb';
 import { getHomepageCars } from '../lib/shopify';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -64,11 +65,14 @@ export default function Home({ cars }) {
   const brands = ['all', 'toyota', 'honda', 'nissan', 'mazda', 'mitsubishi', 'isuzu', 'ford'];
   const priceRanges = [
     { value: 'all', label: 'ทุกช่วงราคา' },
-    { value: '0-200000', label: 'ต่ำกว่า 200,000' },
-    { value: '200000-400000', label: '200,000 - 400,000' },
-    { value: '400000-600000', label: '400,000 - 600,000' },
-    { value: '600000-800000', label: '600,000 - 800,000' },
-    { value: '800000', label: 'มากกว่า 800,000' },
+    { value: '0-100000', label: 'ต่ำกว่า 1 แสน' },
+    { value: '100000-200000', label: '1-2 แสน' },
+    { value: '200000-300000', label: '2-3 แสน' },
+    { value: '300000-400000', label: '3-4 แสน' },
+    { value: '400000-500000', label: '4-5 แสน' },
+    { value: '500000-600000', label: '5-6 แสน' },
+    { value: '600000-700000', label: '6-7 แสน' },
+    { value: '700000', label: '7 แสนขึ้นไป' },
   ];
 
   // Breadcrumb Schema
@@ -186,6 +190,9 @@ export default function Home({ cars }) {
         />
       </header>
 
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb />
+
       <section id="hero" className="relative">
         <div className="hero-card max-w-4xl w-[90%] mx-auto my-6 flex flex-col md:flex-row items-center gap-6 px-6 py-8 rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
           <div className="flex-1">
@@ -282,46 +289,79 @@ export default function Home({ cars }) {
                 </div>
               </div>
 
-              {/* Quick Links */}
-              <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+              {/* Quick Links - Price Ranges (Modern 2025 Design) */}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
                 <Link
-                  href="/all-cars?brand=toyota"
-                  className="text-center p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  href="/all-cars?price=0-100000"
+                  className="group relative text-center p-3 bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 rounded-xl hover:from-blue-100 hover:to-indigo-200 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-xs text-gray-900">Toyota</div>
+                  <div className="font-bold text-sm text-blue-700 group-hover:text-blue-800">
+                    ต่ำกว่า 1 แสน
+                  </div>
+                  <div className="text-xs font-bold text-orange-500 group-hover:text-orange-600">
+                    &lt; 100K
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
                 <Link
-                  href="/all-cars?brand=honda"
-                  className="text-center p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  href="/all-cars?price=100000-200000"
+                  className="group relative text-center p-3 bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 rounded-xl hover:from-blue-100 hover:to-indigo-200 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-xs text-gray-900">Honda</div>
+                  <div className="font-bold text-sm text-blue-700 group-hover:text-blue-800">
+                    1-2 แสน
+                  </div>
+                  <div className="text-xs font-bold text-orange-500 group-hover:text-orange-600">
+                    100K-200K
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
                 <Link
-                  href="/all-cars?price=0-400000"
-                  className="text-center p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  href="/all-cars?price=200000-300000"
+                  className="group relative text-center p-3 bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 rounded-xl hover:from-blue-100 hover:to-indigo-200 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-xs text-gray-900">ราคาดี</div>
-                  <div className="text-xs font-bold text-red-600">&lt; 400K</div>
+                  <div className="font-bold text-sm text-blue-700 group-hover:text-blue-800">
+                    2-3 แสน
+                  </div>
+                  <div className="text-xs font-bold text-orange-500 group-hover:text-orange-600">
+                    200K-300K
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
                 <Link
-                  href="/all-cars?search=ฟรีดาวน์"
-                  className="text-center p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  href="/all-cars?price=400000-500000"
+                  className="group relative text-center p-3 bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 rounded-xl hover:from-blue-100 hover:to-indigo-200 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-xs text-gray-900">ฟรีดาวน์</div>
+                  <div className="font-bold text-sm text-blue-700 group-hover:text-blue-800">
+                    4-5 แสน
+                  </div>
+                  <div className="text-xs font-bold text-orange-500 group-hover:text-orange-600">
+                    400K-500K
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
                 <Link
-                  href="/all-cars"
-                  className="text-center p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  href="/all-cars?price=600000-700000"
+                  className="group relative text-center p-3 bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 rounded-xl hover:from-blue-100 hover:to-indigo-200 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-xs text-gray-900">รถทั้งหมด</div>
-                  <div className="text-xs font-bold text-red-600">{safeCars.length} คัน</div>
+                  <div className="font-bold text-sm text-blue-700 group-hover:text-blue-800">
+                    6-7 แสน
+                  </div>
+                  <div className="text-xs font-bold text-orange-500 group-hover:text-orange-600">
+                    600K-700K
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
                 <Link
-                  href="/payment-calculator"
-                  className="text-center p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  href="/all-cars?price=700000"
+                  className="group relative text-center p-3 bg-gradient-to-br from-orange-50 to-amber-100 border border-orange-200 rounded-xl hover:from-orange-100 hover:to-amber-200 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-xs text-gray-900">คำนวณ</div>
-                  <div className="text-xs font-bold text-red-600">ค่างวด</div>
+                  <div className="font-bold text-sm text-orange-700 group-hover:text-orange-800">
+                    7 แสนขึ้นไป
+                  </div>
+                  <div className="text-xs font-bold text-blue-500 group-hover:text-blue-600">
+                    &gt; 700K
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
               </div>
             </div>

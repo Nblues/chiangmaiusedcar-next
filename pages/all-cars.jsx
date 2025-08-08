@@ -88,11 +88,14 @@ export default function AllCars({ cars }) {
   const brands = ['all', 'toyota', 'honda', 'nissan', 'mazda', 'mitsubishi', 'isuzu', 'ford'];
   const priceRanges = [
     { value: 'all', label: 'ทุกช่วงราคา' },
-    { value: '0-200000', label: 'ต่ำกว่า 200,000' },
-    { value: '200000-400000', label: '200,000 - 400,000' },
-    { value: '400000-600000', label: '400,000 - 600,000' },
-    { value: '600000-800000', label: '600,000 - 800,000' },
-    { value: '800000', label: 'มากกว่า 800,000' },
+    { value: '0-100000', label: 'ต่ำกว่า 1 แสน' },
+    { value: '100000-200000', label: '1-2 แสน' },
+    { value: '200000-300000', label: '2-3 แสน' },
+    { value: '300000-400000', label: '3-4 แสน' },
+    { value: '400000-500000', label: '4-5 แสน' },
+    { value: '500000-600000', label: '5-6 แสน' },
+    { value: '600000-700000', label: '6-7 แสน' },
+    { value: '700000', label: '7 แสนขึ้นไป' },
   ];
 
   // คำนวณการแบ่งหน้า
@@ -195,7 +198,9 @@ export default function AllCars({ cars }) {
                       brand: car.vendor || 'Unknown',
                       offers: {
                         '@type': 'Offer',
-                        price: car.price.amount,
+                        price: car.price?.amount
+                          ? parseFloat(car.price.amount.toString().replace(/[^0-9.-]/g, ''))
+                          : 0,
                         priceCurrency: 'THB',
                         availability: 'https://schema.org/InStock',
                         seller: {

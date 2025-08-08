@@ -9,7 +9,7 @@ function testServer() {
     if (res.statusCode === 200) {
       console.log('🎉 เซิร์ฟเวอร์พร้อมใช้งาน!');
       console.log('🌐 เปิดเบราว์เซอร์ไปที่: http://localhost:3000');
-      console.log('📄 ทดสอบหน้าบล็อก: http://localhost:3000/blog');
+      console.log('📄 ทดสอบหน้าข่าวสาร: http://localhost:3000/blog');
     } else {
       console.log('⚠️  เซิร์ฟเวอร์มีปัญหา');
     }

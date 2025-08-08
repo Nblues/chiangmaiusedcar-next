@@ -1,18 +1,31 @@
 import React, { useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import '../styles/globals.css';
 import { Analytics } from '@vercel/analytics/next';
 import { GoogleAnalytics } from '@next/third-parties/google';
-
-// Import แบบ dynamic ปิด SSR เพื่อลด hydration mismatch
-const Navbar = dynamic(() => import('../components/Navbar'), { ssr: false });
-const Footer = dynamic(() => import('../components/Footer'), { ssr: false });
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import CookieConsent from '../components/CookieConsent';
+import PWAInstallPrompt from '../components/PWAInstallPrompt';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
+    // Service Worker Registration for PWA
+    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then(registration => {
+            console.log('SW registered: ', registration);
+          })
+          .catch(registrationError => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+
     // ป้องกัน router errors และ handle route changes ที่ถูกยกเลิก
     const handleRouteChangeError = (err, url) => {
       if (err.cancelled) {
@@ -51,6 +64,11 @@ function MyApp({ Component, pageProps }) {
         <main className="flex-1">{getLayout(<Component {...pageProps} />)}</main>
         <Footer />
       </div>
+
+      {/* Components */}
+      <CookieConsent />
+      <PWAInstallPrompt />
+
       <Analytics />
       <GoogleAnalytics gaId="G-81DK266FDR" />
     </>

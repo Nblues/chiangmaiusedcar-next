@@ -210,7 +210,7 @@ export default function Footer() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  บล็อก
+                  ข่าวสาร
                 </Link>
               </li>
               <li>

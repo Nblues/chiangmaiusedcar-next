@@ -8,8 +8,8 @@ export default function BlogCMSPage() {
   return (
     <>
       <SEO
-        title="Blog CMS - ระบบจัดการบทความ | ครูหนึ่งรถสวย"
-        description="ระบบจัดการบทความสำหรับเขียนและแก้ไขบทความบล็อก"
+        title="ระบบจัดการข่าวสาร - CMS | ครูหนึ่งรถสวย"
+        description="ระบบจัดการบทความสำหรับเขียนและแก้ไขบทความข่าวสาร"
         url="https://chiangmaiusedcar.com/blog/cms"
         noindex={true} // ไม่ให้ search engine index หน้านี้
       />

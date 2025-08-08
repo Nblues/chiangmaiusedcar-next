@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import SEO from '../../components/SEO';
+import Breadcrumb from '../../components/Breadcrumb';
 import SimilarCars from '../../components/SimilarCars';
 import { getAllCars } from '../../lib/shopify';
 import Link from 'next/link';
@@ -11,52 +12,128 @@ const CarActionButtons = dynamic(() => import('../../components/CarActionButtons
 
 function CarDetailPage({ car, allCars }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [imageLoadingState, setImageLoadingState] = useState({});
+  const [preloadedImages, setPreloadedImages] = useState(new Set());
 
-  // Prepare images (up to 25 images from Shopify) - moved before hooks
+  // Prepare images (up to 20 images from Shopify) - optimized for speed
   const carImages = React.useMemo(() => {
-    return car?.images?.slice(0, 25) || [{ url: '/cover.jpg', alt: car?.title || 'รถมือสอง' }];
+    if (!car?.images || car.images.length === 0) {
+      return [{ url: '/cover.jpg', alt: car?.title || 'รถมือสอง' }];
+    }
+
+    // Limit to 20 images for better performance
+    const images = car.images.slice(0, 20);
+
+    // Optimize image URLs with Shopify transformations
+    return images.map((img, index) => ({
+      ...img,
+      url: img.url.includes('cdn.shopify.com')
+        ? `${img.url.split('?')[0]}?width=${index === 0 ? 800 : 400}&quality=85&format=webp`
+        : img.url,
+      alt: img.alt || `${car.title} - รูปที่ ${index + 1}`,
+    }));
   }, [car?.images, car?.title]);
 
   const currentImage = carImages[selectedImageIndex] || carImages[0];
 
-  // Handle keyboard navigation และ preload รูปถัดไป
-  useEffect(() => {
-    if (!car || typeof window === 'undefined') return; // Early return protection
+  // Advanced image preloading function
+  const preloadImage = useCallback(
+    (url, priority = 'low') => {
+      if (!url || preloadedImages.has(url) || url.includes('/cover.jpg')) return;
 
-    // Preload รูป 2-3 รูปแรกเพื่อลดการหน่วง - ป้องกัน duplicate preload
-    if (carImages.length > 1) {
-      const preloadImages = carImages.slice(1, Math.min(4, carImages.length)); // เริ่มจากรูปที่ 2
-      const preloadedUrls = new Set();
+      const img = new window.Image();
+      img.fetchPriority = priority;
+      img.loading = 'eager';
 
-      preloadImages.forEach(img => {
-        if (!preloadedUrls.has(img.url)) {
-          const link = document.createElement('link');
-          link.rel = 'preload';
-          link.as = 'image';
-          link.href = img.url;
-          link.onload = () => console.log(`Preloaded: ${img.url}`);
-          link.onerror = () => console.warn(`Failed to preload: ${img.url}`);
-          document.head.appendChild(link);
-          preloadedUrls.add(img.url);
+      img.onload = () => {
+        setPreloadedImages(prev => new Set([...prev, url]));
+        setImageLoadingState(prev => ({ ...prev, [url]: 'loaded' }));
+      };
+
+      img.onerror = () => {
+        setImageLoadingState(prev => ({ ...prev, [url]: 'error' }));
+      };
+
+      setImageLoadingState(prev => ({ ...prev, [url]: 'loading' }));
+      img.src = url;
+    },
+    [preloadedImages]
+  );
+
+  // Smart image navigation with preloading
+  const changeImage = useCallback(
+    newIndex => {
+      setSelectedImageIndex(newIndex);
+
+      // Preload adjacent images
+      const nextIndexes = [
+        (newIndex + 1) % carImages.length,
+        (newIndex - 1 + carImages.length) % carImages.length,
+        (newIndex + 2) % carImages.length,
+      ];
+
+      nextIndexes.forEach((index, priority) => {
+        const img = carImages[index];
+        if (img?.url) {
+          preloadImage(img.url, priority === 0 ? 'high' : 'low');
         }
       });
+    },
+    [carImages, preloadImage]
+  );
+
+  // Handle keyboard navigation และ intelligent preloading
+  useEffect(() => {
+    if (!car || typeof window === 'undefined') return;
+
+    // Register Service Worker for image caching
+    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
+      navigator.serviceWorker
+        .register('/sw-images.js')
+        .then(registration => {
+          console.log('Image SW registered:', registration);
+
+          // ส่งรายการรูปไปให้ SW preload
+          if (registration.active) {
+            registration.active.postMessage({
+              type: 'PRELOAD_IMAGES',
+              urls: carImages.slice(0, 5).map(img => img.url),
+            });
+          }
+        })
+        .catch(error => console.log('Image SW registration failed:', error));
+    }
+
+    // Initial preloading strategy
+    const initPreload = () => {
+      // Preload first 3 images immediately
+      carImages.slice(0, 3).forEach((img, index) => {
+        if (img?.url && !img.url.includes('/cover.jpg')) {
+          preloadImage(img.url, index === 0 ? 'high' : 'low');
+        }
+      });
+    };
+
+    // Use requestIdleCallback for non-blocking preload
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(initPreload);
+    } else {
+      setTimeout(initPreload, 100);
     }
 
     const handleKeyPress = event => {
       if (event.key === 'ArrowLeft') {
-        setSelectedImageIndex(
-          selectedImageIndex === 0 ? carImages.length - 1 : selectedImageIndex - 1
-        );
+        const newIndex = selectedImageIndex === 0 ? carImages.length - 1 : selectedImageIndex - 1;
+        changeImage(newIndex);
       } else if (event.key === 'ArrowRight') {
-        setSelectedImageIndex(
-          selectedImageIndex === carImages.length - 1 ? 0 : selectedImageIndex + 1
-        );
+        const newIndex = selectedImageIndex === carImages.length - 1 ? 0 : selectedImageIndex + 1;
+        changeImage(newIndex);
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [selectedImageIndex, carImages.length, car, carImages]);
+  }, [selectedImageIndex, carImages, car, preloadImage, changeImage]);
 
   // Early return after all hooks
   if (!car) {
@@ -139,7 +216,9 @@ function CarDetailPage({ car, allCars }) {
     offers: {
       '@type': 'Offer',
       priceCurrency: car.price?.currencyCode || 'THB',
-      price: car.price?.amount,
+      price: car.price?.amount
+        ? parseFloat(car.price.amount.toString().replace(/[^0-9.-]/g, ''))
+        : 0,
       availability: car.availableForSale
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock',
@@ -231,35 +310,8 @@ function CarDetailPage({ car, allCars }) {
 
       <main className="min-h-screen bg-gray-50">
         <div className="max-w-6xl mx-auto p-4 lg:p-6">
-          {/* Breadcrumb UI - เพิ่ม background และ contrast */}
-          <nav
-            className="bg-white rounded-lg shadow-sm p-4 mb-6 border border-gray-200"
-            aria-label="breadcrumb"
-          >
-            <ol className="flex items-center space-x-2 text-sm">
-              <li>
-                <Link
-                  href="/"
-                  className="text-primary hover:text-primary-600 font-medium transition-colors"
-                >
-                  หน้าแรก
-                </Link>
-              </li>
-              <li className="text-gray-400 font-medium">/</li>
-              <li>
-                <Link
-                  href="/all-cars"
-                  className="text-primary hover:text-primary-600 font-medium transition-colors"
-                >
-                  รถทั้งหมด
-                </Link>
-              </li>
-              <li className="text-gray-400 font-medium">/</li>
-              <li className="text-gray-800 font-bold" aria-current="page">
-                {car.title}
-              </li>
-            </ol>
-          </nav>
+          {/* Breadcrumb Navigation with Schema */}
+          <Breadcrumb carTitle={car.title} />
 
           {/* Header Section - เพิ่ม background card */}
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
@@ -274,18 +326,28 @@ function CarDetailPage({ car, allCars }) {
 
           {/* รูปหลัก - Main Image Gallery - ปรับปรุงสำหรับมือถือ */}
           <div className="mb-8">
-            {/* Main Image Container */}
+            {/* Main Image Container - Optimized Loading */}
             <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-white rounded-2xl overflow-hidden shadow-2xl mb-4 border border-gray-200">
+              {/* Loading skeleton */}
+              <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 animate-pulse opacity-50" />
+
               <Image
                 src={currentImage.url}
                 alt={currentImage.alt || `${car.title} - รูปที่ ${selectedImageIndex + 1}`}
                 fill
-                className="object-contain transition-transform duration-200"
-                priority={selectedImageIndex <= 2} // ให้ priority กับ 3 รูปแรก
-                quality={90} // ลดจาก 95 เพื่อความเร็ว
+                className="object-contain transition-all duration-300 ease-out"
+                priority={selectedImageIndex === 0} // Only first image gets priority
+                quality={selectedImageIndex === 0 ? 90 : 80} // Higher quality for main image
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 80vw"
                 placeholder="blur"
-                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkrHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyBksud7UmvdIsUsOoKbNOF04rmbY/8k9L7jkl6eSdR8+GRK7QNUb/ZEH9kn5+Dj/x"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                loading={selectedImageIndex === 0 ? 'eager' : 'lazy'}
+                fetchPriority={selectedImageIndex === 0 ? 'high' : 'low'}
+                onLoad={() => {
+                  // Hide loading skeleton
+                  const skeleton = document.querySelector('.animate-pulse');
+                  if (skeleton) skeleton.style.opacity = '0';
+                }}
               />
 
               {/* Mobile-friendly Navigation */}
@@ -293,11 +355,11 @@ function CarDetailPage({ car, allCars }) {
                 <>
                   {/* Left Arrow */}
                   <button
-                    onClick={() =>
-                      setSelectedImageIndex(
-                        selectedImageIndex === 0 ? carImages.length - 1 : selectedImageIndex - 1
-                      )
-                    }
+                    onClick={() => {
+                      const newIndex =
+                        selectedImageIndex === 0 ? carImages.length - 1 : selectedImageIndex - 1;
+                      changeImage(newIndex);
+                    }}
                     className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-2 sm:p-3 rounded-full transition-all duration-200 z-20 touch-manipulation"
                     aria-label="รูปก่อนหน้า (ใช้ลูกศรซ้าย)"
                     type="button"
@@ -319,11 +381,11 @@ function CarDetailPage({ car, allCars }) {
 
                   {/* Right Arrow */}
                   <button
-                    onClick={() =>
-                      setSelectedImageIndex(
-                        selectedImageIndex === carImages.length - 1 ? 0 : selectedImageIndex + 1
-                      )
-                    }
+                    onClick={() => {
+                      const newIndex =
+                        selectedImageIndex === carImages.length - 1 ? 0 : selectedImageIndex + 1;
+                      changeImage(newIndex);
+                    }}
                     className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white p-2 sm:p-3 rounded-full transition-all duration-200 z-20 touch-manipulation"
                     aria-label="รูปถัดไป (ใช้ลูกศรขวา)"
                     type="button"
@@ -356,12 +418,12 @@ function CarDetailPage({ car, allCars }) {
               </div>
             </div>
 
-            {/* Desktop Thumbnail Gallery - เลื่อนรวดเร็ว */}
+            {/* Desktop Thumbnail Gallery - Performance Optimized */}
             {carImages.length > 1 && (
               <div className="hidden sm:flex gap-2 overflow-x-auto pb-2 scrollbar-hide max-h-20 lg:max-h-24">
                 {carImages.map((img, index) => (
                   <button
-                    key={index}
+                    key={`thumb-${index}`}
                     onClick={() => setSelectedImageIndex(index)}
                     className={`relative flex-shrink-0 w-16 h-16 lg:w-20 lg:h-20 rounded-lg overflow-hidden border-2 transition-all duration-150 hover:scale-105 touch-manipulation ${
                       selectedImageIndex === index
@@ -372,27 +434,33 @@ function CarDetailPage({ car, allCars }) {
                     type="button"
                   >
                     <Image
-                      src={img.url}
+                      src={
+                        img.url.includes('cdn.shopify.com')
+                          ? `${img.url.split('?')[0]}?width=80&quality=60&format=webp`
+                          : img.url
+                      }
                       alt={img.alt || `${car.title} ภาพย่อย ${index + 1}`}
                       fill
                       className="object-cover"
                       loading="lazy"
-                      quality={60}
+                      quality={50}
                       sizes="80px"
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                     />
                   </button>
                 ))}
               </div>
             )}
 
-            {/* Mobile Thumbnail Slider - เลื่อนรวดเร็ว */}
+            {/* Mobile Thumbnail Slider - Performance Optimized */}
             {carImages.length > 1 && (
               <div className="sm:hidden">
                 <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                   {carImages.map((img, index) => (
                     <button
-                      key={index}
-                      onClick={() => setSelectedImageIndex(index)}
+                      key={`mobile-thumb-${index}`}
+                      onClick={() => changeImage(index)}
                       className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-150 touch-manipulation ${
                         selectedImageIndex === index
                           ? 'border-primary shadow-lg'
@@ -402,13 +470,19 @@ function CarDetailPage({ car, allCars }) {
                       type="button"
                     >
                       <Image
-                        src={img.url}
+                        src={
+                          img.url.includes('cdn.shopify.com')
+                            ? `${img.url.split('?')[0]}?width=64&quality=50&format=webp`
+                            : img.url
+                        }
                         alt={img.alt || `${car.title} ภาพย่อย ${index + 1}`}
                         fill
                         className="object-cover"
                         loading="lazy"
-                        quality={50}
+                        quality={40}
                         sizes="64px"
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                       />
                     </button>
                   ))}
