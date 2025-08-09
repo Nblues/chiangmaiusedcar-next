@@ -12,7 +12,8 @@ const CarActionButtons = dynamic(() => import('../../components/CarActionButtons
 
 function CarDetailPage({ car, allCars }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [imageLoadingState, setImageLoadingState] = useState({});
+  // imageLoadingState สำหรับการใช้ในอนาคต
+  const [_imageLoadingState, setImageLoadingState] = useState({});
   const [preloadedImages, setPreloadedImages] = useState(new Set());
 
   // Prepare images (up to 20 images from Shopify) - optimized for speed
@@ -91,7 +92,7 @@ function CarDetailPage({ car, allCars }) {
       navigator.serviceWorker
         .register('/sw-images.js')
         .then(registration => {
-          console.log('Image SW registered:', registration);
+          // Image SW registered successfully
 
           // ส่งรายการรูปไปให้ SW preload
           if (registration.active) {
@@ -101,7 +102,10 @@ function CarDetailPage({ car, allCars }) {
             });
           }
         })
-        .catch(error => console.log('Image SW registration failed:', error));
+        .catch(error => {
+          // Image SW registration failed
+          console.error('Image SW registration failed:', error);
+        });
     }
 
     // Initial preloading strategy

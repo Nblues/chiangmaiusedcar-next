@@ -51,7 +51,8 @@ export default async function handler(req, res) {
 
     const originalPath = uploadedFile.filepath;
     const filename = uploadedFile.originalFilename || 'uploaded-image';
-    const parsedName = path.parse(filename);
+    // parsedName สำหรับการใช้ในอนาคต
+    const _parsedName = path.parse(filename);
 
     // สร้าง alt text
     const altText = generateAltText(filename, options.context);

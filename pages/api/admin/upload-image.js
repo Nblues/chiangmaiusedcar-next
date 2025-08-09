@@ -78,8 +78,8 @@ async function handler(req, res) {
     const jpegStats = fs.statSync(jpegPath);
     const webpStats = fs.statSync(webpPath);
 
-    // Calculate savings
-    const jpegSize = jpegStats.size;
+    // Calculate savings - jpegSize สำหรับการใช้ในอนาคต
+    const _jpegSize = jpegStats.size;
     const webpSize = webpStats.size;
     const savings = Math.round(((originalSize - webpSize) / originalSize) * 100);
 

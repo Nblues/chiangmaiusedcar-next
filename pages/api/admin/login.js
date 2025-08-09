@@ -23,6 +23,7 @@ const blockedIPs = new Map();
 
 // ยืนยัน 2FA code
 function verify2FA(token, secret) {
+  // eslint-disable-next-line
   const speakeasy = require('speakeasy');
 
   return speakeasy.totp.verify({
@@ -35,6 +36,7 @@ function verify2FA(token, secret) {
 
 // สร้าง JWT token
 function generateJWT(user) {
+  // eslint-disable-next-line
   const jwt = require('jsonwebtoken');
 
   const payload = {

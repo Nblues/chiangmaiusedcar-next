@@ -1,0 +1,26 @@
+# Modern browsers for optimal performance
+# Reduces bundle size and eliminates legacy polyfills
+
+# Production: Modern browsers only
+> 0.5%
+last 2 versions
+not dead
+not IE 11
+not op_mini all
+
+# Modern baseline
+chrome >= 80
+firefox >= 78
+safari >= 14
+edge >= 80
+
+# Mobile - modern support
+ios_saf >= 14
+chrome >= 80
+and_chr >= 80
+
+# Remove legacy browsers
+not safari < 14
+not chrome < 80
+not firefox < 78
+not edge < 80

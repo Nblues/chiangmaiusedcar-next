@@ -92,6 +92,7 @@ export default function AdminDashboard() {
   };
 
   // Component สำหรับจัดการรูปภาพ
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function AdminImageManagerComponent() {
     const [uploadStatus, setUploadStatus] = useState('');
     const [processing, setProcessing] = useState(false);
@@ -248,6 +249,7 @@ export default function AdminDashboard() {
   }
 
   // Component สำหรับจัดการบทความ
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function AdminBlogManagerComponent() {
     const [articles, setArticles] = useState([]);
     const [showEditor, setShowEditor] = useState(false);

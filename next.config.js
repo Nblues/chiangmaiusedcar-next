@@ -14,6 +14,11 @@ const nextConfig = {
         hostname: 'cdn.shopify.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
@@ -24,6 +29,25 @@ const nextConfig = {
     loader: 'default',
     path: '/_next/image',
     unoptimized: false,
+  },
+
+  // URL redirects for SEO and compatibility
+  async redirects() {
+    return [
+      // www -> apex domain redirect
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.chiangmaiusedcar.com' }],
+        destination: 'https://chiangmaiusedcar.com/:path*',
+        permanent: true,
+      },
+      // Legacy /index redirect
+      {
+        source: '/index',
+        destination: '/',
+        permanent: true,
+      },
+    ];
   },
 
   // Headers for better caching and SEO

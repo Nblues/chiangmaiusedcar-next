@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import SEO from '../components/SEO';
 
 export default function TestPrompts() {
-  const [resetCookies, setResetCookies] = useState(0);
-  const [resetPWA, setResetPWA] = useState(0);
+  // resetCookies และ resetPWA สำหรับการใช้ในอนาคต
+  const [_resetCookies, setResetCookies] = useState(0);
+  const [_resetPWA, setResetPWA] = useState(0);
 
   const handleResetCookies = () => {
     localStorage.removeItem('cookie-consent');
@@ -141,9 +142,9 @@ export default function TestPrompts() {
                 <div>
                   <strong>Cookie Consent:</strong>
                   <ol className="mt-1 space-y-1 list-decimal list-inside ml-4">
-                    <li>กดปุ่ม "รีเซ็ต Cookie Consent"</li>
+                    <li>กดปุ่ม &ldquo;รีเซ็ต Cookie Consent&rdquo;</li>
                     <li>รอ 3 วินาที จะเห็น popup เลื่อนขึ้นมาจากด้านล่าง</li>
-                    <li>ทดสอบกดปุ่ม "ยอมรับทั้งหมด" หรือ "ปฏิเสธ"</li>
+                    <li>ทดสอบกดปุ่ม &ldquo;ยอมรับทั้งหมด&rdquo; หรือ &ldquo;ปฏิเสธ&rdquo;</li>
                     <li>popup จะเลื่อนลงและหายไป</li>
                   </ol>
                 </div>
@@ -151,9 +152,9 @@ export default function TestPrompts() {
                 <div>
                   <strong>PWA Install:</strong>
                   <ol className="mt-1 space-y-1 list-decimal list-inside ml-4">
-                    <li>กดปุ่ม "รีเซ็ต PWA Status"</li>
+                    <li>กดปุ่ม &ldquo;รีเซ็ต PWA Status&rdquo;</li>
                     <li>รอ 30 วินาที จะเห็น popup ติดตั้งแอพ</li>
-                    <li>ทดสอบกดปุ่ม "ติดตั้งแอพ" หรือ "ไว้ทีหลัง"</li>
+                    <li>ทดสอบกดปุ่ม &ldquo;ติดตั้งแอพ&rdquo; หรือ &ldquo;ไว้ทีหลัง&rdquo;</li>
                     <li>popup จะหายไปและจำสถานะ</li>
                   </ol>
                 </div>

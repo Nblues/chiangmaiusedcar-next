@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ทดสอบประสิทธิภาพ Core Web Vitals - ครูหนึ่งรถสวย</title>
+    <style>
+      body {
+        font-family: 'Prompt', 'Sarabun', sans-serif;
+        line-height: 1.6;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f8fafc;
+      }
+
+      .test-container {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      .metric {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 8px;
+        font-weight: 500;
+      }
+
+      .good {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .needs-improvement {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .poor {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+
+      .test-button {
+        background: #1a237e;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 10px 5px;
+        transition: background 0.2s;
+      }
+
+      .test-button:hover {
+        background: #3949ab;
+      }
+
+      .results {
+        margin-top: 20px;
+        padding: 20px;
+        background: #f1f5f9;
+        border-radius: 8px;
+      }
+
+      .timestamp {
+        color: #64748b;
+        font-size: 14px;
+      }
+
+      .recommendation {
+        background: #e0f2fe;
+        border-left: 4px solid #0288d1;
+        padding: 15px;
+        margin: 15px 0;
+      }
+
+      .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px;
+      }
+
+      .green {
+        background: #22c55e;
+      }
+      .yellow {
+        background: #eab308;
+      }
+      .red {
+        background: #ef4444;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="test-container">
+      <h1>🚗 ครูหนึ่งรถสวย - ทดสอบประสิทธิภาพ Core Web Vitals</h1>
+
+      <div class="recommendation">
+        <h3>🎯 เป้าหมาย Core Web Vitals 2024</h3>
+        <ul>
+          <li><strong>First Contentful Paint (FCP):</strong> < 1.8 วินาที (ปัจจุบัน: 2.1s)</li>
+          <li><strong>Largest Contentful Paint (LCP):</strong> < 2.5 วินาที (ปัจจุบัน: 10.9s)</li>
+          <li><strong>Speed Index:</strong> < 3.4 วินาที (ปัจจุบัน: 5.5s)</li>
+          <li><strong>Cumulative Layout Shift (CLS):</strong> < 0.1 (เป้าหมาย: 0.05)</li>
+          <li><strong>First Input Delay (FID):</strong> < 100ms</li>
+          <li><strong>Total Blocking Time (TBT):</strong> < 200ms</li>
+        </ul>
+      </div>
+
+      <div class="test-controls">
+        <h3>🧪 เครื่องมือทดสอบ</h3>
+        <button class="test-button" onclick="testLocalhost()">ทดสอบ Localhost (3000)</button>
+        <button class="test-button" onclick="testPageSpeedInsights()">
+          Google PageSpeed Insights
+        </button>
+        <button class="test-button" onclick="testGTmetrix()">GTmetrix Test</button>
+        <button class="test-button" onclick="testWebPageTest()">WebPageTest.org</button>
+        <button class="test-button" onclick="measureCoreWebVitals()">วัด Core Web Vitals</button>
+      </div>
+
+      <div class="results" id="results">
+        <h3>📊 ผลการทดสอบล่าสุด</h3>
+        <div class="timestamp" id="timestamp">ยังไม่มีการทดสอบ</div>
+        <div id="metrics-container">
+          <div class="metric poor">
+            <span><span class="status-indicator red"></span>First Contentful Paint (FCP)</span>
+            <span>2.1s (เป้าหมาย: < 1.8s)</span>
+          </div>
+          <div class="metric poor">
+            <span><span class="status-indicator red"></span>Largest Contentful Paint (LCP)</span>
+            <span>10.9s (เป้าหมาย: < 2.5s)</span>
+          </div>
+          <div class="metric poor">
+            <span><span class="status-indicator red"></span>Speed Index</span>
+            <span>5.5s (เป้าหมาย: < 3.4s)</span>
+          </div>
+          <div class="metric good">
+            <span><span class="status-indicator green"></span>Cumulative Layout Shift (CLS)</span>
+            <span>< 0.1 (ดี)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-container">
+        <h3>🔧 การปรับปรุงที่ดำเนินการแล้ว</h3>
+        <ul>
+          <li>✅ แก้ไข Google Analytics forced reflow (37ms + 31ms)</li>
+          <li>✅ เพิ่ม CSS contain properties สำหรับ Layout Shift prevention</li>
+          <li>✅ ใช้ fixed dimensions สำหรับ price container และ specs grid</li>
+          <li>✅ เพิ่ม priority loading สำหรับ hero image</li>
+          <li>✅ ลด data payload ใน getStaticProps</li>
+          <li>✅ ใช้ requestIdleCallback สำหรับ non-critical resources</li>
+          <li>✅ เพิ่ม critical CSS ใน _app.jsx</li>
+          <li>✅ ปรับปรุง image optimization และ quality settings</li>
+        </ul>
+      </div>
+
+      <div class="test-container">
+        <h3>📋 Checklist สำหรับการทดสอบ</h3>
+        <div id="checklist">
+          <label><input type="checkbox" /> Build production แล้ว (pnpm build)</label><br />
+          <label><input type="checkbox" /> ทดสอบ Core Web Vitals</label><br />
+          <label><input type="checkbox" /> ตรวจสอบ Layout Shift</label><br />
+          <label><input type="checkbox" /> วัด First Input Delay</label><br />
+          <label><input type="checkbox" /> ทดสอบบนอุปกรณ์จริง</label><br />
+          <label><input type="checkbox" /> ตรวจสอบ Network throttling</label><br />
+          <label><input type="checkbox" /> ทดสอบ Mobile performance</label><br />
+          <label><input type="checkbox" /> วิเคราะห์ Main thread blocking</label><br />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function updateTimestamp() {
+        document.getElementById('timestamp').textContent =
+          'อัปเดตล่าสุด: ' + new Date().toLocaleString('th-TH');
+      }
+
+      function testLocalhost() {
+        const url = 'http://localhost:3000';
+        window.open(url, '_blank');
+        updateResults('กำลังทดสอบ localhost...', 'testing');
+      }
+
+      function testPageSpeedInsights() {
+        const url = 'https://pagespeed.web.dev/analysis?url=http://localhost:3000';
+        window.open(url, '_blank');
+        updateResults('เปิด Google PageSpeed Insights...', 'testing');
+      }
+
+      function testGTmetrix() {
+        const url = 'https://gtmetrix.com/';
+        window.open(url, '_blank');
+        updateResults('เปิด GTmetrix...', 'testing');
+      }
+
+      function testWebPageTest() {
+        const url = 'https://www.webpagetest.org/';
+        window.open(url, '_blank');
+        updateResults('เปิด WebPageTest...', 'testing');
+      }
+
+      function measureCoreWebVitals() {
+        if ('web-vital' in window) {
+          // ใช้ Web Vitals library ถ้ามี
+          updateResults('กำลังวัด Core Web Vitals...', 'testing');
+        } else {
+          // Manual measurement
+          const navigationTiming = performance.getEntriesByType('navigation')[0];
+          const paintTiming = performance.getEntriesByType('paint');
+
+          let fcp = 0;
+          paintTiming.forEach(entry => {
+            if (entry.name === 'first-contentful-paint') {
+              fcp = entry.startTime;
+            }
+          });
+
+          const results = {
+            fcp: fcp ? (fcp / 1000).toFixed(2) + 's' : 'ไม่สามารถวัดได้',
+            domContentLoaded: navigationTiming
+              ? (navigationTiming.domContentLoadedEventEnd / 1000).toFixed(2) + 's'
+              : 'ไม่สามารถวัดได้',
+            loadComplete: navigationTiming
+              ? (navigationTiming.loadEventEnd / 1000).toFixed(2) + 's'
+              : 'ไม่สามารถวัดได้',
+          };
+
+          updateResults(
+            `FCP: ${results.fcp}, DOM: ${results.domContentLoaded}, Load: ${results.loadComplete}`,
+            'measured'
+          );
+        }
+      }
+
+      function updateResults(message, status) {
+        const container = document.getElementById('results');
+        const timestamp = document.getElementById('timestamp');
+
+        if (status === 'testing') {
+          container.style.background = '#fef3c7';
+        } else if (status === 'measured') {
+          container.style.background = '#dcfce7';
+        }
+
+        timestamp.textContent = message + ' - ' + new Date().toLocaleString('th-TH');
+      }
+
+      // เรียกใช้เมื่อโหลดหน้า
+      document.addEventListener('DOMContentLoaded', function () {
+        updateTimestamp();
+
+        // วัด performance เบื้องต้น
+        setTimeout(() => {
+          measureCoreWebVitals();
+        }, 1000);
+      });
+
+      // Command สำหรับ Console
+      console.log(`
+🚗 ครูหนึ่งรถสวย - Performance Testing Commands
+
+1. ทดสอบ Build:
+   pnpm build && pnpm start
+
+2. ทดสอบ Development:
+   pnpm dev
+
+3. วิเคราะห์ Bundle:
+   npx @next/bundle-analyzer
+
+4. ทดสอบ Lighthouse:
+   lighthouse http://localhost:3000 --output html --output-path ./lighthouse-report.html
+
+5. ทดสอบ Core Web Vitals:
+   measureCoreWebVitals()
+
+6. ตรวจสอบ Network:
+   Performance → Network tab
+
+7. วิเคราะห์ Main Thread:
+   Performance → Main tab → Bottom-up
+        `);
+    </script>
+  </body>
+</html>
