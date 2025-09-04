@@ -5,6 +5,13 @@ const nextConfig = {
   reactStrictMode: false, // ปิด strict mode ชั่วคราว
   compress: true,
   generateEtags: true,
+  swcMinify: true,
+
+  // Bundle optimization - reduce imports to only what's used
+  experimental: {
+    // Enable optimized package imports for common libraries
+    optimizePackageImports: ['lodash', 'date-fns', 'lucide-react'],
+  },
 
   // Image optimization - enhanced for speed
   images: {
@@ -13,6 +20,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'cdn.shopify.com',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**', // Allow all HTTPS domains for flexibility
       },
     ],
     formats: ['image/webp', 'image/avif'],
@@ -50,7 +61,7 @@ const nextConfig = {
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
+            value: 'strict-origin-when-cross-origin',
           },
         ],
       },
@@ -117,14 +128,26 @@ const nextConfig = {
 
   // Disable problematic features during build
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false, // Keep linting for code quality
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false, // Keep type checking for code quality
   },
 
   // Webpack optimization for better performance
   webpack(config, { dev, isServer }) {
+    // Bundle analyzer (when ANALYZE=true)
+    if (process.env.ANALYZE === 'true') {
+      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+      config.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'static',
+          openAnalyzer: false,
+          reportFilename: isServer ? '../analyze/server.html' : './analyze/client.html',
+        })
+      );
+    }
+
     // Production optimizations
     if (!dev) {
       config.optimization = {
@@ -138,21 +161,35 @@ const nextConfig = {
               priority: 10,
               reuseExistingChunk: true,
             },
+            common: {
+              name: 'common',
+              minChunks: 2,
+              priority: 5,
+              reuseExistingChunk: true,
+            },
           },
         },
       };
     }
 
-    // Minimize changes for stable build
+    // Resolve fallbacks for client-side
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
+        net: false,
+        tls: false,
       };
     }
 
     return config;
   },
+
+  // Optimize for Vercel deployment
+  trailingSlash: false,
+  
+  // Disable source maps in production for smaller bundles
+  productionBrowserSourceMaps: false,
 };
 
 module.exports = nextConfig;
