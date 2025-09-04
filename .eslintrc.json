@@ -6,13 +6,17 @@
     "es6": true
   },
   "rules": {
-    "@next/next/no-img-element": "off",
+    "@next/next/no-img-element": "warn",
     "@next/next/no-html-link-for-pages": "off",
+    "@next/next/no-sync-scripts": "error",
+    "@next/next/no-unwanted-polyfillio": "error",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "no-debugger": "warn",
-    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "prefer-const": "warn",
+    "no-var": "error"
   },
   "settings": {
     "react": {

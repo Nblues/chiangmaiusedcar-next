@@ -123,7 +123,7 @@ export default function CreditCheck() {
         description="เช็คเครดิตก่อนซื้อรถฟรี รู้ดอกเบี้ยและเงื่อนไขล่วงหน้า ครูหนึ่งรถสวยเชียงใหม่ ให้บริการประเมินเครดิตรถยนต์ครบวงจร เครดิตดีได้ดอกเบี้ยต่ำ"
         keywords="เช็คเครดิตรถยนต์, ประเมินเครดิตก่อนซื้อรถ, ดอกเบี้ยรถยนต์, เงื่อนไขไฟแนนซ์, ครูหนึ่งรถสวย, เครดิตดี, ผ่อนรถเชียงใหม่"
         url="/credit-check"
-        image="/cover.jpg"
+        image="/cover.webp"
         canonical="https://chiangmaiusedcar.com/credit-check"
         locale="th_TH"
         structuredData={{

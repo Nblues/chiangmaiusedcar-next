@@ -8,19 +8,19 @@ async function generateImageSitemap() {
   // รูปภาพหลัก
   const mainImages = [
     {
-      url: `${siteUrl}/herobanner/kn2carbanner.png`,
+      url: `${siteUrl}/herobanner/kn2carbanner.webp`,
       caption: 'ครูหนึ่งรถสวย - รถมือสองเชียงใหม่',
       title: 'หน้าแรกครูหนึ่งรถสวย',
       license: `${siteUrl}/terms`,
     },
     {
-      url: `${siteUrl}/herobanner/team.png`,
+      url: `${siteUrl}/herobanner/team.webp`,
       caption: 'ทีมงานครูหนึ่งรถสวย',
       title: 'เกี่ยวกับครูหนึ่งรถสวย',
       license: `${siteUrl}/terms`,
     },
     {
-      url: `${siteUrl}/logo/logo_main.png`,
+      url: `${siteUrl}/logo/logo_main.webp`,
       caption: 'โลโก้ครูหนึ่งรถสวย',
       title: 'ครูหนึ่งรถสวย Logo',
       license: `${siteUrl}/terms`,
@@ -59,7 +59,7 @@ async function generateImageSitemap() {
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>${siteUrl}/herobanner/team.png</image:loc>
+      <image:loc>${siteUrl}/herobanner/team.webp</image:loc>
       <image:caption>ทีมงานครูหนึ่งรถสวย - ประสบการณ์ 10+ ปี</image:caption>
       <image:title>เกี่ยวกับครูหนึ่งรถสวย</image:title>
       <image:license>${siteUrl}/terms</image:license>

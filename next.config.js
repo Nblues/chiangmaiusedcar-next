@@ -2,7 +2,7 @@
 const nextConfig = {
   // Performance & SEO optimizations
   poweredByHeader: false,
-  reactStrictMode: true,
+  reactStrictMode: false, // ปิด strict mode ชั่วคราว
   compress: true,
   generateEtags: true,
 

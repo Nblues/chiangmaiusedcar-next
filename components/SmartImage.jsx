@@ -55,7 +55,7 @@ function generateAltText(src, context = '', carData = null) {
 
 /**
  * SmartImage Component
- * Optimized image component with lazy loading and responsive design
+ * Optimized image component with lazy loading, WebP conversion, and responsive design
  */
 export default function SmartImage({
   src,
@@ -70,6 +70,7 @@ export default function SmartImage({
   context = '',
   carData = null,
   placeholderBlur = true,
+  fallbackSrc = '/cover.webp',
   onLoad,
   onError,
   ...props
@@ -83,8 +84,13 @@ export default function SmartImage({
     return null;
   }
 
+  // Auto-convert to WebP if not already
+  const optimizedSrc = src?.endsWith('.webp')
+    ? src
+    : src?.replace(/\.(jpg|jpeg|png|gif)$/i, '.webp') || fallbackSrc;
+
   // Generate alt text if not provided
-  const finalAlt = alt || generateAltText(src, context, carData);
+  const finalAlt = alt || generateAltText(optimizedSrc, context, carData);
 
   // Handle image load
   const handleLoad = () => {
@@ -92,10 +98,23 @@ export default function SmartImage({
     if (onLoad) onLoad();
   };
 
-  // Handle image error
-  const handleError = () => {
+  // Handle image error with fallback
+  const handleError = e => {
+    console.warn(`Failed to load WebP image: ${optimizedSrc}, trying fallback`);
+
+    // Try original format if WebP fails
+    if (optimizedSrc !== src && !hasError) {
+      e.target.src = src;
+      return;
+    }
+
+    // Final fallback
+    if (src !== fallbackSrc) {
+      e.target.src = fallbackSrc;
+    }
+
     setHasError(true);
-    if (onError) onError();
+    if (onError) onError(e);
   };
 
   // Error fallback
@@ -110,7 +129,7 @@ export default function SmartImage({
   return (
     <div className={`relative overflow-hidden ${className}`}>
       <Image
-        src={src}
+        src={optimizedSrc}
         alt={finalAlt}
         width={width}
         height={height}

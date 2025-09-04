@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-function Error({ statusCode }) {
+export default function Error({ statusCode }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="text-center p-8">
@@ -43,5 +43,3 @@ Error.getInitialProps = ({ res, err }) => {
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
   return { statusCode };
 };
-
-export default Error;

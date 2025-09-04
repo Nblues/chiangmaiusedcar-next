@@ -130,7 +130,7 @@ export default function Blog({ posts: initialPosts }) {
                     <Link href={`/blog/${post.slug}`} className="block">
                       <div className="relative h-48 overflow-hidden bg-gray-100 group">
                         <Image
-                          src={post.coverImage || `/herobanner/kn2carbanner.png`}
+                          src={post.coverImage || `/herobanner/kn2carbanner.webp`}
                           alt={post.title}
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

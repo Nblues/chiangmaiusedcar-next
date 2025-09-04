@@ -362,7 +362,7 @@ export default function AllCars({ cars }) {
                           src={
                             Array.isArray(car.images) && car.images.length > 0
                               ? car.images[0]?.url
-                              : '/cover.jpg'
+                              : '/cover.webp'
                           }
                           alt={`${car.title} - รถมือสองคุณภาพดี ราคา ${Number(car.price.amount).toLocaleString()} บาท`}
                           width={400}

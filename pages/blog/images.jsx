@@ -6,25 +6,25 @@ import SEO from '../../components/SEO';
 export default function BlogImages() {
   const blogImages = [
     {
-      src: '/images/blog/how-to-buy-used-car-chiangmai/banner.png',
+      src: '/images/blog/how-to-buy-used-car-chiangmai/banner.webp',
       alt: 'วิธีซื้อรถมือสองเชียงใหม่',
       title: 'วิธีซื้อรถมือสองเชียงใหม่',
       category: 'คำแนะนำการซื้อรถ',
     },
     {
-      src: '/images/blog/promotion-free-down/bannercars.png',
+      src: '/images/blog/promotion-free-down/bannercars.webp',
       alt: 'โปรโมชันฟรีดาวน์',
       title: 'โปรโมชันฟรีดาวน์',
       category: 'โปรโมชัน',
     },
     {
-      src: '/images/blog/recommended-cars/banner2.png',
+      src: '/images/blog/recommended-cars/banner2.webp',
       alt: 'รถแนะนำ',
       title: 'รถยนต์แนะนำ',
       category: 'รถแนะนำ',
     },
     {
-      src: '/images/reviewers/outdoorbanner.png',
+      src: '/images/reviewers/outdoorbanner.webp',
       alt: 'แบนเนอร์รีวิว',
       title: 'แบนเนอร์รีวิวลูกค้า',
       category: 'รีวิว',

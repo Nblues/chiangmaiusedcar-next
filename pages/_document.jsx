@@ -36,7 +36,10 @@ export default function Document() {
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
         <link rel="dns-prefetch" href="//googletagmanager.com" />
 
-        {/* Preload critical images - เฉพาะที่ใช้งานจริง */}
+        {/* Preload critical images - WebP format for better performance */}
+        <link rel="preload" href="/herobanner/kn2carbanner.webp" as="image" type="image/webp" />
+        <link rel="preload" href="/logo/logo_main.webp" as="image" type="image/webp" />
+        {/* Fallback for browsers that don't support WebP */}
         <link rel="preload" href="/herobanner/kn2carbanner.png" as="image" type="image/png" />
         <link rel="preload" href="/logo/logo_main.png" as="image" type="image/png" />
 

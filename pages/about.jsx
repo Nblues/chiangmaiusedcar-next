@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import SmartImage from '../components/SmartImage';
 import SEO from '../components/SEO';
 
 export default function About() {
@@ -39,7 +40,7 @@ export default function About() {
         description="เรื่องราวครูหนึ่งรถสวย จากอาจารย์สอนดนตรีสู่ผู้เชี่ยวชาญรถมือสอง Facebook 1M+ TikTok 150K+ YouTube 40K+ ติดตาม รับประกัน 1 ปี ส่งฟรีทั่วประเทศ โทร 094-064-9018"
         keywords="ครูหนึ่งรถสวย, ประวัติครูหนึ่ง, รถมือสองเชียงใหม่, รถมือสองเชียงราย, Facebook KN2car, TikTok krunueng_usedcar, YouTube chiangraiusedcar, Lemon8, รับประกันรถมือสอง, ส่งรถฟรีทั่วประเทศ, รถบ้านแท้, Toyota Vios, ไฟแนนซ์รถมือสอง, Google Business, LINE Official"
         url="https://chiangmaiusedcar.com/about"
-        image="https://chiangmaiusedcar.com/herobanner/team.png"
+        image="https://chiangmaiusedcar.com/herobanner/team.webp"
         type="profile"
       />
 
@@ -68,15 +69,13 @@ export default function About() {
               </div>
             </div>
           )}
-          <Image
+          <SmartImage
             src="/herobanner/team.png"
             alt="ทีมงานครูหนึ่งรถสวย"
+            context="team"
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
             className={`object-contain transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-            loading="lazy"
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
             onLoad={() => setImageLoaded(true)}
             onError={() => console.error('Image failed to load')}
           />

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import SmartImage from './SmartImage';
 
 const navItems = [
   { href: '/', label: 'หน้าแรก' },
@@ -27,13 +28,14 @@ export default function Navbar() {
           {/* LOGO */}
           <Link href="/" className="flex items-center space-x-3">
             <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-gold shadow-lg">
-              <Image
+              <SmartImage
                 src="/logo/logo_main.png"
                 alt="ครูหนึ่งรถสวย โลโก้"
+                context="logo"
                 width={48}
                 height={48}
-                className="w-full h-full object-cover scale-125"
                 priority
+                className="w-full h-full object-cover scale-125"
               />
             </div>
             <div className="text-2xl font-bold text-primary font-prompt">ครูหนึ่งรถสวย</div>

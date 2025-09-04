@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import SmartImage from './SmartImage';
 import { useRouter } from 'next/router';
 
 export default function Footer() {
@@ -18,13 +19,13 @@ export default function Footer() {
             <div className="flex items-center space-x-4 mb-6">
               <div className="relative">
                 <div className="w-16 h-16 rounded-full border-2 border-gold shadow-lg overflow-hidden">
-                  <Image
+                  <SmartImage
                     src="/logo/logo_main.png"
                     alt="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่"
+                    context="logo"
                     width={64}
                     height={64}
                     className="w-full h-full object-cover scale-125"
-                    priority
                   />
                 </div>
               </div>

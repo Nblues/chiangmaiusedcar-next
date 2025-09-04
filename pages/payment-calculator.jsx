@@ -9,24 +9,60 @@ export default function PaymentCalculator() {
   const [interestRate, setInterestRate] = useState('4.50');
   const [loanTerm, setLoanTerm] = useState('60');
   const [result, setResult] = useState(null);
+  const [errors, setErrors] = useState({});
+
+  // ฟังก์ชันสำหรับ format ตัวเลขในช่อง input
+  const formatInputNumber = value => {
+    // ลบอักขระที่ไม่ใช่ตัวเลข
+    const numericValue = value.replace(/[^0-9]/g, '');
+    // แปลงเป็น number และ format ด้วยคอมม่า
+    if (numericValue) {
+      return parseInt(numericValue).toLocaleString('th-TH');
+    }
+    return '';
+  };
+
+  // ฟังก์ชันสำหรับแปลง formatted string กลับเป็น number
+  const parseFormattedNumber = value => {
+    return parseInt(value.replace(/,/g, '')) || 0;
+  };
+
+  // ฟังก์ชัน validation
+  const validateInputs = (priceValue, downValue) => {
+    const newErrors = {};
+
+    if (!priceValue || priceValue <= 0) {
+      newErrors.carPrice = 'กรุณาใส่ราคารถที่ถูกต้อง';
+    } else if (priceValue < 50000) {
+      newErrors.carPrice = 'ราคารถต้องไม่น้อยกว่า 50,000 บาท';
+    } else if (priceValue > 10000000) {
+      newErrors.carPrice = 'ราคารถต้องไม่เกิน 10,000,000 บาท';
+    }
+
+    if (downValue < 0) {
+      newErrors.downPayment = 'เงินดาวน์ต้องไม่ติดลบ';
+    } else if (downValue >= priceValue) {
+      newErrors.downPayment = 'เงินดาวน์ต้องน้อยกว่าราคารถ';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const calculatePayment = useCallback(
     (price = carPrice) => {
-      const carPriceValue = parseFloat(price);
-      const down = parseFloat(downPayment) || 0;
+      // แปลง formatted string เป็น number
+      const carPriceValue =
+        typeof price === 'string' ? parseFormattedNumber(price) : parseFloat(price);
+      const down = parseFormattedNumber(downPayment);
       const rate = parseFloat(interestRate) / 100 / 12; // Monthly interest rate
 
-      if (!carPriceValue || carPriceValue <= 0) {
-        alert('กรุณาใส่ราคารถที่ถูกต้อง');
+      // Validate inputs
+      if (!validateInputs(carPriceValue, down)) {
         return;
       }
 
       const loanAmount = carPriceValue - down;
-
-      if (loanAmount <= 0) {
-        alert('จำนวนเงินดาวน์ต้องน้อยกว่าราคารถ');
-        return;
-      }
 
       // คำนวณสำหรับหลายปี: 5, 6, 7 ปี
       const periods = [
@@ -76,7 +112,8 @@ export default function PaymentCalculator() {
   // ดึงราคาจาก URL parameter เมื่อมาจากหน้ารายละเอียดรถ
   useEffect(() => {
     if (router.query.price) {
-      setCarPrice(router.query.price);
+      const formattedPrice = formatInputNumber(router.query.price);
+      setCarPrice(formattedPrice);
       // Auto calculate เมื่อมีราคามาแล้ว - คำนวณทันทีสำหรับ 5-6-7 ปี
       if (router.query.price && !isNaN(router.query.price)) {
         setTimeout(() => {
@@ -183,23 +220,43 @@ export default function PaymentCalculator() {
                   <div>
                     <label className="form-label">ราคารถ (บาท) *</label>
                     <input
-                      type="number"
-                      className="form-input"
-                      placeholder="เช่น 500000"
+                      type="text"
+                      className={`form-input ${errors.carPrice ? 'border-red-500 bg-red-50' : ''}`}
+                      placeholder="เช่น 500,000"
                       value={carPrice}
-                      onChange={e => setCarPrice(e.target.value)}
+                      onChange={e => {
+                        const formatted = formatInputNumber(e.target.value);
+                        setCarPrice(formatted);
+                        // Clear error when user starts typing
+                        if (errors.carPrice) {
+                          setErrors(prev => ({ ...prev, carPrice: null }));
+                        }
+                      }}
                     />
+                    {errors.carPrice && (
+                      <p className="text-red-500 text-sm mt-1 font-prompt">{errors.carPrice}</p>
+                    )}
                   </div>
 
                   <div>
                     <label className="form-label">เงินดาวน์ (บาท)</label>
                     <input
-                      type="number"
-                      className="form-input"
-                      placeholder="เช่น 50000"
+                      type="text"
+                      className={`form-input ${errors.downPayment ? 'border-red-500 bg-red-50' : ''}`}
+                      placeholder="เช่น 50,000"
                       value={downPayment}
-                      onChange={e => setDownPayment(e.target.value)}
+                      onChange={e => {
+                        const formatted = formatInputNumber(e.target.value);
+                        setDownPayment(formatted);
+                        // Clear error when user starts typing
+                        if (errors.downPayment) {
+                          setErrors(prev => ({ ...prev, downPayment: null }));
+                        }
+                      }}
                     />
+                    {errors.downPayment && (
+                      <p className="text-red-500 text-sm mt-1 font-prompt">{errors.downPayment}</p>
+                    )}
                   </div>
 
                   <div>
@@ -239,7 +296,11 @@ export default function PaymentCalculator() {
                     </select>
                   </div>
 
-                  <button onClick={calculatePayment} className="btn-primary w-full">
+                  <button
+                    onClick={() => calculatePayment()}
+                    className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!carPrice || errors.carPrice || errors.downPayment}
+                  >
                     คำนวนค่างวด
                   </button>
 
@@ -253,6 +314,71 @@ export default function PaymentCalculator() {
                     </button>
                   )}
                 </div>
+              </div>
+
+              {/* Result Section */}
+              <div>
+                <h2 className="text-2xl font-bold text-primary mb-6 font-prompt">ผลการคำนวน</h2>
+
+                {result ? (
+                  <div className="bg-white/50 rounded-xl p-6 space-y-4">
+                    <div className="text-center border-b border-gray-200 pb-4">
+                      <h3 className="text-lg font-bold text-primary mb-2 font-prompt">
+                        สรุปข้อมูล
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        ราคารถ: ฿{formatNumber(result.carPrice)}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        จำนวนเงินกู้: ฿{formatNumber(result.loanAmount)}
+                      </p>
+                    </div>
+
+                    <div className="space-y-3">
+                      {result.calculations.map((calc, index) => (
+                        <div
+                          key={calc.years}
+                          className={`p-4 rounded-lg border ${
+                            calc.years === 6
+                              ? 'bg-orange-50 border-orange-200'
+                              : 'bg-gray-50 border-gray-200'
+                          }`}
+                        >
+                          <div className="flex justify-between items-center mb-2">
+                            <span className="font-bold text-gray-700">{calc.label}</span>
+                            {calc.years === 6 && (
+                              <span className="text-xs bg-orange-200 text-orange-700 px-2 py-1 rounded-full">
+                                แนะนำ
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-xl font-bold text-primary mb-1">
+                            ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}/เดือน
+                          </div>
+                          <div className="text-xs text-gray-600 space-y-1">
+                            <p>ค่างวดเฉพาะ: ฿{formatNumber(calc.monthlyPayment)}</p>
+                            <p>VAT 7%: ฿{formatNumber(calc.vat)}</p>
+                            <p>ประกัน: ฿{formatNumber(calc.insurance)}</p>
+                            <p>ดอกเบี้ยรวม: ฿{formatNumber(calc.totalInterest)}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="text-xs text-gray-500 text-center mt-4 font-prompt">
+                      * ผลการคำนวณเป็นเพียงการประมาณการเบื้องต้น
+                      <br />
+                      อัตราดอกเบี้ยและเงื่อนไขจริงขึ้นอยู่กับธนาคารและการอนุมัติ
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bg-gray-50 rounded-xl p-8 text-center">
+                    <div className="text-4xl mb-4">🧮</div>
+                    <p className="text-gray-600 font-prompt">
+                      กรอกข้อมูลและกดปุ่ม "คำนวนค่างวด" เพื่อดูผลการคำนวน
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

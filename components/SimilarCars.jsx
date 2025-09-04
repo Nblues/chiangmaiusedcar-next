@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 // คอมโพเนนต์แนะนำรถที่คล้ายกัน
-function SimilarCars({ currentCar, allCars = [] }) {
+export default function SimilarCars({ currentCar, allCars = [] }) {
   // หาฟังก์ชันรถที่คล้ายกัน
   const findSimilarCars = () => {
     if (!currentCar || allCars.length === 0) return [];
@@ -55,7 +55,7 @@ function SimilarCars({ currentCar, allCars = [] }) {
                   src={
                     Array.isArray(car.images) && car.images.length > 0
                       ? car.images[0]?.url
-                      : '/cover.jpg'
+                      : '/cover.webp'
                   }
                   alt={car.title}
                   fill
@@ -109,5 +109,3 @@ function SimilarCars({ currentCar, allCars = [] }) {
     </div>
   );
 }
-
-export default SimilarCars;

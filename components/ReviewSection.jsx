@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import SmartImage from './SmartImage';
 
 // Mockup: Replace with real API fetch in production
 const fetchFacebookReviews = async () => [
   {
     id: 'fb1',
     name: 'สมชาย ใจดี',
-    avatar: '/reviewers/fb1.jpg',
+    avatar: '/reviewers/fb1.webp',
     rating: 5,
     text: 'บริการดีมาก รถสวยตรงปก แนะนำเลยครับ!',
     source: 'Facebook',
@@ -14,7 +15,7 @@ const fetchFacebookReviews = async () => [
   {
     id: 'fb2',
     name: 'Suda Suksan',
-    avatar: '/reviewers/fb2.jpg',
+    avatar: '/reviewers/fb2.webp',
     rating: 5,
     text: 'ซื้อรถที่นี่ประทับใจสุดๆ ทีมงานดูแลดีมากค่ะ',
     source: 'Facebook',
@@ -26,7 +27,7 @@ const fetchGoogleReviews = async () => [
   {
     id: 'gg1',
     name: 'Nattapong K.',
-    avatar: '/reviewers/gg1.jpg',
+    avatar: '/reviewers/gg1.webp',
     rating: 5,
     text: 'รถมือสองคุณภาพดีจริงๆ บริการหลังการขายเยี่ยม!',
     source: 'Google',
@@ -35,7 +36,7 @@ const fetchGoogleReviews = async () => [
   {
     id: 'gg2',
     name: 'Ploy P.',
-    avatar: '/reviewers/gg2.jpg',
+    avatar: '/reviewers/gg2.webp',
     rating: 5,
     text: 'แนะนำเลยค่ะ รถสวย ราคาดี บริการประทับใจ',
     source: 'Google',
@@ -71,9 +72,10 @@ function ReviewSection() {
             itemType="https://schema.org/Review"
           >
             <div className="flex-shrink-0">
-              <img
+              <SmartImage
                 src={r.avatar}
                 alt={r.name}
+                context="review"
                 width={64}
                 height={64}
                 className="rounded-full border-2 border-gold shadow-md"

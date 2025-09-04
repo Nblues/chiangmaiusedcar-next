@@ -26,8 +26,8 @@ export default function SEO({
   const metaDesc = description || defaultDescription;
   const metaKeywords = keywords || defaultKeywords;
 
-  // Default image for social sharing - ใช้ hero banner เป็นค่าเริ่มต้น
-  const defaultImage = `${site}/herobanner/kn2carbanner.png`;
+  // Default image for social sharing - ใช้ hero banner เป็นค่าเริ่มต้น (WebP for better performance)
+  const defaultImage = `${site}/herobanner/kn2carbanner.webp`;
   const metaImage = image || defaultImage;
 
   return (
@@ -100,6 +100,9 @@ export default function SEO({
       <meta name="rating" content="general" />
 
       {/* Favicon */}
+      <link rel="icon" href="/logo/logo_main.webp" />
+      <link rel="apple-touch-icon" href="/logo/logo_main.webp" />
+      {/* Fallback for older browsers */}
       <link rel="icon" href="/logo/logo_main.png" />
       <link rel="apple-touch-icon" href="/logo/logo_main.png" />
 
@@ -113,7 +116,7 @@ export default function SEO({
             name: 'ครูหนึ่งรถสวย',
             description: metaDesc,
             url: fullUrl,
-            logo: `${site}/logo/logo_main.png`,
+            logo: `${site}/logo/logo_main.webp`,
             image: metaImage,
             telephone: '+66940649018',
             email: 'info@chiangmaiusedcar.com',

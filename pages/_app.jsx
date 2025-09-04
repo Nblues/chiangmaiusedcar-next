@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 import CookieConsent from '../components/CookieConsent';
 import PWAInstallPrompt from '../components/PWAInstallPrompt';
 
-function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
 
   useEffect(() => {
@@ -74,5 +74,3 @@ function MyApp({ Component, pageProps }) {
     </>
   );
 }
-
-export default MyApp;

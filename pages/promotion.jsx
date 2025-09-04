@@ -7,7 +7,7 @@ export default function Promotion() {
   const pageUrl = `${baseUrl}/promotion`;
   const pageTitle = 'โปรโมชัน ฟรีดาวน์ ผ่อนถูก | ครูหนึ่งรถสวย';
   const pageDescription = 'โปรโมชันรถมือสองเชียงใหม่ ฟรีดาวน์ ของแถมจัดเต็ม | ครูหนึ่งรถสวย';
-  const pageImage = `${baseUrl}/cover.jpg`;
+  const pageImage = `${baseUrl}/cover.webp`;
 
   return (
     <>

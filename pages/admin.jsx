@@ -521,7 +521,7 @@ export default function AdminDashboard() {
                   value={newArticle.coverImage}
                   onChange={e => setNewArticle(prev => ({ ...prev, coverImage: e.target.value }))}
                   className="w-full p-3 border border-gray-300 rounded-md"
-                  placeholder="https://example.com/image.jpg"
+                  placeholder="https://example.com/image.webp"
                 />
               </div>
 

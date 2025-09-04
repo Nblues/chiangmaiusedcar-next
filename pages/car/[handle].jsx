@@ -18,7 +18,7 @@ function CarDetailPage({ car, allCars }) {
   // Prepare images (up to 20 images from Shopify) - optimized for speed
   const carImages = React.useMemo(() => {
     if (!car?.images || car.images.length === 0) {
-      return [{ url: '/cover.jpg', alt: car?.title || 'รถมือสอง' }];
+      return [{ url: '/cover.webp', alt: car?.title || 'รถมือสอง' }];
     }
 
     // Limit to 20 images for better performance
@@ -39,7 +39,7 @@ function CarDetailPage({ car, allCars }) {
   // Advanced image preloading function
   const preloadImage = useCallback(
     (url, priority = 'low') => {
-      if (!url || preloadedImages.has(url) || url.includes('/cover.jpg')) return;
+      if (!url || preloadedImages.has(url) || url.includes('/cover.webp')) return;
 
       const img = new window.Image();
       img.fetchPriority = priority;
@@ -108,7 +108,7 @@ function CarDetailPage({ car, allCars }) {
     const initPreload = () => {
       // Preload first 3 images immediately
       carImages.slice(0, 3).forEach((img, index) => {
-        if (img?.url && !img.url.includes('/cover.jpg')) {
+        if (img?.url && !img.url.includes('/cover.webp')) {
           preloadImage(img.url, index === 0 ? 'high' : 'low');
         }
       });
@@ -239,7 +239,7 @@ function CarDetailPage({ car, allCars }) {
     '@type': 'AutoDealer',
     name: 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่',
     url: 'https://chiangmaiusedcar.com',
-    logo: 'https://chiangmaiusedcar.com/logo/logo_main.png',
+    logo: 'https://chiangmaiusedcar.com/logo/logo_main.webp',
     sameAs: [
       'https://facebook.com/krunuengusedcar',
       'https://www.tiktok.com/@krunueng_usedcar',

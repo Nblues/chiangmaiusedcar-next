@@ -4,6 +4,7 @@ import Breadcrumb from '../components/Breadcrumb';
 import { getHomepageCars } from '../lib/shopify';
 import Link from 'next/link';
 import Image from 'next/image';
+import SmartImage from '../components/SmartImage';
 import { useRouter } from 'next/router';
 
 export default function Home({ cars }) {
@@ -87,7 +88,7 @@ export default function Home({ cars }) {
     '@type': 'AutoDealer',
     name: 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่',
     url: 'https://chiangmaiusedcar.com',
-    logo: 'https://chiangmaiusedcar.com/logo/logo_main.png',
+    logo: 'https://chiangmaiusedcar.com/logo/logo_main.webp',
     description: 'ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่ ฟรีดาวน์ ผ่อนถูก รับประกัน 1 ปี',
     address: {
       '@type': 'PostalAddress',
@@ -146,7 +147,7 @@ export default function Home({ cars }) {
         description="ศูนย์รวมรถบ้านเชียงใหม่ ฟรีดาวน์ ผ่อนถูก รับประกัน 1 ปี ทุกคัน รีวิวลูกค้าจริง"
         keywords="รถมือสองเชียงใหม่, รถบ้าน, ฟรีดาวน์, ผ่อนรถ, รถคุณภาพ, ครูหนึ่งรถสวย"
         url="https://chiangmaiusedcar.com/"
-        image="https://chiangmaiusedcar.com/cover.jpg"
+        image="https://chiangmaiusedcar.com/cover.webp"
         breadcrumb={breadcrumbList}
         faqJsonld={faqJsonLd}
       />
@@ -178,12 +179,13 @@ export default function Home({ cars }) {
       />
 
       <header className="relative w-full min-h-[50vh] md:min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-r from-orange-100 to-blue-100">
-        <Image
+        <SmartImage
           src="/herobanner/kn2carbanner.png"
           alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
+          context="hero"
           fill
-          className="absolute inset-0 w-full h-full object-cover z-0"
           priority
+          className="absolute inset-0 w-full h-full object-cover z-0"
           quality={75}
           sizes="100vw"
           style={{ objectFit: 'cover' }}
@@ -396,7 +398,7 @@ export default function Home({ cars }) {
                     src={
                       Array.isArray(car.images) && car.images.length > 0
                         ? car.images[0]?.url
-                        : '/cover.jpg'
+                        : '/cover.webp'
                     }
                     alt={`${car.title} - รถมือสองคุณภาพดี ราคา ${Number(car.price.amount).toLocaleString()} บาท`}
                     width={400}
