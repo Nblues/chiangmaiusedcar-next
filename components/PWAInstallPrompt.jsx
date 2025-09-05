@@ -131,8 +131,12 @@ const PWAInstallPrompt = () => {
       <div className="bg-white border border-gray-200 rounded-2xl shadow-2xl p-6 animate-slide-up">
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center">
-              <span className="text-white text-xl">🚗</span>
+            <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center p-1">
+              <img
+                src="/favicon.webp"
+                alt="ครูหนึ่งรถสวย"
+                className="w-full h-full object-contain"
+              />
             </div>
           </div>
 

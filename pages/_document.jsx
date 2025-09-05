@@ -20,9 +20,9 @@ export default function Document() {
         <link rel="manifest" href="/manifest.json" />
 
         {/* Favicons and Icons */}
-        <link rel="icon" href="/logo/logo_main.png" />
+        <link rel="icon" href="/favicon.webp" type="image/webp" />
         <link rel="apple-touch-icon" href="/logo/logo_main.png" />
-        <link rel="shortcut icon" href="/logo/logo_main.png" />
+        <link rel="shortcut icon" href="/favicon.webp" type="image/webp" />
 
         {/* Theme color for mobile browser bar */}
         <meta name="theme-color" content="#FFB200" />
