@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SEO from '../components/SEO';
+import SEO from '../components/SEO.jsx';
 import Breadcrumb from '../components/Breadcrumb';
 import { getHomepageCars } from '../lib/shopify';
 import Link from 'next/link';
@@ -391,7 +391,7 @@ export default function Home({ cars }) {
                 className="block focus:outline-none flex-1"
                 tabIndex={0}
               >
-                <figure className="relative w-full h-32 md:h-48 flex items-center justify-center overflow-hidden bg-orange-600/10">
+                <figure className="relative w-full h-32 md:h-48 overflow-hidden bg-orange-600/10">
                   <Image
                     src={
                       Array.isArray(car.images) && car.images.length > 0
@@ -399,11 +399,11 @@ export default function Home({ cars }) {
                         : '/cover.jpg'
                     }
                     alt={`${car.title} - รถมือสองคุณภาพดี ราคา ${Number(car.price.amount).toLocaleString()} บาท`}
-                    width={400}
-                    height={300}
-                    className="w-full h-full object-contain transition-transform duration-300 border-b-2 border-orange-600 bg-white"
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
                     itemProp="image"
                     loading="lazy"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 300px"
                   />
                   {car.tags?.includes('ใหม่') && (
                     <span className="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold shadow-md">

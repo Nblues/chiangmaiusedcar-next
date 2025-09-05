@@ -357,7 +357,7 @@ export default function AllCars({ cars }) {
                   >
                     {/* Main Car Link - คลิกได้ทั้งส่วนรูปและข้อมูล */}
                     <Link href={`/car/${car.handle}`} className="block focus:outline-none flex-1">
-                      <figure className="relative w-full h-32 md:h-48 flex items-center justify-center overflow-hidden bg-orange-600/10">
+                      <figure className="relative w-full h-32 md:h-48 overflow-hidden bg-orange-600/10">
                         <Image
                           src={
                             Array.isArray(car.images) && car.images.length > 0
@@ -365,10 +365,10 @@ export default function AllCars({ cars }) {
                               : '/cover.jpg'
                           }
                           alt={`${car.title} - รถมือสองคุณภาพดี ราคา ${Number(car.price.amount).toLocaleString()} บาท`}
-                          width={400}
-                          height={300}
-                          className="w-full h-full object-contain transition-transform duration-300 border-b-2 border-orange-600 bg-white"
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
                           loading="lazy"
+                          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 300px"
                         />
                       </figure>
                       <div className="p-3 md:p-4 flex flex-col">

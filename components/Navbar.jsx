@@ -8,7 +8,6 @@ const navItems = [
   { href: '/all-cars', label: 'รถทั้งหมด' },
   { href: '/about', label: 'เกี่ยวกับเรา' },
   { href: '/promotion', label: 'โปรโมชัน' },
-  { href: '/blog', label: 'ข่าวสาร' },
   { href: '/contact', label: 'ติดต่อ' },
   { href: '/credit-check', label: 'เช็คเครดิต' },
   { href: '/payment-calculator', label: 'คำนวนค่างวด' },

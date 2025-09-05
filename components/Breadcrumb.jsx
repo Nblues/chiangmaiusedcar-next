@@ -26,9 +26,6 @@ export default function Breadcrumb({ items = [], carTitle = null }) {
         case 'all-cars':
           label = 'รถทั้งหมด';
           break;
-        case 'blog':
-          label = 'ข่าวสาร';
-          break;
         case 'about':
           label = 'เกี่ยวกับเรา';
           break;

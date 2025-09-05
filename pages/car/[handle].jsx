@@ -335,7 +335,7 @@ function CarDetailPage({ car, allCars }) {
                 src={currentImage.url}
                 alt={currentImage.alt || `${car.title} - รูปที่ ${selectedImageIndex + 1}`}
                 fill
-                className="object-contain transition-all duration-300 ease-out"
+                className="object-cover transition-all duration-300 ease-out"
                 priority={selectedImageIndex === 0} // Only first image gets priority
                 quality={selectedImageIndex === 0 ? 90 : 80} // Higher quality for main image
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 80vw"

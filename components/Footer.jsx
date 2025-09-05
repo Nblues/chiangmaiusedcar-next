@@ -196,25 +196,6 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/blog"
-                  className="text-gray-300 hover:text-accent-400 transition-colors flex items-center group"
-                >
-                  <svg
-                    className="w-4 h-4 mr-2 text-accent-500 group-hover:text-accent-400 transition-colors"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  ข่าวสาร
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/contact"
                   className="text-gray-300 hover:text-accent-400 transition-colors flex items-center group"
                 >

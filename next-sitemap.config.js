@@ -10,7 +10,7 @@ module.exports = {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin*', '/api*', '/_next*', '/secret*', '/private*', '/drafts*'],
+        disallow: ['/api*', '/_next*', '/secret*', '/private*', '/drafts*'],
       },
       {
         userAgent: 'Googlebot-Image',
@@ -22,7 +22,7 @@ module.exports = {
       'https://chiangmaiusedcar.com/sitemap-images.xml',
     ],
   },
-  exclude: ['/admin*', '/api*', '/_next*', '/secret*', '/private*', '/drafts*', '/404', '/500'],
+  exclude: ['/api*', '/_next*', '/secret*', '/private*', '/drafts*', '/404', '/500'],
   transform: async (config, path) => {
     // กำหนด priority ตามประเภทหน้า
     let priority = 0.7;
@@ -33,9 +33,6 @@ module.exports = {
       changefreq = 'daily';
     } else if (path.startsWith('/car/')) {
       priority = 0.8;
-      changefreq = 'weekly';
-    } else if (path.startsWith('/blog/')) {
-      priority = 0.6;
       changefreq = 'weekly';
     }
 

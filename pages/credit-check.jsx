@@ -3,30 +3,17 @@ import Link from 'next/link';
 import SEO from '../components/SEO';
 import Swal from 'sweetalert2';
 import emailjs from 'emailjs-com';
-import dynamic from 'next/dynamic';
-
-// Dynamic import reCAPTCHA to prevent hydration mismatch
-const ReCAPTCHA = dynamic(() => import('react-google-recaptcha'), {
-  ssr: false,
-  loading: () => <div className="h-16 flex items-center justify-center">Loading reCAPTCHA...</div>,
-});
-
-// ใส่ Site Key ที่ได้จากการสมัคร reCAPTCHA
-const RECAPTCHA_SITEKEY =
-  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LevqZkrAAAAAPAsPmJk_qUo6kGlvGsy2xdvvL1A';
 
 export default function CreditCheck() {
   const formRef = useRef();
   const [career, setCareer] = useState('');
   const [downOption, setDownOption] = useState('');
   const [showDownInput, setShowDownInput] = useState(false);
-  const [captcha, setCaptcha] = useState(null);
   const [sending, setSending] = useState(false);
-  const [isClient, setIsClient] = useState(false);
 
-  // Prevent hydration mismatch
+  // Prevent hydration mismatch (kept for other dynamic content)
   useEffect(() => {
-    setIsClient(true);
+    // Any other initialization logic can go here
   }, []);
 
   const careerText = {
@@ -40,9 +27,6 @@ export default function CreditCheck() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    if (!captcha) {
-      return Swal.fire('กรุณายืนยัน reCAPTCHA', '', 'warning');
-    }
 
     setSending(true);
     Swal.fire({
@@ -52,22 +36,6 @@ export default function CreditCheck() {
     });
 
     try {
-      // Verify reCAPTCHA first
-      const recaptchaResponse = await fetch('/api/verify-recaptcha', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: captcha }),
-      });
-
-      const recaptchaData = await recaptchaResponse.json();
-
-      if (!recaptchaData.success) {
-        throw new Error('reCAPTCHA verification failed');
-      }
-
-      // Set hidden field values
       formRef.current.careerText.value = careerText[career];
       formRef.current.downOptionText.value = downOption;
       formRef.current.submittedAt.value = new Date().toLocaleString('th-TH');
@@ -92,7 +60,6 @@ export default function CreditCheck() {
       setCareer('');
       setDownOption('');
       setShowDownInput(false);
-      setCaptcha(null);
     } catch (error) {
       Swal.fire({
         icon: 'error',
@@ -430,22 +397,6 @@ export default function CreditCheck() {
                     className="form-input"
                     placeholder="เช่น 50000"
                   />
-                </div>
-              )}
-
-              {/* reCAPTCHA */}
-              {isClient && RECAPTCHA_SITEKEY && (
-                <div className="flex justify-center">
-                  <ReCAPTCHA sitekey={RECAPTCHA_SITEKEY} onChange={setCaptcha} />
-                </div>
-              )}
-
-              {/* Message if reCAPTCHA is not available */}
-              {isClient && !RECAPTCHA_SITEKEY && (
-                <div className="flex justify-center">
-                  <p className="text-red-600">
-                    reCAPTCHA is not configured. Please contact support.
-                  </p>
                 </div>
               )}
 
