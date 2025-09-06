@@ -15,6 +15,12 @@ export default function Document() {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="ครูหนึ่งรถสวย" />
+        <meta name="application-name" content="ครูหนึ่งรถสวย" />
+
+        {/* Performance hints */}
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="format-detection" content="telephone=yes, email=yes, address=yes" />
 
         {/* PWA Manifest */}
         <link rel="manifest" href="/manifest.json" />

@@ -2,7 +2,7 @@ module.exports = {
   siteUrl: process.env.SITE_URL || 'https://chiangmaiusedcar.com',
   generateRobotsTxt: true,
   generateIndexSitemap: true,
-  sitemapSize: 5000,
+  sitemapSize: 7000,
   changefreq: 'daily',
   priority: 0.7,
   robotsTxtOptions: {
@@ -10,7 +10,12 @@ module.exports = {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api*', '/_next*', '/secret*', '/private*', '/drafts*'],
+        disallow: ['/api*', '/_next*', '/secret*', '/private*', '/drafts*', '/admin*'],
+      },
+      {
+        userAgent: 'Googlebot',
+        allow: '/',
+        disallow: ['/api*', '/admin*'],
       },
       {
         userAgent: 'Googlebot-Image',
@@ -19,10 +24,31 @@ module.exports = {
     ],
     additionalSitemaps: [
       'https://chiangmaiusedcar.com/sitemap-0.xml',
+      'https://chiangmaiusedcar.com/sitemap-cars.xml',
       'https://chiangmaiusedcar.com/sitemap-images.xml',
     ],
   },
-  exclude: ['/api*', '/_next*', '/secret*', '/private*', '/drafts*', '/404', '/500'],
+  exclude: [
+    '/api*',
+    '/_next*',
+    '/secret*',
+    '/private*',
+    '/drafts*',
+    '/404',
+    '/500',
+    '/_document',
+    '/_app',
+    '/_error',
+  ],
+  additionalPaths: async config => [
+    await config.transform(config, '/'),
+    await config.transform(config, '/all-cars'),
+    await config.transform(config, '/contact'),
+    await config.transform(config, '/about'),
+    await config.transform(config, '/promotion'),
+    await config.transform(config, '/credit-check'),
+    await config.transform(config, '/payment-calculator'),
+  ],
   transform: async (config, path) => {
     // กำหนด priority ตามประเภทหน้า
     let priority = 0.7;
@@ -32,6 +58,12 @@ module.exports = {
       priority = 1.0;
       changefreq = 'daily';
     } else if (path.startsWith('/car/')) {
+      priority = 0.8;
+      changefreq = 'weekly';
+    } else if (['/all-cars', '/contact', '/promotion'].includes(path)) {
+      priority = 0.9;
+      changefreq = 'daily';
+    } else if (['/about', '/credit-check', '/payment-calculator'].includes(path)) {
       priority = 0.8;
       changefreq = 'weekly';
     }

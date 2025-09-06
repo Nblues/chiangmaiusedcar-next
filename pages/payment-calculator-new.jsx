@@ -22,11 +22,6 @@ export default function PaymentCalculator() {
       return;
     }
 
-    if (!customerAge || age < 18 || age > 70) {
-      alert('กรุณาใส่อายุที่ถูกต้อง (18-70 ปี)');
-      return;
-    }
-
     const loanAmount = carPriceValue - down;
 
     if (loanAmount <= 0) {
@@ -292,13 +287,13 @@ export default function PaymentCalculator() {
                       value={interestRate}
                       onChange={e => setInterestRate(e.target.value)}
                     >
-                      <option value="7.5">7.5%</option>
                       <option value="4.50">4.50%</option>
                       <option value="5.00">5.00%</option>
                       <option value="5.50">5.50%</option>
                       <option value="6.00">6.00%</option>
                       <option value="6.50">6.50%</option>
                       <option value="7.0">7.0%</option>
+                      <option value="7.5">7.5%</option>
                       <option value="8.0">8.0%</option>
                       <option value="8.5">8.5%</option>
                       <option value="9.0">9.0%</option>
@@ -307,22 +302,24 @@ export default function PaymentCalculator() {
 
                   <div>
                     <label className="form-label">อายุผู้กู้ (ปี)</label>
-                    <input
-                      type="text"
-                      className="form-input"
+                    <select
+                      className="form-select"
                       value={customerAge}
-                      onChange={e => {
-                        const numericValue = e.target.value.replace(/[^0-9]/g, '');
-                        setCustomerAge(numericValue);
-                      }}
-                      placeholder="กรอกอายุ 18-70 ปี"
-                    />
+                      onChange={e => setCustomerAge(e.target.value)}
+                    >
+                      <option value="25">25 ปี</option>
+                      <option value="30">30 ปี</option>
+                      <option value="35">35 ปี</option>
+                      <option value="40">40 ปี</option>
+                      <option value="45">45 ปี</option>
+                      <option value="50">50 ปี</option>
+                      <option value="55">55 ปี</option>
+                      <option value="60">60 ปี</option>
+                    </select>
                     <p className="text-sm text-gray-600 mt-1">
-                      {customerAge && parseInt(customerAge) > 40
+                      {parseInt(customerAge) > 40
                         ? 'ค่าประกัน: 500 + VAT (รวม 535 บาท/เดือน)'
-                        : customerAge
-                          ? 'ค่าประกัน: 200 + VAT (รวม 214 บาท/เดือน)'
-                          : 'กรอกอายุเพื่อดูค่าประกัน'}
+                        : 'ค่าประกัน: 200 + VAT (รวม 214 บาท/เดือน)'}
                     </p>
                   </div>
 

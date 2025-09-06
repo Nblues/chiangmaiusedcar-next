@@ -37,10 +37,15 @@ export default function SEO({
       <meta name="description" content={metaDesc} />
       <meta name="keywords" content={metaKeywords} />
       <meta name="author" content={siteAuthor} />
-      <meta name="robots" content="index, follow" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta
+        name="robots"
+        content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+      />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
       <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
       <meta name="language" content="Thai" />
+      <meta name="color-scheme" content="light" />
+      <meta name="format-detection" content="telephone=yes" />
       <link rel="canonical" href={fullUrl} />
 
       {/* Open Graph Meta Tags */}

@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import CookieConsent from '../components/CookieConsent';
 import PWAInstallPrompt from '../components/PWAInstallPrompt';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 // Import Analytics dynamically and only on client-side
 const VercelAnalytics = dynamic(() => import('@vercel/analytics/react').then(m => m.Analytics), {
@@ -96,7 +97,7 @@ export default function MyApp({ Component, pageProps }) {
   const getLayout = Component.getLayout || (page => page);
 
   return (
-    <>
+    <ErrorBoundary>
       <div className="relative z-0 min-h-screen flex flex-col" suppressHydrationWarning>
         <Navbar />
         <main className="flex-1" suppressHydrationWarning>
@@ -110,6 +111,6 @@ export default function MyApp({ Component, pageProps }) {
       {/* Vercel Analytics - client-only */}
       <VercelAnalytics />
       <GoogleAnalytics gaId="G-81DK266FDR" />
-    </>
+    </ErrorBoundary>
   );
 }

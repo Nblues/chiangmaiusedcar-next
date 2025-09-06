@@ -20,8 +20,18 @@ const nextConfig = {
 
   // Bundle optimization - reduce imports to only what's used
   experimental: {
-    // Minimal experimental features for stability
+    // Next.js 2025 features
     serverComponentsExternalPackages: ['sharp'],
+    webVitalsAttribution: ['CLS', 'LCP'],
+    optimizePackageImports: ['lucide-react', 'date-fns'],
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
   },
 
   // Image optimization - enhanced for speed and security

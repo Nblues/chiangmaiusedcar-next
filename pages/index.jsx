@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SEO from '../components/SEO.jsx';
 import Breadcrumb from '../components/Breadcrumb';
+import ClientOnly from '../components/ClientOnly';
 import { getHomepageCars } from '../lib/shopify';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -10,7 +11,7 @@ export default function Home({ cars }) {
   // Facebook reviews: render only client
   const [showFbReviews, setShowFbReviews] = useState(false);
   const [saved, setSaved] = useState([]);
-  const [isClient, setIsClient] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   // Search state
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,7 +21,7 @@ export default function Home({ cars }) {
   const router = useRouter();
 
   useEffect(() => {
-    setIsClient(true);
+    setMounted(true);
     // load saved cars (localStorage)
     if (typeof window !== 'undefined') {
       setSaved(JSON.parse(localStorage.getItem('savedCars') || '[]'));
@@ -36,7 +37,7 @@ export default function Home({ cars }) {
 
   // Handle search - redirect to all-cars with filters
   const handleSearch = () => {
-    if (!isClient) return;
+    if (!mounted) return;
 
     const params = new URLSearchParams();
     if (searchTerm) params.set('search', searchTerm);
@@ -50,7 +51,7 @@ export default function Home({ cars }) {
 
   // Save/unsave cars
   function toggleSave(carId) {
-    if (typeof window === 'undefined') return;
+    if (!mounted || typeof window === 'undefined') return;
 
     let s = JSON.parse(localStorage.getItem('savedCars') || '[]');
     if (s.includes(carId)) s = s.filter(id => id !== carId);
@@ -745,5 +746,5 @@ export async function getStaticProps() {
     console.error('getHomepageCars error:', e);
     cars = [];
   }
-  return { props: { cars }, revalidate: 600 };
+  return { props: { cars }, revalidate: 60 };
 }

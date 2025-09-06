@@ -57,8 +57,8 @@ export default function About() {
           </div>
         </div>
 
-        {/* Image Section - เต็มขนาดไม่มี overlay */}
-        <div className="relative w-full h-[400px] md:h-[500px] bg-gray-100 border border-gray-200">
+        {/* Image Section - ปรับปรุงให้แสดงผลดีในทุกหน้าจอ */}
+        <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-gray-100 border border-gray-200">
           {!imageLoaded && (
             <div className="absolute inset-0 flex items-center justify-center z-10">
               <div className="animate-pulse space-y-4 w-full max-w-md mx-auto p-8">
@@ -72,13 +72,17 @@ export default function About() {
             src="/herobanner/team.png"
             alt="ทีมงานครูหนึ่งรถสวย"
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-            className={`object-cover transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            sizes="100vw"
+            className={`object-cover object-center transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            style={{
+              objectPosition: 'center center',
+            }}
             loading="lazy"
             placeholder="blur"
             blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
             onLoad={() => setImageLoaded(true)}
             onError={() => console.error('Image failed to load')}
+            priority={false}
           />
         </div>
       </section>

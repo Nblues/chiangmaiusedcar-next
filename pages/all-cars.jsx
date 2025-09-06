@@ -548,6 +548,6 @@ export async function getStaticProps() {
 
   return {
     props: { cars },
-    revalidate: 300, // revalidate ทุก 5 นาที (เร็วขึ้นเพื่อข้อมูลใหม่)
+    revalidate: 60, // revalidate ทุก 1 นาที (เร็วขึ้นเพื่อข้อมูลใหม่)
   };
 }
