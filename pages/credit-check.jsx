@@ -1,26 +1,15 @@
 import { useRef, useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import SEO from '../components/SEO';
 import Swal from 'sweetalert2';
 import emailjs from 'emailjs-com';
 
-// โหลด ReCAPTCHA แบบ dynamic import ป้องกัน SSR และ chunk error
-const ReCAPTCHAComponent = dynamic(() => import('../components/ReCAPTCHAComponent'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex justify-center p-4 text-gray-500">กำลังโหลด reCAPTCHA...</div>
-  ),
-});
-
 export default function CreditCheck() {
   const formRef = useRef();
-  const recaptchaRef = useRef(null);
   const [career, setCareer] = useState('');
   const [downOption, setDownOption] = useState('');
   const [showDownInput, setShowDownInput] = useState(false);
   const [sending, setSending] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState(null);
   const [honeypot, setHoneypot] = useState('');
 
   // Prevent hydration mismatch (kept for other dynamic content)
@@ -76,16 +65,6 @@ export default function CreditCheck() {
       return;
     }
 
-    // Require reCAPTCHA token
-    if (!captchaToken) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'ยืนยันว่าไม่ใช่บอท',
-        text: 'โปรดทำการยืนยัน reCAPTCHA ก่อนส่งข้อมูล',
-      });
-      return;
-    }
-
     setSending(true);
     Swal.fire({
       title: 'กำลังตรวจสอบข้อมูล...',
@@ -94,15 +73,6 @@ export default function CreditCheck() {
     });
 
     try {
-      // Verify reCAPTCHA on server
-      const verify = await fetch('/api/verify-recaptcha', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: captchaToken }),
-      }).then(r => r.json());
-      if (!verify?.ok) {
-        throw new Error('reCAPTCHA verification failed');
-      }
 
       const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
       const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
@@ -116,7 +86,6 @@ export default function CreditCheck() {
       formRef.current.careerText.value = careerText[career];
       formRef.current.downOptionText.value = downOption;
       formRef.current.submittedAt.value = new Date().toLocaleString('th-TH');
-      formRef.current['g-recaptcha-response'].value = captchaToken;
 
       // Send email
       await emailjs.sendForm(serviceId, templateId, formRef.current, publicKey);
@@ -133,10 +102,6 @@ export default function CreditCheck() {
       setCareer('');
       setDownOption('');
       setShowDownInput(false);
-      setCaptchaToken(null);
-      try {
-        recaptchaRef.current?.reset?.();
-      } catch {}
     } catch (error) {
       Swal.fire({
         icon: 'error',
@@ -213,7 +178,6 @@ export default function CreditCheck() {
               <input type="hidden" name="careerText" />
               <input type="hidden" name="downOptionText" />
               <input type="hidden" name="submittedAt" />
-              <input type="hidden" name="g-recaptcha-response" />
 
               {/* ข้อมูลทั่วไป */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -515,19 +479,10 @@ export default function CreditCheck() {
                 </label>
               </div>
 
-              {/* reCAPTCHA */}
-              <div className="flex justify-center">
-                <ReCAPTCHAComponent
-                  sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
-                  onChange={token => setCaptchaToken(token)}
-                  onRef={recaptchaRef}
-                />
-              </div>
-
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={sending || !captchaToken}
+                disabled={sending}
                 className="w-full py-4 rounded-xl font-bold text-white bg-success hover:bg-success/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
               >
                 {sending ? (
