@@ -46,7 +46,6 @@ const PWAInstallPrompt = () => {
 
     // Listen for app installation
     const handleAppInstalled = () => {
-      console.log('PWA was installed');
       localStorage.setItem('pwa-installed', 'true');
       setShowInstallPrompt(false);
     };
@@ -87,22 +86,102 @@ const PWAInstallPrompt = () => {
   }, [isClient]);
 
   const handleInstallClick = async () => {
-    if (deferredPrompt) {
-      // Show the install prompt
+    if (isIOS) {
+      // สำหรับ iOS แสดง modal พร้อมคำแนะนำโดยละเอียด
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 font-prompt';
+      modal.innerHTML = `
+        <div class="bg-white mx-4 p-6 rounded-2xl max-w-sm w-full">
+          <div class="text-center mb-4">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-gray-900 mb-2">ติดตั้งแอพ ครูหนึ่งรถสวย</h3>
+          </div>
+          
+          <div class="space-y-3 text-sm text-gray-700 mb-6">
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-blue-600 font-bold text-xs">1</span>
+              </div>
+              <div>
+                <p class="font-medium">แตะปุ่ม Share (แชร์)</p>
+                <p class="text-xs text-gray-500">ปุ่มสี่เหลี่ยมพร้อมลูกศรชี้ขึ้น ด้านล่างหน้าจอ</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-blue-600 font-bold text-xs">2</span>
+              </div>
+              <div>
+                <p class="font-medium">เลื่อนลงหา "เพิ่มที่หน้าจอหลัก"</p>
+                <p class="text-xs text-gray-500">มองหาไอคอนสี่เหลี่ยมพร้อมเครื่องหมาย +</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                <span class="text-blue-600 font-bold text-xs">3</span>
+              </div>
+              <div>
+                <p class="font-medium">แตะ "เพิ่ม" เพื่อยืนยัน</p>
+                <p class="text-xs text-gray-500">แอพจะปรากฏบนหน้าจอหลักของคุณ</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-2">
+            <button 
+              onclick="this.closest('div').remove()" 
+              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+            >
+              เข้าใจแล้ว
+            </button>
+            <button 
+              onclick="this.closest('div').remove()" 
+              class="px-4 py-3 text-gray-500 hover:text-gray-700 font-medium transition-colors"
+            >
+              ปิด
+            </button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      // Remove modal when clicking outside
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
+      
+      // Remove after 10 seconds
+      setTimeout(() => {
+        if (document.body.contains(modal)) {
+          modal.remove();
+        }
+      }, 10000);
+      
+      // Mark as instructed
+      localStorage.setItem('pwa-installed', 'true');
+      setShowInstallPrompt(false);
+      
+    } else if (deferredPrompt) {
+      // สำหรับ Android/Desktop ใช้ native install prompt
       deferredPrompt.prompt();
-      // Wait for the user to respond to the prompt
       const { outcome } = await deferredPrompt.userChoice;
-      console.log(`User response to the install prompt: ${outcome}`);
 
       if (outcome === 'accepted') {
-        // บันทึกว่าผู้ใช้ติดตั้งแล้ว
         localStorage.setItem('pwa-installed', 'true');
       }
 
-      // Clear the deferredPrompt variable
       setDeferredPrompt(null);
     } else {
-      // สำหรับ iOS หรือกรณีอื่นๆ ที่ไม่มี deferredPrompt
+      // สำหรับกรณีอื่นๆ
       localStorage.setItem('pwa-installed', 'true');
     }
 
@@ -187,14 +266,12 @@ const PWAInstallPrompt = () => {
             )}
 
             <div className="flex gap-2">
-              {!isIOS && deferredPrompt ? (
-                <button
-                  onClick={handleInstallClick}
-                  className="flex-1 bg-primary hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm"
-                >
-                  ติดตั้งแอพ
-                </button>
-              ) : null}
+              <button
+                onClick={handleInstallClick}
+                className="flex-1 bg-primary hover:bg-primary-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors text-sm"
+              >
+                {isIOS ? 'วิธีติดตั้ง' : 'ติดตั้งแอพ'}
+              </button>
 
               <button
                 onClick={handleDismiss}
