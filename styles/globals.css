@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fonts: Prompt for Thai (via @fontsource) */
+@import '@fontsource/prompt/400.css';
+@import '@fontsource/prompt/700.css';
+
 @import './theme.css';
 
 /* ---- เพิ่ม custom css ได้ตรงนี้ ---- */

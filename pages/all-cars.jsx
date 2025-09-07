@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
 import { getAllCars } from '../lib/shopify';
+import { buildLocalBusinessJsonLd, sanitizePrice } from '../lib/seo/jsonld';
 
 export default function AllCars({ cars }) {
   const router = useRouter();
@@ -16,6 +17,17 @@ export default function AllCars({ cars }) {
   const [mounted, setMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Helper: format price safely
+  function getPriceInfo(amount) {
+    const num = Number(amount);
+    const valid = Number.isFinite(num) && num >= 0;
+    return {
+      valid,
+      numeric: valid ? String(num) : undefined,
+      display: valid ? num.toLocaleString() : 'ติดต่อสอบถาม',
+    };
+  }
+
   // จำนวนรถต่อหน้า: 8 คัน (มือถือ: 2x4 แถว, เดสก์ท็อป: 4x2 แถว)
   const carsPerPage = 8;
 
@@ -24,15 +36,28 @@ export default function AllCars({ cars }) {
 
     // ป้องกัน hydration mismatch โดยเช็ค window object
     if (typeof window !== 'undefined') {
-      setSaved(JSON.parse(localStorage.getItem('savedCars') || '[]'));
+      try {
+        const raw = localStorage.getItem('savedCars');
+        const parsed = raw ? JSON.parse(raw) : [];
+        setSaved(Array.isArray(parsed) ? parsed : []);
+      } catch {
+        setSaved([]);
+      }
     }
 
     // อ่านพารามิเตอร์จาก URL
     const { query } = router;
-    if (query.search) setSearchTerm(query.search);
-    if (query.price) setPriceRange(query.price);
-    if (query.brand) setBrandFilter(query.brand);
-    if (query.page) setCurrentPage(parseInt(query.page) || 1);
+    if (query.search) setSearchTerm(String(query.search).trim().slice(0, 120));
+    if (query.price) {
+      const p = String(query.price);
+      // allow forms like 100000-200000 or 700000
+      if (/^\d+(?:-\d+)?$/.test(p)) setPriceRange(p);
+    }
+    if (query.brand) setBrandFilter(String(query.brand).trim().slice(0, 40));
+    if (query.page) {
+      const pg = parseInt(query.page, 10);
+      setCurrentPage(Number.isFinite(pg) && pg > 0 ? pg : 1);
+    }
   }, [router]);
 
   useEffect(() => {
@@ -40,34 +65,38 @@ export default function AllCars({ cars }) {
 
     // Search filter - ปรับปรุงให้ค้นหาในหลายฟิลด์
     if (searchTerm) {
-      const term = searchTerm.toLowerCase();
+      const term = String(searchTerm).toLowerCase();
       filtered = filtered.filter(
         car =>
-          car.title.toLowerCase().includes(term) ||
-          car.vendor?.toLowerCase().includes(term) ||
-          car.tags?.some(tag => tag.toLowerCase().includes(term))
+          car.title?.toLowerCase?.().includes(term) ||
+          car.vendor?.toLowerCase?.().includes(term) ||
+          (Array.isArray(car.tags) &&
+            car.tags.some(tag => String(tag).toLowerCase().includes(term)))
       );
     }
 
     // Price filter
     if (priceRange !== 'all') {
-      const [min, max] = priceRange.split('-').map(Number);
-      filtered = filtered.filter(car => {
-        const price = Number(car.price.amount);
-        if (max) {
-          return price >= min && price <= max;
-        } else {
-          return price >= min;
-        }
-      });
+      const [minRaw, maxRaw] = String(priceRange).split('-');
+      const min = Number(minRaw);
+      const hasMax = typeof maxRaw !== 'undefined';
+      const max = hasMax ? Number(maxRaw) : undefined;
+      const validMin = Number.isFinite(min) && min >= 0;
+      const validMax = !hasMax || (Number.isFinite(max) && max >= min);
+      if (validMin && validMax) {
+        filtered = filtered.filter(car => {
+          const price = Number(car?.price?.amount);
+          if (!Number.isFinite(price)) return false;
+          return hasMax ? price >= min && price <= max : price >= min;
+        });
+      }
     }
 
     // Brand filter - ปรับปรุงให้แม่นยำขึ้น
     if (brandFilter !== 'all') {
+      const bf = String(brandFilter).toLowerCase();
       filtered = filtered.filter(
-        car =>
-          car.title.toLowerCase().includes(brandFilter.toLowerCase()) ||
-          car.vendor?.toLowerCase().includes(brandFilter.toLowerCase())
+        car => car.title?.toLowerCase?.().includes(bf) || car.vendor?.toLowerCase?.().includes(bf)
       );
     }
 
@@ -77,12 +106,21 @@ export default function AllCars({ cars }) {
 
   function toggleSave(carId) {
     if (!mounted || typeof window === 'undefined') return; // ป้องกันการเรียกใช้ก่อน mount และ SSR
-
-    let s = JSON.parse(localStorage.getItem('savedCars') || '[]');
-    if (s.includes(carId)) s = s.filter(id => id !== carId);
-    else s.push(carId);
-    setSaved(s);
-    localStorage.setItem('savedCars', JSON.stringify(s));
+    try {
+      let s = [];
+      try {
+        const raw = localStorage.getItem('savedCars');
+        s = raw ? JSON.parse(raw) : [];
+      } catch {
+        s = [];
+      }
+      if (!Array.isArray(s)) s = [];
+      if (carId == null) return;
+      if (s.includes(carId)) s = s.filter(id => id !== carId);
+      else s.push(carId);
+      setSaved(s);
+      localStorage.setItem('savedCars', JSON.stringify(s));
+    } catch {}
   }
 
   const brands = ['all', 'toyota', 'honda', 'nissan', 'mazda', 'mitsubishi', 'isuzu', 'ford'];
@@ -107,7 +145,10 @@ export default function AllCars({ cars }) {
   // ฟังก์ชันสำหรับสร้างลิงก์ SEO-friendly
   const getPageUrl = page => {
     const params = new URLSearchParams();
-    if (searchTerm) params.set('search', searchTerm);
+    const term = String(searchTerm || '')
+      .trim()
+      .slice(0, 120);
+    if (term) params.set('search', term);
     if (priceRange !== 'all') params.set('price', priceRange);
     if (brandFilter !== 'all') params.set('brand', brandFilter);
     if (page > 1) params.set('page', page.toString());
@@ -119,16 +160,13 @@ export default function AllCars({ cars }) {
   // ฟังก์ชันสำหรับเปลี่ยนหน้าโดยไม่เลื่อนขึ้นด้านบน
   const handlePageChange = (page, event) => {
     event.preventDefault();
+    if (!Number.isFinite(page) || page < 1 || page > totalPages) return;
     setCurrentPage(page);
-
-    // อัพเดต URL โดยไม่รีโหลดหน้า - เพิ่มการป้องกัน error
     try {
       const newUrl = getPageUrl(page);
       router.push(newUrl, undefined, { shallow: true, scroll: false });
     } catch (error) {
       console.warn('Router navigation failed:', error);
-      // Fallback to direct page change without URL update
-      setCurrentPage(page);
     }
   };
 
@@ -138,7 +176,6 @@ export default function AllCars({ cars }) {
 
     let startPage = Math.max(1, currentPage - Math.floor(showPages / 2));
     let endPage = Math.min(totalPages, startPage + showPages - 1);
-
     if (endPage - startPage + 1 < showPages) {
       startPage = Math.max(1, endPage - showPages + 1);
     }
@@ -150,13 +187,14 @@ export default function AllCars({ cars }) {
     return pages;
   };
 
+  // เริ่มการเรนเดอร์หน้า
   return (
     <div>
       <SEO
         title={`รถทั้งหมด${totalPages > 1 && currentPage > 1 ? ` - หน้า ${currentPage}` : ''} - รถมือสองเชียงใหม่ คุณภาพดี | ครูหนึ่งรถสวย`}
         description={`ดูรถมือสองทั้งหมดที่มีจำหน่าย รถบ้านแท้ ฟรีดาวน์ ผ่อนถูก รับประกัน 1 ปี ส่งฟรีทั่วไทย${totalPages > 1 ? ` หน้า ${currentPage} จาก ${totalPages} หน้า มีรถให้เลือก ${filteredCars.length} คัน` : ''}`}
         keywords="รถมือสองทั้งหมด, รถยนต์มือสอง, รถบ้านเชียงใหม่, รถคุณภาพดี, ฟรีดาวน์, ผ่อนถูก"
-        url={`https://chiangmaiusedcar.com/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`}
+        url={`/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`}
       />
 
       {/* Pagination Link Tags for SEO */}
@@ -175,6 +213,15 @@ export default function AllCars({ cars }) {
       {/* Structured Data for Car Collection */}
       {mounted && currentCars.length > 0 && (
         <Head>
+          {/* LocalBusiness Schema */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(buildLocalBusinessJsonLd()),
+            }}
+          />
+
+          {/* Collection Page Schema */}
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
@@ -188,28 +235,60 @@ export default function AllCars({ cars }) {
                   '@type': 'ItemList',
                   name: 'รายการรถมือสอง',
                   numberOfItems: currentCars.length,
-                  itemListElement: currentCars.map((car, index) => ({
-                    '@type': 'ListItem',
-                    position: startIndex + index + 1,
-                    item: {
-                      '@type': 'Car',
-                      '@id': `https://chiangmaiusedcar.com/car/${car.handle}`,
-                      name: car.title,
-                      brand: car.vendor || 'Unknown',
-                      offers: {
-                        '@type': 'Offer',
-                        price: car.price?.amount
-                          ? parseFloat(car.price.amount.toString().replace(/[^0-9.-]/g, ''))
-                          : 0,
-                        priceCurrency: 'THB',
-                        availability: 'https://schema.org/InStock',
-                        seller: {
-                          '@type': 'AutoDealer',
-                          name: 'ครูหนึ่งรถสวย',
+                  itemListElement: currentCars.map((car, index) => {
+                    const sanitizedPrice = sanitizePrice(car.price?.amount);
+                    const priceValidUntil = new Date(
+                      Date.now() + 90 * 24 * 60 * 60 * 1000
+                    ).toISOString();
+                    const carDescription =
+                      car.description ||
+                      `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} มือสองเชียงใหม่ สภาพสวย ราคาดี`.trim();
+
+                    return {
+                      '@type': 'ListItem',
+                      position: startIndex + index + 1,
+                      item: {
+                        '@type': 'Car',
+                        '@id': `https://chiangmaiusedcar.com/car/${car.handle}`,
+                        name: car.title,
+                        description: carDescription,
+                        brand: car.vendor || 'Unknown',
+                        offers: {
+                          '@type': 'Offer',
+                          price: sanitizedPrice,
+                          priceCurrency: 'THB',
+                          availability:
+                            car.availableForSale !== false
+                              ? 'https://schema.org/InStock'
+                              : 'https://schema.org/OutOfStock',
+                          priceValidUntil: sanitizedPrice ? priceValidUntil : undefined,
+                          seller: {
+                            '@type': 'AutoDealer',
+                            name: 'ครูหนึ่งรถสวย',
+                          },
+                          hasMerchantReturnPolicy: {
+                            '@type': 'MerchantReturnPolicy',
+                            applicableCountry: 'TH',
+                            returnPolicyCategory: 'http://schema.org/MerchantReturnUnlimitedWindow',
+                            merchantReturnDays: 7,
+                            returnFees: 'http://schema.org/FreeReturn',
+                          },
+                          shippingDetails: {
+                            '@type': 'OfferShippingDetails',
+                            shippingDestination: {
+                              '@type': 'DefinedRegion',
+                              addressCountry: 'TH',
+                            },
+                            shippingRate: {
+                              '@type': 'MonetaryAmount',
+                              value: 0,
+                              currency: 'THB',
+                            },
+                          },
                         },
                       },
-                    },
-                  })),
+                    };
+                  }),
                 },
                 publisher: {
                   '@type': 'AutoDealer',
@@ -356,7 +435,14 @@ export default function AllCars({ cars }) {
                     className="group bg-white rounded-2xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
                   >
                     {/* Main Car Link - คลิกได้ทั้งส่วนรูปและข้อมูล */}
-                    <Link href={`/car/${car.handle}`} className="block focus:outline-none flex-1">
+                    <Link
+                      href={
+                        typeof car?.handle === 'string' && car.handle.length
+                          ? `/car/${encodeURIComponent(car.handle)}`
+                          : '/all-cars'
+                      }
+                      className="block focus:outline-none flex-1"
+                    >
                       <figure className="relative w-full h-32 md:h-48 overflow-hidden bg-orange-600/10">
                         <Image
                           src={
@@ -364,7 +450,7 @@ export default function AllCars({ cars }) {
                               ? car.images[0]?.url
                               : '/cover.jpg'
                           }
-                          alt={`${car.title} - รถมือสองคุณภาพดี ราคา ${Number(car.price.amount).toLocaleString()} บาท`}
+                          alt={`${car?.title || 'รถมือสองคุณภาพดี'} - ราคา ${getPriceInfo(car?.price?.amount).display} บาท`}
                           fill
                           className="object-cover transition-transform duration-300 group-hover:scale-105"
                           loading="lazy"
@@ -377,7 +463,7 @@ export default function AllCars({ cars }) {
                         </h3>
                         <div className="flex items-center justify-between mb-2 md:mb-3">
                           <p className="text-lg md:text-xl font-bold text-orange-600 font-prompt">
-                            ฿{Number(car.price.amount).toLocaleString()}
+                            ฿{getPriceInfo(car?.price?.amount).display}
                           </p>
                           <span className="text-xs bg-orange-600 text-white px-2 py-1 rounded-full font-bold shadow-sm">
                             ส่งฟรี!
@@ -485,21 +571,6 @@ export default function AllCars({ cars }) {
                     </button>
                   ))}
 
-                  {/* Last Page */}
-                  {generatePageNumbers()[generatePageNumbers().length - 1] < totalPages && (
-                    <>
-                      {generatePageNumbers()[generatePageNumbers().length - 1] < totalPages - 1 && (
-                        <span className="px-2 text-gray-500">...</span>
-                      )}
-                      <button
-                        onClick={e => handlePageChange(totalPages, e)}
-                        className="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition-colors font-prompt text-gray-700 hover:text-orange-600"
-                      >
-                        {totalPages}
-                      </button>
-                    </>
-                  )}
-
                   {/* Next Button */}
                   {currentPage < totalPages && (
                     <button
@@ -519,7 +590,7 @@ export default function AllCars({ cars }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   let cars = [];
   try {
     const result = await getAllCars();
@@ -548,6 +619,5 @@ export async function getStaticProps() {
 
   return {
     props: { cars },
-    revalidate: 60, // revalidate ทุก 1 นาที (เร็วขึ้นเพื่อข้อมูลใหม่)
   };
 }

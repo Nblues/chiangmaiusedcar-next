@@ -142,3 +142,9 @@ export default function PrivacyPolicy() {
     </>
   );
 }
+
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
+}

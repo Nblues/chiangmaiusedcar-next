@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import Head from 'next/head';
 import SEO from '../../components/SEO';
 import Breadcrumb from '../../components/Breadcrumb';
 import { getAllCars } from '../../lib/shopify';
+import { buildCarJsonLd, buildProductJsonLd } from '../../lib/seo/jsonld';
 import Link from 'next/link';
 import NextImage from 'next/image';
 
@@ -25,6 +27,39 @@ function CarDetailPage({ car }) {
   ];
   const currentImage = carImages[selectedImageIndex] || carImages[0];
 
+  // เตรียม JSON-LD schema สำหรับ SEO
+  const carSpecs = {
+    year: car.year,
+    transmission: car.transmission || 'Unknown',
+    fuelType: car.fuel_type || 'Gasoline',
+    engineSize: car.engine,
+    mileage: car.mileage,
+    seats: car.seats,
+    color: car.color,
+  };
+
+  const carProduct = {
+    url: `https://chiangmaiusedcar.com/car/${car.handle}`,
+    name: car.title,
+    description:
+      car.description ||
+      `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} มือสองเชียงใหม่ สภาพสวย ราคาดี`,
+    images: carImages.map(img =>
+      img.url.startsWith('/') ? `https://chiangmaiusedcar.com${img.url}` : img.url
+    ),
+    brand: car.vendor || car.brand,
+    sku: car.id || car.handle,
+    mpn: car.vin,
+    price: car.price?.amount,
+    currency: car.price?.currencyCode || 'THB',
+    inStock: car.availableForSale !== false,
+    priceValidDays: 90,
+    sellerName: 'ครูหนึ่งรถสวย',
+  };
+
+  const carJsonLd = buildCarJsonLd(carSpecs, carProduct);
+  const productJsonLd = buildProductJsonLd(carProduct);
+
   return (
     <>
       <SEO
@@ -32,7 +67,24 @@ function CarDetailPage({ car }) {
         description={`${car.title} ${car.vendor} ${car.model || ''} ${car.year || ''} ราคา ${Number(car.price.amount).toLocaleString()} บาท`}
         image={currentImage.url}
         url={`/car/${car.handle}`}
+        carData={car}
       />
+
+      {/* Car Product JSON-LD Schema */}
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(carJsonLd),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(productJsonLd),
+          }}
+        />
+      </Head>
 
       <main className="min-h-screen bg-gray-50">
         <div className="max-w-6xl mx-auto p-4 lg:p-6">
@@ -468,19 +520,11 @@ function CarDetailPage({ car }) {
   );
 }
 
-// Static Paths/Props
-export async function getStaticPaths() {
-  const cars = await getAllCars();
-  const paths = cars.map(car => ({
-    params: { handle: car.handle },
-  }));
-  return { paths, fallback: 'blocking' };
-}
-
-export async function getStaticProps({ params }) {
+// Static Paths/Props - ปิด static generation เพื่อหลีกเลี่ยง Html import error
+export async function getServerSideProps({ params }) {
   const cars = await getAllCars();
   const car = cars.find(c => c.handle === params.handle) || null;
-  return { props: { car, allCars: cars }, revalidate: 60 };
+  return { props: { car, allCars: cars } };
 }
 
 export default CarDetailPage;

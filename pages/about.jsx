@@ -378,3 +378,9 @@ export default function About() {
     </div>
   );
 }
+
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
+}

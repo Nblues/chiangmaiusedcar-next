@@ -200,3 +200,9 @@ export default function TermsOfService() {
     </>
   );
 }
+
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
+}

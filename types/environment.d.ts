@@ -27,6 +27,10 @@ declare namespace NodeJS {
     NEXT_PUBLIC_EMAILJS_TEMPLATE_ID: string;
     NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: string;
 
+    // ReCAPTCHA
+    NEXT_PUBLIC_RECAPTCHA_SITE_KEY: string;
+    RECAPTCHA_SECRET_KEY: string;
+
     // Optional features
     ANALYZE?: 'true' | 'false';
     NEXT_PUBLIC_PWA_ENABLED?: 'true' | 'false';

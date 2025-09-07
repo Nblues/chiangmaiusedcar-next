@@ -304,3 +304,9 @@ export default function APIDashboard() {
     </>
   );
 }
+
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
+}

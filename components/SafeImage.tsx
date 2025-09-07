@@ -51,7 +51,7 @@ export default function SafeImage({
 
   // Convert to WebP if supported (client-side only)
   const getOptimizedSrc = (originalSrc: string) => {
-    if (!mounted) return originalSrc;
+    if (!mounted || typeof window === 'undefined') return originalSrc;
 
     // Check if browser supports WebP
     const canvas = document.createElement('canvas');

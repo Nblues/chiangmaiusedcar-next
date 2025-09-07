@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
+import { buildCarJsonLd, buildLocalBusinessJsonLd } from '../lib/seo/jsonld.js';
 
 export default function SEO({
   title,
@@ -10,6 +11,7 @@ export default function SEO({
   type = 'website',
   image = null,
   carData = null,
+  structuredData = null,
 }) {
   const site = process.env.SITE_URL || 'https://chiangmaiusedcar.com';
   const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่';
@@ -112,45 +114,7 @@ export default function SEO({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'AutoDealer',
-            name: 'ครูหนึ่งรถสวย',
-            description: metaDesc,
-            url: fullUrl,
-            logo: `${site}/logo/logo_main.png`,
-            image: metaImage,
-            telephone: '+66940649018',
-            email: 'info@chiangmaiusedcar.com',
-            address: {
-              '@type': 'PostalAddress',
-              streetAddress: '320 หมู่ 2 ถนน สมโภชเชียงใหม่ 700 ปี',
-              addressLocality: 'สันพระเนตร',
-              addressRegion: 'สันทราย',
-              postalCode: '50210',
-              addressCountry: 'TH',
-            },
-            geo: {
-              '@type': 'GeoCoordinates',
-              latitude: 18.7986111,
-              longitude: 99.0144444,
-            },
-            openingHours: 'Mo-Su 08:00-18:00',
-            priceRange: '฿฿',
-            paymentAccepted: 'Cash, Credit Card, Bank Transfer, Financing',
-            currenciesAccepted: 'THB',
-            sameAs: [
-              'https://www.facebook.com/KN2car',
-              'https://youtube.com/@chiangraiusedcar',
-              'https://www.tiktok.com/@krunueng_usedcar',
-              'https://lin.ee/8ugfzstD',
-            ],
-            aggregateRating: {
-              '@type': 'AggregateRating',
-              ratingValue: '4.8',
-              reviewCount: '250',
-            },
-          }),
+          __html: JSON.stringify(buildLocalBusinessJsonLd()),
         }}
       />
 
@@ -159,59 +123,30 @@ export default function SEO({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Car',
-              name: carData.title,
-              description: carData.description || metaDesc,
-              url: fullUrl,
-              image: carData.images?.map(img => img.url) || [metaImage],
-              brand: {
-                '@type': 'Brand',
-                name: carData.brand || 'Unknown',
-              },
-              model: carData.model || 'Unknown',
-              vehicleModelDate: carData.year || new Date().getFullYear(),
-              mileageFromOdometer: {
-                '@type': 'QuantitativeValue',
-                value: carData.mileage ? parseInt(carData.mileage.replace(/[^0-9]/g, '')) : null,
-                unitCode: 'KMT',
-              },
-              vehicleTransmission: carData.transmission || 'Unknown',
-              fuelType: carData.fuel_type || 'Gasoline',
-              numberOfSeats: carData.seats ? parseInt(carData.seats) : null,
-              vehicleConfiguration: carData.seats ? `${carData.seats} seats` : null,
-              color: carData.color || 'Unknown',
-              offers: {
-                '@type': 'Offer',
-                price: carData.price?.amount
-                  ? parseFloat(carData.price.amount.toString().replace(/[^0-9.-]/g, ''))
-                  : 0,
-                priceCurrency: carData.price?.currencyCode || 'THB',
-                availability: carData.availableForSale
-                  ? 'https://schema.org/InStock'
-                  : 'https://schema.org/OutOfStock',
-                seller: {
-                  '@type': 'AutoDealer',
-                  name: 'ครูหนึ่งรถสวย',
-                  telephone: '+66940649018',
-                  address: {
-                    '@type': 'PostalAddress',
-                    addressLocality: 'เชียงใหม่',
-                    addressCountry: 'TH',
-                  },
+            __html: JSON.stringify(
+              buildCarJsonLd(
+                {
+                  year: carData.year,
+                  transmission: carData.transmission || 'Unknown',
+                  fuelType: carData.fuel_type || 'Gasoline',
+                  engineSize: carData.engine,
+                  mileage: carData.mileage,
+                  seats: carData.seats,
+                  color: carData.color,
                 },
-                warranty: carData.warranty || 'รับประกัน 1 ปี',
-              },
-              seller: {
-                '@type': 'AutoDealer',
-                name: 'ครูหนึ่งรถสวย',
-                url: site,
-                telephone: '+66940649018',
-              },
-              itemCondition: 'https://schema.org/UsedCondition',
-              vehicleIdentificationNumber: carData.sku || carData.id,
-            }),
+                {
+                  url: fullUrl,
+                  name: carData.title,
+                  description: carData.description || metaDesc,
+                  images: carData.images?.map(img => img.url) || [metaImage],
+                  brand: carData.brand,
+                  sku: carData.sku || carData.id,
+                  price: carData.price?.amount,
+                  currency: carData.price?.currencyCode || 'THB',
+                  inStock: carData.availableForSale !== false,
+                }
+              )
+            ),
           }}
         />
       )}
@@ -240,6 +175,14 @@ export default function SEO({
           }),
         }}
       />
+
+      {/* Extra structured data (page specific) */}
+      {structuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      )}
     </Head>
   );
 }

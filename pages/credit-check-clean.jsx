@@ -659,6 +659,6 @@ export default function CreditCheck() {
 
 export async function getServerSideProps() {
   return {
-    props: {}
+    props: {},
   };
 }

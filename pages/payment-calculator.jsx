@@ -526,3 +526,9 @@ export default function PaymentCalculator() {
     </div>
   );
 }
+
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
+}

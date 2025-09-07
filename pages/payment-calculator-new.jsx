@@ -75,14 +75,18 @@ export default function PaymentCalculator() {
     });
   };
 
-  // ดึงราคาจาก URL parameter เมื่อมาจากหน้ารายละเอียดรถ
+  // ดึงราคาจาก URL parameter เมื่อมาจากหน้ารายละเอียดรถ (พร้อม sanitize)
   useEffect(() => {
-    if (router.query.price) {
-      setCarPrice(router.query.price);
+    const qp = router.query?.price;
+    if (qp) {
+      const sanitized = String(qp)
+        .replace(/[^0-9.]/g, '')
+        .slice(0, 12);
+      setCarPrice(sanitized);
       // Auto calculate เมื่อมีราคามาแล้ว - คำนวณทันทีสำหรับ 5-6-7 ปี
-      if (router.query.price && !isNaN(router.query.price)) {
+      if (sanitized && !isNaN(sanitized)) {
         setTimeout(() => {
-          const carPriceValue = parseFloat(router.query.price);
+          const carPriceValue = parseFloat(sanitized);
           const down = 0; // เริ่มต้นเงินดาวน์ 0
           const rate = 7.5 / 100 / 12; // ดอกเบี้ย 7.50%
           const age = 35; // อายุเริ่มต้น 35 ปี
@@ -166,10 +170,11 @@ export default function PaymentCalculator() {
           {router.query.price && (
             <div className="mt-6 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-xl p-4 max-w-4xl mx-auto">
               <p className="text-lg font-prompt mb-4 text-center">
-                {router.query.carTitle && `${decodeURIComponent(router.query.carTitle)} - `}
+                {router.query.carTitle &&
+                  `${(typeof router.query.carTitle === 'string' ? router.query.carTitle : '').replace(/</g, '&lt;').replace(/>/g, '&gt;')} - `}
                 ราคา:{' '}
                 <span className="font-bold text-yellow-300">
-                  ฿{Number(router.query.price).toLocaleString()}
+                  ฿{Number(carPrice || 0).toLocaleString()}
                 </span>{' '}
                 บาท
               </p>
@@ -522,4 +527,10 @@ export default function PaymentCalculator() {
       </section>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
 }

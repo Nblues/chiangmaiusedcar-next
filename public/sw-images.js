@@ -3,7 +3,7 @@ const CACHE_NAME = 'car-images-v1';
 const IMAGE_CACHE_SIZE = 50; // จำกัดจำนวนรูปที่เก็บ
 
 // รายการ URL ที่ต้องการ cache
-const CACHE_URLS = ['/cover.jpg', '/logo/logo_main.webp'];
+const CACHE_URLS = ['/cover.jpg', '/logo/logo_main.png'];
 
 // ติดตั้ง Service Worker
 self.addEventListener('install', event => {

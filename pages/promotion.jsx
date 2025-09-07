@@ -1,6 +1,7 @@
 import React from 'react';
 import SEO from '../components/SEO';
 import Head from 'next/head';
+import { buildLocalBusinessJsonLd } from '../lib/seo/jsonld';
 
 export default function Promotion() {
   const baseUrl = 'https://chiangmaiusedcar.com';
@@ -28,6 +29,12 @@ export default function Promotion() {
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content={pageImage} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(buildLocalBusinessJsonLd()),
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -289,4 +296,10 @@ export default function Promotion() {
       </main>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  return {
+    props: {},
+  };
 }

@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import SEO from '../components/SEO.jsx';
 import Breadcrumb from '../components/Breadcrumb';
-import ClientOnly from '../components/ClientOnly';
 import { getHomepageCars } from '../lib/shopify';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+
+// Helper: format price safely for display and microdata
+function getPriceInfo(amount) {
+  const num = Number(amount);
+  const valid = Number.isFinite(num) && num >= 0;
+  return {
+    valid,
+    numeric: valid ? String(num) : undefined,
+    display: valid ? num.toLocaleString() : 'ติดต่อสอบถาม',
+  };
+}
 
 export default function Home({ cars }) {
   // Facebook reviews: render only client
@@ -24,7 +34,13 @@ export default function Home({ cars }) {
     setMounted(true);
     // load saved cars (localStorage)
     if (typeof window !== 'undefined') {
-      setSaved(JSON.parse(localStorage.getItem('savedCars') || '[]'));
+      try {
+        const raw = localStorage.getItem('savedCars');
+        const parsed = raw ? JSON.parse(raw) : [];
+        setSaved(Array.isArray(parsed) ? parsed : []);
+      } catch {
+        setSaved([]);
+      }
     }
 
     // Delay Facebook reviews loading for better performance
@@ -40,7 +56,8 @@ export default function Home({ cars }) {
     if (!mounted) return;
 
     const params = new URLSearchParams();
-    if (searchTerm) params.set('search', searchTerm);
+    const term = (searchTerm || '').trim().slice(0, 120);
+    if (term) params.set('search', term);
     if (priceRange !== 'all') params.set('price', priceRange);
     if (brandFilter !== 'all') params.set('brand', brandFilter);
 
@@ -53,11 +70,23 @@ export default function Home({ cars }) {
   function toggleSave(carId) {
     if (!mounted || typeof window === 'undefined') return;
 
-    let s = JSON.parse(localStorage.getItem('savedCars') || '[]');
-    if (s.includes(carId)) s = s.filter(id => id !== carId);
-    else s.push(carId);
-    setSaved(s);
-    localStorage.setItem('savedCars', JSON.stringify(s));
+    try {
+      let s = [];
+      try {
+        const raw = localStorage.getItem('savedCars');
+        s = raw ? JSON.parse(raw) : [];
+      } catch {
+        s = [];
+      }
+      if (!Array.isArray(s)) s = [];
+      if (carId == null) return;
+      if (s.includes(carId)) s = s.filter(id => id !== carId);
+      else s.push(carId);
+      setSaved(s);
+      localStorage.setItem('savedCars', JSON.stringify(s));
+    } catch {
+      // noop
+    }
   }
 
   const safeCars = Array.isArray(cars) ? cars : [];
@@ -82,31 +111,7 @@ export default function Home({ cars }) {
     { name: 'รถมือสองเชียงใหม่', url: 'https://chiangmaiusedcar.com/' },
   ];
 
-  // Organization Schema
-  const organizationSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'AutoDealer',
-    name: 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่',
-    url: 'https://chiangmaiusedcar.com',
-    logo: 'https://chiangmaiusedcar.com/logo/logo_main.png',
-    description: 'ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่ ฟรีดาวน์ ผ่อนถูก รับประกัน 1 ปี',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'เชียงใหม่',
-      addressRegion: 'เชียงใหม่',
-      addressCountry: 'TH',
-    },
-    contactPoint: [
-      {
-        '@type': 'ContactPoint',
-        telephone: '+66940649018',
-        contactType: 'customer service',
-        areaServed: 'TH',
-        availableLanguage: 'Thai',
-      },
-    ],
-    sameAs: ['https://www.facebook.com/KN2car', 'https://lin.ee/8ugfzstD'],
-  };
+  // Organization Schema moved to SEO component; avoid duplicating JSON-LD here
 
   // FAQ Schema
   const faqJsonLd = {
@@ -154,11 +159,6 @@ export default function Home({ cars }) {
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
-
-      <script
-        type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
@@ -178,17 +178,20 @@ export default function Home({ cars }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
-      <header className="relative w-full min-h-[50vh] md:min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-r from-orange-100 to-blue-100">
-        <Image
-          src="/herobanner/kn2carbanner.png"
-          alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-          fill
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          priority
-          quality={75}
-          sizes="100vw"
-          style={{ objectFit: 'cover' }}
-        />
+      <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
+        <div className="relative w-full max-w-7xl mx-auto">
+          <Image
+            src="/herobanner/changmaiusedcar.webp"
+            alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
+            width={1920}
+            height={1080}
+            className="w-full h-auto object-contain"
+            priority
+            quality={90}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+            style={{ maxHeight: '80vh' }}
+          />
+        </div>
       </header>
 
       {/* Breadcrumb Navigation */}
@@ -388,7 +391,11 @@ export default function Home({ cars }) {
               itemType="https://schema.org/Product"
             >
               <Link
-                href={`/car/${car.handle}`}
+                href={
+                  typeof car?.handle === 'string' && car.handle.length
+                    ? `/car/${encodeURIComponent(car.handle)}`
+                    : '/all-cars'
+                }
                 className="block focus:outline-none flex-1"
                 tabIndex={0}
               >
@@ -399,7 +406,7 @@ export default function Home({ cars }) {
                         ? car.images[0]?.url
                         : '/cover.jpg'
                     }
-                    alt={`${car.title} - รถมือสองคุณภาพดี ราคา ${Number(car.price.amount).toLocaleString()} บาท`}
+                    alt={`${car?.title || 'รถมือสองคุณภาพดี'} - ราคา ${getPriceInfo(car?.price?.amount).display} บาท`}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                     itemProp="image"
@@ -420,15 +427,21 @@ export default function Home({ cars }) {
                     {car.title}
                   </h3>
                   <div className="flex items-center justify-between mb-2 md:mb-3">
-                    <p
-                      className="text-lg md:text-xl font-bold text-orange-600 font-prompt"
-                      itemProp="offers"
-                      itemScope
-                      itemType="https://schema.org/Offer"
-                    >
-                      <span itemProp="price">฿{Number(car.price.amount).toLocaleString()}</span>
-                      <meta itemProp="priceCurrency" content="THB" />
-                    </p>
+                    {(() => {
+                      const price = getPriceInfo(car?.price?.amount);
+                      return (
+                        <p
+                          className="text-lg md:text-xl font-bold text-orange-600 font-prompt"
+                          itemProp="offers"
+                          itemScope
+                          itemType="https://schema.org/Offer"
+                        >
+                          {price.numeric && <meta itemProp="price" content={price.numeric} />}
+                          <meta itemProp="priceCurrency" content="THB" />
+                          <span>฿{price.display}</span>
+                        </p>
+                      );
+                    })()}
                     <span className="text-xs bg-orange-600 text-white px-2 py-1 rounded-full font-bold shadow-sm">
                       ส่งฟรี!
                     </span>
@@ -527,7 +540,9 @@ export default function Home({ cars }) {
               className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-700 hover:text-primary rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
               onClick={() => {
                 const container = document.querySelector('.reviews-scroll-container');
-                container.scrollBy({ left: -320, behavior: 'smooth' });
+                if (container && 'scrollBy' in container) {
+                  container.scrollBy({ left: -320, behavior: 'smooth' });
+                }
               }}
               aria-label="ดูรีวิวก่อนหน้า"
             >
@@ -545,7 +560,9 @@ export default function Home({ cars }) {
               className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-700 hover:text-primary rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
               onClick={() => {
                 const container = document.querySelector('.reviews-scroll-container');
-                container.scrollBy({ left: 320, behavior: 'smooth' });
+                if (container && 'scrollBy' in container) {
+                  container.scrollBy({ left: 320, behavior: 'smooth' });
+                }
               }}
               aria-label="ดูรีวิวถัดไป"
             >
@@ -736,8 +753,8 @@ export default function Home({ cars }) {
   );
 }
 
-// SSG (getStaticProps)
-export async function getStaticProps() {
+// SSR (getServerSideProps) - แก้ปัญหา useRouter ใน SSG
+export async function getServerSideProps() {
   let cars = [];
   try {
     const result = await getHomepageCars(8);
@@ -746,5 +763,5 @@ export async function getStaticProps() {
     console.error('getHomepageCars error:', e);
     cars = [];
   }
-  return { props: { cars }, revalidate: 60 };
+  return { props: { cars } };
 }
