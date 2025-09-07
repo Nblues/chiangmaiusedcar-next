@@ -29,7 +29,7 @@ export default function SEO({
   const metaKeywords = keywords || defaultKeywords;
 
   // Default image for social sharing - ใช้ hero banner เป็นค่าเริ่มต้น
-  const defaultImage = `${site}/herobanner/kn2carbanner.png`;
+  const defaultImage = `${site}/herobanner/chiangmaiusedcar.webp`;
   const metaImage = image || defaultImage;
 
   return (

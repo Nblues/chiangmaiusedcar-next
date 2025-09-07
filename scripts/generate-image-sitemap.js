@@ -8,7 +8,7 @@ async function generateImageSitemap() {
   // รูปภาพหลัก
   const mainImages = [
     {
-      url: `${siteUrl}/herobanner/kn2carbanner.png`,
+      url: `${siteUrl}/herobanner/chiangmaiusedcar.webp`,
       caption: 'ครูหนึ่งรถสวย - รถมือสองเชียงใหม่',
       title: 'หน้าแรกครูหนึ่งรถสวย',
       license: `${siteUrl}/terms`,

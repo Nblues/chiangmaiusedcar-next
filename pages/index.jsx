@@ -181,7 +181,7 @@ export default function Home({ cars }) {
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-7xl mx-auto">
           <Image
-            src="/herobanner/changmaiusedcar.webp"
+            src="/herobanner/chiangmaiusedcar.webp"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             width={1920}
             height={1080}

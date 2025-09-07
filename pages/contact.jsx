@@ -112,7 +112,7 @@ export default function Contact() {
         description="ติดต่อครูหนึ่งรถสวยง่ายๆ ผ่านหลากหลายช่องทาง โทร 094-064-9018, LINE, Facebook 1 ล้านติดตาม, TikTok 1.5 แสนติดตาม, YouTube 4 หมื่นติดตาม | รถมือสองเชียงใหม่ คุณภาพดี"
         keywords="ติดต่อครูหนึ่งรถสวย,เบอร์โทรรถมือสองเชียงใหม่,LINE รถมือสอง,Facebook รถมือสอง,TikTok รถมือสอง,YouTube รถมือสอง,Lemon8 รถมือสอง,094-064-9018,สอบถามรถมือสอง,นัดดูรถ,ที่ตั้งร้านรถมือสอง"
         url="https://chiangmaiusedcar.com/contact"
-        image="https://chiangmaiusedcar.com/herobanner/kn2carbanner.png"
+        image="https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp"
         canonical="https://chiangmaiusedcar.com/contact"
         locale="th_TH"
         alternate={[{ href: 'https://chiangmaiusedcar.com/contact', hrefLang: 'th-TH' }]}

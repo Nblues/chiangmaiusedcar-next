@@ -14,7 +14,7 @@ const FILES_TO_CACHE = [
   '/offline.html',
   '/all-cars',
   '/logo/logo_main.png',
-  '/herobanner/kn2carbanner.png'
+  '/herobanner/chiangmaiusedcar.webp'
 ];
 
 // Routes that should be cached with network-first strategy

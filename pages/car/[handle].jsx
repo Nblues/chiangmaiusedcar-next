@@ -23,7 +23,7 @@ function CarDetailPage({ car }) {
 
   // เตรียมรูปภาพ
   const carImages = car?.images || [
-    { url: '/herobanner/kn2carbanner.webp', alt: car?.title || 'รถมือสอง' },
+    { url: '/herobanner/chiangmaiusedcar.webp', alt: car?.title || 'รถมือสอง' },
   ];
   const currentImage = carImages[selectedImageIndex] || carImages[0];
 
