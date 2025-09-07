@@ -20,7 +20,7 @@ export default function Navbar() {
   const isActive = href => router.pathname === href;
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-accent">
+    <nav className="bg-transparent shadow-lg sticky top-0 z-50 border-b-2 border-accent pt-[env(safe-area-inset-top)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* LOGO */}
@@ -75,7 +75,7 @@ export default function Navbar() {
         {/* Mobile Navigation */}
         {mobileOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-gray-50 rounded-md mt-2">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-white/90 backdrop-blur-sm rounded-md mt-2 shadow-lg border border-gray-200">
               {navItems.map(item => (
                 <Link
                   key={item.href}
