@@ -13,7 +13,7 @@ export default function SEO({
   carData = null,
   structuredData = null,
 }) {
-  const site = process.env.SITE_URL || 'https://chiangmaiusedcar.com';
+  const site = process.env.SITE_URL || 'https://www.chiangmaiusedcar.com';
   const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่';
   const defaultDescription =
     process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
@@ -60,7 +60,7 @@ export default function SEO({
       <meta property="og:image" content={metaImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:image:type" content="image/png" />
+      <meta property="og:image:type" content="image/webp" />
       <meta property="og:image:alt" content={metaTitle} />
       <meta property="og:image:secure_url" content={metaImage} />
       {carData && (

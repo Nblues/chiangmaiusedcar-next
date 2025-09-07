@@ -151,8 +151,8 @@ export default function Home({ cars }) {
         title="รถมือสองเชียงใหม่ ฟรีดาวน์ ผ่อนถูก | ครูหนึ่งรถสวย"
         description="ศูนย์รวมรถบ้านเชียงใหม่ ฟรีดาวน์ ผ่อนถูก รับประกัน 1 ปี ทุกคัน รีวิวลูกค้าจริง"
         keywords="รถมือสองเชียงใหม่, รถบ้าน, ฟรีดาวน์, ผ่อนรถ, รถคุณภาพ, ครูหนึ่งรถสวย"
-        url="https://chiangmaiusedcar.com/"
-        image="https://chiangmaiusedcar.com/cover.jpg"
+        url="https://www.chiangmaiusedcar.com/"
+        image="https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp"
         breadcrumb={breadcrumbList}
         faqJsonld={faqJsonLd}
       />

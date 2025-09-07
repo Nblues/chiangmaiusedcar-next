@@ -6,7 +6,52 @@
     "NEXT_PUBLIC_EMAILJS_SERVICE_ID": "service_qlcksif",
     "NEXT_PUBLIC_EMAILJS_TEMPLATE_ID": "template_zd6e3f6",
     "NEXT_PUBLIC_EMAILJS_PUBLIC_KEY": "P3wnNJB_Y_PddrdBJ",
-    "SITE_URL": "https://chiangmaiusedcar.com"
+    "SITE_URL": "https://www.chiangmaiusedcar.com"
   },
-  "alias": ["chiangmaiusedcar.com", "www.chiangmaiusedcar.com"]
+  "alias": ["chiangmaiusedcar.com", "www.chiangmaiusedcar.com"],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { 
+          "key": "Cache-Control", 
+          "value": "public, max-age=600" 
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        }
+      ]
+    },
+    {
+      "source": "/herobanner/(.*)",
+      "headers": [
+        { 
+          "key": "Cache-Control", 
+          "value": "public, max-age=31536000, immutable" 
+        },
+        {
+          "key": "Cross-Origin-Resource-Policy",
+          "value": "cross-origin"
+        }
+      ]
+    },
+    {
+      "source": "/images/(.*)",
+      "headers": [
+        { 
+          "key": "Cache-Control", 
+          "value": "public, max-age=31536000, immutable" 
+        },
+        {
+          "key": "Cross-Origin-Resource-Policy",
+          "value": "cross-origin"
+        }
+      ]
+    }
+  ]
 }
