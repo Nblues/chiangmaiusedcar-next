@@ -5,8 +5,9 @@
  */
 
 const APP_PREFIX = 'ChiangmaiUsedCar_';
-const VERSION = 'v1.0.0';
+const VERSION = 'v2025.9.8_' + Date.now(); // Dynamic versioning for 2025
 const CACHE_NAME = APP_PREFIX + VERSION;
+const UPDATE_CHECK_INTERVAL = 30000; // Check for updates every 30 seconds
 
 // Assets to cache on install
 const FILES_TO_CACHE = [
@@ -25,43 +26,50 @@ const CACHE_ROUTES = [
   /^\/_next\/static\/.*$/
 ];
 
-// Install event
+// Install event with aggressive cache clearing
 self.addEventListener('install', e => {
-  console.log('[ServiceWorker] Install');
   e.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE_NAME);
-      console.log('[ServiceWorker] Caching app shell');
       await cache.addAll(FILES_TO_CACHE);
+      
+      // Force immediate activation for updates
+      await self.skipWaiting();
     })(),
   );
-  self.skipWaiting();
 });
 
-// Activate event
+// Activate event with complete cache cleanup
 self.addEventListener('activate', e => {
-  console.log('[ServiceWorker] Activate');
   e.waitUntil(
     (async () => {
-      // Remove old caches
+      // Remove ALL old caches aggressively
       const keyList = await caches.keys();
       await Promise.all(
         keyList.map(key => {
-          if (key.indexOf(APP_PREFIX) === 0 && key !== CACHE_NAME) {
-            console.log('[ServiceWorker] Removing old cache', key);
+          if (key !== CACHE_NAME) {
             return caches.delete(key);
           }
         }),
       );
+      
+      // Claim all clients immediately
+      await self.clients.claim();
+      
+      // Notify all clients of update
+      const clients = await self.clients.matchAll();
+      clients.forEach(client => {
+        client.postMessage({
+          type: 'CACHE_UPDATED',
+          payload: { version: VERSION, timestamp: Date.now() }
+        });
+      });
     })(),
   );
-  self.clients.claim();
 });
 
-// Fetch event with enhanced caching for pagination
+// Fetch event with network-first strategy for 2025
 self.addEventListener('fetch', e => {
-  console.log('[ServiceWorker] Fetch', e.request.url);
-
   // Skip non-GET requests
   if (e.request.method !== 'GET') return;
 
@@ -71,29 +79,10 @@ self.addEventListener('fetch', e => {
   e.respondWith(
     (async () => {
       try {
-        // For pagination and car data, use stale-while-revalidate strategy
-        if (shouldCache) {
-          const cachedResponse = await caches.match(e.request);
-          
-          // Return cached response immediately if available
-          if (cachedResponse) {
-            // Revalidate in background
-            fetch(e.request).then(networkResponse => {
-              if (networkResponse && networkResponse.status === 200) {
-                caches.open(CACHE_NAME).then(cache => {
-                  cache.put(e.request, networkResponse.clone());
-                });
-              }
-            }).catch(err => console.log('[ServiceWorker] Background fetch failed:', err));
-            
-            return cachedResponse;
-          }
-        }
-
-        // Try network first
+        // Network-first strategy for always fresh content
         const networkResponse = await fetch(e.request);
 
-        // Cache successful responses for our routes
+        // Cache successful responses
         if (networkResponse && networkResponse.status === 200 && shouldCache) {
           const cache = await caches.open(CACHE_NAME);
           cache.put(e.request, networkResponse.clone());
@@ -101,7 +90,7 @@ self.addEventListener('fetch', e => {
 
         return networkResponse;
       } catch (error) {
-        // Network failed, try cache
+        // Network failed, try cache as fallback only
         const cachedResponse = await caches.match(e.request);
 
         if (cachedResponse) {
@@ -125,7 +114,6 @@ self.addEventListener('fetch', e => {
 
 // Background sync for offline functionality
 self.addEventListener('sync', e => {
-  console.log('[ServiceWorker] Sync', e.tag);
   if (e.tag === 'sync-cars') {
     e.waitUntil(syncCarsData());
   }
@@ -134,10 +122,9 @@ self.addEventListener('sync', e => {
 // Helper function for syncing
 async function syncCarsData() {
   try {
-    console.log('[ServiceWorker] Syncing cars data...');
     // Add your sync logic here
   } catch (error) {
-    console.error('[ServiceWorker] Sync failed:', error);
+    // Sync failed silently
   }
 }
 

@@ -1,6 +1,13 @@
 # *
 User-agent: *
 Allow: /
+Allow: /favicon.webp
+Allow: /favicon.ico
+Allow: /manifest.json
+Allow: /browserconfig.xml
+Allow: /herobanner/
+Allow: /images/
+Allow: /logo/
 Disallow: /admin*
 Disallow: /api*
 Disallow: /_next*
@@ -11,10 +18,22 @@ Disallow: /drafts*
 # Facebook External Hit
 User-agent: facebookexternalhit
 Allow: /
+Allow: /favicon.webp
+Allow: /herobanner/
 
-# Googlebot-Image
+# Googlebot-Image - Allow all image access
 User-agent: Googlebot-Image
 Allow: /
+Allow: /favicon.webp
+Allow: /favicon.ico
+Allow: /herobanner/
+Allow: /images/
+Allow: /logo/
+
+# Bingbot
+User-agent: bingbot
+Allow: /
+Allow: /favicon.webp
 
 # Host
 Host: https://www.chiangmaiusedcar.com

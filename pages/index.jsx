@@ -148,13 +148,45 @@ export default function Home({ cars }) {
   return (
     <div>
       <SEO
-        title="รถมือสองเชียงใหม่ ฟรีดาวน์ ผ่อนถูก | ครูหนึ่งรถสวย"
-        description="ศูนย์รวมรถบ้านเชียงใหม่ ฟรีดาวน์ ผ่อนถูก รับประกัน 1 ปี ทุกคัน รีวิวลูกค้าจริง"
-        keywords="รถมือสองเชียงใหม่, รถบ้าน, ฟรีดาวน์, ผ่อนรถ, รถคุณภาพ, ครูหนึ่งรถสวย"
-        url="https://www.chiangmaiusedcar.com/"
-        image="https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp"
-        breadcrumb={breadcrumbList}
-        faqJsonld={faqJsonLd}
+        title="รถมือสองเชียงใหม่ ฟรีดาวน์ 0% ผ่อนถูก รับประกัน 1 ปี | ครูหนึ่งรถสวย"
+        description="ศูนย์รวมรถมือสองคุณภาพดีเชียงใหม่ รถบ้านแท้ 100% ฟรีดาวน์ 0% ผ่อนถูกสุด รับประกัน 1 ปี ส่งฟรีทั่วไทย ติดตาม Facebook 1M+ TikTok 150K+ โทร 094-064-9018"
+        keywords="รถมือสองเชียงใหม่, รถบ้านแท้, ฟรีดาวน์, ผ่อนรถ, รถคุณภาพ, ครูหนึ่งรถสวย, รถมือสองคุณภาพ, Toyota Honda Nissan, สินเชื่อรถยนต์, รับประกันรถ, ส่งฟรีทั่วไทย"
+        url="/"
+        image="https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp"
+        type="website"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'รถมือสองแนะนำ',
+          description: 'รถมือสองคุณภาพดีจากครูหนึ่งรถสวย',
+          numberOfItems: safeCars.length,
+          itemListElement: safeCars.slice(0, 10).map((car, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            item: {
+              '@type': 'Car',
+              '@id': `https://chiangmaiusedcar.com/car/${car.handle}`,
+              name: car.title,
+              description: `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท`,
+              brand: car.vendor || car.brand || 'รถมือสอง',
+              model: car.model || '',
+              year: car.year || '',
+              image: car.images?.[0]?.url || '/herobanner/chiangmaiusedcar.webp',
+              offers: {
+                '@type': 'Offer',
+                price: car.price?.amount || '0',
+                priceCurrency: 'THB',
+                availability: car.availableForSale
+                  ? 'https://schema.org/InStock'
+                  : 'https://schema.org/OutOfStock',
+                seller: {
+                  '@type': 'AutoDealer',
+                  name: 'ครูหนึ่งรถสวย',
+                },
+              },
+            },
+          })),
+        }}
       />
 
       <script
@@ -221,7 +253,7 @@ export default function Home({ cars }) {
               สอบถามเลย
             </a>
             <Link
-              href="#recommended-cars"
+              href="/all-cars"
               className="inline-block text-center font-semibold rounded-full px-6 py-3 text-base border-2 border-primary text-primary hover:bg-primary hover:text-white transition-colors"
             >
               ดูรถทั้งหมด
@@ -468,7 +500,7 @@ export default function Home({ cars }) {
                     LINE
                   </a>
                   <a
-                    href={`tel:094-0649018`}
+                    href={`tel:0940649018`}
                     className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
                     aria-label="โทร 094-064-9018"
                     onClick={e => e.stopPropagation()}

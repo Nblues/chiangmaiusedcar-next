@@ -72,28 +72,146 @@ function CarDetailPage({ car }) {
   const carJsonLd = buildCarJsonLd(carSpecs, carProduct);
   const productJsonLd = buildProductJsonLd(carProduct);
 
+  // Enhanced SEO data for better link sharing
+  const enhancedTitle = `${car.title} ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท | ครูหนึ่งรถสวย`;
+  const enhancedDescription = [
+    car.title,
+    car.vendor || car.brand,
+    car.model || '',
+    car.year ? `ปี ${car.year}` : '',
+    `ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท`,
+    car.mileage ? `วิ่ง ${Number(car.mileage).toLocaleString()} กม.` : '',
+    'รถบ้านแท้ รับประกัน 1 ปี ส่งฟรีทั่วไทย ครูหนึ่งรถสวย เชียงใหม่',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  // Enhanced image for social sharing (ensure absolute URL)
+  const socialImage = currentImage.url.startsWith('/')
+    ? `https://chiangmaiusedcar.com${currentImage.url}`
+    : currentImage.url;
+
   return (
     <>
       <SEO
-        title={`${car.title} | รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย`}
-        description={`${car.title} ${car.vendor} ${car.model || ''} ${car.year || ''} ราคา ${Number(car.price.amount).toLocaleString()} บาท`}
-        image={currentImage.url}
+        title={enhancedTitle}
+        description={enhancedDescription}
+        image={socialImage}
         url={`/car/${car.handle}`}
-        carData={car}
+        type="product"
+        carData={{
+          ...car,
+          title: enhancedTitle,
+          description: enhancedDescription,
+          brand: car.vendor || car.brand || 'รถมือสอง',
+          model: car.model || '',
+          year: car.year || '',
+          images: carImages.map(img => ({
+            ...img,
+            url: img.url.startsWith('/') ? `https://chiangmaiusedcar.com${img.url}` : img.url,
+          })),
+        }}
+        keywords={[
+          car.title,
+          car.vendor || car.brand,
+          car.model,
+          `${car.vendor} ${car.model}`,
+          `รถมือสอง${car.vendor}`,
+          `${car.vendor}มือสอง`,
+          car.year ? `${car.vendor} ${car.year}` : '',
+          'รถมือสองเชียงใหม่',
+          'รถบ้านแท้',
+          'ฟรีดาวน์',
+          'ผ่อนถูก',
+          'รับประกัน',
+          'ส่งฟรีทั่วไทย',
+          'ครูหนึ่งรถสวย',
+        ]
+          .filter(Boolean)
+          .join(', ')}
       />
 
-      {/* Car Product JSON-LD Schema */}
+      {/* Enhanced Car Product JSON-LD Schema */}
       <Head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(carJsonLd),
+            __html: JSON.stringify({
+              ...carJsonLd,
+              name: enhancedTitle,
+              description: enhancedDescription,
+              image: carImages.map(img =>
+                img.url.startsWith('/') ? `https://chiangmaiusedcar.com${img.url}` : img.url
+              ),
+              url: `https://chiangmaiusedcar.com/car/${car.handle}`,
+              offers: {
+                ...carJsonLd.offers,
+                description: enhancedDescription,
+                category: 'รถยนต์มือสอง',
+                hasMerchantReturnPolicy: {
+                  '@type': 'MerchantReturnPolicy',
+                  applicableCountry: 'TH',
+                  returnPolicyCategory: 'http://schema.org/MerchantReturnUnlimitedWindow',
+                  merchantReturnDays: 7,
+                  returnFees: 'http://schema.org/FreeReturn',
+                },
+                warranty: {
+                  '@type': 'WarrantyPromise',
+                  durationOfWarranty: 'P1Y',
+                  warrantyScope: 'เครื่องยนต์และเกียร์',
+                },
+              },
+            }),
           }}
         />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(productJsonLd),
+            __html: JSON.stringify({
+              ...productJsonLd,
+              name: enhancedTitle,
+              description: enhancedDescription,
+              image: carImages.map(img =>
+                img.url.startsWith('/') ? `https://chiangmaiusedcar.com${img.url}` : img.url
+              ),
+            }),
+          }}
+        />
+
+        {/* Enhanced Breadcrumb JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                {
+                  '@type': 'ListItem',
+                  position: 1,
+                  name: 'หน้าแรก',
+                  item: 'https://chiangmaiusedcar.com/',
+                },
+                {
+                  '@type': 'ListItem',
+                  position: 2,
+                  name: 'รถทั้งหมด',
+                  item: 'https://chiangmaiusedcar.com/all-cars',
+                },
+                {
+                  '@type': 'ListItem',
+                  position: 3,
+                  name: car.vendor || car.brand || 'รถมือสอง',
+                  item: `https://chiangmaiusedcar.com/all-cars?brand=${encodeURIComponent(car.vendor || car.brand || '')}`,
+                },
+                {
+                  '@type': 'ListItem',
+                  position: 4,
+                  name: car.title,
+                  item: `https://chiangmaiusedcar.com/car/${car.handle}`,
+                },
+              ],
+            }),
           }}
         />
       </Head>

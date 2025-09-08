@@ -35,12 +35,58 @@ export default function About() {
   return (
     <div>
       <SEO
-        title="เกี่ยวกับครูหนึ่งรถสวย - ผู้เชี่ยวชาญรถมือสองเชียงใหม่ 10+ ปี"
-        description="เรื่องราวครูหนึ่งรถสวย จากอาจารย์สอนดนตรีสู่ผู้เชี่ยวชาญรถมือสอง Facebook 1M+ TikTok 150K+ YouTube 40K+ ติดตาม รับประกัน 1 ปี ส่งฟรีทั่วประเทศ โทร 094-064-9018"
-        keywords="ครูหนึ่งรถสวย, ประวัติครูหนึ่ง, รถมือสองเชียงใหม่, รถมือสองเชียงราย, Facebook KN2car, TikTok krunueng_usedcar, YouTube chiangraiusedcar, Lemon8, รับประกันรถมือสอง, ส่งรถฟรีทั่วประเทศ, รถบ้านแท้, Toyota Vios, ไฟแนนซ์รถมือสอง, Google Business, LINE Official"
-        url="https://chiangmaiusedcar.com/about"
-        image="https://chiangmaiusedcar.com/herobanner/team.png"
+        title="เกี่ยวกับครูหนึ่งรถสวย - จากครูดนตรีสู่ผู้เชี่ยวชาญรถมือสอง 10+ ปี | Facebook 1M+ ติดตาม"
+        description="เรื่องราวครูหนึ่งรถสวย จากอาจารย์สอนดนตรีสู่ผู้เชี่ยวชาญรถมือสองเชียงใหม่ ประสบการณ์ 10+ ปี Facebook 1M+ TikTok 150K+ YouTube 40K+ ติดตาม รถบ้านแท้ 100% ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วประเทศ โทร 094-064-9018"
+        keywords="ครูหนึ่งรถสวย, ประวัติครูหนึ่ง, เรื่องราวครูหนึ่ง, รถมือสองเชียงใหม่, รถมือสองเชียงราย, Facebook KN2car, TikTok krunueng_usedcar, YouTube chiangraiusedcar, Lemon8, รับประกันรถมือสอง, ส่งรถฟรีทั่วประเทศ, รถบ้านแท้, Toyota Vios, ไฟแนนซ์รถมือสอง, Google Business, LINE Official, อาจารย์สอนดนตรี, นายหน้ารถ, เต็นท์รถเชียงราย"
+        url="/about"
+        image="https://chiangmaiusedcar.com/herobanner/team.webp"
         type="profile"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: 'ครูหนึ่งรถสวย',
+          alternateName: 'KruNueng Used Cars',
+          description: 'ผู้เชี่ยวชาญรถมือสองเชียงใหม่ ประสบการณ์ 10+ ปี',
+          image: 'https://chiangmaiusedcar.com/herobanner/team.webp',
+          url: 'https://chiangmaiusedcar.com/about',
+          jobTitle: 'ผู้เชี่ยวชาญรถมือสอง',
+          worksFor: {
+            '@type': 'AutoDealer',
+            name: 'ครูหนึ่งรถสวย',
+            url: 'https://chiangmaiusedcar.com',
+          },
+          knowsAbout: [
+            'รถมือสองเชียงใหม่',
+            'รถยนต์มือสอง',
+            'การประเมินรถ',
+            'สินเชื่อรถยนต์',
+            'Toyota',
+            'Honda',
+            'Nissan',
+            'Mazda',
+          ],
+          alumniOf: 'อาจารย์สอนดนตรี',
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: 'เชียงใหม่',
+            addressRegion: 'เชียงใหม่',
+            addressCountry: 'TH',
+          },
+          sameAs: [
+            'https://www.facebook.com/KN2car',
+            'https://www.facebook.com/nuengblues',
+            'https://www.tiktok.com/@krunueng_usedcar',
+            'https://youtube.com/@chiangraiusedcar',
+            'https://s.lemon8-app.com/al/GgUmdUUsrT',
+            'https://lin.ee/8ugfzstD',
+          ],
+          award: [
+            'Facebook 1M+ ผู้ติดตาม',
+            'TikTok 150K+ ผู้ติดตาม',
+            'YouTube 40K+ ผู้ติดตาม',
+            'Lemon8 26K+ ผู้ติดตาม',
+          ],
+        }}
       />
 
       {/* Hero Section with Image */}
@@ -72,7 +118,7 @@ export default function About() {
                 </div>
               )}
               <Image
-                src="/herobanner/team.png"
+                src="/herobanner/team.webp"
                 alt="ทีมงานครูหนึ่งรถสวย"
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"

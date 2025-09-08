@@ -160,7 +160,7 @@ export default function Contact() {
             <div className="bg-primary/5 p-4 rounded-lg">
               <h3 className="font-bold text-primary mb-2">โทรศัพท์</h3>
               <a
-                href="tel:094-0649018"
+                href="tel:0940649018"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-accent font-semibold hover:text-accent-600 transition-colors"

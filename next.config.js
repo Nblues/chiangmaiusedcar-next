@@ -74,7 +74,7 @@ const nextConfig = {
     unoptimized: false,
   },
 
-  // Headers for better caching and SEO
+  // Headers for 2025 cache strategy - aggressive fresh content
   async headers() {
     return [
       {
@@ -108,6 +108,19 @@ const nextConfig = {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=(self), payment=()',
           },
+          // Force fresh content for HTML pages
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+          {
+            key: 'Pragma',
+            value: 'no-cache',
+          },
+          {
+            key: 'Expires',
+            value: '0',
+          },
         ],
       },
       {
@@ -129,11 +142,15 @@ const nextConfig = {
         ],
       },
       {
-        source: '/_next/static/webpack/:file*',
+        source: '/sw.js',
         headers: [
           {
             key: 'Cache-Control',
             value: 'public, max-age=0, must-revalidate',
+          },
+          {
+            key: 'Service-Worker-Allowed',
+            value: '/',
           },
         ],
       },
@@ -147,6 +164,19 @@ const nextConfig = {
           {
             key: 'Service-Worker-Allowed',
             value: '/',
+          },
+        ],
+      },
+      {
+        source: '/manifest.json',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/manifest+json',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
           },
         ],
       },
@@ -174,19 +204,6 @@ const nextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=3600, must-revalidate',
-          },
-        ],
-      },
-      {
-        source: '/site.webmanifest',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'application/manifest+json',
-          },
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=86400, must-revalidate',
           },
         ],
       },

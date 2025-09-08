@@ -189,12 +189,72 @@ export default function AllCars({ cars }) {
 
   // เริ่มการเรนเดอร์หน้า
   return (
-    <div>
+    <div className="min-h-screen">
       <SEO
-        title={`รถทั้งหมด${totalPages > 1 && currentPage > 1 ? ` - หน้า ${currentPage}` : ''} - รถมือสองเชียงใหม่ คุณภาพดี | ครูหนึ่งรถสวย`}
-        description={`ดูรถมือสองทั้งหมดที่มีจำหน่าย รถบ้านแท้ ฟรีดาวน์ ผ่อนถูก รับประกัน 1 ปี ส่งฟรีทั่วไทย${totalPages > 1 ? ` หน้า ${currentPage} จาก ${totalPages} หน้า มีรถให้เลือก ${filteredCars.length} คัน` : ''}`}
-        keywords="รถมือสองทั้งหมด, รถยนต์มือสอง, รถบ้านเชียงใหม่, รถคุณภาพดี, ฟรีดาวน์, ผ่อนถูก"
+        title={`รรถมือสองทั้งหมด${totalPages > 1 && currentPage > 1 ? ` หน้า ${currentPage}` : ''} - รถบ้านแท้ ฟรีดาวน์ ผ่อนถูก | ครูหนึ่งรถสวย`}
+        description={`รถมือสองคุณภาพดี ${filteredCars.length} คัน รถบ้านแท้ 100% ฟรีดาวน์ 0% ผ่อนถูกสุด รับประกัน 1 ปี ส่งฟรีทั่วไทย${totalPages > 1 ? ` หน้า ${currentPage}/${totalPages}` : ''} Toyota Honda Nissan Mazda และอื่นๆ โทร 094-064-9018`}
+        keywords={`รถมือสองทั้งหมด, รถยนต์มือสอง, รถบ้านเชียงใหม่, รถคุณภาพดี, ฟรีดาวน์, ผ่อนถูก, Toyota มือสอง, Honda มือสอง, Nissan มือสอง, Mazda มือสอง, รับประกันรถ, ส่งฟรีทั่วไทย, ครูหนึ่งรถสวย${brandFilter !== 'all' ? `, ${brandFilter} มือสอง` : ''}${searchTerm ? `, ${searchTerm}` : ''}`}
         url={`/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`}
+        image="https://chiangmaiusedcar.com/herobanner/allusedcars.webp"
+        type="website"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: `รถมือสองทั้งหมด${totalPages > 1 ? ` - หน้า ${currentPage}` : ''}`,
+          description: `รถมือสองคุณภาพดี ${filteredCars.length} คัน พร้อมส่งมอบ`,
+          url: `https://chiangmaiusedcar.com/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`,
+          mainEntity: {
+            '@type': 'ItemList',
+            name: 'รายการรถมือสอง',
+            numberOfItems: currentCars.length,
+            itemListElement: currentCars.map((car, index) => ({
+              '@type': 'ListItem',
+              position: startIndex + index + 1,
+              item: {
+                '@type': 'Car',
+                '@id': `https://chiangmaiusedcar.com/car/${car.handle}`,
+                name: car.title,
+                description: `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท`,
+                brand: car.vendor || car.brand || 'รถมือสอง',
+                image: car.images?.[0]?.url
+                  ? car.images[0].url.startsWith('/')
+                    ? `https://chiangmaiusedcar.com${car.images[0].url}`
+                    : car.images[0].url
+                  : 'https://chiangmaiusedcar.com/herobanner/allusedcars.webp',
+                offers: {
+                  '@type': 'Offer',
+                  price: car.price?.amount || '0',
+                  priceCurrency: 'THB',
+                  availability:
+                    car.availableForSale !== false
+                      ? 'https://schema.org/InStock'
+                      : 'https://schema.org/OutOfStock',
+                  priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
+                  seller: {
+                    '@type': 'AutoDealer',
+                    name: 'ครูหนึ่งรถสวย',
+                    telephone: '+66940649018',
+                    address: {
+                      '@type': 'PostalAddress',
+                      addressLocality: 'เชียงใหม่',
+                      addressCountry: 'TH',
+                    },
+                  },
+                  warranty: {
+                    '@type': 'WarrantyPromise',
+                    durationOfWarranty: 'P1Y',
+                    warrantyScope: 'เครื่องยนต์และเกียร์',
+                  },
+                },
+              },
+            })),
+          },
+          publisher: {
+            '@type': 'AutoDealer',
+            name: 'ครูหนึ่งรถสวย',
+            url: 'https://chiangmaiusedcar.com',
+          },
+        }}
       />
 
       {/* Pagination Link Tags for SEO */}
@@ -302,19 +362,16 @@ export default function AllCars({ cars }) {
       )}
 
       {/* Hero Banner */}
-      <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
+      <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50 -mt-0">
         <Image
-          src="/herobanner/allcars.webp"
+          src="/herobanner/allusedcars.webp"
           alt="รถมือสองทั้งหมด - ครูหนึ่งรถสวย"
           fill
-          className="object-cover object-center"
+          className="object-contain object-center"
           priority
           quality={85}
           sizes="100vw"
         />
-
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/30"></div>
 
         {/* Content over banner */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -322,11 +379,11 @@ export default function AllCars({ cars }) {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-prompt drop-shadow-lg">
               รถมือสองทั้งหมด
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl font-prompt drop-shadow-md">
+            <p className="text-lg sm:text-xl md:text-2xl font-prompt drop-shadow-lg text-black font-bold">
               รถมือสองคุณภาพดี {mounted ? filteredCars.length : '...'} คัน พร้อมส่งมอบ
             </p>
             {mounted && totalPages > 1 && (
-              <p className="text-base sm:text-lg mt-2 drop-shadow-md font-prompt">
+              <p className="text-base sm:text-lg mt-2 drop-shadow-lg font-prompt text-black font-semibold">
                 หน้าที่ {currentPage} จาก {totalPages} หน้า
               </p>
             )}
@@ -335,7 +392,7 @@ export default function AllCars({ cars }) {
       </section>
 
       {/* Breadcrumb */}
-      <section className="bg-white py-4 border-b border-gray-200">
+      <section className="bg-white py-4 border-b border-gray-200 -mt-0">
         <div className="max-w-7xl mx-auto px-6">
           <nav className="flex items-center gap-2 text-sm text-gray-600 font-prompt">
             <Link href="/" className="hover:text-primary transition-colors">
