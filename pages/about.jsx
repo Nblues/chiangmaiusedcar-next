@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import SEO from '../components/SEO';
 
 export default function About() {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
   const features = [
     {
       title: 'รถบ้านแท้ 100%',
@@ -57,33 +55,27 @@ export default function About() {
           </div>
         </div>
 
-        {/* Image Section - ปรับปรุงให้แสดงผลดีในทุกหน้าจอ */}
-        <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-gray-100 border border-gray-200">
-          {!imageLoaded && (
-            <div className="absolute inset-0 flex items-center justify-center z-10">
-              <div className="animate-pulse space-y-4 w-full max-w-md mx-auto p-8">
-                <div className="h-16 bg-gray-300 rounded-lg"></div>
-                <div className="h-8 bg-gray-300 rounded w-3/4 mx-auto"></div>
-                <div className="h-4 bg-gray-300 rounded w-1/2 mx-auto"></div>
+        {/* Image Section - ปรับปรุงให้แสดงรูปเต็มไม่ถูกตัดสำหรับทุกอุปกรณ์ */}
+        <div className="w-full bg-gradient-to-br from-gray-50 to-gray-100 py-8 md:py-12">
+          <div className="max-w-5xl mx-auto px-4">
+            <div className="relative w-full bg-white rounded-2xl shadow-lg overflow-hidden">
+              {/* พื้นที่รูปที่คำนวณสัดส่วนอัตโนมัติ */}
+              <div className="relative w-full" style={{ aspectRatio: '16/9' }}>
+                <Image
+                  src="/herobanner/team.png"
+                  alt="ทีมงานครูหนึ่งรถสวย - รถมือสองเชียงใหม่คุณภาพดี"
+                  fill
+                  sizes="(max-width: 640px) 95vw, (max-width: 1024px) 85vw, 1000px"
+                  className="object-contain"
+                  style={{
+                    objectPosition: 'center center',
+                  }}
+                  loading="lazy"
+                  priority={false}
+                />
               </div>
             </div>
-          )}
-          <Image
-            src="/herobanner/team.png"
-            alt="ทีมงานครูหนึ่งรถสวย"
-            fill
-            sizes="100vw"
-            className={`object-cover object-center transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-            style={{
-              objectPosition: 'center center',
-            }}
-            loading="lazy"
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-            onLoad={() => setImageLoaded(true)}
-            onError={() => console.error('Image failed to load')}
-            priority={false}
-          />
+          </div>
         </div>
       </section>
 

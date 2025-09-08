@@ -468,7 +468,7 @@ export default function Home({ cars }) {
                     LINE
                   </a>
                   <a
-                    href={`tel:094-0649018`}
+                    href="tel:0940649018"
                     className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
                     aria-label="โทร 094-064-9018"
                     onClick={e => e.stopPropagation()}

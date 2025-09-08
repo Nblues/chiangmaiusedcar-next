@@ -78,8 +78,12 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/:path*',
         headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
           {
             key: 'X-DNS-Prefetch-Control',
             value: 'on',
@@ -107,6 +111,15 @@ const nextConfig = {
           {
             key: 'Permissions-Policy',
             value: 'camera=(), microphone=(), geolocation=(self), payment=()',
+          },
+        ],
+      },
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
           },
         ],
       },
@@ -208,6 +221,17 @@ const nextConfig = {
           },
         ],
       },
+    ];
+  },
+
+  // Redirects for clean URLs (remove trailing slashes)
+  async redirects() {
+    return [
+      {
+        source: "/:path*/",
+        destination: "/:path*",
+        permanent: true
+      }
     ];
   },
 

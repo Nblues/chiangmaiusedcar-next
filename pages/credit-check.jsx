@@ -35,7 +35,15 @@ export default function CreditCheck() {
       // Trim text-like inputs
       if (tag === 'input' && (type === 'text' || type === 'tel' || type === 'number')) {
         if (typeof el.value === 'string') el.value = el.value.trim();
-        if (type === 'tel') el.value = el.value.replace(/[^0-9]/g, '').slice(0, 10);
+        if (type === 'tel') {
+          // Clean phone number: keep only digits and ensure 10 digits starting with 0
+          el.value = el.value.replace(/[^0-9]/g, '');
+          if (el.value.length === 10 && el.value.startsWith('0')) {
+            // Keep as is for Thai mobile format
+          } else if (el.value.length > 10) {
+            el.value = el.value.slice(0, 10);
+          }
+        }
       }
       if (tag === 'input' && type === 'number') {
         // Clamp to reasonable range
@@ -73,7 +81,6 @@ export default function CreditCheck() {
     });
 
     try {
-
       const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
       const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
       const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
@@ -200,13 +207,15 @@ export default function CreditCheck() {
                   <input
                     type="tel"
                     name="phone"
-                    pattern="0[0-9]{9}"
+                    pattern="^0[0-9]{9}$"
                     placeholder="เช่น 0812345678"
                     required
                     className="form-input"
                     inputMode="tel"
                     autoComplete="tel"
+                    maxLength="10"
                   />
+                  <p className="text-xs text-gray-500 mt-1">รูปแบบ: 0812345678 (10 หลัก)</p>
                 </div>
 
                 <div>
@@ -530,7 +539,7 @@ export default function CreditCheck() {
                     <div className="text-gray-700">84 เดือน</div>
                   </div>
                   <div className="bg-white rounded-lg p-3">
-                    <div className="font-semibold text-purple-600">อนุมัติเร็ว</div>
+                    <div className="font-semibold text-gold">อนุมัติเร็ว</div>
                     <div className="text-gray-700">ภายใน 1 วัน</div>
                   </div>
                   <div className="bg-white rounded-lg p-3">
@@ -614,6 +623,6 @@ export default function CreditCheck() {
 
 export async function getServerSideProps() {
   return {
-    props: {}
+    props: {},
   };
 }

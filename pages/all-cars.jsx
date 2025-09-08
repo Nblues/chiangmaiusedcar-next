@@ -483,22 +483,24 @@ export default function AllCars({ cars }) {
 
                     {/* Action Buttons - แยกออกจาก Link เพื่อป้องกัน nested anchor */}
                     <div className="flex gap-1 md:gap-2 p-3 pt-0 md:p-4 md:pt-0">
-                      <button
-                        type="button"
+                      <a
+                        href="https://lin.ee/8ugfzstD"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
-                        onClick={() =>
-                          window.open('https://lin.ee/8ugfzstD', '_blank', 'noopener,noreferrer')
-                        }
+                        aria-label="สอบถามผ่าน LINE ครูหนึ่งรถสวย"
+                        onClick={e => e.stopPropagation()}
                       >
                         LINE
-                      </button>
-                      <button
-                        type="button"
+                      </a>
+                      <a
+                        href="tel:0940649018"
                         className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
-                        onClick={() => window.open('tel:094-0649018', '_self')}
+                        aria-label="โทร 094-064-9018"
+                        onClick={e => e.stopPropagation()}
                       >
                         โทร
-                      </button>
+                      </a>
                       <button
                         type="button"
                         className={`flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border transition-all duration-200 ${

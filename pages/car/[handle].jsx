@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import SEO from '../../components/SEO';
 import Breadcrumb from '../../components/Breadcrumb';
@@ -9,7 +9,98 @@ import NextImage from 'next/image';
 
 function CarDetailPage({ car }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
+  const touchStartTime = useRef(null);
+  const minSwipeDistance = 30; // Reduced for more responsive touch
+  const maxSwipeTime = 300; // Max time for swipe gesture (ms)
 
+  // เตรียมรูปภาพ
+  const carImages = car?.images || [
+    { url: '/herobanner/chiangmaiusedcar.webp', alt: car?.title || 'รถมือสอง' },
+  ];
+  const currentImage = carImages[selectedImageIndex] || carImages[0];
+
+  // Smooth image change with international performance standards
+  const changeImage = useCallback(
+    newIndex => {
+      if (
+        isTransitioning ||
+        newIndex === selectedImageIndex ||
+        newIndex < 0 ||
+        newIndex >= carImages.length
+      )
+        return;
+
+      setIsTransitioning(true);
+
+      // Pre-schedule the image change for smoother transition
+      requestAnimationFrame(() => {
+        setSelectedImageIndex(newIndex);
+
+        // Reset transition state after CSS animation completes
+        setTimeout(() => setIsTransitioning(false), 150); // Optimized from 200ms to 150ms
+      });
+    },
+    [isTransitioning, selectedImageIndex, carImages.length]
+  );
+
+  // Handle touch events for swipe navigation
+  const onTouchStart = e => {
+    touchEndX.current = null;
+    touchStartX.current = e.targetTouches[0].clientX;
+    touchStartTime.current = Date.now();
+  };
+
+  const onTouchMove = e => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current || !touchStartTime.current) return;
+
+    const distance = touchStartX.current - touchEndX.current;
+    const timeElapsed = Date.now() - touchStartTime.current;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    const isQuickSwipe = timeElapsed < maxSwipeTime;
+
+    // Only trigger swipe if it's quick enough and meets distance requirement
+    if (isQuickSwipe && carImages.length > 1) {
+      if (isLeftSwipe) {
+        // Swipe left - next image
+        const nextIndex = selectedImageIndex === carImages.length - 1 ? 0 : selectedImageIndex + 1;
+        changeImage(nextIndex);
+      } else if (isRightSwipe) {
+        // Swipe right - previous image
+        const prevIndex = selectedImageIndex === 0 ? carImages.length - 1 : selectedImageIndex - 1;
+        changeImage(prevIndex);
+      }
+    }
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = e => {
+      if (carImages.length <= 1) return;
+
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const prevIndex = selectedImageIndex === 0 ? carImages.length - 1 : selectedImageIndex - 1;
+        changeImage(prevIndex);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        const nextIndex = selectedImageIndex === carImages.length - 1 ? 0 : selectedImageIndex + 1;
+        changeImage(nextIndex);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [carImages.length, selectedImageIndex, changeImage]);
+
+  // Early return for missing car
   if (!car) {
     return (
       <div className="max-w-2xl mx-auto p-8 text-center text-red-600">
@@ -20,12 +111,6 @@ function CarDetailPage({ car }) {
       </div>
     );
   }
-
-  // เตรียมรูปภาพ
-  const carImages = car?.images || [
-    { url: '/herobanner/chiangmaiusedcar.webp', alt: car?.title || 'รถมือสอง' },
-  ];
-  const currentImage = carImages[selectedImageIndex] || carImages[0];
 
   // เตรียม JSON-LD schema สำหรับ SEO
   const carSpecs = {
@@ -97,27 +182,46 @@ function CarDetailPage({ car }) {
             </h1>
           </div>
 
-          {/* รูปรถ - Carsome Style */}
+          {/* รูปรถ - Smooth Transition Gallery with Touch Support */}
           <div className="mb-8">
-            <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-gray-100 rounded-xl overflow-hidden shadow-lg">
+            <div
+              className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-gray-100 rounded-xl overflow-hidden shadow-lg cursor-pointer select-none"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
               <NextImage
                 src={currentImage.url}
                 alt={currentImage.alt || car.title}
                 fill
-                className="object-cover"
+                className={`object-cover transition-all duration-200 ease-out ${
+                  isTransitioning ? 'scale-102 opacity-95' : 'scale-100 opacity-100'
+                }`}
                 priority
-                quality={85}
+                quality={90}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
               />
 
-              {/* Navigation buttons */}
+              {/* Loading overlay during transition - optimized */}
+              {isTransitioning && (
+                <div className="absolute inset-0 bg-black/5 flex items-center justify-center transition-opacity duration-150">
+                  <div className="w-6 h-6 border-2 border-white/80 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              )}
+
+              {/* Navigation buttons - enhanced with hover effects */}
               {carImages.length > 1 && (
                 <>
                   <button
-                    onClick={() =>
-                      setSelectedImageIndex(prev => (prev === 0 ? carImages.length - 1 : prev - 1))
-                    }
-                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 sm:p-3 rounded-full shadow-lg transition-all duration-200"
+                    onClick={() => {
+                      const prevIndex =
+                        selectedImageIndex === 0 ? carImages.length - 1 : selectedImageIndex - 1;
+                      changeImage(prevIndex);
+                    }}
+                    disabled={isTransitioning}
+                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 sm:p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed hidden sm:flex items-center justify-center"
                     type="button"
                     aria-label="รูปก่อนหน้า"
                   >
@@ -136,10 +240,13 @@ function CarDetailPage({ car }) {
                     </svg>
                   </button>
                   <button
-                    onClick={() =>
-                      setSelectedImageIndex(prev => (prev === carImages.length - 1 ? 0 : prev + 1))
-                    }
-                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 sm:p-3 rounded-full shadow-lg transition-all duration-200"
+                    onClick={() => {
+                      const nextIndex =
+                        selectedImageIndex === carImages.length - 1 ? 0 : selectedImageIndex + 1;
+                      changeImage(nextIndex);
+                    }}
+                    disabled={isTransitioning}
+                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 sm:p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed hidden sm:flex items-center justify-center"
                     type="button"
                     aria-label="รูปถัดไป"
                   >
@@ -161,30 +268,51 @@ function CarDetailPage({ car }) {
               )}
 
               {/* Image Counter แบบ Carsome */}
-              <div className="absolute top-4 right-4 bg-black/80 text-white px-4 py-2 rounded-lg text-sm font-medium font-prompt backdrop-blur-sm">
+              <div className="absolute top-4 right-4 bg-black/80 text-white px-4 py-2 rounded-lg text-sm font-medium font-prompt backdrop-blur-sm transition-all duration-200">
                 <span className="text-white">{selectedImageIndex + 1}</span>
                 <span className="text-gray-300 mx-1">/</span>
                 <span className="text-gray-300">{carImages.length}</span>
                 <span className="text-gray-300 ml-2">ภาพรถจริง</span>
               </div>
 
-              {/* Keyboard hint */}
-              <div className="absolute bottom-4 left-4 bg-black/70 text-white px-2 py-1 rounded text-xs font-prompt hidden sm:block">
-                ใช้ ← → เพื่อเลื่อนรูป
+              {/* Navigation hint - animated */}
+              <div className="absolute bottom-4 left-4 bg-black/70 text-white px-2 py-1 rounded text-xs font-prompt transition-all duration-200 hover:bg-black/80">
+                <span className="sm:hidden">⚡ เลื่อนนิ้วเร็วๆ ซ้าย-ขวา</span>
+                <span className="hidden sm:inline">⚡ ใช้ ← → หรือเลื่อนนิ้วเร็วๆ</span>
               </div>
+
+              {/* Mobile dots indicator - enhanced */}
+              {carImages.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 sm:hidden">
+                  {carImages.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => changeImage(index)}
+                      disabled={isTransitioning}
+                      className={`w-2.5 h-2.5 rounded-full transition-all duration-300 disabled:opacity-50 ${
+                        selectedImageIndex === index
+                          ? 'bg-white scale-125'
+                          : 'bg-white/50 hover:bg-white/70 scale-100'
+                      }`}
+                      aria-label={`ไปยังรูปที่ ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Thumbnails - Carsome Style */}
+            {/* Thumbnails - Enhanced Smooth Transitions */}
             {carImages.length > 1 && (
               <div className="hidden sm:flex gap-3 mt-4 overflow-x-auto pb-2 scrollbar-hide">
                 {carImages.map((img, index) => (
                   <button
                     key={index}
-                    onClick={() => setSelectedImageIndex(index)}
-                    className={`relative flex-shrink-0 w-20 h-16 lg:w-24 lg:h-18 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:scale-105 ${
+                    onClick={() => changeImage(index)}
+                    disabled={isTransitioning}
+                    className={`relative flex-shrink-0 w-20 h-16 lg:w-24 lg:h-18 rounded-lg overflow-hidden border-2 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed ${
                       selectedImageIndex === index
-                        ? 'border-blue-500 ring-2 ring-blue-200 shadow-lg'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-blue-500 ring-2 ring-blue-200 shadow-lg scale-105'
+                        : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
                     }`}
                     type="button"
                     aria-label={`ดูรูปที่ ${index + 1}`}
@@ -193,14 +321,17 @@ function CarDetailPage({ car }) {
                       src={img.url}
                       alt={`รูปที่ ${index + 1}`}
                       fill
-                      className="object-cover"
+                      className="object-cover transition-transform duration-200"
                       sizes="96px"
                       loading="lazy"
+                      quality={75}
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                     />
                     {/* Selected indicator */}
                     {selectedImageIndex === index && (
-                      <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-center">
-                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                      <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-center transition-all duration-300">
+                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center animate-pulse">
                           <svg
                             className="w-4 h-4 text-white"
                             fill="none"
@@ -222,18 +353,19 @@ function CarDetailPage({ car }) {
               </div>
             )}
 
-            {/* Mobile Thumbnails */}
+            {/* Mobile Thumbnails - Enhanced */}
             {carImages.length > 1 && (
               <div className="sm:hidden">
                 <div className="flex gap-2 mt-4 overflow-x-auto pb-2 scrollbar-hide px-1">
                   {carImages.map((img, index) => (
                     <button
                       key={`mobile-${index}`}
-                      onClick={() => setSelectedImageIndex(index)}
-                      className={`relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden border transition-all duration-200 ${
+                      onClick={() => changeImage(index)}
+                      disabled={isTransitioning}
+                      className={`relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden border transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
                         selectedImageIndex === index
-                          ? 'border-blue-500 ring-1 ring-blue-200'
-                          : 'border-gray-200'
+                          ? 'border-blue-500 ring-1 ring-blue-200 scale-105'
+                          : 'border-gray-200 hover:border-gray-300'
                       }`}
                       type="button"
                       aria-label={`ดูรูปที่ ${index + 1}`}
@@ -242,9 +374,12 @@ function CarDetailPage({ car }) {
                         src={img.url}
                         alt={`รูปที่ ${index + 1}`}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-200"
                         sizes="64px"
                         loading="lazy"
+                        quality={70}
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                       />
                     </button>
                   ))}
@@ -520,11 +655,49 @@ function CarDetailPage({ car }) {
   );
 }
 
-// Static Paths/Props - ปิด static generation เพื่อหลีกเลี่ยง Html import error
+// Static Paths/Props - Optimized data fetching for performance
 export async function getServerSideProps({ params }) {
-  const cars = await getAllCars();
-  const car = cars.find(c => c.handle === params.handle) || null;
-  return { props: { car, allCars: cars } };
+  try {
+    const cars = await getAllCars();
+    const car = cars.find(c => c.handle === params.handle) || null;
+
+    if (!car) {
+      return { notFound: true };
+    }
+
+    // Optimize data size by only sending necessary fields
+    const optimizedCar = {
+      id: car.id,
+      handle: car.handle,
+      title: car.title,
+      vendor: car.vendor,
+      model: car.model,
+      year: car.year,
+      price: car.price,
+      description: car.description,
+      images: car.images || [], // Show all images from source
+      // Essential specs only
+      mileage: car.mileage,
+      transmission: car.transmission,
+      engine: car.engine,
+      fuel_type: car.fuel_type,
+      color: car.color,
+      province: car.province,
+      seats: car.seats,
+      availableForSale: car.availableForSale,
+      vin: car.vin || null, // Fix undefined serialization error
+    };
+
+    return {
+      props: {
+        car: optimizedCar,
+        // Remove allCars to reduce data transfer
+      },
+    };
+  } catch (error) {
+    console.error('Error fetching car data:', error);
+    return { notFound: true };
+  }
 }
 
 export default CarDetailPage;
