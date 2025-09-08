@@ -124,7 +124,7 @@ export default function About() {
                 sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
                 className={`transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                 style={{
-                  objectFit: 'contain',
+                  objectFit: 'cover',
                   objectPosition: 'center center',
                 }}
                 loading="lazy"

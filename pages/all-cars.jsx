@@ -362,12 +362,12 @@ export default function AllCars({ cars }) {
       )}
 
       {/* Hero Banner */}
-      <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50 -mt-0">
+      <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
         <Image
           src="/herobanner/allusedcars.webp"
           alt="รถมือสองทั้งหมด - ครูหนึ่งรถสวย"
           fill
-          className="object-contain object-center"
+          className="object-cover object-center"
           priority
           quality={85}
           sizes="100vw"
@@ -375,18 +375,20 @@ export default function AllCars({ cars }) {
 
         {/* Content over banner */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-4">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-prompt drop-shadow-lg">
+          <div className="text-center text-white px-4 max-w-4xl mx-auto">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 font-prompt drop-shadow-lg">
               รถมือสองทั้งหมด
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl font-prompt drop-shadow-lg text-black font-bold">
-              รถมือสองคุณภาพดี {mounted ? filteredCars.length : '...'} คัน พร้อมส่งมอบ
-            </p>
-            {mounted && totalPages > 1 && (
-              <p className="text-base sm:text-lg mt-2 drop-shadow-lg font-prompt text-black font-semibold">
-                หน้าที่ {currentPage} จาก {totalPages} หน้า
+            <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap">
+              <p className="text-sm sm:text-base md:text-xl lg:text-2xl font-prompt drop-shadow-lg text-black font-bold">
+                รถคุณภาพดี {mounted ? filteredCars.length : '...'} คัน พร้อมส่งมอบ
               </p>
-            )}
+              {mounted && totalPages > 1 && (
+                <p className="text-xs sm:text-sm md:text-base lg:text-lg drop-shadow-lg font-prompt text-black font-semibold">
+                  หน้า {currentPage}/{totalPages}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </section>
