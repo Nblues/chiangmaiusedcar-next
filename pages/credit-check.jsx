@@ -162,7 +162,9 @@ export default function CreditCheck() {
           {/* Hero Section */}
           <div className="text-center mb-8">
             <div className="bg-gradient-to-r from-primary to-primary-600 text-white rounded-2xl p-8 mb-6">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">เช็คเครดิตก่อนซื้อรถ</h1>
+              <h1 className="text-3xl md:text-4xl font-bold mb-4">
+                <span className="text-accent">เช็คเครดิตก่อนซื้อรถ</span>
+              </h1>
               <p className="text-lg md:text-xl opacity-90 mb-4">
                 รู้เงื่อนไขล่วงหน้า • ดอกเบี้ยต่ำสำหรับเครดิตดี • เช็คฟรี • รู้ผลเร็ว
               </p>
