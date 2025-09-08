@@ -325,8 +325,6 @@ const nextConfig = {
     esmExternals: 'loose',
     optimizeCss: true,
     scrollRestoration: true,
-    legacyBrowsers: false,
-    browsersListForSwc: true,
     // Enable future features
     serverComponentsExternalPackages: ['shopify-api-node'],
   },
