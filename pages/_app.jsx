@@ -8,10 +8,23 @@ import PWAInstallPrompt from '../components/PWAInstallPrompt';
 import { cacheManager } from '../lib/cache';
 import '../styles/globals.css';
 
+// Web Vitals reporting function
+export function reportWebVitals(metric) {
+  // Dynamic import to avoid blocking main bundle
+  import('../lib/performance').then(({ checkWebVitals }) => {
+    checkWebVitals(metric);
+  });
+}
+
 export default function MyApp({ Component, pageProps }) {
   // 2025 Cache Management: Always fresh content strategy
   useEffect(() => {
     if (typeof window !== 'undefined') {
+      // Initialize performance observer
+      import('../lib/performance').then(({ initPerformanceObserver }) => {
+        initPerformanceObserver();
+      });
+
       // Clear old caches on app start
       cacheManager.clearAllCaches().then(() => {
         // Start update checker for continuous freshness
@@ -23,36 +36,49 @@ export default function MyApp({ Component, pageProps }) {
         };
       });
 
-      // Listen for service worker messages
+      // Listen for service worker messages (production only)
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.addEventListener('message', event => {
-          if (event.data?.type === 'CACHE_UPDATED') {
-            cacheManager.notifyUpdateAvailable();
-          }
-        });
-
-        // Register service worker with update handling
-        navigator.serviceWorker
-          .register('/sw.js', {
-            scope: '/',
-            updateViaCache: 'none', // Never cache the service worker itself
-          })
-          .then(registration => {
-            // Check for updates immediately
-            registration.update();
-
-            // Setup update detection
-            registration.addEventListener('updatefound', () => {
-              const newWorker = registration.installing;
-              if (newWorker) {
-                newWorker.addEventListener('statechange', () => {
-                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    cacheManager.notifyUpdateAvailable();
-                  }
-                });
-              }
+        if (process.env.NODE_ENV === 'development') {
+          // Unregister service worker in development
+          navigator.serviceWorker.getRegistrations().then(registrations => {
+            registrations.forEach(registration => {
+              registration.unregister();
             });
           });
+        } else {
+          // Production service worker registration
+          navigator.serviceWorker.addEventListener('message', event => {
+            if (event.data?.type === 'CACHE_UPDATED') {
+              cacheManager.notifyUpdateAvailable();
+            }
+          });
+
+          // Register service worker with update handling
+          navigator.serviceWorker
+            .register('/sw.js', {
+              scope: '/',
+              updateViaCache: 'none', // Never cache the service worker itself
+            })
+            .then(registration => {
+              // Check for updates immediately
+              registration.update();
+
+              // Setup update detection
+              registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                if (newWorker) {
+                  newWorker.addEventListener('statechange', () => {
+                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                      cacheManager.notifyUpdateAvailable();
+                    }
+                  });
+                }
+              });
+            })
+            .catch(error => {
+              console.warn('SW registration failed:', error);
+            });
+        }
       }
 
       // Request notification permission for update alerts

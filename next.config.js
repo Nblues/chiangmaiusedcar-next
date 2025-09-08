@@ -7,7 +7,7 @@ const nextConfig = {
   generateEtags: true,
   swcMinify: true,
 
-  // Webpack configuration to prevent .html import issues
+  // Webpack configuration to prevent .html import issues and bundle optimization
   webpack: (config, { isServer, webpack }) => {
     config.module.rules.push({
       test: /\.html$/i,
@@ -28,6 +28,49 @@ const nextConfig = {
         __NEXT_IGNORE_HTML_ERRORS__: JSON.stringify(true),
       })
     );
+
+    // Bundle optimization - split chunks intelligently
+    if (!isServer) {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          ...config.optimization.splitChunks,
+          chunks: 'all',
+          cacheGroups: {
+            ...config.optimization.splitChunks.cacheGroups,
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+              priority: 10,
+              reuseExistingChunk: true,
+              enforce: true,
+            },
+            common: {
+              name: 'common',
+              minChunks: 2,
+              chunks: 'all',
+              priority: 5,
+              reuseExistingChunk: true,
+              enforce: true,
+            },
+          },
+        },
+      };
+    }
+
+    // Bundle analyzer (conditionally)
+    if (process.env.ANALYZE === 'true') {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+      config.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'static',
+          openAnalyzer: false,
+          reportFilename: `./analyze/${isServer ? 'server' : 'client'}.html`,
+        })
+      );
+    }
 
     return config;
   },
@@ -74,54 +117,75 @@ const nextConfig = {
     unoptimized: false,
   },
 
-  // Headers for 2025 cache strategy - aggressive fresh content
+  // Headers for 2025 cache strategy - aggressive fresh content + enhanced security
   async headers() {
+    const securityHeaders = [
+      {
+        key: 'X-DNS-Prefetch-Control',
+        value: 'on',
+      },
+      {
+        key: 'X-XSS-Protection',
+        value: '1; mode=block',
+      },
+      {
+        key: 'X-Frame-Options',
+        value: 'SAMEORIGIN',
+      },
+      {
+        key: 'X-Content-Type-Options',
+        value: 'nosniff',
+      },
+      {
+        key: 'Referrer-Policy',
+        value: 'strict-origin-when-cross-origin',
+      },
+      {
+        key: 'Strict-Transport-Security',
+        value: 'max-age=31536000; includeSubDomains; preload',
+      },
+      {
+        key: 'Permissions-Policy',
+        value:
+          'camera=(), microphone=(), geolocation=(self), payment=(), usb=(), magnetometer=(), gyroscope=(), speaker=()',
+      },
+      // Enhanced Content Security Policy
+      {
+        key: 'Content-Security-Policy',
+        value: [
+          "default-src 'self'",
+          "script-src 'self' 'unsafe-eval' 'unsafe-inline' *.googletagmanager.com *.google-analytics.com *.vercel-analytics.com",
+          "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
+          "font-src 'self' fonts.gstatic.com",
+          "img-src 'self' data: blob: *.shopify.com *.myshopify.com cdn.shopify.com files.myshopify.com images.unsplash.com",
+          "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com",
+          "frame-src 'self' *.facebook.com *.line.me",
+          "object-src 'none'",
+          "base-uri 'self'",
+          "form-action 'self'",
+          "frame-ancestors 'self'",
+          'upgrade-insecure-requests',
+        ].join('; '),
+      },
+      // Force fresh content for HTML pages
+      {
+        key: 'Cache-Control',
+        value: 'no-cache, no-store, must-revalidate',
+      },
+      {
+        key: 'Pragma',
+        value: 'no-cache',
+      },
+      {
+        key: 'Expires',
+        value: '0',
+      },
+    ];
+
     return [
       {
         source: '/(.*)',
-        headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(self), payment=()',
-          },
-          // Force fresh content for HTML pages
-          {
-            key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate',
-          },
-          {
-            key: 'Pragma',
-            value: 'no-cache',
-          },
-          {
-            key: 'Expires',
-            value: '0',
-          },
-        ],
+        headers: securityHeaders,
       },
       {
         source: '/_next/image(.*)',
@@ -249,10 +313,32 @@ const nextConfig = {
     ignoreBuildErrors: false,
   },
 
-  // Clean experimental config
+  // Internationalization support (prepared for future)
+  i18n: {
+    locales: ['th', 'en'],
+    defaultLocale: 'th',
+    localeDetection: false, // Disable auto-detection for now
+  },
+
+  // Enhanced experimental config for 2025
   experimental: {
     esmExternals: 'loose',
+    optimizeCss: true,
+    scrollRestoration: true,
+    legacyBrowsers: false,
+    browsersListForSwc: true,
+    // Enable future features
+    serverComponentsExternalPackages: ['shopify-api-node'],
   },
+
+  // Web vitals monitoring
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
+  },
+
+  // Output configuration for static export (if needed)
+  // output: 'standalone', // Disabled for Windows symlink compatibility
 
   // Optimize for Vercel deployment
   trailingSlash: false,

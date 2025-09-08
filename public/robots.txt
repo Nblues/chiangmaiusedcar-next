@@ -35,10 +35,11 @@ User-agent: bingbot
 Allow: /
 Allow: /favicon.webp
 
-# Host
-Host: https://www.chiangmaiusedcar.com
+# Host (consistent with config)
+Host: https://chiangmaiusedcar.com
 
-# Sitemaps
-Sitemap: https://www.chiangmaiusedcar.com/sitemap.xml
-Sitemap: https://www.chiangmaiusedcar.com/sitemap-0.xml
-Sitemap: https://www.chiangmaiusedcar.com/sitemap-images.xml
+# Sitemaps (updated URLs)
+Sitemap: https://chiangmaiusedcar.com/sitemap.xml
+Sitemap: https://chiangmaiusedcar.com/sitemap-0.xml
+Sitemap: https://chiangmaiusedcar.com/sitemap-cars.xml
+Sitemap: https://chiangmaiusedcar.com/sitemap-images.xml
