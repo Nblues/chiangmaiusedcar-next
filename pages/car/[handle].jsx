@@ -10,6 +10,18 @@ import NextImage from 'next/image';
 function CarDetailPage({ car }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
+  // Preload next/prev images for instant switching
+  React.useEffect(() => {
+    if (!car?.images || car.images.length < 2) return;
+    const preloadIndexes = [];
+    if (selectedImageIndex < car.images.length - 1) preloadIndexes.push(selectedImageIndex + 1);
+    if (selectedImageIndex > 0) preloadIndexes.push(selectedImageIndex - 1);
+    preloadIndexes.forEach(idx => {
+      const img = new window.Image();
+      img.src = car.images[idx].url;
+    });
+  }, [selectedImageIndex, car?.images]);
+
   if (!car) {
     return (
       <div className="max-w-2xl mx-auto p-8 text-center text-red-600">

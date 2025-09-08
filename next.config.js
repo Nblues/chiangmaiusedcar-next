@@ -200,6 +200,19 @@ const nextConfig = {
         ],
       },
       {
+        source: '/favicon.webp',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Content-Type',
+            value: 'image/webp',
+          },
+        ],
+      },
+      {
         source: '/apple-touch-icon.png',
         headers: [
           {

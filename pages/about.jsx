@@ -58,32 +58,38 @@ export default function About() {
         </div>
 
         {/* Image Section - ปรับปรุงให้แสดงผลดีในทุกหน้าจอ */}
-        <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-gray-100 border border-gray-200">
-          {!imageLoaded && (
-            <div className="absolute inset-0 flex items-center justify-center z-10">
-              <div className="animate-pulse space-y-4 w-full max-w-md mx-auto p-8">
-                <div className="h-16 bg-gray-300 rounded-lg"></div>
-                <div className="h-8 bg-gray-300 rounded w-3/4 mx-auto"></div>
-                <div className="h-4 bg-gray-300 rounded w-1/2 mx-auto"></div>
-              </div>
+        <div className="relative w-full bg-gray-100">
+          {/* Container สำหรับรูปภาพที่ปรับขนาดได้ */}
+          <div className="aspect-w-16 aspect-h-9 sm:aspect-h-8 md:aspect-h-7 lg:aspect-h-6">
+            <div className="relative w-full h-full">
+              {!imageLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center z-10">
+                  <div className="animate-pulse space-y-4 w-full max-w-md mx-auto p-8">
+                    <div className="h-16 bg-gray-300 rounded-lg"></div>
+                    <div className="h-8 bg-gray-300 rounded w-3/4 mx-auto"></div>
+                    <div className="h-4 bg-gray-300 rounded w-1/2 mx-auto"></div>
+                  </div>
+                </div>
+              )}
+              <Image
+                src="/herobanner/team.png"
+                alt="ทีมงานครูหนึ่งรถสวย"
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
+                className={`transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                style={{
+                  objectFit: 'contain',
+                  objectPosition: 'center center',
+                }}
+                loading="lazy"
+                placeholder="blur"
+                blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                onLoad={() => setImageLoaded(true)}
+                onError={() => console.error('Image failed to load')}
+                priority={false}
+              />
             </div>
-          )}
-          <Image
-            src="/herobanner/team.png"
-            alt="ทีมงานครูหนึ่งรถสวย"
-            fill
-            sizes="100vw"
-            className={`object-cover object-center transition-opacity duration-700 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
-            style={{
-              objectPosition: 'center center',
-            }}
-            loading="lazy"
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-            onLoad={() => setImageLoaded(true)}
-            onError={() => console.error('Image failed to load')}
-            priority={false}
-          />
+          </div>
         </div>
       </section>
 

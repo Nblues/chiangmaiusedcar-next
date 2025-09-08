@@ -68,12 +68,15 @@ export default function CreditCheck() {
     setSending(true);
     Swal.fire({
       title: 'กำลังตรวจสอบข้อมูล...',
+      html: '<div class="swal2-loader"><div></div><div></div><div></div></div>',
       allowOutsideClick: false,
-      didOpen: Swal.showLoading,
+      showConfirmButton: false,
+      customClass: {
+        loader: 'custom-loader',
+      },
     });
 
     try {
-
       const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
       const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
       const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
@@ -154,20 +157,20 @@ export default function CreditCheck() {
         }}
       />
 
-      <main className="min-h-screen bg-gray-50 py-4 px-4 font-prompt">
+      <main className="min-h-screen bg-gray-50 py-8 px-4 font-prompt">
         <div className="max-w-4xl mx-auto">
-          {/* Header */}
+          {/* Hero Section */}
           <div className="text-center mb-8">
-            <h1 className="text-2xl md:text-3xl font-bold text-primary mb-2">
-              เช็คเครดิตก่อนซื้อรถ
-            </h1>
-            <p className="text-gray-600 text-sm md:text-base">
-              รู้เงื่อนไขล่วงหน้า • ดอกเบี้ยต่ำสำหรับเครดิตดี • เช็คฟรี • รู้ผลเร็ว
-            </p>
-            <div className="mt-4 bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-lg p-4">
-              <p className="text-sm text-blue-700">
-                💡 <strong>เครดิตดีได้สิทธิพิเศษ:</strong> ดอกเบี้ยต่ำสุด ผ่อนยาวสูงสุด 84 เดือน
+            <div className="bg-gradient-to-r from-primary to-primary-600 text-white rounded-2xl p-8 mb-6">
+              <h1 className="text-3xl md:text-4xl font-bold mb-4">เช็คเครดิตก่อนซื้อรถ</h1>
+              <p className="text-lg md:text-xl opacity-90 mb-4">
+                รู้เงื่อนไขล่วงหน้า • ดอกเบี้ยต่ำสำหรับเครดิตดี • เช็คฟรี • รู้ผลเร็ว
               </p>
+              <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 inline-block">
+                <p className="text-sm">
+                  💡 <strong>เครดิตดีได้สิทธิพิเศษ:</strong> ดอกเบี้ยต่ำสุด ผ่อนยาวสูงสุด 84 เดือน
+                </p>
+              </div>
             </div>
           </div>
 
@@ -256,8 +259,13 @@ export default function CreditCheck() {
 
               {/* Career-specific fields */}
               {career && (
-                <div className="form-section-government bg-blue-50 p-4 rounded-xl border border-blue-200">
-                  <h3 className="text-lg font-semibold text-primary mb-4">
+                <div className="bg-gradient-to-br from-accent/10 to-accent/5 p-6 rounded-2xl border border-accent/20">
+                  <h3 className="text-xl font-bold text-primary mb-6 flex items-center gap-2">
+                    <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
                     ข้อมูลเพิ่มเติม - {careerText[career]}
                   </h3>
 
@@ -480,129 +488,174 @@ export default function CreditCheck() {
               </div>
 
               {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={sending}
-                className="w-full py-4 rounded-xl font-bold text-white bg-success hover:bg-success/90 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
-              >
-                {sending ? (
-                  <span className="flex items-center justify-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    กำลังส่งข้อมูล...
-                  </span>
-                ) : (
-                  'ส่งข้อมูล'
-                )}
-              </button>
+              <div className="pt-4">
+                <button
+                  type="submit"
+                  disabled={sending}
+                  className="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-primary to-primary-600 hover:from-primary-600 hover:to-primary-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                >
+                  {sending ? (
+                    <span className="flex items-center justify-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      กำลังส่งข้อมูล...
+                    </span>
+                  ) : (
+                    'ส่งข้อมูลเพื่อประเมินเครดิต'
+                  )}
+                </button>
+              </div>
             </form>
 
             {/* Links */}
-            <div className="mt-8 text-center space-y-4">
+            <div className="mt-8 text-center space-y-6">
               {/* Credit Benefits Section */}
-              <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-6">
-                <h3 className="text-lg font-bold text-green-700 mb-4">🌟 สิทธิพิเศษเครดิตดี</h3>
+              <div className="bg-gradient-to-br from-gold/20 to-accent/20 border border-accent/30 rounded-2xl p-6 mb-6">
+                <h3 className="text-xl font-bold text-primary mb-6 flex items-center justify-center gap-2">
+                  <span className="text-2xl">🌟</span>
+                  สิทธิพิเศษเครดิตดี
+                </h3>
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
-                  <div className="bg-white rounded-lg p-3">
-                    <div className="font-semibold text-green-600">ดอกเบี้ยต่ำสุด</div>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-primary/10">
+                    <div className="font-bold text-primary text-lg">ดอกเบี้ยต่ำสุด</div>
                     <div className="text-gray-700">เครดิตดี</div>
                   </div>
-                  <div className="bg-white rounded-lg p-3">
-                    <div className="font-semibold text-blue-600">ผ่อนยาวสุด</div>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-accent/10">
+                    <div className="font-bold text-accent text-lg">ผ่อนยาวสุด</div>
                     <div className="text-gray-700">84 เดือน</div>
                   </div>
-                  <div className="bg-white rounded-lg p-3">
-                    <div className="font-semibold text-purple-600">อนุมัติเร็ว</div>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-gold/20">
+                    <div className="font-bold text-gold text-lg">อนุมัติเร็ว</div>
                     <div className="text-gray-700">ภายใน 1 วัน</div>
                   </div>
-                  <div className="bg-white rounded-lg p-3">
-                    <div className="font-semibold text-orange-600">ไม่ต้องค้ำ</div>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-primary/10">
+                    <div className="font-bold text-primary text-lg">ไม่ต้องค้ำ</div>
                     <div className="text-gray-700">สำหรับเครดิต AAA</div>
                   </div>
                 </div>
               </div>
 
               <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <Link href="/all-cars" className="btn-primary">
+                <Link
+                  href="/all-cars"
+                  className="btn-primary inline-flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H3m2 0h4M9 7h6m-6 4h6m-2 8l-2-2-2 2"
+                    />
+                  </svg>
                   ดูรถทั้งหมด
                 </Link>
-                <Link href="/payment-calculator" className="btn-secondary">
+                <Link
+                  href="/payment-calculator"
+                  className="btn-secondary inline-flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                    />
+                  </svg>
                   คำนวนค่างวด
                 </Link>
               </div>
 
-              <p className="text-sm text-gray-600">
-                หรือติดต่อโดยตรง:
-                <a
-                  href="https://lin.ee/8ugfzstD"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:text-accent ml-1"
-                >
-                  LINE @ครูหนึ่งรถสวย
-                </a>
-              </p>
+              <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-primary/10">
+                <p className="text-gray-700">
+                  หรือติดต่อโดยตรง:
+                  <a
+                    href="https://lin.ee/8ugfzstD"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:text-accent ml-2 font-semibold underline"
+                  >
+                    LINE @ครูหนึ่งรถสวย
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
 
           {/* FAQ Section */}
           <section className="mt-12">
-            <h2 className="text-2xl font-bold mb-6 text-center text-primary">คำถามที่พบบ่อย</h2>
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-primary mb-4">คำถามที่พบบ่อย</h2>
+              <p className="text-gray-600">ข้อมูลเพิ่มเติมที่คุณควรรู้</p>
+            </div>
             <div className="space-y-4">
-              <details className="bg-white p-6 rounded-xl shadow-md">
-                <summary className="font-semibold text-accent cursor-pointer hover:text-accent-700">
-                  Q: ประเมินไฟแนนซ์ฟรีจริงหรือไม่?
+              <details className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+                <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-2">
+                  <span className="text-accent">Q:</span>
+                  ประเมินไฟแนนซ์ฟรีจริงหรือไม่?
                 </summary>
-                <p className="mt-3 text-gray-700 leading-relaxed">
-                  ฟรี 100% ไม่มีค่าใช้จ่ายใดๆ ไม่บังคับซื้อรถ รู้ผลทันที ทีมงานมีประสบการณ์กว่า 10
-                  ปี
-                </p>
+                <div className="mt-4 pl-6 border-l-4 border-accent/30">
+                  <p className="text-gray-700 leading-relaxed">
+                    ฟรี 100% ไม่มีค่าใช้จ่ายใดๆ ไม่บังคับซื้อรถ รู้ผลทันที ทีมงานมีประสบการณ์กว่า 10
+                    ปี
+                  </p>
+                </div>
               </details>
 
-              <details className="bg-white p-6 rounded-xl shadow-md">
-                <summary className="font-semibold text-accent cursor-pointer hover:text-accent-700">
-                  Q: ใช้เวลานานแค่ไหนถึงจะรู้ผล?
+              <details className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+                <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-2">
+                  <span className="text-accent">Q:</span>
+                  ใช้เวลานานแค่ไหนถึงจะรู้ผล?
                 </summary>
-                <p className="mt-3 text-gray-700 leading-relaxed">
-                  ภายใน 24 ชั่วโมง ทีมงานจะติดต่อกลับพร้อมผลการประเมินและแนะนำรถที่เหมาะสม
-                </p>
+                <div className="mt-4 pl-6 border-l-4 border-accent/30">
+                  <p className="text-gray-700 leading-relaxed">
+                    ภายใน 24 ชั่วโมง ทีมงานจะติดต่อกลับพร้อมผลการประเมินและแนะนำรถที่เหมาะสม
+                  </p>
+                </div>
               </details>
 
-              <details className="bg-white p-6 rounded-xl shadow-md">
-                <summary className="font-semibold text-accent cursor-pointer hover:text-accent-700">
-                  Q: เครดิตดีจะได้สิทธิพิเศษอะไรบ้าง?
+              <details className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+                <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-2">
+                  <span className="text-accent">Q:</span>
+                  เครดิตดีจะได้สิทธิพิเศษอะไรบ้าง?
                 </summary>
-                <p className="mt-3 text-gray-700 leading-relaxed">
-                  ดอกเบี้ยต่ำสุด, ผ่อนยาวสูงสุด 84 เดือน, อนุมัติเร็ว, ไม่ต้องค้ำประกัน
-                  และเลือกรถได้มากกว่า
-                </p>
+                <div className="mt-4 pl-6 border-l-4 border-accent/30">
+                  <p className="text-gray-700 leading-relaxed">
+                    ดอกเบี้ยต่ำสุด, ผ่อนยาวสูงสุด 84 เดือน, อนุมัติเร็ว, ไม่ต้องค้ำประกัน
+                    และเลือกรถได้มากกว่า
+                  </p>
+                </div>
               </details>
 
-              <details className="bg-white p-6 rounded-xl shadow-md">
-                <summary className="font-semibold text-accent cursor-pointer hover:text-accent-700">
-                  Q: รถที่ขายมีรับประกันไหม?
+              <details className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
+                <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-2">
+                  <span className="text-accent">Q:</span>
+                  รถที่ขายมีรับประกันไหม?
                 </summary>
-                <p className="mt-3 text-gray-700 leading-relaxed">
-                  รับประกันเครื่องยนต์ เกียร์ 3 เดือน และมีบริการฟรีตรวจเช็คระยะเปลี่ยนน้ำมันเครื่อง
-                </p>
+                <div className="mt-4 pl-6 border-l-4 border-accent/30">
+                  <p className="text-gray-700 leading-relaxed">
+                    รับประกันเครื่องยนต์ เกียร์ 3 เดือน
+                    และมีบริการฟรีตรวจเช็คระยะเปลี่ยนน้ำมันเครื่อง
+                  </p>
+                </div>
               </details>
             </div>
           </section>
@@ -614,6 +667,6 @@ export default function CreditCheck() {
 
 export async function getServerSideProps() {
   return {
-    props: {}
+    props: {},
   };
 }

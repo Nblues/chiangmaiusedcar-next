@@ -301,20 +301,49 @@ export default function AllCars({ cars }) {
         </Head>
       )}
 
-      {/* Header */}
-      <section className="bg-orange-50 text-primary py-12 border-t border-orange-200">
-        <div className="max-w-7xl mx-auto px-6">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-prompt text-primary">
-            รถทั้งหมด
-          </h1>
-          <p className="text-xl font-prompt text-accent">
-            รถมือสองคุณภาพดี {mounted ? filteredCars.length : '...'} คัน พร้อมส่งมอบ
+      {/* Hero Banner */}
+      <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
+        <Image
+          src="/herobanner/allcars.webp"
+          alt="รถมือสองทั้งหมด - ครูหนึ่งรถสวย"
+          fill
+          className="object-cover object-center"
+          priority
+          quality={85}
+          sizes="100vw"
+        />
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/30"></div>
+
+        {/* Content over banner */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center text-white px-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 font-prompt drop-shadow-lg">
+              รถมือสองทั้งหมด
+            </h1>
+            <p className="text-lg sm:text-xl md:text-2xl font-prompt drop-shadow-md">
+              รถมือสองคุณภาพดี {mounted ? filteredCars.length : '...'} คัน พร้อมส่งมอบ
+            </p>
             {mounted && totalPages > 1 && (
-              <span className="block text-lg mt-2 text-primary">
+              <p className="text-base sm:text-lg mt-2 drop-shadow-md font-prompt">
                 หน้าที่ {currentPage} จาก {totalPages} หน้า
-              </span>
+              </p>
             )}
-          </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Breadcrumb */}
+      <section className="bg-white py-4 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-6">
+          <nav className="flex items-center gap-2 text-sm text-gray-600 font-prompt">
+            <Link href="/" className="hover:text-primary transition-colors">
+              หน้าแรก
+            </Link>
+            <span>/</span>
+            <span className="text-primary font-medium">รถทั้งหมด</span>
+          </nav>
         </div>
       </section>
 

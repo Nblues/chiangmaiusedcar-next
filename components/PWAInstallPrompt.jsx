@@ -89,11 +89,12 @@ const PWAInstallPrompt = () => {
     if (isIOS) {
       // สำหรับ iOS แสดง modal พร้อมคำแนะนำโดยละเอียด
       const modal = document.createElement('div');
-      modal.className = 'fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 font-prompt';
+      modal.className =
+        'fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 font-prompt';
       modal.innerHTML = `
         <div class="bg-white mx-4 p-6 rounded-2xl max-w-sm w-full">
           <div class="text-center mb-4">
-            <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-3">
+            <div class="w-16 h-16 bg-gradient-to-br from-error to-red-700 rounded-full flex items-center justify-center mx-auto mb-3">
               <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
               </svg>
@@ -104,7 +105,7 @@ const PWAInstallPrompt = () => {
           <div class="space-y-3 text-sm text-gray-700 mb-6">
             <div class="flex items-start gap-3">
               <div class="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span class="text-red-600 font-bold text-xs">1</span>
+                <span class="text-error font-bold text-xs">1</span>
               </div>
               <div>
                 <p class="font-medium">แตะปุ่ม Share (แชร์)</p>
@@ -114,7 +115,7 @@ const PWAInstallPrompt = () => {
             
             <div class="flex items-start gap-3">
               <div class="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span class="text-red-600 font-bold text-xs">2</span>
+                <span class="text-error font-bold text-xs">2</span>
               </div>
               <div>
                 <p class="font-medium">เลื่อนลงหา "เพิ่มที่หน้าจอหลัก"</p>
@@ -124,7 +125,7 @@ const PWAInstallPrompt = () => {
             
             <div class="flex items-start gap-3">
               <div class="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                <span class="text-red-600 font-bold text-xs">3</span>
+                <span class="text-error font-bold text-xs">3</span>
               </div>
               <div>
                 <p class="font-medium">แตะ "เพิ่ม" เพื่อยืนยัน</p>
@@ -136,7 +137,7 @@ const PWAInstallPrompt = () => {
           <div class="flex gap-2">
             <button 
               onclick="this.closest('div').remove()" 
-              class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+              class="flex-1 bg-error hover:bg-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
             >
               เข้าใจแล้ว
             </button>
@@ -149,27 +150,26 @@ const PWAInstallPrompt = () => {
           </div>
         </div>
       `;
-      
+
       document.body.appendChild(modal);
-      
+
       // Remove modal when clicking outside
-      modal.addEventListener('click', (e) => {
+      modal.addEventListener('click', e => {
         if (e.target === modal) {
           modal.remove();
         }
       });
-      
+
       // Remove after 10 seconds
       setTimeout(() => {
         if (document.body.contains(modal)) {
           modal.remove();
         }
       }, 10000);
-      
+
       // Mark as instructed
       localStorage.setItem('pwa-installed', 'true');
       setShowInstallPrompt(false);
-      
     } else if (deferredPrompt) {
       // สำหรับ Android/Desktop ใช้ native install prompt
       deferredPrompt.prompt();
@@ -210,7 +210,7 @@ const PWAInstallPrompt = () => {
       <div className="bg-white border border-gray-200 rounded-2xl shadow-2xl p-6 animate-slide-up">
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0">
-            <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center p-1">
+            <div className="w-12 h-12 bg-gradient-to-br from-error to-red-700 rounded-xl flex items-center justify-center p-1">
               <img
                 src="/favicon.webp"
                 alt="ครูหนึ่งรถสวย"
