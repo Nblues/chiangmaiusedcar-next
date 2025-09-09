@@ -327,6 +327,16 @@ const nextConfig = {
     scrollRestoration: true,
     // Enable future features
     serverComponentsExternalPackages: ['shopify-api-node'],
+    // Performance optimizations
+    optimizePackageImports: ['@headlessui/react', 'framer-motion'],
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
   },
 
   // Web vitals monitoring

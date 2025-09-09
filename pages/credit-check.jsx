@@ -26,34 +26,11 @@ export default function CreditCheck() {
     other: 'อื่นๆ',
   };
 
-  function sanitizeForm(form) {
-    const elements = Array.from(form.elements);
-    elements.forEach(el => {
-      if (!el || !('name' in el)) return;
-      const tag = el.tagName?.toLowerCase();
-      const type = (el.getAttribute?.('type') || '').toLowerCase();
-      // Trim text-like inputs
-      if (tag === 'input' && (type === 'text' || type === 'tel' || type === 'number')) {
-        if (typeof el.value === 'string') el.value = el.value.trim();
-        if (type === 'tel') el.value = el.value.replace(/[^0-9]/g, '').slice(0, 10);
-      }
-      if (tag === 'input' && type === 'number') {
-        // Clamp to reasonable range
-        if (el.name?.toLowerCase().includes('age')) {
-          const n = parseInt(el.value || '');
-          if (!Number.isFinite(n)) el.value = '';
-          else el.value = String(Math.min(80, Math.max(18, n)));
-        }
-      }
-      if (tag === 'textarea' || tag === 'select') {
-        if (typeof el.value === 'string') el.value = el.value.trim();
-      }
-    });
-  }
-
   const handleSubmit = async e => {
     e.preventDefault();
     if (sending) return;
+
+    console.log('Form submission started');
 
     // Honeypot: if filled, likely bot
     if (honeypot && honeypot.trim().length > 0) {
@@ -67,12 +44,12 @@ export default function CreditCheck() {
 
     setSending(true);
     Swal.fire({
-      title: 'กำลังตรวจสอบข้อมูล...',
-      html: '<div class="swal2-loader"><div></div><div></div><div></div></div>',
+      title: 'กำลังส่งข้อมูล...',
+      text: 'โปรดรอสักครู่',
       allowOutsideClick: false,
       showConfirmButton: false,
-      customClass: {
-        loader: 'custom-loader',
+      didOpen: () => {
+        Swal.showLoading();
       },
     });
 
@@ -80,39 +57,113 @@ export default function CreditCheck() {
       const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
       const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
       const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
-      if (!serviceId || !templateId || !publicKey) {
-        throw new Error('EmailJS environment variables are not configured');
-      }
 
-      // Sanitize and enrich form data
-      sanitizeForm(formRef.current);
-      formRef.current.careerText.value = careerText[career];
-      formRef.current.downOptionText.value = downOption;
-      formRef.current.submittedAt.value = new Date().toLocaleString('th-TH');
-
-      // Send email
-      await emailjs.sendForm(serviceId, templateId, formRef.current, publicKey);
-
-      Swal.fire({
-        icon: 'success',
-        title: 'ส่งข้อมูลเรียบร้อยแล้ว',
-        text: 'ทีมงานจะติดต่อกลับภายใน 24 ชั่วโมง',
-        confirmButtonText: 'ตกลง',
+      console.log('EmailJS config:', {
+        serviceId,
+        templateId,
+        publicKey: publicKey ? 'SET' : 'NOT SET',
       });
 
-      // Reset form
-      formRef.current.reset();
-      setCareer('');
-      setDownOption('');
-      setShowDownInput(false);
+      if (!serviceId || !templateId || !publicKey) {
+        Swal.close();
+        console.error('EmailJS configuration missing:', {
+          serviceId: !!serviceId,
+          templateId: !!templateId,
+          publicKey: !!publicKey,
+        });
+        Swal.fire({
+          icon: 'error',
+          title: 'ระบบไม่พร้อม',
+          text: 'กรุณาติดต่อ 094-064-9018 โดยตรง ระบบส่งอีเมลขัดข้อง',
+          confirmButtonText: 'ตกลง',
+        });
+        setSending(false);
+        return;
+      }
+
+      // Create form data object manually
+      const formData = {
+        name: formRef.current.name.value,
+        phone: formRef.current.phone.value,
+        gender: formRef.current.gender.value,
+        age: formRef.current.age.value,
+        career: career,
+        careerText: careerText[career] || career,
+        province: formRef.current.province.value,
+        creditStatus: formRef.current.creditStatus.value,
+        downOption: downOption,
+        downOptionText: downOption,
+        submittedAt: new Date().toLocaleString('th-TH'),
+        privacyConsent: formRef.current.privacyConsent.checked ? 'Yes' : 'No',
+      };
+
+      // Add career-specific fields
+      if (career === 'government') {
+        formData.govAgency = formRef.current.govAgency?.value || '';
+        formData.govPosition = formRef.current.govPosition?.value || '';
+        formData.govYears = formRef.current.govYears?.value || '';
+        formData.govIncome = formRef.current.govIncome?.value || '';
+      } else if (career === 'company') {
+        formData.companyName = formRef.current.companyName?.value || '';
+        formData.companyPosition = formRef.current.companyPosition?.value || '';
+        formData.companyYears = formRef.current.companyYears?.value || '';
+        formData.companyIncome = formRef.current.companyIncome?.value || '';
+        formData.companySalaryProof = formRef.current.companySalaryProof?.value || '';
+      } else if (career === 'freelance') {
+        formData.freelanceField = formRef.current.freelanceField?.value || '';
+        formData.freelanceYears = formRef.current.freelanceYears?.value || '';
+        formData.freelanceIncome = formRef.current.freelanceIncome?.value || '';
+      } else if (career === 'business') {
+        formData.businessName = formRef.current.businessName?.value || '';
+        formData.businessYears = formRef.current.businessYears?.value || '';
+        formData.businessIncome = formRef.current.businessIncome?.value || '';
+        formData.businessLicense = formRef.current.businessLicense?.value || '';
+      } else if (career === 'farmer') {
+        formData.farmType = formRef.current.farmType?.value || '';
+        formData.farmArea = formRef.current.farmArea?.value || '';
+        formData.farmIncome = formRef.current.farmIncome?.value || '';
+        formData.farmerBook = formRef.current.farmerBook?.value || '';
+      } else if (career === 'other') {
+        formData.otherCareer = formRef.current.otherCareer?.value || '';
+        formData.otherIncome = formRef.current.otherIncome?.value || '';
+      }
+
+      // Add custom down payment amount if applicable
+      if (downOption === 'วางเงินดาวน์') {
+        formData.customDown = formRef.current.customDown?.value || '';
+      }
+
+      console.log('Sending data:', formData);
+
+      // Send email using EmailJS with template params
+      const result = await emailjs.send(serviceId, templateId, formData, publicKey);
+
+      console.log('EmailJS result:', result);
+
+      if (result.status === 200 || result.text === 'OK') {
+        Swal.fire({
+          icon: 'success',
+          title: 'ส่งข้อมูลเรียบร้อยแล้ว!',
+          text: 'ทีมงานจะติดต่อกลับภายใน 24 ชั่วโมง',
+          confirmButtonText: 'ตกลง',
+        });
+
+        // Reset form
+        formRef.current.reset();
+        setCareer('');
+        setDownOption('');
+        setShowDownInput(false);
+      } else {
+        throw new Error('EmailJS response error');
+      }
     } catch (error) {
+      console.error('Form submission error:', error);
       Swal.fire({
         icon: 'error',
         title: 'เกิดข้อผิดพลาด',
-        text: 'ไม่สามารถส่งข้อมูลได้ กรุณาลองใหม่',
+        text: `ไม่สามารถส่งข้อมูลได้ กรุณาลองใหม่ หรือติดต่อ 094-064-9018`,
         confirmButtonText: 'ตกลง',
       });
-      console.error('เกิดข้อผิดพลาด', error);
     } finally {
       setSending(false);
     }
@@ -179,11 +230,6 @@ export default function CreditCheck() {
           {/* Form Container */}
           <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
             <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-              {/* Hidden fields */}
-              <input type="hidden" name="careerText" />
-              <input type="hidden" name="downOptionText" />
-              <input type="hidden" name="submittedAt" />
-
               {/* ข้อมูลทั่วไป */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>

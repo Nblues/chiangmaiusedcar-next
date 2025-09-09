@@ -36,16 +36,45 @@ export default function SEO({
   const defaultImage = `${site}/herobanner/chiangmaiusedcar.webp`;
   const metaImage = image || defaultImage;
 
-  // Enhanced Open Graph for better link sharing
+  // Enhanced Open Graph for better link sharing - social media optimized
   const enhancedTitle = metaTitle.length > 60 ? metaTitle.substring(0, 57) + '...' : metaTitle;
-  const enhancedDesc = metaDesc.length > 160 ? metaDesc.substring(0, 157) + '...' : metaDesc;
+  const enhancedDesc = metaDesc.length > 155 ? metaDesc.substring(0, 152) + '...' : metaDesc;
 
-  // Generate multiple image sizes for better sharing
+  // Ensure absolute URL for image with fallback
+  let absoluteImage = metaImage;
+  if (!absoluteImage || absoluteImage === site) {
+    absoluteImage = defaultImage;
+  }
+  if (absoluteImage && !absoluteImage.startsWith('http')) {
+    absoluteImage = absoluteImage.startsWith('/')
+      ? `${site}${absoluteImage}`
+      : `${site}/${absoluteImage}`;
+  }
+
+  // Add cache busting for Facebook if not already present
+  if (absoluteImage && !absoluteImage.includes('?v=') && !absoluteImage.includes('&v=')) {
+    const separator = absoluteImage.includes('?') ? '&' : '?';
+    absoluteImage = `${absoluteImage}${separator}v=${timestamp}`;
+  }
+
+  // Generate multiple image sizes for better sharing compatibility
   const ogImages = [
-    { url: metaImage, width: 1200, height: 630 },
-    { url: metaImage, width: 800, height: 600 },
-    { url: metaImage, width: 600, height: 315 },
+    { url: absoluteImage, width: 1200, height: 630, type: 'image/webp' },
+    { url: absoluteImage, width: 800, height: 600, type: 'image/webp' },
+    { url: absoluteImage, width: 600, height: 315, type: 'image/webp' },
   ];
+
+  // Debug mode - log meta data for development
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🔍 SEO Component Debug:', {
+      title: enhancedTitle,
+      description: enhancedDesc,
+      image: absoluteImage,
+      url: fullUrl,
+      timestamp,
+      type,
+    });
+  }
 
   return (
     <Head>
@@ -55,6 +84,11 @@ export default function SEO({
       <meta httpEquiv="Expires" content="0" />
       <meta name="last-modified" content={buildTime} />
       <meta name="cache-timestamp" content={timestamp.toString()} />
+
+      {/* Force Facebook to refresh cache */}
+      <meta property="og:updated_time" content={new Date().toISOString()} />
+      <meta property="article:modified_time" content={new Date().toISOString()} />
+      <meta name="robots" content="index, follow, max-image-preview:large" />
 
       {/* Enhanced Language and Locale Settings */}
       <meta httpEquiv="Content-Language" content="th" />
@@ -92,12 +126,24 @@ export default function SEO({
         <React.Fragment key={index}>
           <meta property="og:image" content={img.url} />
           <meta property="og:image:secure_url" content={img.url} />
-          <meta property="og:image:type" content="image/webp" />
+          <meta property="og:image:type" content={img.type} />
           <meta property="og:image:width" content={img.width.toString()} />
           <meta property="og:image:height" content={img.height.toString()} />
-          <meta property="og:image:alt" content={`${enhancedTitle} - ครูหนึ่งรถสวย`} />
+          <meta
+            property="og:image:alt"
+            content={`${enhancedTitle} - รถมือสองเชียงใหม่ ครูหนึ่งรถสวย`}
+          />
         </React.Fragment>
       ))}
+
+      {/* Additional Open Graph tags for better social sharing */}
+      <meta property="og:updated_time" content={buildTime} />
+      <meta property="og:see_also" content={`${site}/all-cars`} />
+      <meta property="article:publisher" content="https://www.facebook.com/KN2car" />
+      <meta property="article:author" content="ครูหนึ่งรถสวย" />
+      <meta property="article:section" content="รถยนต์" />
+      <meta property="article:tag" content="รถมือสอง" />
+      <meta property="article:tag" content="เชียงใหม่" />
 
       {/* Enhanced Car Product Meta Tags */}
       {carData && (
@@ -123,6 +169,13 @@ export default function SEO({
             content={carData.compareAtPrice?.amount || carData.price?.amount || '0'}
           />
           <meta property="product:sale_price:amount" content={carData.price?.amount || '0'} />
+
+          {/* Car specific Open Graph tags */}
+          <meta property="auto:year" content={carData.year || ''} />
+          <meta property="auto:make" content={carData.brand || carData.vendor || ''} />
+          <meta property="auto:model" content={carData.model || ''} />
+          <meta property="auto:mileage" content={carData.mileage || ''} />
+          <meta property="auto:condition" content="used" />
         </>
       )}
 
@@ -135,22 +188,46 @@ export default function SEO({
       <meta name="twitter:description" content={enhancedDesc} />
       <meta name="twitter:site" content="@krunueng_usedcar" />
       <meta name="twitter:creator" content="@krunueng_usedcar" />
-      <meta name="twitter:image" content={metaImage} />
-      <meta name="twitter:image:alt" content={`${enhancedTitle} - ครูหนึ่งรถสวย`} />
+      <meta name="twitter:image" content={absoluteImage} />
+      <meta
+        name="twitter:image:alt"
+        content={`${enhancedTitle} - รถมือสองเชียงใหม่ ครูหนึ่งรถสวย`}
+      />
       <meta name="twitter:domain" content="chiangmaiusedcar.com" />
+      <meta
+        name="twitter:data1"
+        content={
+          carData?.price?.amount
+            ? `${carData.price.amount.toLocaleString()} บาท`
+            : 'ติดต่อสอบถามราคา'
+        }
+      />
+      <meta name="twitter:label1" content="ราคา" />
+      <meta name="twitter:data2" content={carData?.year || 'ติดต่อสอบถาม'} />
+      <meta name="twitter:label2" content="ปี" />
 
-      {/* LINE and WhatsApp specific tags */}
+      {/* LINE and WhatsApp specific tags - optimized for Thai market */}
       <meta property="line:card" content="summary_large_image" />
       <meta property="line:site" content="@krunueng_usedcar" />
       <meta property="line:title" content={enhancedTitle} />
       <meta property="line:description" content={enhancedDesc} />
-      <meta property="line:image" content={metaImage} />
+      <meta property="line:image" content={absoluteImage} />
+
+      {/* WhatsApp specific meta tags */}
+      <meta property="whatsapp:title" content={enhancedTitle} />
+      <meta property="whatsapp:description" content={enhancedDesc} />
+      <meta property="whatsapp:image" content={absoluteImage} />
+
+      {/* Telegram specific meta tags */}
+      <meta property="telegram:title" content={enhancedTitle} />
+      <meta property="telegram:description" content={enhancedDesc} />
+      <meta property="telegram:image" content={absoluteImage} />
 
       {/* Additional Social Platform Support */}
       <meta name="pinterest-rich-pin" content="true" />
       <meta property="pinterest:title" content={enhancedTitle} />
       <meta property="pinterest:description" content={enhancedDesc} />
-      <meta property="pinterest:image" content={metaImage} />
+      <meta property="pinterest:image" content={absoluteImage} />
 
       {/* Additional SEO Meta Tags */}
       <meta name="theme-color" content="#ff5252" />

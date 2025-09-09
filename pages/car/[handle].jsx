@@ -102,26 +102,64 @@ function CarDetailPage({ car, allCars }) {
   const carJsonLd = buildCarJsonLd(carSpecs, carProduct);
   const productJsonLd = buildProductJsonLd(carProduct);
 
-  // Enhanced SEO data for better link sharing
-  const enhancedTitle = `${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} ราคา ${safeFormatPrice(safeGet(car, 'price.amount')).display} บาท | ครูหนึ่งรถสวย`;
-  const enhancedDescription = [
-    safeGet(car, 'title'),
-    safeGet(car, 'vendor') || safeGet(car, 'brand'),
-    safeGet(car, 'model'),
+  // Enhanced SEO data for better link sharing - optimized for social media
+  const brandModel = [safeGet(car, 'vendor') || safeGet(car, 'brand'), safeGet(car, 'model')]
+    .filter(Boolean)
+    .join(' ');
+
+  const yearPrice = [
     safeGet(car, 'year') ? `ปี ${safeGet(car, 'year')}` : '',
-    `ราคา ${safeFormatPrice(safeGet(car, 'price.amount')).display} บาท`,
-    safeGet(car, 'mileage')
-      ? `วิ่ง ${Number(safeGet(car, 'mileage', 0)).toLocaleString()} กม.`
-      : '',
-    'รถบ้านแท้ รับประกัน 1 ปี ส่งฟรีทั่วไทย ครูหนึ่งรถสวย เชียงใหม่',
+    `${safeFormatPrice(safeGet(car, 'price.amount')).display}฿`,
   ]
     .filter(Boolean)
     .join(' ');
 
-  // Enhanced image for social sharing (ensure absolute URL)
-  const socialImage = safeGet(currentImage, 'url', '').startsWith('/')
-    ? `https://chiangmaiusedcar.com${safeGet(currentImage, 'url', '')}`
-    : safeGet(currentImage, 'url', '');
+  // Social media optimized title (max 60 chars for Facebook)
+  const enhancedTitle = `${brandModel} ${yearPrice} | ครูหนึ่งรถสวย`.substring(0, 58);
+
+  // Social media optimized description (max 155 chars for Facebook)
+  const enhancedDescription = [
+    `${brandModel} ${yearPrice}`,
+    safeGet(car, 'mileage')
+      ? `วิ่ง ${Number(safeGet(car, 'mileage', 0)).toLocaleString()} กม.`
+      : '',
+    'รถบ้านแท้ รับประกัน เชียงใหม่',
+  ]
+    .filter(Boolean)
+    .join(' • ')
+    .substring(0, 150);
+
+  // Enhanced image for social sharing - ensure high quality and absolute URL
+  let socialImage = safeGet(currentImage, 'url', '');
+
+  // Handle relative URLs
+  if (socialImage.startsWith('/')) {
+    socialImage = `https://chiangmaiusedcar.com${socialImage}`;
+  }
+
+  // Fallback to default high-quality image if no car image
+  if (!socialImage || socialImage === 'https://chiangmaiusedcar.com') {
+    socialImage = 'https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
+  }
+
+  // Add cache busting and optimization for Facebook sharing
+  if (socialImage && !socialImage.includes('?')) {
+    // Add timestamp for cache busting Facebook cards
+    const timestamp = Date.now();
+    socialImage = `${socialImage}?v=${timestamp}&w=1200&h=630&fit=crop&auto=format&q=90`;
+  }
+
+  // Debug mode - log for development
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🔍 Car Detail SEO Debug:', {
+      title: enhancedTitle,
+      description: enhancedDescription,
+      image: socialImage,
+      url: `/car/${safeGet(car, 'handle', '')}`,
+      brandModel,
+      yearPrice,
+    });
+  }
 
   return (
     <>
@@ -254,24 +292,24 @@ function CarDetailPage({ car, allCars }) {
         />
       </Head>
 
-      <main className="min-h-screen bg-gray-50">
-        <div className="max-w-6xl mx-auto p-4 lg:p-6">
+      <main className="min-h-screen bg-gradient-to-b from-white via-blue-50 to-gray-50">
+        <div className="max-w-6xl mx-auto p-2 sm:p-4 lg:p-6">
           <Breadcrumb carTitle={safeGet(car, 'title', 'รถมือสองคุณภาพดี')} />
 
           {/* ชื่อรถ */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 font-prompt">
+          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-primary/10">
+            <h1 className="text-2xl md:text-3xl font-bold text-primary mb-3 font-prompt">
               {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
             </h1>
           </div>
 
           {/* รูปรถ - Carsome Style */}
-          <div className="mb-8">
-            <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] bg-gray-100 rounded-xl overflow-hidden shadow-lg">
+          <div className="mb-6 sm:mb-8">
+            <div className="relative w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[600px] bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl overflow-hidden shadow-lg border-2 border-primary/20">
               {/* Loading overlay */}
               {imageLoading && (
-                <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
-                  <div className="text-gray-500 font-prompt">กำลังโหลดรูป...</div>
+                <div className="absolute inset-0 bg-primary/10 animate-pulse flex items-center justify-center">
+                  <div className="text-primary font-prompt">กำลังโหลดรูป...</div>
                 </div>
               )}
 
@@ -338,7 +376,7 @@ function CarDetailPage({ car, allCars }) {
               )}
 
               {/* Image Counter แบบ Carsome */}
-              <div className="absolute top-4 right-4 bg-black/80 text-white px-4 py-2 rounded-lg text-sm font-medium font-prompt backdrop-blur-sm">
+              <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-primary/80 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium font-prompt backdrop-blur-sm shadow-md">
                 <span className="text-white">{selectedImageIndex + 1}</span>
                 <span className="text-gray-300 mx-1">/</span>
                 <span className="text-gray-300">{carImages.length}</span>
@@ -346,7 +384,7 @@ function CarDetailPage({ car, allCars }) {
               </div>
 
               {/* Keyboard hint */}
-              <div className="absolute bottom-4 left-4 bg-black/70 text-white px-2 py-1 rounded text-xs font-prompt hidden sm:block">
+              <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-primary/70 text-white px-2 py-1 rounded text-xs font-prompt hidden sm:block">
                 ใช้ ← → เพื่อเลื่อนรูป
               </div>
             </div>
@@ -402,7 +440,7 @@ function CarDetailPage({ car, allCars }) {
             {/* Mobile Thumbnails */}
             {carImages.length > 1 && (
               <div className="sm:hidden">
-                <div className="flex gap-2 mt-4 overflow-x-auto pb-2 scrollbar-hide px-1">
+                <div className="flex gap-2 mt-2 overflow-x-auto pb-2 scrollbar-hide px-1">
                   {carImages.map((img, index) => (
                     <button
                       key={`mobile-${index}`}
@@ -431,11 +469,11 @@ function CarDetailPage({ car, allCars }) {
           </div>
 
           {/* ข้อมูลหลักรถ - Carsome Style */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-primary/10">
             {/* Social Sharing */}
             <div className="border-b border-gray-200 pb-6 mb-6">
               <h3 className="text-lg font-bold text-gray-900 mb-4 font-prompt">แชร์รถคันนี้</h3>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 <button
                   onClick={() => {
                     const shareUrl = `https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`;
@@ -446,7 +484,7 @@ function CarDetailPage({ car, allCars }) {
                           .writeText(`${shareText} ${shareUrl}`)
                           .then(() => alert('คัดลอกลิ้งค์แล้ว!'));
                   }}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors font-prompt"
+                  className="btn-secondary flex items-center gap-2 px-4 py-2 rounded-xl font-prompt"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -462,7 +500,7 @@ function CarDetailPage({ car, allCars }) {
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-prompt"
+                  className="btn-primary flex items-center gap-2 px-4 py-2 rounded-xl font-prompt"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -473,7 +511,7 @@ function CarDetailPage({ car, allCars }) {
                   href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors font-prompt"
+                  className="bg-green-500 hover:bg-green-600 text-white flex items-center gap-2 px-4 py-2 rounded-xl font-prompt"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771z" />
@@ -483,7 +521,7 @@ function CarDetailPage({ car, allCars }) {
               </div>
             </div>
             {/* สเปคหลัก - แนวนอนแบบ Carsome */}
-            <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm sm:text-base text-gray-600 mb-6 font-prompt">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm sm:text-base text-gray-700 mb-6 font-prompt">
               {safeGet(car, 'mileage') && (
                 <>
                   <span className="font-semibold">
@@ -509,37 +547,37 @@ function CarDetailPage({ car, allCars }) {
               )}
             </div>
             {/* ราคาโดดเด่นแบบ Carsome */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
               {/* ราคาหลัก */}
               <div>
-                <div className="text-4xl sm:text-5xl font-bold text-gray-900 mb-2 font-prompt">
+                <div className="text-4xl sm:text-5xl font-bold text-accent mb-2 font-prompt">
                   {safeFormatPrice(safeGet(car, 'price.amount')).display} บาท
                 </div>
                 {/* ค่าผ่อนประมาณ - คำนวณแบบ Carsome */}
-                <div className="text-lg text-gray-600 font-prompt">
+                <div className="text-lg text-primary font-prompt">
                   {Math.round(Number(safeGet(car, 'price.amount', 0)) * 0.0195).toLocaleString()}{' '}
                   บาท /เดือน
                 </div>
               </div>
 
               {/* ปุ่มหลัก */}
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2 sm:gap-3">
                 <Link
                   href={`/payment-calculator?price=${safeGet(car, 'price.amount', 0)}&from=car&carTitle=${encodeURIComponent(safeGet(car, 'title', 'รถมือสองคุณภาพดี'))}`}
-                  className="bg-blue-600 hover:bg-blue-700 text-white text-center py-4 px-6 rounded-xl font-bold text-lg transition-colors font-prompt"
+                  className="btn-primary text-center py-4 px-6 rounded-xl font-bold text-lg transition-colors font-prompt w-full"
                 >
                   เครื่องคำนวณสินเชื่อรถยนต์
                 </Link>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                   <a
                     href="tel:0940649018"
-                    className="bg-green-600 hover:bg-green-700 text-white text-center py-3 px-4 rounded-xl font-bold transition-colors font-prompt"
+                    className="btn-secondary text-center py-3 px-4 rounded-xl font-bold transition-colors font-prompt w-full"
                   >
                     โทรหาฉัน
                   </a>
                   <a
                     href="https://line.me/ti/p/@krunuengusedcar"
-                    className="bg-green-500 hover:bg-green-600 text-white text-center py-3 px-4 rounded-xl font-bold transition-colors font-prompt"
+                    className="bg-green-500 hover:bg-green-600 text-white text-center py-3 px-4 rounded-xl font-bold transition-colors font-prompt w-full"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -549,17 +587,17 @@ function CarDetailPage({ car, allCars }) {
               </div>
             </div>
             {/* Badge ความน่าเชื่อถือแบบ Carsome */}
-            <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+            <div className="bg-white border-2 border-primary/20 rounded-xl p-4 mb-6">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className="font-bold text-green-800 font-prompt">
+                  <span className="font-bold text-black font-prompt">
                     ครูหนึ่งรถสวย การันตีคุณภาพ
                   </span>
                 </div>
@@ -569,31 +607,31 @@ function CarDetailPage({ car, allCars }) {
                   {[1, 2, 3, 4, 5].map(star => (
                     <svg
                       key={star}
-                      className="w-4 h-4 text-yellow-400"
+                      className="w-4 h-4 text-accent"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
-                  <span className="text-sm text-green-700 ml-1 font-prompt">4.9/5</span>
+                  <span className="text-sm text-black ml-1 font-prompt font-bold">4.9/5</span>
                 </div>
               </div>
-              <div className="text-green-700 text-sm font-prompt">
+              <div className="text-black text-sm font-prompt font-medium">
                 ✓ ไม่มีข้อบกพร่อง ✓ ไม่ชนหนัก ✓ ไม่เคยผ่านน้ำท่วม ✓ ไม่มีความเสียหายจากไฟไหม้
               </div>
 
               {/* Quick Reviews */}
               <div className="mt-3 pt-3 border-t border-green-200">
-                <div className="text-xs text-green-600 font-prompt mb-2">รีวิวล่าสุดจากลูกค้า:</div>
+                <div className="text-xs text-gold font-prompt mb-2">รีวิวล่าสุดจากลูกค้า:</div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                  <div className="bg-white/50 rounded-lg p-2">
+                  <div className="bg-gray-50 rounded-lg p-2">
                     <div className="flex items-center gap-1 mb-1">
                       <div className="flex">
                         {[1, 2, 3, 4, 5].map(star => (
                           <svg
                             key={star}
-                            className="w-3 h-3 text-yellow-400"
+                            className="w-3 h-3 text-accent"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -601,19 +639,19 @@ function CarDetailPage({ car, allCars }) {
                           </svg>
                         ))}
                       </div>
-                      <span className="text-green-700 font-semibold">คุณสมชาย</span>
+                      <span className="text-black font-semibold">คุณสมชาย</span>
                     </div>
-                    <p className="text-green-700">
+                    <p className="text-black">
                       &ldquo;รถสภาพดีมาก ตรงตามที่โฆษณา บริการดีเยี่ยม&rdquo;
                     </p>
                   </div>
-                  <div className="bg-white/50 rounded-lg p-2">
+                  <div className="bg-gray-50 rounded-lg p-2">
                     <div className="flex items-center gap-1 mb-1">
                       <div className="flex">
                         {[1, 2, 3, 4, 5].map(star => (
                           <svg
                             key={star}
-                            className="w-3 h-3 text-yellow-400"
+                            className="w-3 h-3 text-accent"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -621,11 +659,9 @@ function CarDetailPage({ car, allCars }) {
                           </svg>
                         ))}
                       </div>
-                      <span className="text-green-700 font-semibold">คุณมาลี</span>
+                      <span className="text-black font-semibold">คุณมาลี</span>
                     </div>
-                    <p className="text-green-700">
-                      &ldquo;ได้รถดีในราคาที่คุ้มค่า แนะนำเลยค่ะ&rdquo;
-                    </p>
+                    <p className="text-black">&ldquo;ได้รถดีในราคาที่คุ้มค่า แนะนำเลยค่ะ&rdquo;</p>
                   </div>
                 </div>
               </div>
@@ -713,12 +749,12 @@ function CarDetailPage({ car, allCars }) {
           </div>
 
           {/* ข้อมูลการติดต่อและสถานที่ */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-primary/10">
             <h2 className="text-xl font-bold text-gray-900 mb-4 font-prompt">
               ที่ตั้งรถและการติดต่อ
             </h2>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* ข้อมูลสถานที่ */}
               <div>
                 <div className="flex items-center gap-2 mb-3">
@@ -743,13 +779,13 @@ function CarDetailPage({ car, allCars }) {
               <div className="space-y-3">
                 <a
                   href="tel:0940649018"
-                  className="block bg-green-600 hover:bg-green-700 text-white text-center py-4 px-6 rounded-xl font-bold text-lg transition-colors font-prompt"
+                  className="btn-primary block text-center py-4 px-6 rounded-xl font-bold text-lg transition-colors font-prompt w-full"
                 >
                   โทร 094-064-9018
                 </a>
                 <a
                   href="https://line.me/ti/p/@krunuengusedcar"
-                  className="block bg-green-500 hover:bg-green-600 text-white text-center py-4 px-6 rounded-xl font-bold text-lg transition-colors font-prompt"
+                  className="btn-secondary block text-center py-4 px-6 rounded-xl font-bold text-lg transition-colors font-prompt w-full"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -760,10 +796,10 @@ function CarDetailPage({ car, allCars }) {
           </div>
 
           {/* ขั้นตอนการซื้อรถ - แบบ Carsome */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-primary/10">
             <h2 className="text-xl font-bold text-gray-900 mb-6 font-prompt">ขั้นตอนการซื้อรถ</h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
               <div className="text-center">
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                   <span className="text-2xl font-bold text-blue-600">1</span>
@@ -802,7 +838,7 @@ function CarDetailPage({ car, allCars }) {
           <div className="text-center pb-8">
             <Link
               href="/all-cars"
-              className="inline-block px-6 py-3 rounded-xl bg-white hover:bg-gray-50 text-primary border-2 border-primary font-semibold shadow-lg transition-all text-lg font-prompt"
+              className="btn-primary inline-block px-6 py-3 rounded-xl font-semibold shadow-lg transition-all text-lg font-prompt"
             >
               กลับหน้ารวมรถ
             </Link>

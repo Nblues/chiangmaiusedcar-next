@@ -263,7 +263,10 @@ export default function Home({ cars }) {
         </div>
       </section>
 
-      <main className="max-w-7xl mx-auto px-6 py-16 bg-white font-prompt" id="recommended-cars">
+      <main
+        className="max-w-7xl mx-auto px-4 md:px-6 py-16 bg-white font-prompt"
+        id="recommended-cars"
+      >
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-prompt">
             ค้นหารถที่คุณต้องการ
@@ -414,7 +417,7 @@ export default function Home({ cars }) {
         </div>
         <section
           aria-label="รถเข้าใหม่แนะนำวันนี้"
-          className="grid gap-8 grid-cols-2 lg:grid-cols-4"
+          className="grid gap-6 grid-cols-2 lg:grid-cols-4"
         >
           {safeCars.slice(0, 8).map(car => (
             <article
@@ -448,7 +451,7 @@ export default function Home({ cars }) {
                     </span>
                   )}
                 </figure>
-                <div className="p-3 md:p-4 flex flex-col">
+                <div className="p-2 md:p-3 flex flex-col">
                   <h3
                     className="font-extrabold text-sm md:text-lg text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt"
                     itemProp="name"
@@ -471,9 +474,6 @@ export default function Home({ cars }) {
                         </p>
                       );
                     })()}
-                    <span className="text-xs bg-orange-600 text-white px-2 py-1 rounded-full font-bold shadow-sm">
-                      ส่งฟรี!
-                    </span>
                   </div>
                   <ul className="text-xs md:text-sm text-gray-800 mb-2 md:mb-3 space-y-1 font-prompt font-medium">
                     {safeGet(car, 'tags', []).includes('ฟรีดาวน์') && (

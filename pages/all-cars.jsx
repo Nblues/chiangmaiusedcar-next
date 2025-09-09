@@ -456,7 +456,7 @@ export default function AllCars({ cars }) {
 
       {/* Cars Grid */}
       <section className="py-12 bg-white border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
           {!mounted ? (
             // Loading state ระหว่างรอ hydration - Skeleton Cards
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
@@ -496,11 +496,11 @@ export default function AllCars({ cars }) {
           ) : (
             <>
               {/* Cards Grid - Responsive Layout */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              <div className="car-grid grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
                 {currentCars.map(car => (
                   <article
                     key={car.id}
-                    className="group bg-white rounded-2xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
+                    className="car-card group bg-white rounded-2xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
                   >
                     {/* Main Car Link - คลิกได้ทั้งส่วนรูปและข้อมูล */}
                     <Link
@@ -512,7 +512,7 @@ export default function AllCars({ cars }) {
                       }
                       className="block focus:outline-none flex-1"
                     >
-                      <figure className="relative w-full h-32 md:h-48 overflow-hidden bg-orange-600/10">
+                      <figure className="thumb relative w-full h-32 md:h-48 overflow-hidden bg-orange-600/10">
                         <Image
                           src={
                             Array.isArray(car.images) && car.images.length > 0
@@ -526,17 +526,14 @@ export default function AllCars({ cars }) {
                           sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 300px"
                         />
                       </figure>
-                      <div className="p-3 md:p-4 flex flex-col">
-                        <h3 className="font-extrabold text-sm md:text-lg text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt">
+                      <div className="p-2 md:p-3 flex flex-col">
+                        <h3 className="card-title font-extrabold text-sm md:text-lg text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt">
                           {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
                         </h3>
                         <div className="flex items-center justify-between mb-2 md:mb-3">
-                          <p className="text-lg md:text-xl font-bold text-orange-600 font-prompt">
+                          <p className="price text-lg md:text-xl font-bold text-orange-600 font-prompt">
                             ฿{safeFormatPrice(safeGet(car, 'price.amount')).display}
                           </p>
-                          <span className="text-xs bg-orange-600 text-white px-2 py-1 rounded-full font-bold shadow-sm">
-                            ส่งฟรี!
-                          </span>
                         </div>
                         <ul className="text-xs md:text-sm text-gray-800 mb-2 md:mb-3 space-y-1 font-prompt font-medium">
                           {safeGet(car, 'tags', []).includes('ฟรีดาวน์') && (

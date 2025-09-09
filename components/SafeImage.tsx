@@ -17,6 +17,22 @@ interface SafeImageProps {
   fallbackSrc?: string;
 }
 
+// Generate better blur placeholder
+const generateBlurDataURL = (width = 10, height = 10) => {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  if (ctx) {
+    const gradient = ctx.createLinearGradient(0, 0, width, height);
+    gradient.addColorStop(0, '#f3f4f6');
+    gradient.addColorStop(1, '#e5e7eb');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+  }
+  return canvas.toDataURL();
+};
+
 export default function SafeImage({
   src,
   alt,
@@ -24,104 +40,81 @@ export default function SafeImage({
   height,
   fill = false,
   className = '',
-  quality = 80,
+  quality = 85, // Increased from 80 for better quality/size balance
   priority = false,
   loading = 'lazy',
   sizes,
-  placeholder = 'empty',
-  blurDataURL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=',
+  placeholder = 'blur',
+  blurDataURL,
   fallbackSrc = '/images/placeholder-car.jpg',
 }: SafeImageProps) {
   const [mounted, setMounted] = useState(false);
   const [imgSrc, setImgSrc] = useState(src);
   const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Generate blur placeholder if not provided
+  const getBlurDataURL = () => {
+    if (blurDataURL) return blurDataURL;
+    if (typeof window !== 'undefined') {
+      return generateBlurDataURL();
+    }
+    return 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=';
+  };
+
   // Handle image error with fallback
   const handleError = () => {
     if (!hasError && fallbackSrc) {
-      console.warn(`Failed to load image: ${imgSrc}, trying fallback`);
       setImgSrc(fallbackSrc);
       setHasError(true);
     }
+    setIsLoading(false);
   };
 
-  // Convert to WebP if supported (client-side only)
-  const getOptimizedSrc = (originalSrc: string) => {
-    if (!mounted || typeof window === 'undefined') return originalSrc;
-
-    // Check if browser supports WebP
-    const canvas = document.createElement('canvas');
-    const supportsWebP = canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
-
-    if (
-      supportsWebP &&
-      originalSrc &&
-      !originalSrc.includes('.webp') &&
-      !originalSrc.startsWith('data:')
-    ) {
-      // Convert to WebP for better performance
-      const url = new URL(originalSrc, window.location.origin);
-      url.searchParams.set('format', 'webp');
-      return url.toString();
-    }
-
-    return originalSrc;
+  const handleLoad = () => {
+    setIsLoading(false);
   };
 
-  // Show placeholder during SSR or before mounting
+  // Optimized sizes for responsive images
+  const getOptimizedSizes = () => {
+    if (sizes) return sizes;
+    if (fill) return '100vw';
+    return '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw';
+  };
+
+  // Show loading placeholder during SSR
   if (!mounted) {
     const placeholderClasses = fill
-      ? `w-full h-full min-h-[200px] bg-gray-200 animate-pulse flex items-center justify-center ${className}`
-      : `bg-gray-200 animate-pulse flex items-center justify-center min-h-[200px] ${className}`;
+      ? `absolute inset-0 w-full h-full bg-gray-200 animate-pulse ${className}`
+      : `bg-gray-200 animate-pulse min-h-[200px] ${className}`;
 
-    return (
-      <div className={placeholderClasses}>
-        <div className="text-gray-400 text-sm">Loading...</div>
-      </div>
-    );
+    return <div className={placeholderClasses} />;
   }
 
-  const optimizedSrc = getOptimizedSrc(imgSrc);
+  // Common Image props
+  const imageProps = {
+    src: imgSrc,
+    alt,
+    quality,
+    priority,
+    loading,
+    sizes: getOptimizedSizes(),
+    placeholder,
+    blurDataURL: getBlurDataURL(),
+    onError: handleError,
+    onLoad: handleLoad,
+    className: `${className} ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`,
+  };
 
-  // Use Next.js Image component for better performance
   if (fill) {
-    return (
-      <Image
-        src={optimizedSrc}
-        alt={alt}
-        fill
-        className={className}
-        quality={quality}
-        priority={priority}
-        loading={loading}
-        sizes={sizes}
-        placeholder={placeholder}
-        blurDataURL={blurDataURL}
-        onError={handleError}
-      />
-    );
+    return <Image {...imageProps} fill alt={alt} />;
   }
 
-  return (
-    <Image
-      src={optimizedSrc}
-      alt={alt}
-      width={width || 500}
-      height={height || 300}
-      className={className}
-      quality={quality}
-      priority={priority}
-      loading={loading}
-      sizes={sizes}
-      placeholder={placeholder}
-      blurDataURL={blurDataURL}
-      onError={handleError}
-    />
-  );
+  return <Image {...imageProps} alt={alt} width={width || 500} height={height || 300} />;
 }
 
 // Basic version for simple use cases

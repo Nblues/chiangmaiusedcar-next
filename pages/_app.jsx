@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import ClientOnly from '../components/ClientOnly';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import CookieConsent from '../components/CookieConsent';
-import PWAInstallPrompt from '../components/PWAInstallPrompt';
 import '../styles/globals.css';
+
+// Lazy load non-critical components to reduce initial bundle size
+const CookieConsent = lazy(() => import('../components/CookieConsent'));
+const PWAInstallPrompt = lazy(() => import('../components/PWAInstallPrompt'));
 
 export default function MyApp({ Component, pageProps }) {
   // Service worker registration with fixed variables
@@ -43,10 +45,14 @@ export default function MyApp({ Component, pageProps }) {
           <Footer />
         </ClientOnly>
         <ClientOnly>
-          <CookieConsent />
+          <Suspense fallback={<div style={{ display: 'none' }}></div>}>
+            <CookieConsent />
+          </Suspense>
         </ClientOnly>
         <ClientOnly>
-          <PWAInstallPrompt />
+          <Suspense fallback={<div style={{ display: 'none' }}></div>}>
+            <PWAInstallPrompt />
+          </Suspense>
         </ClientOnly>
       </>
     ));

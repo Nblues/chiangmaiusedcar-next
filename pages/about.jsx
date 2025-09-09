@@ -117,6 +117,7 @@ export default function About() {
                   </div>
                 </div>
               )}
+
               <Image
                 src="/herobanner/team.webp"
                 alt="ทีมงานครูหนึ่งรถสวย"

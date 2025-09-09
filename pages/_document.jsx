@@ -8,6 +8,12 @@ export default function Document() {
   return (
     <Html lang="th">
       <Head>
+        {/* Default viewport */}
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+        />
+
         {/* 2025 Cache Control Meta Tags */}
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta httpEquiv="Pragma" content="no-cache" />
@@ -19,9 +25,9 @@ export default function Document() {
         <meta name="etag" content={`"${buildTime}"`} />
 
         {/* Favicon Settings - Enhanced for Google Search with cache busting */}
-        <link rel="icon" type="image/webp" href={`/favicon.webp?${cacheVersion}`} />
         <link rel="icon" type="image/x-icon" href={`/favicon.ico?${cacheVersion}`} />
-        <link rel="shortcut icon" href={`/favicon.webp?${cacheVersion}`} />
+        <link rel="icon" type="image/webp" href={`/favicon.webp?${cacheVersion}`} />
+        <link rel="shortcut icon" href={`/favicon.ico?${cacheVersion}`} />
 
         {/* Preload favicon for faster loading */}
         <link rel="preload" href={`/favicon.webp?${cacheVersion}`} as="image" type="image/webp" />
@@ -65,12 +71,35 @@ export default function Document() {
         <link rel="dns-prefetch" href="//www.google-analytics.com" />
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
+        <link rel="dns-prefetch" href="//cdn.shopify.com" />
+        <link rel="dns-prefetch" href="//files.myshopify.com" />
 
         {/* 2025 Performance Optimization */}
         <link rel="dns-prefetch" href="//vercel.com" />
         <link rel="dns-prefetch" href="//analytics.vercel.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Critical resource preconnections */}
+        <link rel="preconnect" href="https://cdn.shopify.com" />
+        <link rel="preconnect" href="https://files.myshopify.com" />
+
+        {/* Preload critical CSS */}
+        <link
+          rel="preload"
+          href="/_next/static/css/app.css"
+          as="style"
+          onLoad="this.onload=null;this.rel='stylesheet'"
+        />
+
+        {/* Critical font preloading */}
+        <link
+          rel="preload"
+          href="https://fonts.gstatic.com/s/prompt/v9/jizaRExUiTo99u79D0-ExdGM.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </Head>
       <body>
         <Main />
