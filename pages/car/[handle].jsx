@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import SEO from '../../components/SEO';
 import Breadcrumb from '../../components/Breadcrumb';
+import SimilarCars from '../../components/SimilarCars';
 import { getAllCars } from '../../lib/shopify.mjs';
 import { buildCarJsonLd, buildProductJsonLd } from '../../lib/seo/jsonld';
 import { safeGet, safeFormatPrice } from '../../lib/safeFetch';
 import Link from 'next/link';
 import NextImage from 'next/image';
 
-function CarDetailPage({ car }) {
+function CarDetailPage({ car, allCars }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageLoading, setImageLoading] = useState(true);
 
@@ -808,35 +809,7 @@ function CarDetailPage({ car }) {
           </div>
 
           {/* Similar Cars Section */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-6 font-prompt">รถที่คล้ายกัน</h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* คุณสามารถเพิ่ม Similar Cars component ที่นี่ */}
-              <div className="text-center py-8 text-gray-500 font-prompt col-span-full">
-                <svg
-                  className="w-12 h-12 mx-auto mb-3 text-gray-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                  />
-                </svg>
-                <p>รถที่คล้ายกันจะแสดงที่นี่เร็วๆ นี้</p>
-                <Link
-                  href="/all-cars"
-                  className="inline-block mt-3 text-blue-600 hover:text-blue-700 font-semibold"
-                >
-                  ดูรถทั้งหมด →
-                </Link>
-              </div>
-            </div>
-          </div>
+          <SimilarCars currentCar={car} allCars={allCars || []} />
         </div>
       </main>
     </>
