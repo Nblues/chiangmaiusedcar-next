@@ -1,5 +1,5 @@
 // pages/api/og-preview.js
-import { getAllCars } from '../../lib/shopify';
+import { getAllCars } from '../../lib/shopify.mjs';
 
 export default async function handler(req, res) {
   const { url } = req.query;

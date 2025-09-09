@@ -1,24 +1,32 @@
-/**
- * Service Worker for Chiangmai Used Car Website
- * Custom implementation for PWA functionality
- * Created specifically for this project
- */
+// Service Worker สำหรับการจัดการแคชตามมาตรฐานสากล 2025
+// Cache Strategy: Stale-While-Revalidate + Network First สำหรับเนื้อหาล่าสุด
 
-const APP_PREFIX = 'ChiangmaiUsedCar_';
-const VERSION = 'v2025.9.8_' + Date.now(); // Dynamic versioning for 2025
-const CACHE_NAME = APP_PREFIX + VERSION;
-const UPDATE_CHECK_INTERVAL = 30000; // Check for updates every 30 seconds
+const CACHE_VERSION = 'v2025-1.0.0';
+const STATIC_CACHE = `static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
+const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 
-// Assets to cache on install
-const FILES_TO_CACHE = [
+// กำหนดรายการไฟล์ที่ต้อง cache
+const STATIC_ASSETS = [
   '/',
   '/offline.html',
-  '/all-cars',
-  '/logo/logo_main.png',
-  '/herobanner/chiangmaiusedcar.webp'
+  '/manifest.json',
+  '/favicon.webp',
+  // '/_next/static/css/main.css', // ถ้ามีไฟล์ css หลักให้ใส่ชื่อไฟล์
+  // '/_next/static/chunks/framework.js', // ถ้ามีไฟล์ js หลักให้ใส่ชื่อไฟล์
 ];
 
-// Routes that should be cached with network-first strategy
+// กำหนด strategy สำหรับแต่ละประเภทไฟล์
+const CACHE_STRATEGIES = {
+  // HTML pages: Network First (เนื้อหาล่าสุดเสมอ)
+  pages: 'networkFirst',
+  // Static assets: Cache First (ประสิทธิภาพสูง)
+  static: 'cacheFirst',
+  // Images: Stale While Revalidate (แสดงเร็ว + อัปเดตเบื้องหลัง)
+  images: 'staleWhileRevalidate',
+  // API: Network Only (ข้อมูลสดใหม่เสมอ)
+  api: 'networkOnly',
+};
 const CACHE_ROUTES = [
   /^\/all-cars.*$/,
   /^\/car\/.*$/,
@@ -30,8 +38,8 @@ const CACHE_ROUTES = [
 self.addEventListener('install', e => {
   e.waitUntil(
     (async () => {
-      const cache = await caches.open(CACHE_NAME);
-      await cache.addAll(FILES_TO_CACHE);
+      const cache = await caches.open(STATIC_CACHE);
+      await cache.addAll(STATIC_ASSETS);
       
       // Force immediate activation for updates
       await self.skipWaiting();
@@ -47,7 +55,7 @@ self.addEventListener('activate', e => {
       const keyList = await caches.keys();
       await Promise.all(
         keyList.map(key => {
-          if (key !== CACHE_NAME) {
+          if (key !== STATIC_CACHE && key !== DYNAMIC_CACHE && key !== IMAGE_CACHE) {
             return caches.delete(key);
           }
         }),
@@ -61,7 +69,7 @@ self.addEventListener('activate', e => {
       clients.forEach(client => {
         client.postMessage({
           type: 'CACHE_UPDATED',
-          payload: { version: VERSION, timestamp: Date.now() }
+          payload: { version: CACHE_VERSION, timestamp: Date.now() }
         });
       });
     })(),
@@ -84,7 +92,7 @@ self.addEventListener('fetch', e => {
 
         // Cache successful responses
         if (networkResponse && networkResponse.status === 200 && shouldCache) {
-          const cache = await caches.open(CACHE_NAME);
+          const cache = await caches.open(DYNAMIC_CACHE);
           cache.put(e.request, networkResponse.clone());
         }
 

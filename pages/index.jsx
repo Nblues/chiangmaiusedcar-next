@@ -2,20 +2,29 @@ import React, { useState, useEffect } from 'react';
 import SEO from '../components/SEO.jsx';
 import Breadcrumb from '../components/Breadcrumb';
 import NoSSR from '../components/NoSSR';
-import { getHomepageCars } from '../lib/shopify';
+import { getHomepageCars } from '../lib/shopify.mjs';
+import { safeGet, safeLocalStorage } from '../lib/safeFetch';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-// Helper: format price safely for display and microdata
+// Helper: format price safely for display and microdata using our safe utility
 function getPriceInfo(amount) {
-  const num = Number(amount);
-  const valid = Number.isFinite(num) && num >= 0;
-  return {
-    valid,
-    numeric: valid ? String(num) : undefined,
-    display: valid ? num.toLocaleString() : 'ติดต่อสอบถาม',
-  };
+  try {
+    const num = Number(amount);
+    const valid = Number.isFinite(num) && num >= 0;
+    return {
+      valid,
+      numeric: valid ? String(num) : undefined,
+      display: valid ? num.toLocaleString() : 'ติดต่อสอบถาม',
+    };
+  } catch (error) {
+    return {
+      valid: false,
+      numeric: undefined,
+      display: 'ติดต่อสอบถาม',
+    };
+  }
 }
 
 export default function Home({ cars }) {
@@ -33,16 +42,9 @@ export default function Home({ cars }) {
 
   useEffect(() => {
     setMounted(true);
-    // load saved cars (localStorage)
-    if (typeof window !== 'undefined') {
-      try {
-        const raw = localStorage.getItem('savedCars');
-        const parsed = raw ? JSON.parse(raw) : [];
-        setSaved(Array.isArray(parsed) ? parsed : []);
-      } catch {
-        setSaved([]);
-      }
-    }
+    // Load saved cars safely using safeLocalStorage
+    const savedCars = safeLocalStorage('savedCars', []);
+    setSaved(Array.isArray(savedCars) ? savedCars : []);
 
     // Delay Facebook reviews loading for better performance
     const timer = setTimeout(() => {
@@ -67,26 +69,24 @@ export default function Home({ cars }) {
     router.push(url);
   };
 
-  // Save/unsave cars
+  // Save/unsave cars with safe error handling
   function toggleSave(carId) {
-    if (!mounted || typeof window === 'undefined') return;
+    if (!mounted || typeof window === 'undefined' || !carId) return;
 
     try {
-      let s = [];
-      try {
-        const raw = localStorage.getItem('savedCars');
-        s = raw ? JSON.parse(raw) : [];
-      } catch {
-        s = [];
+      const currentSaved = safeLocalStorage('savedCars', []);
+      let updatedSaved = Array.isArray(currentSaved) ? [...currentSaved] : [];
+
+      if (updatedSaved.includes(carId)) {
+        updatedSaved = updatedSaved.filter(id => id !== carId);
+      } else {
+        updatedSaved.push(carId);
       }
-      if (!Array.isArray(s)) s = [];
-      if (carId == null) return;
-      if (s.includes(carId)) s = s.filter(id => id !== carId);
-      else s.push(carId);
-      setSaved(s);
-      localStorage.setItem('savedCars', JSON.stringify(s));
-    } catch {
-      // noop
+
+      setSaved(updatedSaved);
+      localStorage.setItem('savedCars', JSON.stringify(updatedSaved));
+    } catch (error) {
+      console.warn('Failed to save car preference:', error);
     }
   }
 
@@ -425,7 +425,7 @@ export default function Home({ cars }) {
             >
               <Link
                 href={
-                  typeof car?.handle === 'string' && car.handle.length
+                  safeGet(car, 'handle') && typeof car.handle === 'string' && car.handle.length
                     ? `/car/${encodeURIComponent(car.handle)}`
                     : '/all-cars'
                 }
@@ -434,19 +434,15 @@ export default function Home({ cars }) {
               >
                 <figure className="relative w-full h-32 md:h-48 overflow-hidden bg-orange-600/10">
                   <Image
-                    src={
-                      Array.isArray(car.images) && car.images.length > 0
-                        ? car.images[0]?.url
-                        : '/cover.jpg'
-                    }
-                    alt={`${car?.title || 'รถมือสองคุณภาพดี'} - ราคา ${getPriceInfo(car?.price?.amount).display} บาท`}
+                    src={safeGet(car, 'images.0.url') || '/cover.jpg'}
+                    alt={`${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} - ราคา ${getPriceInfo(safeGet(car, 'price.amount')).display} บาท`}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                     itemProp="image"
                     loading="lazy"
                     sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 300px"
                   />
-                  {car.tags?.includes('ใหม่') && (
+                  {safeGet(car, 'tags', []).includes('ใหม่') && (
                     <span className="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold shadow-md">
                       ใหม่
                     </span>
@@ -457,11 +453,11 @@ export default function Home({ cars }) {
                     className="font-extrabold text-sm md:text-lg text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt"
                     itemProp="name"
                   >
-                    {car.title}
+                    {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
                   </h3>
                   <div className="flex items-center justify-between mb-2 md:mb-3">
                     {(() => {
-                      const price = getPriceInfo(car?.price?.amount);
+                      const price = getPriceInfo(safeGet(car, 'price.amount'));
                       return (
                         <p
                           className="text-lg md:text-xl font-bold text-orange-600 font-prompt"
@@ -480,10 +476,12 @@ export default function Home({ cars }) {
                     </span>
                   </div>
                   <ul className="text-xs md:text-sm text-gray-800 mb-2 md:mb-3 space-y-1 font-prompt font-medium">
-                    {car.tags?.includes('ฟรีดาวน์') && (
+                    {safeGet(car, 'tags', []).includes('ฟรีดาวน์') && (
                       <li className="text-blue-600">✓ ฟรีดาวน์</li>
                     )}
-                    {car.tags?.includes('ผ่อนถูก') && <li className="text-blue-600">✓ ผ่อนถูก</li>}
+                    {safeGet(car, 'tags', []).includes('ผ่อนถูก') && (
+                      <li className="text-blue-600">✓ ผ่อนถูก</li>
+                    )}
                     <li className="text-gray-900">✓ รับประกัน 1 ปี</li>
                   </ul>
                 </div>
@@ -508,43 +506,51 @@ export default function Home({ cars }) {
                   >
                     โทร
                   </a>
-                  <NoSSR fallback={
-                    <button
-                      type="button"
-                      className="flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border bg-white text-gray-600 border-gray-300"
-                      disabled
-                    >
-                      <svg
-                        className="w-3 md:w-4 h-3 md:h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        viewBox="0 0 24 24"
+                  <NoSSR
+                    fallback={
+                      <button
+                        type="button"
+                        className="flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border bg-white text-gray-600 border-gray-300"
+                        disabled
                       >
-                        <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                      </svg>
-                    </button>
-                  }>
+                        <svg
+                          className="w-3 md:w-4 h-3 md:h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                        </svg>
+                      </button>
+                    }
+                  >
                     <button
                       type="button"
                       className={`flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border transition-all duration-200 ${
-                        mounted && saved.includes(car.id)
+                        mounted && saved.includes(safeGet(car, 'id'))
                           ? 'bg-orange-600 text-white border-orange-600 shadow-lg'
                           : 'bg-white text-gray-600 border-gray-300 hover:border-orange-600 hover:text-orange-600'
                       }`}
                       onClick={e => {
                         e.preventDefault();
                         e.stopPropagation();
-                        toggleSave(car.id);
+                        toggleSave(safeGet(car, 'id'));
                       }}
-                      aria-label={mounted && saved.includes(car.id) ? 'ลบออกจากที่บันทึก' : 'บันทึกรถ'}
+                      aria-label={
+                        mounted && saved.includes(safeGet(car, 'id'))
+                          ? 'ลบออกจากที่บันทึก'
+                          : 'บันทึกรถ'
+                      }
                       title="บันทึกดูทีหลัง"
                     >
                       <svg
                         className="w-3 md:w-4 h-3 md:h-4"
-                        fill={mounted && saved.includes(car.id) ? 'currentColor' : 'none'}
+                        fill={
+                          mounted && saved.includes(safeGet(car, 'id')) ? 'currentColor' : 'none'
+                        }
                         stroke="currentColor"
-                        strokeWidth={mounted && saved.includes(car.id) ? 0 : 2}
+                        strokeWidth={mounted && saved.includes(safeGet(car, 'id')) ? 0 : 2}
                         viewBox="0 0 24 24"
                       >
                         <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />

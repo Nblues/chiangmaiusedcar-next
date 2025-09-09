@@ -3,6 +3,8 @@
  * Receives and processes performance metrics from the client
  */
 
+import { safeExternalFetch } from '../../lib/safeFetch';
+
 export default async function handler(req, res) {
   // Only allow POST requests
   if (req.method !== 'POST') {
@@ -58,62 +60,52 @@ export default async function handler(req, res) {
 }
 
 /**
- * Send metrics to external analytics service
+ * Send metrics to external analytics service using safeFetch
  */
 async function sendToAnalyticsService(metrics) {
-  // Example integrations:
+  // Example integrations with improved error handling:
 
   // 1. Vercel Analytics (if using Vercel)
   if (process.env.VERCEL_ANALYTICS_ID) {
-    try {
-      // This would be the actual Vercel Analytics API call
-      // await fetch('https://vitals.vercel-analytics.com/v1/vitals', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(metrics)
-      // });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn('Failed to send to Vercel Analytics:', error);
-    }
+    await safeExternalFetch('https://vitals.vercel-analytics.com/v1/vitals', {
+      method: 'POST',
+      body: metrics,
+      fallback: null,
+      logErrors: false,
+    });
   }
 
   // 2. Google Analytics 4 (Measurement Protocol)
-  if (process.env.GA_MEASUREMENT_ID) {
-    try {
-      // This would be the actual GA4 API call
-      // await fetch(`https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     client_id: metrics.clientId || 'anonymous',
-      //     events: [{
-      //       name: 'performance_metric',
-      //       params: metrics
-      //     }]
-      //   })
-      // });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn('Failed to send to Google Analytics:', error);
-    }
+  if (process.env.GA_MEASUREMENT_ID && process.env.GA_API_SECRET) {
+    const gaEndpoint = `https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`;
+
+    await safeExternalFetch(gaEndpoint, {
+      method: 'POST',
+      body: {
+        client_id: metrics.clientId || 'anonymous',
+        events: [
+          {
+            name: 'performance_metric',
+            params: metrics,
+          },
+        ],
+      },
+      fallback: null,
+      logErrors: false,
+    });
   }
 
   // 3. Custom analytics service
-  if (process.env.CUSTOM_ANALYTICS_ENDPOINT) {
-    try {
-      await fetch(process.env.CUSTOM_ANALYTICS_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.CUSTOM_ANALYTICS_TOKEN}`,
-        },
-        body: JSON.stringify(metrics),
-      });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn('Failed to send to custom analytics:', error);
-    }
+  if (process.env.CUSTOM_ANALYTICS_ENDPOINT && process.env.CUSTOM_ANALYTICS_TOKEN) {
+    await safeExternalFetch(process.env.CUSTOM_ANALYTICS_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.CUSTOM_ANALYTICS_TOKEN}`,
+      },
+      body: metrics,
+      fallback: null,
+      logErrors: false,
+    });
   }
 
   // For now, just log in production (you can remove this when you have real analytics)

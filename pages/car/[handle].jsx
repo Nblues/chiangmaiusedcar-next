@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import SEO from '../../components/SEO';
 import Breadcrumb from '../../components/Breadcrumb';
-import { getAllCars } from '../../lib/shopify';
+import { getAllCars } from '../../lib/shopify.mjs';
 import { buildCarJsonLd, buildProductJsonLd } from '../../lib/seo/jsonld';
+import { safeGet, safeFormatPrice } from '../../lib/safeFetch';
 import Link from 'next/link';
 import NextImage from 'next/image';
 
@@ -13,33 +14,35 @@ function CarDetailPage({ car }) {
 
   // Preload next/prev images for instant switching
   React.useEffect(() => {
-    if (!car?.images || car.images.length < 2) return;
+    const images = safeGet(car, 'images', []);
+    if (images.length < 2) return;
     const preloadIndexes = [];
-    if (selectedImageIndex < car.images.length - 1) preloadIndexes.push(selectedImageIndex + 1);
+    if (selectedImageIndex < images.length - 1) preloadIndexes.push(selectedImageIndex + 1);
     if (selectedImageIndex > 0) preloadIndexes.push(selectedImageIndex - 1);
     preloadIndexes.forEach(idx => {
       const img = new window.Image();
-      img.src = car.images[idx].url;
+      img.src = safeGet(images[idx], 'url', '');
     });
-  }, [selectedImageIndex, car?.images]);
+  }, [selectedImageIndex, car]);
 
   // Keyboard navigation for image gallery
   React.useEffect(() => {
-    if (!car?.images || car.images.length < 2) return;
+    const images = safeGet(car, 'images', []);
+    if (images.length < 2) return;
 
     const handleKeyDown = e => {
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        setSelectedImageIndex(prev => (prev === 0 ? car.images.length - 1 : prev - 1));
+        setSelectedImageIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
-        setSelectedImageIndex(prev => (prev === car.images.length - 1 ? 0 : prev + 1));
+        setSelectedImageIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [car?.images]);
+  }, [car]);
 
   // Reset loading state when image changes
   React.useEffect(() => {
@@ -58,37 +61,39 @@ function CarDetailPage({ car }) {
   }
 
   // เตรียมรูปภาพ
-  const carImages = car?.images || [
-    { url: '/herobanner/chiangmaiusedcar.webp', alt: car?.title || 'รถมือสอง' },
-  ];
+  const carImages = safeGet(car, 'images', [
+    { url: '/herobanner/chiangmaiusedcar.webp', alt: safeGet(car, 'title', 'รถมือสอง') },
+  ]);
   const currentImage = carImages[selectedImageIndex] || carImages[0];
 
   // เตรียม JSON-LD schema สำหรับ SEO
   const carSpecs = {
-    year: car.year,
-    transmission: car.transmission || 'Unknown',
-    fuelType: car.fuel_type || 'Gasoline',
-    engineSize: car.engine,
-    mileage: car.mileage,
-    seats: car.seats,
-    color: car.color,
+    year: safeGet(car, 'year'),
+    transmission: safeGet(car, 'transmission', 'Unknown'),
+    fuelType: safeGet(car, 'fuel_type', 'Gasoline'),
+    engineSize: safeGet(car, 'engine'),
+    mileage: safeGet(car, 'mileage'),
+    seats: safeGet(car, 'seats'),
+    color: safeGet(car, 'color'),
   };
 
   const carProduct = {
-    url: `https://chiangmaiusedcar.com/car/${car.handle}`,
-    name: car.title,
+    url: `https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
+    name: safeGet(car, 'title', 'รถมือสองคุณภาพดี'),
     description:
-      car.description ||
-      `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} มือสองเชียงใหม่ สภาพสวย ราคาดี`,
+      safeGet(car, 'description') ||
+      `${safeGet(car, 'vendor', '') || safeGet(car, 'brand', '')} ${safeGet(car, 'model', '')} ${safeGet(car, 'year', '')} มือสองเชียงใหม่ สภาพสวย ราคาดี`,
     images: carImages.map(img =>
-      img.url.startsWith('/') ? `https://chiangmaiusedcar.com${img.url}` : img.url
+      safeGet(img, 'url', '').startsWith('/')
+        ? `https://chiangmaiusedcar.com${safeGet(img, 'url', '')}`
+        : safeGet(img, 'url', '')
     ),
-    brand: car.vendor || car.brand,
-    sku: car.id || car.handle,
-    mpn: car.vin,
-    price: car.price?.amount,
-    currency: car.price?.currencyCode || 'THB',
-    inStock: car.availableForSale !== false,
+    brand: safeGet(car, 'vendor') || safeGet(car, 'brand'),
+    sku: safeGet(car, 'id') || safeGet(car, 'handle'),
+    mpn: safeGet(car, 'vin'),
+    price: safeGet(car, 'price.amount'),
+    currency: safeGet(car, 'price.currencyCode', 'THB'),
+    inStock: safeGet(car, 'availableForSale', true) !== false,
     priceValidDays: 90,
     sellerName: 'ครูหนึ่งรถสวย',
   };
@@ -97,23 +102,25 @@ function CarDetailPage({ car }) {
   const productJsonLd = buildProductJsonLd(carProduct);
 
   // Enhanced SEO data for better link sharing
-  const enhancedTitle = `${car.title} ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท | ครูหนึ่งรถสวย`;
+  const enhancedTitle = `${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} ราคา ${safeFormatPrice(safeGet(car, 'price.amount')).display} บาท | ครูหนึ่งรถสวย`;
   const enhancedDescription = [
-    car.title,
-    car.vendor || car.brand,
-    car.model || '',
-    car.year ? `ปี ${car.year}` : '',
-    `ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท`,
-    car.mileage ? `วิ่ง ${Number(car.mileage).toLocaleString()} กม.` : '',
+    safeGet(car, 'title'),
+    safeGet(car, 'vendor') || safeGet(car, 'brand'),
+    safeGet(car, 'model'),
+    safeGet(car, 'year') ? `ปี ${safeGet(car, 'year')}` : '',
+    `ราคา ${safeFormatPrice(safeGet(car, 'price.amount')).display} บาท`,
+    safeGet(car, 'mileage')
+      ? `วิ่ง ${Number(safeGet(car, 'mileage', 0)).toLocaleString()} กม.`
+      : '',
     'รถบ้านแท้ รับประกัน 1 ปี ส่งฟรีทั่วไทย ครูหนึ่งรถสวย เชียงใหม่',
   ]
     .filter(Boolean)
     .join(' ');
 
   // Enhanced image for social sharing (ensure absolute URL)
-  const socialImage = currentImage.url.startsWith('/')
-    ? `https://chiangmaiusedcar.com${currentImage.url}`
-    : currentImage.url;
+  const socialImage = safeGet(currentImage, 'url', '').startsWith('/')
+    ? `https://chiangmaiusedcar.com${safeGet(currentImage, 'url', '')}`
+    : safeGet(currentImage, 'url', '');
 
   return (
     <>
@@ -121,28 +128,30 @@ function CarDetailPage({ car }) {
         title={enhancedTitle}
         description={enhancedDescription}
         image={socialImage}
-        url={`/car/${car.handle}`}
+        url={`/car/${safeGet(car, 'handle', '')}`}
         type="product"
         carData={{
           ...car,
           title: enhancedTitle,
           description: enhancedDescription,
-          brand: car.vendor || car.brand || 'รถมือสอง',
-          model: car.model || '',
-          year: car.year || '',
+          brand: safeGet(car, 'vendor') || safeGet(car, 'brand', 'รถมือสอง'),
+          model: safeGet(car, 'model', ''),
+          year: safeGet(car, 'year', ''),
           images: carImages.map(img => ({
             ...img,
-            url: img.url.startsWith('/') ? `https://chiangmaiusedcar.com${img.url}` : img.url,
+            url: safeGet(img, 'url', '').startsWith('/')
+              ? `https://chiangmaiusedcar.com${safeGet(img, 'url', '')}`
+              : safeGet(img, 'url', ''),
           })),
         }}
         keywords={[
-          car.title,
-          car.vendor || car.brand,
-          car.model,
-          `${car.vendor} ${car.model}`,
-          `รถมือสอง${car.vendor}`,
-          `${car.vendor}มือสอง`,
-          car.year ? `${car.vendor} ${car.year}` : '',
+          safeGet(car, 'title'),
+          safeGet(car, 'vendor') || safeGet(car, 'brand'),
+          safeGet(car, 'model'),
+          `${safeGet(car, 'vendor', '')} ${safeGet(car, 'model', '')}`,
+          `รถมือสอง${safeGet(car, 'vendor', '')}`,
+          `${safeGet(car, 'vendor', '')}มือสอง`,
+          safeGet(car, 'year') ? `${safeGet(car, 'vendor', '')} ${safeGet(car, 'year')}` : '',
           'รถมือสองเชียงใหม่',
           'รถบ้านแท้',
           'ฟรีดาวน์',
@@ -165,9 +174,11 @@ function CarDetailPage({ car }) {
               name: enhancedTitle,
               description: enhancedDescription,
               image: carImages.map(img =>
-                img.url.startsWith('/') ? `https://chiangmaiusedcar.com${img.url}` : img.url
+                safeGet(img, 'url', '').startsWith('/')
+                  ? `https://chiangmaiusedcar.com${safeGet(img, 'url', '')}`
+                  : safeGet(img, 'url', '')
               ),
-              url: `https://chiangmaiusedcar.com/car/${car.handle}`,
+              url: `https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
               offers: {
                 ...carJsonLd.offers,
                 description: enhancedDescription,
@@ -196,7 +207,9 @@ function CarDetailPage({ car }) {
               name: enhancedTitle,
               description: enhancedDescription,
               image: carImages.map(img =>
-                img.url.startsWith('/') ? `https://chiangmaiusedcar.com${img.url}` : img.url
+                safeGet(img, 'url', '').startsWith('/')
+                  ? `https://chiangmaiusedcar.com${safeGet(img, 'url', '')}`
+                  : safeGet(img, 'url', '')
               ),
             }),
           }}
@@ -225,14 +238,14 @@ function CarDetailPage({ car }) {
                 {
                   '@type': 'ListItem',
                   position: 3,
-                  name: car.vendor || car.brand || 'รถมือสอง',
-                  item: `https://chiangmaiusedcar.com/all-cars?brand=${encodeURIComponent(car.vendor || car.brand || '')}`,
+                  name: safeGet(car, 'vendor') || safeGet(car, 'brand', 'รถมือสอง'),
+                  item: `https://chiangmaiusedcar.com/all-cars?brand=${encodeURIComponent(safeGet(car, 'vendor', '') || safeGet(car, 'brand', ''))}`,
                 },
                 {
                   '@type': 'ListItem',
                   position: 4,
-                  name: car.title,
-                  item: `https://chiangmaiusedcar.com/car/${car.handle}`,
+                  name: safeGet(car, 'title', 'รถมือสองคุณภาพดี'),
+                  item: `https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
                 },
               ],
             }),
@@ -242,12 +255,12 @@ function CarDetailPage({ car }) {
 
       <main className="min-h-screen bg-gray-50">
         <div className="max-w-6xl mx-auto p-4 lg:p-6">
-          <Breadcrumb carTitle={car.title} />
+          <Breadcrumb carTitle={safeGet(car, 'title', 'รถมือสองคุณภาพดี')} />
 
           {/* ชื่อรถ */}
           <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 font-prompt">
-              {car.title}
+              {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
             </h1>
           </div>
 
@@ -262,8 +275,8 @@ function CarDetailPage({ car }) {
               )}
 
               <NextImage
-                src={currentImage.url}
-                alt={currentImage.alt || car.title}
+                src={safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp')}
+                alt={safeGet(currentImage, 'alt') || safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
                 fill
                 className={`object-cover transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
                 priority
@@ -353,7 +366,7 @@ function CarDetailPage({ car }) {
                     aria-label={`ดูรูปที่ ${index + 1}`}
                   >
                     <NextImage
-                      src={img.url}
+                      src={safeGet(img, 'url', '/herobanner/chiangmaiusedcar.webp')}
                       alt={`รูปที่ ${index + 1}`}
                       fill
                       className="object-cover"
@@ -402,7 +415,7 @@ function CarDetailPage({ car }) {
                       aria-label={`ดูรูปที่ ${index + 1}`}
                     >
                       <NextImage
-                        src={img.url}
+                        src={safeGet(img, 'url', '/herobanner/chiangmaiusedcar.webp')}
                         alt={`รูปที่ ${index + 1}`}
                         fill
                         className="object-cover"
@@ -424,8 +437,8 @@ function CarDetailPage({ car }) {
               <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => {
-                    const shareUrl = `https://chiangmaiusedcar.com/car/${car.handle}`;
-                    const shareText = `${car.title} ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท | ครูหนึ่งรถสวย`;
+                    const shareUrl = `https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`;
+                    const shareText = `${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} ราคา ${safeFormatPrice(safeGet(car, 'price.amount')).display} บาท | ครูหนึ่งรถสวย`;
                     navigator.share
                       ? navigator.share({ title: shareText, url: shareUrl })
                       : navigator.clipboard
@@ -445,7 +458,7 @@ function CarDetailPage({ car }) {
                   แชร์
                 </button>
                 <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://chiangmaiusedcar.com/car/${car.handle}`)}`}
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-prompt"
@@ -456,7 +469,7 @@ function CarDetailPage({ car }) {
                   Facebook
                 </a>
                 <a
-                  href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://chiangmaiusedcar.com/car/${car.handle}`)}`}
+                  href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors font-prompt"
@@ -470,43 +483,48 @@ function CarDetailPage({ car }) {
             </div>
             {/* สเปคหลัก - แนวนอนแบบ Carsome */}
             <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm sm:text-base text-gray-600 mb-6 font-prompt">
-              {car.mileage && (
+              {safeGet(car, 'mileage') && (
                 <>
-                  <span className="font-semibold">{Number(car.mileage).toLocaleString()} กม.</span>
+                  <span className="font-semibold">
+                    {Number(safeGet(car, 'mileage', 0)).toLocaleString()} กม.
+                  </span>
                   <span className="text-gray-400">|</span>
                 </>
               )}
-              {car.transmission && (
+              {safeGet(car, 'transmission') && (
                 <>
-                  <span className="font-semibold">{car.transmission}</span>
+                  <span className="font-semibold">{safeGet(car, 'transmission')}</span>
                   <span className="text-gray-400">|</span>
                 </>
               )}
-              {car.year && (
+              {safeGet(car, 'year') && (
                 <>
-                  <span className="font-semibold">{car.year}</span>
+                  <span className="font-semibold">{safeGet(car, 'year')}</span>
                   <span className="text-gray-400">|</span>
                 </>
               )}
-              {car.engine && <span className="font-semibold">{car.engine}</span>}
+              {safeGet(car, 'engine') && (
+                <span className="font-semibold">{safeGet(car, 'engine')}</span>
+              )}
             </div>
             {/* ราคาโดดเด่นแบบ Carsome */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
               {/* ราคาหลัก */}
               <div>
                 <div className="text-4xl sm:text-5xl font-bold text-gray-900 mb-2 font-prompt">
-                  {Number(car.price.amount).toLocaleString()} บาท
+                  {safeFormatPrice(safeGet(car, 'price.amount')).display} บาท
                 </div>
                 {/* ค่าผ่อนประมาณ - คำนวณแบบ Carsome */}
                 <div className="text-lg text-gray-600 font-prompt">
-                  {Math.round(Number(car.price.amount) * 0.0195).toLocaleString()} บาท /เดือน
+                  {Math.round(Number(safeGet(car, 'price.amount', 0)) * 0.0195).toLocaleString()}{' '}
+                  บาท /เดือน
                 </div>
               </div>
 
               {/* ปุ่มหลัก */}
               <div className="flex flex-col gap-3">
                 <Link
-                  href={`/payment-calculator?price=${car.price.amount}&from=car&carTitle=${encodeURIComponent(car.title)}`}
+                  href={`/payment-calculator?price=${safeGet(car, 'price.amount', 0)}&from=car&carTitle=${encodeURIComponent(safeGet(car, 'title', 'รถมือสองคุณภาพดี'))}`}
                   className="bg-blue-600 hover:bg-blue-700 text-white text-center py-4 px-6 rounded-xl font-bold text-lg transition-colors font-prompt"
                 >
                   เครื่องคำนวณสินเชื่อรถยนต์

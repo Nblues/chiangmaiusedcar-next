@@ -57,7 +57,6 @@ export default function SEO({
       <meta name="cache-timestamp" content={timestamp.toString()} />
 
       {/* Enhanced Language and Locale Settings */}
-      <html lang="th" />
       <meta httpEquiv="Content-Language" content="th" />
       <meta name="language" content="th-TH" />
       <meta name="country" content="TH" />

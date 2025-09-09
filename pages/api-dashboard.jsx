@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import { safeAPIFetch } from '../lib/safeFetch';
 
 export default function APIDashboard() {
   const [healthData, setHealthData] = useState(null);
@@ -11,37 +12,26 @@ export default function APIDashboard() {
   const [loading, setLoading] = useState(true);
 
   const fetchHealthCheck = async () => {
-    try {
-      const response = await fetch('/api/health');
-      const data = await response.json();
-      setHealthData(data);
-    } catch (error) {
-      setHealthData({ error: error.message });
-    }
+    const data = await safeAPIFetch('/api/health', {
+      fallback: { error: 'Health check API unavailable' },
+    });
+    setHealthData(data);
   };
 
   const fetchShopifyTest = async () => {
-    try {
-      const response = await fetch('/api/test-shopify?limit=3');
-      const data = await response.json();
-      setShopifyData(data);
-    } catch (error) {
-      setShopifyData({ error: error.message });
-    }
+    const data = await safeAPIFetch('/api/test-shopify?limit=3', {
+      fallback: { error: 'Shopify test API unavailable' },
+    });
+    setShopifyData(data);
   };
 
   const fetchEmailTest = async () => {
-    try {
-      const response = await fetch('/api/test-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ testEmail: 'admin@chiangmaiusedcar.com' }),
-      });
-      const data = await response.json();
-      setEmailData(data);
-    } catch (error) {
-      setEmailData({ error: error.message });
-    }
+    const data = await safeAPIFetch('/api/test-email', {
+      method: 'POST',
+      body: { testEmail: 'admin@chiangmaiusedcar.com' },
+      fallback: { error: 'Email test API unavailable' },
+    });
+    setEmailData(data);
   };
 
   useEffect(() => {
