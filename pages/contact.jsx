@@ -516,6 +516,7 @@ export default function Contact() {
   );
 }
 
+// SSR - Server Side Rendering
 export async function getServerSideProps() {
   return {
     props: {},

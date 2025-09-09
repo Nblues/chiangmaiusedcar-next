@@ -3,7 +3,7 @@
  * Receives and processes performance metrics from the client
  */
 
-import { safeExternalFetch } from '../../lib/safeFetch';
+import { fetchWithTimeout } from '../../src/lib/fetchWithTimeout.ts';
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -60,52 +60,67 @@ export default async function handler(req, res) {
 }
 
 /**
- * Send metrics to external analytics service using safeFetch
+ * Send metrics to external analytics service using fetchWithTimeout
  */
 async function sendToAnalyticsService(metrics) {
-  // Example integrations with improved error handling:
+  // Example integrations with timeout and error handling:
 
   // 1. Vercel Analytics (if using Vercel)
   if (process.env.VERCEL_ANALYTICS_ID) {
-    await safeExternalFetch('https://vitals.vercel-analytics.com/v1/vitals', {
-      method: 'POST',
-      body: metrics,
-      fallback: null,
-      logErrors: false,
-    });
+    try {
+      await fetchWithTimeout('https://vitals.vercel-analytics.com/v1/vitals', 5000, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(metrics),
+        next: { revalidate: 600 }
+      });
+    } catch (error) {
+      // Safe fallback - don't block SSR
+      console.error('Vercel Analytics error:', error.message);
+    }
   }
 
   // 2. Google Analytics 4 (Measurement Protocol)
   if (process.env.GA_MEASUREMENT_ID && process.env.GA_API_SECRET) {
     const gaEndpoint = `https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`;
 
-    await safeExternalFetch(gaEndpoint, {
-      method: 'POST',
-      body: {
-        client_id: metrics.clientId || 'anonymous',
-        events: [
-          {
-            name: 'performance_metric',
-            params: metrics,
-          },
-        ],
-      },
-      fallback: null,
-      logErrors: false,
-    });
+    try {
+      await fetchWithTimeout(gaEndpoint, 5000, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_id: metrics.clientId || 'anonymous',
+          events: [
+            {
+              name: 'performance_metric',
+              params: metrics,
+            },
+          ],
+        }),
+        next: { revalidate: 600 }
+      });
+    } catch (error) {
+      // Safe fallback - don't block SSR
+      console.error('Google Analytics error:', error.message);
+    }
   }
 
   // 3. Custom analytics service
   if (process.env.CUSTOM_ANALYTICS_ENDPOINT && process.env.CUSTOM_ANALYTICS_TOKEN) {
-    await safeExternalFetch(process.env.CUSTOM_ANALYTICS_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${process.env.CUSTOM_ANALYTICS_TOKEN}`,
-      },
-      body: metrics,
-      fallback: null,
-      logErrors: false,
-    });
+    try {
+      await fetchWithTimeout(process.env.CUSTOM_ANALYTICS_ENDPOINT, 5000, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.CUSTOM_ANALYTICS_TOKEN}`,
+        },
+        body: JSON.stringify(metrics),
+        next: { revalidate: 600 }
+      });
+    } catch (error) {
+      // Safe fallback - don't block SSR
+      console.error('Custom Analytics error:', error.message);
+    }
   }
 
   // For now, just log in production (you can remove this when you have real analytics)

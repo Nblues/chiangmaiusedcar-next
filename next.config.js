@@ -7,27 +7,13 @@ const nextConfig = {
   generateEtags: true,
   swcMinify: true,
 
-  // Webpack configuration to prevent .html import issues and bundle optimization
-  webpack: (config, { isServer, webpack }) => {
+  // Webpack configuration for bundle optimization
+  webpack: (config, { isServer }) => {
+    // Handle .html files as string assets
     config.module.rules.push({
       test: /\.html$/i,
-      type: 'asset/source', // Treat .html files as string assets instead of modules
+      type: 'asset/source',
     });
-
-    // Prevent Html component from being incorrectly bundled in shared chunks
-    if (!isServer) {
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        'next/document': false, // Disable next/document on client side to prevent Html import issues
-      };
-    }
-
-    // Add plugin to ignore Html-related warnings during build
-    config.plugins.push(
-      new webpack.DefinePlugin({
-        __NEXT_IGNORE_HTML_ERRORS__: JSON.stringify(true),
-      })
-    );
 
     // Bundle optimization - split chunks intelligently
     if (!isServer) {

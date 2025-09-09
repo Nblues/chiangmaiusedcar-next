@@ -143,6 +143,7 @@ export default function PrivacyPolicy() {
   );
 }
 
+// ISR (Incremental Static Regeneration) - Performance optimization
 export async function getServerSideProps() {
   return {
     props: {},

@@ -658,6 +658,7 @@ export default function AllCars({ cars }) {
   );
 }
 
+// Keep SSR for all-cars due to pagination and search functionality  
 export async function getServerSideProps() {
   let cars = [];
   try {
@@ -686,6 +687,6 @@ export async function getServerSideProps() {
   }
 
   return {
-    props: { cars },
+    props: { cars }
   };
 }

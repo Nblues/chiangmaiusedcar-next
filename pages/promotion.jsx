@@ -298,6 +298,7 @@ export default function Promotion() {
   );
 }
 
+// Using SSR for now due to Html import issues during static generation
 export async function getServerSideProps() {
   return {
     props: {},

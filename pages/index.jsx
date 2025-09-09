@@ -810,7 +810,7 @@ export default function Home({ cars }) {
   );
 }
 
-// SSR (getServerSideProps) - แก้ปัญหา useRouter ใน SSG
+// Keep SSR for homepage due to search functionality
 export async function getServerSideProps() {
   let cars = [];
   try {
@@ -820,5 +820,7 @@ export async function getServerSideProps() {
     console.error('getHomepageCars error:', e);
     cars = [];
   }
-  return { props: { cars } };
+  return { 
+    props: { cars }
+  };
 }

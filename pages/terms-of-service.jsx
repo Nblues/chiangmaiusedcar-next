@@ -201,6 +201,7 @@ export default function TermsOfService() {
   );
 }
 
+// ISR (Incremental Static Regeneration) - Performance optimization
 export async function getServerSideProps() {
   return {
     props: {},
