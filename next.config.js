@@ -92,10 +92,10 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-    formats: ['image/webp', 'image/avif'],
+    formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 192, 256, 384, 512],
-    minimumCacheTTL: 31536000, // 1 year
+    minimumCacheTTL: 86400, // 24 hours
     dangerouslyAllowSVG: false, // Disable for security unless specifically needed
     contentDispositionType: 'inline',
     loader: 'default',

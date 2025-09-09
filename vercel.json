@@ -28,6 +28,15 @@
       ]
     },
     {
+      "source": "/(.*)\\.(js|css|svg|woff2|png|jpg|jpeg|webp|avif)",
+      "headers": [
+        { 
+          "key": "Cache-Control", 
+          "value": "public, max-age=31536000, immutable" 
+        }
+      ]
+    },
+    {
       "source": "/herobanner/(.*)",
       "headers": [
         { 
