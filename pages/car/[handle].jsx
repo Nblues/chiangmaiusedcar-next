@@ -52,11 +52,32 @@ function CarDetailPage({ car, allCars }) {
 
   if (!car) {
     return (
-      <div className="max-w-2xl mx-auto p-8 text-center text-red-600">
-        ไม่พบข้อมูลรถคันนี้{' '}
-        <Link href="/all-cars" className="text-blue-700 underline">
-          ← กลับหน้ารวมรถ
-        </Link>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-2xl mx-auto p-8 text-center">
+          <div className="text-6xl mb-4">🚗</div>
+          <h1 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">
+            ไม่พบข้อมูลรถคันนี้
+          </h1>
+          <p className="text-gray-500 font-prompt mb-6">
+            รถคันนี้อาจถูกขายไปแล้ว หรือลิงก์อาจไม่ถูกต้อง
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link 
+              href="/all-cars" 
+              className="inline-flex items-center bg-primary hover:bg-primary-600 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+            >
+              <span>← ดูรถทั้งหมด</span>
+            </Link>
+            <a
+              href="https://lin.ee/8ugfzstD"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center bg-accent hover:bg-accent-600 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+            >
+              <span>สอบถามรถอื่น</span>
+            </a>
+          </div>
+        </div>
       </div>
     );
   }
@@ -872,7 +893,10 @@ function CarDetailPage({ car, allCars }) {
 export async function getServerSideProps({ params }) {
   try {
     const cars = await getAllCars();
-    const car = cars.find(c => c.handle === params.handle) || null;
+    
+    // ป้องกันกรณีที่ cars เป็น null หรือ undefined
+    const safeCars = Array.isArray(cars) ? cars : [];
+    const car = safeCars.find(c => c?.handle === params?.handle) || null;
 
     if (!car) {
       return {
@@ -881,10 +905,14 @@ export async function getServerSideProps({ params }) {
     }
 
     return {
-      props: { car, allCars: cars },
+      props: { 
+        car, 
+        allCars: safeCars 
+      },
     };
   } catch (error) {
     console.error('getServerSideProps error:', error);
+    // ไม่ throw error - ให้หน้า 404 แทน
     return {
       notFound: true,
     };

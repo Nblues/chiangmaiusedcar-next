@@ -4,7 +4,8 @@
 
 ### Purpose
 
-This rule ensures that essential SEO and performance monitoring tools can access the website without being blocked by Cloudflare's bot protection.
+This rule ensures that essential SEO and performance monitoring tools can access the website without being blocked by
+Cloudflare's bot protection.
 
 ### Rule Configuration
 
@@ -19,6 +20,7 @@ This rule ensures that essential SEO and performance monitoring tools can access
 ### Covered Bots
 
 1. **Chrome Lighthouse** (`Chrome-Lighthouse`)
+
    - Google's automated tool for improving web page quality
    - Used for performance, accessibility, SEO, and PWA audits
    - Essential for PageSpeed Insights and Core Web Vitals monitoring

@@ -6,7 +6,8 @@ import Image from 'next/image';
 function SimilarCars({ currentCar, allCars = [] }) {
   // หาฟังก์ชันรถที่คล้ายกัน - อัลกอริทึมปรับปรุงใหม่
   const findSimilarCars = () => {
-    if (!currentCar || allCars.length === 0) return [];
+    // ป้องกันกรณีข้อมูลไม่ครบ
+    if (!currentCar || !Array.isArray(allCars) || allCars.length === 0) return [];
 
     const currentPrice = Number(currentCar.price?.amount) || 0;
     const currentBrand = currentCar.vendor || currentCar.brand || '';
@@ -15,6 +16,7 @@ function SimilarCars({ currentCar, allCars = [] }) {
     return allCars
       .filter(
         car =>
+          car && // ป้องกัน null/undefined
           car.handle !== currentCar.handle && // ไม่ใช่รถปัจจุบัน
           car.availableForSale !== false && // ยังขายอยู่
           car.price?.amount && // มีราคา
@@ -66,7 +68,37 @@ function SimilarCars({ currentCar, allCars = [] }) {
   const similarCars = findSimilarCars();
 
   if (similarCars.length === 0) {
-    return null; // ไม่แสดงถ้าไม่มีรถคล้ายกัน
+    // แสดง empty state แทนการไม่แสดงอะไรเลย
+    return (
+      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 font-prompt border-b-2 border-accent pb-2">
+            🚗 รถที่แนะนำ
+          </h2>
+          <Link
+            href="/all-cars"
+            className="text-accent hover:text-accent-600 font-semibold text-sm font-prompt flex items-center gap-1"
+          >
+            ดูทั้งหมด
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
+        <div className="text-center py-8">
+          <div className="text-4xl mb-4">🔍</div>
+          <p className="text-gray-600 font-prompt mb-4">
+            ขออภัย ยังไม่มีรถที่ใกล้เคียงให้แนะนำ
+          </p>
+          <Link
+            href="/all-cars"
+            className="inline-flex items-center bg-accent hover:bg-accent-600 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+          >
+            <span>ดูรถทั้งหมด</span>
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (

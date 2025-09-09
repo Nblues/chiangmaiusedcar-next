@@ -683,6 +683,7 @@ export async function getServerSideProps() {
     }
   } catch (e) {
     console.error('getAllCars error:', e);
+    // ไม่ throw error - ให้ UI แสดงข้อมูลว่างแทน
     cars = [];
   }
 

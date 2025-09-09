@@ -419,7 +419,51 @@ export default function Home({ cars }) {
           aria-label="รถเข้าใหม่แนะนำวันนี้"
           className="grid gap-6 grid-cols-2 lg:grid-cols-4"
         >
-          {safeCars.slice(0, 8).map(car => (
+          {!mounted ? (
+            // Loading state ระหว่างรอ hydration - Skeleton Cards
+            Array.from({ length: 8 }).map((_, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-2xl md:rounded-3xl shadow-lg overflow-hidden border-2 border-gray-200 animate-pulse"
+              >
+                <div className="w-full h-32 md:h-48 bg-gray-200"></div>
+                <div className="p-3 md:p-4">
+                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-6 bg-gray-200 rounded w-1/2 mb-2"></div>
+                  <div className="space-y-1 mb-2">
+                    <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                  </div>
+                  <div className="flex gap-1 md:gap-2">
+                    <div className="flex-1 h-6 bg-gray-200 rounded-full"></div>
+                    <div className="flex-1 h-6 bg-gray-200 rounded-full"></div>
+                    <div className="flex-1 h-6 bg-gray-200 rounded-full"></div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : safeCars.length === 0 ? (
+            // Empty state when no cars available
+            <div className="col-span-full text-center py-12">
+              <div className="text-6xl mb-4">🚗</div>
+              <h3 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">
+                ขออภัย ยังไม่มีรถให้แสดง
+              </h3>
+              <p className="text-gray-500 font-prompt mb-4">
+                เรากำลังอัปเดตรถใหม่ ติดตามได้ที่ Facebook หรือ LINE
+              </p>
+              <a
+                href="https://lin.ee/8ugfzstD"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center bg-accent hover:bg-accent-600 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+              >
+                <span>ติดต่อสอบถาม</span>
+              </a>
+            </div>
+          ) : (
+            safeCars.slice(0, 8).map(car => (
             <article
               key={car.id}
               className="group bg-white rounded-2xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
@@ -560,7 +604,7 @@ export default function Home({ cars }) {
                 </div>
               </div>
             </article>
-          ))}
+          )))}
         </section>
         <div className="text-center mt-12">
           <Link

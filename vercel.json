@@ -13,9 +13,9 @@
     {
       "source": "/(.*)",
       "headers": [
-        { 
-          "key": "Cache-Control", 
-          "value": "public, max-age=600" 
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=600"
         },
         {
           "key": "X-Content-Type-Options",
@@ -30,18 +30,18 @@
     {
       "source": "/(.*)\\.(js|css|svg|woff2|png|jpg|jpeg|webp|avif)",
       "headers": [
-        { 
-          "key": "Cache-Control", 
-          "value": "public, max-age=31536000, immutable" 
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     },
     {
       "source": "/herobanner/(.*)",
       "headers": [
-        { 
-          "key": "Cache-Control", 
-          "value": "public, max-age=31536000, immutable" 
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         },
         {
           "key": "Cross-Origin-Resource-Policy",
@@ -52,9 +52,9 @@
     {
       "source": "/images/(.*)",
       "headers": [
-        { 
-          "key": "Cache-Control", 
-          "value": "public, max-age=31536000, immutable" 
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         },
         {
           "key": "Cross-Origin-Resource-Policy",
