@@ -18,7 +18,8 @@
     "deploy": "vercel --prod",
     "deploy:preview": "vercel",
     "build:analyze": "cross-env ANALYZE=true next build",
-    "production": "npm run build && npm run start"
+    "production": "npm run build && npm run start",
+    "probe": "curl -A 'Chrome-Lighthouse' -s -o /dev/null -w 'TTFB:%{time_starttransfer}s Total:%{time_total}s\\n' https://www.chiangmaiusedcar.com/"
   },
   "dependencies": {
     "@fontsource/prompt": "^5.2.6",
