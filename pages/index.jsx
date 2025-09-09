@@ -464,147 +464,148 @@ export default function Home({ cars }) {
             </div>
           ) : (
             safeCars.slice(0, 8).map(car => (
-            <article
-              key={car.id}
-              className="group bg-white rounded-2xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
-              itemScope
-              itemType="https://schema.org/Product"
-            >
-              <Link
-                href={
-                  safeGet(car, 'handle') && typeof car.handle === 'string' && car.handle.length
-                    ? `/car/${encodeURIComponent(car.handle)}`
-                    : '/all-cars'
-                }
-                className="block focus:outline-none flex-1"
-                tabIndex={0}
+              <article
+                key={car.id}
+                className="group bg-white rounded-2xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
+                itemScope
+                itemType="https://schema.org/Product"
               >
-                <figure className="relative w-full h-32 md:h-48 overflow-hidden bg-orange-600/10">
-                  <Image
-                    src={safeGet(car, 'images.0.url') || '/cover.jpg'}
-                    alt={`${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} - ราคา ${getPriceInfo(safeGet(car, 'price.amount')).display} บาท`}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    itemProp="image"
-                    loading="lazy"
-                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 300px"
-                  />
-                  {safeGet(car, 'tags', []).includes('ใหม่') && (
-                    <span className="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold shadow-md">
-                      ใหม่
-                    </span>
-                  )}
-                </figure>
-                <div className="p-2 md:p-3 flex flex-col">
-                  <h3
-                    className="font-extrabold text-sm md:text-lg text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt"
-                    itemProp="name"
-                  >
-                    {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
-                  </h3>
-                  <div className="flex items-center justify-between mb-2 md:mb-3">
-                    {(() => {
-                      const price = getPriceInfo(safeGet(car, 'price.amount'));
-                      return (
-                        <p
-                          className="text-lg md:text-xl font-bold text-orange-600 font-prompt"
-                          itemProp="offers"
-                          itemScope
-                          itemType="https://schema.org/Offer"
-                        >
-                          {price.numeric && <meta itemProp="price" content={price.numeric} />}
-                          <meta itemProp="priceCurrency" content="THB" />
-                          <span>฿{price.display}</span>
-                        </p>
-                      );
-                    })()}
+                <Link
+                  href={
+                    safeGet(car, 'handle') && typeof car.handle === 'string' && car.handle.length
+                      ? `/car/${encodeURIComponent(car.handle)}`
+                      : '/all-cars'
+                  }
+                  className="block focus:outline-none flex-1"
+                  tabIndex={0}
+                >
+                  <figure className="relative w-full h-32 md:h-48 overflow-hidden bg-orange-600/10">
+                    <Image
+                      src={safeGet(car, 'images.0.url') || '/cover.jpg'}
+                      alt={`${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} - ราคา ${getPriceInfo(safeGet(car, 'price.amount')).display} บาท`}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      itemProp="image"
+                      loading="lazy"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 300px"
+                    />
+                    {safeGet(car, 'tags', []).includes('ใหม่') && (
+                      <span className="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold shadow-md">
+                        ใหม่
+                      </span>
+                    )}
+                  </figure>
+                  <div className="p-2 md:p-3 flex flex-col">
+                    <h3
+                      className="font-extrabold text-sm md:text-lg text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt"
+                      itemProp="name"
+                    >
+                      {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
+                    </h3>
+                    <div className="flex items-center justify-between mb-2 md:mb-3">
+                      {(() => {
+                        const price = getPriceInfo(safeGet(car, 'price.amount'));
+                        return (
+                          <p
+                            className="text-lg md:text-xl font-bold text-orange-600 font-prompt"
+                            itemProp="offers"
+                            itemScope
+                            itemType="https://schema.org/Offer"
+                          >
+                            {price.numeric && <meta itemProp="price" content={price.numeric} />}
+                            <meta itemProp="priceCurrency" content="THB" />
+                            <span>฿{price.display}</span>
+                          </p>
+                        );
+                      })()}
+                    </div>
+                    <ul className="text-xs md:text-sm text-gray-800 mb-2 md:mb-3 space-y-1 font-prompt font-medium">
+                      {safeGet(car, 'tags', []).includes('ฟรีดาวน์') && (
+                        <li className="text-blue-600">✓ ฟรีดาวน์</li>
+                      )}
+                      {safeGet(car, 'tags', []).includes('ผ่อนถูก') && (
+                        <li className="text-blue-600">✓ ผ่อนถูก</li>
+                      )}
+                      <li className="text-gray-900">✓ รับประกัน 1 ปี</li>
+                    </ul>
                   </div>
-                  <ul className="text-xs md:text-sm text-gray-800 mb-2 md:mb-3 space-y-1 font-prompt font-medium">
-                    {safeGet(car, 'tags', []).includes('ฟรีดาวน์') && (
-                      <li className="text-blue-600">✓ ฟรีดาวน์</li>
-                    )}
-                    {safeGet(car, 'tags', []).includes('ผ่อนถูก') && (
-                      <li className="text-blue-600">✓ ผ่อนถูก</li>
-                    )}
-                    <li className="text-gray-900">✓ รับประกัน 1 ปี</li>
-                  </ul>
-                </div>
-              </Link>
-              <div className="flex gap-1 md:gap-2 p-3 pt-0 md:p-4 md:pt-0">
-                <div className="flex gap-1 md:gap-2 w-full">
-                  <a
-                    href="https://lin.ee/8ugfzstD"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
-                    aria-label="สอบถามผ่าน LINE ครูหนึ่งรถสวย"
-                    onClick={e => e.stopPropagation()}
-                  >
-                    LINE
-                  </a>
-                  <a
-                    href={`tel:0940649018`}
-                    className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
-                    aria-label="โทร 094-064-9018"
-                    onClick={e => e.stopPropagation()}
-                  >
-                    โทร
-                  </a>
-                  <NoSSR
-                    fallback={
+                </Link>
+                <div className="flex gap-1 md:gap-2 p-3 pt-0 md:p-4 md:pt-0">
+                  <div className="flex gap-1 md:gap-2 w-full">
+                    <a
+                      href="https://lin.ee/8ugfzstD"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
+                      aria-label="สอบถามผ่าน LINE ครูหนึ่งรถสวย"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      LINE
+                    </a>
+                    <a
+                      href={`tel:0940649018`}
+                      className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
+                      aria-label="โทร 094-064-9018"
+                      onClick={e => e.stopPropagation()}
+                    >
+                      โทร
+                    </a>
+                    <NoSSR
+                      fallback={
+                        <button
+                          type="button"
+                          className="flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border bg-white text-gray-600 border-gray-300"
+                          disabled
+                        >
+                          <svg
+                            className="w-3 md:w-4 h-3 md:h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                          </svg>
+                        </button>
+                      }
+                    >
                       <button
                         type="button"
-                        className="flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border bg-white text-gray-600 border-gray-300"
-                        disabled
+                        className={`flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border transition-all duration-200 ${
+                          mounted && saved.includes(safeGet(car, 'id'))
+                            ? 'bg-orange-600 text-white border-orange-600 shadow-lg'
+                            : 'bg-white text-gray-600 border-gray-300 hover:border-orange-600 hover:text-orange-600'
+                        }`}
+                        onClick={e => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          toggleSave(safeGet(car, 'id'));
+                        }}
+                        aria-label={
+                          mounted && saved.includes(safeGet(car, 'id'))
+                            ? 'ลบออกจากที่บันทึก'
+                            : 'บันทึกรถ'
+                        }
+                        title="บันทึกดูทีหลัง"
                       >
                         <svg
                           className="w-3 md:w-4 h-3 md:h-4"
-                          fill="none"
+                          fill={
+                            mounted && saved.includes(safeGet(car, 'id')) ? 'currentColor' : 'none'
+                          }
                           stroke="currentColor"
-                          strokeWidth={2}
+                          strokeWidth={mounted && saved.includes(safeGet(car, 'id')) ? 0 : 2}
                           viewBox="0 0 24 24"
                         >
                           <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                         </svg>
                       </button>
-                    }
-                  >
-                    <button
-                      type="button"
-                      className={`flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border transition-all duration-200 ${
-                        mounted && saved.includes(safeGet(car, 'id'))
-                          ? 'bg-orange-600 text-white border-orange-600 shadow-lg'
-                          : 'bg-white text-gray-600 border-gray-300 hover:border-orange-600 hover:text-orange-600'
-                      }`}
-                      onClick={e => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        toggleSave(safeGet(car, 'id'));
-                      }}
-                      aria-label={
-                        mounted && saved.includes(safeGet(car, 'id'))
-                          ? 'ลบออกจากที่บันทึก'
-                          : 'บันทึกรถ'
-                      }
-                      title="บันทึกดูทีหลัง"
-                    >
-                      <svg
-                        className="w-3 md:w-4 h-3 md:h-4"
-                        fill={
-                          mounted && saved.includes(safeGet(car, 'id')) ? 'currentColor' : 'none'
-                        }
-                        stroke="currentColor"
-                        strokeWidth={mounted && saved.includes(safeGet(car, 'id')) ? 0 : 2}
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                      </svg>
-                    </button>
-                  </NoSSR>
+                    </NoSSR>
+                  </div>
                 </div>
-              </div>
-            </article>
-          )))}
+              </article>
+            ))
+          )}
         </section>
         <div className="text-center mt-12">
           <Link

@@ -19,7 +19,7 @@
     "deploy:preview": "vercel",
     "build:analyze": "cross-env ANALYZE=true next build",
     "production": "npm run build && npm run start",
-    "probe": "curl -A 'Chrome-Lighthouse' -s -o /dev/null -w 'TTFB:%{time_starttransfer}s Total:%{time_total}s\\n' https://www.chiangmaiusedcar.com/"
+    "probe": "powershell -Command \"& { $start = Get-Date; try { $response = Invoke-WebRequest -Uri 'https://www.chiangmaiusedcar.com/' -UserAgent 'Chrome-Lighthouse' -UseBasicParsing -TimeoutSec 30; $end = Get-Date; $total = ($end - $start).TotalSeconds; Write-Host ('TTFB:N/A Total:' + $total + 's Status:' + $response.StatusCode) } catch { Write-Host 'Error: Connection failed' } }\""
   },
   "dependencies": {
     "@fontsource/prompt": "^5.2.6",

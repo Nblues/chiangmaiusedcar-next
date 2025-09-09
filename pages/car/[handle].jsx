@@ -55,15 +55,13 @@ function CarDetailPage({ car, allCars }) {
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-2xl mx-auto p-8 text-center">
           <div className="text-6xl mb-4">🚗</div>
-          <h1 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">
-            ไม่พบข้อมูลรถคันนี้
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">ไม่พบข้อมูลรถคันนี้</h1>
           <p className="text-gray-500 font-prompt mb-6">
             รถคันนี้อาจถูกขายไปแล้ว หรือลิงก์อาจไม่ถูกต้อง
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
-              href="/all-cars" 
+            <Link
+              href="/all-cars"
               className="inline-flex items-center bg-primary hover:bg-primary-600 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
             >
               <span>← ดูรถทั้งหมด</span>
@@ -893,7 +891,7 @@ function CarDetailPage({ car, allCars }) {
 export async function getServerSideProps({ params }) {
   try {
     const cars = await getAllCars();
-    
+
     // ป้องกันกรณีที่ cars เป็น null หรือ undefined
     const safeCars = Array.isArray(cars) ? cars : [];
     const car = safeCars.find(c => c?.handle === params?.handle) || null;
@@ -905,9 +903,9 @@ export async function getServerSideProps({ params }) {
     }
 
     return {
-      props: { 
-        car, 
-        allCars: safeCars 
+      props: {
+        car,
+        allCars: safeCars,
       },
     };
   } catch (error) {

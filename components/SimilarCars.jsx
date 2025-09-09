@@ -73,7 +73,7 @@ function SimilarCars({ currentCar, allCars = [] }) {
       <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold text-gray-900 font-prompt border-b-2 border-accent pb-2">
-            🚗 รถที่แนะนำ
+            รถที่แนะนำ
           </h2>
           <Link
             href="/all-cars"
@@ -87,9 +87,7 @@ function SimilarCars({ currentCar, allCars = [] }) {
         </div>
         <div className="text-center py-8">
           <div className="text-4xl mb-4">🔍</div>
-          <p className="text-gray-600 font-prompt mb-4">
-            ขออภัย ยังไม่มีรถที่ใกล้เคียงให้แนะนำ
-          </p>
+          <p className="text-gray-600 font-prompt mb-4">ขออภัย ยังไม่มีรถที่ใกล้เคียงให้แนะนำ</p>
           <Link
             href="/all-cars"
             className="inline-flex items-center bg-accent hover:bg-accent-600 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
@@ -105,7 +103,7 @@ function SimilarCars({ currentCar, allCars = [] }) {
     <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold text-gray-900 font-prompt border-b-2 border-accent pb-2">
-          🚗 รถที่แนะนำ ใกล้เคียงกัน
+          รถที่แนะนำ ใกล้เคียงกัน
         </h2>
         <Link
           href="/all-cars"
