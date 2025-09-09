@@ -24,26 +24,28 @@ export default function Document() {
         <meta name="last-modified" content={buildTime} />
         <meta name="etag" content={`"${buildTime}"`} />
 
-        {/* Favicon Settings - Enhanced for Google Search with cache busting */}
-        <link rel="icon" type="image/x-icon" href={`/favicon.ico?${cacheVersion}`} />
-        <link rel="icon" type="image/webp" href={`/favicon.webp?${cacheVersion}`} />
-        <link rel="shortcut icon" href={`/favicon.ico?${cacheVersion}`} />
+        {/* Favicon Settings - Optimized for Google Search Results */}
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/webp" href="/favicon.webp" />
+        <link rel="shortcut icon" href="/favicon.ico" />
 
-        {/* Preload favicon for faster loading */}
-        <link rel="preload" href={`/favicon.webp?${cacheVersion}`} as="image" type="image/webp" />
+        {/* Multi-size PNG icons for better SEO */}
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon.webp" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.webp" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon.webp" />
 
         {/* Apple Touch Icons */}
-        <link rel="apple-touch-icon" href={`/favicon.webp?${cacheVersion}`} />
-        <link rel="apple-touch-icon" sizes="180x180" href={`/favicon.webp?${cacheVersion}`} />
+        <link rel="apple-touch-icon" href="/favicon.webp" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon.webp" />
 
         {/* Android/Chrome Icons */}
-        <link rel="icon" sizes="192x192" href={`/favicon.webp?${cacheVersion}`} />
-        <link rel="icon" sizes="512x512" href={`/favicon.webp?${cacheVersion}`} />
+        <link rel="icon" sizes="192x192" href="/favicon.webp" />
+        <link rel="icon" sizes="512x512" href="/favicon.webp" />
 
         {/* Microsoft Tiles */}
-        <meta name="msapplication-TileImage" content={`/favicon.webp?${cacheVersion}`} />
+        <meta name="msapplication-TileImage" content="/favicon.webp" />
         <meta name="msapplication-TileColor" content="#ff5252" />
-        <meta name="msapplication-config" content={`/browserconfig.xml?${cacheVersion}`} />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
 
         {/* PWA Manifest with cache busting */}
         <link rel="manifest" href={`/manifest.json?${cacheVersion}`} />
@@ -102,6 +104,13 @@ export default function Document() {
         />
       </Head>
       <body>
+        {/* Skip link for accessibility */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-2 focus:bg-white focus:text-primary focus:shadow-lg focus:border focus:border-primary focus:rounded"
+        >
+          ข้ามไปยังเนื้อหา
+        </a>
         <Main />
         <NextScript />
       </body>

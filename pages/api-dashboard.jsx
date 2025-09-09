@@ -73,6 +73,7 @@ export default function APIDashboard() {
                 <p className="text-gray-600 mt-2">ตรวจสอบการเชื่อมต่อ API และบริการต่างๆ</p>
               </div>
               <button
+                type="button"
                 onClick={refreshTests}
                 disabled={loading}
                 className="bg-primary hover:bg-primary-700 text-white px-4 py-2 rounded-md font-medium disabled:opacity-50"
@@ -280,6 +281,7 @@ export default function APIDashboard() {
                 <div className="text-sm text-gray-600">หน้าเว็บไซต์</div>
               </a>
               <button
+                type="button"
                 onClick={refreshTests}
                 disabled={loading}
                 className="p-4 border rounded hover:bg-gray-50 transition-colors text-left disabled:opacity-50"

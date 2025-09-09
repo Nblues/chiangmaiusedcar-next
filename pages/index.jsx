@@ -5,8 +5,9 @@ import NoSSR from '../components/NoSSR';
 import { getHomepageCars } from '../lib/shopify.mjs';
 import { safeGet, safeLocalStorage } from '../lib/safeFetch';
 import Link from 'next/link';
-import Image from 'next/image';
+import A11yImage from '../components/A11yImage';
 import { useRouter } from 'next/router';
+import { carAlt } from '../utils/a11y';
 
 // Helper: format price safely for display and microdata using our safe utility
 function getPriceInfo(amount) {
@@ -213,7 +214,7 @@ export default function Home({ cars }) {
 
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-7xl mx-auto">
-          <Image
+          <A11yImage
             src="/herobanner/chiangmaiusedcar.webp"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             width={1920}
@@ -251,7 +252,7 @@ export default function Home({ cars }) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              สอบถามเลย
+              สอบถามรถยนต์
             </a>
             <Link
               href="/all-cars"
@@ -278,8 +279,12 @@ export default function Home({ cars }) {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 {/* Search */}
                 <div>
+                  <label htmlFor="searchTerm" className="sr-only">
+                    ค้นหารถ
+                  </label>
                   <input
                     type="text"
+                    id="searchTerm"
                     placeholder="ค้นหารถ..."
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
@@ -289,7 +294,11 @@ export default function Home({ cars }) {
 
                 {/* Price Range */}
                 <div>
+                  <label htmlFor="priceRange" className="sr-only">
+                    ช่วงราคา
+                  </label>
                   <select
+                    id="priceRange"
                     value={priceRange}
                     onChange={e => setPriceRange(e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-accent focus:ring-1 focus:ring-accent text-gray-900 bg-white"
@@ -304,7 +313,11 @@ export default function Home({ cars }) {
 
                 {/* Brand Filter */}
                 <div>
+                  <label htmlFor="brandFilter" className="sr-only">
+                    ยี่ห้อรถ
+                  </label>
                   <select
+                    id="brandFilter"
                     value={brandFilter}
                     onChange={e => setBrandFilter(e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-accent focus:ring-1 focus:ring-accent text-gray-900 bg-white"
@@ -321,6 +334,7 @@ export default function Home({ cars }) {
                 {/* Search Button */}
                 <div>
                   <button
+                    type="button"
                     onClick={handleSearch}
                     className="w-full bg-accent hover:bg-accent-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300 font-prompt"
                   >
@@ -410,9 +424,9 @@ export default function Home({ cars }) {
 
         {/* รถแนะนำเข้าใหม่ */}
         <div className="text-center mb-8">
-          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-prompt">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-prompt">
             รถแนะนำเข้าใหม่วันนี้
-          </h3>
+          </h2>
           <p className="text-gray-600 font-prompt">รถคุณภาพดีที่เราคัดสรรมาเพื่อคุณโดยเฉพาะ</p>
         </div>
         <section
@@ -480,9 +494,10 @@ export default function Home({ cars }) {
                   tabIndex={0}
                 >
                   <figure className="relative w-full h-32 md:h-48 overflow-hidden bg-orange-600/10">
-                    <Image
+                    <A11yImage
                       src={safeGet(car, 'images.0.url') || '/cover.jpg'}
-                      alt={`${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} - ราคา ${getPriceInfo(safeGet(car, 'price.amount')).display} บาท`}
+                      alt={carAlt(car)}
+                      fallbackAlt={`${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} - ราคา ${getPriceInfo(safeGet(car, 'price.amount')).display} บาท`}
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                       itemProp="image"
@@ -536,15 +551,15 @@ export default function Home({ cars }) {
                       href="https://lin.ee/8ugfzstD"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
-                      aria-label="สอบถามผ่าน LINE ครูหนึ่งรถสวย"
+                      className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full min-h-11 min-w-11 px-4 py-2 text-xs font-semibold shadow transition-colors"
+                      aria-label="แชท LINE ครูหนึ่งรถสวย"
                       onClick={e => e.stopPropagation()}
                     >
                       LINE
                     </a>
                     <a
                       href={`tel:0940649018`}
-                      className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
+                      className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full min-h-11 min-w-11 px-4 py-2 text-xs font-semibold shadow transition-colors"
                       aria-label="โทร 094-064-9018"
                       onClick={e => e.stopPropagation()}
                     >
@@ -554,7 +569,7 @@ export default function Home({ cars }) {
                       fallback={
                         <button
                           type="button"
-                          className="flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border bg-white text-gray-600 border-gray-300"
+                          className="flex-1 flex items-center justify-center rounded-full min-h-11 min-w-11 px-4 py-2 text-xs font-semibold shadow border bg-white text-gray-600 border-gray-300"
                           disabled
                         >
                           <svg
@@ -571,7 +586,7 @@ export default function Home({ cars }) {
                     >
                       <button
                         type="button"
-                        className={`flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border transition-all duration-200 ${
+                        className={`flex-1 flex items-center justify-center rounded-full min-h-11 min-w-11 px-4 py-2 text-xs font-semibold shadow border transition-all duration-200 ${
                           mounted && saved.includes(safeGet(car, 'id'))
                             ? 'bg-orange-600 text-white border-orange-600 shadow-lg'
                             : 'bg-white text-gray-600 border-gray-300 hover:border-orange-600 hover:text-orange-600'
@@ -639,6 +654,7 @@ export default function Home({ cars }) {
           <div className="relative overflow-hidden">
             {/* Desktop Arrow Buttons - ซ่อนในมือถือ */}
             <button
+              type="button"
               className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-700 hover:text-primary rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
               onClick={() => {
                 const container = document.querySelector('.reviews-scroll-container');
@@ -646,7 +662,7 @@ export default function Home({ cars }) {
                   container.scrollBy({ left: -320, behavior: 'smooth' });
                 }
               }}
-              aria-label="ดูรีวิวก่อนหน้า"
+              aria-label="เลื่อนดูรีวิวก่อนหน้า"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -659,6 +675,7 @@ export default function Home({ cars }) {
             </button>
 
             <button
+              type="button"
               className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-700 hover:text-primary rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
               onClick={() => {
                 const container = document.querySelector('.reviews-scroll-container');
@@ -666,7 +683,7 @@ export default function Home({ cars }) {
                   container.scrollBy({ left: 320, behavior: 'smooth' });
                 }
               }}
-              aria-label="ดูรีวิวถัดไป"
+              aria-label="เลื่อนดูรีวิวถัดไป"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -784,7 +801,7 @@ export default function Home({ cars }) {
                     <div
                       onClick={() => window.open(review.url, '_blank', 'noopener,noreferrer')}
                       className="absolute bottom-1 md:bottom-2 right-1 md:right-2 bg-blue-600 hover:bg-blue-700 text-white px-2 md:px-3 py-1 rounded-full text-xs font-semibold shadow-lg transition-colors cursor-pointer"
-                      aria-label={`ดูรีวิวเต็มบน Facebook - รีวิว ${i + 1}`}
+                      aria-label={`ดูรีวิวเต็มของ ${review.name} บน Facebook`}
                       role="button"
                       tabIndex={0}
                       onKeyDown={e => {
@@ -794,7 +811,7 @@ export default function Home({ cars }) {
                         }
                       }}
                     >
-                      ดูเต็ม
+                      อ่านรีวิวเต็ม
                     </div>
                   </div>
                 </article>
@@ -815,12 +832,12 @@ export default function Home({ cars }) {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
-              aria-label="ดูรีวิวเพิ่มเติมบน Facebook ครูหนึ่งรถสวย"
+              aria-label="ดูรีวิวลูกค้าเพิ่มเติมบน Facebook ครูหนึ่งรถสวย"
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
               </svg>
-              <span>ดูรีวิวเพิ่มเติม</span>
+              <span>ดูรีวิวลูกค้าเพิ่มเติม</span>
             </a>
           </div>
         </section>

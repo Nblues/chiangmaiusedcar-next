@@ -9,7 +9,7 @@ export default function Footer() {
   const isContactPage = router.pathname === '/contact';
 
   return (
-    <footer className="bg-gray-900 text-white py-12 mt-16 font-prompt">
+    <footer className="bg-gray-900 text-white py-12 mt-16 font-prompt" role="contentinfo">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8 lg:gap-12">

@@ -40,7 +40,9 @@ export default function MyApp({ Component, pageProps }) {
         >
           <Navbar />
         </ClientOnly>
-        {page}
+        <main id="main" role="main">
+          {page}
+        </main>
         <ClientOnly>
           <Footer />
         </ClientOnly>

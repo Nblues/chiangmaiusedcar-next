@@ -20,7 +20,10 @@ export default function Navbar() {
   const isActive = href => router.pathname === href;
 
   return (
-    <nav className="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-accent pt-[env(safe-area-inset-top)]">
+    <nav
+      className="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-accent pt-[env(safe-area-inset-top)]"
+      aria-label="เมนูหลัก"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* LOGO */}
@@ -65,8 +68,11 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <button
+            type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-white hover:bg-primary focus:outline-none"
+            aria-label={mobileOpen ? 'ปิดเมนู' : 'เปิดเมนู'}
+            aria-expanded={mobileOpen}
           >
             {mobileOpen ? 'ปิด' : 'เมนู'}
           </button>

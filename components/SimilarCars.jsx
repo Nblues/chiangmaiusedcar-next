@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { carAlt } from '../utils/a11y';
 
 // คอมโพเนนต์แนะนำรถที่คล้ายกัน
 function SimilarCars({ currentCar, allCars = [] }) {
@@ -130,7 +131,7 @@ function SimilarCars({ currentCar, allCars = [] }) {
                       ? car.images[0]?.url
                       : '/herobanner/chiangmaiusedcar.webp'
                   }
-                  alt={car.title}
+                  alt={carAlt(car)}
                   fill
                   className="object-cover transition-transform duration-300 group-hover:scale-110"
                   loading="lazy"

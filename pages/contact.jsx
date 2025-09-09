@@ -164,6 +164,7 @@ export default function Contact() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-accent font-semibold hover:text-accent-600 transition-colors"
+                aria-label="โทร 094-064-9018"
               >
                 094-064-9018
               </a>
@@ -354,6 +355,7 @@ export default function Contact() {
                 <a
                   href="tel:0940649018"
                   className="flex items-center text-accent hover:text-accent-600 font-semibold group"
+                  aria-label="โทร 094-064-9018"
                 >
                   <svg
                     className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform"

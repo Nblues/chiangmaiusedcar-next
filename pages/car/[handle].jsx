@@ -7,7 +7,8 @@ import { getAllCars } from '../../lib/shopify.mjs';
 import { buildCarJsonLd, buildProductJsonLd, buildImageObjectJsonLd } from '../../lib/seo/jsonld';
 import { safeGet, safeFormatPrice } from '../../lib/safeFetch';
 import Link from 'next/link';
-import NextImage from 'next/image';
+import A11yImage from '../../components/A11yImage';
+import { carAlt } from '../../utils/a11y';
 
 function CarDetailPage({ car, allCars }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -332,9 +333,10 @@ function CarDetailPage({ car, allCars }) {
                 </div>
               )}
 
-              <NextImage
+              <A11yImage
                 src={safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp')}
-                alt={safeGet(currentImage, 'alt') || safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
+                alt={carAlt(car)}
+                fallbackAlt={safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
                 fill
                 className={`object-cover transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
                 priority
@@ -415,7 +417,14 @@ function CarDetailPage({ car, allCars }) {
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`relative flex-shrink-0 w-20 h-16 lg:w-24 lg:h-18 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:scale-105 ${
+                    onKeyDown={e => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setSelectedImageIndex(index);
+                      }
+                    }}
+                    tabIndex={0}
+                    className={`relative flex-shrink-0 w-20 h-16 lg:w-24 lg:h-18 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
                       selectedImageIndex === index
                         ? 'border-blue-500 ring-2 ring-blue-200 shadow-lg'
                         : 'border-gray-200 hover:border-gray-300'
@@ -423,9 +432,10 @@ function CarDetailPage({ car, allCars }) {
                     type="button"
                     aria-label={`ดูรูปที่ ${index + 1}`}
                   >
-                    <NextImage
+                    <A11yImage
                       src={safeGet(img, 'url', '/herobanner/chiangmaiusedcar.webp')}
-                      alt={`รูปที่ ${index + 1}`}
+                      alt={`${carAlt(car)} รูปที่ ${index + 1}`}
+                      fallbackAlt={`รูปที่ ${index + 1}`}
                       fill
                       className="object-cover"
                       sizes="96px"
@@ -472,9 +482,10 @@ function CarDetailPage({ car, allCars }) {
                       type="button"
                       aria-label={`ดูรูปที่ ${index + 1}`}
                     >
-                      <NextImage
+                      <A11yImage
                         src={safeGet(img, 'url', '/herobanner/chiangmaiusedcar.webp')}
-                        alt={`รูปที่ ${index + 1}`}
+                        alt={`${carAlt(car)} รูปที่ ${index + 1}`}
+                        fallbackAlt={`รูปที่ ${index + 1}`}
                         fill
                         className="object-cover"
                         sizes="64px"
@@ -503,7 +514,8 @@ function CarDetailPage({ car, allCars }) {
                           .writeText(`${shareText} ${shareUrl}`)
                           .then(() => alert('คัดลอกลิ้งค์แล้ว!'));
                   }}
-                  className="btn-secondary flex items-center gap-2 px-4 py-2 rounded-xl font-prompt"
+                  className="btn-secondary flex items-center gap-2 min-h-11 min-w-11 px-4 py-2 rounded-xl font-prompt"
+                  aria-label="แชร์ข้อมูลรถคันนี้"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -513,29 +525,31 @@ function CarDetailPage({ car, allCars }) {
                       d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
                     />
                   </svg>
-                  แชร์
+                  แชร์ข้อมูลรถ
                 </button>
                 <a
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-primary flex items-center gap-2 px-4 py-2 rounded-xl font-prompt"
+                  className="btn-primary flex items-center gap-2 min-h-11 min-w-11 px-4 py-2 rounded-xl font-prompt"
+                  aria-label="แชร์รถคันนี้บน Facebook"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
-                  Facebook
+                  แชร์ Facebook
                 </a>
                 <a
                   href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-green-500 hover:bg-green-600 text-white flex items-center gap-2 px-4 py-2 rounded-xl font-prompt"
+                  className="bg-green-500 hover:bg-green-600 text-white flex items-center gap-2 min-h-11 min-w-11 px-4 py-2 rounded-xl font-prompt"
+                  aria-label="แชร์รถคันนี้ทาง LINE"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771z" />
                   </svg>
-                  LINE
+                  แชร์ LINE
                 </a>
               </div>
             </div>
@@ -591,6 +605,7 @@ function CarDetailPage({ car, allCars }) {
                   <a
                     href="tel:0940649018"
                     className="btn-secondary text-center py-3 px-4 rounded-xl font-bold transition-colors font-prompt w-full"
+                    aria-label="โทร 094-064-9018"
                   >
                     โทรหาฉัน
                   </a>
@@ -599,6 +614,7 @@ function CarDetailPage({ car, allCars }) {
                     className="bg-green-500 hover:bg-green-600 text-white text-center py-3 px-4 rounded-xl font-bold transition-colors font-prompt w-full"
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label="แชท LINE ครูหนึ่งรถสวย"
                   >
                     ทดลองขับฟรี
                   </a>
@@ -739,6 +755,7 @@ function CarDetailPage({ car, allCars }) {
                 <a
                   href="tel:0940649018"
                   className="btn-primary block text-center py-4 px-6 rounded-xl font-bold text-lg transition-colors font-prompt w-full"
+                  aria-label="โทร 094-064-9018"
                 >
                   โทร 094-064-9018
                 </a>
@@ -747,6 +764,7 @@ function CarDetailPage({ car, allCars }) {
                   className="btn-secondary block text-center py-4 px-6 rounded-xl font-bold text-lg transition-colors font-prompt w-full"
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="แชท LINE ครูหนึ่งรถสวย"
                 >
                   Line: @krunuengusedcar
                 </a>

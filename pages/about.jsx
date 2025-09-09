@@ -408,12 +408,14 @@ export default function About() {
               target="_blank"
               rel="noopener noreferrer"
               className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-full font-semibold transition-colors duration-300 font-prompt"
+              aria-label="แชท LINE ครูหนึ่งรถสวย"
             >
               แชท LINE เลย
             </a>
             <a
               href="tel:094-0649018"
               className="bg-white text-accent hover:bg-gray-100 px-8 py-3 rounded-full font-semibold transition-colors duration-300 font-prompt"
+              aria-label="โทร 094-064-9018"
             >
               โทร 094-064-9018
             </a>

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
-import Image from 'next/image';
+import A11yImage from '../components/A11yImage';
 import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
 import { getAllCars } from '../lib/shopify.mjs';
 import { buildLocalBusinessJsonLd, sanitizePrice } from '../lib/seo/jsonld';
 import { safeGet, safeLocalStorage, safeFormatPrice } from '../lib/safeFetch';
+import { carAlt } from '../utils/a11y';
 
 export default function AllCars({ cars }) {
   const router = useRouter();
@@ -343,7 +344,7 @@ export default function AllCars({ cars }) {
 
       {/* Hero Banner */}
       <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
-        <Image
+        <A11yImage
           src="/herobanner/allusedcars.webp"
           alt="รถมือสองทั้งหมด - ครูหนึ่งรถสวย"
           fill
@@ -435,6 +436,7 @@ export default function AllCars({ cars }) {
             {/* Reset */}
             <div>
               <button
+                type="button"
                 onClick={() => {
                   setSearchTerm('');
                   setPriceRange('all');
@@ -513,13 +515,14 @@ export default function AllCars({ cars }) {
                       className="block focus:outline-none flex-1"
                     >
                       <figure className="thumb relative w-full h-32 md:h-48 overflow-hidden bg-orange-600/10">
-                        <Image
+                        <A11yImage
                           src={
                             Array.isArray(car.images) && car.images.length > 0
                               ? safeGet(car, 'images.0.url', '/cover.jpg')
                               : '/cover.jpg'
                           }
-                          alt={`${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} - ราคา ${safeFormatPrice(safeGet(car, 'price.amount')).display} บาท`}
+                          alt={carAlt(car)}
+                          fallbackAlt={`${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} - ราคา ${safeFormatPrice(safeGet(car, 'price.amount')).display} บาท`}
                           fill
                           className="object-cover transition-transform duration-300 group-hover:scale-105"
                           loading="lazy"
@@ -551,23 +554,25 @@ export default function AllCars({ cars }) {
                     <div className="flex gap-1 md:gap-2 p-3 pt-0 md:p-4 md:pt-0">
                       <button
                         type="button"
-                        className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
+                        className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full min-h-11 min-w-11 px-4 py-2 text-xs font-semibold shadow transition-colors"
                         onClick={() =>
                           window.open('https://lin.ee/8ugfzstD', '_blank', 'noopener,noreferrer')
                         }
+                        aria-label="แชท LINE ครูหนึ่งรถสวย"
                       >
                         LINE
                       </button>
                       <button
                         type="button"
-                        className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full px-2 py-1 text-xs font-semibold shadow transition-colors"
+                        className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full min-h-11 min-w-11 px-4 py-2 text-xs font-semibold shadow transition-colors"
                         onClick={() => window.open('tel:094-0649018', '_self')}
+                        aria-label="โทร 094-064-9018"
                       >
                         โทร
                       </button>
                       <button
                         type="button"
-                        className={`flex-1 flex items-center justify-center rounded-full px-2 py-1 text-xs font-semibold shadow border transition-all duration-200 ${
+                        className={`flex-1 flex items-center justify-center rounded-full min-h-11 min-w-11 px-4 py-2 text-xs font-semibold shadow border transition-all duration-200 ${
                           mounted && saved.includes(safeGet(car, 'id'))
                             ? 'bg-orange-600 text-white border-orange-600 shadow-lg'
                             : 'bg-white text-gray-600 border-gray-300 hover:border-orange-600 hover:text-orange-600'
@@ -602,8 +607,10 @@ export default function AllCars({ cars }) {
                   {/* Previous Button */}
                   {currentPage > 1 && (
                     <button
+                      type="button"
                       onClick={e => handlePageChange(currentPage - 1, e)}
                       className="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition-colors font-prompt text-gray-700 hover:text-orange-600"
+                      aria-label="ไปหน้าก่อนหน้า"
                     >
                       ← ก่อนหน้า
                     </button>
@@ -642,8 +649,10 @@ export default function AllCars({ cars }) {
                   {/* Next Button */}
                   {currentPage < totalPages && (
                     <button
+                      type="button"
                       onClick={e => handlePageChange(currentPage + 1, e)}
                       className="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition-colors font-prompt text-gray-700 hover:text-orange-600"
+                      aria-label="ไปหน้าถัดไป"
                     >
                       ถัดไป →
                     </button>

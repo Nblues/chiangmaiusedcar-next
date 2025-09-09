@@ -27,6 +27,7 @@ function Error({ statusCode }) {
 
           <div>
             <button
+              type="button"
               onClick={() => window.location.reload()}
               className="inline-block bg-accent hover:bg-accent-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors ml-4 font-prompt"
             >

@@ -239,9 +239,12 @@ export default function PaymentCalculator() {
 
                 <div className="space-y-6">
                   <div>
-                    <label className="form-label">ราคารถ (บาท) *</label>
+                    <label htmlFor="carPrice" className="form-label">
+                      ราคารถ (บาท) *
+                    </label>
                     <input
                       type="text"
+                      id="carPrice"
                       inputMode="numeric"
                       pattern="[0-9]*"
                       className="form-input"
@@ -263,9 +266,12 @@ export default function PaymentCalculator() {
                   </div>
 
                   <div>
-                    <label className="form-label">เงินดาวน์ (บาท)</label>
+                    <label htmlFor="downPayment" className="form-label">
+                      เงินดาวน์ (บาท)
+                    </label>
                     <input
                       type="text"
+                      id="downPayment"
                       inputMode="numeric"
                       pattern="[0-9]*"
                       className="form-input"
@@ -286,8 +292,11 @@ export default function PaymentCalculator() {
                   </div>
 
                   <div>
-                    <label className="form-label">อัตราดอกเบี้ย (% ต่อปี)</label>
+                    <label htmlFor="interestRate" className="form-label">
+                      อัตราดอกเบี้ย (% ต่อปี)
+                    </label>
                     <select
+                      id="interestRate"
                       className="form-select"
                       value={interestRate}
                       onChange={e => setInterestRate(e.target.value)}
@@ -306,9 +315,12 @@ export default function PaymentCalculator() {
                   </div>
 
                   <div>
-                    <label className="form-label">อายุผู้กู้ (ปี)</label>
+                    <label htmlFor="customerAge" className="form-label">
+                      อายุผู้กู้ (ปี)
+                    </label>
                     <input
                       type="text"
+                      id="customerAge"
                       className="form-input"
                       value={customerAge}
                       onChange={e => {
@@ -327,8 +339,11 @@ export default function PaymentCalculator() {
                   </div>
 
                   <div>
-                    <label className="form-label">ระยะเวลาผ่อน (เดือน)</label>
+                    <label htmlFor="loanTerm" className="form-label">
+                      ระยะเวลาผ่อน (เดือน)
+                    </label>
                     <select
+                      id="loanTerm"
                       className="form-select"
                       value={loanTerm}
                       onChange={e => setLoanTerm(e.target.value)}
@@ -344,6 +359,7 @@ export default function PaymentCalculator() {
                   </div>
 
                   <button
+                    type="button"
                     onClick={() => calculatePayment()}
                     className="btn-primary w-full"
                     disabled={!carPrice}
@@ -354,6 +370,7 @@ export default function PaymentCalculator() {
                   {/* ปุ่มกลับไปหน้ารถ (ถ้ามาจากหน้ารายละเอียดรถ) */}
                   {router.query.from && (
                     <button
+                      type="button"
                       onClick={() => router.back()}
                       className="w-full mt-4 px-4 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl transition-colors font-prompt"
                     >
@@ -410,7 +427,7 @@ export default function PaymentCalculator() {
                           }`}
                         >
                           <div className="flex justify-between items-center mb-2">
-                            <h5
+                            <h4
                               className={`font-bold ${
                                 index === 1 ? 'text-orange-600' : 'text-primary'
                               }`}
@@ -421,7 +438,7 @@ export default function PaymentCalculator() {
                                   แนะนำ
                                 </span>
                               )}
-                            </h5>
+                            </h4>
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
@@ -511,12 +528,14 @@ export default function PaymentCalculator() {
               target="_blank"
               rel="noopener noreferrer"
               className="bg-primary hover:bg-primary-600 text-white px-8 py-3 rounded-full font-semibold transition-colors duration-300 font-prompt"
+              aria-label="แชท LINE ครูหนึ่งรถสวย"
             >
               สอบถามผ่าน LINE
             </a>
             <a
               href="tel:094-0649018"
               className="bg-white text-accent hover:bg-gray-100 px-8 py-3 rounded-full font-semibold transition-colors duration-300 font-prompt"
+              aria-label="โทร 094-064-9018"
             >
               โทร 094-064-9018
             </a>

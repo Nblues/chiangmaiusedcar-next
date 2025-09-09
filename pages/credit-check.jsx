@@ -81,6 +81,62 @@ export default function CreditCheck() {
         return;
       }
 
+      // Validate required form fields
+      const requiredFields = ['name', 'phone', 'gender', 'age', 'province', 'creditStatus'];
+      for (const field of requiredFields) {
+        if (!formRef.current[field] || !formRef.current[field].value.trim()) {
+          Swal.close();
+          Swal.fire({
+            icon: 'warning',
+            title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+            text: `กรุณากรอก${
+              field === 'name'
+                ? 'ชื่อ-นามสกุล'
+                : field === 'phone'
+                  ? 'เบอร์โทรศัพท์'
+                  : field === 'gender'
+                    ? 'เพศ'
+                    : field === 'age'
+                      ? 'อายุ'
+                      : field === 'province'
+                        ? 'จังหวัด'
+                        : field === 'creditStatus'
+                          ? 'สถานะเครดิต'
+                          : field
+            }`,
+            confirmButtonText: 'ตกลง',
+          });
+          setSending(false);
+          return;
+        }
+      }
+
+      // Validate career selection
+      if (!career) {
+        Swal.close();
+        Swal.fire({
+          icon: 'warning',
+          title: 'กรุณาเลือกอาชีพ',
+          text: 'กรุณาระบุอาชีพของท่าน',
+          confirmButtonText: 'ตกลง',
+        });
+        setSending(false);
+        return;
+      }
+
+      // Validate privacy consent
+      if (!formRef.current.privacyConsent.checked) {
+        Swal.close();
+        Swal.fire({
+          icon: 'warning',
+          title: 'กรุณายืนยันการยอมรับข้อกำหนด',
+          text: 'กรุณาอ่านและยอมรับนโยบายความเป็นส่วนตัว',
+          confirmButtonText: 'ตกลง',
+        });
+        setSending(false);
+        return;
+      }
+
       // Create form data object manually
       const formData = {
         name: formRef.current.name.value,
@@ -133,12 +189,14 @@ export default function CreditCheck() {
         formData.customDown = formRef.current.customDown?.value || '';
       }
 
-      console.log('Sending data:', formData);
+      // Debug: Log form data (remove in production)
+      // console.log('Sending data:', formData);
 
       // Send email using EmailJS with template params
       const result = await emailjs.send(serviceId, templateId, formData, publicKey);
 
-      console.log('EmailJS result:', result);
+      // Debug: Log result (remove in production)
+      // console.log('EmailJS result:', result);
 
       if (result.status === 200 || result.text === 'OK') {
         Swal.fire({
@@ -233,9 +291,12 @@ export default function CreditCheck() {
               {/* ข้อมูลทั่วไป */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="form-label">ชื่อ-นามสกุล *</label>
+                  <label htmlFor="name" className="form-label">
+                    ชื่อ-นามสกุล *
+                  </label>
                   <input
                     type="text"
+                    id="name"
                     name="name"
                     required
                     className="form-input"
@@ -247,9 +308,12 @@ export default function CreditCheck() {
                 </div>
 
                 <div>
-                  <label className="form-label">เบอร์โทรศัพท์ *</label>
+                  <label htmlFor="phone" className="form-label">
+                    เบอร์โทรศัพท์ *
+                  </label>
                   <input
                     type="tel"
+                    id="phone"
                     name="phone"
                     pattern="0[0-9]{9}"
                     placeholder="เช่น 0812345678"
@@ -261,8 +325,10 @@ export default function CreditCheck() {
                 </div>
 
                 <div>
-                  <label className="form-label">เพศ *</label>
-                  <select name="gender" required className="form-select">
+                  <label htmlFor="gender" className="form-label">
+                    เพศ *
+                  </label>
+                  <select id="gender" name="gender" required className="form-select">
                     <option value="">-- เลือกเพศ --</option>
                     <option value="ชาย">ชาย</option>
                     <option value="หญิง">หญิง</option>
@@ -271,9 +337,12 @@ export default function CreditCheck() {
                 </div>
 
                 <div>
-                  <label className="form-label">อายุ *</label>
+                  <label htmlFor="age" className="form-label">
+                    อายุ *
+                  </label>
                   <input
                     type="number"
+                    id="age"
                     name="age"
                     required
                     min="18"
@@ -287,8 +356,11 @@ export default function CreditCheck() {
 
               {/* อาชีพ */}
               <div>
-                <label className="form-label">อาชีพ *</label>
+                <label htmlFor="career" className="form-label">
+                  อาชีพ *
+                </label>
                 <select
+                  id="career"
                   name="career"
                   value={career}
                   onChange={handleCareerChange}
@@ -320,20 +392,38 @@ export default function CreditCheck() {
                   {career === 'government' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="form-label">หน่วยงานที่ทำงาน</label>
-                        <input type="text" name="govAgency" className="form-input" />
+                        <label htmlFor="govAgency" className="form-label">
+                          หน่วยงานที่ทำงาน
+                        </label>
+                        <input type="text" id="govAgency" name="govAgency" className="form-input" />
                       </div>
                       <div>
-                        <label className="form-label">ตำแหน่ง</label>
-                        <input type="text" name="govPosition" className="form-input" />
+                        <label htmlFor="govPosition" className="form-label">
+                          ตำแหน่ง
+                        </label>
+                        <input
+                          type="text"
+                          id="govPosition"
+                          name="govPosition"
+                          className="form-input"
+                        />
                       </div>
                       <div>
-                        <label className="form-label">อายุราชการ (ปี)</label>
-                        <input type="number" name="govYears" className="form-input" />
+                        <label htmlFor="govYears" className="form-label">
+                          อายุราชการ (ปี)
+                        </label>
+                        <input type="number" id="govYears" name="govYears" className="form-input" />
                       </div>
                       <div>
-                        <label className="form-label">รายได้ต่อเดือน (บาท)</label>
-                        <input type="number" name="govIncome" className="form-input" />
+                        <label htmlFor="govIncome" className="form-label">
+                          รายได้ต่อเดือน (บาท)
+                        </label>
+                        <input
+                          type="number"
+                          id="govIncome"
+                          name="govIncome"
+                          className="form-input"
+                        />
                       </div>
                     </div>
                   )}
@@ -341,24 +431,58 @@ export default function CreditCheck() {
                   {career === 'company' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="form-label">บริษัทที่ทำงาน</label>
-                        <input type="text" name="companyName" className="form-input" />
+                        <label htmlFor="companyName" className="form-label">
+                          บริษัทที่ทำงาน
+                        </label>
+                        <input
+                          type="text"
+                          id="companyName"
+                          name="companyName"
+                          className="form-input"
+                        />
                       </div>
                       <div>
-                        <label className="form-label">ตำแหน่ง</label>
-                        <input type="text" name="companyPosition" className="form-input" />
+                        <label htmlFor="companyPosition" className="form-label">
+                          ตำแหน่ง
+                        </label>
+                        <input
+                          type="text"
+                          id="companyPosition"
+                          name="companyPosition"
+                          className="form-input"
+                        />
                       </div>
                       <div>
-                        <label className="form-label">อายุงาน (ปี)</label>
-                        <input type="number" name="companyYears" className="form-input" />
+                        <label htmlFor="companyYears" className="form-label">
+                          อายุงาน (ปี)
+                        </label>
+                        <input
+                          type="number"
+                          id="companyYears"
+                          name="companyYears"
+                          className="form-input"
+                        />
                       </div>
                       <div>
-                        <label className="form-label">รายได้ต่อเดือน (บาท)</label>
-                        <input type="number" name="companyIncome" className="form-input" />
+                        <label htmlFor="companyIncome" className="form-label">
+                          รายได้ต่อเดือน (บาท)
+                        </label>
+                        <input
+                          type="number"
+                          id="companyIncome"
+                          name="companyIncome"
+                          className="form-input"
+                        />
                       </div>
                       <div className="md:col-span-2">
-                        <label className="form-label">ประเภทเอกสารรายได้</label>
-                        <select name="companySalaryProof" className="form-select">
+                        <label htmlFor="companySalaryProof" className="form-label">
+                          ประเภทเอกสารรายได้
+                        </label>
+                        <select
+                          id="companySalaryProof"
+                          name="companySalaryProof"
+                          className="form-select"
+                        >
                           <option value="">-- เลือกประเภท --</option>
                           <option value="มีสลิปเงินเดือน">มีสลิปเงินเดือน</option>
                           <option value="หนังสือรับรองเงินเดือน">หนังสือรับรองเงินเดือน</option>
@@ -371,16 +495,37 @@ export default function CreditCheck() {
                   {career === 'freelance' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="form-label">สาขางานที่ทำ</label>
-                        <input type="text" name="freelanceField" className="form-input" />
+                        <label htmlFor="freelanceField" className="form-label">
+                          สาขางานที่ทำ
+                        </label>
+                        <input
+                          type="text"
+                          id="freelanceField"
+                          name="freelanceField"
+                          className="form-input"
+                        />
                       </div>
                       <div>
-                        <label className="form-label">อายุงาน (ปี)</label>
-                        <input type="number" name="freelanceYears" className="form-input" />
+                        <label htmlFor="freelanceYears" className="form-label">
+                          อายุงาน (ปี)
+                        </label>
+                        <input
+                          type="number"
+                          id="freelanceYears"
+                          name="freelanceYears"
+                          className="form-input"
+                        />
                       </div>
                       <div className="md:col-span-2">
-                        <label className="form-label">รายได้ต่อเดือน (บาท)</label>
-                        <input type="number" name="freelanceIncome" className="form-input" />
+                        <label htmlFor="freelanceIncome" className="form-label">
+                          รายได้ต่อเดือน (บาท)
+                        </label>
+                        <input
+                          type="number"
+                          id="freelanceIncome"
+                          name="freelanceIncome"
+                          className="form-input"
+                        />
                       </div>
                     </div>
                   )}
@@ -388,20 +533,43 @@ export default function CreditCheck() {
                   {career === 'business' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="form-label">ชื่อกิจการ</label>
-                        <input type="text" name="businessName" className="form-input" />
+                        <label htmlFor="businessName" className="form-label">
+                          ชื่อกิจการ
+                        </label>
+                        <input
+                          type="text"
+                          id="businessName"
+                          name="businessName"
+                          className="form-input"
+                        />
                       </div>
                       <div>
-                        <label className="form-label">อายุกิจการ (ปี)</label>
-                        <input type="number" name="businessYears" className="form-input" />
+                        <label htmlFor="businessYears" className="form-label">
+                          อายุกิจการ (ปี)
+                        </label>
+                        <input
+                          type="number"
+                          id="businessYears"
+                          name="businessYears"
+                          className="form-input"
+                        />
                       </div>
                       <div>
-                        <label className="form-label">รายได้ต่อเดือน (บาท)</label>
-                        <input type="number" name="businessIncome" className="form-input" />
+                        <label htmlFor="businessIncome" className="form-label">
+                          รายได้ต่อเดือน (บาท)
+                        </label>
+                        <input
+                          type="number"
+                          id="businessIncome"
+                          name="businessIncome"
+                          className="form-input"
+                        />
                       </div>
                       <div>
-                        <label className="form-label">ทะเบียนพาณิชย์</label>
-                        <select name="businessLicense" className="form-select">
+                        <label htmlFor="businessLicense" className="form-label">
+                          ทะเบียนพาณิชย์
+                        </label>
+                        <select id="businessLicense" name="businessLicense" className="form-select">
                           <option value="">-- มีทะเบียนพาณิชย์ไหม --</option>
                           <option value="มี">มี</option>
                           <option value="ไม่มี">ไม่มี</option>
@@ -413,20 +581,33 @@ export default function CreditCheck() {
                   {career === 'farmer' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="form-label">ประเภทการเกษตร</label>
-                        <input type="text" name="farmType" className="form-input" />
+                        <label htmlFor="farmType" className="form-label">
+                          ประเภทการเกษตร
+                        </label>
+                        <input type="text" id="farmType" name="farmType" className="form-input" />
                       </div>
                       <div>
-                        <label className="form-label">จำนวนไร่</label>
-                        <input type="number" name="farmArea" className="form-input" />
+                        <label htmlFor="farmArea" className="form-label">
+                          จำนวนไร่
+                        </label>
+                        <input type="number" id="farmArea" name="farmArea" className="form-input" />
                       </div>
                       <div>
-                        <label className="form-label">รายได้ต่อปี (บาท)</label>
-                        <input type="number" name="farmIncome" className="form-input" />
+                        <label htmlFor="farmIncome" className="form-label">
+                          รายได้ต่อปี (บาท)
+                        </label>
+                        <input
+                          type="number"
+                          id="farmIncome"
+                          name="farmIncome"
+                          className="form-input"
+                        />
                       </div>
                       <div>
-                        <label className="form-label">สมุดเกษตรกร</label>
-                        <select name="farmerBook" className="form-select">
+                        <label htmlFor="farmBook" className="form-label">
+                          สมุดเกษตรกร
+                        </label>
+                        <select id="farmBook" name="farmerBook" className="form-select">
                           <option value="">-- มีสมุดเกษตรกรไหม --</option>
                           <option value="มี">มี</option>
                           <option value="ไม่มี">ไม่มี</option>
@@ -438,12 +619,26 @@ export default function CreditCheck() {
                   {career === 'other' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="form-label">ระบุอาชีพ</label>
-                        <input type="text" name="otherCareer" className="form-input" />
+                        <label htmlFor="otherCareer" className="form-label">
+                          ระบุอาชีพ
+                        </label>
+                        <input
+                          type="text"
+                          id="otherCareer"
+                          name="otherCareer"
+                          className="form-input"
+                        />
                       </div>
                       <div>
-                        <label className="form-label">รายได้ต่อเดือน (บาท)</label>
-                        <input type="number" name="otherIncome" className="form-input" />
+                        <label htmlFor="otherIncome" className="form-label">
+                          รายได้ต่อเดือน (บาท)
+                        </label>
+                        <input
+                          type="number"
+                          id="otherIncome"
+                          name="otherIncome"
+                          className="form-input"
+                        />
                       </div>
                     </div>
                   )}
@@ -453,9 +648,12 @@ export default function CreditCheck() {
               {/* ข้อมูลเพิ่มเติม */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="form-label">จังหวัดที่อาศัย *</label>
+                  <label htmlFor="province" className="form-label">
+                    จังหวัดที่อาศัย *
+                  </label>
                   <input
                     type="text"
+                    id="province"
                     name="province"
                     required
                     className="form-input"
@@ -466,8 +664,10 @@ export default function CreditCheck() {
                 </div>
 
                 <div>
-                  <label className="form-label">สถานะเครดิต *</label>
-                  <select name="creditStatus" required className="form-select">
+                  <label htmlFor="creditStatus" className="form-label">
+                    สถานะเครดิต *
+                  </label>
+                  <select id="creditStatus" name="creditStatus" required className="form-select">
                     <option value="">-- เลือกสถานะเครดิต --</option>
                     <option value="เครดิตดีมาก">เครดิตดีมาก (AAA)</option>
                     <option value="เครดิตดี">เครดิตดี (AA-A)</option>
@@ -480,8 +680,11 @@ export default function CreditCheck() {
 
               {/* เงินดาวน์ */}
               <div>
-                <label className="form-label">เงินดาวน์ *</label>
+                <label htmlFor="downOption" className="form-label">
+                  เงินดาวน์ *
+                </label>
                 <select
+                  id="downOption"
                   name="downOption"
                   value={downOption}
                   onChange={handleDownOptionChange}
@@ -496,9 +699,12 @@ export default function CreditCheck() {
 
               {showDownInput && (
                 <div>
-                  <label className="form-label">จำนวนเงินวางดาวน์ (บาท)</label>
+                  <label htmlFor="customDown" className="form-label">
+                    จำนวนเงินวางดาวน์ (บาท)
+                  </label>
                   <input
                     type="number"
+                    id="customDown"
                     name="customDown"
                     className="form-input"
                     min="0"
@@ -640,6 +846,7 @@ export default function CreditCheck() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-primary inline-flex items-center justify-center gap-2 text-sm"
+                    aria-label="แชท LINE ครูหนึ่งรถสวย"
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.630.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.630 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12.017.572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
@@ -649,6 +856,7 @@ export default function CreditCheck() {
                   <a
                     href="tel:0940649018"
                     className="btn-secondary inline-flex items-center justify-center gap-2 text-sm"
+                    aria-label="โทร 094-064-9018"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
