@@ -820,7 +820,7 @@ export async function getServerSideProps() {
     console.error('getHomepageCars error:', e);
     cars = [];
   }
-  return { 
-    props: { cars }
+  return {
+    props: { cars },
   };
 }

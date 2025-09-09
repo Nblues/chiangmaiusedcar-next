@@ -873,20 +873,20 @@ export async function getServerSideProps({ params }) {
   try {
     const cars = await getAllCars();
     const car = cars.find(c => c.handle === params.handle) || null;
-    
+
     if (!car) {
       return {
-        notFound: true
+        notFound: true,
       };
     }
 
-    return { 
-      props: { car, allCars: cars }
+    return {
+      props: { car, allCars: cars },
     };
   } catch (error) {
     console.error('getServerSideProps error:', error);
     return {
-      notFound: true
+      notFound: true,
     };
   }
 }

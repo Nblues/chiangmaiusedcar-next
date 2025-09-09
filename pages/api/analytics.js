@@ -72,7 +72,7 @@ async function sendToAnalyticsService(metrics) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(metrics),
-        next: { revalidate: 600 }
+        next: { revalidate: 600 },
       });
     } catch (error) {
       // Safe fallback - don't block SSR
@@ -97,7 +97,7 @@ async function sendToAnalyticsService(metrics) {
             },
           ],
         }),
-        next: { revalidate: 600 }
+        next: { revalidate: 600 },
       });
     } catch (error) {
       // Safe fallback - don't block SSR
@@ -115,7 +115,7 @@ async function sendToAnalyticsService(metrics) {
           Authorization: `Bearer ${process.env.CUSTOM_ANALYTICS_TOKEN}`,
         },
         body: JSON.stringify(metrics),
-        next: { revalidate: 600 }
+        next: { revalidate: 600 },
       });
     } catch (error) {
       // Safe fallback - don't block SSR

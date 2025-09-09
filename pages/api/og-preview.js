@@ -1,5 +1,4 @@
 // pages/api/og-preview.js
-import { getAllCars } from '../../lib/shopify.mjs';
 
 export default async function handler(req, res) {
   const { url } = req.query;
@@ -34,35 +33,23 @@ export default async function handler(req, res) {
     if (url) {
       // Handle different page types
       if (url.includes('/car/')) {
-        // Car detail page
+        // Car detail page - use generic car preview without network calls
         const handle = url.split('/car/')[1]?.split('?')[0];
         if (handle) {
-          try {
-            const cars = await getAllCars();
-            const car = cars.find(c => c.handle === handle);
-
-            if (car) {
-              preview = {
-                title: `${car.title} ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท | ครูหนึ่งรถสวย`,
-                description: `${car.title} ${car.vendor || car.brand || ''} ${car.model || ''} ${car.year ? `ปี ${car.year}` : ''} ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท ${car.mileage ? `วิ่ง ${Number(car.mileage).toLocaleString()} กม.` : ''} รถบ้านแท้ รับประกัน 1 ปี ส่งฟรีทั่วไทย`,
-                image: car.images?.[0]?.url?.startsWith('/')
-                  ? `https://chiangmaiusedcar.com${car.images[0].url}`
-                  : car.images?.[0]?.url ||
-                    'https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp',
-                url: `https://chiangmaiusedcar.com/car/${handle}`,
-                type: 'product',
-                product: {
-                  price: car.price?.amount || '0',
-                  currency: 'THB',
-                  brand: car.vendor || car.brand || 'รถมือสอง',
-                  condition: 'used',
-                  availability: car.availableForSale ? 'in stock' : 'out of stock',
-                },
-              };
-            }
-          } catch (error) {
-            console.error('Error fetching car data:', error);
-          }
+          preview = {
+            title: `รถมือสอง ${handle} ฟรีดาวน์ ผ่อนถูก | ครูหนึ่งรถสวย`,
+            description: `รถมือสองคุณภาพดี ${handle} รถบ้านแท้ รับประกัน 1 ปี ฟรีดาวน์ 0% ผ่อนถูกสุด ส่งฟรีทั่วไทย โทร 094-064-9018`,
+            image: 'https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp',
+            url: `https://chiangmaiusedcar.com/car/${handle}`,
+            type: 'product',
+            product: {
+              price: '0',
+              currency: 'THB',
+              brand: 'รถมือสอง',
+              condition: 'used',
+              availability: 'in stock',
+            },
+          };
         }
       } else if (url.includes('/all-cars')) {
         // All cars page

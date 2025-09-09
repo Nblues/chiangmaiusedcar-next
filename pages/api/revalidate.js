@@ -90,9 +90,14 @@ export default async function handler(req, res) {
     // Dynamic paths revalidation (car detail pages)
     if (paths && paths.includes('/car/[handle]')) {
       try {
-        // ดึงรายการรถจาก Shopify แล้ว revalidate car pages
-        const carRevalidations = await revalidateCarPages(res, force);
-        revalidationResults.push(...carRevalidations);
+        // Skip car-specific revalidation to avoid blocking network calls in API
+        // Individual car pages will be revalidated on-demand when visited
+        revalidationResults.push({
+          path: '/car/[handle]',
+          status: 'deferred',
+          message: 'Car pages will be revalidated on-demand when visited',
+          timestamp: new Date().toISOString(),
+        });
       } catch (carError) {
         revalidationResults.push({
           path: '/car/[handle]',
@@ -160,47 +165,5 @@ async function getPageLastModified(path) {
   } catch (error) {
     console.warn('Could not get page last modified time:', error);
     return null;
-  }
-}
-
-/**
- * Revalidate car detail pages
- */
-async function revalidateCarPages(res, force = false) {
-  try {
-    // Import shopify functions dynamically
-    const { getAllCars } = await import('../../lib/shopify.mjs');
-    const cars = await getAllCars();
-
-    const carRevalidations = [];
-    const maxCarsToRevalidate = force ? cars.length : Math.min(cars.length, 10); // จำกัดจำนวน
-
-    for (let i = 0; i < maxCarsToRevalidate; i++) {
-      const car = cars[i];
-      const carPath = `/car/${car.handle}`;
-
-      try {
-        await res.revalidate(carPath);
-        carRevalidations.push({
-          path: carPath,
-          handle: car.handle,
-          title: car.title,
-          status: 'revalidated',
-          timestamp: new Date().toISOString(),
-        });
-      } catch (carError) {
-        carRevalidations.push({
-          path: carPath,
-          handle: car.handle,
-          status: 'error',
-          error: carError.message,
-          timestamp: new Date().toISOString(),
-        });
-      }
-    }
-
-    return carRevalidations;
-  } catch (error) {
-    throw new Error(`Failed to revalidate car pages: ${error.message}`);
   }
 }
