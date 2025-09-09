@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Head from 'next/head';
 import { buildCarJsonLd, buildLocalBusinessJsonLd } from '../lib/seo/jsonld.js';
 
@@ -13,68 +13,125 @@ export default function SEO({
   carData = null,
   structuredData = null,
 }) {
-  const site = process.env.SITE_URL || 'https://www.chiangmaiusedcar.com';
-  const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่';
-  const defaultDescription =
-    process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
-    'รถมือสองเชียงใหม่ ครูหนึ่งรถสวย ศูนย์รวมรถบ้านคุณภาพดี ฟรีดาวน์ ผ่อนถูกที่สุด รับประกัน 1 ปี บริการสินเชื่อครบวงจร ส่งฟรีทั่วไทย โทร 094-064-9018';
-  const defaultKeywords =
-    process.env.NEXT_PUBLIC_SITE_KEYWORDS ||
-    'รถมือสอง, รถมือสองเชียงใหม่, ครูหนึ่งรถสวย, รถบ้าน, ฟรีดาวน์, ผ่อนรถ, สินเชื่อรถยนต์, รถยนต์มือสอง, รถราคาดี, รับประกันรถ';
-  const siteAuthor = author || process.env.NEXT_PUBLIC_SITE_AUTHOR || 'ครูหนึ่งรถสวย';
+  // Memoize static values to prevent unnecessary re-renders
+  const staticValues = useMemo(() => {
+    const site = process.env.SITE_URL || 'https://www.chiangmaiusedcar.com';
+    const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่';
+    const defaultDescription =
+      process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
+      'รถมือสองเชียงใหม่ ครูหนึ่งรถสวย ศูนย์รวมรถบ้านคุณภาพดี ฟรีดาวน์ ผ่อนถูกที่สุด รับประกัน 1 ปี บริการสินเชื่อครบวงจร ส่งฟรีทั่วไทย โทร 094-064-9018';
+    const defaultKeywords =
+      process.env.NEXT_PUBLIC_SITE_KEYWORDS ||
+      'รถมือสอง, รถมือสองเชียงใหม่, ครูหนึ่งรถสวย, รถบ้าน, ฟรีดาวน์, ผ่อนรถ, สินเชื่อรถยนต์, รถยนต์มือสอง, รถราคาดี, รับประกันรถ';
+    const siteAuthor = author || process.env.NEXT_PUBLIC_SITE_AUTHOR || 'ครูหนึ่งรถสวย';
+    const buildTime = process.env.CUSTOM_BUILD_TIME || new Date().toISOString();
 
-  const fullUrl = url ? `${site}${url}` : site;
-  const metaTitle = title ? `${title} | ${siteName}` : siteName;
-  const metaDesc = description || defaultDescription;
-  const metaKeywords = keywords || defaultKeywords;
+    return {
+      site,
+      siteName,
+      defaultDescription,
+      defaultKeywords,
+      siteAuthor,
+      buildTime,
+    };
+  }, [author]);
 
-  // Cache busting for 2025 standards
-  const timestamp = Date.now();
-  const buildTime = process.env.CUSTOM_BUILD_TIME || new Date().toISOString();
+  // Memoize computed values
+  const computedValues = useMemo(() => {
+    const { site, siteName, defaultDescription, defaultKeywords, buildTime } = staticValues;
 
-  // Default image for social sharing - ใช้ hero banner เป็นค่าเริ่มต้น
-  const defaultImage = `${site}/herobanner/chiangmaiusedcar.webp`;
-  const metaImage = image || defaultImage;
+    const fullUrl = url ? `${site}${url}` : site;
+    const metaTitle = title ? `${title} | ${siteName}` : siteName;
+    const metaDesc = description || defaultDescription;
+    const metaKeywords = keywords || defaultKeywords;
 
-  // Enhanced Open Graph for better link sharing - social media optimized
-  const enhancedTitle = metaTitle.length > 60 ? metaTitle.substring(0, 57) + '...' : metaTitle;
-  const enhancedDesc = metaDesc.length > 155 ? metaDesc.substring(0, 152) + '...' : metaDesc;
+    // Use stable timestamp for cache busting (only change on build)
+    const stableTimestamp = process.env.CUSTOM_BUILD_TIME || buildTime;
+    const timestamp = new Date(stableTimestamp).getTime();
 
-  // Ensure absolute URL for image with fallback
-  let absoluteImage = metaImage;
-  if (!absoluteImage || absoluteImage === site) {
-    absoluteImage = defaultImage;
-  }
-  if (absoluteImage && !absoluteImage.startsWith('http')) {
-    absoluteImage = absoluteImage.startsWith('/')
-      ? `${site}${absoluteImage}`
-      : `${site}/${absoluteImage}`;
-  }
+    // Default image for social sharing
+    const defaultImage = `${site}/herobanner/chiangmaiusedcar.webp`;
+    const metaImage = image || defaultImage;
 
-  // Add cache busting for Facebook if not already present
-  if (absoluteImage && !absoluteImage.includes('?v=') && !absoluteImage.includes('&v=')) {
-    const separator = absoluteImage.includes('?') ? '&' : '?';
-    absoluteImage = `${absoluteImage}${separator}v=${timestamp}`;
-  }
+    // Enhanced Open Graph for better link sharing
+    const enhancedTitle = metaTitle.length > 60 ? metaTitle.substring(0, 57) + '...' : metaTitle;
+    const enhancedDesc = metaDesc.length > 155 ? metaDesc.substring(0, 152) + '...' : metaDesc;
 
-  // Generate multiple image sizes for better sharing compatibility
-  const ogImages = [
-    { url: absoluteImage, width: 1200, height: 630, type: 'image/webp' },
-    { url: absoluteImage, width: 800, height: 600, type: 'image/webp' },
-    { url: absoluteImage, width: 600, height: 315, type: 'image/webp' },
-  ];
-
-  // Debug mode - log meta data for development
-  if (process.env.NODE_ENV === 'development') {
-    console.log('🔍 SEO Component Debug:', {
-      title: enhancedTitle,
-      description: enhancedDesc,
-      image: absoluteImage,
-      url: fullUrl,
+    return {
+      fullUrl,
+      metaTitle,
+      metaDesc,
+      metaKeywords,
       timestamp,
-      type,
-    });
-  }
+      metaImage,
+      enhancedTitle,
+      enhancedDesc,
+      defaultImage,
+    };
+  }, [title, description, url, keywords, staticValues, image]);
+
+  // Memoize absolute image URL
+  const absoluteImage = useMemo(() => {
+    const { site } = staticValues;
+    const { metaImage, defaultImage, timestamp } = computedValues;
+
+    let imgUrl = metaImage;
+    if (!imgUrl || imgUrl === site) {
+      imgUrl = defaultImage;
+    }
+    if (imgUrl && !imgUrl.startsWith('http')) {
+      imgUrl = imgUrl.startsWith('/') ? `${site}${imgUrl}` : `${site}/${imgUrl}`;
+    }
+
+    // Add cache busting if not already present (use stable timestamp)
+    if (imgUrl && !imgUrl.includes('?v=') && !imgUrl.includes('&v=')) {
+      const separator = imgUrl.includes('?') ? '&' : '?';
+      imgUrl = `${imgUrl}${separator}v=${timestamp}`;
+    }
+
+    return imgUrl;
+  }, [staticValues, computedValues]);
+
+  // Memoize OG images array
+  const ogImages = useMemo(
+    () => [
+      { url: absoluteImage, width: 1200, height: 630, type: 'image/webp' },
+      { url: absoluteImage, width: 800, height: 600, type: 'image/webp' },
+      { url: absoluteImage, width: 600, height: 315, type: 'image/webp' },
+    ],
+    [absoluteImage]
+  );
+
+  // Simplified debug - only log once per unique component props (disabled in production)
+  const debugKey = useMemo(
+    () => `${title}-${description}-${url}-${type}`,
+    [title, description, url, type]
+  );
+
+  // Memoize debug logging to prevent spam
+  useMemo(() => {
+    if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
+      // Only log unique combinations and throttle logging
+      const lastLogged = window.seoDebugCache || {};
+      const now = Date.now();
+
+      if (!lastLogged[debugKey] || now - lastLogged[debugKey] > 5000) {
+        lastLogged[debugKey] = now;
+        window.seoDebugCache = lastLogged;
+
+        // eslint-disable-next-line no-console
+        console.log(`🔍 SEO [${debugKey.substring(0, 20)}...]:`, {
+          title: computedValues.enhancedTitle,
+          url: computedValues.fullUrl,
+          type,
+        });
+      }
+    }
+  }, [debugKey, computedValues, type]);
+
+  const { site, buildTime, siteAuthor } = staticValues;
+  const { fullUrl, metaTitle, metaDesc, metaKeywords, enhancedTitle, enhancedDesc, timestamp } =
+    computedValues;
 
   return (
     <Head>
@@ -86,8 +143,8 @@ export default function SEO({
       <meta name="cache-timestamp" content={timestamp.toString()} />
 
       {/* Force Facebook to refresh cache */}
-      <meta property="og:updated_time" content={new Date().toISOString()} />
-      <meta property="article:modified_time" content={new Date().toISOString()} />
+      <meta property="og:updated_time" content={buildTime} />
+      <meta property="article:modified_time" content={buildTime} />
       <meta name="robots" content="index, follow, max-image-preview:large" />
 
       {/* Enhanced Language and Locale Settings */}
@@ -280,7 +337,7 @@ export default function SEO({
                   url: fullUrl,
                   name: carData.title,
                   description: carData.description || metaDesc,
-                  images: carData.images?.map(img => img.url) || [metaImage],
+                  images: carData.images?.map(img => img.url) || [absoluteImage],
                   brand: carData.brand,
                   sku: carData.sku || carData.id,
                   price: carData.price?.amount,
@@ -384,7 +441,7 @@ export default function SEO({
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'ImageObject',
-            url: metaImage,
+            url: absoluteImage,
             width: '1200',
             height: '630',
             caption: metaTitle,

@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
 import { getAllCars } from '../lib/shopify.mjs';
 import { buildLocalBusinessJsonLd, sanitizePrice } from '../lib/seo/jsonld';
-import { safeGet, safeLocalStorage, safeFormatPrice } from '../lib/safeFetch';
+import { safeGet, safeFormatPrice } from '../lib/safeFetch';
 import { carAlt } from '../utils/a11y';
 
 export default function AllCars({ cars }) {
@@ -15,7 +15,6 @@ export default function AllCars({ cars }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState('all');
   const [brandFilter, setBrandFilter] = useState('all');
-  const [saved, setSaved] = useState([]);
   const [mounted, setMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -24,12 +23,6 @@ export default function AllCars({ cars }) {
 
   useEffect(() => {
     setMounted(true);
-
-    // ป้องกัน hydration mismatch โดยเช็ค window object
-    if (typeof window !== 'undefined') {
-      const saved = safeLocalStorage('savedCars', []);
-      setSaved(Array.isArray(saved) ? saved : []);
-    }
 
     // อ่านพารามิเตอร์จาก URL
     const { query } = router;
@@ -90,19 +83,6 @@ export default function AllCars({ cars }) {
     setFilteredCars(filtered);
     setCurrentPage(1); // รีเซ็ตหน้าเมื่อมีการกรอง
   }, [searchTerm, priceRange, brandFilter, cars]);
-
-  function toggleSave(carId) {
-    if (!mounted || typeof window === 'undefined') return; // ป้องกันการเรียกใช้ก่อน mount และ SSR
-    try {
-      const currentSaved = safeLocalStorage('savedCars', []);
-      let s = Array.isArray(currentSaved) ? currentSaved : [];
-      if (carId == null) return;
-      if (s.includes(carId)) s = s.filter(id => id !== carId);
-      else s.push(carId);
-      setSaved(s);
-      localStorage.setItem('savedCars', JSON.stringify(s));
-    } catch {}
-  }
 
   const brands = ['all', 'toyota', 'honda', 'nissan', 'mazda', 'mitsubishi', 'isuzu', 'ford'];
   const priceRanges = [
@@ -457,29 +437,27 @@ export default function AllCars({ cars }) {
       </section>
 
       {/* Cars Grid */}
-      <section className="py-12 bg-white border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
+      <section className="py-8 md:py-12 bg-white border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-3 md:px-6">
           {!mounted ? (
             // Loading state ระหว่างรอ hydration - Skeleton Cards
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
               {Array.from({ length: 8 }).map((_, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl md:rounded-3xl shadow-lg overflow-hidden border-2 border-gray-200 animate-pulse"
+                  className="bg-white rounded-xl md:rounded-3xl shadow-lg overflow-hidden border-2 border-gray-200 animate-pulse"
                 >
-                  <div className="w-full h-32 md:h-48 bg-gray-200"></div>
-                  <div className="p-3 md:p-4">
-                    <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                    <div className="h-6 bg-gray-200 rounded w-1/2 mb-2"></div>
-                    <div className="space-y-1 mb-2">
-                      <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                  <div className="w-full h-28 md:h-48 bg-gray-200"></div>
+                  <div className="p-2 md:p-4">
+                    <div className="h-3 md:h-4 bg-gray-200 rounded mb-1 md:mb-2"></div>
+                    <div className="h-3 md:h-4 bg-gray-200 rounded w-3/4 mb-1 md:mb-2"></div>
+                    <div className="h-4 md:h-6 bg-gray-200 rounded w-1/2 mb-1 md:mb-2"></div>
+                    <div className="space-y-0.5 md:space-y-1 mb-1 md:mb-2">
+                      <div className="h-2 md:h-3 bg-gray-200 rounded w-2/3"></div>
+                      <div className="h-2 md:h-3 bg-gray-200 rounded w-1/2"></div>
                     </div>
-                    <div className="flex gap-1 md:gap-2">
-                      <div className="flex-1 h-6 bg-gray-200 rounded-full"></div>
-                      <div className="flex-1 h-6 bg-gray-200 rounded-full"></div>
-                      <div className="flex-1 h-6 bg-gray-200 rounded-full"></div>
+                    <div className="flex">
+                      <div className="w-full h-8 md:h-10 bg-gray-200 rounded-full"></div>
                     </div>
                   </div>
                 </div>
@@ -498,11 +476,11 @@ export default function AllCars({ cars }) {
           ) : (
             <>
               {/* Cards Grid - Responsive Layout */}
-              <div className="car-grid grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+              <div className="car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
                 {currentCars.map(car => (
                   <article
                     key={car.id}
-                    className="car-card group bg-white rounded-2xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
+                    className="car-card group bg-white rounded-xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
                   >
                     {/* Main Car Link - คลิกได้ทั้งส่วนรูปและข้อมูล */}
                     <Link
@@ -514,7 +492,7 @@ export default function AllCars({ cars }) {
                       }
                       className="block focus:outline-none flex-1"
                     >
-                      <figure className="thumb relative w-full h-32 md:h-48 overflow-hidden bg-orange-600/10">
+                      <figure className="thumb relative w-full h-28 md:h-48 overflow-hidden bg-orange-600/10">
                         <A11yImage
                           src={
                             Array.isArray(car.images) && car.images.length > 0
@@ -530,15 +508,15 @@ export default function AllCars({ cars }) {
                         />
                       </figure>
                       <div className="p-2 md:p-3 flex flex-col">
-                        <h3 className="card-title font-extrabold text-sm md:text-lg text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt">
+                        <h3 className="card-title font-extrabold text-sm md:text-lg text-gray-900 mb-1 md:mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt">
                           {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
                         </h3>
-                        <div className="flex items-center justify-between mb-2 md:mb-3">
-                          <p className="price text-lg md:text-xl font-bold text-orange-600 font-prompt">
+                        <div className="flex items-center justify-between mb-1 md:mb-3">
+                          <p className="price text-base md:text-xl font-bold text-orange-600 font-prompt">
                             ฿{safeFormatPrice(safeGet(car, 'price.amount')).display}
                           </p>
                         </div>
-                        <ul className="text-xs md:text-sm text-gray-800 mb-2 md:mb-3 space-y-1 font-prompt font-medium">
+                        <ul className="text-xs md:text-sm text-gray-800 mb-1 md:mb-3 space-y-0.5 md:space-y-1 font-prompt font-medium">
                           {safeGet(car, 'tags', []).includes('ฟรีดาวน์') && (
                             <li className="text-blue-600">✓ ฟรีดาวน์</li>
                           )}
@@ -550,52 +528,20 @@ export default function AllCars({ cars }) {
                       </div>
                     </Link>
 
-                    {/* Action Buttons - แยกออกจาก Link เพื่อป้องกัน nested anchor */}
-                    <div className="flex gap-1 md:gap-2 p-3 pt-0 md:p-4 md:pt-0">
-                      <button
-                        type="button"
-                        className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-full min-h-11 min-w-11 px-4 py-2 text-xs font-semibold shadow transition-colors"
-                        onClick={() =>
-                          window.open('https://lin.ee/8ugfzstD', '_blank', 'noopener,noreferrer')
+                    {/* Action Button - ปุ่มดูรายละเอียดเท่านั้น */}
+                    <div className="flex p-2 pt-0 md:p-4 md:pt-0">
+                      <Link
+                        href={
+                          typeof safeGet(car, 'handle') === 'string' &&
+                          safeGet(car, 'handle', '').length
+                            ? `/car/${encodeURIComponent(safeGet(car, 'handle'))}`
+                            : '/all-cars'
                         }
-                        aria-label="แชท LINE ครูหนึ่งรถสวย"
+                        className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-full min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200 font-prompt"
+                        aria-label={`ดูรายละเอียด ${safeGet(car, 'title', 'รถยนต์')}`}
                       >
-                        LINE
-                      </button>
-                      <button
-                        type="button"
-                        className="flex-1 flex items-center justify-center bg-orange-600 hover:bg-orange-700 text-white rounded-full min-h-11 min-w-11 px-4 py-2 text-xs font-semibold shadow transition-colors"
-                        onClick={() => window.open('tel:094-0649018', '_self')}
-                        aria-label="โทร 094-064-9018"
-                      >
-                        โทร
-                      </button>
-                      <button
-                        type="button"
-                        className={`flex-1 flex items-center justify-center rounded-full min-h-11 min-w-11 px-4 py-2 text-xs font-semibold shadow border transition-all duration-200 ${
-                          mounted && saved.includes(safeGet(car, 'id'))
-                            ? 'bg-orange-600 text-white border-orange-600 shadow-lg'
-                            : 'bg-white text-gray-600 border-gray-300 hover:border-orange-600 hover:text-orange-600'
-                        }`}
-                        onClick={e => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          toggleSave(safeGet(car, 'id'));
-                        }}
-                        aria-label={`${mounted && saved.includes(safeGet(car, 'id')) ? 'ยกเลิก' : ''}บันทึกรถ ${safeGet(car, 'title', 'รถยนต์')}`}
-                      >
-                        <svg
-                          className="w-3 md:w-4 h-3 md:h-4"
-                          fill={
-                            mounted && saved.includes(safeGet(car, 'id')) ? 'currentColor' : 'none'
-                          }
-                          stroke="currentColor"
-                          strokeWidth={mounted && saved.includes(safeGet(car, 'id')) ? 0 : 2}
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                        </svg>
-                      </button>
+                        ดูรายละเอียด
+                      </Link>
                     </div>
                   </article>
                 ))}

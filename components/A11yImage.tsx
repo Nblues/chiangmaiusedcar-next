@@ -1,7 +1,11 @@
 import Image, { ImageProps } from 'next/image';
 
-export default function A11yImage(props: ImageProps & { fallbackAlt?: string }) {
-  const alt =
-    props.alt && props.alt.trim().length > 0 ? props.alt : (props.fallbackAlt ?? 'รูปภาพประกอบ');
-  return <Image {...props} alt={alt} />;
+interface A11yImageProps extends Omit<ImageProps, 'alt'> {
+  alt?: string;
+  fallbackAlt?: string;
+}
+
+export default function A11yImage({ fallbackAlt, alt, ...props }: A11yImageProps) {
+  const finalAlt = alt && alt.trim().length > 0 ? alt : (fallbackAlt ?? 'รูปภาพประกอบ');
+  return <Image {...props} alt={finalAlt} />;
 }

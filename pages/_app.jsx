@@ -10,6 +10,43 @@ const CookieConsent = lazy(() => import('../components/CookieConsent'));
 const PWAInstallPrompt = lazy(() => import('../components/PWAInstallPrompt'));
 
 export default function MyApp({ Component, pageProps }) {
+  // Global error handling for third-party scripts
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Handle uncaught errors from third-party scripts
+      const handleError = event => {
+        // Ignore errors from third-party scripts that don't affect our app
+        if (
+          event.error &&
+          (event.error.message?.includes('semalt') ||
+            event.error.message?.includes('Object.keys') ||
+            event.filename?.includes('content.js'))
+        ) {
+          event.preventDefault();
+          console.warn('Third-party script error suppressed:', event.error.message);
+          return true;
+        }
+      };
+
+      const handleUnhandledRejection = event => {
+        // Handle unhandled promise rejections
+        if (event.reason?.message?.includes('semalt')) {
+          event.preventDefault();
+          console.warn('Third-party promise rejection suppressed:', event.reason.message);
+          return true;
+        }
+      };
+
+      window.addEventListener('error', handleError);
+      window.addEventListener('unhandledrejection', handleUnhandledRejection);
+
+      return () => {
+        window.removeEventListener('error', handleError);
+        window.removeEventListener('unhandledrejection', handleUnhandledRejection);
+      };
+    }
+  }, []);
+
   // Service worker registration with fixed variables
   useEffect(() => {
     if (typeof window !== 'undefined') {

@@ -3,7 +3,7 @@
  * Receives and processes performance metrics from the client
  */
 
-import { fetchWithTimeout } from '../../src/lib/fetchWithTimeout.ts';
+import { safeFetch } from '../../lib/safeFetch';
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -60,7 +60,7 @@ export default async function handler(req, res) {
 }
 
 /**
- * Send metrics to external analytics service using fetchWithTimeout
+ * Send metrics to external analytics service using safeFetch
  */
 async function sendToAnalyticsService(metrics) {
   // Example integrations with timeout and error handling:
@@ -68,11 +68,10 @@ async function sendToAnalyticsService(metrics) {
   // 1. Vercel Analytics (if using Vercel)
   if (process.env.VERCEL_ANALYTICS_ID) {
     try {
-      await fetchWithTimeout('https://vitals.vercel-analytics.com/v1/vitals', 5000, {
+      await safeFetch('https://vitals.vercel-analytics.com/v1/vitals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(metrics),
-        next: { revalidate: 600 },
       });
     } catch (error) {
       // Safe fallback - don't block SSR
@@ -85,7 +84,7 @@ async function sendToAnalyticsService(metrics) {
     const gaEndpoint = `https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`;
 
     try {
-      await fetchWithTimeout(gaEndpoint, 5000, {
+      await safeFetch(gaEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -97,7 +96,6 @@ async function sendToAnalyticsService(metrics) {
             },
           ],
         }),
-        next: { revalidate: 600 },
       });
     } catch (error) {
       // Safe fallback - don't block SSR
@@ -108,14 +106,13 @@ async function sendToAnalyticsService(metrics) {
   // 3. Custom analytics service
   if (process.env.CUSTOM_ANALYTICS_ENDPOINT && process.env.CUSTOM_ANALYTICS_TOKEN) {
     try {
-      await fetchWithTimeout(process.env.CUSTOM_ANALYTICS_ENDPOINT, 5000, {
+      await safeFetch(process.env.CUSTOM_ANALYTICS_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${process.env.CUSTOM_ANALYTICS_TOKEN}`,
         },
         body: JSON.stringify(metrics),
-        next: { revalidate: 600 },
       });
     } catch (error) {
       // Safe fallback - don't block SSR
