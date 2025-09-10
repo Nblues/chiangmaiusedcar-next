@@ -144,7 +144,7 @@ const nextConfig = {
           "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
           "font-src 'self' fonts.gstatic.com",
           "img-src 'self' data: blob: *.shopify.com *.myshopify.com cdn.shopify.com files.myshopify.com images.unsplash.com",
-          "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com api.emailjs.com *.emailjs.com fonts.googleapis.com",
+          "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com",
           "frame-src 'self' *.facebook.com *.line.me",
           "object-src 'none'",
           "base-uri 'self'",

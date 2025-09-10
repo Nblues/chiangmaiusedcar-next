@@ -1,7 +1,7 @@
 // Service Worker สำหรับการจัดการแคชตามมาตรฐานสากล 2025
 // Cache Strategy: Stale-While-Revalidate + Network First สำหรับเนื้อหาล่าสุด
 
-const CACHE_VERSION = 'v2025-1.0.0';
+const CACHE_VERSION = 'v2025-1.0.1';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
@@ -89,10 +89,21 @@ self.addEventListener('fetch', e => {
   // Skip non-GET requests
   if (e.request.method !== 'GET') return;
 
-  // Allow Google Fonts and EmailJS requests to bypass CSP
+  // Allow Google Fonts and EmailJS requests to bypass CSP completely
   const url = new URL(e.request.url);
-  if (ALLOWED_DOMAINS.some(domain => url.hostname.includes(domain))) {
-    e.respondWith(fetch(e.request));
+  const hostname = url.hostname;
+  
+  // Check if this is a font or EmailJS request that needs CSP bypass
+  if (ALLOWED_DOMAINS.some(domain => hostname.includes(domain) || hostname === domain)) {
+    e.respondWith(
+      fetch(e.request, {
+        mode: 'cors',
+        credentials: 'omit'
+      }).catch(() => {
+        // If fetch fails, return a basic response
+        return new Response('', { status: 408 });
+      })
+    );
     return;
   }
 

@@ -7,6 +7,7 @@
 ## 📋 สถานะการแก้ไข
 
 ### ✅ EmailJS Integration - สำเร็จ 100%
+
 - **Environment Variables**: สร้างใหม่และทำงานได้
   - `NEXT_PUBLIC_EMAILJS_SERVICE_ID: service_qlcksif`
   - `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID: template_zd6e3f6`
@@ -15,11 +16,13 @@
 - **Error Handling**: ครบถ้วนในหน้า credit-check.jsx
 
 ### ✅ Content Security Policy - แก้ไขสมบูรณ์
+
 - **next.config.js**: CSP directive รองรับ fonts.googleapis.com และ api.emailjs.com
 - **Service Worker**: อัปเดต sw.js ให้ bypass CSP สำหรับ Google Fonts
 - **Google Fonts**: โหลดได้โดยไม่มี CSP blocking errors
 
 ### ✅ Production Deployment
+
 - **URL**: https://chiangmaiusedcar-next-ayxy26hgg-chiangmaiusedcars-projects.vercel.app
 - **Status**: Live และใช้งานได้
 - **Service Worker**: เวอร์ชัน v2025-1.0.0 พร้อม CSP bypass
@@ -27,6 +30,7 @@
 ## 🔧 การเปลี่ยนแปลงหลัก
 
 ### 1. Environment Variables (Vercel Production)
+
 ```bash
 # ลบและสร้างใหม่เมื่อ 10s-5m ago
 NEXT_PUBLIC_EMAILJS_SERVICE_ID=service_qlcksif
@@ -35,14 +39,10 @@ NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=P3wnNJB_Y_PddrdBJ
 ```
 
 ### 2. Service Worker Updates (public/sw.js)
+
 ```javascript
 // เพิ่ม ALLOWED_DOMAINS
-const ALLOWED_DOMAINS = [
-  'fonts.googleapis.com',
-  'fonts.gstatic.com',
-  'api.emailjs.com',
-  'cdn.emailjs.com'
-];
+const ALLOWED_DOMAINS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'api.emailjs.com', 'cdn.emailjs.com'];
 
 // อัปเดต fetch event ให้ bypass CSP
 if (ALLOWED_DOMAINS.some(domain => url.hostname.includes(domain))) {
@@ -52,8 +52,9 @@ if (ALLOWED_DOMAINS.some(domain => url.hostname.includes(domain))) {
 ```
 
 ### 3. CSP Configuration (next.config.js)
+
 ```javascript
-"connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com api.emailjs.com *.emailjs.com fonts.googleapis.com"
+"connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com api.emailjs.com *.emailjs.com fonts.googleapis.com";
 ```
 
 ## 🧪 การทดสอบผ่าน
@@ -68,18 +69,16 @@ if (ALLOWED_DOMAINS.some(domain => url.hostname.includes(domain))) {
 
 1. **Environment Variables** (Vercel Dashboard)
    - สร้างใหม่ทั้ง 3 ตัวใน Production environment
-   
 2. **public/sw.js**
    - เพิ่ม ALLOWED_DOMAINS array
    - อัปเดต fetch event handler
-   
 3. **next.config.js** (แก้ไขก่อนหน้า)
    - CSP directives สำหรับ fonts และ EmailJS
 
 ## 🚀 สถานะระบบ
 
 - **EmailJS**: ✅ ทำงานเต็มรูปแบบ
-- **Google Fonts**: ✅ โหลดได้ไม่มีปัญหา  
+- **Google Fonts**: ✅ โหลดได้ไม่มีปัญหา
 - **Service Worker**: ✅ CSP bypass ทำงานได้
 - **Production**: ✅ Deployed และ stable
 - **Form Validation**: ✅ ครบถ้วนทุกฟิลด์
@@ -87,14 +86,16 @@ if (ALLOWED_DOMAINS.some(domain => url.hostname.includes(domain))) {
 ## 🔄 วิธีย้อนกลับ (หากจำเป็น)
 
 1. **Environment Variables**:
+
    ```bash
    vercel env rm NEXT_PUBLIC_EMAILJS_SERVICE_ID production
-   vercel env rm NEXT_PUBLIC_EMAILJS_TEMPLATE_ID production  
+   vercel env rm NEXT_PUBLIC_EMAILJS_TEMPLATE_ID production
    vercel env rm NEXT_PUBLIC_EMAILJS_PUBLIC_KEY production
    # แล้วสร้างใหม่ด้วยค่าเดิม
    ```
 
 2. **Service Worker**:
+
    ```bash
    git checkout HEAD~1 -- public/sw.js
    ```
@@ -112,4 +113,5 @@ if (ALLOWED_DOMAINS.some(domain => url.hostname.includes(domain))) {
 - ระบบพร้อมใช้งาน production ได้เต็มรูปแบบ
 
 ---
+
 **จุดแบ็คอัพนี้**: EmailJS + Service Worker CSP แก้ไขเสร็จสมบูรณ์ 🎯
