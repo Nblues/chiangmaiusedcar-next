@@ -14,7 +14,7 @@
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "resolve:map": "node dev/scripts/resolve-map-coords.js",
+    "resolve:map": "node dev/scripts/fetch-coords.js",
     "postinstall": "npm run resolve:map || true",
     "postbuild": "next-sitemap; node scripts/generate-image-sitemap.js || true; node scripts/generate-pagination-sitemap.js || true",
     "generate-sitemap": "node scripts/generate-image-sitemap.js && node scripts/generate-pagination-sitemap.js",
