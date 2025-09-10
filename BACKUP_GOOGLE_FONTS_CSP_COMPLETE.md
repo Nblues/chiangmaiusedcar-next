@@ -20,7 +20,7 @@
   - `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID: template_zd6e3f6`
   - `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY: P3wnNJB_Y_PddrdBJ`
 - **Form Submission**: ✅ ส่งได้สำเร็จ (EmailJS result: a)
-- **CSP Support**: ✅ api.emailjs.com และ *.emailjs.com รองรับ
+- **CSP Support**: ✅ api.emailjs.com และ \*.emailjs.com รองรับ
 
 ### ✅ Production Deployment
 
@@ -34,7 +34,7 @@
 
 ```javascript
 // เพิ่ม fonts.gstatic.com ใน connect-src
-"connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com"
+"connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com";
 ```
 
 ### 2. Service Worker Enhanced (public/sw.js)
@@ -44,19 +44,14 @@
 const CACHE_VERSION = 'v2025-1.0.1';
 
 // ALLOWED_DOMAINS ครบถ้วน
-const ALLOWED_DOMAINS = [
-  'fonts.googleapis.com',
-  'fonts.gstatic.com', 
-  'api.emailjs.com',
-  'cdn.emailjs.com'
-];
+const ALLOWED_DOMAINS = ['fonts.googleapis.com', 'fonts.gstatic.com', 'api.emailjs.com', 'cdn.emailjs.com'];
 
 // Enhanced CSP bypass logic
 if (ALLOWED_DOMAINS.some(domain => hostname.includes(domain) || hostname === domain)) {
   e.respondWith(
     fetch(e.request, {
       mode: 'cors',
-      credentials: 'omit'
+      credentials: 'omit',
     }).catch(() => {
       return new Response('', { status: 408 });
     })
@@ -77,6 +72,7 @@ if (ALLOWED_DOMAINS.some(domain => hostname.includes(domain) || hostname === dom
 ## 📁 ไฟล์ที่แก้ไข
 
 1. **next.config.js**
+
    - เพิ่ม `fonts.gstatic.com` ใน CSP connect-src directive
 
 2. **public/sw.js**
@@ -95,12 +91,14 @@ if (ALLOWED_DOMAINS.some(domain => hostname.includes(domain) || hostname === dom
 ## 🔍 Technical Details
 
 ### CSP Domains รองรับ:
+
 - ✅ `fonts.googleapis.com` - CSS files
-- ✅ `fonts.gstatic.com` - WOFF2 font files  
+- ✅ `fonts.gstatic.com` - WOFF2 font files
 - ✅ `api.emailjs.com` - EmailJS API
 - ✅ `*.emailjs.com` - EmailJS CDN
 
 ### Service Worker Bypass Logic:
+
 - Exact hostname matching
 - CORS mode สำหรับ cross-origin requests
 - Error handling กรณี fetch failed
@@ -109,12 +107,14 @@ if (ALLOWED_DOMAINS.some(domain => hostname.includes(domain) || hostname === dom
 ## 🔄 วิธีย้อนกลับ (หากจำเป็น)
 
 1. **CSP Configuration**:
+
    ```bash
    # แก้ไข next.config.js ลบ fonts.gstatic.com
    git checkout HEAD~1 -- next.config.js
    ```
 
 2. **Service Worker**:
+
    ```bash
    # ย้อนกลับ Service Worker
    git checkout HEAD~1 -- public/sw.js
@@ -135,6 +135,7 @@ if (ALLOWED_DOMAINS.some(domain => hostname.includes(domain) || hostname === dom
 ## 📝 การทดสอบเพิ่มเติม
 
 ### Developer Tools Console:
+
 ```javascript
 // ตรวจสอบ fonts
 console.log('Font status:', document.fonts.status);
@@ -146,8 +147,9 @@ navigator.serviceWorker.getRegistration().then(reg => {
 ```
 
 ### วิธีบังคับ Service Worker Refresh:
+
 1. F12 → Application → Service Workers
-2. Click "Unregister" 
+2. Click "Unregister"
 3. Hard refresh (Ctrl+Shift+R)
 4. ตรวจสอบ Console ไม่มี CSP errors
 

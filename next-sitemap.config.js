@@ -5,8 +5,9 @@ module.exports = {
   sitemapSize: 7000,
   changefreq: 'daily',
   priority: 0.7,
+  autoLastmod: true,
 
-  // Enhanced robots.txt with consistent URLs
+  // Enhanced robots.txt with 2025 AI bot support
   robotsTxtOptions: {
     policies: [
       {
@@ -31,14 +32,62 @@ module.exports = {
         userAgent: 'bingbot',
         allow: '/',
       },
+      // AI Crawlers 2025
+      {
+        userAgent: 'ChatGPT-User',
+        allow: ['/', '/all-cars', '/car/*', '/about', '/contact'],
+        disallow: ['/api*', '/admin*'],
+        crawlDelay: 1,
+      },
+      {
+        userAgent: 'Claude-Web',
+        allow: ['/', '/all-cars', '/car/*', '/about', '/contact'],
+        disallow: ['/api*', '/admin*'],
+        crawlDelay: 1,
+      },
+      {
+        userAgent: 'Bard',
+        allow: ['/', '/all-cars', '/car/*', '/about', '/contact'],
+        disallow: ['/api*', '/admin*'],
+        crawlDelay: 1,
+      },
+      // Social Commerce
+      {
+        userAgent: 'Instagram',
+        allow: ['/', '/car/*'],
+        disallow: ['/api*'],
+        crawlDelay: 3,
+      },
+      {
+        userAgent: 'TikTokBot',
+        allow: ['/', '/car/*'],
+        disallow: ['/api*'],
+        crawlDelay: 3,
+      },
     ],
     additionalSitemaps: [
       'https://chiangmaiusedcar.com/sitemap-0.xml',
       'https://chiangmaiusedcar.com/sitemap-cars.xml',
       'https://chiangmaiusedcar.com/sitemap-images.xml',
+      'https://chiangmaiusedcar.com/sitemap-videos.xml', // For future video content
     ],
     // Add host directive for consistency
     host: 'https://chiangmaiusedcar.com',
+    // 2025 enhancement: crawl delay for different bots
+    transformRobotsTxt: async (config, robotsTxt) => {
+      return robotsTxt
+        .replace(
+          'User-agent: *',
+          `# Enhanced for AI Crawlers 2025
+User-agent: *`
+        )
+        .replace(
+          /Sitemap: /g,
+          `
+# Additional XML Sitemaps
+Sitemap: `
+        );
+    },
   },
   exclude: [
     '/api*',

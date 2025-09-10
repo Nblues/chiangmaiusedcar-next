@@ -6,8 +6,9 @@ import { buildLocalBusinessJsonLd } from '../lib/seo/jsonld';
 export default function Promotion() {
   const baseUrl = 'https://chiangmaiusedcar.com';
   const pageUrl = `${baseUrl}/promotion`;
-  const pageTitle = 'โปรโมชัน ฟรีดาวน์ ผ่อนถูก | ครูหนึ่งรถสวย';
-  const pageDescription = 'โปรโมชันรถมือสองเชียงใหม่ ฟรีดาวน์ ของแถมจัดเต็ม | ครูหนึ่งรถสวย';
+  const pageTitle = 'โปรโมชัน ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน | ครูหนึ่งรถสวย';
+  const pageDescription =
+    'โปรโมชันรถมือสองเชียงใหม่ ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน เครดิตไม่ผ่านก็มีทาง ของแถมจัดเต็ม รับประกัน 1 ปี | ครูหนึ่งรถสวย';
   const pageImage = `${baseUrl}/cover.jpg`;
 
   return (
@@ -15,7 +16,7 @@ export default function Promotion() {
       <SEO
         title={pageTitle}
         description={pageDescription}
-        keywords="โปรโมชันรถมือสอง, รถมือสองเชียงใหม่, รถบ้านฟรีดาวน์, โปรรถมือสอง ฟรีดาวน์, รถมือสองราคาถูก, รถบ้านฟรีดาวน์ เชียงใหม่, รถมือสองผ่อนถูก, ของแถมรถมือสอง"
+        keywords="โปรโมชันรถมือสองเชียงใหม่, ครูหนึ่งรถสวย, ฟรีดาวน์ 0%, รถ ECO Car มือสอง, รถประหยัดน้ำมัน, เครดิตไม่ผ่าน, รถบ้านฟรีดาวน์, โปรรถมือสอง, รถมือสองราคาพิเศษ, รถมือสองผ่อนถูก, ของแถมรถมือสอง, Toyota ECO Car มือสอง, Honda ECO Car มือสอง, Nissan ECO Car มือสอง, สินเชื่อรถยนต์, รับประกัน 1 ปี, ส่งฟรีทั่วไทย, โปรโมชัน 2025, รถมือสองสันพระเนตร"
         url="/promotion"
       />
       <Head>

@@ -1,45 +1,95 @@
 # *
+# Enhanced for AI Crawlers 2025
 User-agent: *
 Allow: /
-Allow: /favicon.webp
-Allow: /favicon.ico
-Allow: /manifest.json
-Allow: /browserconfig.xml
-Allow: /herobanner/
-Allow: /images/
-Allow: /logo/
-Disallow: /admin*
 Disallow: /api*
 Disallow: /_next*
 Disallow: /secret*
 Disallow: /private*
 Disallow: /drafts*
+Disallow: /admin*
 
-# Facebook External Hit
-User-agent: facebookexternalhit
+# Googlebot
+User-agent: Googlebot
 Allow: /
-Allow: /favicon.webp
-Allow: /herobanner/
+Disallow: /api*
+Disallow: /admin*
 
-# Googlebot-Image - Allow all image access
+# Googlebot-Image
 User-agent: Googlebot-Image
 Allow: /
-Allow: /favicon.webp
-Allow: /favicon.ico
-Allow: /herobanner/
-Allow: /images/
-Allow: /logo/
 
-# Bingbot
+# facebookexternalhit
+User-agent: facebookexternalhit
+Allow: /
+
+# bingbot
 User-agent: bingbot
 Allow: /
-Allow: /favicon.webp
 
-# Host (consistent with config)
-Host: https://chiangmaiusedcar.com
+# ChatGPT-User
+User-agent: ChatGPT-User
+Allow: /
+Allow: /all-cars
+Allow: /car/*
+Allow: /about
+Allow: /contact
+Disallow: /api*
+Disallow: /admin*
+Crawl-delay: 1
 
-# Sitemaps (updated URLs)
-Sitemap: https://chiangmaiusedcar.com/sitemap.xml
+# Claude-Web
+User-agent: Claude-Web
+Allow: /
+Allow: /all-cars
+Allow: /car/*
+Allow: /about
+Allow: /contact
+Disallow: /api*
+Disallow: /admin*
+Crawl-delay: 1
+
+# Bard
+User-agent: Bard
+Allow: /
+Allow: /all-cars
+Allow: /car/*
+Allow: /about
+Allow: /contact
+Disallow: /api*
+Disallow: /admin*
+Crawl-delay: 1
+
+# Instagram
+User-agent: Instagram
+Allow: /
+Allow: /car/*
+Disallow: /api*
+Crawl-delay: 3
+
+# TikTokBot
+User-agent: TikTokBot
+Allow: /
+Allow: /car/*
+Disallow: /api*
+Crawl-delay: 3
+
+# Host
+Host: https://www.chiangmaiusedcar.com
+
+# Sitemaps
+
+# Additional XML Sitemaps
+Sitemap: https://www.chiangmaiusedcar.com/sitemap.xml
+
+# Additional XML Sitemaps
 Sitemap: https://chiangmaiusedcar.com/sitemap-0.xml
+
+# Additional XML Sitemaps
 Sitemap: https://chiangmaiusedcar.com/sitemap-cars.xml
+
+# Additional XML Sitemaps
 Sitemap: https://chiangmaiusedcar.com/sitemap-images.xml
+
+# Additional XML Sitemaps
+Sitemap: https://chiangmaiusedcar.com/sitemap-videos.xml

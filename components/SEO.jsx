@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import Head from 'next/head';
 import { buildCarJsonLd, buildLocalBusinessJsonLd } from '../lib/seo/jsonld.js';
+import { getSiteLocation } from '../utils/siteLocation.js';
 
 export default function SEO({
   title,
   description,
   url,
-  keywords,
   author,
   type = 'website',
   image = null,
@@ -19,10 +19,32 @@ export default function SEO({
     const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่';
     const defaultDescription =
       process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
-      'รถมือสองเชียงใหม่ ครูหนึ่งรถสวย ศูนย์รวมรถบ้านคุณภาพดี ฟรีดาวน์ ผ่อนถูกที่สุด รับประกัน 1 ปี บริการสินเชื่อครบวงจร ส่งฟรีทั่วไทย โทร 094-064-9018';
-    const defaultKeywords =
-      process.env.NEXT_PUBLIC_SITE_KEYWORDS ||
-      'รถมือสอง, รถมือสองเชียงใหม่, ครูหนึ่งรถสวย, รถบ้าน, ฟรีดาวน์, ผ่อนรถ, สินเชื่อรถยนต์, รถยนต์มือสอง, รถราคาดี, รับประกันรถ';
+      'รถมือสองเชียงใหม่ ครูหนึ่งรถสวย ศูนย์รวมรถบ้านคุณภาพดี ฟรีดาวน์ 0% ผ่อนถูกที่สุด รับประกัน 1 ปี บริการสินเชื่อครบวงจร เครดิตไม่ผ่านก็มีทาง ส่งฟรีทั่วไทย โทร 094-064-9018';
+
+    // 2025 SEO: Keywords moved to structured data - keeping for compatibility
+    const aiOptimizedKeywords = [
+      // Core business
+      'รถมือสองเชียงใหม่',
+      'ครูหนึ่งรถสวย',
+      'รถ ECO Car มือสอง',
+      'รถประหยัดน้ำมัน',
+      // Conversational/AI search
+      'รถมือสองดีที่ไหนเชียงใหม่',
+      'ซื้อรถมือสองเชียงใหม่ที่ไหนดี',
+      'รถมือสองฟรีดาวน์เชียงใหม่',
+      // Voice search
+      'หารถมือสองเชียงใหม่',
+      'รถมือสองราคาดีเชียงใหม่',
+      'รถมือสองผ่อนถูกเชียงใหม่',
+      // E-A-T keywords
+      'ผู้เชี่ยวชาญรถมือสองเชียงใหม่',
+      'รับรองคุณภาพรถมือสอง',
+      'ประเมินราคารถยุติธรรม',
+      // Local SEO
+      'รถมือสองสันพระเนตร',
+      'รถมือสองสันทราย',
+      'รถมือสองหางดง',
+    ].join(', ');
     const siteAuthor = author || process.env.NEXT_PUBLIC_SITE_AUTHOR || 'ครูหนึ่งรถสวย';
     const buildTime = process.env.CUSTOM_BUILD_TIME || new Date().toISOString();
 
@@ -30,7 +52,7 @@ export default function SEO({
       site,
       siteName,
       defaultDescription,
-      defaultKeywords,
+      aiOptimizedKeywords,
       siteAuthor,
       buildTime,
     };
@@ -38,12 +60,12 @@ export default function SEO({
 
   // Memoize computed values
   const computedValues = useMemo(() => {
-    const { site, siteName, defaultDescription, defaultKeywords, buildTime } = staticValues;
+    const { site, siteName, defaultDescription, buildTime } = staticValues;
+    const siteLocation = getSiteLocation();
 
     const fullUrl = url ? `${site}${url}` : site;
     const metaTitle = title ? `${title} | ${siteName}` : siteName;
     const metaDesc = description || defaultDescription;
-    const metaKeywords = keywords || defaultKeywords;
 
     // Use stable timestamp for cache busting (only change on build)
     const stableTimestamp = process.env.CUSTOM_BUILD_TIME || buildTime;
@@ -61,14 +83,14 @@ export default function SEO({
       fullUrl,
       metaTitle,
       metaDesc,
-      metaKeywords,
       timestamp,
       metaImage,
       enhancedTitle,
       enhancedDesc,
       defaultImage,
+      siteLocation,
     };
-  }, [title, description, url, keywords, staticValues, image]);
+  }, [title, description, url, staticValues, image]);
 
   // Memoize absolute image URL
   const absoluteImage = useMemo(() => {
@@ -130,8 +152,7 @@ export default function SEO({
   }, [debugKey, computedValues, type]);
 
   const { site, buildTime, siteAuthor } = staticValues;
-  const { fullUrl, metaTitle, metaDesc, metaKeywords, enhancedTitle, enhancedDesc, timestamp } =
-    computedValues;
+  const { fullUrl, metaTitle, metaDesc, enhancedTitle, enhancedDesc, timestamp } = computedValues;
 
   return (
     <Head>
@@ -154,15 +175,33 @@ export default function SEO({
       <meta name="geo.region" content="TH-50" />
       <meta name="geo.placename" content="เชียงใหม่, ประเทศไทย" />
 
-      {/* Basic Meta Tags */}
+      {/* Basic Meta Tags - Updated for 2025 Standards */}
       <title>{metaTitle}</title>
       <meta name="description" content={metaDesc} />
-      <meta name="keywords" content={metaKeywords} />
       <meta name="author" content={siteAuthor} />
       <meta
         name="robots"
         content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
       />
+      <meta
+        name="googlebot"
+        content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+      />
+      <meta
+        name="bingbot"
+        content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+      />
+
+      {/* 2025 SEO: Meta keywords deprecated - using structured data instead */}
+      <meta name="google-site-verification" content="your-verification-code" />
+      <meta name="msvalidate.01" content="your-bing-verification-code" />
+
+      {/* Enhanced semantic and entity markup for 2025 */}
+      <meta name="business-type" content="AutoDealer" />
+      <meta name="service-area" content="สันพระเนตร, สันทราย, หางดง, เชียงใหม่" />
+      <meta name="expertise" content="รถมือสอง, รถ ECO Car, สินเชื่อรถยนต์, ประเมินราคารถ" />
+      <meta name="service-type" content="ขายรถมือสอง, รับซื้อรถ, สินเชื่อรถยนต์" />
+
       <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
       <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
       <meta name="color-scheme" content="light" />
@@ -295,19 +334,26 @@ export default function SEO({
       <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
       {/* Geographic and Business Meta Tags */}
-      <meta name="geo.position" content="18.7986111;99.0144444" />
-      <meta name="ICBM" content="18.7986111, 99.0144444" />
+      <meta name="geo.position" content={`${computedValues.siteLocation.lat};${computedValues.siteLocation.lng}`} />
+      <meta name="ICBM" content={`${computedValues.siteLocation.lat}, ${computedValues.siteLocation.lng}`} />
       <meta name="contact" content="094-064-9018" />
       <meta name="coverage" content="ประเทศไทย" />
       <meta name="distribution" content="global" />
       <meta name="rating" content="general" />
       <meta name="revisit-after" content="1 day" />
 
-      {/* Enhanced Favicon with cache busting */}
-      <link rel="icon" href={`/favicon.webp?v=${buildTime}`} type="image/webp" />
+      {/* Enhanced Favicon with cache busting - 2025 Standards */}
+      <link rel="icon" href={`/favicon.png?v=${buildTime}`} type="image/png" />
       <link rel="icon" href={`/favicon.ico?v=${buildTime}`} type="image/x-icon" />
-      <link rel="apple-touch-icon" href={`/favicon.webp?v=${buildTime}`} />
-      <link rel="shortcut icon" href={`/favicon.webp?v=${buildTime}`} />
+      <link rel="apple-touch-icon" href={`/favicon.png?v=${buildTime}`} />
+      <link rel="shortcut icon" href={`/favicon.png?v=${buildTime}`} />
+
+      {/* Additional favicon sizes for better search engine recognition */}
+      <link rel="icon" type="image/png" sizes="16x16" href={`/favicon.png?v=${buildTime}`} />
+      <link rel="icon" type="image/png" sizes="32x32" href={`/favicon.png?v=${buildTime}`} />
+      <link rel="icon" type="image/png" sizes="96x96" href={`/favicon.png?v=${buildTime}`} />
+      <link rel="icon" type="image/png" sizes="192x192" href={`/favicon.png?v=${buildTime}`} />
+      <link rel="icon" type="image/png" sizes="512x512" href={`/favicon.png?v=${buildTime}`} />
 
       {/* Schema.org JSON-LD */}
       <script
@@ -358,30 +404,65 @@ export default function SEO({
             '@context': 'https://schema.org',
             '@type': 'AutoDealer',
             '@id': `${site}/#organization`,
-            name: 'ครูหนึ่งรถสวย',
-            alternateName: 'KruNueng Used Cars',
+            name: 'ครูหนึ่งรถสวย - รถมือสองเชียงใหม่ ฟรีดาวน์ 0%',
+            alternateName: [
+              'KruNueng Used Cars',
+              'ครูหนึ่งรถสวย',
+              'รถมือสองเชียงใหม่คุณภาพ',
+              'ศูนย์รถมือสองเชียงใหม่',
+            ],
             url: site,
             logo: {
               '@type': 'ImageObject',
-              url: `${site}/favicon.webp`,
+              url: `${site}/favicon.png`,
               width: '512',
               height: '512',
               caption: 'ครูหนึ่งรถสวย Logo',
             },
             image: `${site}/herobanner/chiangmaiusedcar.webp`,
-            description: 'ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่ รับประกัน 1 ปี ส่งฟรีทั่วไทย',
+            description:
+              'ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่ ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย เครดิตไม่ผ่านก็มีทาง รถ ECO Car ประหยัดน้ำมัน สินเชื่อผ่านง่าย',
+
+            // 2025 SEO: Enhanced keywords in structured data
+            keywords: [
+              'รถมือสองเชียงใหม่',
+              'ครูหนึ่งรถสวย',
+              'รถ ECO Car มือสอง',
+              'รถประหยัดน้ำมัน',
+              'ฟรีดาวน์ 0%',
+              'รถมือสองดีที่ไหนเชียงใหม่',
+              'ซื้อรถมือสองเชียงใหม่ที่ไหนดี',
+              'รถมือสองฟรีดาวน์เชียงใหม่',
+            ],
+
+            // E-A-T and expertise markers
+            expertise: [
+              'ผู้เชี่ยวชาญรถมือสอง 10+ ปี',
+              'ประเมินราคายุติธรรม',
+              'รับรองคุณภาพรถทุกคัน',
+              'บริการครบวงจรรถมือสอง',
+            ],
+
+            serviceType: [
+              'ขายรถมือสอง',
+              'รับซื้อรถมือสอง',
+              'ประเมินราคารถฟรี',
+              'สินเชื่อรถมือสอง',
+              'รับประกันหลังการขาย',
+              'ส่งรถฟรีทั่วประเทศ',
+            ],
             address: {
               '@type': 'PostalAddress',
-              streetAddress: '99/9 หมู่ 8',
-              addressLocality: 'สันกำแพง',
+              streetAddress: 'เลขที่ 320 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี',
+              addressLocality: 'สันพระเนตร',
               addressRegion: 'เชียงใหม่',
-              postalCode: '50130',
+              postalCode: '50210',
               addressCountry: 'TH',
             },
             geo: {
               '@type': 'GeoCoordinates',
-              latitude: 18.7986111,
-              longitude: 99.0144444,
+              latitude: computedValues.siteLocation.lat,
+              longitude: computedValues.siteLocation.lng,
             },
             telephone: '+66940649018',
             email: 'contact@chiangmaiusedcar.com',

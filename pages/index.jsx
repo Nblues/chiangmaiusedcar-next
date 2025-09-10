@@ -81,41 +81,58 @@ export default function Home({ cars }) {
     { value: '700000', label: '7 แสนขึ้นไป' },
   ];
 
-  // Breadcrumb Schema
+  // Breadcrumb Schema - Enhanced for 2025 SEO with accurate info
   const breadcrumbList = [
     { name: 'หน้าแรก', url: 'https://chiangmaiusedcar.com/' },
-    { name: 'รถมือสองเชียงใหม่', url: 'https://chiangmaiusedcar.com/' },
+    { name: 'รถมือสองเชียงใหม่ ครูหนึ่งรถสวย', url: 'https://chiangmaiusedcar.com/' },
+    { name: 'ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน', url: 'https://chiangmaiusedcar.com/' },
   ];
 
   // Organization Schema moved to SEO component; avoid duplicating JSON-LD here
 
-  // FAQ Schema
+  // FAQ Schema - Enhanced for 2025 with trending keywords
   const faqJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'ดาวน์ 0% จริงไหม?',
+        name: 'ฟรีดาวน์ 0% รถมือสองเชียงใหม่ จริงไหม?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'จริง! ลูกค้าสามารถออกรถฟรีดาวน์ตามโปรโมชันและไฟแนนซ์',
+          text: 'จริง! ครูหนึ่งรถสวยให้ลูกค้าออกรถฟรีดาวน์ 0% ตามโปรโมชันและไฟแนนซ์ที่อนุมัติ รถ ECO Car ประหยัดน้ำมันและรธธรรมดาก็มี',
         },
       },
       {
         '@type': 'Question',
-        name: 'ติดเครดิตบูโรออกได้ไหม?',
+        name: 'เครดิตไม่ผ่าน ติดบูโรรถมือสองเชียงใหม่ออกได้ไหม?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'สอบถามข้อมูลได้ทาง LINE, ส่วนมากไฟแนนซ์ให้โอกาส! แจ้งรายละเอียดกับทีมงาน',
+          text: 'ได้! ครูหนึ่งรถสวยมีไฟแนนซ์หลากหลายแบบ เครดิตไม่ผ่านก็มีทาง สอบถามข้อมูลได้ทาง LINE หรือโทร 094-064-9018',
         },
       },
       {
         '@type': 'Question',
-        name: 'มีรับประกันไหม?',
+        name: 'รถมือสองเชียงใหม่ ครูหนึ่งรถสวย มีรับประกันไหม?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม',
+          text: 'ครูหนึ่งรถสวยให้รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม รถ ECO Car ก็มีรับประกัน พร้อมบริการหลังการขายครบครัน',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'รถ ECO Car ประหยัดน้ำมันมือสองเชียงใหม่ มีไหม?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'มี! ครูหนึ่งรถสวยมีรถ ECO Car ประหยัดน้ำมันหลากหลายรุ่น Toyota Vios, Honda City, Nissan Almera พร้อมส่ง ประหยัดน้ำมันสุดๆ',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'ส่งรถฟรีทั่วไทย รถมือสองเชียงใหม่ จริงไหม?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'จริง! ครูหนึ่งรถสวยส่งฟรีทั่วไทย มีขนส่งเฉพาะและประกันภัยระหว่างขนส่ง ลูกค้ากรุงเทพ ภูเก็ต หาดใหญ่ สั่งได้เลย',
         },
       },
     ],
@@ -124,9 +141,9 @@ export default function Home({ cars }) {
   return (
     <div>
       <SEO
-        title="รถมือสองเชียงใหม่ ฟรีดาวน์ 0% ผ่อนถูก รับประกัน 1 ปี | ครูหนึ่งรถสวย"
-        description="ศูนย์รวมรถมือสองคุณภาพดีเชียงใหม่ รถบ้านแท้ 100% ฟรีดาวน์ 0% ผ่อนถูกสุด รับประกัน 1 ปี ส่งฟรีทั่วไทย ติดตาม Facebook 1M+ TikTok 150K+ โทร 094-064-9018"
-        keywords="รถมือสองเชียงใหม่, รถบ้านแท้, ฟรีดาวน์, ผ่อนรถ, รถคุณภาพ, ครูหนึ่งรถสวย, รถมือสองคุณภาพ, Toyota Honda Nissan, สินเชื่อรถยนต์, รับประกันรถ, ส่งฟรีทั่วไทย"
+        title="รถมือสองเชียงใหม่ ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน | ครูหนึ่งรถสวย"
+        description="ศูนย์รวมรถมือสองคุณภาพดีเชียงใหม่ รถบ้านแท้ 100% ฟรีดาวน์ 0% ผ่อนถูกสุด รับประกัน 1 ปี รถ ECO Car ประหยัดน้ำมัน เครดิตไม่ผ่านก็มีทาง ส่งฟรีทั่วไทย ติดตาม Facebook 1M+ TikTok 150K+ โทร 094-064-9018"
+        keywords="รถมือสองเชียงใหม่, ครูหนึ่งรถสวย, ฟรีดาวน์ 0%, รถ ECO Car มือสอง, รถประหยัดน้ำมัน, เครดิตไม่ผ่าน, รถบ้านแท้, Toyota มือสอง, Honda มือสอง, Nissan มือสอง, Mazda มือสอง, Mitsubishi มือสอง, รถ SUV มือสอง, รถกระบะมือสอง, รถเก๋งมือสอง, ผ่อนรถถูก, สินเชื่อรถยนต์, รับประกันรถ 1 ปี, ส่งฟรีทั่วไทย, รถมือสองสันพระเนตร, รถมือสองสันทราย, รถมือสองหางดง, ศูนย์รถมือสอง, ประเมินรถฟรี, รับซื้อรถ"
         url="/"
         image="https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp"
         type="website"

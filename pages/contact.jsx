@@ -1,7 +1,11 @@
 import Link from 'next/link';
 import SEO from '../components/SEO';
+import { createMapEmbedUrl, createMapOpenUrl, getSiteLocation } from '../utils/siteLocation';
 
 export default function Contact() {
+  // ดึงพิกัดจาก utility
+  const siteLocation = getSiteLocation();
+
   // Breadcrumb Schema
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -77,8 +81,8 @@ export default function Contact() {
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: 18.7986111,
-      longitude: 99.0144444,
+      latitude: siteLocation.lat,
+      longitude: siteLocation.lng,
     },
     openingHours: 'Mo-Su 09:00-20:00',
     paymentAccepted: ['Cash', 'Credit Card', 'Bank Transfer'],
@@ -342,6 +346,43 @@ export default function Contact() {
             </div>
           </div>
 
+          {/* Google Maps Embed */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold text-primary text-center mb-6">แผนที่ร้าน</h2>
+            <div className="bg-white p-4 rounded-lg shadow-lg">
+              <div className="aspect-video rounded-lg overflow-hidden">
+                <iframe
+                  src={createMapEmbedUrl(17)}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="ที่ตั้งครูหนึ่งรถสวย รถมือสองเชียงใหม่"
+                  aria-label="แผนที่ที่ตั้งร้านครูหนึ่งรถสวย"
+                ></iframe>
+              </div>
+              <div className="mt-4 text-center">
+                <a
+                  href={createMapOpenUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-full font-semibold hover:bg-primary-600 transform hover:scale-105 transition-all duration-300"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                      fillRule="evenodd"
+                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  เปิดใน Google Maps
+                </a>
+              </div>
+            </div>
+          </div>
+
           {/* Contact Methods */}
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white p-6 rounded-lg shadow-lg border-l-4 border-primary">
@@ -403,7 +444,7 @@ export default function Contact() {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <a
-                    href="https://www.google.com/maps/search/เลขที่+320+หมู่+2+ถนนสมโภชเชียงใหม่+700+ปี+ตำบลสันพระเนตร+อำเภอสันทราย+เชียงใหม่+50210"
+                    href={createMapOpenUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-4 py-2 bg-red-600 text-white rounded-full text-sm font-semibold hover:bg-red-700 transform hover:scale-105 transition-all duration-300"
