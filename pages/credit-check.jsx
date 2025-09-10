@@ -189,14 +189,22 @@ export default function CreditCheck() {
         formData.customDown = formRef.current.customDown?.value || '';
       }
 
-      // Debug: Log form data (remove in production)
-      // console.log('Sending data:', formData);
+      // Debug: Log form data
+      console.log('Sending data to EmailJS:', formData);
+      console.log('Using configuration:', {
+        serviceId,
+        templateId,
+        publicKey: publicKey ? 'SET' : 'NOT SET',
+      });
+
+      // Initialize EmailJS (ensure it's properly initialized)
+      emailjs.init(publicKey);
 
       // Send email using EmailJS with template params
       const result = await emailjs.send(serviceId, templateId, formData, publicKey);
 
-      // Debug: Log result (remove in production)
-      // console.log('EmailJS result:', result);
+      // Debug: Log result
+      console.log('EmailJS result:', result);
 
       if (result.status === 200 || result.text === 'OK') {
         Swal.fire({
@@ -212,15 +220,42 @@ export default function CreditCheck() {
         setDownOption('');
         setShowDownInput(false);
       } else {
-        throw new Error('EmailJS response error');
+        throw new Error(`EmailJS response error: ${JSON.stringify(result)}`);
       }
     } catch (error) {
       console.error('Form submission error:', error);
+
+      let errorMessage = 'ไม่สามารถส่งข้อมูลได้ กรุณาลองใหม่ หรือติดต่อ 094-064-9018';
+
+      // Detailed error handling
+      if (
+        error.name === 'TypeError' &&
+        error.message &&
+        error.message.includes('Cannot read properties of null')
+      ) {
+        errorMessage = 'เกิดข้อผิดพลาดในการอ่านข้อมูลฟอร์ม กรุณากรอกข้อมูลให้ครบถ้วนและลองใหม่';
+      } else if (
+        error.message &&
+        (error.message.includes('Failed to fetch') || error.message.includes('Network'))
+      ) {
+        errorMessage = 'เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย กรุณาตรวจสอบอินเทอร์เน็ตและลองใหม่';
+      } else if (error.status === 0) {
+        errorMessage = 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาตรวจสอบอินเทอร์เน็ตและลองใหม่';
+      } else if (error.status === 400) {
+        errorMessage = 'ข้อมูลที่ส่งไม่ถูกต้อง กรุณาตรวจสอบข้อมูลและลองใหม่';
+      } else if (error.status === 401 || error.status === 403) {
+        errorMessage = 'ไม่ได้รับอนุญาตให้ส่งข้อมูล กรุณาติดต่อ 094-064-9018 โดยตรง';
+      } else if (error.text) {
+        console.log('EmailJS error text:', error.text);
+        errorMessage = `เกิดข้อผิดพลาด: ${error.text}`;
+      }
+
       Swal.fire({
         icon: 'error',
         title: 'เกิดข้อผิดพลาด',
-        text: `ไม่สามารถส่งข้อมูลได้ กรุณาลองใหม่ หรือติดต่อ 094-064-9018`,
+        text: errorMessage,
         confirmButtonText: 'ตกลง',
+        footer: 'หากปัญหายังไม่หายใจ กรุณาติดต่อ LINE: @chiangmaiusedcar',
       });
     } finally {
       setSending(false);

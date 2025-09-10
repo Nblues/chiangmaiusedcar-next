@@ -6,6 +6,14 @@ const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 
+// Allowed domains for CSP bypass
+const ALLOWED_DOMAINS = [
+  'fonts.googleapis.com',
+  'fonts.gstatic.com',
+  'api.emailjs.com',
+  'cdn.emailjs.com'
+];
+
 // กำหนดรายการไฟล์ที่ต้อง cache
 const STATIC_ASSETS = [
   '/',
@@ -80,6 +88,13 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   // Skip non-GET requests
   if (e.request.method !== 'GET') return;
+
+  // Allow Google Fonts and EmailJS requests to bypass CSP
+  const url = new URL(e.request.url);
+  if (ALLOWED_DOMAINS.some(domain => url.hostname.includes(domain))) {
+    e.respondWith(fetch(e.request));
+    return;
+  }
 
   // Check if request matches our cache routes
   const shouldCache = CACHE_ROUTES.some(pattern => pattern.test(e.request.url));

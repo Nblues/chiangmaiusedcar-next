@@ -140,11 +140,11 @@ const nextConfig = {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self'",
-          "script-src 'self' 'unsafe-eval' 'unsafe-inline' *.googletagmanager.com *.google-analytics.com *.vercel-analytics.com",
+          "script-src 'self' 'unsafe-eval' 'unsafe-inline' *.googletagmanager.com *.google-analytics.com *.vercel-analytics.com va.vercel-scripts.com",
           "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
           "font-src 'self' fonts.gstatic.com",
           "img-src 'self' data: blob: *.shopify.com *.myshopify.com cdn.shopify.com files.myshopify.com images.unsplash.com",
-          "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com",
+          "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com api.emailjs.com *.emailjs.com fonts.googleapis.com",
           "frame-src 'self' *.facebook.com *.line.me",
           "object-src 'none'",
           "base-uri 'self'",
