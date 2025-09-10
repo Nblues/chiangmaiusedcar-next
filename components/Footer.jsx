@@ -1,12 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { getSiteLocation, createMapEmbedUrl, createMapOpenUrl } from '../utils/siteLocation';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const router = useRouter();
   const isContactPage = router.pathname === '/contact';
+  
+  const [mapUrls, setMapUrls] = useState({
+    open: '',
+    embed: ''
+  });
+
+  useEffect(() => {
+    // Load location data on client side
+    const loadLocationData = async () => {
+      try {
+        await getSiteLocation(); // Ensure location config is loaded
+        
+        // Generate map URLs
+        const openUrl = createMapOpenUrl();
+        const embedUrl = createMapEmbedUrl();
+        
+        setMapUrls({
+          open: openUrl,
+          embed: embedUrl
+        });
+      } catch (error) {
+        // Fallback to hardcoded values if utils fail
+        setMapUrls({
+          open: "https://www.google.com/maps/place/ครูหนึ่งรถสวย+รถมือสอง/@18.7986111,99.0144444,17z",
+          embed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3777.0123456789!2d99.0144444!3d18.7986111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da39b7b3b3b3b3%3A0x1234567890abcdef!2z4LiE4Lij4Li54Lir4LiZ4Li24LmI4LiH4Lij4LiW4LmA4Li04LiB!5e0!3m2!1sth!2sth!4v1234567890123!5m2!1sth!2sth"
+        });
+      }
+    };
+
+    loadLocationData();
+  }, []);
 
   return (
     <footer className="bg-gray-900 text-white py-12 mt-16 font-prompt" role="contentinfo">
@@ -332,7 +364,7 @@ export default function Footer() {
 
             <div className="space-y-4">
               <a
-                href="https://www.google.com/maps/place/ครูหนึ่งรถสวย+รถมือสอง/@18.7986111,99.0144444,17z"
+                href={mapUrls.open || "https://www.google.com/maps/place/ครูหนึ่งรถสวย+รถมือสอง/@18.7986111,99.0144444,17z"}
                 target="_blank"
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-all duration-300 group"
               >
@@ -407,7 +439,7 @@ export default function Footer() {
             <div className="rounded-2xl overflow-hidden shadow-2xl">
               <iframe
                 title="แผนที่ครูหนึ่งรถสวย"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3777.0123456789!2d99.0144444!3d18.7986111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da39b7b3b3b3b3%3A0x1234567890abcdef!2z4LiE4Lij4Li54Lir4LiZ4Li24LmI4LiH4Lij4LiW4LmA4Li04LiB!5e0!3m2!1sth!2sth!4v1234567890123!5m2!1sth!2sth"
+                src={mapUrls.embed || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3777.0123456789!2d99.0144444!3d18.7986111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da39b7b3b3b3b3%3A0x1234567890abcdef!2z4LiE4Lij4Li54Lir4LiZ4Li24LmI4LiH4Lij4LiW4LmA4Li04LiB!5e0!3m2!1sth!2sth!4v1234567890123!5m2!1sth!2sth"}
                 width="100%"
                 height="300"
                 style={{ border: 0 }}
@@ -419,7 +451,7 @@ export default function Footer() {
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
               <a
-                href="https://www.google.com/maps/place/ครูหนึ่งรถสวย+รถมือสอง/@18.7986111,99.0144444,17z"
+                href={mapUrls.open || "https://www.google.com/maps/place/ครูหนึ่งรถสวย+รถมือสอง/@18.7986111,99.0144444,17z"}
                 target="_blank"
                 className="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-full font-semibold text-center transition-all duration-300 flex items-center justify-center space-x-2"
               >
