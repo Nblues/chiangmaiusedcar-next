@@ -37,7 +37,6 @@ export default function About() {
       <SEO
         title="เกี่ยวกับครูหนึ่งรถสวย - จากครูดนตรีสู่ผู้เชี่ยวชาญรถมือสอง 10+ ปี | Facebook 1M+ ติดตาม"
         description="เรื่องราวครูหนึ่งรถสวย จากอาจารย์สอนดนตรีสู่ผู้เชี่ยวชาญรถมือสองเชียงใหม่ ประสบการณ์ 10+ ปี Facebook 1M+ TikTok 150K+ YouTube 40K+ ติดตาม รถบ้านแท้ 100% ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วประเทศ โทร 094-064-9018"
-        keywords="ครูหนึ่งรถสวย, ประวัติครูหนึ่ง, เรื่องราวครูหนึ่ง, รถมือสองเชียงใหม่, รถมือสองเชียงราย, Facebook KN2car, TikTok krunueng_usedcar, YouTube chiangraiusedcar, Lemon8, รับประกันรถมือสอง, ส่งรถฟรีทั่วประเทศ, รถบ้านแท้, Toyota Vios, ไฟแนนซ์รถมือสอง, Google Business, LINE Official, อาจารย์สอนดนตรี, นายหน้ารถ, เต็นท์รถเชียงราย"
         url="/about"
         image="https://chiangmaiusedcar.com/herobanner/team.webp"
         type="profile"

@@ -5,10 +5,9 @@ export default function LicensePage() {
   return (
     <>
       <SEO
-        title="เงื่อนไขการใช้งานรูปภาพและลิขสิทธิ์"
+        title="เงื่อนไขการใช้งานรูปภาพและลิขสิทธิ์ | ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
         description="เงื่อนไขการใช้งานรูปภาพ ลิขสิทธิ์ และทรัพย์สินทางปัญญาของครูหนึ่งรถสวย รถมือสองเชียงใหม่"
         url="/license"
-        keywords="ลิขสิทธิ์, เงื่อนไขการใช้งาน, รูปภาพ, ครูหนึ่งรถสวย, สงวนสิทธิ์"
       />
 
       <main className="min-h-screen bg-gradient-to-b from-white via-blue-50 to-gray-50">

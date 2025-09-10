@@ -1,6 +1,7 @@
 import React from 'react';
 import SEO from '../components/SEO';
 import Head from 'next/head';
+import A11yImage from '../components/A11yImage';
 import { buildLocalBusinessJsonLd } from '../lib/seo/jsonld';
 
 export default function Promotion() {
@@ -9,16 +10,11 @@ export default function Promotion() {
   const pageTitle = 'โปรโมชัน ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน | ครูหนึ่งรถสวย';
   const pageDescription =
     'โปรโมชันรถมือสองเชียงใหม่ ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน เครดิตไม่ผ่านก็มีทาง ของแถมจัดเต็ม รับประกัน 1 ปี | ครูหนึ่งรถสวย';
-  const pageImage = `${baseUrl}/cover.jpg`;
+  const pageImage = `${baseUrl}/herobanner/promotion.webp`;
 
   return (
     <>
-      <SEO
-        title={pageTitle}
-        description={pageDescription}
-        keywords="โปรโมชันรถมือสองเชียงใหม่, ครูหนึ่งรถสวย, ฟรีดาวน์ 0%, รถ ECO Car มือสอง, รถประหยัดน้ำมัน, เครดิตไม่ผ่าน, รถบ้านฟรีดาวน์, โปรรถมือสอง, รถมือสองราคาพิเศษ, รถมือสองผ่อนถูก, ของแถมรถมือสอง, Toyota ECO Car มือสอง, Honda ECO Car มือสอง, Nissan ECO Car มือสอง, สินเชื่อรถยนต์, รับประกัน 1 ปี, ส่งฟรีทั่วไทย, โปรโมชัน 2025, รถมือสองสันพระเนตร"
-        url="/promotion"
-      />
+      <SEO title={pageTitle} description={pageDescription} url="/promotion" />
       <Head>
         <link rel="canonical" href={pageUrl} />
         <meta property="og:type" content="website" />
@@ -54,15 +50,28 @@ export default function Promotion() {
         className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50"
         suppressHydrationWarning
       >
-        {/* Header Section */}
-        <section className="bg-primary text-white py-16">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 font-prompt">โปรโมชั่นพิเศษ</h1>
-            <p className="text-xl md:text-2xl font-prompt opacity-90">
-              ข้อเสนอสุดคุ้มสำหรับลูกค้าที่ออกรถกับเรา
-            </p>
-            <div className="mt-8 inline-flex items-center bg-white bg-opacity-20 px-6 py-3 rounded-full">
-              <span className="text-lg font-semibold font-prompt">
+        {/* Hero Banner */}
+        <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
+          <A11yImage
+            src="/herobanner/promotion.webp"
+            alt="โปรโมชั่นพิเศษ รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย"
+            fill
+            className="object-cover object-center"
+            priority
+            quality={85}
+            sizes="100vw"
+          />
+
+          {/* Content over banner */}
+          <div className="absolute inset-0 flex items-end md:items-center justify-center pb-8 md:pb-0 overflow-hidden">
+            <div className="text-center text-white px-4 max-w-4xl mx-auto">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 font-prompt drop-shadow-2xl text-white">
+                โปรโมชั่นพิเศษ
+              </h1>
+              <p className="text-sm sm:text-base md:text-xl lg:text-2xl font-prompt drop-shadow-2xl text-white font-bold mb-4">
+                ข้อเสนอสุดคุ้มสำหรับลูกค้าที่ออกรถกับเรา
+              </p>
+              <span className="text-sm sm:text-base md:text-lg font-semibold font-prompt text-white drop-shadow-2xl">
                 ฟรีดาวน์ • ผ่อนถูก • รับประกัน 1 ปี
               </span>
             </div>

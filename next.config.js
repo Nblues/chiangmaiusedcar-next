@@ -15,6 +15,16 @@ const nextConfig = {
       type: 'asset/source',
     });
 
+    // Prevent Node.js modules from being bundled in client-side
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        os: false,
+      };
+    }
+
     // Bundle optimization - split chunks intelligently
     if (!isServer) {
       config.optimization = {
@@ -144,8 +154,8 @@ const nextConfig = {
           "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
           "font-src 'self' fonts.gstatic.com",
           "img-src 'self' data: blob: *.shopify.com *.myshopify.com cdn.shopify.com files.myshopify.com images.unsplash.com",
-          "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com",
-          "frame-src 'self' *.facebook.com *.line.me",
+          "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com *.googleapis.com *.gstatic.com",
+          "frame-src 'self' *.facebook.com *.line.me *.google.com maps.google.com",
           "object-src 'none'",
           "base-uri 'self'",
           "form-action 'self'",

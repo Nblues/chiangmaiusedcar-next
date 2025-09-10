@@ -1,10 +1,47 @@
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import SEO from '../components/SEO';
-import { createMapEmbedUrl, createMapOpenUrl, getSiteLocation } from '../utils/siteLocation';
+import A11yImage from '../components/A11yImage';
+import {
+  createMapEmbedUrl,
+  createMapOpenUrl,
+  getSiteLocation,
+  clearLocationCache,
+} from '../utils/siteLocation';
 
 export default function Contact() {
-  // ดึงพิกัดจาก utility
-  const siteLocation = getSiteLocation();
+  // State สำหรับแผนที่
+  const [mapEmbedUrl, setMapEmbedUrl] = useState('');
+  const [mapOpenUrl, setMapOpenUrl] = useState('');
+  const [mounted, setMounted] = useState(false);
+
+  // ดึงพิกัดจาก utility (client-side only)
+  useEffect(() => {
+    setMounted(true);
+    try {
+      // ล้าง cache เพื่อให้ใช้พิกัดใหม่
+      clearLocationCache();
+
+      const embedUrl = createMapEmbedUrl(17);
+      const openUrl = createMapOpenUrl();
+
+      setMapEmbedUrl(embedUrl);
+      setMapOpenUrl(openUrl);
+    } catch (error) {
+      console.warn('Error creating map URLs:', error);
+      // Fallback URLs with coordinates from business.js
+      const fallbackEmbedUrl =
+        'https://www.google.com/maps?hl=th&q=18.80508571828391,99.03016129487551&z=17&output=embed';
+      const fallbackOpenUrl = 'https://www.google.com/maps?q=18.80508571828391,99.03016129487551';
+
+      setMapEmbedUrl(fallbackEmbedUrl);
+      setMapOpenUrl(fallbackOpenUrl);
+    }
+  }, []);
+
+  const siteLocation = mounted
+    ? getSiteLocation()
+    : { lat: 18.80508571828391, lng: 99.03016129487551 };
 
   // Breadcrumb Schema
   const breadcrumbSchema = {
@@ -114,9 +151,8 @@ export default function Contact() {
       <SEO
         title="ติดต่อเรา - ครูหนึ่งรถสวย | รถมือสองเชียงใหม่ โทร 094-064-9018"
         description="ติดต่อครูหนึ่งรถสวยง่ายๆ ผ่านหลากหลายช่องทาง โทร 094-064-9018, LINE, Facebook 1 ล้านติดตาม, TikTok 1.5 แสนติดตาม, YouTube 4 หมื่นติดตาม | รถมือสองเชียงใหม่ คุณภาพดี"
-        keywords="ติดต่อครูหนึ่งรถสวย,เบอร์โทรรถมือสองเชียงใหม่,LINE รถมือสอง,Facebook รถมือสอง,TikTok รถมือสอง,YouTube รถมือสอง,Lemon8 รถมือสอง,094-064-9018,สอบถามรถมือสอง,นัดดูรถ,ที่ตั้งร้านรถมือสอง"
         url="https://chiangmaiusedcar.com/contact"
-        image="https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp"
+        image="https://chiangmaiusedcar.com/herobanner/contact.webp"
         canonical="https://chiangmaiusedcar.com/contact"
         locale="th_TH"
         alternate={[{ href: 'https://chiangmaiusedcar.com/contact', hrefLang: 'th-TH' }]}
@@ -139,25 +175,65 @@ export default function Contact() {
       />
 
       <main className="min-h-screen bg-white">
-        {/* Header Section */}
-        <div className="bg-gradient-to-br from-primary to-primary-600 text-white py-16">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">ติดต่อเรา</h1>
-            <p className="text-xl text-blue-100 mb-6">
-              ครูหนึ่งรถสวย - ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <span className="bg-white/20 px-4 py-2 rounded-full">⏰ เปิดทุกวัน 9:00-20:00</span>
-              <span className="bg-white/20 px-4 py-2 rounded-full">📞 094-064-9018</span>
-              <span className="bg-white/20 px-4 py-2 rounded-full">📱 LINE สอบถาม</span>
+        {/* Hero Banner */}
+        <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
+          <A11yImage
+            src="/herobanner/contact.webp"
+            alt="ติดต่อเรา - ครูหนึ่งรถสวย"
+            fill
+            className="object-cover object-center"
+            priority
+            quality={85}
+            sizes="100vw"
+          />
+
+          {/* Content over banner */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center px-4 max-w-4xl mx-auto">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 font-prompt drop-shadow-lg text-white">
+                ติดต่อเรา
+              </h1>
+              <p className="text-sm sm:text-base md:text-xl lg:text-2xl font-prompt drop-shadow-lg text-white font-semibold mb-4 md:mb-6">
+                ครูหนึ่งรถสวย - ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่
+              </p>
+
+              {/* Quick Contact Info */}
+              <div className="flex flex-wrap justify-center gap-4 text-sm">
+                <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white border border-white/30">
+                  <span className="font-semibold">⏰ เปิดทุกวัน 9:00-20:00 น.</span>
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white border border-white/30">
+                  <span className="font-semibold">📞 094-064-9018</span>
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white border border-white/30">
+                  <span className="font-semibold">📱 LINE ปรึกษา</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* Breadcrumb */}
+        <section className="bg-white py-4 border-b border-gray-200 -mt-0">
+          <div className="max-w-7xl mx-auto px-6">
+            <nav className="flex items-center gap-2 text-sm text-gray-600 font-prompt">
+              <Link href="/" className="hover:text-primary transition-colors">
+                หน้าแรก
+              </Link>
+              <span>›</span>
+              <span className="text-primary font-medium">ติดต่อเรา</span>
+            </nav>
+          </div>
+        </section>
 
         {/* Content Section */}
         <div className="max-w-6xl mx-auto px-6 py-16">
-          <h2 className="text-3xl font-bold text-primary text-center mb-4">ช่องทางติดต่อ</h2>
-          <p className="text-gray-600 text-center mb-12">เลือกช่องทางที่สะดวกสำหรับคุณ</p>
+          <h2 className="text-3xl font-bold text-primary text-center mb-4 font-prompt">
+            ช่องทางติดต่อ
+          </h2>
+          <p className="text-gray-600 text-center mb-12 font-prompt">
+            เลือกช่องทางที่สะดวกสำหรับคุณ
+          </p>
 
           {/* Contact Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
@@ -351,34 +427,47 @@ export default function Contact() {
             <h2 className="text-2xl font-bold text-primary text-center mb-6">แผนที่ร้าน</h2>
             <div className="bg-white p-4 rounded-lg shadow-lg">
               <div className="aspect-video rounded-lg overflow-hidden">
-                <iframe
-                  src={createMapEmbedUrl(17)}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="ที่ตั้งครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-                  aria-label="แผนที่ที่ตั้งร้านครูหนึ่งรถสวย"
-                ></iframe>
+                {mounted && mapEmbedUrl ? (
+                  <iframe
+                    src={mapEmbedUrl}
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="ที่ตั้งครูหนึ่งรถสวย รถมือสองเชียงใหม่"
+                    aria-label="แผนที่ที่ตั้งร้านครูหนึ่งรถสวย"
+                  ></iframe>
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <div className="text-gray-500 text-center">
+                      <div className="text-2xl mb-2">🗺️</div>
+                      <div>กำลังโหลดแผนที่...</div>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="mt-4 text-center">
-                <a
-                  href={createMapOpenUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-full font-semibold hover:bg-primary-600 transform hover:scale-105 transition-all duration-300"
-                >
-                  <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fillRule="evenodd"
-                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  เปิดใน Google Maps
-                </a>
+                {mounted && mapOpenUrl ? (
+                  <a
+                    href={mapOpenUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-full font-semibold hover:bg-primary-600 transform hover:scale-105 transition-all duration-300"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    เปิดใน Google Maps
+                  </a>
+                ) : (
+                  <div className="text-gray-500">กำลังโหลดลิงก์แผนที่...</div>
+                )}
               </div>
             </div>
           </div>

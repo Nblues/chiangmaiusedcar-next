@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import { getSiteLocation, createMapEmbedUrl, createMapOpenUrl } from '../utils/siteLocation';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  const router = useRouter();
-  const isContactPage = router.pathname === '/contact';
 
   const [mapUrls, setMapUrls] = useState({
     open: '',
@@ -31,9 +28,9 @@ export default function Footer() {
       } catch (error) {
         // Fallback to hardcoded values if utils fail
         setMapUrls({
-          open: 'https://www.google.com/maps/place/ครูหนึ่งรถสวย+รถมือสอง/@18.7986111,99.0144444,17z',
+          open: 'https://www.google.com/maps/place/ครูหนึ่งรถสวย+รถมือสอง/@18.80508571828391,99.03016129487551,17z',
           embed:
-            'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3777.0123456789!2d99.0144444!3d18.7986111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da39b7b3b3b3b3%3A0x1234567890abcdef!2z4LiE4Lij4Li54Lir4LiZ4Li24LmI4LiH4Lij4LiW4LmA4Li04LiB!5e0!3m2!1sth!2sth!4v1234567890123!5m2!1sth!2sth',
+            'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3777.0123456789!2d99.03016129487551!3d18.80508571828391!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da39b7b3b3b3b3%3A0x1234567890abcdef!2z4LiE4Lij4Li54Lir4LiZ4Li24LmI4LiH4Lij4LiW4LmA4Li04LiB!5e0!3m2!1sth!2sth!4v1234567890123!5m2!1sth!2sth',
         });
       }
     };
@@ -367,7 +364,7 @@ export default function Footer() {
               <a
                 href={
                   mapUrls.open ||
-                  'https://www.google.com/maps/place/ครูหนึ่งรถสวย+รถมือสอง/@18.7986111,99.0144444,17z'
+                  'https://www.google.com/maps/place/ครูหนึ่งรถสวย+รถมือสอง/@18.80508571828391,99.03016129487551,17z'
                 }
                 target="_blank"
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-all duration-300 group"
@@ -434,63 +431,6 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
-      {/* Google Maps Section - แสดงแค่ในหน้าติดต่อ */}
-      {isContactPage && (
-        <div className="bg-gray-800 py-8">
-          <div className="max-w-7xl mx-auto px-6">
-            <h4 className="text-lg font-bold text-white mb-4 text-center">ตำแหน่งร้าน</h4>
-            <div className="rounded-2xl overflow-hidden shadow-2xl">
-              <iframe
-                title="แผนที่ครูหนึ่งรถสวย"
-                src={
-                  mapUrls.embed ||
-                  'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3777.0123456789!2d99.0144444!3d18.7986111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da39b7b3b3b3b3%3A0x1234567890abcdef!2z4LiE4Lij4Li54Lir4LiZ4Li24LmI4LiH4Lij4LiW4LmA4Li04LiB!5e0!3m2!1sth!2sth!4v1234567890123!5m2!1sth!2sth'
-                }
-                width="100%"
-                height="300"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="w-full"
-              />
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
-              <a
-                href={
-                  mapUrls.open ||
-                  'https://www.google.com/maps/place/ครูหนึ่งรถสวย+รถมือสอง/@18.7986111,99.0144444,17z'
-                }
-                target="_blank"
-                className="bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-full font-semibold text-center transition-all duration-300 flex items-center justify-center space-x-2"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span>เปิดใน Google Maps</span>
-              </a>
-              <a
-                href="https://g.co/kgs/Fe9dhXt"
-                target="_blank"
-                className="bg-success-500 hover:bg-success-600 text-white px-6 py-3 rounded-full font-semibold text-center transition-all duration-300 flex items-center justify-center space-x-2"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                </svg>
-                <span>Google Business</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Copyright */}
       <div className="bg-gray-900 border-t border-gray-700">

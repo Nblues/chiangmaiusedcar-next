@@ -22,11 +22,6 @@ export default function PaymentCalculator() {
       return;
     }
 
-    if (!customerAge || age < 18 || age > 70) {
-      alert('กรุณาใส่อายุที่ถูกต้อง (18-70 ปี)');
-      return;
-    }
-
     const loanAmount = carPriceValue - down;
 
     if (loanAmount <= 0) {
@@ -80,14 +75,18 @@ export default function PaymentCalculator() {
     });
   };
 
-  // ดึงราคาจาก URL parameter เมื่อมาจากหน้ารายละเอียดรถ
+  // ดึงราคาจาก URL parameter เมื่อมาจากหน้ารายละเอียดรถ (พร้อม sanitize)
   useEffect(() => {
-    if (router.query.price) {
-      setCarPrice(router.query.price);
+    const qp = router.query?.price;
+    if (qp) {
+      const sanitized = String(qp)
+        .replace(/[^0-9.]/g, '')
+        .slice(0, 12);
+      setCarPrice(sanitized);
       // Auto calculate เมื่อมีราคามาแล้ว - คำนวณทันทีสำหรับ 5-6-7 ปี
-      if (router.query.price && !isNaN(router.query.price)) {
+      if (sanitized && !isNaN(sanitized)) {
         setTimeout(() => {
-          const carPriceValue = parseFloat(router.query.price);
+          const carPriceValue = parseFloat(sanitized);
           const down = 0; // เริ่มต้นเงินดาวน์ 0
           const rate = 7.5 / 100 / 12; // ดอกเบี้ย 7.50%
           const age = 35; // อายุเริ่มต้น 35 ปี
@@ -151,37 +150,37 @@ export default function PaymentCalculator() {
   return (
     <div>
       <SEO
-        title="คำนวนค่างวดรถยนต์ - ครูหนึ่งรถสวย"
+        title="คำนวนค่างวดรถยนต์ - ครูหนึ่งรถสวย | รถมือสองเชียงใหม่"
         description="เครื่องมือคำนวนค่างวดรถยนต์ คำนวนค่าผ่อนรายเดือน ดอกเบี้ย และยอดชำระรวม ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-        keywords="คำนวนค่างวด, คำนวนค่าผ่อนรถ, เครื่องคิดเลข, สินเชื่อรถยนต์, รถมือสองเชียงใหม่"
         url="https://chiangmaiusedcar.com/payment-calculator"
       />
 
       {/* Hero Section */}
-      <section className="bg-white text-primary py-16 border-t border-gray-200">
+      <section className="bg-gradient-to-br from-primary via-blue-700 to-primary text-white py-16 border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-prompt text-accent">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-prompt text-white">
             คำนวนค่างวดรถยนต์
           </h1>
-          <p className="text-xl md:text-2xl max-w-3xl mx-auto font-prompt">
+          <p className="text-xl md:text-2xl max-w-3xl mx-auto font-prompt text-white opacity-90">
             คำนวนค่าผ่อนรายเดือนและดอกเบี้ยได้ง่ายๆ
           </p>
 
           {/* แสดงข้อความและผลคำนวณเมื่อมาจากหน้ารายละเอียดรถ */}
           {router.query.price && (
-            <div className="mt-6 bg-green-500/20 backdrop-blur-sm border border-green-400/30 rounded-xl p-4 max-w-4xl mx-auto">
-              <p className="text-lg font-prompt mb-4 text-center">
-                {router.query.carTitle && `${decodeURIComponent(router.query.carTitle)} - `}
+            <div className="mt-6 bg-white bg-opacity-20 backdrop-blur-sm border border-white border-opacity-30 rounded-xl p-4 max-w-4xl mx-auto">
+              <p className="text-lg font-prompt mb-4 text-center text-white">
+                {router.query.carTitle &&
+                  `${(typeof router.query.carTitle === 'string' ? router.query.carTitle : '').replace(/</g, '&lt;').replace(/>/g, '&gt;')} - `}
                 ราคา:{' '}
-                <span className="font-bold text-yellow-300">
-                  ฿{Number(router.query.price).toLocaleString()}
+                <span className="font-bold text-accent">
+                  ฿{Number(carPrice || 0).toLocaleString()}
                 </span>{' '}
                 บาท
               </p>
 
               {/* ผลการคำนวณ 5-6-7 ปี แบบกะทัดรัด */}
               {result && (
-                <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 mt-4">
+                <div className="bg-white bg-opacity-95 backdrop-blur-sm rounded-xl p-6 mt-4">
                   <h3 className="text-lg font-bold text-primary mb-4 text-center font-prompt">
                     ค่างวดรายเดือน (รวม VAT + ประกัน)
                   </h3>
@@ -191,27 +190,27 @@ export default function PaymentCalculator() {
                         key={calc.years}
                         className={`text-center p-4 rounded-lg ${
                           index === 1
-                            ? 'bg-orange-100 border-2 border-orange-300'
+                            ? 'bg-accent bg-opacity-20 border-2 border-accent'
                             : 'bg-gray-50 border border-gray-200'
                         }`}
                       >
                         <div
                           className={`text-lg font-bold mb-1 ${
-                            index === 1 ? 'text-orange-600' : 'text-gray-800'
+                            index === 1 ? 'text-accent' : 'text-gray-800'
                           }`}
                         >
                           {calc.label}
                         </div>
                         <div
                           className={`text-2xl font-bold ${
-                            index === 1 ? 'text-orange-600' : 'text-primary'
+                            index === 1 ? 'text-green-600' : 'text-primary'
                           }`}
                         >
                           ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}
                         </div>
                         <div className="text-xs text-gray-600">ต่อเดือน</div>
                         {index === 1 && (
-                          <div className="text-xs bg-orange-200 text-orange-700 px-2 py-1 rounded-full mt-2 inline-block">
+                          <div className="text-xs bg-accent bg-opacity-20 text-accent px-2 py-1 rounded-full mt-2 inline-block font-semibold">
                             แนะนำ
                           </div>
                         )}
@@ -301,16 +300,16 @@ export default function PaymentCalculator() {
                       value={interestRate}
                       onChange={e => setInterestRate(e.target.value)}
                     >
-                      <option value="7.5">7.5%</option>
                       <option value="4.50">4.50%</option>
                       <option value="5.00">5.00%</option>
                       <option value="5.50">5.50%</option>
                       <option value="6.00">6.00%</option>
                       <option value="6.50">6.50%</option>
-                      <option value="7.0">7.0%</option>
-                      <option value="8.0">8.0%</option>
-                      <option value="8.5">8.5%</option>
-                      <option value="9.0">9.0%</option>
+                      <option value="7.00">7.00%</option>
+                      <option value="7.50">7.50%</option>
+                      <option value="8.00">8.00%</option>
+                      <option value="8.50">8.50%</option>
+                      <option value="9.00">9.00%</option>
                     </select>
                   </div>
 
@@ -318,23 +317,25 @@ export default function PaymentCalculator() {
                     <label htmlFor="customerAge" className="form-label">
                       อายุผู้กู้ (ปี)
                     </label>
-                    <input
-                      type="text"
+                    <select
                       id="customerAge"
-                      className="form-input"
+                      className="form-select"
                       value={customerAge}
-                      onChange={e => {
-                        const numericValue = e.target.value.replace(/[^0-9]/g, '');
-                        setCustomerAge(numericValue);
-                      }}
-                      placeholder="กรอกอายุ 18-70 ปี"
-                    />
+                      onChange={e => setCustomerAge(e.target.value)}
+                    >
+                      <option value="25">25 ปี</option>
+                      <option value="30">30 ปี</option>
+                      <option value="35">35 ปี</option>
+                      <option value="40">40 ปี</option>
+                      <option value="45">45 ปี</option>
+                      <option value="50">50 ปี</option>
+                      <option value="55">55 ปี</option>
+                      <option value="60">60 ปี</option>
+                    </select>
                     <p className="text-sm text-gray-600 mt-1">
-                      {customerAge && parseInt(customerAge) > 40
+                      {parseInt(customerAge) > 40
                         ? 'ค่าประกัน: 500 + VAT (รวม 535 บาท/เดือน)'
-                        : customerAge
-                          ? 'ค่าประกัน: 200 + VAT (รวม 214 บาท/เดือน)'
-                          : 'กรอกอายุเพื่อดูค่าประกัน'}
+                        : 'ค่าประกัน: 200 + VAT (รวม 214 บาท/เดือน)'}
                     </p>
                   </div>
 
@@ -450,7 +451,7 @@ export default function PaymentCalculator() {
                             </div>
                             <div>
                               <span className="text-gray-600">รวม VAT + ประกัน:</span>
-                              <div className="font-bold text-lg text-accent">
+                              <div className="font-bold text-lg text-green-600">
                                 ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}
                               </div>
                             </div>

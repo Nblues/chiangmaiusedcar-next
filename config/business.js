@@ -24,10 +24,10 @@ export const BUSINESS_INFO = {
     country: 'TH',
   },
 
-  // พิกัดร้าน
+  // พิกัดร้าน (พิกัดที่แม่นยำจาก Google Maps)
   coordinates: {
-    latitude: 18.7986111,
-    longitude: 99.0144444,
+    latitude: 18.80508571828391,
+    longitude: 99.03016129487551,
   },
 
   // เวลาทำการ

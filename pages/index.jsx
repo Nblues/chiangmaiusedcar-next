@@ -143,9 +143,8 @@ export default function Home({ cars }) {
       <SEO
         title="รถมือสองเชียงใหม่ ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน | ครูหนึ่งรถสวย"
         description="ศูนย์รวมรถมือสองคุณภาพดีเชียงใหม่ รถบ้านแท้ 100% ฟรีดาวน์ 0% ผ่อนถูกสุด รับประกัน 1 ปี รถ ECO Car ประหยัดน้ำมัน เครดิตไม่ผ่านก็มีทาง ส่งฟรีทั่วไทย ติดตาม Facebook 1M+ TikTok 150K+ โทร 094-064-9018"
-        keywords="รถมือสองเชียงใหม่, ครูหนึ่งรถสวย, ฟรีดาวน์ 0%, รถ ECO Car มือสอง, รถประหยัดน้ำมัน, เครดิตไม่ผ่าน, รถบ้านแท้, Toyota มือสอง, Honda มือสอง, Nissan มือสอง, Mazda มือสอง, Mitsubishi มือสอง, รถ SUV มือสอง, รถกระบะมือสอง, รถเก๋งมือสอง, ผ่อนรถถูก, สินเชื่อรถยนต์, รับประกันรถ 1 ปี, ส่งฟรีทั่วไทย, รถมือสองสันพระเนตร, รถมือสองสันทราย, รถมือสองหางดง, ศูนย์รถมือสอง, ประเมินรถฟรี, รับซื้อรถ"
         url="/"
-        image="https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp"
+        image="https://chiangmaiusedcar.com/herobanner/chiangmaiusedcars.webp"
         type="website"
         structuredData={{
           '@context': 'https://schema.org',
@@ -164,7 +163,7 @@ export default function Home({ cars }) {
               brand: car.vendor || car.brand || 'รถมือสอง',
               model: car.model || '',
               year: car.year || '',
-              image: car.images?.[0]?.url || '/herobanner/chiangmaiusedcar.webp',
+              image: car.images?.[0]?.url || '/herobanner/chiangmaiusedcars.webp',
               offers: {
                 '@type': 'Offer',
                 price: car.price?.amount || '0',
@@ -206,7 +205,7 @@ export default function Home({ cars }) {
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-7xl mx-auto">
           <A11yImage
-            src="/herobanner/chiangmaiusedcar.webp"
+            src="/herobanner/chiangmaiusedcars.webp"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             width={1920}
             height={1080}

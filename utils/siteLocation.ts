@@ -53,9 +53,18 @@ function readLocationConfig(): SiteLocation | null {
   }
 
   try {
-    // Dynamic import สำหรับ Node.js modules
-    const fs = require('fs');
-    const path = require('path');
+    // ตรวจสอบว่าอยู่ใน Node.js environment
+    if (typeof process === 'undefined' || !process.cwd) {
+      return null;
+    }
+
+    // ใช้ dynamic import แทน require เพื่อป้องกัน webpack bundling
+    const fs = eval('require')('fs');
+    const path = eval('require')('path');
+
+    if (!fs || !path) {
+      return null;
+    }
 
     const configPath = path.resolve(process.cwd(), 'config', 'site-location.json');
 

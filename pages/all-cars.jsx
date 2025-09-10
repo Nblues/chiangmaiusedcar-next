@@ -154,7 +154,6 @@ export default function AllCars({ cars }) {
       <SEO
         title={`รถมือสองเชียงใหม่ทั้งหมด${totalPages > 1 && currentPage > 1 ? ` หน้า ${currentPage}` : ''} ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน | ครูหนึ่งรถสวย`}
         description={`รถมือสองเชียงใหม่คุณภาพดี ${filteredCars.length} คัน รถบ้านแท้ 100% ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน เครดิตไม่ผ่านก็มีทาง ผ่อนถูกสุด รับประกัน 1 ปี ส่งฟรีทั่วไทย${totalPages > 1 ? ` หน้า ${currentPage}/${totalPages}` : ''} Toyota Honda Nissan Mazda Mitsubishi และอื่นๆ โทร 094-064-9018`}
-        keywords={`รถมือสองเชียงใหม่, ครูหนึ่งรถสวย, รถมือสองทั้งหมด, ฟรีดาวน์ 0%, รถ ECO Car มือสอง, รถประหยัดน้ำมัน, เครดิตไม่ผ่าน, รถยนต์มือสอง, รถบ้านเชียงใหม่, รถคุณภาพดี, Toyota มือสอง, Honda มือสอง, Nissan มือสอง, Mazda มือสอง, Mitsubishi มือสอง, รถ SUV มือสอง, รถกระบะมือสอง, รถเก๋งมือสอง, ผ่อนรถถูก, สินเชื่อรถยนต์, รับประกันรถ 1 ปี, ส่งฟรีทั่วไทย, รถมือสองสันพระเนตร, ศูนย์รถมือสอง${brandFilter !== 'all' ? `, ${brandFilter} มือสองเชียงใหม่` : ''}${searchTerm ? `, ${searchTerm} เชียงใหม่` : ''}`}
         url={`/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`}
         image="https://chiangmaiusedcar.com/herobanner/allusedcars.webp"
         type="website"
