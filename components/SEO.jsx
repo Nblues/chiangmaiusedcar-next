@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import Head from 'next/head';
 import { buildCarJsonLd, buildLocalBusinessJsonLd } from '../lib/seo/jsonld.js';
-import { getSiteLocation } from '../utils/siteLocation.js';
+import { getSiteLocation } from '../utils/siteLocation';
 
 export default function SEO({
   title,
@@ -334,8 +334,14 @@ export default function SEO({
       <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
       {/* Geographic and Business Meta Tags */}
-      <meta name="geo.position" content={`${computedValues.siteLocation.lat};${computedValues.siteLocation.lng}`} />
-      <meta name="ICBM" content={`${computedValues.siteLocation.lat}, ${computedValues.siteLocation.lng}`} />
+      <meta
+        name="geo.position"
+        content={`${computedValues.siteLocation.lat};${computedValues.siteLocation.lng}`}
+      />
+      <meta
+        name="ICBM"
+        content={`${computedValues.siteLocation.lat}, ${computedValues.siteLocation.lng}`}
+      />
       <meta name="contact" content="094-064-9018" />
       <meta name="coverage" content="ประเทศไทย" />
       <meta name="distribution" content="global" />

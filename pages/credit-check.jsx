@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import SEO from '../components/SEO';

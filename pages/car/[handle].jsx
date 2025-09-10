@@ -171,6 +171,7 @@ function CarDetailPage({ car, allCars }) {
 
   // Debug mode - log for development
   if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
     console.log('🔍 Car Detail SEO Debug:', {
       title: enhancedTitle,
       description: enhancedDescription,
