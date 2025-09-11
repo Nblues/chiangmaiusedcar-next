@@ -78,15 +78,7 @@ Crawl-delay: 3
 Host: https://www.chiangmaiusedcar.com
 
 # Sitemaps
-
-# Additional XML Sitemaps
 Sitemap: https://www.chiangmaiusedcar.com/sitemap.xml
-
-# Additional XML Sitemaps
 Sitemap: https://www.chiangmaiusedcar.com/sitemap-0.xml
-
-# Additional XML Sitemaps
 Sitemap: https://www.chiangmaiusedcar.com/sitemap-cars.xml
-
-# Additional XML Sitemaps
 Sitemap: https://www.chiangmaiusedcar.com/sitemap-images.xml
