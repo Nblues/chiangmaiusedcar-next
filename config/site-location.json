@@ -1,7 +1,7 @@
 {
-  "lat": 18.80508571828391,
-  "lng": 99.03016129487551,
-  "source": "business.js (updated coordinates)",
-  "updatedAt": "2025-09-11T12:00:00.000Z",
-  "originalUrl": "updated coordinates from Google Business"
+  "lat": 18.8048977,
+  "lng": 99.0301667,
+  "source": "Google Maps fetch-coords.js (latest)",
+  "updated": "2025-09-11T13:20:20.521Z",
+  "original_url": "https://maps.app.goo.gl/LwBKM6WGbGUEhNYZ7"
 }

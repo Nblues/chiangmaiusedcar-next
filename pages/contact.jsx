@@ -22,17 +22,18 @@ export default function Contact() {
       // ล้าง cache เพื่อให้ใช้พิกัดใหม่
       clearLocationCache();
 
-      const embedUrl = createMapEmbedUrl(17);
+      const embedUrl = createMapEmbedUrl();
       const openUrl = createMapOpenUrl();
 
       setMapEmbedUrl(embedUrl);
       setMapOpenUrl(openUrl);
     } catch (error) {
-      console.warn('Error creating map URLs:', error);
-      // Fallback URLs with coordinates from business.js
+      console.error('❌ Error creating map URLs:', error);
+      // Fallback URLs with updated coordinates - ใช้ Google Maps ที่แน่ใจว่าทำงาน
       const fallbackEmbedUrl =
-        'https://www.google.com/maps?hl=th&q=18.80508571828391,99.03016129487551&z=17&output=embed';
-      const fallbackOpenUrl = 'https://www.google.com/maps?q=18.80508571828391,99.03016129487551';
+        'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3777.089193583984!2d99.02736887517952!3d18.804897754158845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da25a34cba1f05%3A0x9cb559411066b7cb!2z4LiE4Lij4Li54Lir4LiZ4Li24LmI4LiH4Lij4LiW4Liq4Lin4Lii!5e0!3m2!1sth!2sth!4v1694441234567!5m2!1sth!2sth';
+      const fallbackOpenUrl =
+        'https://www.google.com/maps/place/%E0%B8%84%E0%B8%A3%E0%B8%B9%E0%B8%AB%E0%B8%99%E0%B8%B6%E0%B9%88%E0%B8%87%E0%B8%A3%E0%B8%96%E0%B8%AA%E0%B8%A7%E0%B8%A2/@18.8048977,99.0301667,17z';
 
       setMapEmbedUrl(fallbackEmbedUrl);
       setMapOpenUrl(fallbackOpenUrl);
@@ -435,6 +436,7 @@ export default function Contact() {
                     allowFullScreen=""
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
                     title="ที่ตั้งครูหนึ่งรถสวย รถมือสองเชียงใหม่"
                     aria-label="แผนที่ที่ตั้งร้านครูหนึ่งรถสวย"
                   ></iframe>
@@ -443,6 +445,7 @@ export default function Contact() {
                     <div className="text-gray-500 text-center">
                       <div className="text-2xl mb-2">🗺️</div>
                       <div>กำลังโหลดแผนที่...</div>
+                      <div className="text-sm mt-2">พิกัด: 18.8048977, 99.0301667</div>
                     </div>
                   </div>
                 )}

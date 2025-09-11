@@ -140,9 +140,14 @@ export function getSiteLocation(): { lat: number; lng: number } {
 /**
  * สร้าง Google Maps embed URL
  */
-export function createMapEmbedUrl(zoom = 17): string {
+export function createMapEmbedUrl(): string {
   const { lat, lng } = getSiteLocation();
-  return `https://www.google.com/maps?hl=th&q=${lat},${lng}&z=${zoom}&output=embed`;
+
+  // ใช้ Google Maps embed URL ที่รองรับ iframe โดยตรง
+  // ฟอร์แมตนี้จะทำงานได้โดยไม่ต้องใช้ API key
+  const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3777.089193583984!2d${lng}!3d${lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da25a34cba1f05%3A0x9cb559411066b7cb!2z4LiE4Lij4Li54Lir4LiZ4Li24LmI4LiH4Lij4LiW4Liq4Lin4Lii!5e0!3m2!1sth!2sth!4v${Date.now()}!5m2!1sth!2sth`;
+
+  return mapUrl;
 }
 
 /**
