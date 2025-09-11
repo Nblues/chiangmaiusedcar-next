@@ -41,26 +41,22 @@ export default function Promotion() {
         suppressHydrationWarning
       >
         {/* Hero Banner */}
-        <section className="relative w-full h-auto overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
-          <div className="relative w-full max-w-7xl mx-auto">
-            <A11yImage
-              src="/herobanner/promotioncar.webp"
-              alt="โปรโมชั่นพิเศษ รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย ฟรีดาวน์ 0% รถ ECO Car"
-              width={1920}
-              height={1080}
-              className="w-full h-auto object-contain"
-              priority
-              quality={90}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
-              style={{ maxHeight: '80vh' }}
-            />
-          </div>
+        <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
+          <A11yImage
+            src="/herobanner/promotioncar.webp"
+            alt="โปรโมชั่นพิเศษ รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย ฟรีดาวน์ 0% รถ ECO Car"
+            fill
+            className="object-cover object-center"
+            priority
+            quality={85}
+            sizes="100vw"
+          />
 
           {/* Content over banner - Mobile Optimized */}
-          <div className="absolute inset-0 flex items-center justify-center overflow-hidden px-1 py-2 sm:p-4">
-            <div className="text-center text-white w-full max-w-5xl mx-auto">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center text-white w-full max-w-5xl mx-auto px-4">
               {/* Main Offer Title */}
-              <div className="bg-black bg-opacity-60 rounded-xl sm:rounded-2xl p-2 sm:p-6 lg:p-8 backdrop-blur-sm mx-1 sm:mx-4">
+              <div className="bg-black bg-opacity-60 rounded-xl sm:rounded-2xl p-2 sm:p-6 lg:p-8 backdrop-blur-sm">
                 <h1 className="text-sm sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-prompt font-bold text-white drop-shadow-2xl mb-2 sm:mb-6 leading-tight">
                   ข้อเสนอสุดคุ้มสำหรับลูกค้า
                   <br className="sm:hidden" />

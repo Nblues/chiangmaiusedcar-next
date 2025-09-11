@@ -176,35 +176,36 @@ export default function Contact() {
 
       <main className="min-h-screen bg-white">
         {/* Hero Banner */}
-        <section className="relative w-full h-auto overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
-          <div className="relative w-full max-w-7xl mx-auto">
-            <A11yImage
-              src="/herobanner/contact.webp"
-              alt="ติดต่อเรา - ครูหนึ่งรถสวย"
-              width={1920}
-              height={1080}
-              className="w-full h-auto object-contain"
-              priority
-              quality={90}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
-              style={{ maxHeight: '80vh' }}
-            />
-          </div>
+        <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
+          <A11yImage
+            src="/herobanner/contact.webp"
+            alt="ติดต่อเรา - ครูหนึ่งรถสวย"
+            fill
+            className="object-cover object-center"
+            priority
+            quality={85}
+            sizes="100vw"
+          />
 
           {/* Content over banner */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center px-4 max-w-4xl mx-auto">
+            <div className="text-center px-4 max-w-5xl mx-auto">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 font-prompt drop-shadow-lg text-white">
                 ติดต่อเรา
               </h1>
-              <p className="text-sm sm:text-base md:text-xl lg:text-2xl font-prompt drop-shadow-lg text-white font-semibold mb-4 md:mb-6">
-                ครูหนึ่งรถสวย - ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่
-              </p>
+              <div className="text-sm sm:text-base md:text-xl lg:text-2xl font-prompt drop-shadow-lg text-white font-semibold mb-4 md:mb-6">
+                <p className="mb-1 md:mb-2">ครูหนึ่งรถสวย</p>
+                <p className="text-xs sm:text-sm md:text-lg lg:text-xl mb-2 md:mb-3">
+                  ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่
+                </p>
+              </div>
 
               {/* Quick Contact Info */}
-              <div className="flex flex-wrap justify-center gap-1 md:gap-2 text-xs">
-                <div className="px-1 py-1 text-white">
-                  <span className="font-semibold">เปิดทุกวัน 9:00-20:00 น.</span>
+              <div className="flex flex-wrap justify-center gap-1 md:gap-2">
+                <div className="px-2 py-1 bg-black bg-opacity-40 rounded-lg backdrop-blur-sm">
+                  <span className="text-sm md:text-base lg:text-lg font-semibold text-white">
+                    เปิดทุกวัน 9:00-20:00 น.
+                  </span>
                 </div>
               </div>
             </div>
