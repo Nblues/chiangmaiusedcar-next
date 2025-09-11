@@ -197,8 +197,8 @@ class SEOVerifier {
     for (const file of allFiles) {
       const content = fs.readFileSync(file, 'utf8');
 
-      // Find all img tags and Image components
-      const imgMatches = content.match(/<(?:img|Image)[^>]*>/g) || [];
+      // Find all img tags and Image components (including multi-line)
+      const imgMatches = content.match(/<(?:img|Image)[\s\S]*?>/g) || [];
 
       imgMatches.forEach(match => {
         totalImages++;

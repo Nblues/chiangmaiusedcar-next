@@ -141,8 +141,8 @@ export default function Home({ cars }) {
   return (
     <div>
       <SEO
-        title="รถมือสองเชียงใหม่ ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน | ครูหนึ่งรถสวย"
-        description="ศูนย์รวมรถมือสองคุณภาพดีเชียงใหม่ รถบ้านแท้ 100% ฟรีดาวน์ 0% ผ่อนถูกสุด รับประกัน 1 ปี รถ ECO Car ประหยัดน้ำมัน เครดิตไม่ผ่านก็มีทาง ส่งฟรีทั่วไทย ติดตาม Facebook 1M+ TikTok 150K+ โทร 094-064-9018"
+        title="รถมือสองเชียงใหม่ คุณภาพดี ตรวจสภาพครบถ้วน | ครูหนึ่งรถสวย"
+        description="รถมือสองเชียงใหม่คุณภาพดี ครูหนึ่งรถสวย ตรวจสภาพครบถ้วน ฟรีดาวน์ ดอกเบี้ยต่ำ รับประกัน 1 ปี ส่งฟรีทั่วไทย เช็คประวัติรถ โทร 094-064-9018"
         url="/"
         image="https://chiangmaiusedcar.com/herobanner/chiangmaiusedcars.webp"
         type="website"
@@ -231,8 +231,8 @@ export default function Home({ cars }) {
               คุณภาพระดับพรีเมียม
             </h2>
             <p className="text-base leading-relaxed text-gray-900">
-              ครูหนึ่งรถสวย ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่ ฟรีดาวน์ ผ่อนถูก รับประกันหลังการขาย
-              1 ปี จัดส่งฟรีทั่วประเทศ
+              ครูหนึ่งรถสวย แพลตฟอร์มออนไลน์รถมือสองคุณภาพดีในเชียงใหม่ ตรวจสภาพครบถ้วน
+              เช็คประวัติรถ ฟรีดาวน์ ผ่อนถูก รับประกันหลังการขาย 1 ปี จัดส่งฟรีทั่วประเทศ
             </p>
           </div>
           <div className="flex flex-col gap-4 w-full md:w-auto md:min-w-[200px]">
@@ -417,7 +417,9 @@ export default function Home({ cars }) {
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-prompt">
             รถแนะนำเข้าใหม่วันนี้
           </h2>
-          <p className="text-gray-600 font-prompt">รถคุณภาพดีที่เราคัดสรรมาเพื่อคุณโดยเฉพาะ</p>
+          <p className="text-gray-600 font-prompt">
+            รถคุณภาพดีที่เราตรวจสภาพครบถ้วน เช็คประวัติรถ คัดสรรมาเพื่อคุณโดยเฉพาะ
+          </p>
         </div>
         <section
           aria-label="รถเข้าใหม่แนะนำวันนี้"
@@ -779,7 +781,7 @@ export default function Home({ cars }) {
           <details className="bg-white rounded-xl p-4 shadow">
             <summary className="font-bold text-gray-900 cursor-pointer">ดาวน์ 0% จริงไหม?</summary>
             <div className="text-gray-700 pt-2 font-medium">
-              จริง! ลูกค้าสามารถออกรถฟรีดาวน์ตามโปรโมชันและไฟแนนซ์
+              จริง! ลูกค้าสามารถออกรถฟรีดาวน์ตามโปรโมชัน ตรวจสภาพครบถ้วน เช็คประวัติรถก่อนส่งมอบ
             </div>
           </details>
           <details className="bg-white rounded-xl p-4 shadow">
@@ -787,13 +789,15 @@ export default function Home({ cars }) {
               ติดเครดิตบูโรออกได้ไหม?
             </summary>
             <div className="text-gray-700 pt-2 font-medium">
-              สอบถามข้อมูลได้ทาง LINE, ส่วนมากไฟแนนซ์ให้โอกาส! แจ้งรายละเอียดกับทีมงาน
+              ได้! แพลตฟอร์มออนไลน์ของเรามีไฟแนนซ์หลากหลายแบบ สอบถามข้อมูลได้ทาง LINE หรือโทร
+              094-064-9018
             </div>
           </details>
           <details className="bg-white rounded-xl p-4 shadow">
             <summary className="font-bold text-gray-900 cursor-pointer">มีรับประกันไหม?</summary>
             <div className="text-gray-700 pt-2 font-medium">
-              รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม
+              รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม ตรวจสภาพครบถ้วนก่อนส่งมอบ
+              พร้อมบริการหลังการขายครบครัน
             </div>
           </details>
         </div>

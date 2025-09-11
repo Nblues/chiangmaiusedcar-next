@@ -19,7 +19,7 @@ export default function SEO({
     const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่';
     const defaultDescription =
       process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
-      'รถมือสองเชียงใหม่ ครูหนึ่งรถสวย ศูนย์รวมรถบ้านคุณภาพดี ฟรีดาวน์ 0% ผ่อนถูกที่สุด รับประกัน 1 ปี บริการสินเชื่อครบวงจร เครดิตไม่ผ่านก็มีทาง ส่งฟรีทั่วไทย โทร 094-064-9018';
+      'รถมือสองเชียงใหม่คุณภาพดี ครูหนึ่งรถสวย ตรวจสภาพครบถ้วน ฟรีดาวน์ ดอกเบี้ยต่ำ รับประกัน 1 ปี ส่งฟรีทั่วไทย เช็คประวัติรถ โทร 094-064-9018';
 
     // 2025 SEO: Keywords moved to structured data - keeping for compatibility
     const aiOptimizedKeywords = [

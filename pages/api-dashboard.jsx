@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import SEO from '../components/SEO';
 import { safeAPIFetch } from '../lib/safeFetch';
 
 export default function APIDashboard() {
@@ -58,8 +59,13 @@ export default function APIDashboard() {
 
   return (
     <>
+      <SEO
+        title="API Dashboard - ระบบตรวจสอบการเชื่อมต่อ"
+        description="แดชบอร์ดตรวจสอบสถานะการเชื่อมต่อ API ต่างๆ ของระบบรถมือสองเชียงใหม่ ครูหนึ่งรถสวย"
+        url="/api-dashboard"
+        image="/herobanner/api-dashboard.webp"
+      />
       <Head>
-        <title>API Dashboard - ครูหนึ่งรถสวย</title>
         {process.env.NODE_ENV === 'development' && (
           <meta name="robots" content="noindex, nofollow" />
         )}

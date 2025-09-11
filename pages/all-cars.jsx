@@ -152,8 +152,8 @@ export default function AllCars({ cars }) {
   return (
     <div className="min-h-screen">
       <SEO
-        title={`รถมือสองเชียงใหม่ทั้งหมด${totalPages > 1 && currentPage > 1 ? ` หน้า ${currentPage}` : ''} ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน | ครูหนึ่งรถสวย`}
-        description={`รถมือสองเชียงใหม่คุณภาพดี ${filteredCars.length} คัน รถบ้านแท้ 100% ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน เครดิตไม่ผ่านก็มีทาง ผ่อนถูกสุด รับประกัน 1 ปี ส่งฟรีทั่วไทย${totalPages > 1 ? ` หน้า ${currentPage}/${totalPages}` : ''} Toyota Honda Nissan Mazda Mitsubishi และอื่นๆ โทร 094-064-9018`}
+        title={`รถมือสองเชียงใหม่ทั้งหมด${totalPages > 1 && currentPage > 1 ? ` หน้า ${currentPage}` : ''} ตรวจสภาพครบถ้วน เช็คประวัติรถ ฟรีดาวน์ | ครูหนึ่งรถสวย`}
+        description={`รถมือสองเชียงใหม่คุณภาพดี ${filteredCars.length} คัน แพลตฟอร์มออนไลน์ ตรวจสภาพครบถ้วน เช็คประวัติรถ ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย${totalPages > 1 ? ` หน้า ${currentPage}/${totalPages}` : ''} Toyota Honda Nissan โทร 094-064-9018`}
         url={`/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`}
         image="https://chiangmaiusedcar.com/herobanner/allusedcars.webp"
         type="website"
@@ -221,12 +221,21 @@ export default function AllCars({ cars }) {
       {mounted && totalPages > 1 && (
         <Head>
           {currentPage > 1 && (
-            <link rel="prev" href={`https://chiangmaiusedcar.com${getPageUrl(currentPage - 1)}`} />
+            <link
+              rel="prev"
+              href={`https://www.chiangmaiusedcar.com${getPageUrl(currentPage - 1)}`}
+            />
           )}
           {currentPage < totalPages && (
-            <link rel="next" href={`https://chiangmaiusedcar.com${getPageUrl(currentPage + 1)}`} />
+            <link
+              rel="next"
+              href={`https://www.chiangmaiusedcar.com${getPageUrl(currentPage + 1)}`}
+            />
           )}
-          <link rel="canonical" href={`https://chiangmaiusedcar.com${getPageUrl(currentPage)}`} />
+          <link
+            rel="canonical"
+            href={`https://www.chiangmaiusedcar.com${getPageUrl(currentPage)}`}
+          />
         </Head>
       )}
 

@@ -1,0 +1,34 @@
+{
+  "competitors": [
+    {
+      "name": "AK Car Center",
+      "url": "https://www.akcarcenter.com/",
+      "focus": "Premium used cars dealer",
+      "location": "Bangkok (reference for CNX)"
+    },
+    {
+      "name": "One2Car Chiang Mai",
+      "url": "https://www.one2car.com/th/used-cars-for-sale/chiang-mai",
+      "focus": "Marketplace - Chiang Mai section",
+      "location": "Chiang Mai"
+    },
+    {
+      "name": "Carsome Chiang Mai",
+      "url": "https://www.carsome.co.th/buy-car/used-car/chiang-mai",
+      "focus": "Corporate dealer - Chiang Mai",
+      "location": "Chiang Mai"
+    },
+    {
+      "name": "Ennxo Chiang Mai",
+      "url": "https://www.ennxo.com/car/chiang-mai",
+      "focus": "Car marketplace - Chiang Mai",
+      "location": "Chiang Mai"
+    }
+  ],
+  "pages_to_analyze": ["/", "/all-cars", "/car-detail", "/promotion", "/contact"],
+  "settings": {
+    "lighthouse_timeout": 30000,
+    "scrape_timeout": 15000,
+    "user_agent": "Mozilla/5.0 (compatible; SEO-Audit-Bot/1.0; +https://chiangmaiusedcar.com)"
+  }
+}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import SEO from '../components/SEO';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 
@@ -92,12 +93,13 @@ export default function KeywordAudit() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEO
+        title="รายงานตรวจสอบคีย์เวิร์ด SEO 2025"
+        description="รายงานการตรวจสอบความถูกต้องของคีย์เวิร์ด SEO ตามมาตรฐานสากล 2025 ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
+        url="/keyword-audit"
+        image="/herobanner/seo-audit.webp"
+      />
       <Head>
-        <title>รายงานตรวจสอบคีย์เวิร์ด - ครูหนึ่งรถสวย</title>
-        <meta
-          name="description"
-          content="รายงานการตรวจสอบความถูกต้องของคีย์เวิร์ด SEO ตามมาตรฐานสากล 2025"
-        />
         {process.env.NODE_ENV === 'development' && (
           <meta name="robots" content="noindex, nofollow" />
         )}

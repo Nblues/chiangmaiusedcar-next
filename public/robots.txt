@@ -2,12 +2,24 @@
 # Enhanced for AI Crawlers 2025
 User-agent: *
 Allow: /
+Allow: /_next/static/
+Allow: /_next/image/
+Allow: *.js
+Allow: *.css
+Allow: *.webp
+Allow: *.png
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.svg
 Disallow: /api*
-Disallow: /_next*
+Disallow: /_next/data/
 Disallow: /secret*
 Disallow: /private*
 Disallow: /drafts*
 Disallow: /admin*
+Disallow: /api-dashboard*
+Disallow: /keyword-audit*
+Disallow: /_error*
 
 # Googlebot
 User-agent: Googlebot
