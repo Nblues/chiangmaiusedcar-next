@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 async function generateImageSitemap() {
-  const siteUrl = 'https://chiangmaiusedcar.com';
+  const siteUrl = 'https://www.chiangmaiusedcar.com';
 
   // รูปภาพหลัก
   const mainImages = [

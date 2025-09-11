@@ -1,5 +1,5 @@
 module.exports = {
-  siteUrl: process.env.SITE_URL || 'https://chiangmaiusedcar.com',
+  siteUrl: process.env.SITE_URL || 'https://www.chiangmaiusedcar.com',
   generateRobotsTxt: true,
   generateIndexSitemap: true,
   sitemapSize: 7000,
@@ -66,13 +66,12 @@ module.exports = {
       },
     ],
     additionalSitemaps: [
-      'https://chiangmaiusedcar.com/sitemap-0.xml',
-      'https://chiangmaiusedcar.com/sitemap-cars.xml',
-      'https://chiangmaiusedcar.com/sitemap-images.xml',
-      'https://chiangmaiusedcar.com/sitemap-videos.xml', // For future video content
+      'https://www.chiangmaiusedcar.com/sitemap-0.xml',
+      'https://www.chiangmaiusedcar.com/sitemap-cars.xml',
+      'https://www.chiangmaiusedcar.com/sitemap-images.xml',
     ],
     // Add host directive for consistency
-    host: 'https://chiangmaiusedcar.com',
+    host: 'https://www.chiangmaiusedcar.com',
     // 2025 enhancement: crawl delay for different bots
     transformRobotsTxt: async (config, robotsTxt) => {
       return robotsTxt
@@ -100,6 +99,7 @@ Sitemap: `
     '/_document',
     '/_app',
     '/_error',
+    '/payment-calculator-new',
     '/admin*',
   ],
 
@@ -175,11 +175,11 @@ Sitemap: `
       lastmod,
       alternateRefs: [
         {
-          href: `${config.siteUrl}${path}`,
+          href: `https://www.chiangmaiusedcar.com${path}`,
           hreflang: 'th',
         },
         {
-          href: `${config.siteUrl}${path}`,
+          href: `https://www.chiangmaiusedcar.com${path}`,
           hreflang: 'th-TH',
         },
       ],

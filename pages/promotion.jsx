@@ -51,23 +51,24 @@ export default function Promotion() {
         suppressHydrationWarning
       >
         {/* Hero Banner */}
-        <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
-          <A11yImage
-            src="/herobanner/promotion.webp"
-            alt="โปรโมชั่นพิเศษ รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย"
-            fill
-            className="object-cover object-center"
-            priority
-            quality={85}
-            sizes="100vw"
-          />
+        <section className="relative w-full h-auto overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
+          <div className="relative w-full max-w-7xl mx-auto">
+            <A11yImage
+              src="/herobanner/promotion.webp"
+              alt="โปรโมชั่นพิเศษ รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย"
+              width={1920}
+              height={1080}
+              className="w-full h-auto object-contain"
+              priority
+              quality={90}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+              style={{ maxHeight: '80vh' }}
+            />
+          </div>
 
           {/* Content over banner */}
           <div className="absolute inset-0 flex items-end md:items-center justify-center pb-8 md:pb-0 overflow-hidden">
             <div className="text-center text-white px-4 max-w-4xl mx-auto">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 font-prompt drop-shadow-2xl text-white">
-                โปรโมชั่นพิเศษ
-              </h1>
               <p className="text-sm sm:text-base md:text-xl lg:text-2xl font-prompt drop-shadow-2xl text-white font-bold mb-4">
                 ข้อเสนอสุดคุ้มสำหรับลูกค้าที่ออกรถกับเรา
               </p>

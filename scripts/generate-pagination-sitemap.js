@@ -9,7 +9,7 @@ async function generatePaginationSitemap() {
     const carsPerPage = 8;
     const totalPages = Math.ceil(totalCars / carsPerPage);
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chiangmaiusedcar.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chiangmaiusedcar.com';
 
     let sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -78,7 +78,7 @@ async function generatePaginationSitemap() {
 
 function updateSitemapIndex() {
   try {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chiangmaiusedcar.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chiangmaiusedcar.com';
 
     const sitemapIndexXml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

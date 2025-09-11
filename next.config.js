@@ -301,6 +301,27 @@ const nextConfig = {
     ];
   },
 
+  // Redirects for SEO and domain consistency
+  async redirects() {
+    return [
+      // Force www subdomain with single-hop redirect
+      {
+        source: '/(.*)',
+        has: [
+          {
+            type: 'host',
+            value: 'chiangmaiusedcar.com',
+          },
+        ],
+        destination: 'https://www.chiangmaiusedcar.com/:path*',
+        permanent: true,
+        statusCode: 301,
+      },
+      // Remove any 404 redirects (if any legacy URLs need redirecting)
+      // Add specific 301 redirects here if needed
+    ];
+  },
+
   // Disable problematic features during build
   eslint: {
     ignoreDuringBuilds: false,

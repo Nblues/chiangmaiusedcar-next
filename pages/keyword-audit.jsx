@@ -98,7 +98,9 @@ export default function KeywordAudit() {
           name="description"
           content="รายงานการตรวจสอบความถูกต้องของคีย์เวิร์ด SEO ตามมาตรฐานสากล 2025"
         />
-        <meta name="robots" content="noindex, nofollow" />
+        {process.env.NODE_ENV === 'development' && (
+          <meta name="robots" content="noindex, nofollow" />
+        )}
       </Head>
 
       <Navbar />

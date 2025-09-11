@@ -60,7 +60,9 @@ export default function APIDashboard() {
     <>
       <Head>
         <title>API Dashboard - ครูหนึ่งรถสวย</title>
-        <meta name="robots" content="noindex, nofollow" />
+        {process.env.NODE_ENV === 'development' && (
+          <meta name="robots" content="noindex, nofollow" />
+        )}
       </Head>
 
       <div className="min-h-screen bg-gray-50 py-8">

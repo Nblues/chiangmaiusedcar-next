@@ -15,7 +15,7 @@ export default function SEO({
 }) {
   // Memoize static values to prevent unnecessary re-renders
   const staticValues = useMemo(() => {
-    const site = process.env.SITE_URL || 'https://www.chiangmaiusedcar.com';
+    const site = 'https://www.chiangmaiusedcar.com';
     const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่';
     const defaultDescription =
       process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||

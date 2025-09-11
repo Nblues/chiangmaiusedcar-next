@@ -176,16 +176,20 @@ export default function Contact() {
 
       <main className="min-h-screen bg-white">
         {/* Hero Banner */}
-        <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
-          <A11yImage
-            src="/herobanner/contact.webp"
-            alt="ติดต่อเรา - ครูหนึ่งรถสวย"
-            fill
-            className="object-cover object-center"
-            priority
-            quality={85}
-            sizes="100vw"
-          />
+        <section className="relative w-full h-auto overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
+          <div className="relative w-full max-w-7xl mx-auto">
+            <A11yImage
+              src="/herobanner/contact.webp"
+              alt="ติดต่อเรา - ครูหนึ่งรถสวย"
+              width={1920}
+              height={1080}
+              className="w-full h-auto object-contain"
+              priority
+              quality={90}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+              style={{ maxHeight: '80vh' }}
+            />
+          </div>
 
           {/* Content over banner */}
           <div className="absolute inset-0 flex items-center justify-center">
@@ -198,15 +202,9 @@ export default function Contact() {
               </p>
 
               {/* Quick Contact Info */}
-              <div className="flex flex-wrap justify-center gap-4 text-sm">
-                <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white border border-white/30">
-                  <span className="font-semibold">⏰ เปิดทุกวัน 9:00-20:00 น.</span>
-                </div>
-                <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white border border-white/30">
-                  <span className="font-semibold">📞 094-064-9018</span>
-                </div>
-                <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white border border-white/30">
-                  <span className="font-semibold">📱 LINE ปรึกษา</span>
+              <div className="flex flex-wrap justify-center gap-1 md:gap-2 text-xs">
+                <div className="px-1 py-1 text-white">
+                  <span className="font-semibold">เปิดทุกวัน 9:00-20:00 น.</span>
                 </div>
               </div>
             </div>
