@@ -190,6 +190,7 @@ function CarDetailPage({ car, allCars }) {
         image={socialImage}
         url={`/car/${safeGet(car, 'handle', '')}`}
         type="product"
+        pageType="car"
         carData={{
           ...car,
           title: enhancedTitle,

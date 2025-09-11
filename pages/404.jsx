@@ -10,6 +10,7 @@ export default function Custom404() {
         description="ขออภัย ไม่พบหน้าที่คุณต้องการ กรุณาเลือกดูรถมือสองเชียงใหม่คุณภาพดี หรือติดต่อสอบถาม ครูหนึ่งรถสวย"
         url="/404"
         image="/herobanner/404-page.webp"
+        pageType="default"
       />
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center p-8">

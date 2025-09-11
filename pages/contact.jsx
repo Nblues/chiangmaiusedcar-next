@@ -157,6 +157,7 @@ export default function Contact() {
         canonical="https://chiangmaiusedcar.com/contact"
         locale="th_TH"
         alternate={[{ href: 'https://chiangmaiusedcar.com/contact', hrefLang: 'th-TH' }]}
+        pageType="contact"
       />
 
       {/* Breadcrumb Schema */}

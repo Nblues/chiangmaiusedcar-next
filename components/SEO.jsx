@@ -2,6 +2,11 @@ import React, { useMemo } from 'react';
 import Head from 'next/head';
 import { buildCarJsonLd, buildLocalBusinessJsonLd } from '../lib/seo/jsonld.js';
 import { getSiteLocation } from '../utils/siteLocation';
+import {
+  getSocialImageUrl,
+  getPlatformImage,
+  SOCIAL_PLATFORMS_CONFIG,
+} from '../lib/social-sharing';
 
 export default function SEO({
   title,
@@ -12,6 +17,7 @@ export default function SEO({
   image = null,
   carData = null,
   structuredData = null,
+  pageType = 'default', // เพิ่มพารามิเตอร์ pageType สำหรับ social sharing 2025
 }) {
   // Memoize static values to prevent unnecessary re-renders
   const staticValues = useMemo(() => {
@@ -101,13 +107,20 @@ export default function SEO({
     const stableTimestamp = process.env.CUSTOM_BUILD_TIME || buildTime;
     const timestamp = new Date(stableTimestamp).getTime();
 
-    // Default image for social sharing
-    const defaultImage = `${site}/herobanner/chiangmaiusedcar.webp`;
+    // 2025 Social Sharing: Use optimized social images based on page type
+    const defaultImage = getSocialImageUrl(pageType, site);
     const metaImage = image || defaultImage;
 
-    // Enhanced Open Graph for better link sharing
-    const enhancedTitle = metaTitle.length > 60 ? metaTitle.substring(0, 57) + '...' : metaTitle;
-    const enhancedDesc = metaDesc.length > 155 ? metaDesc.substring(0, 152) + '...' : metaDesc;
+    // Enhanced Open Graph for better link sharing with 2025 standards
+    const enhancedTitle =
+      metaTitle.length > SOCIAL_PLATFORMS_CONFIG.facebook.optimal_title_length
+        ? metaTitle.substring(0, SOCIAL_PLATFORMS_CONFIG.facebook.optimal_title_length - 3) + '...'
+        : metaTitle;
+    const enhancedDesc =
+      metaDesc.length > SOCIAL_PLATFORMS_CONFIG.facebook.optimal_description_length
+        ? metaDesc.substring(0, SOCIAL_PLATFORMS_CONFIG.facebook.optimal_description_length - 3) +
+          '...'
+        : metaDesc;
 
     return {
       fullUrl,
@@ -120,7 +133,7 @@ export default function SEO({
       defaultImage,
       siteLocation,
     };
-  }, [title, description, url, staticValues, image]);
+  }, [title, description, url, staticValues, image, pageType]);
 
   // Memoize absolute image URL
   const absoluteImage = useMemo(() => {
@@ -144,15 +157,16 @@ export default function SEO({
     return imgUrl;
   }, [staticValues, computedValues]);
 
-  // Memoize OG images array
-  const ogImages = useMemo(
-    () => [
+  // Memoize OG images array with 2025 social sharing standards
+  const ogImages = useMemo(() => {
+    // Return primary formats for Open Graph with enhanced 2025 compatibility
+    return [
       { url: absoluteImage, width: 1200, height: 630, type: 'image/webp' },
+      { url: absoluteImage, width: 1200, height: 675, type: 'image/webp' },
       { url: absoluteImage, width: 800, height: 600, type: 'image/webp' },
       { url: absoluteImage, width: 600, height: 315, type: 'image/webp' },
-    ],
-    [absoluteImage]
-  );
+    ];
+  }, [absoluteImage]);
 
   // Simplified debug - only log once per unique component props (disabled in production)
   const debugKey = useMemo(
@@ -183,6 +197,12 @@ export default function SEO({
 
   const { site, buildTime, siteAuthor } = staticValues;
   const { fullUrl, metaTitle, metaDesc, enhancedTitle, enhancedDesc, timestamp } = computedValues;
+
+  // Get platform-specific images for enhanced 2025 social sharing
+  const twitterImage = getPlatformImage(pageType, 'twitter_large');
+  const lineImage = getPlatformImage(pageType, 'line');
+  const whatsappImage = getPlatformImage(pageType, 'whatsapp');
+  const telegramImage = getPlatformImage(pageType, 'telegram');
 
   return (
     <Head>
@@ -308,17 +328,16 @@ export default function SEO({
       {/* Facebook App ID for better analytics */}
       <meta property="fb:app_id" content="393815362560599" />
 
-      {/* Enhanced Twitter Card Meta Tags */}
+      {/* Enhanced Twitter Card Meta Tags - 2025 Standards */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={enhancedTitle} />
       <meta name="twitter:description" content={enhancedDesc} />
       <meta name="twitter:site" content="@krunueng_usedcar" />
       <meta name="twitter:creator" content="@krunueng_usedcar" />
-      <meta name="twitter:image" content={absoluteImage} />
-      <meta
-        name="twitter:image:alt"
-        content={`${enhancedTitle} - รถมือสองเชียงใหม่ ครูหนึ่งรถสวย`}
-      />
+      <meta name="twitter:image" content={twitterImage.url} />
+      <meta name="twitter:image:width" content={twitterImage.width.toString()} />
+      <meta name="twitter:image:height" content={twitterImage.height.toString()} />
+      <meta name="twitter:image:alt" content={twitterImage.alt} />
       <meta name="twitter:domain" content="chiangmaiusedcar.com" />
       <meta
         name="twitter:data1"
@@ -332,22 +351,31 @@ export default function SEO({
       <meta name="twitter:data2" content={carData?.year || 'ติดต่อสอบถาม'} />
       <meta name="twitter:label2" content="ปี" />
 
-      {/* LINE and WhatsApp specific tags - optimized for Thai market */}
+      {/* LINE Meta Tags - 2025 Thai Market Optimization */}
       <meta property="line:card" content="summary_large_image" />
       <meta property="line:site" content="@krunueng_usedcar" />
       <meta property="line:title" content={enhancedTitle} />
       <meta property="line:description" content={enhancedDesc} />
-      <meta property="line:image" content={absoluteImage} />
+      <meta property="line:image" content={lineImage.url} />
+      <meta property="line:image:width" content={lineImage.width.toString()} />
+      <meta property="line:image:height" content={lineImage.height.toString()} />
+      <meta property="line:image:alt" content={lineImage.alt} />
 
-      {/* WhatsApp specific meta tags */}
+      {/* WhatsApp Meta Tags - 2025 Standards */}
       <meta property="whatsapp:title" content={enhancedTitle} />
       <meta property="whatsapp:description" content={enhancedDesc} />
-      <meta property="whatsapp:image" content={absoluteImage} />
+      <meta property="whatsapp:image" content={whatsappImage.url} />
+      <meta property="whatsapp:image:width" content={whatsappImage.width.toString()} />
+      <meta property="whatsapp:image:height" content={whatsappImage.height.toString()} />
+      <meta property="whatsapp:image:alt" content={whatsappImage.alt} />
 
-      {/* Telegram specific meta tags */}
+      {/* Telegram Meta Tags - 2025 Standards */}
       <meta property="telegram:title" content={enhancedTitle} />
       <meta property="telegram:description" content={enhancedDesc} />
-      <meta property="telegram:image" content={absoluteImage} />
+      <meta property="telegram:image" content={telegramImage.url} />
+      <meta property="telegram:image:width" content={telegramImage.width.toString()} />
+      <meta property="telegram:image:height" content={telegramImage.height.toString()} />
+      <meta property="telegram:image:alt" content={telegramImage.alt} />
 
       {/* Additional Social Platform Support */}
       <meta name="pinterest-rich-pin" content="true" />

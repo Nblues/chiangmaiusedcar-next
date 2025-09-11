@@ -157,6 +157,7 @@ export default function AllCars({ cars }) {
         url={`/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`}
         image="https://chiangmaiusedcar.com/herobanner/allusedcars.webp"
         type="website"
+        pageType="all-cars"
         structuredData={{
           '@context': 'https://schema.org',
           '@type': 'CollectionPage',

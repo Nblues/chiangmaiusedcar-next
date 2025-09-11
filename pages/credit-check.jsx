@@ -282,6 +282,7 @@ export default function CreditCheck() {
         image="/cover.jpg"
         canonical="https://chiangmaiusedcar.com/credit-check"
         locale="th_TH"
+        pageType="credit-check"
         structuredData={{
           '@context': 'https://schema.org',
           '@type': 'Service',

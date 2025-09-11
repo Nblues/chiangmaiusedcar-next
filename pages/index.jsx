@@ -146,6 +146,7 @@ export default function Home({ cars }) {
         url="/"
         image="https://chiangmaiusedcar.com/herobanner/chiangmaiusedcars.webp"
         type="website"
+        pageType="home"
         structuredData={{
           '@context': 'https://schema.org',
           '@type': 'ItemList',

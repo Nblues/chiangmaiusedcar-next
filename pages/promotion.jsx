@@ -14,7 +14,13 @@ export default function Promotion() {
 
   return (
     <>
-      <SEO title={pageTitle} description={pageDescription} url="/promotion" image={pageImage} />
+      <SEO
+        title={pageTitle}
+        description={pageDescription}
+        url="/promotion"
+        image={pageImage}
+        pageType="promotion"
+      />
       <Head>
         <script
           type="application/ld+json"

@@ -40,6 +40,7 @@ export default function About() {
         url="/about"
         image="https://chiangmaiusedcar.com/herobanner/team.webp"
         type="profile"
+        pageType="about"
         structuredData={{
           '@context': 'https://schema.org',
           '@type': 'Person',
