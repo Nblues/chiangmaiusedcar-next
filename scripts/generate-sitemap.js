@@ -22,8 +22,9 @@ async function generateEnhancedSitemap() {
   console.log('🚀 Starting enhanced sitemap generation...');
 
   try {
-    // Import the Shopify library
-    const { getAllCars } = require('../lib/shopify');
+    // Import the Shopify library (dynamic import for ES modules)
+    const shopify = await import('../lib/shopify.mjs');
+    const { getAllCars } = shopify;
 
     // Get all cars
     console.log('📡 Fetching cars data...');
