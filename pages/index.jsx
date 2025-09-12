@@ -144,7 +144,7 @@ export default function Home({ cars }) {
         title="รถมือสองเชียงใหม่ คุณภาพดี ตรวจสภาพครบถ้วน | ครูหนึ่งรถสวย"
         description="รถมือสองเชียงใหม่คุณภาพดี ครูหนึ่งรถสวย ตรวจสภาพครบถ้วน ฟรีดาวน์ ดอกเบี้ยต่ำ รับประกัน 1 ปี ส่งฟรีทั่วไทย เช็คประวัติรถ โทร 094-064-9018"
         url="/"
-        image="https://chiangmaiusedcar.com/herobanner/chiangmaiusedcars.webp"
+        image="https://chiangmaiusedcar.com/herobanner/cnxcar.webp"
         type="website"
         pageType="home"
         structuredData={{
@@ -164,7 +164,7 @@ export default function Home({ cars }) {
               brand: car.vendor || car.brand || 'รถมือสอง',
               model: car.model || '',
               year: car.year || '',
-              image: car.images?.[0]?.url || '/herobanner/chiangmaiusedcars.webp',
+              image: car.images?.[0]?.url || '/herobanner/cnxcar.webp',
               offers: {
                 '@type': 'Offer',
                 price: car.price?.amount || '0',
@@ -206,7 +206,7 @@ export default function Home({ cars }) {
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-7xl mx-auto">
           <A11yImage
-            src="/herobanner/chiangmaiusedcars.webp"
+            src="/herobanner/cnxcar.webp"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             width={1920}
             height={1080}
@@ -264,9 +264,9 @@ export default function Home({ cars }) {
             ค้นหารถที่คุณต้องการ
           </h2>
 
-          {/* Search Bar */}
+          {/* Search Bar - 2025 Modern Design */}
           <div className="max-w-4xl mx-auto font-prompt">
-            <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 border border-gray-200">
+            <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 border-2 border-gray-200">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 {/* Search */}
                 <div>
@@ -279,7 +279,7 @@ export default function Home({ cars }) {
                     placeholder="ค้นหารถ..."
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-accent focus:ring-1 focus:ring-accent text-gray-900 placeholder-gray-500 bg-white"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 placeholder-gray-500 bg-white transition-all duration-200"
                   />
                 </div>
 
@@ -292,7 +292,7 @@ export default function Home({ cars }) {
                     id="priceRange"
                     value={priceRange}
                     onChange={e => setPriceRange(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-accent focus:ring-1 focus:ring-accent text-gray-900 bg-white"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 bg-white transition-all duration-200"
                   >
                     {priceRanges.map(range => (
                       <option key={range.value} value={range.value}>
@@ -311,7 +311,7 @@ export default function Home({ cars }) {
                     id="brandFilter"
                     value={brandFilter}
                     onChange={e => setBrandFilter(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-accent focus:ring-1 focus:ring-accent text-gray-900 bg-white"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 bg-white transition-all duration-200"
                   >
                     <option value="all">ทุกยี่ห้อ</option>
                     {brands.slice(1).map(brand => (
@@ -327,86 +327,80 @@ export default function Home({ cars }) {
                   <button
                     type="button"
                     onClick={handleSearch}
-                    className="w-full bg-accent hover:bg-accent-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300 font-prompt"
+                    className="w-full bg-accent hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 font-prompt shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
                     ค้นหา
                   </button>
                 </div>
               </div>
 
-              {/* Quick Links - Price Ranges (Modern 2025 Design) */}
+              {/* Quick Links - Price Ranges (2025 Modern Clean Design) */}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
                 <Link
                   href="/all-cars?price=0-100000"
-                  className="group relative text-center p-3 bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 rounded-xl hover:from-blue-100 hover:to-indigo-200 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-sm text-blue-700 group-hover:text-blue-800">
+                  <div className="font-bold text-sm text-primary group-hover:text-white">
                     ต่ำกว่า 1 แสน
                   </div>
-                  <div className="text-xs font-bold text-orange-500 group-hover:text-orange-600">
+                  <div className="text-xs font-bold text-accent group-hover:text-white">
                     &lt; 100K
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
                 <Link
                   href="/all-cars?price=100000-200000"
-                  className="group relative text-center p-3 bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 rounded-xl hover:from-blue-100 hover:to-indigo-200 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-sm text-blue-700 group-hover:text-blue-800">
+                  <div className="font-bold text-sm text-primary group-hover:text-white">
                     1-2 แสน
                   </div>
-                  <div className="text-xs font-bold text-orange-500 group-hover:text-orange-600">
+                  <div className="text-xs font-bold text-accent group-hover:text-white">
                     100K-200K
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
                 <Link
                   href="/all-cars?price=200000-300000"
-                  className="group relative text-center p-3 bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 rounded-xl hover:from-blue-100 hover:to-indigo-200 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-sm text-blue-700 group-hover:text-blue-800">
+                  <div className="font-bold text-sm text-primary group-hover:text-white">
                     2-3 แสน
                   </div>
-                  <div className="text-xs font-bold text-orange-500 group-hover:text-orange-600">
+                  <div className="text-xs font-bold text-accent group-hover:text-white">
                     200K-300K
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
                 <Link
                   href="/all-cars?price=400000-500000"
-                  className="group relative text-center p-3 bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 rounded-xl hover:from-blue-100 hover:to-indigo-200 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-sm text-blue-700 group-hover:text-blue-800">
+                  <div className="font-bold text-sm text-primary group-hover:text-white">
                     4-5 แสน
                   </div>
-                  <div className="text-xs font-bold text-orange-500 group-hover:text-orange-600">
+                  <div className="text-xs font-bold text-accent group-hover:text-white">
                     400K-500K
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
                 <Link
                   href="/all-cars?price=600000-700000"
-                  className="group relative text-center p-3 bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 rounded-xl hover:from-blue-100 hover:to-indigo-200 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-sm text-blue-700 group-hover:text-blue-800">
+                  <div className="font-bold text-sm text-primary group-hover:text-white">
                     6-7 แสน
                   </div>
-                  <div className="text-xs font-bold text-orange-500 group-hover:text-orange-600">
+                  <div className="text-xs font-bold text-accent group-hover:text-white">
                     600K-700K
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
                 <Link
                   href="/all-cars?price=700000"
-                  className="group relative text-center p-3 bg-gradient-to-br from-orange-50 to-amber-100 border border-orange-200 rounded-xl hover:from-orange-100 hover:to-amber-200 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="group text-center p-3 bg-white border-2 border-accent rounded-xl hover:bg-accent hover:border-accent transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-sm text-orange-700 group-hover:text-orange-800">
+                  <div className="font-bold text-sm text-accent group-hover:text-white">
                     7 แสนขึ้นไป
                   </div>
-                  <div className="text-xs font-bold text-blue-500 group-hover:text-blue-600">
+                  <div className="text-xs font-bold text-primary group-hover:text-white">
                     &gt; 700K
                   </div>
-                  <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </Link>
               </div>
             </div>

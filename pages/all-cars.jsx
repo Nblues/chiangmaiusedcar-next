@@ -155,7 +155,7 @@ export default function AllCars({ cars }) {
         title={`รถมือสองเชียงใหม่ทั้งหมด${totalPages > 1 && currentPage > 1 ? ` หน้า ${currentPage}` : ''} ตรวจสภาพครบถ้วน เช็คประวัติรถ ฟรีดาวน์ | ครูหนึ่งรถสวย`}
         description={`รถมือสองเชียงใหม่คุณภาพดี ${filteredCars.length} คัน แพลตฟอร์มออนไลน์ ตรวจสภาพครบถ้วน เช็คประวัติรถ ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย${totalPages > 1 ? ` หน้า ${currentPage}/${totalPages}` : ''} Toyota Honda Nissan โทร 094-064-9018`}
         url={`/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`}
-        image="https://chiangmaiusedcar.com/herobanner/allusedcars.webp"
+        image="https://chiangmaiusedcar.com/herobanner/cnxallcar.webp"
         type="website"
         pageType="all-cars"
         structuredData={{
@@ -331,30 +331,51 @@ export default function AllCars({ cars }) {
         </Head>
       )}
 
-      {/* Hero Banner */}
-      <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
+      {/* Hero Banner - 2025 Modern Design */}
+      <section className="relative w-full h-[150px] sm:h-[200px] md:h-[250px] lg:h-[300px] overflow-hidden bg-white">
         <A11yImage
-          src="/herobanner/allusedcars.webp"
+          src="/herobanner/cnxallcar.webp"
           alt="รถมือสองทั้งหมด - ครูหนึ่งรถสวย"
           fill
-          className="object-cover object-center"
+          className="object-cover object-top"
           priority
           quality={85}
           sizes="100vw"
         />
 
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/40"></div>
+
         {/* Content over banner */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-4 max-w-4xl mx-auto">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 font-prompt drop-shadow-lg">
+          <div className="text-center px-4 max-w-4xl mx-auto">
+            <h1
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-1 md:mb-2 font-prompt text-white"
+              style={{
+                textShadow:
+                  '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
+              }}
+            >
               รถมือสองทั้งหมด
             </h1>
             <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap">
-              <p className="text-sm sm:text-base md:text-xl lg:text-2xl font-prompt drop-shadow-lg text-black font-bold">
+              <p
+                className="text-xs sm:text-sm md:text-lg lg:text-xl font-prompt text-white font-bold"
+                style={{
+                  textShadow:
+                    '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
+                }}
+              >
                 รถคุณภาพดี {mounted ? filteredCars.length : '...'} คัน พร้อมส่งมอบ
               </p>
               {mounted && totalPages > 1 && (
-                <p className="text-xs sm:text-sm md:text-base lg:text-lg drop-shadow-lg font-prompt text-black font-semibold">
+                <p
+                  className="text-xs sm:text-xs md:text-sm lg:text-base font-prompt text-white font-semibold"
+                  style={{
+                    textShadow:
+                      '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
+                  }}
+                >
                   หน้า {currentPage}/{totalPages}
                 </p>
               )}
@@ -377,7 +398,7 @@ export default function AllCars({ cars }) {
       </section>
 
       {/* Filters */}
-      <section className="bg-white py-4 md:py-6 shadow-md">
+      <section className="bg-white py-4 md:py-6 shadow-lg border-b-2 border-gray-200">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             {/* Search */}
@@ -387,7 +408,7 @@ export default function AllCars({ cars }) {
                 placeholder="ค้นหารถ..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent focus:ring-1 focus:ring-accent text-gray-900 placeholder-gray-500 bg-white"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 placeholder-gray-500 bg-white transition-all duration-200"
               />
             </div>
 
@@ -396,7 +417,7 @@ export default function AllCars({ cars }) {
               <select
                 value={priceRange}
                 onChange={e => setPriceRange(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent focus:ring-1 focus:ring-accent text-gray-900 bg-white"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 bg-white transition-all duration-200"
               >
                 {priceRanges.map(range => (
                   <option key={range.value} value={range.value}>
@@ -411,7 +432,7 @@ export default function AllCars({ cars }) {
               <select
                 value={brandFilter}
                 onChange={e => setBrandFilter(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent focus:ring-1 focus:ring-accent text-gray-900 bg-white"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 bg-white transition-all duration-200"
               >
                 <option value="all">ทุกยี่ห้อ</option>
                 {brands.slice(1).map(brand => (
@@ -436,7 +457,7 @@ export default function AllCars({ cars }) {
                     router.push('/all-cars', undefined, { shallow: true });
                   }
                 }}
-                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg transition-colors duration-300 font-prompt"
+                className="w-full bg-accent hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 font-prompt shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 รีเซ็ต
               </button>
@@ -484,12 +505,12 @@ export default function AllCars({ cars }) {
             </div>
           ) : (
             <>
-              {/* Cards Grid - Responsive Layout */}
+              {/* Cards Grid - 2025 Modern Layout */}
               <div className="car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
                 {currentCars.map(car => (
                   <article
                     key={car.id}
-                    className="car-card group bg-white rounded-xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
+                    className="car-card group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden border-2 border-gray-200 hover:border-primary flex flex-col h-full relative font-prompt"
                   >
                     {/* Main Car Link - คลิกได้ทั้งส่วนรูปและข้อมูล */}
                     <Link
@@ -501,7 +522,7 @@ export default function AllCars({ cars }) {
                       }
                       className="block focus:outline-none flex-1"
                     >
-                      <figure className="thumb relative w-full h-28 md:h-48 overflow-hidden bg-orange-600/10">
+                      <figure className="thumb relative w-full h-28 md:h-48 overflow-hidden bg-gray-100">
                         <A11yImage
                           src={
                             Array.isArray(car.images) && car.images.length > 0
@@ -517,27 +538,27 @@ export default function AllCars({ cars }) {
                         />
                       </figure>
                       <div className="p-2 md:p-3 flex flex-col">
-                        <h3 className="card-title font-extrabold text-sm md:text-lg text-gray-900 mb-1 md:mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt">
+                        <h3 className="card-title font-extrabold text-sm md:text-lg text-gray-900 mb-1 md:mb-2 group-hover:text-primary transition-colors line-clamp-2 font-prompt">
                           {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
                         </h3>
                         <div className="flex items-center justify-between mb-1 md:mb-3">
-                          <p className="price text-base md:text-xl font-bold text-orange-600 font-prompt">
+                          <p className="price text-base md:text-xl font-bold text-accent font-prompt">
                             ฿{safeFormatPrice(safeGet(car, 'price.amount')).display}
                           </p>
                         </div>
                         <ul className="text-xs md:text-sm text-gray-800 mb-1 md:mb-3 space-y-0.5 md:space-y-1 font-prompt font-medium">
                           {safeGet(car, 'tags', []).includes('ฟรีดาวน์') && (
-                            <li className="text-blue-600">✓ ฟรีดาวน์</li>
+                            <li className="text-primary">✓ ฟรีดาวน์</li>
                           )}
                           {safeGet(car, 'tags', []).includes('ผ่อนถูก') && (
-                            <li className="text-blue-600">✓ ผ่อนถูก</li>
+                            <li className="text-primary">✓ ผ่อนถูก</li>
                           )}
                           <li className="text-gray-900">✓ รับประกัน 1 ปี</li>
                         </ul>
                       </div>
                     </Link>
 
-                    {/* Action Button - ปุ่มดูรายละเอียดเท่านั้น */}
+                    {/* Action Button - Modern 2025 Design */}
                     <div className="flex p-2 pt-0 md:p-4 md:pt-0">
                       <Link
                         href={
@@ -546,17 +567,36 @@ export default function AllCars({ cars }) {
                             ? `/car/${encodeURIComponent(safeGet(car, 'handle'))}`
                             : '/all-cars'
                         }
-                        className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-full min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200 font-prompt"
+                        className="group w-full relative overflow-hidden flex items-center justify-center bg-primary hover:bg-blue-700 text-white rounded-2xl min-h-12 px-6 py-3 text-sm font-bold shadow-xl hover:shadow-2xl transition-all duration-300 font-prompt transform hover:scale-[1.02] active:scale-[0.98] border-2 border-primary/20 hover:border-primary/40"
                         aria-label={`ดูรายละเอียด ${safeGet(car, 'title', 'รถยนต์')}`}
                       >
-                        ดูรายละเอียด
+                        {/* Shine effect */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
+
+                        {/* Button content */}
+                        <span className="relative z-10 flex items-center gap-2">
+                          <svg
+                            className="w-4 h-4 transition-transform group-hover:translate-x-1"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M13 7l5 5m0 0l-5 5m5-5H6"
+                            />
+                          </svg>
+                          ดูรายละเอียด
+                        </span>
                       </Link>
                     </div>
                   </article>
                 ))}
               </div>
 
-              {/* Pagination */}
+              {/* Pagination - 2025 Modern Design */}
               {totalPages > 1 && (
                 <div className="flex justify-center items-center mt-12 space-x-2">
                   {/* Previous Button */}
@@ -564,7 +604,7 @@ export default function AllCars({ cars }) {
                     <button
                       type="button"
                       onClick={e => handlePageChange(currentPage - 1, e)}
-                      className="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition-colors font-prompt text-gray-700 hover:text-orange-600"
+                      className="px-4 py-2 bg-white border-2 border-gray-300 rounded-xl hover:bg-primary hover:border-primary hover:text-white transition-all duration-200 font-prompt text-gray-700 shadow-lg"
                       aria-label="ไปหน้าก่อนหน้า"
                     >
                       ← ก่อนหน้า
@@ -576,12 +616,12 @@ export default function AllCars({ cars }) {
                     <>
                       <button
                         onClick={e => handlePageChange(1, e)}
-                        className="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition-colors font-prompt text-gray-700 hover:text-orange-600"
+                        className="px-4 py-2 bg-white border-2 border-gray-300 rounded-xl hover:bg-primary hover:border-primary hover:text-white transition-all duration-200 font-prompt text-gray-700 shadow-lg"
                       >
                         1
                       </button>
                       {generatePageNumbers()[0] > 2 && (
-                        <span className="px-2 text-gray-500">...</span>
+                        <span className="px-2 text-gray-500 font-bold">...</span>
                       )}
                     </>
                   )}
@@ -591,10 +631,10 @@ export default function AllCars({ cars }) {
                     <button
                       key={page}
                       onClick={e => handlePageChange(page, e)}
-                      className={`px-3 py-2 rounded-lg transition-colors font-prompt ${
+                      className={`px-4 py-2 rounded-xl transition-all duration-200 font-prompt shadow-lg ${
                         page === currentPage
-                          ? 'bg-orange-600 text-white border border-orange-600 font-bold shadow-lg'
-                          : 'bg-white border border-gray-300 text-gray-700 hover:bg-orange-50 hover:border-orange-300 hover:text-orange-600'
+                          ? 'bg-accent text-white border-2 border-accent font-bold shadow-xl transform scale-110'
+                          : 'bg-white border-2 border-gray-300 text-gray-700 hover:bg-primary hover:border-primary hover:text-white'
                       }`}
                     >
                       {page}
@@ -606,7 +646,7 @@ export default function AllCars({ cars }) {
                     <button
                       type="button"
                       onClick={e => handlePageChange(currentPage + 1, e)}
-                      className="px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition-colors font-prompt text-gray-700 hover:text-orange-600"
+                      className="px-4 py-2 bg-white border-2 border-gray-300 rounded-xl hover:bg-primary hover:border-primary hover:text-white transition-all duration-200 font-prompt text-gray-700 shadow-lg"
                       aria-label="ไปหน้าถัดไป"
                     >
                       ถัดไป →

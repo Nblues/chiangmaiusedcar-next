@@ -10,7 +10,7 @@ export default function Promotion() {
   const pageTitle = 'โปรโมชัน ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน | ครูหนึ่งรถสวย';
   const pageDescription =
     'โปรโมชันรถมือสองเชียงใหม่ ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน เครดิตไม่ผ่านก็มีทาง ของแถมจัดเต็ม รับประกัน 1 ปี | ครูหนึ่งรถสวย';
-  const pageImage = `${baseUrl}/herobanner/promotioncar.webp`;
+  const pageImage = `${baseUrl}/herobanner/cnxcontact.webp`;
 
   return (
     <>
@@ -42,14 +42,11 @@ export default function Promotion() {
         />
       </Head>
 
-      <main
-        className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50"
-        suppressHydrationWarning
-      >
+      <main className="min-h-screen bg-white" suppressHydrationWarning>
         {/* Hero Banner */}
-        <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
+        <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
           <A11yImage
-            src="/herobanner/promotioncar.webp"
+            src="/herobanner/cnxcontact.webp"
             alt="โปรโมชั่นพิเศษ รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย ฟรีดาวน์ 0% รถ ECO Car"
             fill
             className="object-cover object-center"
@@ -58,11 +55,14 @@ export default function Promotion() {
             sizes="100vw"
           />
 
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/30"></div>
+
           {/* Content over banner - Mobile Optimized */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center text-white w-full max-w-5xl mx-auto px-4">
               {/* Main Offer Title */}
-              <div className="bg-black bg-opacity-60 rounded-xl sm:rounded-2xl p-2 sm:p-6 lg:p-8 backdrop-blur-sm">
+              <div className="bg-black/60 rounded-xl sm:rounded-2xl p-2 sm:p-6 lg:p-8">
                 <h1 className="text-sm sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-prompt font-bold text-white drop-shadow-2xl mb-2 sm:mb-6 leading-tight">
                   ข้อเสนอสุดคุ้มสำหรับลูกค้า
                   <br className="sm:hidden" />
@@ -71,7 +71,7 @@ export default function Promotion() {
 
                 {/* Special Offers Grid - Ultra Compact Mobile */}
                 <div className="grid grid-cols-3 gap-0.5 sm:gap-4 lg:gap-6 mb-2 sm:mb-4">
-                  <div className="bg-gradient-to-r from-primary/90 to-primary rounded sm:rounded-lg p-1 sm:p-4 shadow-lg">
+                  <div className="bg-primary rounded sm:rounded-lg p-1 sm:p-4 shadow-lg">
                     <div className="text-center">
                       <div className="text-xs sm:text-sm lg:text-base font-bold text-white leading-none">
                         ฟรี
@@ -83,7 +83,7 @@ export default function Promotion() {
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-r from-accent/90 to-accent rounded sm:rounded-lg p-1 sm:p-4 shadow-lg">
+                  <div className="bg-primary rounded sm:rounded-lg p-1 sm:p-4 shadow-lg">
                     <div className="text-center">
                       <div className="text-xs sm:text-sm lg:text-base font-bold text-white leading-none">
                         ดอกเบี้ย
@@ -95,7 +95,7 @@ export default function Promotion() {
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-r from-gold/90 to-gold rounded sm:rounded-lg p-1 sm:p-4 shadow-lg">
+                  <div className="bg-primary rounded sm:rounded-lg p-1 sm:p-4 shadow-lg">
                     <div className="text-center">
                       <div className="text-xs sm:text-sm lg:text-base font-bold text-white leading-none">
                         รับประกัน
@@ -109,13 +109,13 @@ export default function Promotion() {
                 </div>
 
                 {/* Call to Action - Ultra Compact Mobile */}
-                <div className="bg-white bg-opacity-20 rounded-lg sm:rounded-xl p-1.5 sm:p-3 backdrop-blur-sm">
+                <div className="bg-white/20 rounded-lg sm:rounded-xl p-1.5 sm:p-3">
                   <p className="text-xs sm:text-sm text-white opacity-95 mb-1 sm:mb-2">
                     โทรสอบถามเลย
                   </p>
                   <a
                     href="tel:0940649018"
-                    className="inline-block bg-gradient-to-r from-green-500 to-green-600 text-white px-2 sm:px-6 py-1.5 sm:py-3 rounded-full font-bold text-xs sm:text-base hover:shadow-lg transition-all duration-300 font-prompt"
+                    className="inline-block bg-accent hover:bg-accent/90 text-white px-2 sm:px-6 py-1.5 sm:py-3 rounded-xl font-bold text-xs sm:text-base hover:shadow-lg transition-all duration-300 font-prompt"
                   >
                     094-064-9018
                   </a>
@@ -144,7 +144,7 @@ export default function Promotion() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                 {/* ฟรีดาวน์ */}
                 <div className="group bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-accent/20 hover:border-accent hover:-translate-y-2">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-accent to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-accent rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
                     <svg
                       className="w-6 h-6 sm:w-8 sm:h-8 text-white"
                       fill="none"
@@ -179,8 +179,8 @@ export default function Promotion() {
                 </div>
 
                 {/* ดอกเบี้ยต่ำ */}
-                <div className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gold/20 hover:border-gold hover:-translate-y-2">
-                  <div className="w-16 h-16 bg-gradient-to-br from-gold to-yellow-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                <div className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-accent/20 hover:border-accent hover:-translate-y-2">
+                  <div className="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                     <svg
                       className="w-8 h-8 text-white"
                       fill="none"
@@ -200,15 +200,15 @@ export default function Promotion() {
                   </h3>
                   <ul className="text-sm text-gray-600 space-y-2 font-prompt text-left">
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-gold rounded-full mr-3"></span>
+                      <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>
                       อัตราพิเศษลูกค้าเครดิตดี
                     </li>
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-gold rounded-full mr-3"></span>ผ่อนได้นานสูงสุด 7
-                      ปี
+                      <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>ผ่อนได้นานสูงสุด
+                      7 ปี
                     </li>
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-gold rounded-full mr-3"></span>
+                      <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>
                       เครดิตไม่ผ่านก็มีทาง
                     </li>
                   </ul>
@@ -216,7 +216,7 @@ export default function Promotion() {
 
                 {/* รับประกัน */}
                 <div className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-primary/20 hover:border-primary hover:-translate-y-2">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                     <svg
                       className="w-8 h-8 text-white"
                       fill="none"
@@ -250,8 +250,8 @@ export default function Promotion() {
                 </div>
 
                 {/* เงินสด */}
-                <div className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-green-500/20 hover:border-green-500 hover:-translate-y-2">
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                <div className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-primary/20 hover:border-primary hover:-translate-y-2">
+                  <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                     <svg
                       className="w-8 h-8 text-white"
                       fill="none"
@@ -269,15 +269,15 @@ export default function Promotion() {
                   <h3 className="text-xl font-bold text-gray-900 font-prompt mb-4">ลูกค้าเงินสด</h3>
                   <ul className="text-sm text-gray-600 space-y-2 font-prompt text-left">
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
                       โอนกรรมสิทธิ์ฟรี
                     </li>
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
                       ส่งฟรีทั่วประเทศ
                     </li>
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>สปาเต็มระบบ
+                      <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>สปาเต็มระบบ
                     </li>
                   </ul>
                 </div>
@@ -287,7 +287,7 @@ export default function Promotion() {
             {/* Complete Service Package */}
             <section
               aria-labelledby="service-package"
-              className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-3xl p-8 sm:p-12"
+              className="bg-white rounded-3xl p-8 sm:p-12 border-2 border-primary/20"
             >
               <div className="text-center mb-12">
                 <h2
@@ -304,8 +304,8 @@ export default function Promotion() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {/* Pre-Delivery Services */}
-                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-blue-100 hover:border-blue-300">
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-primary rounded-xl flex items-center justify-center mb-6">
+                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-primary/20 hover:border-primary">
+                  <div className="w-14 h-14 bg-primary rounded-xl flex items-center justify-center mb-6">
                     <svg
                       className="w-7 h-7 text-white"
                       fill="none"
@@ -325,26 +325,26 @@ export default function Promotion() {
                   </h3>
                   <ul className="space-y-3 text-gray-600 font-prompt">
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                      <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
                       ตรวจเช็คเต็มระบบ
                     </li>
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                      <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
                       เปลี่ยนถ่ายของเหลว
                     </li>
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                      <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
                       บริการสปาเต็มระบบ
                     </li>
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>ใบการันตี 5 ดาว
+                      <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>ใบการันตี 5 ดาว
                     </li>
                   </ul>
                 </div>
 
                 {/* Documentation & Transfer */}
-                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-green-100 hover:border-green-300">
-                  <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6">
+                <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-accent/20 hover:border-accent">
+                  <div className="w-14 h-14 bg-accent rounded-xl flex items-center justify-center mb-6">
                     <svg
                       className="w-7 h-7 text-white"
                       fill="none"
@@ -364,25 +364,25 @@ export default function Promotion() {
                   </h3>
                   <ul className="space-y-3 text-gray-600 font-prompt">
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>
                       โอนกรรมสิทธิ์ฟรี
                     </li>
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                      <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>
                       ฟรีค่าธรรมเนียมทุกรายการ
                     </li>
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>สัญญาส่งมอบ
+                      <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>สัญญาส่งมอบ
                     </li>
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>สัญญารับประกัน
+                      <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>สัญญารับประกัน
                     </li>
                   </ul>
                 </div>
 
                 {/* Delivery & Warranty */}
                 <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-orange-100 hover:border-orange-300 md:col-span-2 lg:col-span-1">
-                  <div className="w-14 h-14 bg-gradient-to-br from-accent to-orange-500 rounded-xl flex items-center justify-center mb-6">
+                  <div className="w-14 h-14 bg-accent rounded-xl flex items-center justify-center mb-6">
                     <svg
                       className="w-7 h-7 text-white"
                       fill="none"
@@ -420,7 +420,7 @@ export default function Promotion() {
               </div>
 
               {/* Trust Badge */}
-              <div className="mt-12 text-center bg-gradient-to-r from-blue-600 to-primary rounded-2xl p-8 text-white">
+              <div className="mt-12 text-center bg-primary rounded-2xl p-8 text-white">
                 <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
                   <svg
                     className="w-10 h-10 text-white"
@@ -448,7 +448,7 @@ export default function Promotion() {
             {/* Financing Options */}
             <section aria-labelledby="financing" className="grid md:grid-cols-2 gap-8 lg:gap-12">
               {/* Warranty Highlight */}
-              <div className="bg-gradient-to-br from-yellow-400 via-gold to-yellow-600 rounded-3xl p-10 text-center text-white relative overflow-hidden shadow-2xl">
+              <div className="bg-accent rounded-3xl p-10 text-center text-white relative overflow-hidden shadow-2xl">
                 <div className="absolute inset-0 bg-black bg-opacity-10"></div>
                 <div className="relative z-10">
                   <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mx-auto mb-8">
@@ -478,7 +478,7 @@ export default function Promotion() {
               </div>
 
               {/* Interest Rate */}
-              <div className="bg-gradient-to-br from-green-500 via-emerald-600 to-green-700 rounded-3xl p-10 text-center text-white relative overflow-hidden shadow-2xl">
+              <div className="bg-primary rounded-3xl p-10 text-center text-white relative overflow-hidden shadow-2xl">
                 <div className="absolute inset-0 bg-black bg-opacity-10"></div>
                 <div className="relative z-10">
                   <div className="w-20 h-20 bg-white bg-opacity-30 rounded-full flex items-center justify-center mx-auto mb-8">
@@ -512,8 +512,8 @@ export default function Promotion() {
             </section>
 
             {/* Final CTA - Mobile Optimized */}
-            <section className="bg-gradient-to-br from-gray-900 via-gray-800 to-primary rounded-3xl p-6 sm:p-12 text-center text-white relative overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20"></div>
+            <section className="bg-black rounded-3xl p-6 sm:p-12 text-center text-white relative overflow-hidden shadow-2xl">
+              <div className="absolute inset-0 bg-black/20"></div>
               <div className="relative z-10">
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 font-prompt leading-tight text-white">
                   พร้อมเป็นเจ้าของรถในฝัน
@@ -529,7 +529,7 @@ export default function Promotion() {
                     href="https://lin.ee/8ugfzstD"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group bg-green-500 hover:bg-green-400 text-white px-6 sm:px-8 py-4 sm:py-5 rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 font-prompt shadow-xl hover:shadow-2xl transform hover:-translate-y-2 flex items-center justify-center gap-3 sm:gap-4"
+                    className="group bg-accent hover:bg-accent/90 text-white px-6 sm:px-8 py-4 sm:py-5 rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 font-prompt shadow-xl hover:shadow-2xl transform hover:-translate-y-2 flex items-center justify-center gap-3 sm:gap-4"
                   >
                     <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
                       <svg

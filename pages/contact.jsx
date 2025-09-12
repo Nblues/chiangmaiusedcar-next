@@ -178,7 +178,7 @@ export default function Contact() {
 
       <main className="min-h-screen bg-white">
         {/* Hero Banner */}
-        <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden bg-gradient-to-br from-blue-50 to-orange-50">
+        <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
           <A11yImage
             src="/herobanner/contact.webp"
             alt="ติดต่อเรา - ครูหนึ่งรถสวย"
@@ -188,6 +188,9 @@ export default function Contact() {
             quality={85}
             sizes="100vw"
           />
+
+          {/* Dark overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/30"></div>
 
           {/* Content over banner */}
           <div className="absolute inset-0 flex items-center justify-center">
@@ -204,7 +207,7 @@ export default function Contact() {
 
               {/* Quick Contact Info */}
               <div className="flex flex-wrap justify-center gap-1 md:gap-2">
-                <div className="px-2 py-1 bg-black bg-opacity-40 rounded-lg backdrop-blur-sm">
+                <div className="px-2 py-1 bg-black/50 rounded-lg">
                   <span className="text-sm md:text-base lg:text-lg font-semibold text-white">
                     เปิดทุกวัน 9:00-20:00 น.
                   </span>
@@ -238,32 +241,32 @@ export default function Contact() {
 
           {/* Contact Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            <div className="bg-primary/5 p-4 rounded-lg">
-              <h3 className="font-bold text-primary mb-2">โทรศัพท์</h3>
+            <div className="bg-white border-2 border-primary/20 hover:border-primary p-6 rounded-xl shadow-lg transition-all duration-300">
+              <h3 className="font-bold text-primary mb-3 text-lg">โทรศัพท์</h3>
               <a
                 href="tel:0940649018"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-accent font-semibold hover:text-accent-600 transition-colors"
+                className="text-accent font-semibold hover:text-accent/80 transition-colors text-lg"
                 aria-label="โทร 094-064-9018"
               >
                 094-064-9018
               </a>
             </div>
-            <div className="bg-accent/5 p-4 rounded-lg">
-              <h3 className="font-bold text-primary mb-2">LINE</h3>
+            <div className="bg-white border-2 border-accent/20 hover:border-accent p-6 rounded-xl shadow-lg transition-all duration-300">
+              <h3 className="font-bold text-primary mb-3 text-lg">LINE</h3>
               <a
                 href="https://lin.ee/8ugfzstD"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-accent font-semibold hover:text-accent-600 transition-colors"
+                className="text-accent font-semibold hover:text-accent/80 transition-colors text-lg"
               >
                 @kruneungcar
               </a>
             </div>
-            <div className="bg-gold/10 p-4 rounded-lg md:col-span-2 lg:col-span-1">
-              <h3 className="font-bold text-primary mb-2">เวลาทำการ</h3>
-              <p className="text-gray-700">จันทร์ - อาทิตย์ เวลา 9:00 - 20:00 น.</p>
+            <div className="bg-white border-2 border-primary/20 hover:border-primary p-6 rounded-xl shadow-lg transition-all duration-300 md:col-span-2 lg:col-span-1">
+              <h3 className="font-bold text-primary mb-3 text-lg">เวลาทำการ</h3>
+              <p className="text-gray-700 font-medium">จันทร์ - อาทิตย์ เวลา 9:00 - 20:00 น.</p>
             </div>
           </div>
 
@@ -271,9 +274,9 @@ export default function Contact() {
           <div className="flex justify-center mb-12">
             <Link
               href="/all-cars"
-              className="px-8 py-4 bg-primary text-white rounded-full font-bold shadow-lg hover:bg-primary-600 hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              className="px-8 py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
             >
-              ดูรถทั้งหมด 🚗
+              ดูรถทั้งหมด
             </Link>
           </div>
 
@@ -327,6 +330,29 @@ export default function Contact() {
                   </div>
                 </div>
                 <p className="text-sm font-semibold text-blue-500">1 แสน+ ติดตาม</p>
+              </a>
+
+              {/* Facebook Group */}
+              <a
+                href="https://www.facebook.com/groups/kru.nueng.goodcar"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-700 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+              >
+                <div className="flex items-center mb-3">
+                  <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="font-bold text-gray-800 group-hover:text-blue-700 transition-colors">
+                      Facebook
+                    </h3>
+                    <p className="text-xs text-gray-500">กลุ่ม FC</p>
+                  </div>
+                </div>
+                <p className="text-sm font-semibold text-blue-700">7.3 หมื่น สมาชิก</p>
               </a>
 
               {/* TikTok */}
@@ -539,17 +565,17 @@ export default function Contact() {
                     href={createMapOpenUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-red-600 text-white rounded-full text-sm font-semibold hover:bg-red-700 transform hover:scale-105 transition-all duration-300"
+                    className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-xl text-sm font-semibold transform hover:scale-105 transition-all duration-300"
                   >
-                    📍 Google Maps
+                    Google Maps
                   </a>
                   <a
                     href="https://g.co/kgs/Fe9dhXt"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-semibold hover:bg-blue-700 transform hover:scale-105 transition-all duration-300"
+                    className="px-4 py-2 bg-accent hover:bg-accent/90 text-white rounded-xl text-sm font-semibold transform hover:scale-105 transition-all duration-300"
                   >
-                    ⭐ รีวิว Google
+                    รีวิว Google
                   </a>
                 </div>
               </div>
@@ -564,83 +590,51 @@ export default function Contact() {
               คำถามที่พบบ่อย (FAQ)
             </h2>
             <div className="space-y-4">
-              <details className="bg-white p-6 rounded-lg shadow-md group">
-                <summary className="font-semibold text-primary cursor-pointer flex justify-between items-center">
-                  <span>Q: ติดต่อครูหนึ่งรถสวยได้อย่างไร?</span>
-                  <svg
-                    className="w-5 h-5 transform group-open:rotate-180 transition-transform"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+              <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
+                <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
+                  <span className="text-accent font-extrabold">Q:</span>
+                  ติดต่อครูหนึ่งรถสวยได้อย่างไร?
                 </summary>
-                <div className="pt-4 text-gray-700">
-                  A: สามารถติดต่อได้หลายช่องทาง: โทร 094-064-9018, LINE, Facebook
-                  หรือช่องทางโซเชียลมีเดียอื่นๆ ของเรา
+                <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
+                  <p className="text-gray-700 leading-relaxed font-medium">
+                    สามารถติดต่อได้หลายช่องทาง: โทร 094-064-9018, LINE, Facebook
+                    หรือช่องทางโซเชียลมีเดียอื่นๆ ของเรา
+                  </p>
                 </div>
               </details>
-              <details className="bg-white p-6 rounded-lg shadow-md group">
-                <summary className="font-semibold text-primary cursor-pointer flex justify-between items-center">
-                  <span>Q: เวลาทำการของร้าน?</span>
-                  <svg
-                    className="w-5 h-5 transform group-open:rotate-180 transition-transform"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+              <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
+                <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
+                  <span className="text-accent font-extrabold">Q:</span>
+                  เวลาทำการของร้าน?
                 </summary>
-                <div className="pt-4 text-gray-700">
-                  A: เปิดทุกวัน 9:00 - 20:00 น. วันหยุดราชการปกติ
+                <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
+                  <p className="text-gray-700 leading-relaxed font-medium">
+                    เปิดทุกวัน 9:00 - 20:00 น. วันหยุดราชการปกติ
+                  </p>
                 </div>
               </details>
-              <details className="bg-white p-6 rounded-lg shadow-md group">
-                <summary className="font-semibold text-primary cursor-pointer flex justify-between items-center">
-                  <span>Q: สามารถนัดดูรถได้ไหม?</span>
-                  <svg
-                    className="w-5 h-5 transform group-open:rotate-180 transition-transform"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+              <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
+                <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
+                  <span className="text-accent font-extrabold">Q:</span>
+                  สามารถนัดดูรถได้ไหม?
                 </summary>
-                <div className="pt-4 text-gray-700">
-                  A: ได้เลย! แนะนำให้นัดล่วงหน้าเพื่อให้ทีมงานเตรียมรถไว้รอ ติดต่อ 094-064-9018 หรือ
-                  LINE
+                <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
+                  <p className="text-gray-700 leading-relaxed font-medium">
+                    ได้เลย! แนะนำให้นัดล่วงหน้าเพื่อให้ทีมงานเตรียมรถไว้รอ ติดต่อ 094-064-9018 หรือ
+                    LINE
+                  </p>
                 </div>
               </details>
-              <details className="bg-white p-6 rounded-lg shadow-md group">
-                <summary className="font-semibold text-primary cursor-pointer flex justify-between items-center">
-                  <span>Q: ครูหนึ่งรถสวยมีช่องทางโซเชียลมีเดียอะไรบ้าง?</span>
-                  <svg
-                    className="w-5 h-5 transform group-open:rotate-180 transition-transform"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+              <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
+                <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
+                  <span className="text-accent font-extrabold">Q:</span>
+                  ครูหนึ่งรถสวยมีช่องทางโซเชียลมีเดียอะไรบ้าง?
                 </summary>
-                <div className="pt-4 text-gray-700">
-                  A: Facebook 1 ล้านติดตาม, TikTok 1.5 แสนติดตาม, YouTube 4 หมื่นติดตาม, Lemon8
-                  26k+ติดตาม และ LINE สำหรับสอบถาม
+                <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
+                  <p className="text-gray-700 leading-relaxed font-medium">
+                    Facebook 1 ล้านติดตาม, TikTok 1.5 แสนติดตาม, YouTube 4 หมื่นติดตาม, Lemon8
+                    26k+ติดตาม และ LINE สำหรับสอบถาม
+                  </p>
                 </div>
               </details>
             </div>

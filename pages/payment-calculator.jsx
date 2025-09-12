@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
+import A11yImage from '../components/A11yImage';
 
 export default function PaymentCalculator() {
   const router = useRouter();
@@ -153,78 +154,95 @@ export default function PaymentCalculator() {
         title="คำนวนค่างวดรถยนต์ - ครูหนึ่งรถสวย | รถมือสองเชียงใหม่"
         description="เครื่องมือคำนวนค่างวดรถยนต์ คำนวนค่าผ่อนรายเดือน ดอกเบี้ย และยอดชำระรวม ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
         url="https://chiangmaiusedcar.com/payment-calculator"
+        image="https://chiangmaiusedcar.com/herobanner/paymentcalculator.webp"
         pageType="payment-calculator"
       />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary via-blue-700 to-primary text-white py-16 border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 font-prompt text-white">
-            คำนวนค่างวดรถยนต์
-          </h1>
-          <p className="text-xl md:text-2xl max-w-3xl mx-auto font-prompt text-white opacity-90">
-            คำนวนค่าผ่อนรายเดือนและดอกเบี้ยได้ง่ายๆ
-          </p>
+      <section className="relative bg-primary text-white py-16 border-t border-gray-200">
+        <A11yImage
+          src="/herobanner/paymentcalculator.webp"
+          alt="ครูหนึ่งรถสวย - คำนวนค่างวดรถยนต์ เครื่องมือคำนวนเงินดาวน์และค่างวดรายเดือน"
+          width={1920}
+          height={400}
+          priority
+          className="absolute inset-0 w-full h-full object-cover object-center md:object-[center_20%]"
+        />
+        <div className="relative z-10 bg-black bg-opacity-50 py-16">
+          <div className="max-w-7xl mx-auto px-6 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 font-prompt text-accent">
+              คำนวนค่างวดรถยนต์
+            </h1>
+            <p
+              className="text-xl md:text-2xl max-w-3xl mx-auto font-prompt text-white opacity-90"
+              style={{
+                textShadow:
+                  '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
+              }}
+            >
+              คำนวนค่าผ่อนรายเดือนและดอกเบี้ยได้ง่ายๆ
+            </p>
 
-          {/* แสดงข้อความและผลคำนวณเมื่อมาจากหน้ารายละเอียดรถ */}
-          {router.query.price && (
-            <div className="mt-6 bg-white bg-opacity-20 backdrop-blur-sm border border-white border-opacity-30 rounded-xl p-4 max-w-4xl mx-auto">
-              <p className="text-lg font-prompt mb-4 text-center text-white">
-                {router.query.carTitle &&
-                  `${(typeof router.query.carTitle === 'string' ? router.query.carTitle : '').replace(/</g, '&lt;').replace(/>/g, '&gt;')} - `}
-                ราคา:{' '}
-                <span className="font-bold text-accent">
-                  ฿{Number(carPrice || 0).toLocaleString()}
-                </span>{' '}
-                บาท
-              </p>
+            {/* แสดงข้อความและผลคำนวณเมื่อมาจากหน้ารายละเอียดรถ */}
+            {router.query.price && (
+              <div className="mt-6 bg-white bg-opacity-20 backdrop-blur-sm border border-white border-opacity-30 rounded-xl p-4 max-w-4xl mx-auto">
+                <p className="text-lg font-prompt mb-4 text-center text-white">
+                  {router.query.carTitle &&
+                    `${(typeof router.query.carTitle === 'string' ? router.query.carTitle : '').replace(/</g, '&lt;').replace(/>/g, '&gt;')} - `}
+                  ราคา:{' '}
+                  <span className="font-bold text-accent">
+                    ฿{Number(carPrice || 0).toLocaleString()}
+                  </span>{' '}
+                  บาท
+                </p>
 
-              {/* ผลการคำนวณ 5-6-7 ปี แบบกะทัดรัด */}
-              {result && (
-                <div className="bg-white bg-opacity-95 backdrop-blur-sm rounded-xl p-6 mt-4">
-                  <h3 className="text-lg font-bold text-primary mb-4 text-center font-prompt">
-                    ค่างวดรายเดือน (รวม VAT + ประกัน)
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {result.calculations.map((calc, index) => (
-                      <div
-                        key={calc.years}
-                        className={`text-center p-4 rounded-lg ${
-                          index === 1
-                            ? 'bg-accent bg-opacity-20 border-2 border-accent'
-                            : 'bg-gray-50 border border-gray-200'
-                        }`}
-                      >
+                {/* ผลการคำนวณ 5-6-7 ปี แบบกะทัดรัด */}
+                {result && (
+                  <div className="bg-white bg-opacity-95 backdrop-blur-sm rounded-xl p-6 mt-4">
+                    <h3 className="text-lg font-bold text-primary mb-4 text-center font-prompt">
+                      ค่างวดรายเดือน (รวม VAT + ประกัน)
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {result.calculations.map((calc, index) => (
                         <div
-                          className={`text-lg font-bold mb-1 ${
-                            index === 1 ? 'text-accent' : 'text-gray-800'
+                          key={calc.years}
+                          className={`text-center p-4 rounded-lg ${
+                            index === 1
+                              ? 'bg-accent bg-opacity-20 border-2 border-accent'
+                              : 'bg-gray-50 border border-gray-200'
                           }`}
                         >
-                          {calc.label}
-                        </div>
-                        <div
-                          className={`text-2xl font-bold ${
-                            index === 1 ? 'text-green-600' : 'text-primary'
-                          }`}
-                        >
-                          ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}
-                        </div>
-                        <div className="text-xs text-gray-600">ต่อเดือน</div>
-                        {index === 1 && (
-                          <div className="text-xs bg-accent bg-opacity-20 text-accent px-2 py-1 rounded-full mt-2 inline-block font-semibold">
-                            แนะนำ
+                          <div
+                            className={`text-lg font-bold mb-1 ${
+                              index === 1 ? 'text-accent' : 'text-gray-800'
+                            }`}
+                          >
+                            {calc.label}
                           </div>
-                        )}
-                      </div>
-                    ))}
+                          <div
+                            className={`text-2xl font-bold ${
+                              index === 1 ? 'text-green-600' : 'text-primary'
+                            }`}
+                          >
+                            ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}
+                          </div>
+                          <div className="text-xs text-gray-600">ต่อเดือน</div>
+                          {index === 1 && (
+                            <div className="text-xs bg-accent bg-opacity-20 text-accent px-2 py-1 rounded-full mt-2 inline-block font-semibold">
+                              แนะนำ
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-sm text-gray-600 text-center mt-4 font-prompt">
+                      ผลการคำนวณพร้อมแล้ว - สามารถปรับแต่งข้อมูลเพิ่มเติมด้านล่างได้
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600 text-center mt-4 font-prompt">
-                    ผลการคำนวณพร้อมแล้ว - สามารถปรับแต่งข้อมูลเพิ่มเติมด้านล่างได้
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
