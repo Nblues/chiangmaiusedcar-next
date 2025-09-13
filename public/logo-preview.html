@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ตัวอย่างรูปภาพ Logo และ Favicon</title>
+    <style>
+      body {
+        font-family: 'Prompt', Arial, sans-serif;
+        background: #f5f5f5;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #1a237e;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2.5em;
+      }
+      h2 {
+        color: #1a237e;
+        border-bottom: 3px solid #ff9800;
+        padding-bottom: 10px;
+        margin-top: 40px;
+      }
+      .image-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 40px;
+      }
+      .image-item {
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+      .image-item:hover {
+        border-color: #1a237e;
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(26, 35, 126, 0.15);
+      }
+      .image-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        background: #f9f9f9;
+        padding: 10px;
+      }
+      .image-item h3 {
+        color: #1a237e;
+        margin: 15px 0 10px 0;
+        font-size: 1.3em;
+      }
+      .image-item p {
+        color: #666;
+        margin: 5px 0;
+        font-size: 0.9em;
+      }
+      .favicon-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+      .favicon-item {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+      }
+      .favicon-item img {
+        background: checkerboard;
+        background-image: linear-gradient(45deg, #ccc 25%, transparent 25%),
+          linear-gradient(-45deg, #ccc 25%, transparent 25%),
+          linear-gradient(45deg, transparent 75%, #ccc 75%),
+          linear-gradient(-45deg, transparent 75%, #ccc 75%);
+        background-size: 20px 20px;
+        background-position:
+          0 0,
+          0 10px,
+          10px -10px,
+          -10px 0px;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .status {
+        padding: 10px 20px;
+        border-radius: 25px;
+        color: white;
+        font-weight: bold;
+        display: inline-block;
+        margin: 10px 0;
+      }
+      .current {
+        background: #f44336;
+      }
+      .new {
+        background: #4caf50;
+      }
+      .note {
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🚗 ตัวอย่างรูปภาพ Logo และ Favicon - ครูหนึ่งรถสวย</h1>
+
+      <div class="note">
+        <strong>📋 หมายเหตุ:</strong> ตรวจสอบรูปภาพเหล่านี้เพื่อเลือกว่าจะใช้รูปไหนสำหรับ favicon
+        ใหม่ที่ไม่มีขอบสีแดง
+      </div>
+
+      <h2>📁 Logo ต้นฉบับ</h2>
+      <div class="image-grid">
+        <div class="image-item">
+          <img src="/logo/logo_main.png" alt="Logo หลัก" style="max-height: 200px" />
+          <h3>logo_main.png</h3>
+          <p><strong>ไฟล์ต้นฉบับหลัก</strong></p>
+          <p>ขนาด: ~166KB</p>
+          <div class="status current">ปัจจุบัน (มีขอบสีแดง?)</div>
+        </div>
+
+        <div class="image-item">
+          <img src="/logo/logo_maind.png" alt="Logo รุ่น D" style="max-height: 200px" />
+          <h3>logo_maind.png</h3>
+          <p><strong>เวอร์ชันพิเศษ</strong></p>
+          <p>ไฟล์สำรอง</p>
+        </div>
+
+        <div class="image-item">
+          <img src="/logo/logo_clean.svg" alt="Logo SVG สะอาด" style="max-height: 200px" />
+          <h3>logo_clean.svg</h3>
+          <p><strong>เวอร์ชัน SVG ใหม่</strong></p>
+          <p>ไม่มีขอบสีแดง</p>
+          <div class="status new">ใหม่ล่าสุด</div>
+        </div>
+      </div>
+
+      <h2>🎯 Favicon ปัจจุบัน</h2>
+      <div class="favicon-grid">
+        <div class="favicon-item">
+          <img src="/favicon.png" alt="Favicon หลัก" style="width: 64px; height: 64px" />
+          <h3>favicon.png</h3>
+          <p>256x256px</p>
+          <p>~167KB</p>
+        </div>
+
+        <div class="favicon-item">
+          <img src="/favicon-32.png" alt="Favicon 32px" style="width: 32px; height: 32px" />
+          <h3>favicon-32.png</h3>
+          <p>32x32px</p>
+        </div>
+
+        <div class="favicon-item">
+          <img src="/favicon-48.png" alt="Favicon 48px" style="width: 48px; height: 48px" />
+          <h3>favicon-48.png</h3>
+          <p>48x48px</p>
+        </div>
+
+        <div class="favicon-item">
+          <img src="/favicon-96.png" alt="Favicon 96px" style="width: 64px; height: 64px" />
+          <h3>favicon-96.png</h3>
+          <p>96x96px</p>
+        </div>
+      </div>
+
+      <h2>🆕 ตัวเลือกใหม่</h2>
+      <div class="image-grid">
+        <div class="image-item">
+          <img src="/favicon.svg" alt="Favicon SVG" style="max-height: 100px" />
+          <h3>favicon.svg</h3>
+          <p><strong>เวอร์ชัน SVG</strong></p>
+          <p>Vector graphics</p>
+          <p>ขนาดเล็ก, คมชัดทุกขนาด</p>
+          <div class="status new">แนะนำ</div>
+        </div>
+      </div>
+
+      <div class="note">
+        <strong>🤔 คำถาม:</strong> คุณต้องการใช้รูปไหนเป็น favicon ใหม่?
+        <ul>
+          <li><strong>logo_main.png</strong> - แต่ต้องแก้ไขเอาขอบสีแดงออกก่อน</li>
+          <li><strong>logo_clean.svg</strong> - เวอร์ชัน SVG ใหม่ที่สะอาด</li>
+          <li><strong>สร้างใหม่</strong> - ออกแบบ favicon ใหม่หมด</li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

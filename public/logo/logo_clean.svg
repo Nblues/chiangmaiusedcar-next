@@ -1,0 +1,29 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- พื้นหลังขาวโปร่งใส -->
+  <rect width="512" height="512" fill="none"/>
+  
+  <!-- ใส่โลโก้รถยนต์ง่ายๆ สีน้ำเงิน -->
+  <g fill="#1a237e">
+    <!-- ตัวรถ -->
+    <rect x="100" y="200" width="312" height="80" rx="20" ry="20"/>
+    <rect x="80" y="220" width="352" height="40" rx="15" ry="15"/>
+    
+    <!-- หน้าต่าง -->
+    <rect x="120" y="180" width="80" height="40" rx="8" ry="8" fill="#ffffff"/>
+    <rect x="220" y="180" width="80" height="40" rx="8" ry="8" fill="#ffffff"/>
+    <rect x="320" y="180" width="72" height="40" rx="8" ry="8" fill="#ffffff"/>
+    
+    <!-- ล้อ -->
+    <circle cx="160" cy="300" r="35" fill="#1a237e"/>
+    <circle cx="160" cy="300" r="20" fill="#ffffff"/>
+    <circle cx="352" cy="300" r="35" fill="#1a237e"/>
+    <circle cx="352" cy="300" r="20" fill="#ffffff"/>
+    
+    <!-- ไฟหน้า -->
+    <circle cx="90" cy="240" r="12" fill="#ffd700"/>
+    <circle cx="422" cy="240" r="12" fill="#ff9800"/>
+  </g>
+  
+  <!-- ข้อความ "ครู" -->
+  <text x="256" y="400" font-family="Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="#1a237e">ครู</text>
+</svg>

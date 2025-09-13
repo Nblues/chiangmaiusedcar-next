@@ -1,0 +1,29 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- วงกลมพื้นหลังสีน้ำเงิน -->
+  <circle cx="128" cy="128" r="120" fill="#1a237e"/>
+  
+  <!-- โลโก้รถยนต์ขนาดใหญ่ เต็มพื้นที่ -->
+  <g fill="#ffffff" transform="scale(1.5) translate(-42, -42)">
+    <!-- ตัวรถหลัก -->
+    <rect x="60" y="100" width="136" height="36" rx="8" ry="8"/>
+    <rect x="50" y="110" width="156" height="20" rx="6" ry="6"/>
+    
+    <!-- หน้าต่าง -->
+    <rect x="70" y="92" width="32" height="16" rx="2" ry="2" fill="#e3f2fd"/>
+    <rect x="110" y="92" width="36" height="16" rx="2" ry="2" fill="#e3f2fd"/>
+    <rect x="154" y="92" width="32" height="16" rx="2" ry="2" fill="#e3f2fd"/>
+    
+    <!-- ล้อ -->
+    <circle cx="85" cy="145" r="12" fill="#ffffff"/>
+    <circle cx="85" cy="145" r="6" fill="#1a237e"/>
+    <circle cx="171" cy="145" r="12" fill="#ffffff"/>
+    <circle cx="171" cy="145" r="6" fill="#1a237e"/>
+    
+    <!-- ไฟหน้า -->
+    <circle cx="48" cy="120" r="4" fill="#ffd700"/>
+    <circle cx="208" cy="120" r="4" fill="#ff9800"/>
+  </g>
+  
+  <!-- ข้อความ "ครู" ขนาดใหญ่ -->
+  <text x="128" y="200" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#ffffff">ครู</text>
+</svg>

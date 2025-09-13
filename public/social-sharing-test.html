@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ตรวจสอบ Social Sharing Images - ครูหนึ่งรถสวย</title>
+    <style>
+      body {
+        font-family: 'Prompt', sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .page-test {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+      .test-item {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        background: #f8f9fa;
+      }
+      .test-item h3 {
+        color: #1a237e;
+        margin: 0 0 15px 0;
+        font-size: 16px;
+      }
+      .og-preview {
+        border: 1px solid #e1e5e9;
+        border-radius: 8px;
+        overflow: hidden;
+        background: white;
+        margin: 10px 0;
+      }
+      .og-image {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        display: block;
+      }
+      .og-content {
+        padding: 12px;
+      }
+      .og-title {
+        font-weight: 600;
+        color: #1d2129;
+        font-size: 14px;
+        line-height: 1.3;
+        margin-bottom: 4px;
+      }
+      .og-description {
+        color: #606770;
+        font-size: 12px;
+        line-height: 1.4;
+        margin-bottom: 4px;
+      }
+      .og-url {
+        color: #8a8d91;
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+      h1 {
+        color: #1a237e;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      h2 {
+        color: #1a237e;
+        border-bottom: 2px solid #ff9800;
+        padding-bottom: 10px;
+      }
+      .check-result {
+        background: #e8f5e8;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #4caf50;
+        margin: 20px 0;
+      }
+      .warning {
+        background: #fff3e0;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #ff9800;
+        margin: 20px 0;
+      }
+      .error {
+        background: #ffebee;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #f44336;
+        margin: 20px 0;
+      }
+      .test-url {
+        background: #f0f0f0;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+        margin: 8px 0;
+        word-break: break-all;
+      }
+      .dimensions {
+        font-size: 11px;
+        color: #666;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔍 ตรวจสอบ Social Sharing Images</h1>
+
+    <div class="container">
+      <h2>รูปภาพสำหรับการแชร์ลิ้งค์</h2>
+
+      <div class="check-result">
+        <strong>✅ การทำงาน:</strong><br />
+        • ระบบจะเลือกรูปภาพที่เหมาะสมสำหรับแต่ละหน้า<br />
+        • รองรับ Facebook, Twitter, LINE, WhatsApp<br />
+        • ขนาดรูปเป็นไปตามมาตรฐาน 2025<br />
+        • มี fallback image สำหรับหน้าที่ไม่มีรูปเฉพาะ
+      </div>
+
+      <div class="page-test">
+        <!-- Homepage -->
+        <div class="test-item">
+          <h3>🏠 หน้าแรก (Home)</h3>
+          <div class="og-preview">
+            <img src="/herobanner/cnxcar.webp" alt="Homepage" class="og-image" loading="lazy" />
+            <div class="og-content">
+              <div class="og-title">ครูหนึ่งรถสวย | รถมือสองเชียงใหม่</div>
+              <div class="og-description">
+                รถมือสองคุณภาพ เชียงใหม่ คัดเฉพาะรถมือเดียว ประวัติใส 100%
+              </div>
+              <div class="og-url">chiangmaiusedcar.com</div>
+            </div>
+          </div>
+          <div class="test-url">Image: /herobanner/cnxcar.webp</div>
+          <div class="dimensions">1200×630px (1.91:1)</div>
+        </div>
+
+        <!-- Car Detail -->
+        <div class="test-item">
+          <h3>🚗 หน้ารถยนต์ (Car Detail)</h3>
+          <div class="og-preview">
+            <img
+              src="/herobanner/chiangmaiusedcar.webp"
+              alt="Car Detail"
+              class="og-image"
+              loading="lazy"
+            />
+            <div class="og-content">
+              <div class="og-title">Honda Civic 2020 | ครูหนึ่งรถสวย</div>
+              <div class="og-description">
+                รถมือเดียว ประวัติใส ดาวน์เพียง 20% ผ่อนเริ่มต้น 8,000 บาท
+              </div>
+              <div class="og-url">chiangmaiusedcar.com</div>
+            </div>
+          </div>
+          <div class="test-url">Image: /herobanner/chiangmaiusedcar.webp</div>
+          <div class="dimensions">1200×630px (1.91:1)</div>
+        </div>
+
+        <!-- All Cars -->
+        <div class="test-item">
+          <h3>🚙 รถยนต์ทั้งหมด (All Cars)</h3>
+          <div class="og-preview">
+            <img src="/herobanner/cnxallcar.webp" alt="All Cars" class="og-image" loading="lazy" />
+            <div class="og-content">
+              <div class="og-title">รถมือสองทั้งหมด | ครูหนึ่งรถสวย</div>
+              <div class="og-description">
+                รถมือสองคุณภาพ เชียงใหม่ ทุกยี่ห้อ ทุกรุ่น ราคาดีที่สุด
+              </div>
+              <div class="og-url">chiangmaiusedcar.com</div>
+            </div>
+          </div>
+          <div class="test-url">Image: /herobanner/cnxallcar.webp</div>
+          <div class="dimensions">1200×630px (1.91:1)</div>
+        </div>
+
+        <!-- About -->
+        <div class="test-item">
+          <h3>👥 เกี่ยวกับเรา (About)</h3>
+          <div class="og-preview">
+            <img src="/herobanner/team.webp" alt="About" class="og-image" loading="lazy" />
+            <div class="og-content">
+              <div class="og-title">เกี่ยวกับเรา | ครูหนึ่งรถสวย</div>
+              <div class="og-description">ความเป็นมาและประสบการณ์ของทีมงานมืออาชีพ</div>
+              <div class="og-url">chiangmaiusedcar.com</div>
+            </div>
+          </div>
+          <div class="test-url">Image: /herobanner/team.webp</div>
+          <div class="dimensions">1200×630px (1.91:1)</div>
+        </div>
+
+        <!-- Contact -->
+        <div class="test-item">
+          <h3>📞 ติดต่อเรา (Contact)</h3>
+          <div class="og-preview">
+            <img src="/herobanner/contact.webp" alt="Contact" class="og-image" loading="lazy" />
+            <div class="og-content">
+              <div class="og-title">ติดต่อเรา | ครูหนึ่งรถสวย</div>
+              <div class="og-description">ข้อมูลการติดต่อ ที่อยู่ เบอร์โทร LINE ID</div>
+              <div class="og-url">chiangmaiusedcar.com</div>
+            </div>
+          </div>
+          <div class="test-url">Image: /herobanner/contact.webp</div>
+          <div class="dimensions">1200×630px (1.91:1)</div>
+        </div>
+
+        <!-- Promotion -->
+        <div class="test-item">
+          <h3>🎁 โปรโมชั่น (Promotion)</h3>
+          <div class="og-preview">
+            <img
+              src="/herobanner/cnxcontact.webp"
+              alt="Promotion"
+              class="og-image"
+              loading="lazy"
+            />
+            <div class="og-content">
+              <div class="og-title">โปรโมชั่น | ครูหนึ่งรถสวย</div>
+              <div class="og-description">ข้อเสนอพิเศษ ส่วนลด ดาวน์ต่ำ ดอกเบี้ยพิเศษ</div>
+              <div class="og-url">chiangmaiusedcar.com</div>
+            </div>
+          </div>
+          <div class="test-url">Image: /herobanner/cnxcontact.webp</div>
+          <div class="dimensions">1200×630px (1.91:1)</div>
+        </div>
+
+        <!-- Credit Check -->
+        <div class="test-item">
+          <h3>💳 ตรวจสอบเครดิต (Credit Check)</h3>
+          <div class="og-preview">
+            <img
+              src="/herobanner/outdoorbanner.webp"
+              alt="Credit Check"
+              class="og-image"
+              loading="lazy"
+            />
+            <div class="og-content">
+              <div class="og-title">ตรวจสอบเครดิต | ครูหนึ่งรถสวย</div>
+              <div class="og-description">ตรวจสอบสถานะเครดิต คำนวณค่างวด ดอกเบี้ยพิเศษ</div>
+              <div class="og-url">chiangmaiusedcar.com</div>
+            </div>
+          </div>
+          <div class="test-url">Image: /herobanner/outdoorbanner.webp</div>
+          <div class="dimensions">1200×630px (1.91:1)</div>
+        </div>
+
+        <!-- Payment Calculator -->
+        <div class="test-item">
+          <h3>🧮 คำนวณค่างวด (Payment Calculator)</h3>
+          <div class="og-preview">
+            <img
+              src="/herobanner/paymentcalculator.webp"
+              alt="Payment Calculator"
+              class="og-image"
+              loading="lazy"
+            />
+            <div class="og-content">
+              <div class="og-title">คำนวณค่างวด | ครูหนึ่งรถสวย</div>
+              <div class="og-description">คำนวณค่างวดรถยนต์ ดาวน์ ดอกเบี้ย ค่าประกัน</div>
+              <div class="og-url">chiangmaiusedcar.com</div>
+            </div>
+          </div>
+          <div class="test-url">Image: /herobanner/paymentcalculator.webp</div>
+          <div class="dimensions">1200×630px (1.91:1)</div>
+        </div>
+      </div>
+
+      <div class="warning">
+        <strong>🔄 วิธีทดสอบ:</strong><br />
+        1. แชร์ลิ้งค์หน้าต่างๆ ใน Facebook, LINE, หรือ Twitter<br />
+        2. ตรวจสอบว่ารูปภาพที่แสดงตรงกับหน้านั้นๆ หรือไม่<br />
+        3. ใช้ Facebook Debugger:
+        <a href="https://developers.facebook.com/tools/debug/" target="_blank"
+          >developers.facebook.com/tools/debug/</a
+        ><br />
+        4. ใช้ Twitter Card Validator:
+        <a href="https://cards-dev.twitter.com/validator" target="_blank"
+          >cards-dev.twitter.com/validator</a
+        >
+      </div>
+
+      <div style="text-align: center; margin-top: 30px">
+        <a
+          href="/"
+          style="
+            background: #1a237e;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+          "
+        >
+          กลับหน้าแรก
+        </a>
+      </div>
+    </div>
+
+    <script>
+      // Check if images load properly
+      document.addEventListener('DOMContentLoaded', function () {
+        const images = document.querySelectorAll('.og-image');
+        images.forEach(img => {
+          img.addEventListener('error', function () {
+            this.style.backgroundColor = '#f0f0f0';
+            this.style.color = '#999';
+            this.alt = 'ไม่พบรูปภาพ';
+            console.warn('Image not found:', this.src);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

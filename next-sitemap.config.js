@@ -13,12 +13,21 @@ module.exports = {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api*', '/_next*', '/secret*', '/private*', '/drafts*', '/admin*'],
+        disallow: [
+          '/api*',
+          '/_next*',
+          '/secret*',
+          '/private*',
+          '/drafts*',
+          '/admin*',
+          '/keyword-audit',
+          '/api-dashboard',
+        ],
       },
       {
         userAgent: 'Googlebot',
         allow: '/',
-        disallow: ['/api*', '/admin*'],
+        disallow: ['/api*', '/admin*', '/keyword-audit', '/api-dashboard'],
       },
       {
         userAgent: 'Googlebot-Image',

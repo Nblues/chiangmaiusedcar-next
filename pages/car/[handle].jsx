@@ -314,23 +314,23 @@ function CarDetailPage({ car, allCars }) {
         />
       </Head>
 
-      <main className="min-h-screen bg-gradient-to-b from-white via-blue-50 to-gray-50">
+      <main className="min-h-screen bg-white">
         <div className="max-w-6xl mx-auto p-2 sm:p-4 lg:p-6">
           <Breadcrumb carTitle={safeGet(car, 'title', 'รถมือสองคุณภาพดี')} />
 
           {/* ชื่อรถ */}
-          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-primary/10">
-            <h1 className="text-2xl md:text-3xl font-bold text-primary mb-3 font-prompt">
+          <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
+            <h1 className="text-2xl md:text-3xl font-bold text-black mb-3 font-prompt">
               {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
             </h1>
           </div>
 
-          {/* รูปรถ - Carsome Style */}
+          {/* รูปรถ - Modern 2025 Style */}
           <div className="mb-6 sm:mb-8">
-            <div className="relative w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[600px] bg-gradient-to-br from-primary/10 to-accent/10 rounded-xl overflow-hidden shadow-lg border-2 border-primary/20">
+            <div className="relative w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[600px] bg-white rounded-xl overflow-hidden border border-gray-200">
               {/* Loading overlay */}
               {imageLoading && (
-                <div className="absolute inset-0 bg-primary/10 animate-pulse flex items-center justify-center">
+                <div className="absolute inset-0 bg-gray-100 animate-pulse flex items-center justify-center">
                   <div className="text-primary font-prompt">กำลังโหลดรูป...</div>
                 </div>
               )}
@@ -355,7 +355,7 @@ function CarDetailPage({ car, allCars }) {
                     onClick={() =>
                       setSelectedImageIndex(prev => (prev === 0 ? carImages.length - 1 : prev - 1))
                     }
-                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 sm:p-3 rounded-full shadow-lg transition-all duration-200"
+                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 text-black p-3 rounded-lg border border-gray-200 transition-all duration-200"
                     type="button"
                     aria-label="รูปก่อนหน้า"
                   >
@@ -377,7 +377,7 @@ function CarDetailPage({ car, allCars }) {
                     onClick={() =>
                       setSelectedImageIndex(prev => (prev === carImages.length - 1 ? 0 : prev + 1))
                     }
-                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2 sm:p-3 rounded-full shadow-lg transition-all duration-200"
+                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 text-black p-3 rounded-lg border border-gray-200 transition-all duration-200"
                     type="button"
                     aria-label="รูปถัดไป"
                   >
@@ -398,8 +398,8 @@ function CarDetailPage({ car, allCars }) {
                 </>
               )}
 
-              {/* Image Counter แบบ Carsome */}
-              <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-primary/80 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium font-prompt backdrop-blur-sm shadow-md">
+              {/* Image Counter Modern 2025 */}
+              <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-black text-white px-4 py-2 rounded-lg text-xs sm:text-sm font-medium font-prompt">
                 <span className="text-white">{selectedImageIndex + 1}</span>
                 <span className="text-gray-300 mx-1">/</span>
                 <span className="text-gray-300">{carImages.length}</span>
@@ -407,12 +407,12 @@ function CarDetailPage({ car, allCars }) {
               </div>
 
               {/* Keyboard hint */}
-              <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-primary/70 text-white px-2 py-1 rounded text-xs font-prompt hidden sm:block">
+              <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-black text-white px-3 py-1 rounded-lg text-xs font-prompt hidden sm:block">
                 ใช้ ← → เพื่อเลื่อนรูป
               </div>
             </div>
 
-            {/* Thumbnails - Carsome Style */}
+            {/* Thumbnails - Modern 2025 Style */}
             {carImages.length > 1 && (
               <div className="hidden sm:flex gap-3 mt-4 overflow-x-auto pb-2 scrollbar-hide">
                 {carImages.map((img, index) => (
@@ -426,9 +426,9 @@ function CarDetailPage({ car, allCars }) {
                       }
                     }}
                     tabIndex={0}
-                    className={`relative flex-shrink-0 w-20 h-16 lg:w-24 lg:h-18 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                    className={`relative flex-shrink-0 w-20 h-16 lg:w-24 lg:h-18 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                       selectedImageIndex === index
-                        ? 'border-blue-500 ring-2 ring-blue-200 shadow-lg'
+                        ? 'border-primary ring-2 ring-primary/20'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                     type="button"
@@ -445,8 +445,8 @@ function CarDetailPage({ car, allCars }) {
                     />
                     {/* Selected indicator */}
                     {selectedImageIndex === index && (
-                      <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-center">
-                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                      <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
+                        <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
                           <svg
                             className="w-4 h-4 text-white"
                             fill="none"
@@ -478,7 +478,7 @@ function CarDetailPage({ car, allCars }) {
                       onClick={() => setSelectedImageIndex(index)}
                       className={`relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden border transition-all duration-200 ${
                         selectedImageIndex === index
-                          ? 'border-blue-500 ring-1 ring-blue-200'
+                          ? 'border-primary ring-1 ring-primary/20'
                           : 'border-gray-200'
                       }`}
                       type="button"
@@ -500,11 +500,11 @@ function CarDetailPage({ car, allCars }) {
             )}
           </div>
 
-          {/* ข้อมูลหลักรถ - Carsome Style */}
-          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-primary/10">
+          {/* ข้อมูลหลักรถ - Modern 2025 Style */}
+          <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
             {/* Social Sharing */}
             <div className="border-b border-gray-200 pb-6 mb-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4 font-prompt">แชร์รถคันนี้</h3>
+              <h3 className="text-lg font-bold text-black mb-4 font-prompt">แชร์รถคันนี้</h3>
               <div className="flex flex-wrap gap-2 sm:gap-3">
                 <button
                   onClick={() => {
@@ -516,7 +516,7 @@ function CarDetailPage({ car, allCars }) {
                           .writeText(`${shareText} ${shareUrl}`)
                           .then(() => alert('คัดลอกลิ้งค์แล้ว!'));
                   }}
-                  className="btn-secondary flex items-center gap-2 min-h-11 min-w-11 px-4 py-2 rounded-xl font-prompt"
+                  className="bg-white hover:bg-gray-50 text-black border border-gray-200 flex items-center gap-2 px-4 py-3 rounded-lg font-prompt transition-colors"
                   aria-label="แชร์ข้อมูลรถคันนี้"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -533,7 +533,7 @@ function CarDetailPage({ car, allCars }) {
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-primary flex items-center gap-2 min-h-11 min-w-11 px-4 py-2 rounded-xl font-prompt"
+                  className="bg-primary hover:bg-blue-700 text-white flex items-center gap-2 px-4 py-3 rounded-lg font-prompt transition-colors"
                   aria-label="แชร์รถคันนี้บน Facebook"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -545,7 +545,7 @@ function CarDetailPage({ car, allCars }) {
                   href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-green-500 hover:bg-green-600 text-white flex items-center gap-2 min-h-11 min-w-11 px-4 py-2 rounded-xl font-prompt"
+                  className="bg-accent hover:bg-orange-600 text-white flex items-center gap-2 px-4 py-3 rounded-lg font-prompt transition-colors"
                   aria-label="แชร์รถคันนี้ทาง LINE"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -555,8 +555,8 @@ function CarDetailPage({ car, allCars }) {
                 </a>
               </div>
             </div>
-            {/* สเปคหลัก - แนวนอนแบบ Carsome */}
-            <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm sm:text-base text-gray-700 mb-6 font-prompt">
+            {/* สเปคหลัก - Modern 2025 */}
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm sm:text-base text-black mb-6 font-prompt">
               {safeGet(car, 'mileage') && (
                 <>
                   <span className="font-semibold">
@@ -581,39 +581,113 @@ function CarDetailPage({ car, allCars }) {
                 <span className="font-semibold">{safeGet(car, 'engine')}</span>
               )}
             </div>
-            {/* ราคาโดดเด่นแบบ Carsome */}
+            {/* ราคาโดดเด่น Modern 2025 */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
               {/* ราคาหลัก */}
               <div>
-                <div className="text-4xl sm:text-5xl font-bold text-accent mb-2 font-prompt">
+                <div className="text-4xl sm:text-5xl font-bold text-primary mb-2 font-prompt">
                   {safeFormatPrice(safeGet(car, 'price.amount')).display} บาท
                 </div>
-                {/* ค่าผ่อนประมาณ - คำนวณแบบ Carsome */}
-                <div className="text-lg text-primary font-prompt">
-                  {Math.round(Number(safeGet(car, 'price.amount', 0)) * 0.0195).toLocaleString()}{' '}
-                  บาท /เดือน
+                {/* ค่าผ่อนประมาณ - สูตร Flat Rate */}
+                <div className="space-y-3">
+                  {(() => {
+                    const carPrice = Number(safeGet(car, 'price.amount', 0));
+                    const loanAmount = carPrice; // สมมติเงินดาวน์ 0%
+                    const years = 6; // 6 ปี
+                    const months = 72; // 72 งวด
+                    const age = 35; // อายุเฉลี่ย 35 ปี
+
+                    // Insurance calculation based on age (same for both)
+                    const insuranceRatePerYear = age <= 40 ? 0.004 : 0.0062; // 0.40% หรือ 0.62%
+                    const totalInsurance = loanAmount * insuranceRatePerYear * years;
+                    const monthlyInsurance = totalInsurance / months;
+
+                    // Normal rate calculation (7.5%)
+                    const normalRate = 0.075;
+                    const normalTotalInterest = loanAmount * normalRate * years;
+                    const normalMonthlyPayment = (loanAmount + normalTotalInterest) / months;
+                    const normalVat = normalMonthlyPayment * 0.07;
+                    const normalTotalMonthly = normalMonthlyPayment + normalVat + monthlyInsurance;
+
+                    // Good credit calculation (4.5%)
+                    const goodCreditRate = 0.045;
+                    const goodCreditTotalInterest = loanAmount * goodCreditRate * years;
+                    const goodCreditMonthlyPayment =
+                      (loanAmount + goodCreditTotalInterest) / months;
+                    const goodCreditVat = goodCreditMonthlyPayment * 0.07;
+                    const goodCreditTotalMonthly =
+                      goodCreditMonthlyPayment + goodCreditVat + monthlyInsurance;
+
+                    const savings = normalTotalMonthly - goodCreditTotalMonthly;
+
+                    return (
+                      <>
+                        {/* Normal rate */}
+                        <div>
+                          <div className="text-lg text-primary font-prompt">
+                            {Math.round(normalTotalMonthly).toLocaleString()} บาท /เดือน*
+                          </div>
+                          <div className="text-xs text-gray-500 font-prompt">
+                            *อัตราปกติ 7.5% สำหรับ 72 งวด + VAT + ประกัน
+                          </div>
+                        </div>
+
+                        {/* Good credit rate */}
+                        <div className="bg-white border border-accent rounded-lg p-3">
+                          <div className="flex items-center gap-2 mb-1">
+                            <svg
+                              className="w-4 h-4 text-accent"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            <span className="text-sm font-semibold text-accent font-prompt">
+                              สำหรับลูกค้าเครดิตดี
+                            </span>
+                          </div>
+                          <div className="text-lg font-bold text-primary font-prompt">
+                            {Math.round(goodCreditTotalMonthly).toLocaleString()} บาท /เดือน*
+                          </div>
+                          <div className="text-xs text-gray-600 font-prompt mb-1">
+                            *อัตราพิเศษ 4.5% สำหรับ 72 งวด + VAT + ประกัน
+                          </div>
+                          <div className="text-sm font-semibold text-accent font-prompt">
+                            ประหยัดได้ {Math.round(savings).toLocaleString()} บาท/เดือน
+                          </div>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
 
-              {/* ปุ่มหลัก */}
-              <div className="flex flex-col gap-2 sm:gap-3">
+              {/* ปุ่มหลัก Modern 2025 */}
+              <div className="flex flex-col gap-3">
                 <Link
                   href={`/payment-calculator?price=${safeGet(car, 'price.amount', 0)}&from=car&carTitle=${encodeURIComponent(safeGet(car, 'title', 'รถมือสองคุณภาพดี'))}`}
-                  className="btn-primary text-center py-4 px-6 rounded-xl font-bold text-lg transition-colors font-prompt w-full"
+                  className="bg-primary hover:bg-blue-700 text-white text-center py-4 px-6 rounded-lg font-bold text-lg transition-colors font-prompt w-full"
                 >
-                  เครื่องคำนวณสินเชื่อรถยนต์
+                  คำนวณสินเชื่อแบบเปรียบเทียบ
                 </Link>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                <div className="text-xs text-center text-gray-500 font-prompt mb-2">
+                  ดูเปรียบเทียบอัตราปกติ vs เครดิตดี พร้อมรายละเอียดครบถ้วน
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <a
                     href="tel:0940649018"
-                    className="btn-secondary text-center py-3 px-4 rounded-xl font-bold transition-colors font-prompt w-full"
+                    className="bg-white hover:bg-gray-50 text-black border border-gray-200 text-center py-3 px-4 rounded-lg font-bold transition-colors font-prompt w-full"
                     aria-label="โทร 094-064-9018"
                   >
                     โทรหาฉัน
                   </a>
                   <a
                     href="https://line.me/ti/p/@krunuengusedcar"
-                    className="bg-green-500 hover:bg-green-600 text-white text-center py-3 px-4 rounded-xl font-bold transition-colors font-prompt w-full"
+                    className="bg-accent hover:bg-orange-600 text-white text-center py-3 px-4 rounded-lg font-bold transition-colors font-prompt w-full"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="แชท LINE ครูหนึ่งรถสวย"
@@ -623,8 +697,8 @@ function CarDetailPage({ car, allCars }) {
                 </div>
               </div>
             </div>
-            {/* Badge ความน่าเชื่อถือแบบ Carsome */}
-            <div className="bg-white border-2 border-primary/20 rounded-xl p-4 mb-6">
+            {/* Badge ความน่าเชื่อถือ Modern 2025 */}
+            <div className="bg-white border border-primary rounded-lg p-4 mb-6">
               <div className="flex items-center mb-2">
                 <div className="flex items-center gap-2">
                   <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
@@ -642,23 +716,23 @@ function CarDetailPage({ car, allCars }) {
               <div className="text-black text-sm font-prompt font-medium">
                 ✓ ไม่มีข้อบกพร่อง ✓ ไม่ชนหนัก ✓ ไม่เคยผ่านน้ำท่วม ✓ ไม่มีความเสียหายจากไฟไหม้
               </div>
-            </div>{' '}
+            </div>
             {/* ข้อมูลรายละเอียดรถ */}
             <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-4 font-prompt">รายละเอียดรถยนต์</h2>
+              <h2 className="text-xl font-bold text-black mb-4 font-prompt">รายละเอียดรถยนต์</h2>
 
               {/* ข้อมูลพื้นฐาน */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 {car.vendor && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
                     <div className="font-semibold text-gray-600 font-prompt">ยี่ห้อ</div>
-                    <div className="text-lg font-bold text-gray-900 font-prompt">{car.vendor}</div>
+                    <div className="text-lg font-bold text-black font-prompt">{car.vendor}</div>
                   </div>
                 )}
                 {car.model && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
                     <div className="font-semibold text-gray-600 font-prompt">รุ่น</div>
-                    <div className="text-lg font-bold text-gray-900 font-prompt">{car.model}</div>
+                    <div className="text-lg font-bold text-black font-prompt">{car.model}</div>
                   </div>
                 )}
                 {car.year && (
@@ -673,42 +747,50 @@ function CarDetailPage({ car, allCars }) {
                     <div className="text-lg font-bold text-gray-900 font-prompt">{car.color}</div>
                   </div>
                 )}
+                {car.year && (
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">ปี</div>
+                    <div className="text-lg font-bold text-black font-prompt">{car.year}</div>
+                  </div>
+                )}
+                {car.color && (
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">สี</div>
+                    <div className="text-lg font-bold text-black font-prompt">{car.color}</div>
+                  </div>
+                )}
                 {car.mileage && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
                     <div className="font-semibold text-gray-600 font-prompt">เลขไมล์</div>
-                    <div className="text-lg font-bold text-gray-900 font-prompt">
+                    <div className="text-lg font-bold text-black font-prompt">
                       {Number(car.mileage).toLocaleString()} กม.
                     </div>
                   </div>
                 )}
                 {car.transmission && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
                     <div className="font-semibold text-gray-600 font-prompt">เกียร์</div>
-                    <div className="text-lg font-bold text-gray-900 font-prompt">
+                    <div className="text-lg font-bold text-black font-prompt">
                       {car.transmission}
                     </div>
                   </div>
                 )}
                 {car.fuel_type && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
                     <div className="font-semibold text-gray-600 font-prompt">เชื้อเพลิง</div>
-                    <div className="text-lg font-bold text-gray-900 font-prompt">
-                      {car.fuel_type}
-                    </div>
+                    <div className="text-lg font-bold text-black font-prompt">{car.fuel_type}</div>
                   </div>
                 )}
                 {car.engine && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
                     <div className="font-semibold text-gray-600 font-prompt">เครื่องยนต์</div>
-                    <div className="text-lg font-bold text-gray-900 font-prompt">{car.engine}</div>
+                    <div className="text-lg font-bold text-black font-prompt">{car.engine}</div>
                   </div>
                 )}
                 {car.province && (
-                  <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
                     <div className="font-semibold text-gray-600 font-prompt">จังหวัด</div>
-                    <div className="text-lg font-bold text-gray-900 font-prompt">
-                      {car.province}
-                    </div>
+                    <div className="text-lg font-bold text-black font-prompt">{car.province}</div>
                   </div>
                 )}
               </div>
@@ -716,8 +798,8 @@ function CarDetailPage({ car, allCars }) {
               {/* คำอธิบาย */}
               {car.description && (
                 <div className="mt-6">
-                  <h3 className="text-lg font-bold text-gray-900 mb-3 font-prompt">คำอธิบาย</h3>
-                  <div className="text-gray-700 bg-gray-50 p-4 rounded-lg whitespace-pre-line font-prompt leading-relaxed">
+                  <h3 className="text-lg font-bold text-black mb-3 font-prompt">คำอธิบาย</h3>
+                  <div className="text-gray-700 bg-gray-50 border border-gray-200 p-4 rounded-lg whitespace-pre-line font-prompt leading-relaxed">
                     {car.description}
                   </div>
                 </div>
@@ -725,26 +807,22 @@ function CarDetailPage({ car, allCars }) {
             </div>
           </div>
 
-          {/* ข้อมูลการติดต่อและสถานที่ */}
-          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-primary/10">
-            <h2 className="text-xl font-bold text-gray-900 mb-4 font-prompt">
-              ที่ตั้งรถและการติดต่อ
-            </h2>
+          {/* ข้อมูลการติดต่อและสถานที่ Modern 2025 */}
+          <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
+            <h2 className="text-xl font-bold text-black mb-4 font-prompt">ที่ตั้งรถและการติดต่อ</h2>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               {/* ข้อมูลสถานที่ */}
               <div>
                 <div className="flex items-center gap-2 mb-3">
-                  <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className="font-bold text-gray-900 font-prompt">
-                    ครูหนึ่งรถสวย เชียงใหม่
-                  </span>
+                  <span className="font-bold text-black font-prompt">ครูหนึ่งรถสวย เชียงใหม่</span>
                 </div>
                 <div className="text-gray-600 font-prompt mb-4">
                   ร้านรถมือสองมาตรฐาน ตรวจสภาพละเอียด รับประกันคุณภาพ
@@ -752,18 +830,18 @@ function CarDetailPage({ car, allCars }) {
                 <div className="text-sm text-gray-500 font-prompt">เปิดทุกวัน 09:00 - 20:00</div>
               </div>
 
-              {/* ปุ่มติดต่อ */}
+              {/* ปุ่มติดต่อ Modern 2025 */}
               <div className="space-y-3">
                 <a
                   href="tel:0940649018"
-                  className="btn-primary block text-center py-4 px-6 rounded-xl font-bold text-lg transition-colors font-prompt w-full"
+                  className="bg-primary hover:bg-blue-700 text-white block text-center py-4 px-6 rounded-lg font-bold text-lg transition-colors font-prompt w-full"
                   aria-label="โทร 094-064-9018"
                 >
                   โทร 094-064-9018
                 </a>
                 <a
                   href="https://line.me/ti/p/@krunuengusedcar"
-                  className="btn-secondary block text-center py-4 px-6 rounded-xl font-bold text-lg transition-colors font-prompt w-full"
+                  className="bg-white hover:bg-gray-50 text-black border border-gray-200 block text-center py-4 px-6 rounded-lg font-bold text-lg transition-colors font-prompt w-full"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="แชท LINE ครูหนึ่งรถสวย"
@@ -774,57 +852,57 @@ function CarDetailPage({ car, allCars }) {
             </div>
           </div>
 
-          {/* ขั้นตอนการซื้อรถ - แบบ Carsome */}
-          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8 border-2 border-primary/10">
-            <h2 className="text-xl font-bold text-gray-900 mb-6 font-prompt">ขั้นตอนการซื้อรถ</h2>
+          {/* Similar Cars Section */}
+          <SimilarCars currentCar={car} allCars={allCars || []} />
+
+          {/* ขั้นตอนการซื้อรถ Modern 2025 */}
+          <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
+            <h2 className="text-xl font-bold text-black mb-6 font-prompt">ขั้นตอนการซื้อรถ</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
               <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl font-bold text-blue-600">1</span>
+                <div className="w-16 h-16 bg-primary text-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <span className="text-2xl font-bold">1</span>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2 font-prompt">ติดต่อสอบถาม</h3>
+                <h3 className="font-bold text-black mb-2 font-prompt">ติดต่อสอบถาม</h3>
                 <p className="text-gray-600 text-sm font-prompt">โทรหรือ Line สอบถามรายละเอียด</p>
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl font-bold text-blue-600">2</span>
+                <div className="w-16 h-16 bg-accent text-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <span className="text-2xl font-bold">2</span>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2 font-prompt">นัดดูรถ</h3>
+                <h3 className="font-bold text-black mb-2 font-prompt">นัดดูรถ</h3>
                 <p className="text-gray-600 text-sm font-prompt">นัดหมายเวลาดูรถและทดลองขับ</p>
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl font-bold text-blue-600">3</span>
+                <div className="w-16 h-16 bg-primary text-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <span className="text-2xl font-bold">3</span>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2 font-prompt">ตรวจสภาพ</h3>
+                <h3 className="font-bold text-black mb-2 font-prompt">ตรวจสภาพ</h3>
                 <p className="text-gray-600 text-sm font-prompt">ตรวจสอบสภาพรถอย่างละเอียด</p>
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl font-bold text-blue-600">4</span>
+                <div className="w-16 h-16 bg-accent text-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <span className="text-2xl font-bold">4</span>
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2 font-prompt">จัดการเอกสาร</h3>
+                <h3 className="font-bold text-black mb-2 font-prompt">จัดการเอกสาร</h3>
                 <p className="text-gray-600 text-sm font-prompt">ดำเนินการโอนและจัดไฟแนนซ์</p>
               </div>
             </div>
           </div>
 
-          {/* ปุ่มกลับ */}
+          {/* ปุ่มกลับ Modern 2025 */}
           <div className="text-center pb-8">
             <Link
               href="/all-cars"
-              className="btn-primary inline-block px-6 py-3 rounded-xl font-semibold shadow-lg transition-all text-lg font-prompt"
+              className="bg-primary hover:bg-blue-700 text-white inline-block px-6 py-3 rounded-lg font-semibold transition-colors text-lg font-prompt"
             >
               กลับหน้ารวมรถ
             </Link>
           </div>
-
-          {/* Similar Cars Section */}
-          <SimilarCars currentCar={car} allCars={allCars || []} />
         </div>
       </main>
 

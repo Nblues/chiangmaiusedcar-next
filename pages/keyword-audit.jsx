@@ -100,9 +100,8 @@ export default function KeywordAudit() {
         image="/herobanner/seo-audit.webp"
       />
       <Head>
-        {process.env.NODE_ENV === 'development' && (
-          <meta name="robots" content="noindex, nofollow" />
-        )}
+        <meta name="robots" content="noindex, nofollow" />
+        <meta name="googlebot" content="noindex, nofollow" />
       </Head>
 
       <Navbar />

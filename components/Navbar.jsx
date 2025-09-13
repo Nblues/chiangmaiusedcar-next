@@ -70,7 +70,14 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-white hover:bg-primary focus:outline-none"
+            className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-white hover:bg-primary focus:outline-none font-prompt font-semibold tracking-wide"
+            style={{
+              fontSize: '16px',
+              fontWeight: '600',
+              letterSpacing: '0.025em',
+              WebkitFontSmoothing: 'antialiased',
+              MozOsxFontSmoothing: 'grayscale',
+            }}
             aria-label={mobileOpen ? 'ปิดเมนู' : 'เปิดเมนู'}
             aria-expanded={mobileOpen}
           >
@@ -86,11 +93,18 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`block px-3 py-2 rounded-md text-base font-medium font-prompt ${
+                  className={`block px-3 py-2 rounded-md font-prompt font-semibold text-base tracking-wide transition-colors duration-200 ${
                     isActive(item.href)
                       ? 'bg-primary text-white'
                       : 'text-primary hover:bg-accent hover:text-white'
                   }`}
+                  style={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    letterSpacing: '0.025em',
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                  }}
                   onClick={() => setMobileOpen(false)}
                 >
                   {item.label}
@@ -100,7 +114,14 @@ export default function Navbar() {
                 href="https://lin.ee/8ugfzstD"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block btn-primary text-center mt-4"
+                className="block btn-primary text-center mt-4 font-prompt font-semibold tracking-wide"
+                style={{
+                  fontSize: '16px',
+                  fontWeight: '600',
+                  letterSpacing: '0.025em',
+                  WebkitFontSmoothing: 'antialiased',
+                  MozOsxFontSmoothing: 'grayscale',
+                }}
                 onClick={() => setMobileOpen(false)}
               >
                 LINE สอบถาม

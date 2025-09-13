@@ -15,7 +15,8 @@ export default function PaymentCalculator() {
   const calculatePayment = (price = carPrice) => {
     const carPriceValue = parseFloat(price);
     const down = parseFloat(downPayment) || 0;
-    const rate = parseFloat(interestRate) / 100 / 12; // Monthly interest rate
+    // Flat Rate calculation - ไม่ใช้ monthly rate
+    // const rate = parseFloat(interestRate) / 100 / 12; // Monthly interest rate
     const age = parseInt(customerAge) || 35;
 
     if (!carPriceValue || carPriceValue <= 0) {
@@ -38,23 +39,49 @@ export default function PaymentCalculator() {
     ];
 
     const calculations = periods.map(period => {
+      // คำนวณค่างวดแบบ Flat Rate (ดอกเบี้ยปกติ)
       let monthlyPayment;
-      if (rate === 0) {
-        monthlyPayment = loanAmount / period.months;
+      const annualRate = interestRate / 100; // แปลงเป็นทศนิยม
+      const years = period.months / 12; // จำนวนปี
+
+      // Flat Rate: ดอกเบี้ยรวม = เงินต้น × อัตราดอกเบี้ย × จำนวนปี
+      const totalInterest = loanAmount * annualRate * years;
+      const totalPayment = loanAmount + totalInterest;
+      monthlyPayment = totalPayment / period.months;
+
+      // คำนวณสำหรับเครดิตดี (ดอกเบี้ย 4.50%)
+      const goodCreditRate = 0.045; // 4.50% ต่อปี
+      const goodCreditInterest = loanAmount * goodCreditRate * years;
+      const goodCreditTotal = loanAmount + goodCreditInterest;
+      const goodCreditMonthlyPayment = goodCreditTotal / period.months;
+
+      // คำนวณค่าประกันตามอายุและวงเงินกู้ (เบี้ย = วงเงินกู้ × อัตราเบี้ยตามอายุ × จำนวนปีสัญญา)
+      let insuranceRatePerYear;
+      if (age <= 30) {
+        insuranceRatePerYear = 0.0027; // 0.27% เฉลี่ยของ 0.25-0.30%
+      } else if (age <= 40) {
+        insuranceRatePerYear = 0.004; // 0.40% เฉลี่ยของ 0.35-0.45%
+      } else if (age <= 50) {
+        insuranceRatePerYear = 0.0062; // 0.62% เฉลี่ยของ 0.55-0.70%
+      } else if (age <= 60) {
+        insuranceRatePerYear = 0.01; // 1.00% เฉลี่ยของ 0.80-1.20%
       } else {
-        monthlyPayment =
-          (loanAmount * rate * Math.pow(1 + rate, period.months)) /
-          (Math.pow(1 + rate, period.months) - 1);
+        insuranceRatePerYear = 0.02; // 2.00% เฉลี่ยของ 1.50-2.50%
       }
 
-      const totalPayment = monthlyPayment * period.months;
-      const totalInterest = totalPayment - loanAmount;
+      const totalInsurancePremium = loanAmount * insuranceRatePerYear * years;
+      const insurance = totalInsurancePremium / period.months; // ค่าประกันต่อเดือน
+      const baseInsurance = insurance; // เก็บไว้เพื่อแสดงผล
 
-      // คำนวณค่าประกันตามอายุ และ VAT 7%
-      const baseInsurance = age > 40 ? 500 : 200;
-      const insurance = baseInsurance + baseInsurance * 0.07; // รวม VAT 7%
-      const vat = monthlyPayment * 0.07;
-      const monthlyPaymentWithVatAndInsurance = monthlyPayment + vat + insurance;
+      // คิด VAT 7% เฉพาะค่างวด แล้วค่อยบวกประกัน (ดอกเบี้ยปกติ)
+      const vat = monthlyPayment * 0.07; // VAT 7% ของค่างวดอย่างเดียว
+      const monthlyPaymentWithVat = monthlyPayment + vat; // ค่างวด + VAT
+      const monthlyPaymentWithVatAndInsurance = monthlyPaymentWithVat + insurance; // + ประกัน
+
+      // คิด VAT 7% เฉพาะค่างวด แล้วค่อยบวกประกัน (เครดิตดี)
+      const goodCreditVat = goodCreditMonthlyPayment * 0.07;
+      const goodCreditWithVat = goodCreditMonthlyPayment + goodCreditVat;
+      const goodCreditWithVatAndInsurance = goodCreditWithVat + insurance;
 
       return {
         ...period,
@@ -64,7 +91,14 @@ export default function PaymentCalculator() {
         vat,
         insurance,
         baseInsurance,
+        monthlyPaymentWithVat,
         monthlyPaymentWithVatAndInsurance,
+        // เครดิตดี
+        goodCreditMonthlyPayment,
+        goodCreditVat,
+        goodCreditWithVat,
+        goodCreditWithVatAndInsurance,
+        goodCreditTotalInterest: goodCreditInterest,
       };
     });
 
@@ -89,7 +123,7 @@ export default function PaymentCalculator() {
         setTimeout(() => {
           const carPriceValue = parseFloat(sanitized);
           const down = 0; // เริ่มต้นเงินดาวน์ 0
-          const rate = 7.5 / 100 / 12; // ดอกเบี้ย 7.50%
+          // const rate = 7.5 / 100 / 12; // ดอกเบี้ย 7.50% - ไม่ใช้ใน Flat Rate
           const age = 35; // อายุเริ่มต้น 35 ปี
 
           if (carPriceValue > 0) {
@@ -102,23 +136,49 @@ export default function PaymentCalculator() {
             ];
 
             const calculations = periods.map(period => {
+              // คำนวณค่างวดแบบ Flat Rate (ดอกเบี้ยปกติ)
               let monthlyPayment;
-              if (rate === 0) {
-                monthlyPayment = loanAmount / period.months;
+              const annualRate = 7.5 / 100; // ดอกเบี้ย 7.5% ต่อปี
+              const years = period.months / 12; // จำนวนปี
+
+              // Flat Rate: ดอกเบี้ยรวม = เงินต้น × อัตราดอกเบี้ย × จำนวนปี
+              const totalInterest = loanAmount * annualRate * years;
+              const totalPayment = loanAmount + totalInterest;
+              monthlyPayment = totalPayment / period.months;
+
+              // คำนวณสำหรับเครดิตดี (ดอกเบี้ย 4.50%)
+              const goodCreditRate = 0.045; // 4.50% ต่อปี
+              const goodCreditInterest = loanAmount * goodCreditRate * years;
+              const goodCreditTotal = loanAmount + goodCreditInterest;
+              const goodCreditMonthlyPayment = goodCreditTotal / period.months;
+
+              // คำนวณค่าประกันตามอายุและวงเงินกู้ (เบี้ย = วงเงินกู้ × อัตราเบี้ยตามอายุ × จำนวนปีสัญญา)
+              let insuranceRatePerYear;
+              if (age <= 30) {
+                insuranceRatePerYear = 0.0027; // 0.27% เฉลี่ยของ 0.25-0.30%
+              } else if (age <= 40) {
+                insuranceRatePerYear = 0.004; // 0.40% เฉลี่ยของ 0.35-0.45%
+              } else if (age <= 50) {
+                insuranceRatePerYear = 0.0062; // 0.62% เฉลี่ยของ 0.55-0.70%
+              } else if (age <= 60) {
+                insuranceRatePerYear = 0.01; // 1.00% เฉลี่ยของ 0.80-1.20%
               } else {
-                monthlyPayment =
-                  (loanAmount * rate * Math.pow(1 + rate, period.months)) /
-                  (Math.pow(1 + rate, period.months) - 1);
+                insuranceRatePerYear = 0.02; // 2.00% เฉลี่ยของ 1.50-2.50%
               }
 
-              const totalPayment = monthlyPayment * period.months;
-              const totalInterest = totalPayment - loanAmount;
+              const totalInsurancePremium = loanAmount * insuranceRatePerYear * years;
+              const insurance = totalInsurancePremium / period.months; // ค่าประกันต่อเดือน
+              const baseInsurance = insurance; // เก็บไว้เพื่อแสดงผล
 
-              // คำนวณค่าประกันตามอายุ และ VAT 7%
-              const baseInsurance = age > 40 ? 500 : 200;
-              const insurance = baseInsurance + baseInsurance * 0.07; // รวม VAT 7%
-              const vat = monthlyPayment * 0.07;
-              const monthlyPaymentWithVatAndInsurance = monthlyPayment + vat + insurance;
+              // คิด VAT 7% เฉพาะค่างวด แล้วค่อยบวกประกัน (ดอกเบี้ยปกติ)
+              const vat = monthlyPayment * 0.07; // VAT 7% ของค่างวดอย่างเดียว
+              const monthlyPaymentWithVat = monthlyPayment + vat; // ค่างวด + VAT
+              const monthlyPaymentWithVatAndInsurance = monthlyPaymentWithVat + insurance; // + ประกัน
+
+              // คิด VAT 7% เฉพาะค่างวด แล้วค่อยบวกประกัน (เครดิตดี)
+              const goodCreditVat = goodCreditMonthlyPayment * 0.07;
+              const goodCreditWithVat = goodCreditMonthlyPayment + goodCreditVat;
+              const goodCreditWithVatAndInsurance = goodCreditWithVat + insurance;
 
               return {
                 ...period,
@@ -128,7 +188,14 @@ export default function PaymentCalculator() {
                 vat,
                 insurance,
                 baseInsurance,
+                monthlyPaymentWithVat,
                 monthlyPaymentWithVatAndInsurance,
+                // เครดิตดี
+                goodCreditMonthlyPayment,
+                goodCreditVat,
+                goodCreditWithVat,
+                goodCreditWithVatAndInsurance,
+                goodCreditTotalInterest: goodCreditInterest,
               };
             });
 
@@ -227,16 +294,40 @@ export default function PaymentCalculator() {
                           >
                             {calc.label}
                           </div>
-                          <div
-                            className={`text-xl md:text-2xl font-bold mb-1 ${
-                              index === 1 ? 'text-green-600' : 'text-primary'
-                            }`}
-                          >
-                            ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}
+
+                          {/* ดอกเบี้ยปกติ */}
+                          <div className="mb-3">
+                            <div className="text-xs text-gray-500 mb-1">ดอกเบี้ย 7.5%</div>
+                            <div
+                              className={`text-xl md:text-2xl font-bold mb-1 ${
+                                index === 1 ? 'text-primary' : 'text-primary'
+                              }`}
+                            >
+                              ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}
+                            </div>
+                            <div className="text-xs text-gray-600">ต่อเดือน</div>
                           </div>
-                          <div className="text-xs text-gray-600 mb-2">ต่อเดือน</div>
+
+                          {/* เครดิตดี */}
+                          <div className="border-t pt-2">
+                            <div className="text-xs text-blue-600 mb-1 font-semibold">
+                              เครดิตดี 4.5%
+                            </div>
+                            <div className="text-lg md:text-xl font-bold text-blue-600 mb-1">
+                              ฿{formatNumber(calc.goodCreditWithVatAndInsurance)}
+                            </div>
+                            <div className="text-xs text-accent font-semibold">
+                              ประหยัด ฿
+                              {formatNumber(
+                                calc.monthlyPaymentWithVatAndInsurance -
+                                  calc.goodCreditWithVatAndInsurance
+                              )}
+                              /เดือน
+                            </div>
+                          </div>
+
                           {index === 1 && (
-                            <div className="inline-flex items-center gap-1 text-xs bg-accent bg-opacity-20 text-accent px-3 py-1 rounded-full font-semibold">
+                            <div className="inline-flex items-center gap-1 text-xs bg-accent bg-opacity-20 text-accent px-3 py-1 rounded-full font-semibold mt-2">
                               แนะนำ
                             </div>
                           )}
@@ -426,7 +517,7 @@ export default function PaymentCalculator() {
                     </h3>
 
                     {/* Quick Summary Card */}
-                    <div className="mb-4 md:mb-6 p-3 md:p-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg border border-blue-200">
+                    <div className="mb-4 md:mb-6 p-3 md:p-4 bg-blue-50 rounded-lg border border-blue-200">
                       <div className="grid grid-cols-2 gap-2 md:gap-4 text-xs md:text-sm">
                         <div>
                           <span className="text-gray-600 block">ราคารถ:</span>
@@ -491,9 +582,15 @@ export default function PaymentCalculator() {
                                 ฿{formatNumber(calc.monthlyPayment)}
                               </div>
                             </div>
-                            <div className="flex justify-between items-center p-2 bg-green-50 rounded border border-green-200">
-                              <span className="text-xs text-gray-600">รวม VAT + ประกัน:</span>
-                              <div className="font-bold text-sm text-green-600">
+                            <div className="flex justify-between items-center p-2 bg-blue-50 rounded border border-blue-200">
+                              <span className="text-xs text-gray-600">ค่างวด + VAT:</span>
+                              <div className="font-bold text-sm text-blue-600">
+                                ฿{formatNumber(calc.monthlyPaymentWithVat)}
+                              </div>
+                            </div>
+                            <div className="flex justify-between items-center p-2 bg-blue-50 rounded border border-blue-200">
+                              <span className="text-xs text-gray-600">ยอดชำระรวม (+ ประกัน):</span>
+                              <div className="font-bold text-sm text-blue-600">
                                 ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}
                               </div>
                             </div>
@@ -522,22 +619,27 @@ export default function PaymentCalculator() {
                               </div>
                             </div>
                             <div>
-                              <span className="text-gray-600">รวม VAT + ประกัน:</span>
-                              <div className="font-bold text-lg text-green-600">
+                              <span className="text-gray-600">ค่างวด + VAT:</span>
+                              <div className="font-bold text-lg text-blue-600">
+                                ฿{formatNumber(calc.monthlyPaymentWithVat)}
+                              </div>
+                            </div>
+                            <div>
+                              <span className="text-gray-600">ยอดชำระรวม (+ ประกัน):</span>
+                              <div className="font-bold text-lg text-primary">
                                 ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}
+                              </div>
+                            </div>
+                            <div>
+                              <span className="text-gray-600">VAT 7% (ค่างวดอย่างเดียว):</span>
+                              <div className="font-semibold text-gray-700">
+                                ฿{formatNumber(calc.vat)}
                               </div>
                             </div>
                             <div>
                               <span className="text-gray-600">ค่าประกัน/เดือน:</span>
                               <div className="font-semibold text-gray-700">
-                                ฿{formatNumber(calc.baseInsurance)} + VAT = ฿
-                                {formatNumber(calc.insurance)}
-                              </div>
-                            </div>
-                            <div>
-                              <span className="text-gray-600">VAT ค่างวด:</span>
-                              <div className="font-semibold text-gray-700">
-                                ฿{formatNumber(calc.vat)}
+                                ฿{formatNumber(calc.insurance)}
                               </div>
                             </div>
                             <div>
@@ -562,8 +664,18 @@ export default function PaymentCalculator() {
                         <strong>หมายเหตุ:</strong> ผลการคำนวณนี้เป็นเพียงการประมาณการ
                         ค่าใช้จ่ายจริงอาจแตกต่างขึ้นอยู่กับเงื่อนไขของแต่ละธนาคาร
                         <br />
-                        <strong>ค่าประกัน:</strong> อายุ ≤ 40 ปี = 200 บาท + VAT 7% = 214 บาท/เดือน
-                        | อายุ &gt; 40 ปี = 500 บาท + VAT 7% = 535 บาท/เดือน
+                        <strong>สูตรการคำนวณ:</strong> Flat Rate - (ค่างวด + VAT 7%) + ค่าประกัน
+                        <br />
+                        <strong>ดอกเบี้ยรวม:</strong> เงินต้น × อัตราดอกเบี้ย × จำนวนปี
+                        <br />
+                        <strong>ค่าประกัน:</strong> วงเงินกู้ × อัตราเบี้ยตามอายุ × จำนวนปี ÷
+                        จำนวนงวด
+                        <br />
+                        <strong>อัตราเบี้ยประกัน:</strong> 20-30ปี: 0.27% | 31-40ปี: 0.40% |
+                        41-50ปี: 0.62% | 51-60ปี: 1.00% | 61-65ปี: 2.00%
+                        <br />
+                        <strong>เครดิตดี:</strong> ดอกเบี้ย 4.50% สำหรับผู้มีเครดิตดี
+                        เปรียบเทียบกับดอกเบี้ยปกติ 7.50%
                       </p>
                     </div>
                   </div>

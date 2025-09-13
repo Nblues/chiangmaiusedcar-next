@@ -412,8 +412,10 @@ export default function Home({ cars }) {
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-prompt">
             รถแนะนำเข้าใหม่วันนี้
           </h2>
-          <p className="text-gray-600 font-prompt">
-            รถคุณภาพดีที่เราตรวจสภาพครบถ้วน เช็คประวัติรถ คัดสรรมาเพื่อคุณโดยเฉพาะ
+          <p className="text-base text-gray-700 font-prompt leading-relaxed max-w-3xl mx-auto">
+            รถคุณภาพดี ตรวจสภาพครบถ้วน เช็คประวัติรถ{' '}
+            <span className="font-bold text-primary">คัดเฉพาะรถมือเดียว ประวัติใส 100%</span>{' '}
+            คัดสรรมาเพื่อคุณโดยเฉพาะ ผ่านการตรวจสอบอย่างละเอียด เพื่อให้คุณมั่นใจในทุกการเดินทาง
           </p>
         </div>
         <section
@@ -770,28 +772,78 @@ export default function Home({ cars }) {
         </section>
       )}
 
-      <section className="bg-white py-8 mt-6 rounded-2xl max-w-4xl mx-auto shadow-lg border border-gray-100">
-        <h2 className="text-xl font-bold mb-4 text-gray-900 font-prompt px-4">คำถามที่พบบ่อย</h2>
-        <div className="space-y-4 px-4">
-          <details className="bg-white rounded-xl p-4 shadow">
-            <summary className="font-bold text-gray-900 cursor-pointer">ดาวน์ 0% จริงไหม?</summary>
-            <div className="text-gray-700 pt-2 font-medium">
-              จริง! ลูกค้าสามารถออกรถฟรีดาวน์ตามโปรโมชัน ตรวจสภาพครบถ้วน เช็คประวัติรถก่อนส่งมอบ
-            </div>
-          </details>
-          <details className="bg-white rounded-xl p-4 shadow">
-            <summary className="font-bold text-gray-900 cursor-pointer">
-              ติดเครดิตบูโรออกได้ไหม?
+      <section className="bg-white py-6 sm:py-8 mt-6 rounded-2xl max-w-4xl mx-auto border border-gray-200">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-primary font-prompt px-4 sm:px-6">
+          คำถามที่พบบ่อย
+        </h2>
+        <div className="space-y-3 sm:space-y-4 px-4 sm:px-6">
+          <details className="bg-gray-50 rounded-lg border border-gray-200 p-4 sm:p-5 hover:bg-gray-100 transition-colors group">
+            <summary className="font-bold text-black cursor-pointer text-base sm:text-lg font-prompt flex items-center justify-between group-hover:text-primary transition-colors">
+              ดาวน์ 0% จริงไหม?
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 transform group-open:rotate-180 transition-transform text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
             </summary>
-            <div className="text-gray-700 pt-2 font-medium">
-              ได้! แพลตฟอร์มออนไลน์ของเรามีไฟแนนซ์หลากหลายแบบ สอบถามข้อมูลได้ทาง LINE หรือโทร
-              094-064-9018
+            <div className="text-gray-700 pt-3 sm:pt-4 text-sm sm:text-base font-prompt leading-relaxed">
+              <span className="font-semibold text-accent">จริง!</span>{' '}
+              ลูกค้าสามารถออกรถฟรีดาวน์ตามโปรโมชัน ตรวจสภาพครบถ้วน เช็คประวัติรถก่อนส่งมอบ
             </div>
           </details>
-          <details className="bg-white rounded-xl p-4 shadow">
-            <summary className="font-bold text-gray-900 cursor-pointer">มีรับประกันไหม?</summary>
-            <div className="text-gray-700 pt-2 font-medium">
-              รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม ตรวจสภาพครบถ้วนก่อนส่งมอบ
+          <details className="bg-gray-50 rounded-lg border border-gray-200 p-4 sm:p-5 hover:bg-gray-100 transition-colors group">
+            <summary className="font-bold text-black cursor-pointer text-base sm:text-lg font-prompt flex items-center justify-between group-hover:text-primary transition-colors">
+              ติดเครดิตบูโรออกได้ไหม?
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 transform group-open:rotate-180 transition-transform text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </summary>
+            <div className="text-gray-700 pt-3 sm:pt-4 text-sm sm:text-base font-prompt leading-relaxed">
+              <span className="font-semibold text-accent">ได้!</span>{' '}
+              แพลตฟอร์มออนไลน์ของเรามีไฟแนนซ์หลากหลายแบบ สอบถามข้อมูลได้ทาง LINE หรือโทร
+              <a href="tel:0940649018" className="text-primary font-bold hover:underline ml-1">
+                094-064-9018
+              </a>
+            </div>
+          </details>
+          <details className="bg-gray-50 rounded-lg border border-gray-200 p-4 sm:p-5 hover:bg-gray-100 transition-colors group">
+            <summary className="font-bold text-black cursor-pointer text-base sm:text-lg font-prompt flex items-center justify-between group-hover:text-primary transition-colors">
+              มีรับประกันไหม?
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 transform group-open:rotate-180 transition-transform text-primary"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </summary>
+            <div className="text-gray-700 pt-3 sm:pt-4 text-sm sm:text-base font-prompt leading-relaxed">
+              <span className="font-semibold text-accent">รับประกัน</span>เครื่องยนต์และเกียร์{' '}
+              <span className="font-bold text-primary">1 ปีเต็ม</span> ตรวจสภาพครบถ้วนก่อนส่งมอบ
               พร้อมบริการหลังการขายครบครัน
             </div>
           </details>

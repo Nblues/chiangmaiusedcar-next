@@ -1,25 +1,23 @@
 # *
-# Enhanced for AI & Search Crawlers 2025
-# Next.js Optimized - Schema.org Compliant
+# Enhanced for AI Crawlers 2025
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /_next/
-Disallow: /secret/
-Disallow: /private/
-Disallow: /drafts/
-Disallow: /admin/
-Disallow: /.well-known/
-Disallow: /tmp/
+Disallow: /api*
+Disallow: /_next*
+Disallow: /secret*
+Disallow: /private*
+Disallow: /drafts*
+Disallow: /admin*
+Disallow: /keyword-audit
+Disallow: /api-dashboard
 
 # Googlebot
 User-agent: Googlebot
 Allow: /
-Disallow: /api/
-Disallow: /admin/
-Disallow: /_next/static/chunks/
-Allow: /_next/static/css/
-Allow: /_next/static/media/
+Disallow: /api*
+Disallow: /admin*
+Disallow: /keyword-audit
+Disallow: /api-dashboard
 
 # Googlebot-Image
 User-agent: Googlebot-Image
@@ -40,19 +38,8 @@ Allow: /all-cars
 Allow: /car/*
 Allow: /about
 Allow: /contact
-Disallow: /api/
-Disallow: /admin/
-Crawl-delay: 1
-
-# GPT-4-User (OpenAI 2025)
-User-agent: GPT-4-User
-Allow: /
-Allow: /all-cars
-Allow: /car/*
-Allow: /about
-Allow: /contact
-Disallow: /api/
-Disallow: /admin/
+Disallow: /api*
+Disallow: /admin*
 Crawl-delay: 1
 
 # Claude-Web
@@ -62,71 +49,48 @@ Allow: /all-cars
 Allow: /car/*
 Allow: /about
 Allow: /contact
-Disallow: /api/
-Disallow: /admin/
+Disallow: /api*
+Disallow: /admin*
 Crawl-delay: 1
 
-# Bard/Gemini (Google AI)
+# Bard
 User-agent: Bard
 Allow: /
 Allow: /all-cars
 Allow: /car/*
 Allow: /about
 Allow: /contact
-Disallow: /api/
-Disallow: /admin/
-Crawl-delay: 1
-
-# Gemini-Pro
-User-agent: Gemini-Pro
-Allow: /
-Allow: /all-cars
-Allow: /car/*
-Allow: /about
-Allow: /contact
-Disallow: /api/
-Disallow: /admin/
+Disallow: /api*
+Disallow: /admin*
 Crawl-delay: 1
 
 # Instagram
 User-agent: Instagram
 Allow: /
 Allow: /car/*
-Disallow: /api/
+Disallow: /api*
 Crawl-delay: 3
 
 # TikTokBot
 User-agent: TikTokBot
 Allow: /
 Allow: /car/*
-Disallow: /api/
+Disallow: /api*
 Crawl-delay: 3
-
-# LinkedInBot
-User-agent: LinkedInBot
-Allow: /
-Allow: /car/*
-Allow: /about
-Allow: /contact
-Disallow: /api/
-Crawl-delay: 2
-
-# WhatsApp
-User-agent: WhatsApp
-Allow: /
-Allow: /car/*
-Disallow: /api/
-Crawl-delay: 2
 
 # Host
 Host: https://www.chiangmaiusedcar.com
 
-# Security 2025 Standards
-# Request-rate: 1/1s (Global rate limit)
-# Visit-time: 0600-2200 (Thailand timezone UTC+7)
+# Sitemaps
 
-# Sitemaps - Schema.org Compliant
+# Additional XML Sitemaps
 Sitemap: https://www.chiangmaiusedcar.com/sitemap.xml
+
+# Additional XML Sitemaps
 Sitemap: https://www.chiangmaiusedcar.com/sitemap-0.xml
+
+# Additional XML Sitemaps
 Sitemap: https://www.chiangmaiusedcar.com/sitemap-cars.xml
+
+# Additional XML Sitemaps
 Sitemap: https://www.chiangmaiusedcar.com/sitemap-images.xml

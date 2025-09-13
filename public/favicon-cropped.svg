@@ -1,0 +1,22 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- พื้นหลังโปร่งใส -->
+  <rect width="256" height="256" fill="none"/>
+  
+  <!-- ใช้ image จาก logo_main.png แล้ว crop ส่วนกลาง -->
+  <defs>
+    <clipPath id="cropCircle">
+      <circle cx="128" cy="128" r="120"/>
+    </clipPath>
+  </defs>
+  
+  <!-- โหลดรูป logo_main.png และ crop เอาส่วนกลาง -->
+  <image 
+    href="/logo/logo_main.png" 
+    x="-50" 
+    y="-50" 
+    width="356" 
+    height="356" 
+    clip-path="url(#cropCircle)"
+    preserveAspectRatio="xMidYMid slice"
+  />
+</svg>

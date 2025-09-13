@@ -18,48 +18,49 @@ export default function Document() {
         <meta name="last-modified" content={buildTime} />
         <meta name="etag" content={`"${buildTime}"`} />
 
-        {/* Favicon Settings - 2025 Standards for Search Engine Results */}
+        {/* Favicon Settings - 2025 Standards using favicon.webp */}
+        <link rel="icon" type="image/webp" href="/favicon.webp" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="shortcut icon" href="/favicon.png" />
+        <link rel="shortcut icon" href="/favicon.webp" />
 
-        {/* Multi-size PNG icons for better SEO - 2025 Requirements */}
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
-        <link rel="icon" type="image/png" sizes="48x48" href="/favicon.png" />
-        <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png" />
-        <link rel="icon" type="image/png" sizes="144x144" href="/favicon.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
-        <link rel="icon" type="image/png" sizes="256x256" href="/favicon.png" />
-        <link rel="icon" type="image/png" sizes="384x384" href="/favicon.png" />
-        <link rel="icon" type="image/png" sizes="512x512" href="/favicon.png" />
+        {/* Multi-size WebP icons for better SEO - 2025 Requirements */}
+        <link rel="icon" type="image/webp" sizes="16x16" href="/favicon.webp" />
+        <link rel="icon" type="image/webp" sizes="32x32" href="/favicon.webp" />
+        <link rel="icon" type="image/webp" sizes="48x48" href="/favicon.webp" />
+        <link rel="icon" type="image/webp" sizes="96x96" href="/favicon.webp" />
+        <link rel="icon" type="image/webp" sizes="144x144" href="/favicon.webp" />
+        <link rel="icon" type="image/webp" sizes="192x192" href="/favicon.webp" />
+        <link rel="icon" type="image/webp" sizes="256x256" href="/favicon.webp" />
+        <link rel="icon" type="image/webp" sizes="384x384" href="/favicon.webp" />
+        <link rel="icon" type="image/webp" sizes="512x512" href="/favicon.webp" />
 
         {/* Apple Touch Icons - 2025 Standards */}
-        <link rel="apple-touch-icon" href="/favicon.png" />
-        <link rel="apple-touch-icon" sizes="57x57" href="/favicon.png" />
-        <link rel="apple-touch-icon" sizes="60x60" href="/favicon.png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="/favicon.png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="/favicon.png" />
-        <link rel="apple-touch-icon" sizes="114x114" href="/favicon.png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="/favicon.png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="/favicon.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/favicon.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/favicon.webp" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/favicon.webp" />
+        <link rel="apple-touch-icon" sizes="60x60" href="/favicon.webp" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/favicon.webp" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/favicon.webp" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/favicon.webp" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/favicon.webp" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/favicon.webp" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/favicon.webp" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon.webp" />
 
         {/* Android/Chrome Icons - 2025 PWA Standards */}
-        <link rel="icon" sizes="192x192" href="/favicon.png" />
-        <link rel="icon" sizes="512x512" href="/favicon.png" />
+        <link rel="icon" sizes="192x192" href="/favicon.webp" />
+        <link rel="icon" sizes="512x512" href="/favicon.webp" />
 
         {/* Microsoft Tiles - 2025 Edge Standards */}
-        <meta name="msapplication-TileImage" content="/favicon.png" />
+        <meta name="msapplication-TileImage" content="/favicon.webp" />
         <meta name="msapplication-TileColor" content="#1a237e" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
 
         {/* 2025 Search Engine Favicon Optimization */}
-        <meta name="msapplication-square70x70logo" content="/favicon.png" />
-        <meta name="msapplication-square150x150logo" content="/favicon.png" />
-        <meta name="msapplication-wide310x150logo" content="/favicon.png" />
-        <meta name="msapplication-square310x310logo" content="/favicon.png" />
+        <meta name="msapplication-square70x70logo" content="/favicon.webp" />
+        <meta name="msapplication-square150x150logo" content="/favicon.webp" />
+        <meta name="msapplication-wide310x150logo" content="/favicon.webp" />
+        <meta name="msapplication-square310x310logo" content="/favicon.webp" />
 
         {/* PWA Manifest with cache busting - 2025 Standards */}
         <link rel="manifest" href={`/manifest.json?${cacheVersion}`} />

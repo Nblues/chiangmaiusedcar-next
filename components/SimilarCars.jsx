@@ -71,17 +71,23 @@ function SimilarCars({ currentCar, allCars = [] }) {
   if (similarCars.length === 0) {
     // แสดง empty state แทนการไม่แสดงอะไรเลย
     return (
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
+      <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 font-prompt border-b-2 border-accent pb-2">
+          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-black font-prompt border-b-2 border-accent pb-2 flex-1 mr-4">
             รถที่แนะนำ
           </h2>
           <Link
             href="/all-cars"
-            className="text-accent hover:text-accent-600 font-semibold text-sm font-prompt flex items-center gap-1"
+            className="text-primary hover:text-blue-700 font-semibold text-xs sm:text-sm font-prompt flex items-center gap-1 transition-colors flex-shrink-0"
           >
-            ดูทั้งหมด
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <span className="hidden sm:inline">ดูทั้งหมด</span>
+            <span className="sm:hidden">ดูเพิ่ม</span>
+            <svg
+              className="w-3 h-3 sm:w-4 sm:h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
@@ -91,9 +97,9 @@ function SimilarCars({ currentCar, allCars = [] }) {
           <p className="text-gray-600 font-prompt mb-4">ขออภัย ยังไม่มีรถที่ใกล้เคียงให้แนะนำ</p>
           <Link
             href="/all-cars"
-            className="inline-flex items-center bg-accent hover:bg-accent-600 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+            className="bg-accent hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold text-base transition-colors font-prompt inline-block"
           >
-            <span>ดูรถทั้งหมด</span>
+            ดูรถทั้งหมด
           </Link>
         </div>
       </div>
@@ -101,30 +107,36 @@ function SimilarCars({ currentCar, allCars = [] }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
+    <div className="bg-white rounded-xl border border-gray-200 p-6 mb-8">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 font-prompt border-b-2 border-accent pb-2">
+        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-black font-prompt border-b-2 border-accent pb-2 flex-1 mr-4">
           รถที่แนะนำ ใกล้เคียงกัน
         </h2>
         <Link
           href="/all-cars"
-          className="text-accent hover:text-accent-600 font-semibold text-sm font-prompt flex items-center gap-1"
+          className="text-primary hover:text-blue-700 font-semibold text-xs sm:text-sm font-prompt flex items-center gap-1 transition-colors flex-shrink-0"
         >
-          ดูทั้งหมด
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <span className="hidden sm:inline">ดูทั้งหมด</span>
+          <span className="sm:hidden">ดูเพิ่ม</span>
+          <svg
+            className="w-3 h-3 sm:w-4 sm:h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {similarCars.map(car => (
           <article
             key={car.id}
-            className="group bg-gray-50 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-accent flex flex-col h-full transform hover:-translate-y-1"
+            className="group bg-white rounded-lg border border-gray-200 hover:border-primary transition-all duration-200 overflow-hidden flex flex-col h-full"
           >
             <Link href={`/car/${car.handle}`} className="flex flex-col h-full">
-              <figure className="relative w-full h-40 bg-white overflow-hidden">
+              <figure className="relative w-full h-32 md:h-40 bg-gray-50 overflow-hidden">
                 <Image
                   src={
                     Array.isArray(car.images) && car.images.length > 0
@@ -133,16 +145,17 @@ function SimilarCars({ currentCar, allCars = [] }) {
                   }
                   alt={carAlt(car)}
                   fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="object-cover transition-transform duration-200 group-hover:scale-105"
                   loading="lazy"
                   quality={80}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 25vw"
                 />
 
                 {/* Badge ยี่ห้อเดียวกัน */}
                 {(car.vendor || car.brand) === (currentCar.vendor || currentCar.brand) && (
-                  <div className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-bold font-prompt">
-                    ยี่ห้อเดียวกัน
+                  <div className="absolute top-1 left-1 md:top-2 md:left-2 bg-accent text-white text-xs px-1 py-0.5 md:px-2 md:py-1 rounded-md font-bold font-prompt">
+                    <span className="hidden md:inline">ยี่ห้อเดียวกัน</span>
+                    <span className="md:hidden">ยี่ห้อเดียวกัน</span>
                   </div>
                 )}
 
@@ -150,25 +163,26 @@ function SimilarCars({ currentCar, allCars = [] }) {
                 {currentCar.price?.amount &&
                   Math.abs(Number(car.price.amount) - Number(currentCar.price.amount)) <=
                     Number(currentCar.price.amount) * 0.15 && (
-                    <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-bold font-prompt">
-                      ราคาใกล้เคียง
+                    <div className="absolute top-1 right-1 md:top-2 md:right-2 bg-primary text-white text-xs px-1 py-0.5 md:px-2 md:py-1 rounded-md font-bold font-prompt">
+                      <span className="hidden md:inline">ราคาใกล้เคียง</span>
+                      <span className="md:hidden">ใกล้เคียง</span>
                     </div>
                   )}
               </figure>
 
-              <div className="p-4 flex flex-col flex-grow">
-                <h3 className="font-bold text-sm text-gray-900 mb-2 group-hover:text-accent transition-colors line-clamp-2 font-prompt leading-snug">
+              <div className="p-2 md:p-4 flex flex-col flex-grow">
+                <h3 className="font-bold text-xs md:text-sm text-black mb-1 md:mb-2 group-hover:text-primary transition-colors line-clamp-2 font-prompt leading-tight">
                   {car.title}
                 </h3>
 
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-lg font-bold text-accent font-prompt">
+                <div className="flex items-center justify-between mb-2 md:mb-3">
+                  <p className="text-sm md:text-lg font-bold text-primary font-prompt">
                     ฿{Number(car.price.amount).toLocaleString()}
                   </p>
 
-                  {/* ราคาต่างจากรถปัจจุบัน */}
+                  {/* ราคาต่างจากรถปัจจุบัน - ซ่อนในมือถือ */}
                   {currentCar.price?.amount && (
-                    <div className="text-xs text-gray-500 font-prompt">
+                    <div className="hidden md:block text-xs text-gray-500 font-prompt">
                       {Number(car.price.amount) > Number(currentCar.price.amount) ? '↗' : '↘'}฿
                       {Math.abs(
                         Number(car.price.amount) - Number(currentCar.price.amount)
@@ -178,14 +192,14 @@ function SimilarCars({ currentCar, allCars = [] }) {
                 </div>
 
                 <div className="text-xs text-gray-600 space-y-1 flex-grow font-prompt">
-                  <div className="grid grid-cols-2 gap-1">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
                     {car.vendor && (
                       <div className="truncate">
                         <span className="font-medium">{car.vendor}</span>
                       </div>
                     )}
                     {car.year && (
-                      <div className="truncate text-right">
+                      <div className="truncate md:text-right">
                         ปี <span className="font-medium">{car.year}</span>
                       </div>
                     )}
@@ -199,9 +213,10 @@ function SimilarCars({ currentCar, allCars = [] }) {
                   )}
                 </div>
 
-                <div className="mt-3">
-                  <span className="block text-center bg-gradient-to-r from-accent to-accent-600 hover:from-accent-600 hover:to-accent-700 text-white text-xs py-2 px-3 rounded-lg transition-all duration-300 font-prompt font-bold transform group-hover:scale-105">
-                    ดูรายละเอียด →
+                <div className="mt-2 md:mt-3">
+                  <span className="block text-center bg-accent hover:bg-orange-600 text-white text-xs py-1.5 md:py-2 px-2 md:px-3 rounded-lg transition-colors font-prompt font-bold">
+                    <span className="hidden md:inline">ดูรายละเอียด →</span>
+                    <span className="md:hidden">ดูเพิ่ม</span>
                   </span>
                 </div>
               </div>
@@ -213,9 +228,9 @@ function SimilarCars({ currentCar, allCars = [] }) {
       <div className="mt-6 text-center">
         <Link
           href="/all-cars"
-          className="inline-block px-6 py-3 bg-gradient-to-r from-primary to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg font-prompt"
+          className="bg-primary hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors font-prompt inline-block"
         >
-          🔍 ค้นหารถเพิ่มเติม
+          ค้นหารถเพิ่มเติม
         </Link>
       </div>
     </div>

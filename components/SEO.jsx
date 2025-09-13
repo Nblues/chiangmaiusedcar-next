@@ -100,9 +100,7 @@ export default function SEO({
     const siteLocation = getSiteLocation();
 
     // Fix canonical URL duplication - check if url already contains full domain
-    const fullUrl = url 
-      ? (url.startsWith('http') ? url : `${site}${url}`)
-      : site;
+    const fullUrl = url ? (url.startsWith('http') ? url : `${site}${url}`) : site;
     const metaTitle = title ? `${title} | ${siteName}` : siteName;
     const metaDesc = description || defaultDescription;
 

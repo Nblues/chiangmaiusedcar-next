@@ -1,0 +1,97 @@
+{
+  "timestamp": "2025-09-13T22:23:00.655Z",
+  "healthScore": 100,
+  "summary": {
+    "passed": 17,
+    "warnings": 0,
+    "failed": 0,
+    "total": 17
+  },
+  "details": [
+    {
+      "name": "next.config.js exists",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "package.json exists",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "tsconfig.json exists",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": ".env.local exists",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "Build directory exists",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "Build completed",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "No corrupted service-areas.jsx",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "robots.txt blocks internal tools",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "Sitemap exists",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "CSP headers configured",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "Security headers configured",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "SWC minification enabled",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "Image optimization configured",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "Next.js version OK",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "React version OK",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "Build scripts configured",
+      "status": "✅",
+      "level": "error"
+    },
+    {
+      "name": "Test scripts configured",
+      "status": "✅",
+      "level": "error"
+    }
+  ]
+}

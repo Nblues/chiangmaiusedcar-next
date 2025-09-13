@@ -7,13 +7,13 @@ const nextConfig = {
   generateEtags: true,
   swcMinify: true,
 
-  // Enhanced TypeScript configuration
+  // Production TypeScript configuration
   typescript: {
     ignoreBuildErrors: false,
     tsconfigPath: './tsconfig.json',
   },
 
-  // Enhanced ESLint configuration
+  // Production ESLint configuration
   eslint: {
     ignoreDuringBuilds: false,
     dirs: ['pages', 'components', 'lib', 'utils'],
@@ -31,13 +31,20 @@ const nextConfig = {
       };
     }
 
+    // Optimize bundle size
+    config.optimization = {
+      ...config.optimization,
+      usedExports: true,
+      sideEffects: false,
+    };
+
     return config;
   },
 
   // Environment variables validation
   env: {
     CUSTOM_BUILD_TIME: new Date().toISOString(),
-    NEXT_PUBLIC_BUILD_ENV: process.env.NODE_ENV || 'development',
+    NEXT_PUBLIC_BUILD_ENV: process.env.NODE_ENV || 'production',
   },
 
   // Image optimization - enhanced for speed and security
@@ -75,7 +82,7 @@ const nextConfig = {
     unoptimized: false,
   },
 
-  // Headers for deployment
+  // Headers for security and performance
   async headers() {
     const securityHeaders = [
       {
@@ -171,9 +178,18 @@ const nextConfig = {
   // Production optimization
   productionBrowserSourceMaps: false,
   distDir: '.next',
+  output: 'standalone',
 
   // Optimize for Vercel deployment
   trailingSlash: false,
+
+  // Custom page extensions
+  pageExtensions: ['jsx', 'js', 'ts', 'tsx'],
+
+  // Build optimization
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
 };
 
 module.exports = nextConfig;

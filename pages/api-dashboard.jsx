@@ -66,9 +66,8 @@ export default function APIDashboard() {
         image="/herobanner/api-dashboard.webp"
       />
       <Head>
-        {process.env.NODE_ENV === 'development' && (
-          <meta name="robots" content="noindex, nofollow" />
-        )}
+        <meta name="robots" content="noindex, nofollow" />
+        <meta name="googlebot" content="noindex, nofollow" />
       </Head>
 
       <div className="min-h-screen bg-gray-50 py-8">
