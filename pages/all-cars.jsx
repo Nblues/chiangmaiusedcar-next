@@ -408,7 +408,7 @@ export default function AllCars({ cars }) {
                 placeholder="ค้นหารถ..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 placeholder-gray-500 bg-white transition-all duration-200"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 placeholder-gray-500 bg-white transition-all duration-300"
               />
             </div>
 
@@ -417,7 +417,7 @@ export default function AllCars({ cars }) {
               <select
                 value={priceRange}
                 onChange={e => setPriceRange(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 bg-white transition-all duration-200"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 bg-white transition-all duration-300"
               >
                 {priceRanges.map(range => (
                   <option key={range.value} value={range.value}>
@@ -432,7 +432,7 @@ export default function AllCars({ cars }) {
               <select
                 value={brandFilter}
                 onChange={e => setBrandFilter(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 bg-white transition-all duration-200"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 bg-white transition-all duration-300"
               >
                 <option value="all">ทุกยี่ห้อ</option>
                 {brands.slice(1).map(brand => (
@@ -457,7 +457,7 @@ export default function AllCars({ cars }) {
                     router.push('/all-cars', undefined, { shallow: true });
                   }
                 }}
-                className="w-full bg-accent hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 font-prompt shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="w-full bg-accent hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-2xl transition-all duration-300 font-prompt shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 รีเซ็ต
               </button>
@@ -475,7 +475,7 @@ export default function AllCars({ cars }) {
               {Array.from({ length: 8 }).map((_, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-xl md:rounded-3xl shadow-lg overflow-hidden border-2 border-gray-200 animate-pulse"
+                  className="bg-white rounded-2xl md:rounded-3xl shadow-lg overflow-hidden border-2 border-gray-200 animate-pulse"
                 >
                   <div className="w-full h-28 md:h-48 bg-gray-200"></div>
                   <div className="p-2 md:p-4">
@@ -510,7 +510,7 @@ export default function AllCars({ cars }) {
                 {currentCars.map(car => (
                   <article
                     key={car.id}
-                    className="car-card group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 overflow-hidden border-2 border-gray-200 hover:border-primary flex flex-col h-full relative font-prompt"
+                    className="car-card group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border-2 border-gray-200 hover:border-primary flex flex-col h-full relative font-prompt transform hover:scale-[1.02]"
                   >
                     {/* Main Car Link - คลิกได้ทั้งส่วนรูปและข้อมูล */}
                     <Link
@@ -567,7 +567,7 @@ export default function AllCars({ cars }) {
                             ? `/car/${encodeURIComponent(safeGet(car, 'handle'))}`
                             : '/all-cars'
                         }
-                        className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-full min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200 font-prompt"
+                        className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-2xl min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-prompt"
                         aria-label={`ดูรายละเอียด ${safeGet(car, 'title', 'รถยนต์')}`}
                       >
                         ดูรายละเอียด
@@ -585,7 +585,7 @@ export default function AllCars({ cars }) {
                     <button
                       type="button"
                       onClick={e => handlePageChange(currentPage - 1, e)}
-                      className="px-4 py-2 bg-white border-2 border-gray-300 rounded-xl hover:bg-primary hover:border-primary hover:text-white transition-all duration-200 font-prompt text-gray-700 shadow-lg"
+                      className="px-4 py-2 bg-white border-2 border-gray-300 rounded-2xl hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 font-prompt text-gray-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
                       aria-label="ไปหน้าก่อนหน้า"
                     >
                       ← ก่อนหน้า
@@ -597,7 +597,7 @@ export default function AllCars({ cars }) {
                     <>
                       <button
                         onClick={e => handlePageChange(1, e)}
-                        className="px-4 py-2 bg-white border-2 border-gray-300 rounded-xl hover:bg-primary hover:border-primary hover:text-white transition-all duration-200 font-prompt text-gray-700 shadow-lg"
+                        className="px-4 py-2 bg-white border-2 border-gray-300 rounded-2xl hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 font-prompt text-gray-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
                       >
                         1
                       </button>
@@ -612,9 +612,9 @@ export default function AllCars({ cars }) {
                     <button
                       key={page}
                       onClick={e => handlePageChange(page, e)}
-                      className={`px-4 py-2 rounded-xl transition-all duration-200 font-prompt shadow-lg ${
+                      className={`px-4 py-2 rounded-2xl transition-all duration-300 font-prompt shadow-lg transform hover:scale-[1.02] active:scale-[0.98] hover:shadow-xl ${
                         page === currentPage
-                          ? 'bg-accent text-white border-2 border-accent font-bold shadow-xl transform scale-110'
+                          ? 'bg-accent text-white border-2 border-accent font-bold shadow-xl scale-110'
                           : 'bg-white border-2 border-gray-300 text-gray-700 hover:bg-primary hover:border-primary hover:text-white'
                       }`}
                     >
@@ -627,7 +627,7 @@ export default function AllCars({ cars }) {
                     <button
                       type="button"
                       onClick={e => handlePageChange(currentPage + 1, e)}
-                      className="px-4 py-2 bg-white border-2 border-gray-300 rounded-xl hover:bg-primary hover:border-primary hover:text-white transition-all duration-200 font-prompt text-gray-700 shadow-lg"
+                      className="px-4 py-2 bg-white border-2 border-gray-300 rounded-2xl hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 font-prompt text-gray-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
                       aria-label="ไปหน้าถัดไป"
                     >
                       ถัดไป →
