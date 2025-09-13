@@ -153,7 +153,7 @@ export default function PaymentCalculator() {
       <SEO
         title="คำนวนค่างวดรถยนต์ - ครูหนึ่งรถสวย | รถมือสองเชียงใหม่"
         description="เครื่องมือคำนวนค่างวดรถยนต์ คำนวนค่าผ่อนรายเดือน ดอกเบี้ย และยอดชำระรวม ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-        url="https://chiangmaiusedcar.com/payment-calculator"
+        url="/payment-calculator"
         image="https://chiangmaiusedcar.com/herobanner/paymentcalculator.webp"
         pageType="payment-calculator"
       />

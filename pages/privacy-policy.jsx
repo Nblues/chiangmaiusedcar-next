@@ -6,7 +6,7 @@ export default function PrivacyPolicy() {
       <SEO
         title="นโยบายความเป็นส่วนตัว | ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
         description="นโยบายความเป็นส่วนตัวของ ครูหนึ่งรถสวย เราให้ความสำคัญกับการปกป้องข้อมูลส่วนบุคคลของลูกค้า"
-        canonical="https://chiangmaiusedcar.com/privacy-policy"
+        url="/privacy-policy"
       />
 
       <main className="min-h-screen bg-gray-50 py-8">

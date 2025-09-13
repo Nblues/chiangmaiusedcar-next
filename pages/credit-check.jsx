@@ -281,7 +281,6 @@ export default function CreditCheck() {
         description="เช็คเครดิตรถมือสองเชียงใหม่ฟรี แพลตฟอร์มออนไลน์ ตรวจสภาพครบถ้วน เช็คประวัติรถ ครูหนึ่งรถสวย รู้ดอกเบี้ยล่วงหน้า เครดิตไม่ผ่านก็มีทาง โทร 094-064-9018"
         url="/credit-check"
         image="https://chiangmaiusedcar.com/herobanner/outdoorbanner.webp"
-        canonical="https://chiangmaiusedcar.com/credit-check"
         locale="th_TH"
         pageType="credit-check"
         structuredData={{

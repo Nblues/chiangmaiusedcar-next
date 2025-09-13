@@ -6,7 +6,7 @@ export default function TermsOfService() {
       <SEO
         title="ข้อกำหนดการใช้งาน | ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
         description="ข้อกำหนดและเงื่อนไขการใช้งานเว็บไซต์ ครูหนึ่งรถสวย รถมือสองเชียงใหม่ คุณภาพดี ราคาดี"
-        canonical="https://chiangmaiusedcar.com/terms-of-service"
+        url="/terms-of-service"
       />
 
       <main className="min-h-screen bg-gray-50 py-8">

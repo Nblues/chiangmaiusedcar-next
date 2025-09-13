@@ -152,9 +152,8 @@ export default function Contact() {
       <SEO
         title="ติดต่อเรา - ครูหนึ่งรถสวย | แพลตฟอร์มออนไลน์รถมือสองเชียงใหม่ โทร 094-064-9018"
         description="ติดต่อครูหนึ่งรถสวย แพลตฟอร์มออนไลน์รถมือสองเชียงใหม่ ตรวจสภาพครบถ้วน เช็คประวัติรถ โทร 094-064-9018, LINE, Facebook 1 ล้านติดตาม คุณภาพดี รับประกัน"
-        url="https://chiangmaiusedcar.com/contact"
+        url="/contact"
         image="https://chiangmaiusedcar.com/herobanner/contact.webp"
-        canonical="https://chiangmaiusedcar.com/contact"
         locale="th_TH"
         alternate={[{ href: 'https://chiangmaiusedcar.com/contact', hrefLang: 'th-TH' }]}
         pageType="contact"
