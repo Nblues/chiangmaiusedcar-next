@@ -19,12 +19,6 @@ const nextConfig = {
 
   // Webpack configuration for bundle optimization
   webpack: (config, { isServer }) => {
-    // Handle .html files as string assets
-    config.module.rules.push({
-      test: /\.html$/i,
-      type: 'asset/source',
-    });
-
     // Prevent Node.js modules from being bundled in client-side
     if (!isServer) {
       config.resolve.fallback = {

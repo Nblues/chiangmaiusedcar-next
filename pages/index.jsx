@@ -239,7 +239,7 @@ export default function Home({ cars }) {
           <div className="flex flex-col gap-4 w-full md:w-auto md:min-w-[200px]">
             <a
               href="https://lin.ee/8ugfzstD"
-              className="inline-block text-center font-semibold rounded-full px-6 py-3 text-base bg-accent text-white hover:bg-accent-600 transition-colors"
+              className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base bg-accent text-white hover:bg-accent/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -247,7 +247,7 @@ export default function Home({ cars }) {
             </a>
             <Link
               href="/all-cars"
-              className="inline-block text-center font-semibold rounded-full px-6 py-3 text-base border-2 border-primary text-primary hover:bg-primary hover:text-white transition-colors"
+              className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
             >
               ดูรถทั้งหมด
             </Link>
@@ -539,7 +539,7 @@ export default function Home({ cars }) {
                         ? `/car/${encodeURIComponent(safeGet(car, 'handle'))}`
                         : '/all-cars'
                     }
-                    className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-full min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200 font-prompt"
+                    className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-2xl min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-prompt"
                     aria-label={`ดูรายละเอียด ${safeGet(car, 'title', 'รถยนต์')}`}
                   >
                     ดูรายละเอียด
@@ -552,7 +552,7 @@ export default function Home({ cars }) {
         <div className="text-center mt-12">
           <Link
             href="/all-cars"
-            className="inline-flex items-center bg-gray-900 hover:bg-orange-600 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 border-2 border-orange-600 font-prompt"
+            className="inline-flex items-center bg-gray-900 hover:bg-accent text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
             aria-label="ดูรถทั้งหมด ครูหนึ่งรถสวย"
           >
             <span>ดูรถทั้งหมด</span>

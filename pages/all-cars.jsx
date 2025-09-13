@@ -558,7 +558,7 @@ export default function AllCars({ cars }) {
                       </div>
                     </Link>
 
-                    {/* Action Button - Modern 2025 Design */}
+                    {/* Action Button - เหมือนหน้าแรก */}
                     <div className="flex p-2 pt-0 md:p-4 md:pt-0">
                       <Link
                         href={
@@ -567,29 +567,10 @@ export default function AllCars({ cars }) {
                             ? `/car/${encodeURIComponent(safeGet(car, 'handle'))}`
                             : '/all-cars'
                         }
-                        className="group w-full relative overflow-hidden flex items-center justify-center bg-primary hover:bg-blue-700 text-white rounded-2xl min-h-12 px-6 py-3 text-sm font-bold shadow-xl hover:shadow-2xl transition-all duration-300 font-prompt transform hover:scale-[1.02] active:scale-[0.98] border-2 border-primary/20 hover:border-primary/40"
+                        className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-full min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transition-all duration-200 font-prompt"
                         aria-label={`ดูรายละเอียด ${safeGet(car, 'title', 'รถยนต์')}`}
                       >
-                        {/* Shine effect */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></div>
-
-                        {/* Button content */}
-                        <span className="relative z-10 flex items-center gap-2">
-                          <svg
-                            className="w-4 h-4 transition-transform group-hover:translate-x-1"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M13 7l5 5m0 0l-5 5m5-5H6"
-                            />
-                          </svg>
-                          ดูรายละเอียด
-                        </span>
+                        ดูรายละเอียด
                       </Link>
                     </div>
                   </article>
@@ -681,10 +662,7 @@ export async function getServerSideProps() {
       availableForSale: car.availableForSale,
     }));
 
-    // จำกัดจำนวนรถสำหรับการ preload ลดเวลาโหลดเริ่มต้น
-    if (cars.length > 50) {
-      cars = cars.slice(0, 50); // จำกัดแค่ 50 คันแรกสำหรับ performance
-    }
+    // แสดงรถทั้งหมดที่มีจริง ไม่จำกัดจำนวน
   } catch (e) {
     console.error('getAllCars error:', e);
     // ไม่ throw error - ให้ UI แสดงข้อมูลว่างแทน
