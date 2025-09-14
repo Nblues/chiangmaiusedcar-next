@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import SEO from '../../components/SEO';
 import Breadcrumb from '../../components/Breadcrumb';
@@ -13,6 +13,7 @@ import { carAlt } from '../../utils/a11y';
 function CarDetailPage({ car, allCars }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageLoading, setImageLoading] = useState(true);
+  const [processedDescription, setProcessedDescription] = useState(null);
 
   // Preload next/prev images for instant switching
   React.useEffect(() => {
@@ -50,6 +51,78 @@ function CarDetailPage({ car, allCars }) {
   React.useEffect(() => {
     setImageLoading(true);
   }, [selectedImageIndex]);
+
+  // Process description after component mount to prevent hydration errors
+  useEffect(() => {
+    if (car?.description) {
+      // ฟังก์ชันประมวลผลข้อความ
+      const processText = text => {
+        return (
+          text
+            .replace(/\\n/g, '\n')
+            .replace(/\\r\\n/g, '\n')
+            .replace(/\\r/g, '\n')
+            .replace(/<br\s*\/?>/gi, '\n')
+            .replace(/<\/p><p>/gi, '\n\n')
+            .replace(/<\/?p>/gi, '')
+            .replace(/<\/?div>/gi, '')
+            // ลบอักขระที่มีปัญหาหลายรูปแบบ
+            .replace(/�/g, '') // Replacement character ธรรมดา
+            .replace(/\uFFFD/g, '') // Unicode replacement character
+            .replace(/\uFEFF/g, '') // Byte order mark
+            .replace(/[\u0000-\u001F]/g, '') // Control characters ยกเว้น tab, newline, carriage return
+            .replace(/[\u007F-\u009F]/g, '') // Extended control characters
+            .replace(/\u00A0/g, ' ') // Non-breaking space แปลงเป็น space ธรรมดา
+            // กรองอักขระที่แสดงผลไม่ได้หรือมีปัญหา
+            .split('')
+            .map(char => {
+              const code = char.charCodeAt(0);
+              // เก็บเฉพาะอักขระที่แสดงผลได้ดี
+              if (
+                (code >= 32 && code <= 126) || // ASCII printable
+                (code >= 160 && code <= 255) || // Latin-1 supplement
+                (code >= 0x0e00 && code <= 0x0e7f) || // Thai
+                char === '\n' ||
+                char === '\r' ||
+                char === '\t' || // Whitespace
+                /[#@]/.test(char) // Hashtag และ mention symbols
+              ) {
+                return char;
+              }
+              // แทนที่อักขระที่ไม่รองรับด้วยช่องว่าง
+              return ' ';
+            })
+            .join('')
+            .replace(/\s+/g, ' ') // ลดช่องว่างซ้ำ
+            // ลบ emoji และอักขระพิเศษที่อาจมีปัญหา
+            .replace(/([🚗💥♻️🎯💰💳🔧🏠⭐🏷️▶️])/g, '\n')
+            // แบ่งบรรทัดเมื่อพบคำว่า "สด" ตามด้วยตัวเลขและราคา
+            .replace(/(สด\s*[\d,]+)/gi, '\n$1')
+            // แบ่งบรรทัดเมื่อพบคำว่า "ราคา" ในรูปแบบต่างๆ
+            .replace(/(ราคา)/gi, '\n$1')
+            .replace(/(\d{1,3}(?:,\d{3})*)\s*-\s*/g, '\n\nราคา $1 บาท\n')
+            .replace(/(ออกรถ\s*\d+\s*บาท)/gi, '\n$1')
+            .replace(/(ผ่อน\s*[\d,]+[^ปี]*ปี)/gi, '\n$1')
+            .replace(/(เครื่องยนต์[^\n#]*)/gi, '\n$1')
+            .replace(/(รถบ้าน[^\n#]*)/gi, '\n$1')
+            .replace(/(Option\s*เต็ม[^\n#]*)/gi, '\n$1')
+        );
+      };
+
+      const processed = processText(car.description);
+      const hashtagMatches = processed.match(/#[\w\u0E00-\u0E7F]+/g) || [];
+      const textWithoutHashtags = processed.replace(/#[\w\u0E00-\u0E7F]+/g, '').trim();
+      const paragraphs = textWithoutHashtags
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+
+      setProcessedDescription({
+        paragraphs,
+        hashtags: hashtagMatches,
+      });
+    }
+  }, [car?.description]);
 
   if (!car) {
     return (
@@ -355,12 +428,12 @@ function CarDetailPage({ car, allCars }) {
                     onClick={() =>
                       setSelectedImageIndex(prev => (prev === 0 ? carImages.length - 1 : prev - 1))
                     }
-                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 text-black p-3 rounded-lg border border-gray-200 transition-all duration-200"
+                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-transparent hover:bg-white hover:bg-opacity-10 text-white p-3 rounded-lg transition-all duration-200"
                     type="button"
                     aria-label="รูปก่อนหน้า"
                   >
                     <svg
-                      className="w-5 h-5 sm:w-6 sm:h-6"
+                      className="w-5 h-5 sm:w-6 sm:h-6 drop-shadow-lg"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -368,7 +441,7 @@ function CarDetailPage({ car, allCars }) {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2}
+                        strokeWidth={3}
                         d="M15 19l-7-7 7-7"
                       />
                     </svg>
@@ -377,12 +450,12 @@ function CarDetailPage({ car, allCars }) {
                     onClick={() =>
                       setSelectedImageIndex(prev => (prev === carImages.length - 1 ? 0 : prev + 1))
                     }
-                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-50 text-black p-3 rounded-lg border border-gray-200 transition-all duration-200"
+                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-transparent hover:bg-white hover:bg-opacity-10 text-white p-3 rounded-lg transition-all duration-200"
                     type="button"
                     aria-label="รูปถัดไป"
                   >
                     <svg
-                      className="w-5 h-5 sm:w-6 sm:h-6"
+                      className="w-5 h-5 sm:w-6 sm:h-6 drop-shadow-lg"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -390,7 +463,7 @@ function CarDetailPage({ car, allCars }) {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2}
+                        strokeWidth={3}
                         d="M9 5l7 7-7 7"
                       />
                     </svg>
@@ -799,8 +872,50 @@ function CarDetailPage({ car, allCars }) {
               {car.description && (
                 <div className="mt-6">
                   <h3 className="text-lg font-bold text-black mb-3 font-prompt">คำอธิบาย</h3>
-                  <div className="text-gray-700 bg-gray-50 border border-gray-200 p-4 rounded-lg whitespace-pre-line font-prompt leading-relaxed">
-                    {car.description}
+                  <div className="text-gray-700 bg-gray-50 border border-gray-200 p-4 rounded-lg font-prompt leading-relaxed">
+                    {/* แสดงผลแบบรองรับการแบ่งบรรทัดและจัดรูปแบบข้อความจาก Shopify */}
+                    <div className="space-y-3">
+                      {processedDescription ? (
+                        <>
+                          {/* แสดงข้อความหลัก */}
+                          {processedDescription.paragraphs.map((paragraph, index) => (
+                            <div
+                              key={index}
+                              className="whitespace-pre-line break-words leading-relaxed"
+                            >
+                              {paragraph}
+                            </div>
+                          ))}
+
+                          {/* แสดง hashtags ในบรรทัดเดียว */}
+                          {processedDescription.hashtags.length > 0 && (
+                            <div className="mt-6 pt-4 border-t border-gray-300">
+                              <div className="flex flex-wrap gap-2">
+                                {processedDescription.hashtags.map((hashtag, index) => (
+                                  <a
+                                    key={index}
+                                    href={`/all-cars?search=${encodeURIComponent(hashtag.substring(1))}`}
+                                    className="inline-block bg-primary text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer font-prompt"
+                                    onClick={e => {
+                                      e.preventDefault();
+                                      window.location.href = `/all-cars?search=${encodeURIComponent(hashtag.substring(1))}`;
+                                    }}
+                                  >
+                                    {hashtag}
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <div className="animate-pulse">
+                          <div className="h-4 bg-gray-300 rounded w-full mb-2"></div>
+                          <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                          <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}

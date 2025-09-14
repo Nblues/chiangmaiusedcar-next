@@ -7,10 +7,101 @@ export default function CacheDashboard() {
 
   const [isRevalidating, setIsRevalidating] = useState(false);
   const [lastUpdate, setLastUpdate] = useState(null);
+  const [swStatus, setSwStatus] = useState('checking...');
 
   useEffect(() => {
     setLastUpdate(new Date().toLocaleString('th-TH'));
+    checkServiceWorkerStatus();
   }, [cacheInfo]);
+
+  const checkServiceWorkerStatus = async () => {
+    if (!('serviceWorker' in navigator)) {
+      setSwStatus('not-supported');
+      return;
+    }
+
+    try {
+      const registration = await navigator.serviceWorker.getRegistration('/');
+      if (registration) {
+        if (registration.active) {
+          setSwStatus('active');
+        } else if (registration.installing) {
+          setSwStatus('installing');
+        } else if (registration.waiting) {
+          setSwStatus('waiting');
+        } else {
+          setSwStatus('registered');
+        }
+      } else {
+        setSwStatus('not-registered');
+      }
+    } catch (error) {
+      setSwStatus('error');
+    }
+  };
+
+  const handleServiceWorkerAction = async action => {
+    if (!('serviceWorker' in navigator)) {
+      alert('❌ เบราว์เซอร์ไม่รองรับ Service Worker');
+      return;
+    }
+
+    try {
+      switch (action) {
+        case 'register':
+          const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+          const swFile = isDev ? '/sw-dev.js' : '/sw.js';
+          await navigator.serviceWorker.register(swFile, { scope: '/' });
+          alert('✅ ลงทะเบียน Service Worker สำเร็จ');
+          break;
+
+        case 'unregister':
+          const registration = await navigator.serviceWorker.getRegistration('/');
+          if (registration) {
+            await registration.unregister();
+            alert('✅ ยกเลิกการลงทะเบียน Service Worker สำเร็จ');
+          } else {
+            alert('⚠️ ไม่พบ Service Worker ที่ลงทะเบียน');
+          }
+          break;
+
+        case 'update':
+          const reg = await navigator.serviceWorker.getRegistration('/');
+          if (reg) {
+            await reg.update();
+            alert('✅ อัปเดต Service Worker สำเร็จ');
+          } else {
+            alert('⚠️ ไม่พบ Service Worker ที่จะอัปเดต');
+          }
+          break;
+      }
+
+      setTimeout(checkServiceWorkerStatus, 1000);
+    } catch (error) {
+      alert(`❌ Error: ${error.message}`);
+    }
+  };
+
+  const getSwStatusText = () => {
+    switch (swStatus) {
+      case 'active':
+        return '✅ ทำงาน';
+      case 'installing':
+        return '🔧 กำลังติดตั้ง';
+      case 'waiting':
+        return '⏳ รอการเปิดใช้งาน';
+      case 'registered':
+        return '📋 ลงทะเบียนแล้ว';
+      case 'not-registered':
+        return '❌ ไม่ได้ลงทะเบียน';
+      case 'not-supported':
+        return '❌ ไม่รองรับ';
+      case 'error':
+        return '❌ ข้อผิดพลาด';
+      default:
+        return '🔍 กำลังตรวจสอบ...';
+    }
+  };
 
   const handleRevalidation = async () => {
     setIsRevalidating(true);
@@ -53,7 +144,7 @@ export default function CacheDashboard() {
       {/* Cache Info */}
       <div className="space-y-2 mb-4">
         <div className="text-xs">
-          <strong>Service Worker:</strong> {cacheInfo?.serviceWorkerStatus || 'Loading...'}
+          <strong>Service Worker:</strong> {getSwStatusText()}
         </div>
         <div className="text-xs">
           <strong>Last Update:</strong> {lastUpdate || 'N/A'}
@@ -62,7 +153,43 @@ export default function CacheDashboard() {
           <strong>Storage:</strong>{' '}
           {cacheInfo?.localStorage && cacheInfo?.sessionStorage ? '✅' : '❌'}
         </div>
+        <div className="text-xs">
+          <strong>PWA Mode:</strong> {isPWA ? '📱 Yes' : '🌐 No'}
+        </div>
       </div>
+
+      {/* Service Worker Controls */}
+      {swStatus !== 'not-supported' && (
+        <div className="space-y-1 mb-4">
+          <div className="text-xs font-semibold text-gray-700">Service Worker:</div>
+          <div className="flex gap-1">
+            {swStatus === 'not-registered' && (
+              <button
+                onClick={() => handleServiceWorkerAction('register')}
+                className="text-xs px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+              >
+                📋 Register
+              </button>
+            )}
+            {['active', 'registered', 'waiting'].includes(swStatus) && (
+              <>
+                <button
+                  onClick={() => handleServiceWorkerAction('update')}
+                  className="text-xs px-2 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                >
+                  🔄 Update
+                </button>
+                <button
+                  onClick={() => handleServiceWorkerAction('unregister')}
+                  className="text-xs px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                  🗑️ Remove
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="space-y-2">
@@ -88,6 +215,38 @@ export default function CacheDashboard() {
         >
           🔄 Force Reload
         </button>
+
+        <a
+          href="/test-sw.html"
+          target="_blank"
+          className="block w-full text-center px-3 py-2 bg-purple-500 text-white text-xs rounded hover:bg-purple-600"
+        >
+          🔧 SW Test Center
+        </a>
+
+        <a
+          href="/debug-console.html"
+          target="_blank"
+          className="block w-full text-center px-3 py-2 bg-orange-500 text-white text-xs rounded hover:bg-orange-600"
+        >
+          🐛 Console Debug
+        </a>
+
+        <a
+          href="/console-errors-explained.html"
+          target="_blank"
+          className="block w-full text-center px-3 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
+        >
+          📖 Error Explanations
+        </a>
+        
+        <a
+          href="/test-manifest.html"
+          target="_blank"
+          className="block w-full text-center px-3 py-2 bg-green-600 text-white text-xs rounded hover:bg-green-700"
+        >
+          📋 Manifest Test
+        </a>
       </div>
 
       {/* Cache Info Details */}

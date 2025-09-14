@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Console Error Debug - ครูหนึ่งรถสวย</title>
+
+    <!-- Test manifest.json -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Test favicon files -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/favicon.png" />
+
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .status {
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+      .success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+      .info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+      }
+      .warning {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+      }
+      button {
+        background: #1a237e;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      button:hover {
+        background: #303f9f;
+      }
+      .log {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 5px;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        max-height: 300px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+      }
+      .test-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        background: white;
+      }
+      .test-status {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .pass {
+        background: #28a745;
+        color: white;
+      }
+      .fail {
+        background: #dc3545;
+        color: white;
+      }
+      .pending {
+        background: #ffc107;
+        color: black;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🐛 Console Error Debug Center</h1>
+      <p>เครื่องมือตรวจสอบและแก้ไข Console Errors</p>
+
+      <div id="overallStatus" class="status info">กำลังตรวจสอบ...</div>
+
+      <div>
+        <button onclick="runAllTests()">🔍 ทดสอบทั้งหมด</button>
+        <button onclick="testManifest()">📋 ทดสอบ Manifest</button>
+        <button onclick="testFavicons()">🎨 ทดสอบ Favicons</button>
+        <button onclick="testServiceWorker()">⚙️ ทดสอบ Service Worker</button>
+        <button onclick="clearLogs()">🧹 ล้างบันทึก</button>
+      </div>
+
+      <h3>📊 ผลการทดสอบ</h3>
+      <div id="testResults"></div>
+
+      <h3>📝 บันทึก Console</h3>
+      <div id="consoleLogs" class="log">เริ่มต้นการทำงาน...\n</div>
+
+      <h3>🔗 ลิงก์ทดสอบ</h3>
+      <div>
+        <a href="/manifest.json" target="_blank">📋 manifest.json</a> |
+        <a href="/favicon.svg" target="_blank">🎨 favicon.svg</a> |
+        <a href="/favicon-192.png" target="_blank">🖼️ favicon-192.png</a> |
+        <a href="/favicon-512.png" target="_blank">🖼️ favicon-512.png</a> |
+        <a href="/sw-dev.js" target="_blank">⚙️ sw-dev.js</a> |
+        <a href="/test-sw.html" target="_blank">🔧 SW Test Center</a>
+      </div>
+    </div>
+
+    <script>
+      const logsElement = document.getElementById('consoleLogs');
+      const overallStatusElement = document.getElementById('overallStatus');
+      const testResultsElement = document.getElementById('testResults');
+      let testResults = [];
+
+      function log(message, type = 'info') {
+        const timestamp = new Date().toLocaleTimeString('th-TH');
+        const logEntry = `[${timestamp}] ${message}`;
+        logsElement.textContent += logEntry + '\n';
+        logsElement.scrollTop = logsElement.scrollHeight;
+        console.log(logEntry);
+      }
+
+      function updateOverallStatus(message, type = 'info') {
+        overallStatusElement.textContent = message;
+        overallStatusElement.className = `status ${type}`;
+      }
+
+      function addTestResult(name, status, message = '') {
+        const existing = testResults.findIndex(t => t.name === name);
+        const result = { name, status, message, timestamp: new Date().toLocaleTimeString('th-TH') };
+
+        if (existing >= 0) {
+          testResults[existing] = result;
+        } else {
+          testResults.push(result);
+        }
+
+        updateTestResultsDisplay();
+      }
+
+      function updateTestResultsDisplay() {
+        const html = testResults
+          .map(
+            result => `
+                <div class="test-item">
+                    <div class="test-status ${result.status}">
+                        ${result.status === 'pass' ? '✓' : result.status === 'fail' ? '✗' : '?'}
+                    </div>
+                    <div>
+                        <strong>${result.name}</strong>
+                        <br>
+                        <small>${result.message} (${result.timestamp})</small>
+                    </div>
+                </div>
+            `
+          )
+          .join('');
+
+        testResultsElement.innerHTML = html;
+
+        const passCount = testResults.filter(r => r.status === 'pass').length;
+        const failCount = testResults.filter(r => r.status === 'fail').length;
+        const totalCount = testResults.length;
+
+        if (failCount === 0 && totalCount > 0) {
+          updateOverallStatus(`✅ ผ่านทั้งหมด ${passCount}/${totalCount} ทดสอบ`, 'success');
+        } else if (failCount > 0) {
+          updateOverallStatus(`❌ ล้มเหลว ${failCount}/${totalCount} ทดสอบ`, 'error');
+        }
+      }
+
+      async function testResource(url, name) {
+        addTestResult(name, 'pending', 'กำลังทดสอบ...');
+
+        try {
+          const response = await fetch(url, { method: 'HEAD' });
+          if (response.ok) {
+            addTestResult(name, 'pass', `พบไฟล์ (${response.status})`);
+            log(`✅ ${name}: พบไฟล์ที่ ${url}`);
+            return true;
+          } else {
+            addTestResult(name, 'fail', `ไม่พบไฟล์ (${response.status})`);
+            log(`❌ ${name}: ไม่พบไฟล์ที่ ${url} - ${response.status}`);
+            return false;
+          }
+        } catch (error) {
+          addTestResult(name, 'fail', `เกิดข้อผิดพลาด: ${error.message}`);
+          log(`❌ ${name}: Error - ${error.message}`);
+          return false;
+        }
+      }
+
+      async function testManifest() {
+        log('📋 กำลังทดสอบ Manifest...');
+
+        const manifestOk = await testResource('/manifest.json', 'Manifest File');
+
+        if (manifestOk) {
+          try {
+            const response = await fetch('/manifest.json');
+            const manifest = await response.json();
+
+            // Test icons in manifest
+            for (const icon of manifest.icons) {
+              const iconName = `Icon ${icon.sizes}`;
+              await testResource(icon.src, iconName);
+            }
+
+            // Test shortcuts icons
+            for (const shortcut of manifest.shortcuts || []) {
+              for (const icon of shortcut.icons || []) {
+                const iconName = `Shortcut Icon (${shortcut.name})`;
+                await testResource(icon.src, iconName);
+              }
+            }
+          } catch (error) {
+            addTestResult('Manifest Parse', 'fail', `ไม่สามารถอ่าน manifest: ${error.message}`);
+            log(`❌ ไม่สามารถอ่าน manifest: ${error.message}`);
+          }
+        }
+      }
+
+      async function testFavicons() {
+        log('🎨 กำลังทดสอบ Favicons...');
+
+        const faviconTests = [
+          { url: '/favicon.ico', name: 'ICO Favicon' },
+          { url: '/favicon.svg', name: 'SVG Favicon' },
+          { url: '/favicon.png', name: 'PNG Favicon' },
+          { url: '/favicon-16.png', name: 'Favicon 16px' },
+          { url: '/favicon-32.png', name: 'Favicon 32px' },
+          { url: '/favicon-192.png', name: 'Favicon 192px' },
+          { url: '/favicon-512.png', name: 'Favicon 512px' },
+          { url: '/favicon.webp', name: 'WebP Favicon' },
+        ];
+
+        for (const test of faviconTests) {
+          await testResource(test.url, test.name);
+        }
+      }
+
+      async function testServiceWorker() {
+        log('⚙️ กำลังทดสอบ Service Worker...');
+
+        if (!('serviceWorker' in navigator)) {
+          addTestResult('SW Support', 'fail', 'เบราว์เซอร์ไม่รองรับ Service Worker');
+          log('❌ เบราว์เซอร์ไม่รองรับ Service Worker');
+          return;
+        }
+
+        addTestResult('SW Support', 'pass', 'เบราว์เซอร์รองรับ Service Worker');
+
+        // Test SW files
+        await testResource('/sw.js', 'Production SW');
+        await testResource('/sw-dev.js', 'Development SW');
+
+        // Test SW registration
+        try {
+          const registration = await navigator.serviceWorker.getRegistration('/');
+
+          if (registration) {
+            addTestResult('SW Registration', 'pass', `ลงทะเบียนแล้ว (${registration.scope})`);
+            log(`✅ Service Worker ลงทะเบียนแล้วที่ ${registration.scope}`);
+
+            if (registration.active) {
+              addTestResult('SW Active', 'pass', 'Service Worker ทำงานอยู่');
+              log('✅ Service Worker ทำงานอยู่');
+            } else {
+              addTestResult('SW Active', 'fail', 'Service Worker ไม่ทำงาน');
+              log('❌ Service Worker ไม่ทำงาน');
+            }
+          } else {
+            addTestResult('SW Registration', 'fail', 'ยังไม่ได้ลงทะเบียน');
+            log('❌ Service Worker ยังไม่ได้ลงทะเบียน');
+          }
+        } catch (error) {
+          addTestResult('SW Registration', 'fail', `เกิดข้อผิดพลาด: ${error.message}`);
+          log(`❌ Service Worker Error: ${error.message}`);
+        }
+      }
+
+      async function runAllTests() {
+        log('🔍 เริ่มทดสอบทั้งหมด...');
+        updateOverallStatus('กำลังทดสอบ...', 'info');
+        testResults = [];
+
+        await testManifest();
+        await testFavicons();
+        await testServiceWorker();
+
+        log('🏁 ทดสอบเสร็จสิ้น');
+      }
+
+      function clearLogs() {
+        logsElement.textContent = 'บันทึกถูกล้างแล้ว...\n';
+        log('🧹 ล้างบันทึกเรียบร้อย');
+      }
+
+      // Capture and log console errors
+      const originalError = console.error;
+      const originalWarn = console.warn;
+
+      console.error = function (...args) {
+        log(`🔴 Error: ${args.join(' ')}`, 'error');
+        originalError.apply(console, args);
+      };
+
+      console.warn = function (...args) {
+        log(`🟡 Warning: ${args.join(' ')}`, 'warning');
+        originalWarn.apply(console, args);
+      };
+
+      // Listen for network errors
+      window.addEventListener(
+        'error',
+        event => {
+          if (event.target !== window) {
+            log(`🔴 Resource Error: ${event.target.src || event.target.href} failed to load`);
+          }
+        },
+        true
+      );
+
+      // Auto-run tests on page load
+      window.addEventListener('load', () => {
+        log('🚀 เริ่มต้น Console Error Debug Center');
+        setTimeout(runAllTests, 1000);
+      });
+    </script>
+  </body>
+</html>

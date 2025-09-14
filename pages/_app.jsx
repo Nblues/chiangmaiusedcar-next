@@ -49,19 +49,39 @@ export default function MyApp({ Component, pageProps }) {
 
   // Service worker registration with fixed variables
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-        navigator.serviceWorker
-          .register('/sw.js', {
-            scope: '/',
-          })
-          .then(() => {
-            // Service worker registered successfully
-          })
-          .catch(error => {
-            console.warn('SW registration failed:', error);
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      // Choose appropriate service worker for environment
+      const swFile = process.env.NODE_ENV === 'production' ? '/sw.js' : '/sw-dev.js';
+
+      navigator.serviceWorker
+        .register(swFile, {
+          scope: '/',
+        })
+        .then(registration => {
+          if (process.env.NODE_ENV === 'development') {
+            // eslint-disable-next-line no-console
+            console.log('✅ Service Worker registered successfully:', registration.scope);
+          }
+
+          // Listen for updates
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            if (newWorker) {
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  if (process.env.NODE_ENV === 'development') {
+                    // eslint-disable-next-line no-console
+                    console.log('🔄 New service worker content available');
+                  }
+                }
+              });
+            }
           });
-      }
+        })
+        .catch(error => {
+          // eslint-disable-next-line no-console
+          console.warn('⚠️ SW registration failed:', error);
+        });
     }
   }, []);
 

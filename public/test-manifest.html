@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manifest Test - ครูหนึ่งรถสวย</title>
+    
+    <!-- Link to manifest.json -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- PWA meta tags -->
+    <meta name="theme-color" content="#1a237e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="ครูหนึ่งรถสวย">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        button {
+            background: #1a237e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #303f9f; }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .manifest-data {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .test-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background: white;
+        }
+        .test-status {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .pass { background: #28a745; color: white; }
+        .fail { background: #dc3545; color: white; }
+        .pending { background: #ffc107; color: black; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 Manifest.json Test Center</h1>
+        <p>ตรวจสอบ PWA Manifest และแก้ไข warnings</p>
+        
+        <div id="overallStatus" class="status info">กำลังตรวจสอบ...</div>
+        
+        <div>
+            <button onclick="testManifest()">📋 ทดสอบ Manifest</button>
+            <button onclick="fetchManifest()">📄 โหลด Manifest Data</button>
+            <button onclick="testShareTarget()">🔗 ทดสอบ Share Target</button>
+            <button onclick="testIcons()">🎨 ทดสอบ Icons</button>
+            <button onclick="clearLogs()">🧹 ล้างบันทึก</button>
+        </div>
+        
+        <h3>📊 ผลการทดสอบ</h3>
+        <div id="testResults"></div>
+        
+        <h3>📄 Manifest Data</h3>
+        <div id="manifestData" class="manifest-data">คลิก "โหลด Manifest Data" เพื่อดูข้อมูล</div>
+        
+        <h3>📝 บันทึกการทำงาน</h3>
+        <div id="logs" class="log">เริ่มต้นการทำงาน...\n</div>
+        
+        <h3>🔗 ลิงก์ที่เกี่ยวข้อง</h3>
+        <div>
+            <a href="/manifest.json" target="_blank">📋 manifest.json</a> |
+            <a href="/" target="_blank">🏠 หน้าแรก</a> |
+            <a href="/debug-console.html" target="_blank">🐛 Console Debug</a> |
+            <a href="/console-errors-explained.html" target="_blank">📖 Error Explanations</a>
+        </div>
+    </div>
+
+    <script>
+        const logsElement = document.getElementById('logs');
+        const overallStatusElement = document.getElementById('overallStatus');
+        const testResultsElement = document.getElementById('testResults');
+        const manifestDataElement = document.getElementById('manifestData');
+        let testResults = [];
+        let manifestData = null;
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString('th-TH');
+            const logEntry = `[${timestamp}] ${message}`;
+            logsElement.textContent += logEntry + '\n';
+            logsElement.scrollTop = logsElement.scrollHeight;
+            console.log(logEntry);
+        }
+
+        function updateStatus(message, type = 'info') {
+            overallStatusElement.textContent = message;
+            overallStatusElement.className = `status ${type}`;
+        }
+
+        function addTestResult(name, status, message = '') {
+            const existing = testResults.findIndex(t => t.name === name);
+            const result = { name, status, message, timestamp: new Date().toLocaleTimeString('th-TH') };
+            
+            if (existing >= 0) {
+                testResults[existing] = result;
+            } else {
+                testResults.push(result);
+            }
+            
+            updateTestResultsDisplay();
+        }
+
+        function updateTestResultsDisplay() {
+            const html = testResults.map(result => `
+                <div class="test-item">
+                    <div class="test-status ${result.status}">
+                        ${result.status === 'pass' ? '✓' : result.status === 'fail' ? '✗' : '?'}
+                    </div>
+                    <div>
+                        <strong>${result.name}</strong>
+                        <br>
+                        <small>${result.message} (${result.timestamp})</small>
+                    </div>
+                </div>
+            `).join('');
+            
+            testResultsElement.innerHTML = html;
+            
+            const passCount = testResults.filter(r => r.status === 'pass').length;
+            const failCount = testResults.filter(r => r.status === 'fail').length;
+            const totalCount = testResults.length;
+            
+            if (failCount === 0 && totalCount > 0) {
+                updateStatus(`✅ ผ่านทั้งหมด ${passCount}/${totalCount} ทดสอบ`, 'success');
+            } else if (failCount > 0) {
+                updateStatus(`❌ ล้มเหลว ${failCount}/${totalCount} ทดสอบ`, 'error');
+            }
+        }
+
+        async function fetchManifest() {
+            log('📄 กำลังโหลด Manifest data...');
+            addTestResult('Fetch Manifest', 'pending', 'กำลังโหลด...');
+            
+            try {
+                const response = await fetch('/manifest.json');
+                if (response.ok) {
+                    manifestData = await response.json();
+                    manifestDataElement.textContent = JSON.stringify(manifestData, null, 2);
+                    addTestResult('Fetch Manifest', 'pass', `โหลดสำเร็จ (${response.status})`);
+                    log('✅ โหลด Manifest data สำเร็จ');
+                    return manifestData;
+                } else {
+                    addTestResult('Fetch Manifest', 'fail', `HTTP ${response.status}`);
+                    log(`❌ ไม่สามารถโหลด Manifest - HTTP ${response.status}`);
+                    return null;
+                }
+            } catch (error) {
+                addTestResult('Fetch Manifest', 'fail', `Error: ${error.message}`);
+                log(`❌ Fetch Manifest Error: ${error.message}`);
+                return null;
+            }
+        }
+
+        async function testShareTarget() {
+            log('🔗 กำลังทดสอบ Share Target configuration...');
+            
+            if (!manifestData) {
+                const data = await fetchManifest();
+                if (!data) return;
+            }
+            
+            if (manifestData.share_target) {
+                const shareTarget = manifestData.share_target;
+                
+                // Test required fields
+                if (shareTarget.action) {
+                    addTestResult('Share Target Action', 'pass', `Action: ${shareTarget.action}`);
+                    log(`✅ Share Target Action: ${shareTarget.action}`);
+                } else {
+                    addTestResult('Share Target Action', 'fail', 'Action field missing');
+                    log('❌ Share Target Action field missing');
+                }
+                
+                // Test method
+                if (shareTarget.method) {
+                    addTestResult('Share Target Method', 'pass', `Method: ${shareTarget.method}`);
+                    log(`✅ Share Target Method: ${shareTarget.method}`);
+                } else {
+                    addTestResult('Share Target Method', 'fail', 'Method field missing');
+                    log('❌ Share Target Method field missing');
+                }
+                
+                // Test enctype (this was the original issue)
+                if (shareTarget.enctype) {
+                    addTestResult('Share Target Enctype', 'pass', `Enctype: ${shareTarget.enctype}`);
+                    log(`✅ Share Target Enctype: ${shareTarget.enctype}`);
+                    
+                    // Validate enctype value
+                    const validEnctypes = ['application/x-www-form-urlencoded', 'multipart/form-data'];
+                    if (validEnctypes.includes(shareTarget.enctype)) {
+                        addTestResult('Enctype Validation', 'pass', 'Valid enctype value');
+                        log('✅ Enctype value is valid');
+                    } else {
+                        addTestResult('Enctype Validation', 'fail', `Invalid enctype: ${shareTarget.enctype}`);
+                        log(`❌ Invalid enctype: ${shareTarget.enctype}`);
+                    }
+                } else {
+                    addTestResult('Share Target Enctype', 'fail', 'Enctype field missing');
+                    log('❌ Share Target Enctype field missing');
+                }
+                
+                // Test params
+                if (shareTarget.params) {
+                    addTestResult('Share Target Params', 'pass', `Params: ${Object.keys(shareTarget.params).join(', ')}`);
+                    log(`✅ Share Target Params: ${Object.keys(shareTarget.params).join(', ')}`);
+                } else {
+                    addTestResult('Share Target Params', 'fail', 'Params field missing');
+                    log('❌ Share Target Params field missing');
+                }
+                
+            } else {
+                addTestResult('Share Target', 'fail', 'Share Target not found in manifest');
+                log('❌ Share Target not found in manifest');
+            }
+        }
+
+        async function testIcons() {
+            log('🎨 กำลังทดสอบ Icons...');
+            
+            if (!manifestData) {
+                const data = await fetchManifest();
+                if (!data) return;
+            }
+            
+            if (manifestData.icons && Array.isArray(manifestData.icons)) {
+                addTestResult('Icons Array', 'pass', `${manifestData.icons.length} icons found`);
+                log(`✅ พบ ${manifestData.icons.length} icons`);
+                
+                for (let i = 0; i < manifestData.icons.length; i++) {
+                    const icon = manifestData.icons[i];
+                    const iconName = `Icon ${i + 1} (${icon.sizes || 'no-size'})`;
+                    
+                    try {
+                        const response = await fetch(icon.src, { method: 'HEAD' });
+                        if (response.ok) {
+                            addTestResult(iconName, 'pass', `${icon.src} (${response.status})`);
+                            log(`✅ ${iconName}: พบไฟล์ที่ ${icon.src}`);
+                        } else {
+                            addTestResult(iconName, 'fail', `${icon.src} (${response.status})`);
+                            log(`❌ ${iconName}: ไม่พบไฟล์ที่ ${icon.src} - ${response.status}`);
+                        }
+                    } catch (error) {
+                        addTestResult(iconName, 'fail', `Error: ${error.message}`);
+                        log(`❌ ${iconName}: Error - ${error.message}`);
+                    }
+                }
+            } else {
+                addTestResult('Icons Array', 'fail', 'Icons array not found or invalid');
+                log('❌ Icons array not found or invalid');
+            }
+        }
+
+        async function testManifest() {
+            log('📋 เริ่มทดสอบ Manifest ทั้งหมด...');
+            updateStatus('กำลังทดสอบ...', 'info');
+            testResults = [];
+            
+            // Fetch manifest first
+            await fetchManifest();
+            
+            // Test share target
+            await testShareTarget();
+            
+            // Test icons
+            await testIcons();
+            
+            log('🏁 ทดสอบ Manifest เสร็จสิ้น');
+        }
+
+        function clearLogs() {
+            logsElement.textContent = 'บันทึกถูกล้างแล้ว...\n';
+            log('🧹 ล้างบันทึกเรียบร้อย');
+        }
+
+        // Auto-test on page load
+        window.addEventListener('load', () => {
+            log('🚀 เริ่มต้น Manifest Test Center');
+            updateStatus('พร้อมใช้งาน - คลิกทดสอบ', 'info');
+            setTimeout(fetchManifest, 1000);
+        });
+    </script>
+</body>
+</html>
