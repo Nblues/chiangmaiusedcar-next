@@ -40,11 +40,15 @@ export function middleware(req: NextRequest) {
     // Sitemaps: Short cache for SEO freshness
     response.headers.set('Cache-Control', 'public, max-age=3600, must-revalidate');
   } else {
-    // HTML pages: No cache for always fresh content (2025 standard)
-    response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
-    response.headers.set('Pragma', 'no-cache');
-    response.headers.set('Expires', '0');
+    // HTML pages: Optimized cache for better performance (2025 standard)
+    response.headers.set(
+      'Cache-Control',
+      'public, max-age=60, s-maxage=300, stale-while-revalidate=86400'
+    );
     response.headers.set('X-Timestamp', Date.now().toString());
+    // Add performance headers
+    response.headers.set('Server-Timing', 'middleware;dur=0');
+    response.headers.set('X-Response-Time', Date.now().toString());
   }
 
   // Security headers for 2025

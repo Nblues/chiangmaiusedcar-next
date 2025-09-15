@@ -64,6 +64,7 @@ export default function APIDashboard() {
         description="แดชบอร์ดตรวจสอบสถานะการเชื่อมต่อ API ต่างๆ ของระบบรถมือสองเชียงใหม่ ครูหนึ่งรถสวย"
         url="/api-dashboard"
         image="/herobanner/api-dashboard.webp"
+        noindex={true}
       />
       <Head>
         <meta name="robots" content="noindex, nofollow" />
@@ -304,6 +305,7 @@ export default function APIDashboard() {
   );
 }
 
+// SSR for real-time API monitoring and system status
 export async function getServerSideProps() {
   return {
     props: {},

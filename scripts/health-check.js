@@ -56,7 +56,9 @@ const robotsContent = fs.existsSync('public/robots.txt')
 
 check(
   'robots.txt blocks internal tools',
-  robotsContent.includes('/keyword-audit') && robotsContent.includes('/api-dashboard')
+  robotsContent.includes('/keyword-audit') &&
+    robotsContent.includes('/api-dashboard') &&
+    robotsContent.includes('/license')
 );
 
 check('Sitemap exists', fs.existsSync('public/sitemap.xml'));

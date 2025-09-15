@@ -79,12 +79,12 @@ Disallow: /api*
 Crawl-delay: 3
 
 # Host
-Host: https://www.chiangmaiusedcar.com
+Host: https://chiangmaiusedcar.com
 
 # Sitemaps
 
 # Additional XML Sitemaps
-Sitemap: https://www.chiangmaiusedcar.com/sitemap.xml
+Sitemap: https://chiangmaiusedcar.com/sitemap.xml
 
 # Additional XML Sitemaps
 Sitemap: https://www.chiangmaiusedcar.com/sitemap-0.xml

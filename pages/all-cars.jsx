@@ -661,7 +661,8 @@ export default function AllCars({ cars }) {
 }
 
 // Keep SSR for all-cars due to pagination and search functionality
-export async function getServerSideProps() {
+// ISR for better performance - cars listing changes frequently
+export async function getStaticProps() {
   let cars = [];
   try {
     const result = await getAllCars();
@@ -688,5 +689,6 @@ export async function getServerSideProps() {
 
   return {
     props: { cars },
+    revalidate: 300, // 5 minutes - cars listing updates frequently
   };
 }

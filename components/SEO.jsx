@@ -18,6 +18,7 @@ export default function SEO({
   carData = null,
   structuredData = null,
   pageType = 'default', // เพิ่มพารามิเตอร์ pageType สำหรับ social sharing 2025
+  noindex = false, // เพิ่ม noindex prop สำหรับหน้าที่ไม่ต้องการให้แสดงในผลค้นหา
 }) {
   // Memoize static values to prevent unnecessary re-renders
   const staticValues = useMemo(() => {
@@ -221,6 +222,9 @@ export default function SEO({
 
   return (
     <Head>
+      {/* Essential HTML5 Meta Tags for Viewport */}
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
       {/* 2025 Cache Control for Fresh Content */}
       <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0" />
       <meta httpEquiv="Pragma" content="no-cache" />
@@ -242,19 +246,31 @@ export default function SEO({
 
       {/* Basic Meta Tags - Updated for 2025 Standards */}
       <title>{metaTitle}</title>
-      <meta name="description" content={metaDesc} />
+      {metaDesc && <meta name="description" content={metaDesc} />}
       <meta name="author" content={siteAuthor} />
       <meta
         name="robots"
-        content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        content={
+          noindex
+            ? 'noindex, nofollow'
+            : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'
+        }
       />
       <meta
         name="googlebot"
-        content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        content={
+          noindex
+            ? 'noindex, nofollow'
+            : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
+        }
       />
       <meta
         name="bingbot"
-        content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        content={
+          noindex
+            ? 'noindex, nofollow'
+            : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
+        }
       />
 
       {/* 2025 SEO: Meta keywords deprecated - using structured data instead */}
@@ -267,8 +283,6 @@ export default function SEO({
       <meta name="expertise" content="รถมือสอง, รถ ECO Car, สินเชื่อรถยนต์, ประเมินราคารถ" />
       <meta name="service-type" content="ขายรถมือสอง, รับซื้อรถ, สินเชื่อรถยนต์" />
 
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-      <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
       <meta name="color-scheme" content="light" />
       <meta name="format-detection" content="telephone=yes" />
       <link rel="canonical" href={fullUrl} />

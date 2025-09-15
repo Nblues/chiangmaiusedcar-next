@@ -1,4 +1,5 @@
 import React, { useEffect, lazy, Suspense } from 'react';
+import Head from 'next/head';
 import { Analytics } from '@vercel/analytics/react';
 import ClientOnly from '../components/ClientOnly';
 import Navbar from '../components/Navbar';
@@ -118,8 +119,44 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <>
+      <Head>
+        {/* DNS Prefetch for performance */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+        <link rel="dns-prefetch" href="//cdn.shopify.com" />
+        <link rel="dns-prefetch" href="//kn-goodcar.myshopify.com" />
+        <link rel="dns-prefetch" href="//vercel-analytics.com" />
+
+        {/* Preconnect for critical resources */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn.shopify.com" />
+
+        {/* Font optimization: Using @fontsource/prompt instead of preload */}
+      </Head>
       {getLayout(<Component {...pageProps} />)}
       <Analytics />
     </>
   );
+}
+
+// Report web vitals for better SEO performance monitoring
+export function reportWebVitals(metric) {
+  if (typeof window !== 'undefined') {
+    // Log only in development
+    if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
+      console.log('Web Vitals:', metric);
+    }
+
+    // Send to analytics service if available
+    if (window.gtag) {
+      window.gtag('event', metric.name, {
+        value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+        event_category: 'Web Vitals',
+        event_label: metric.id,
+        non_interaction: true,
+      });
+    }
+  }
 }

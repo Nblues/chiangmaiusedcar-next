@@ -8,6 +8,7 @@ export default function LicensePage() {
         title="เงื่อนไขการใช้งานรูปภาพและลิขสิทธิ์ | ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
         description="เงื่อนไขการใช้งานรูปภาพ ลิขสิทธิ์ และทรัพย์สินทางปัญญาของครูหนึ่งรถสวย รถมือสองเชียงใหม่"
         url="/license"
+        noindex={true}
       />
 
       <main className="min-h-screen bg-gradient-to-b from-white via-blue-50 to-gray-50">
@@ -113,6 +114,7 @@ export default function LicensePage() {
 }
 
 // Use SSR instead of static generation to avoid prerendering issues
+// SSR for license compliance and legal requirements
 export async function getServerSideProps() {
   return {
     props: {},

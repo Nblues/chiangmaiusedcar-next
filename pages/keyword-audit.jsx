@@ -98,6 +98,7 @@ export default function KeywordAudit() {
         description="รายงานการตรวจสอบความถูกต้องของคีย์เวิร์ด SEO ตามมาตรฐานสากล 2025 ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
         url="/keyword-audit"
         image="/herobanner/seo-audit.webp"
+        noindex={true}
       />
       <Head>
         <meta name="robots" content="noindex, nofollow" />
@@ -293,6 +294,7 @@ export default function KeywordAudit() {
 }
 
 // Client-side only - ไม่ใช้ SSR เพื่อป้องกัน NextRouter error
+// SSR for audit results that need real-time verification
 export async function getServerSideProps() {
   return {
     props: {},

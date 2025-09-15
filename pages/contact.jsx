@@ -645,8 +645,10 @@ export default function Contact() {
 }
 
 // SSR - Server Side Rendering
-export async function getServerSideProps() {
+// ISR for better performance - contact page is mostly static
+export async function getStaticProps() {
   return {
     props: {},
+    revalidate: 1800, // 30 minutes - contact info may change occasionally
   };
 }

@@ -8,6 +8,10 @@ export default function Document() {
   return (
     <Html lang="th">
       <Head>
+        {/* Essential HTML5 Meta Tags for SEO 100/100 */}
+        <meta charSet="utf-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+
         {/* 2025 Cache Control Meta Tags */}
         <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
         <meta httpEquiv="Pragma" content="no-cache" />
