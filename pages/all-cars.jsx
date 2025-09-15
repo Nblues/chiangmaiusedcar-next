@@ -118,14 +118,19 @@ export default function AllCars({ cars }) {
     return queryString ? `/all-cars?${queryString}` : '/all-cars';
   };
 
-  // ฟังก์ชันสำหรับเปลี่ยนหน้าโดยไม่เลื่อนขึ้นด้านบน
+  // ฟังก์ชันสำหรับเปลี่ยนหน้าแบบ smooth navigation
   const handlePageChange = (page, event) => {
     event.preventDefault();
     if (!Number.isFinite(page) || page < 1 || page > totalPages) return;
+
     setCurrentPage(page);
     try {
       const newUrl = getPageUrl(page);
-      router.push(newUrl, undefined, { shallow: true, scroll: false });
+      // ใช้ shallow routing และไม่ scroll เหมือนปุ่มรีวิว
+      router.push(newUrl, undefined, {
+        shallow: true,
+        scroll: false,
+      });
     } catch (error) {
       console.warn('Router navigation failed:', error);
     }
@@ -133,12 +138,14 @@ export default function AllCars({ cars }) {
 
   const generatePageNumbers = () => {
     const pages = [];
-    const showPages = 5; // แสดง 5 หน้า
+    const maxVisiblePages = 5; // แสดงหน้าสูงสุด 5 หน้า
 
-    let startPage = Math.max(1, currentPage - Math.floor(showPages / 2));
-    let endPage = Math.min(totalPages, startPage + showPages - 1);
-    if (endPage - startPage + 1 < showPages) {
-      startPage = Math.max(1, endPage - showPages + 1);
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    // ปรับให้แสดงครบ 5 หน้าถ้าเป็นไปได้
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
 
     for (let i = startPage; i <= endPage; i++) {
@@ -516,11 +523,12 @@ export default function AllCars({ cars }) {
                     <Link
                       href={
                         typeof safeGet(car, 'handle') === 'string' &&
-                        safeGet(car, 'handle', '').length
+                        safeGet(car, 'handle', '').length > 0
                           ? `/car/${encodeURIComponent(safeGet(car, 'handle'))}`
                           : '/all-cars'
                       }
                       className="block focus:outline-none flex-1"
+                      prefetch={false}
                     >
                       <figure className="thumb relative w-full h-28 md:h-48 overflow-hidden bg-gray-100">
                         <A11yImage
@@ -563,12 +571,13 @@ export default function AllCars({ cars }) {
                       <Link
                         href={
                           typeof safeGet(car, 'handle') === 'string' &&
-                          safeGet(car, 'handle', '').length
+                          safeGet(car, 'handle', '').length > 0
                             ? `/car/${encodeURIComponent(safeGet(car, 'handle'))}`
                             : '/all-cars'
                         }
                         className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-2xl min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-prompt"
                         aria-label={`ดูรายละเอียด ${safeGet(car, 'title', 'รถยนต์')}`}
+                        prefetch={false}
                       >
                         ดูรายละเอียด
                       </Link>
@@ -577,62 +586,70 @@ export default function AllCars({ cars }) {
                 ))}
               </div>
 
-              {/* Pagination - 2025 Modern Design */}
+              {/* Pagination - Production Style (เหมือนเว็บไซต์จริง) */}
               {totalPages > 1 && (
-                <div className="flex justify-center items-center mt-12 space-x-2">
-                  {/* Previous Button */}
-                  {currentPage > 1 && (
+                <div className="mt-8 md:mt-12 flex flex-col items-center">
+                  <nav className="flex items-center justify-center space-x-2">
+                    {/* Previous Button */}
                     <button
                       type="button"
-                      onClick={e => handlePageChange(currentPage - 1, e)}
-                      className="px-4 py-2 bg-white border-2 border-gray-300 rounded-2xl hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 font-prompt text-gray-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+                      onClick={e => (currentPage > 1 ? handlePageChange(currentPage - 1, e) : null)}
+                      disabled={currentPage <= 1}
+                      className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                        currentPage > 1
+                          ? 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                          : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                      }`}
                       aria-label="ไปหน้าก่อนหน้า"
                     >
                       ← ก่อนหน้า
                     </button>
-                  )}
 
-                  {/* First Page */}
-                  {generatePageNumbers()[0] > 1 && (
-                    <>
-                      <button
-                        onClick={e => handlePageChange(1, e)}
-                        className="px-4 py-2 bg-white border-2 border-gray-300 rounded-2xl hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 font-prompt text-gray-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
-                      >
-                        1
-                      </button>
-                      {generatePageNumbers()[0] > 2 && (
-                        <span className="px-2 text-gray-500 font-bold">...</span>
-                      )}
-                    </>
-                  )}
+                    {/* Page Numbers */}
+                    <div className="flex items-center space-x-1">
+                      {generatePageNumbers().map(page => (
+                        <button
+                          key={page}
+                          type="button"
+                          onClick={e => handlePageChange(page, e)}
+                          className={`w-10 h-10 text-sm font-medium rounded-lg border transition-colors ${
+                            page === currentPage
+                              ? 'bg-primary border-primary text-white'
+                              : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                          }`}
+                          aria-label={`ไปหน้าที่ ${page}`}
+                          aria-current={page === currentPage ? 'page' : undefined}
+                        >
+                          {page}
+                        </button>
+                      ))}
+                    </div>
 
-                  {/* Page Numbers */}
-                  {generatePageNumbers().map(page => (
-                    <button
-                      key={page}
-                      onClick={e => handlePageChange(page, e)}
-                      className={`px-4 py-2 rounded-2xl transition-all duration-300 font-prompt shadow-lg transform hover:scale-[1.02] active:scale-[0.98] hover:shadow-xl ${
-                        page === currentPage
-                          ? 'bg-accent text-white border-2 border-accent font-bold shadow-xl scale-110'
-                          : 'bg-white border-2 border-gray-300 text-gray-700 hover:bg-primary hover:border-primary hover:text-white'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ))}
-
-                  {/* Next Button */}
-                  {currentPage < totalPages && (
+                    {/* Next Button */}
                     <button
                       type="button"
-                      onClick={e => handlePageChange(currentPage + 1, e)}
-                      className="px-4 py-2 bg-white border-2 border-gray-300 rounded-2xl hover:bg-primary hover:border-primary hover:text-white transition-all duration-300 font-prompt text-gray-700 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+                      onClick={e =>
+                        currentPage < totalPages ? handlePageChange(currentPage + 1, e) : null
+                      }
+                      disabled={currentPage >= totalPages}
+                      className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                        currentPage < totalPages
+                          ? 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+                          : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
+                      }`}
                       aria-label="ไปหน้าถัดไป"
                     >
                       ถัดไป →
                     </button>
-                  )}
+                  </nav>
+
+                  {/* Page Info */}
+                  <div className="mt-4 text-center">
+                    <p className="text-sm text-gray-600">
+                      หน้า <span className="font-medium text-primary">{currentPage}</span> จาก{' '}
+                      <span className="font-medium text-primary">{totalPages}</span>
+                    </p>
+                  </div>
                 </div>
               )}
             </>

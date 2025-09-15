@@ -4,7 +4,7 @@ import SEO from '../../components/SEO';
 import Breadcrumb from '../../components/Breadcrumb';
 import SimilarCars from '../../components/SimilarCars';
 import { getAllCars } from '../../lib/shopify.mjs';
-import { buildCarJsonLd, buildProductJsonLd, buildImageObjectJsonLd } from '../../lib/seo/jsonld';
+import { buildEnhancedCarJsonLd, buildImageObjectJsonLd } from '../../lib/seo/jsonld';
 import { safeGet, safeFormatPrice } from '../../lib/safeFetch';
 import Link from 'next/link';
 import A11yImage from '../../components/A11yImage';
@@ -14,9 +14,16 @@ function CarDetailPage({ car, allCars }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageLoading, setImageLoading] = useState(true);
   const [processedDescription, setProcessedDescription] = useState(null);
+  const [mounted, setMounted] = useState(false);
+
+  // Hydration protection
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Preload next/prev images for instant switching
-  React.useEffect(() => {
+  useEffect(() => {
+    if (!mounted || !car) return;
     const images = safeGet(car, 'images', []);
     if (images.length < 2) return;
     const preloadIndexes = [];
@@ -26,10 +33,11 @@ function CarDetailPage({ car, allCars }) {
       const img = new window.Image();
       img.src = safeGet(images[idx], 'url', '');
     });
-  }, [selectedImageIndex, car]);
+  }, [selectedImageIndex, car, mounted]);
 
   // Keyboard navigation for image gallery
-  React.useEffect(() => {
+  useEffect(() => {
+    if (!mounted || !car) return;
     const images = safeGet(car, 'images', []);
     if (images.length < 2) return;
 
@@ -45,10 +53,10 @@ function CarDetailPage({ car, allCars }) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [car]);
+  }, [car, mounted]);
 
   // Reset loading state when image changes
-  React.useEffect(() => {
+  useEffect(() => {
     setImageLoading(true);
   }, [selectedImageIndex]);
 
@@ -124,6 +132,18 @@ function CarDetailPage({ car, allCars }) {
     }
   }, [car?.description]);
 
+  // ป้องกัน hydration error
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-gray-600 font-prompt">กำลังโหลด...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!car) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -159,41 +179,6 @@ function CarDetailPage({ car, allCars }) {
     { url: '/herobanner/chiangmaiusedcar.webp', alt: safeGet(car, 'title', 'รถมือสอง') },
   ]);
   const currentImage = carImages[selectedImageIndex] || carImages[0];
-
-  // เตรียม JSON-LD schema สำหรับ SEO
-  const carSpecs = {
-    year: safeGet(car, 'year'),
-    transmission: safeGet(car, 'transmission', 'Unknown'),
-    fuelType: safeGet(car, 'fuel_type', 'Gasoline'),
-    engineSize: safeGet(car, 'engine'),
-    mileage: safeGet(car, 'mileage'),
-    seats: safeGet(car, 'seats'),
-    color: safeGet(car, 'color'),
-  };
-
-  const carProduct = {
-    url: `https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
-    name: safeGet(car, 'title', 'รถมือสองคุณภาพดี'),
-    description:
-      safeGet(car, 'description') ||
-      `${safeGet(car, 'vendor', '') || safeGet(car, 'brand', '')} ${safeGet(car, 'model', '')} ${safeGet(car, 'year', '')} มือสองเชียงใหม่ สภาพสวย ราคาดี`,
-    images: carImages.map(img =>
-      safeGet(img, 'url', '').startsWith('/')
-        ? `https://chiangmaiusedcar.com${safeGet(img, 'url', '')}`
-        : safeGet(img, 'url', '')
-    ),
-    brand: safeGet(car, 'vendor') || safeGet(car, 'brand'),
-    sku: safeGet(car, 'id') || safeGet(car, 'handle'),
-    mpn: safeGet(car, 'vin'),
-    price: safeGet(car, 'price.amount'),
-    currency: safeGet(car, 'price.currencyCode', 'THB'),
-    inStock: safeGet(car, 'availableForSale', true) !== false,
-    priceValidDays: 90,
-    sellerName: 'ครูหนึ่งรถสวย',
-  };
-
-  const carJsonLd = buildCarJsonLd(carSpecs, carProduct);
-  const productJsonLd = buildProductJsonLd(carProduct);
 
   // Enhanced SEO data for better link sharing - optimized for social media
   const brandModel = [safeGet(car, 'vendor') || safeGet(car, 'brand'), safeGet(car, 'model')]
@@ -277,6 +262,13 @@ function CarDetailPage({ car, allCars }) {
               ? `https://chiangmaiusedcar.com${safeGet(img, 'url', '')}`
               : safeGet(img, 'url', ''),
           })),
+          // Ensure structured data has required fields for Google Rich Results
+          price: {
+            amount: safeGet(car, 'price.amount', 0),
+            currencyCode: safeGet(car, 'price.currencyCode', 'THB'),
+          },
+          availableForSale:
+            typeof car?.availableForSale === 'boolean' ? car.availableForSale : true,
         }}
         keywords={[
           safeGet(car, 'title'),
@@ -303,49 +295,37 @@ function CarDetailPage({ car, allCars }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              ...carJsonLd,
-              name: enhancedTitle,
-              description: enhancedDescription,
-              image: carImages.map(img =>
-                safeGet(img, 'url', '').startsWith('/')
-                  ? `https://chiangmaiusedcar.com${safeGet(img, 'url', '')}`
-                  : safeGet(img, 'url', '')
-              ),
-              url: `https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
-              offers: {
-                ...carJsonLd.offers,
+            __html: JSON.stringify(
+              buildEnhancedCarJsonLd({
+                name: enhancedTitle,
                 description: enhancedDescription,
-                category: 'รถยนต์มือสอง',
-                hasMerchantReturnPolicy: {
-                  '@type': 'MerchantReturnPolicy',
-                  applicableCountry: 'TH',
-                  returnPolicyCategory: 'http://schema.org/MerchantReturnUnlimitedWindow',
-                  merchantReturnDays: 7,
-                  returnFees: 'http://schema.org/FreeReturn',
-                },
-                warranty: {
-                  '@type': 'WarrantyPromise',
-                  durationOfWarranty: 'P1Y',
-                  warrantyScope: 'เครื่องยนต์และเกียร์',
-                },
-              },
-            }),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              ...productJsonLd,
-              name: enhancedTitle,
-              description: enhancedDescription,
-              image: carImages.map(img =>
-                safeGet(img, 'url', '').startsWith('/')
-                  ? `https://chiangmaiusedcar.com${safeGet(img, 'url', '')}`
-                  : safeGet(img, 'url', '')
-              ),
-            }),
+                brand: safeGet(car, 'vendor') || safeGet(car, 'brand', 'รถมือสอง'),
+                year: safeGet(car, 'year', ''),
+                model: safeGet(car, 'model', ''),
+                images: carImages.map(img =>
+                  safeGet(img, 'url', '').startsWith('/')
+                    ? `https://chiangmaiusedcar.com${safeGet(img, 'url', '')}`
+                    : safeGet(img, 'url', '')
+                ),
+                price: safeGet(car, 'price.amount', 0), // Default to 0 if no price
+                currency: safeGet(car, 'price.currencyCode', 'THB'),
+                url: `https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
+                sku: safeGet(car, 'id') || safeGet(car, 'handle'),
+                mileage: safeGet(car, 'mileage'),
+                transmission: safeGet(car, 'transmission', 'Manual'),
+                fuelType: safeGet(car, 'fuel_type', 'Gasoline'),
+                engineSize: safeGet(car, 'engine'),
+                color: safeGet(car, 'color'),
+                seats: safeGet(car, 'seats'),
+                availability: safeGet(car, 'availableForSale', true) ? 'InStock' : 'OutOfStock',
+                priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
+                  .toISOString()
+                  .split('T')[0],
+                returnPolicy: 'NoReturnRefund',
+                shippingCost: 0,
+                warrantyPeriod: '1 ปี',
+              })
+            ),
           }}
         />
 
@@ -414,7 +394,7 @@ function CarDetailPage({ car, allCars }) {
                 fallbackAlt={safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
                 fill
                 className={`object-cover transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
-                priority
+                priority={true} // ⭐ เพิ่ม priority สำหรับรูปหลัก Above-the-fold
                 quality={85}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
                 onLoad={() => setImageLoading(false)}
@@ -709,7 +689,7 @@ function CarDetailPage({ car, allCars }) {
                         <div className="bg-white border border-accent rounded-lg p-3">
                           <div className="flex items-center gap-2 mb-1">
                             <svg
-                              className="w-4 h-4 text-accent"
+                              className="w-4 h-4 text-accent-800"
                               fill="currentColor"
                               viewBox="0 0 20 20"
                             >
@@ -719,7 +699,7 @@ function CarDetailPage({ car, allCars }) {
                                 clipRule="evenodd"
                               />
                             </svg>
-                            <span className="text-sm font-semibold text-accent font-prompt">
+                            <span className="text-sm font-semibold text-accent-800 font-prompt">
                               สำหรับลูกค้าเครดิตดี
                             </span>
                           </div>
@@ -729,7 +709,7 @@ function CarDetailPage({ car, allCars }) {
                           <div className="text-xs text-gray-600 font-prompt mb-1">
                             *อัตราพิเศษ 4.5% สำหรับ 72 งวด + VAT + ประกัน
                           </div>
-                          <div className="text-sm font-semibold text-accent font-prompt">
+                          <div className="text-sm font-semibold text-accent-800 font-prompt">
                             ประหยัดได้ {Math.round(savings).toLocaleString()} บาท/เดือน
                           </div>
                         </div>
@@ -1101,7 +1081,32 @@ function CarDetailPage({ car, allCars }) {
 }
 
 // Convert to SSR temporarily to debug
-export async function getServerSideProps({ params }) {
+// ISR - Individual car pages - revalidate every 10 minutes
+export async function getStaticPaths() {
+  try {
+    const cars = await getAllCars();
+    const safeCars = Array.isArray(cars) ? cars : [];
+
+    const paths = safeCars
+      .filter(car => car?.handle)
+      .map(car => ({
+        params: { handle: car.handle },
+      }));
+
+    return {
+      paths,
+      fallback: 'blocking', // Enable ISR for new cars
+    };
+  } catch (error) {
+    console.error('getStaticPaths error:', error);
+    return {
+      paths: [],
+      fallback: 'blocking',
+    };
+  }
+}
+
+export async function getStaticProps({ params }) {
   try {
     const cars = await getAllCars();
 
@@ -1120,9 +1125,10 @@ export async function getServerSideProps({ params }) {
         car,
         allCars: safeCars,
       },
+      revalidate: 600, // 10 minutes
     };
   } catch (error) {
-    console.error('getServerSideProps error:', error);
+    console.error('getStaticProps error:', error);
     // ไม่ throw error - ให้หน้า 404 แทน
     return {
       notFound: true,

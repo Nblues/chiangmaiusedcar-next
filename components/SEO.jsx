@@ -21,7 +21,7 @@ export default function SEO({
 }) {
   // Memoize static values to prevent unnecessary re-renders
   const staticValues = useMemo(() => {
-    const site = 'https://www.chiangmaiusedcar.com';
+    const site = 'https://chiangmaiusedcar.com';
     const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่';
     const defaultDescription =
       process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
@@ -101,7 +101,21 @@ export default function SEO({
 
     // Fix canonical URL duplication - check if url already contains full domain
     const fullUrl = url ? (url.startsWith('http') ? url : `${site}${url}`) : site;
-    const metaTitle = title ? `${title} | ${siteName}` : siteName;
+    // ป้องกันชื่อธุรกิจซ้อนกันใน title
+    let metaTitle = siteName;
+    if (title) {
+      // ถ้า title มีชื่อธุรกิจอยู่แล้ว ไม่ต้องเติมซ้ำ
+      const normalizedTitle = title.replace(/\|/g, '').replace(/\s+/g, ' ').trim();
+      const normalizedSiteName = siteName.replace(/\|/g, '').replace(/\s+/g, ' ').trim();
+      if (
+        normalizedTitle.includes(normalizedSiteName) ||
+        normalizedTitle.includes('ครูหนึ่งรถสวย')
+      ) {
+        metaTitle = title;
+      } else {
+        metaTitle = `${title} | ${siteName}`;
+      }
+    }
     const metaDesc = description || defaultDescription;
 
     // Use stable timestamp for cache busting (only change on build)
