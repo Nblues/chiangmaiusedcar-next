@@ -162,7 +162,7 @@ export default function AllCars({ cars }) {
         title={`รถมือสองเชียงใหม่ทั้งหมด${totalPages > 1 && currentPage > 1 ? ` หน้า ${currentPage}` : ''} ตรวจสภาพครบถ้วน เช็คประวัติรถ ฟรีดาวน์ | ครูหนึ่งรถสวย`}
         description={`รถมือสองเชียงใหม่คุณภาพดี ${filteredCars.length} คัน แพลตฟอร์มออนไลน์ ตรวจสภาพครบถ้วน เช็คประวัติรถ ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย${totalPages > 1 ? ` หน้า ${currentPage}/${totalPages}` : ''} Toyota Honda Nissan โทร 094-064-9018`}
         url={`/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`}
-        image="https://chiangmaiusedcar.com/herobanner/cnxallcar.webp"
+        image="https://www.chiangmaiusedcar.com/herobanner/cnxallcar.webp"
         type="website"
         pageType="all-cars"
         structuredData={{
@@ -170,7 +170,7 @@ export default function AllCars({ cars }) {
           '@type': 'CollectionPage',
           name: `รถมือสองทั้งหมด${totalPages > 1 ? ` - หน้า ${currentPage}` : ''}`,
           description: `รถมือสองคุณภาพดี ${filteredCars.length} คัน พร้อมส่งมอบ`,
-          url: `https://chiangmaiusedcar.com/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`,
+          url: `https://www.chiangmaiusedcar.com/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`,
           mainEntity: {
             '@type': 'ItemList',
             name: 'รายการรถมือสอง',
@@ -180,7 +180,7 @@ export default function AllCars({ cars }) {
               position: startIndex + index + 1,
               item: {
                 '@type': 'Car',
-                '@id': `https://chiangmaiusedcar.com/car/${car.handle}`,
+                '@id': `https://www.chiangmaiusedcar.com/car/${car.handle}`,
                 name: car.title,
                 description: `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท`,
                 brand: car.vendor || car.brand || 'รถมือสอง',

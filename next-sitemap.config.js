@@ -1,5 +1,5 @@
 module.exports = {
-  siteUrl: process.env.SITE_URL || 'https://www.chiangmaiusedcar.com',
+  siteUrl: process.env.SITE_URL || 'https://chiangmaiusedcar.com',
   generateRobotsTxt: true,
   generateIndexSitemap: true,
   sitemapSize: 7000,
@@ -22,12 +22,13 @@ module.exports = {
           '/admin*',
           '/keyword-audit',
           '/api-dashboard',
+          '/license',
         ],
       },
       {
         userAgent: 'Googlebot',
         allow: '/',
-        disallow: ['/api*', '/admin*', '/keyword-audit', '/api-dashboard'],
+        disallow: ['/api*', '/admin*', '/keyword-audit', '/api-dashboard', '/license'],
       },
       {
         userAgent: 'Googlebot-Image',
@@ -45,42 +46,42 @@ module.exports = {
       {
         userAgent: 'ChatGPT-User',
         allow: ['/', '/all-cars', '/car/*', '/about', '/contact'],
-        disallow: ['/api*', '/admin*'],
+        disallow: ['/api*', '/admin*', '/keyword-audit', '/api-dashboard', '/license'],
         crawlDelay: 1,
       },
       {
         userAgent: 'Claude-Web',
         allow: ['/', '/all-cars', '/car/*', '/about', '/contact'],
-        disallow: ['/api*', '/admin*'],
+        disallow: ['/api*', '/admin*', '/keyword-audit', '/api-dashboard', '/license'],
         crawlDelay: 1,
       },
       {
         userAgent: 'Bard',
         allow: ['/', '/all-cars', '/car/*', '/about', '/contact'],
-        disallow: ['/api*', '/admin*'],
+        disallow: ['/api*', '/admin*', '/keyword-audit', '/api-dashboard', '/license'],
         crawlDelay: 1,
       },
       // Social Commerce
       {
         userAgent: 'Instagram',
         allow: ['/', '/car/*'],
-        disallow: ['/api*'],
+        disallow: ['/api*', '/keyword-audit', '/api-dashboard', '/license'],
         crawlDelay: 3,
       },
       {
         userAgent: 'TikTokBot',
         allow: ['/', '/car/*'],
-        disallow: ['/api*'],
+        disallow: ['/api*', '/keyword-audit', '/api-dashboard', '/license'],
         crawlDelay: 3,
       },
     ],
     additionalSitemaps: [
-      'https://www.chiangmaiusedcar.com/sitemap-0.xml',
-      'https://www.chiangmaiusedcar.com/sitemap-cars.xml',
-      'https://www.chiangmaiusedcar.com/sitemap-images.xml',
+      'https://chiangmaiusedcar.com/sitemap-0.xml',
+      'https://chiangmaiusedcar.com/sitemap-cars.xml',
+      'https://chiangmaiusedcar.com/sitemap-images.xml',
     ],
     // Add host directive for consistency
-    host: 'https://www.chiangmaiusedcar.com',
+    host: 'https://chiangmaiusedcar.com',
     // 2025 enhancement: crawl delay for different bots
     transformRobotsTxt: async (config, robotsTxt) => {
       return robotsTxt
@@ -184,11 +185,11 @@ Sitemap: `
       lastmod,
       alternateRefs: [
         {
-          href: `https://www.chiangmaiusedcar.com${path}`,
+          href: `https://chiangmaiusedcar.com${path}`,
           hreflang: 'th',
         },
         {
-          href: `https://www.chiangmaiusedcar.com${path}`,
+          href: `https://chiangmaiusedcar.com${path}`,
           hreflang: 'th-TH',
         },
       ],

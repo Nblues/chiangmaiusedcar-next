@@ -1,34 +1,29 @@
 {
   "framework": "nextjs",
+  "functions": {
+    "pages/api/*.js": {
+      "maxDuration": 10
+    }
+  },
   "env": {
     "SHOPIFY_DOMAIN": "kn-goodcar.com",
     "SHOPIFY_STOREFRONT_TOKEN": "bb70cb008199a94b83c98df0e45ada67",
     "NEXT_PUBLIC_EMAILJS_SERVICE_ID": "service_qlcksif",
     "NEXT_PUBLIC_EMAILJS_TEMPLATE_ID": "template_zd6e3f6",
     "NEXT_PUBLIC_EMAILJS_PUBLIC_KEY": "P3wnNJB_Y_PddrdBJ",
-    "SITE_URL": "https://www.chiangmaiusedcar.com"
+    "SITE_URL": "https://www.chiangmaiusedcar.com",
+    "FACEBOOK_COMPATIBLE": "true",
+    "VERCEL_PROTECTION_BYPASS": "true"
   },
-  "alias": ["chiangmaiusedcar.com", "www.chiangmaiusedcar.com"],
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "host",
-          "value": "chiangmaiusedcar.com"
-        }
-      ],
-      "destination": "https://www.chiangmaiusedcar.com/$1",
-      "permanent": true
-    }
-  ],
+  "alias": ["chiangmaiusedcar.com"],
+  "redirects": [],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=600"
+          "value": "public, max-age=300, s-maxage=600"
         },
         {
           "key": "X-Content-Type-Options",
@@ -37,6 +32,26 @@
         {
           "key": "X-Frame-Options",
           "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=*, microphone=(), camera=()"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Accept-CH",
+          "value": "DPR, Viewport-Width, Width"
+        },
+        {
+          "key": "Vary",
+          "value": "Accept-Encoding"
+        },
+        {
+          "key": "Server-Timing",
+          "value": "total;dur=0"
         }
       ]
     },

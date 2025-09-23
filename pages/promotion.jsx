@@ -497,7 +497,7 @@ export default function Promotion() {
                     </svg>
                   </div>
                   <h2 id="credit-offer" className="text-3xl font-bold mb-6 font-prompt">
-                    ลูกค้าเครดิตดี
+                    <span className="text-accent">ลูกค้าเครดิตดี</span>
                   </h2>
                   <div className="space-y-4">
                     <p className="text-xl font-prompt">ดอกเบี้ยเริ่มต้น</p>
@@ -583,9 +583,10 @@ export default function Promotion() {
   );
 }
 
-// Using SSR for now due to Html import issues during static generation
-export async function getServerSideProps() {
+// Using ISR for better performance - revalidate every 10 minutes
+export async function getStaticProps() {
   return {
     props: {},
+    revalidate: 600, // 10 minutes
   };
 }

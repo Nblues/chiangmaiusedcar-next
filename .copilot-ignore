@@ -1,0 +1,73 @@
+# .copilot-ignore
+# ไฟล์ที่ไม่ต้องการให้ GitHub Copilot วิเคราะห์หรือเปรียบเทียบ
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Logs
+*.log
+logs/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Environment variables
+.env*
+!.env.example
+
+# Vercel
+.vercel
+
+# Backup files
+BACKUP_*.md
+*_BACKUP.md
+*_backup.*
+
+# Documentation and reports
+*_REPORT.md
+*_SUCCESS.md
+ALL_CARS_*.md
+ACCESSIBILITY_*.md
+BOUNCE_*.md
+BUILD_*.md
+CANONICAL_*.md
+CAR_*.md
+CLEANUP_*.md
+COMPLETION_*.md
+CONTACT_*.md
+COVER_*.md
+CREDIT_*.md
+CSP_*.md
+CURRENT_*.md
+DAY*.md
+DEPLOYMENT_*.md
+DEVELOPMENT_*.md
+DOMAIN_*.md
+
+# Scripts
+*.bat
+*.sh
+*.ps1
+
+# HTML debug files
+debug-*.html
+
+# Original code - เฉพาะโค้ดต้นฉบับของ Chiangmai Used Car
+!pages/admin/
+!pages/features/
+!components/
+!lib/
+!LICENSE
+!README.md

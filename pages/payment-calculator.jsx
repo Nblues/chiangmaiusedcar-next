@@ -221,7 +221,7 @@ export default function PaymentCalculator() {
         title="คำนวนค่างวดรถยนต์ - ครูหนึ่งรถสวย | รถมือสองเชียงใหม่"
         description="เครื่องมือคำนวนค่างวดรถยนต์ คำนวนค่าผ่อนรายเดือน ดอกเบี้ย และยอดชำระรวม ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
         url="/payment-calculator"
-        image="https://chiangmaiusedcar.com/herobanner/paymentcalculator.webp"
+        image="https://www.chiangmaiusedcar.com/herobanner/paymentcalculator.webp"
         pageType="payment-calculator"
       />
 
@@ -238,7 +238,7 @@ export default function PaymentCalculator() {
         <div className="relative z-10 py-8 md:py-16">
           <div className="max-w-7xl mx-auto px-4 md:px-6 text-center">
             <div className="bg-black bg-opacity-40 rounded-2xl p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm border border-white border-opacity-20">
-              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 font-prompt text-accent drop-shadow-2xl">
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 font-prompt text-white drop-shadow-2xl">
                 คำนวนค่างวดรถยนต์
               </h1>
               <p
@@ -261,7 +261,7 @@ export default function PaymentCalculator() {
                       `${(typeof router.query.carTitle === 'string' ? router.query.carTitle : '').replace(/</g, '&lt;').replace(/>/g, '&gt;')} - `}
                     <span className="block md:inline mt-1 md:mt-0">
                       ราคา:{' '}
-                      <span className="font-bold text-accent text-lg md:text-xl drop-shadow-lg">
+                      <span className="font-bold text-white text-lg md:text-xl drop-shadow-lg">
                         ฿{Number(carPrice || 0).toLocaleString()}
                       </span>{' '}
                       บาท
@@ -289,7 +289,7 @@ export default function PaymentCalculator() {
                         >
                           <div
                             className={`text-sm md:text-lg font-bold mb-2 ${
-                              index === 1 ? 'text-accent' : 'text-gray-800'
+                              index === 1 ? 'text-orange-700' : 'text-gray-800'
                             }`}
                           >
                             {calc.label}
@@ -316,7 +316,7 @@ export default function PaymentCalculator() {
                             <div className="text-lg md:text-xl font-bold text-blue-600 mb-1">
                               ฿{formatNumber(calc.goodCreditWithVatAndInsurance)}
                             </div>
-                            <div className="text-xs text-accent font-semibold">
+                            <div className="text-xs text-orange-700 font-semibold">
                               ประหยัด ฿
                               {formatNumber(
                                 calc.monthlyPaymentWithVatAndInsurance -
@@ -327,7 +327,7 @@ export default function PaymentCalculator() {
                           </div>
 
                           {index === 1 && (
-                            <div className="inline-flex items-center gap-1 text-xs bg-accent bg-opacity-20 text-accent px-3 py-1 rounded-full font-semibold mt-2">
+                            <div className="inline-flex items-center gap-1 text-xs bg-accent bg-opacity-20 text-orange-700 px-3 py-1 rounded-full font-semibold mt-2">
                               แนะนำ
                             </div>
                           )}
@@ -721,7 +721,7 @@ export default function PaymentCalculator() {
             </a>
             <a
               href="tel:094-0649018"
-              className="bg-white text-accent hover:bg-gray-50 border-2 border-accent hover:border-accent/80 px-6 md:px-8 py-3 rounded-2xl font-semibold transition-all duration-300 font-prompt text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-white text-orange-700 hover:bg-gray-50 border-2 border-accent hover:border-accent/80 px-6 md:px-8 py-3 rounded-2xl font-semibold transition-all duration-300 font-prompt text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
               aria-label="โทร 094-064-9018"
             >
               โทร 094-064-9018
@@ -733,6 +733,7 @@ export default function PaymentCalculator() {
   );
 }
 
+// SSR for payment calculator with real-time interest rates
 export async function getServerSideProps() {
   return {
     props: {},

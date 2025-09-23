@@ -117,5 +117,29 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hide': {
+          /* IE and Edge */
+          '-ms-overflow-style': 'none',
+          /* Firefox */
+          'scrollbar-width': 'none',
+          /* Safari and Chrome */
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+        },
+        '.text-shadow': {
+          'text-shadow': '2px 2px 4px rgba(0, 0, 0, 0.8)',
+        },
+        '.text-shadow-lg': {
+          'text-shadow': '3px 3px 6px rgba(0, 0, 0, 0.9), 1px 1px 2px rgba(0, 0, 0, 0.8)',
+        },
+        '.text-shadow-xl': {
+          'text-shadow': '4px 4px 8px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.8)',
+        },
+      });
+    },
+  ],
 };

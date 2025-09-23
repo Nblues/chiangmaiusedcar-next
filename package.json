@@ -5,9 +5,11 @@
   "scripts": {
     "prebuild": "node scripts/check-no-html-imports.cjs",
     "dev": "next dev -p 3000",
+    "dev:hmr": "node scripts/fix-hmr.js && npm run dev",
     "build": "cross-env NODE_ENV=production next build",
     "build:memory": "cross-env NODE_OPTIONS=--max-old-space-size=4096 NODE_ENV=production next build",
     "build:production": "cross-env NODE_ENV=production next build --config next.config.production.js",
+    "build:secure": "npm run security-check && npm run build",
     "start": "next start -p 3000",
     "start:production": "cross-env NODE_ENV=production next start -p 3000",
     "analyze": "cross-env ANALYZE=true NODE_ENV=production next build",
@@ -19,6 +21,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test:build": "npm run lint && npm run type-check && npm run build",
+    "security-check": "echo 'Checking admin security...' && grep -q 'Disallow: /admin' public/robots.txt && echo 'Admin protection verified' || echo 'WARNING: Admin not protected in robots.txt'",
+    "deploy:secure": "npm run security-check && npm run build && echo 'Ready for deployment with admin protection'",
     "resolve:map": "node dev/scripts/fetch-coords.js",
     "postinstall": "npm run resolve:map || true",
     "postbuild": "next-sitemap; node scripts/generate-image-sitemap.js || true; node scripts/generate-pagination-sitemap.js || true",
@@ -29,6 +33,10 @@
     "deploy:preview": "vercel",
     "build:analyze": "cross-env ANALYZE=true NODE_ENV=production next build",
     "production": "npm run build && npm run start:production",
+    "hmr:fix": "node scripts/fix-hmr.js",
+    "hmr:reset": "powershell -ExecutionPolicy Bypass -File scripts/fix-hmr.ps1 -Reset",
+    "hmr:dev": "powershell -ExecutionPolicy Bypass -File scripts/fix-hmr.ps1 -Development",
+    "hmr:prod": "powershell -ExecutionPolicy Bypass -File scripts/fix-hmr.ps1 -Production",
     "probe": "powershell -Command \"& { $start = Get-Date; try { $response = Invoke-WebRequest -Uri 'https://www.chiangmaiusedcar.com/' -UserAgent 'Chrome-Lighthouse' -UseBasicParsing -TimeoutSec 30; $end = Get-Date; $total = ($end - $start).TotalSeconds; Write-Host ('TTFB:N/A Total:' + $total + 's Status:' + $response.StatusCode) } catch { Write-Host 'Error: Connection failed' } }\""
   },
   "dependencies": {

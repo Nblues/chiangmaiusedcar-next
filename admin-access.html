@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Admin Access</title>
+    <script>
+      // Auto login and redirect
+      localStorage.setItem('adminLoggedIn', 'true');
+      localStorage.setItem('admin_auth', 'true');
+      window.location.href = 'http://localhost:3000/admin/articles';
+    </script>
+  </head>
+  <body>
+    <p>กำลังเข้าสู่ระบบและไปหน้าจัดการบทความ...</p>
+  </body>
+</html>

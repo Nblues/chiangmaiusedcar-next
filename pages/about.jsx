@@ -38,7 +38,7 @@ export default function About() {
         title="เกี่ยวกับครูหนึ่งรถสวย - แพลตฟอร์มออนไลน์รถมือสองเชียงใหม่ ตรวจสภาพครบถ้วน | Facebook 1M+"
         description="เรื่องราวครูหนึ่งรถสวย แพลตฟอร์มออนไลน์รถมือสองเชียงใหม่ ตรวจสภาพครบถ้วน เช็คประวัติรถ ประสบการณ์ 10+ ปี Facebook 1M+ TikTok 150K+ รับประกัน 1 ปี โทร 094-064-9018"
         url="/about"
-        image="https://chiangmaiusedcar.com/herobanner/team.webp"
+        image="https://www.chiangmaiusedcar.com/herobanner/team.webp"
         type="profile"
         pageType="about"
         structuredData={{
@@ -47,13 +47,13 @@ export default function About() {
           name: 'ครูหนึ่งรถสวย',
           alternateName: 'KruNueng Used Cars',
           description: 'ผู้เชี่ยวชาญรถมือสองเชียงใหม่ ประสบการณ์ 10+ ปี',
-          image: 'https://chiangmaiusedcar.com/herobanner/team.webp',
-          url: 'https://chiangmaiusedcar.com/about',
+          image: 'https://www.chiangmaiusedcar.com/herobanner/team.webp',
+          url: 'https://www.chiangmaiusedcar.com/about',
           jobTitle: 'ผู้เชี่ยวชาญรถมือสอง',
           worksFor: {
             '@type': 'AutoDealer',
             name: 'ครูหนึ่งรถสวย',
-            url: 'https://chiangmaiusedcar.com',
+            url: 'https://www.chiangmaiusedcar.com',
           },
           knowsAbout: [
             'รถมือสองเชียงใหม่',
@@ -490,9 +490,10 @@ export default function About() {
   );
 }
 
-// SSR - Server Side Rendering
-export async function getServerSideProps() {
+// ISR - Company info changes infrequently - revalidate every 30 minutes
+export async function getStaticProps() {
   return {
     props: {},
+    revalidate: 1800, // 30 minutes
   };
 }

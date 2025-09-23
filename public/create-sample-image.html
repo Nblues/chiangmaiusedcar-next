@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head>
+    <title>สร้างรูปภาพตัวอย่าง</title>
+    <script>
+      function createSampleImage() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 800;
+        canvas.height = 600;
+        const ctx = canvas.getContext('2d');
+
+        // พื้นหลังสีน้ำเงิน
+        ctx.fillStyle = '#1a237e';
+        ctx.fillRect(0, 0, 800, 600);
+
+        // ข้อความ
+        ctx.fillStyle = 'white';
+        ctx.font = '48px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('รูปภาพตัวอย่าง', 400, 250);
+        ctx.fillText('ครูหนึ่งรถสวย', 400, 320);
+
+        // ส่งออกเป็นไฟล์
+        canvas.toBlob(function (blob) {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'sample-image.png';
+          a.click();
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <h1>สร้างรูปภาพตัวอย่างสำหรับทดสอบ</h1>
+    <button onclick="createSampleImage()">ดาวน์โหลดรูปภาพตัวอย่าง</button>
+  </body>
+</html>

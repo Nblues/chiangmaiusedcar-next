@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ทดสอบระบบรูปภาพ</title>
+    <style>
+      body {
+        font-family: 'Prompt', sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .test-section {
+        border: 2px solid #ddd;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+      }
+      button {
+        background: #1a237e;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      .result {
+        background: #f5f5f5;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        font-family: monospace;
+        font-size: 12px;
+      }
+      img {
+        max-width: 300px;
+        height: auto;
+        border: 2px solid #ddd;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🧪 ทดสอบระบบรูปภาพ - Debug Tool</h1>
+
+    <div class="test-section">
+      <h2>1. ทดสอบการสร้างรูปภาพ</h2>
+      <button onclick="createTestImage()">สร้างรูปทดสอบ</button>
+      <button onclick="uploadToLocalStorage()">บันทึกลง localStorage</button>
+      <div id="test-image-result"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>2. ทดสอบการดึงข้อมูลจาก localStorage</h2>
+      <button onclick="checkLocalStorage()">ตรวจสอบ localStorage</button>
+      <button onclick="listAllImages()">แสดงรายการรูปภาพ</button>
+      <div id="storage-result"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>3. ทดสอบการแสดงรูปภาพ</h2>
+      <button onclick="displayStoredImages()">แสดงรูปจาก localStorage</button>
+      <div id="display-result"></div>
+    </div>
+
+    <div class="test-section">
+      <h2>4. ทดสอบ HTML IMG Tag</h2>
+      <button onclick="testImageTags()">ทดสอบ IMG Tags</button>
+      <div id="html-result"></div>
+    </div>
+
+    <script>
+      let testImageData = null;
+      let testImageName = null;
+
+      // สร้างรูปภาพทดสอบ
+      function createTestImage() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 400;
+        canvas.height = 300;
+        const ctx = canvas.getContext('2d');
+
+        // พื้นหลัง
+        ctx.fillStyle = '#1a237e';
+        ctx.fillRect(0, 0, 400, 300);
+
+        // ข้อความ
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Test Image', 200, 150);
+        ctx.font = '16px Arial';
+        ctx.fillText(new Date().toISOString(), 200, 180);
+
+        // แสดงผล
+        const result = document.getElementById('test-image-result');
+        result.innerHTML = '<h3>รูปภาพที่สร้าง:</h3>';
+        result.appendChild(canvas);
+
+        // เก็บข้อมูล
+        testImageData = canvas.toDataURL('image/png');
+        testImageName = `test_${Date.now()}.png`;
+
+        result.innerHTML += `<div class="result">
+                Image Data Length: ${testImageData.length} characters<br>
+                Image Name: ${testImageName}<br>
+                Data Preview: ${testImageData.substring(0, 50)}...
+            </div>`;
+      }
+
+      // บันทึกลง localStorage
+      function uploadToLocalStorage() {
+        if (!testImageData) {
+          alert('สร้างรูปภาพก่อน!');
+          return;
+        }
+
+        try {
+          // จำลองการบันทึกแบบเดียวกับ saveImageToStorage
+          const articleId = 'test';
+          const imageName = `${articleId}_${Date.now()}_test.png`;
+
+          const images = JSON.parse(localStorage.getItem('article_images') || '{}');
+          images[imageName] = {
+            data: testImageData,
+            name: 'test.png',
+            size: testImageData.length,
+            type: 'image/png',
+            uploadDate: new Date().toISOString(),
+          };
+
+          localStorage.setItem('article_images', JSON.stringify(images));
+
+          document.getElementById('test-image-result').innerHTML += `
+                    <div class="result" style="background: #d4edda;">
+                        ✅ บันทึกสำเร็จ!<br>
+                        Image Key: ${imageName}<br>
+                        Total Images in Storage: ${Object.keys(images).length}
+                    </div>`;
+        } catch (error) {
+          document.getElementById('test-image-result').innerHTML += `
+                    <div class="result" style="background: #f8d7da;">
+                        ❌ เกิดข้อผิดพลาด: ${error.message}
+                    </div>`;
+        }
+      }
+
+      // ตรวจสอบ localStorage
+      function checkLocalStorage() {
+        try {
+          const images = JSON.parse(localStorage.getItem('article_images') || '{}');
+          const result = document.getElementById('storage-result');
+
+          result.innerHTML = `<div class="result">
+                    localStorage Size: ${JSON.stringify(images).length} characters<br>
+                    Number of Images: ${Object.keys(images).length}<br>
+                    Keys: ${Object.keys(images).join(', ')}<br>
+                    <br>
+                    Raw Data:<br>
+                    <textarea style="width:100%; height:100px; font-size:10px;">${JSON.stringify(images, null, 2)}</textarea>
+                </div>`;
+        } catch (error) {
+          document.getElementById('storage-result').innerHTML = `
+                    <div class="result" style="background: #f8d7da;">
+                        ❌ ไม่สามารถอ่าน localStorage: ${error.message}
+                    </div>`;
+        }
+      }
+
+      // แสดงรายการรูปภาพ
+      function listAllImages() {
+        try {
+          const images = JSON.parse(localStorage.getItem('article_images') || '{}');
+          const result = document.getElementById('storage-result');
+
+          let html = '<h3>รายการรูปภาพทั้งหมด:</h3>';
+
+          if (Object.keys(images).length === 0) {
+            html += '<p>ไม่มีรูปภาพใน localStorage</p>';
+          } else {
+            Object.keys(images).forEach(key => {
+              const img = images[key];
+              html += `<div class="result">
+                            <strong>Key:</strong> ${key}<br>
+                            <strong>Name:</strong> ${img.name}<br>
+                            <strong>Size:</strong> ${img.size} bytes<br>
+                            <strong>Type:</strong> ${img.type}<br>
+                            <strong>Upload Date:</strong> ${img.uploadDate}<br>
+                            <strong>Data Length:</strong> ${img.data ? img.data.length : 'No data'} characters<br>
+                        </div>`;
+            });
+          }
+
+          result.innerHTML += html;
+        } catch (error) {
+          document.getElementById('storage-result').innerHTML += `
+                    <div class="result" style="background: #f8d7da;">
+                        ❌ เกิดข้อผิดพลาด: ${error.message}
+                    </div>`;
+        }
+      }
+
+      // แสดงรูปภาพจาก localStorage
+      function displayStoredImages() {
+        try {
+          const images = JSON.parse(localStorage.getItem('article_images') || '{}');
+          const result = document.getElementById('display-result');
+
+          result.innerHTML = '<h3>รูปภาพจาก localStorage:</h3>';
+
+          if (Object.keys(images).length === 0) {
+            result.innerHTML += '<p>ไม่มีรูปภาพใน localStorage</p>';
+            return;
+          }
+
+          Object.keys(images).forEach(key => {
+            const img = images[key];
+            if (img.data) {
+              const imgElement = document.createElement('img');
+              imgElement.src = img.data;
+              imgElement.alt = img.name;
+              imgElement.title = `${img.name} (${key})`;
+              result.appendChild(imgElement);
+
+              result.innerHTML += `<div class="result">
+                            Image: ${img.name}<br>
+                            Key: ${key}<br>
+                            Status: ${imgElement.complete ? '✅ Loaded' : '⏳ Loading...'}
+                        </div>`;
+            }
+          });
+        } catch (error) {
+          document.getElementById('display-result').innerHTML = `
+                    <div class="result" style="background: #f8d7da;">
+                        ❌ เกิดข้อผิดพลาด: ${error.message}
+                    </div>`;
+        }
+      }
+
+      // ทดสอบ HTML IMG Tags
+      function testImageTags() {
+        try {
+          const images = JSON.parse(localStorage.getItem('article_images') || '{}');
+          const result = document.getElementById('html-result');
+
+          result.innerHTML = '<h3>ทดสอบ HTML IMG Tags:</h3>';
+
+          if (Object.keys(images).length === 0) {
+            result.innerHTML += '<p>ไม่มีรูปภาพในระบบ กรุณาสร้างรูปทดสอบก่อน</p>';
+            return;
+          }
+
+          // สร้าง HTML แบบที่ RichTextEditor สร้าง
+          Object.keys(images).forEach(key => {
+            const img = images[key];
+
+            // HTML ที่ระบบสร้าง
+            const htmlTag = `<img src="${img.data}" alt="${img.name}" style="max-width: 100%; height: auto; margin: 10px 0;" />`;
+
+            result.innerHTML += `<div class="result">
+                        <strong>Generated HTML:</strong><br>
+                        <textarea style="width:100%; height:60px; font-size:10px;">${htmlTag}</textarea><br>
+                        <strong>Rendered Result:</strong><br>
+                        <div style="border: 1px solid #ccc; padding: 10px; background: white;">
+                            ${htmlTag}
+                        </div>
+                    </div>`;
+          });
+        } catch (error) {
+          document.getElementById('html-result').innerHTML = `
+                    <div class="result" style="background: #f8d7da;">
+                        ❌ เกิดข้อผิดพลาด: ${error.message}
+                    </div>`;
+        }
+      }
+
+      // แสดงสถานะเริ่มต้น
+      window.onload = function () {
+        checkLocalStorage();
+      };
+    </script>
+  </body>
+</html>

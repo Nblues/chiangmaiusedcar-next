@@ -22,7 +22,7 @@ export default function SEO({
 }) {
   // Memoize static values to prevent unnecessary re-renders
   const staticValues = useMemo(() => {
-    const site = 'https://chiangmaiusedcar.com';
+    const site = 'https://www.chiangmaiusedcar.com';
     const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่';
     const defaultDescription =
       process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
@@ -101,6 +101,7 @@ export default function SEO({
     const siteLocation = getSiteLocation();
 
     // Fix canonical URL duplication - check if url already contains full domain
+    // Use current page URL for canonical - more accurate for SEO 2025
     const fullUrl = url ? (url.startsWith('http') ? url : `${site}${url}`) : site;
     // ป้องกันชื่อธุรกิจซ้อนกันใน title
     let metaTitle = siteName;
@@ -237,8 +238,8 @@ export default function SEO({
       <meta property="article:modified_time" content={buildTime} />
       <meta name="robots" content="index, follow, max-image-preview:large" />
 
-      {/* Enhanced Language and Locale Settings */}
-      <meta httpEquiv="Content-Language" content="th" />
+      {/* Enhanced Language and Locale Settings - Unified th-TH */}
+      <meta httpEquiv="Content-Language" content="th-TH" />
       <meta name="language" content="th-TH" />
       <meta name="country" content="TH" />
       <meta name="geo.region" content="TH-50" />

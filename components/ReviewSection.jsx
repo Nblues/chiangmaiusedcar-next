@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 // Mockup: Replace with real API fetch in production
 const fetchFacebookReviews = async () => [
@@ -71,12 +72,13 @@ function ReviewSection() {
             itemType="https://schema.org/Review"
           >
             <div className="flex-shrink-0">
-              <img
+              <Image
                 src={r.avatar}
                 alt={r.name}
                 width={64}
                 height={64}
                 className="rounded-full border-2 border-gold shadow-md"
+                quality={85}
               />
             </div>
             <div className="flex-1 text-left">

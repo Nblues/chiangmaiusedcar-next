@@ -10,6 +10,68 @@
 
 /* ---- เพิ่ม custom css ได้ตรงนี้ ---- */
 
+/* Prevent Layout Shifts - 2025 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Fixed Layout Support - No Jumping */
+.fixed-layout {
+  contain: layout;
+  will-change: auto;
+}
+
+/* Pagination Container - Universal All Screen Responsive */
+.pagination-stable {
+  min-height: 80px;
+  contain: layout style;
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .pagination-stable {
+    min-height: 90px;
+  }
+}
+
+@media (min-width: 768px) {
+  .pagination-stable {
+    min-height: 100px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pagination-stable {
+    min-height: 120px;
+  }
+}
+
+/* Touch-Friendly Navigation - Mobile Optimized */
+.pagination-stable button {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mobile Touch Improvements */
+@media (max-width: 639px) {
+  .pagination-stable button {
+    min-height: 44px; /* iOS recommended touch target */
+    min-width: 44px;
+  }
+}
+
+/* Tablet Touch Improvements */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .pagination-stable button {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
 /* Focus Visible - Accessibility */
 :focus-visible {
   outline: 2px solid currentColor;
@@ -413,4 +475,49 @@ body {
   line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Prose styling for article content */
+.prose {
+  @apply max-w-none;
+}
+
+.prose h2 {
+  @apply text-2xl font-bold text-gray-900 mt-8 mb-4 font-prompt;
+}
+
+.prose h3 {
+  @apply text-xl font-bold text-gray-900 mt-6 mb-3 font-prompt;
+}
+
+.prose p {
+  @apply text-gray-800 mb-4 leading-relaxed font-prompt;
+}
+
+.prose ul {
+  @apply list-disc list-inside mb-4 space-y-2;
+}
+
+.prose li {
+  @apply text-gray-800 font-prompt;
+}
+
+.prose strong {
+  @apply font-bold text-gray-900;
+}
+
+.prose table {
+  @apply w-full border-collapse border border-gray-300 my-6;
+}
+
+.prose th {
+  @apply border border-gray-300 bg-gray-100 px-4 py-2 font-bold text-left font-prompt;
+}
+
+.prose td {
+  @apply border border-gray-300 px-4 py-2 font-prompt;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-accent pl-4 my-6 text-gray-600 italic;
 }

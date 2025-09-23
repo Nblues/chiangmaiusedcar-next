@@ -280,7 +280,7 @@ export default function CreditCheck() {
         title="เช็คเครดิตรถมือสองเชียงใหม่ แพลตฟอร์มออนไลน์ ตรวจสภาพครบถ้วน - ครูหนึ่งรถสวย"
         description="เช็คเครดิตรถมือสองเชียงใหม่ฟรี แพลตฟอร์มออนไลน์ ตรวจสภาพครบถ้วน เช็คประวัติรถ ครูหนึ่งรถสวย รู้ดอกเบี้ยล่วงหน้า เครดิตไม่ผ่านก็มีทาง โทร 094-064-9018"
         url="/credit-check"
-        image="https://chiangmaiusedcar.com/herobanner/outdoorbanner.webp"
+        image="https://www.chiangmaiusedcar.com/herobanner/outdoorbanner.webp"
         locale="th_TH"
         pageType="credit-check"
         structuredData={{
@@ -291,7 +291,7 @@ export default function CreditCheck() {
           provider: {
             '@type': 'Organization',
             name: 'ครูหนึ่งรถสวย',
-            url: 'https://chiangmaiusedcar.com',
+            url: 'https://www.chiangmaiusedcar.com',
           },
           areaServed: 'เชียงใหม่',
           offers: {
@@ -318,7 +318,7 @@ export default function CreditCheck() {
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="text-center text-white px-4 sm:px-6 max-w-5xl mx-auto bg-black/20 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/10">
             <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-3 md:mb-4 font-prompt drop-shadow-2xl">
-              <span className="text-accent drop-shadow-2xl">เช็คเครดิตก่อนซื้อรถ</span>
+              <span className="text-white drop-shadow-2xl">เช็คเครดิตก่อนซื้อรถ</span>
             </h1>
 
             <div className="space-y-3 mb-4 md:mb-6">
@@ -784,7 +784,10 @@ export default function CreditCheck() {
                 <input type="checkbox" name="privacyConsent" required className="mt-1" />
                 <p className="text-sm text-gray-700">
                   ฉันยินยอมตาม{' '}
-                  <Link href="/privacy-policy" className="text-primary hover:text-accent underline">
+                  <Link
+                    href="/privacy-policy"
+                    className="text-primary hover:text-accent-800 underline"
+                  >
                     นโยบายความเป็นส่วนตัว
                   </Link>
                 </p>
@@ -859,7 +862,7 @@ export default function CreditCheck() {
                   <div className="group bg-accent/5 rounded-xl p-6 border-2 border-accent/20 hover:border-accent transition-all duration-300 hover:shadow-lg">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-4 h-4 bg-accent rounded-full flex-shrink-0"></div>
-                      <div className="font-bold text-accent text-xl">ผ่อนยาวสุด</div>
+                      <div className="font-bold text-accent-800 text-xl">ผ่อนยาวสุด</div>
                     </div>
                     <div className="text-gray-700 ml-7">84 เดือน</div>
                   </div>
@@ -873,7 +876,7 @@ export default function CreditCheck() {
                   <div className="group bg-accent/5 rounded-xl p-6 border-2 border-accent/20 hover:border-accent transition-all duration-300 hover:shadow-lg">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-4 h-4 bg-accent rounded-full flex-shrink-0"></div>
-                      <div className="font-bold text-accent text-xl">ไม่ต้องค้ำ</div>
+                      <div className="font-bold text-accent-800 text-xl">ไม่ต้องค้ำ</div>
                     </div>
                     <div className="text-gray-700 ml-7">สำหรับเครดิต AAA</div>
                   </div>
@@ -903,7 +906,7 @@ export default function CreditCheck() {
                 </Link>
                 <Link
                   href="/payment-calculator"
-                  className="group relative overflow-hidden bg-white hover:bg-gray-50 text-accent border-2 border-accent font-medium px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-105 inline-flex items-center justify-center gap-3"
+                  className="group relative overflow-hidden bg-white hover:bg-gray-50 text-accent-800 border-2 border-accent font-medium px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-105 inline-flex items-center justify-center gap-3"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-orange-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <svg
@@ -970,8 +973,8 @@ export default function CreditCheck() {
             </div>
             <div className="space-y-4">
               <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
-                <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
-                  <span className="text-accent font-extrabold">Q:</span>
+                <summary className="font-bold text-primary cursor-pointer hover:text-accent-800 flex items-center gap-3 text-lg">
+                  <span className="text-accent-800 font-extrabold">Q:</span>
                   ประเมินไฟแนนซ์ฟรีจริงหรือไม่?
                 </summary>
                 <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
@@ -983,8 +986,8 @@ export default function CreditCheck() {
               </details>
 
               <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
-                <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
-                  <span className="text-accent font-extrabold">Q:</span>
+                <summary className="font-bold text-primary cursor-pointer hover:text-accent-800 flex items-center gap-3 text-lg">
+                  <span className="text-accent-800 font-extrabold">Q:</span>
                   ใช้เวลานานแค่ไหนถึงจะรู้ผล?
                 </summary>
                 <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
@@ -995,8 +998,8 @@ export default function CreditCheck() {
               </details>
 
               <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
-                <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
-                  <span className="text-accent font-extrabold">Q:</span>
+                <summary className="font-bold text-primary cursor-pointer hover:text-accent-800 flex items-center gap-3 text-lg">
+                  <span className="text-accent-800 font-extrabold">Q:</span>
                   เครดิตดีจะได้สิทธิพิเศษอะไรบ้าง?
                 </summary>
                 <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
@@ -1008,8 +1011,8 @@ export default function CreditCheck() {
               </details>
 
               <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
-                <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
-                  <span className="text-accent font-extrabold">Q:</span>
+                <summary className="font-bold text-primary cursor-pointer hover:text-accent-800 flex items-center gap-3 text-lg">
+                  <span className="text-accent-800 font-extrabold">Q:</span>
                   รถที่ขายมีรับประกันไหม?
                 </summary>
                 <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
@@ -1027,6 +1030,7 @@ export default function CreditCheck() {
   );
 }
 
+// SSR for credit check security and real-time verification
 export async function getServerSideProps() {
   return {
     props: {},

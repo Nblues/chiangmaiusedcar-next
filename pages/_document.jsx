@@ -12,10 +12,15 @@ export default function Document() {
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
-        {/* 2025 Cache Control Meta Tags */}
-        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Expires" content="0" />
+        {/* Facebook In-App Browser Compatibility */}
+        <meta httpEquiv="Accept-CH" content="DPR, Viewport-Width, Width" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+
+        {/* 2025 Cache Control Meta Tags - Relaxed for Cloudflare */}
+        <meta httpEquiv="Cache-Control" content="public, max-age=3600" />
+        <meta httpEquiv="Pragma" content="public" />
         <meta name="cache-bust" content={buildTime} />
 
         {/* Force browser refresh on updates */}
@@ -108,6 +113,9 @@ export default function Document() {
         {/* Critical resource preconnections */}
         <link rel="preconnect" href="https://cdn.shopify.com" />
         <link rel="preconnect" href="https://files.myshopify.com" />
+
+        {/* Cloudflare compatibility script - must load early */}
+        <script src="/cloudflare-compat.js" defer></script>
       </Head>
       <body>
         {/* Skip link for accessibility */}

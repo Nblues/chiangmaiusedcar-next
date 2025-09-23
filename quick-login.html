@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quick Login - Admin</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-light">
+    <div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+      <div class="card" style="width: 400px">
+        <div class="card-header text-center">
+          <h4>🔐 Admin Login</h4>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info">
+            <strong>Quick Login:</strong><br />
+            Username: <code>admin</code><br />
+            Password: <code>admin123</code>
+          </div>
+          <button onclick="quickLogin()" class="btn btn-primary w-100">🚀 Quick Login</button>
+          <hr />
+          <div class="text-center">
+            <a href="http://localhost:3000/admin/articles" class="btn btn-outline-secondary">
+              📝 ไปหน้าจัดการบทความ
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function quickLogin() {
+        // Set authentication
+        localStorage.setItem('adminLoggedIn', 'true');
+        localStorage.setItem('admin_auth', 'true');
+
+        alert('Login สำเร็จ! กำลังไปหน้าจัดการบทความ...');
+
+        // Redirect to articles
+        window.location.href = 'http://localhost:3000/admin/articles';
+      }
+
+      // Auto login if needed
+      if (localStorage.getItem('adminLoggedIn') === 'true') {
+        document.querySelector('.alert').innerHTML = '<strong>✅ คุณล็อกอินแล้ว!</strong>';
+      }
+    </script>
+  </body>
+</html>

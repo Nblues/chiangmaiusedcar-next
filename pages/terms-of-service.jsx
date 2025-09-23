@@ -201,9 +201,10 @@ export default function TermsOfService() {
   );
 }
 
-// ISR (Incremental Static Regeneration) - Performance optimization
-export async function getServerSideProps() {
+// ISR - Terms rarely change - revalidate every 1 hour
+export async function getStaticProps() {
   return {
     props: {},
+    revalidate: 3600, // 1 hour
   };
 }

@@ -49,12 +49,17 @@ export default function Contact() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: 'https://chiangmaiusedcar.com/' },
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'หน้าแรก',
+        item: 'https://www.chiangmaiusedcar.com/',
+      },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'ติดต่อเรา',
-        item: 'https://chiangmaiusedcar.com/contact',
+        item: 'https://www.chiangmaiusedcar.com/contact',
       },
     ],
   };
@@ -153,9 +158,9 @@ export default function Contact() {
         title="ติดต่อเรา - ครูหนึ่งรถสวย | แพลตฟอร์มออนไลน์รถมือสองเชียงใหม่ โทร 094-064-9018"
         description="ติดต่อครูหนึ่งรถสวย แพลตฟอร์มออนไลน์รถมือสองเชียงใหม่ ตรวจสภาพครบถ้วน เช็คประวัติรถ โทร 094-064-9018, LINE, Facebook 1 ล้านติดตาม คุณภาพดี รับประกัน"
         url="/contact"
-        image="https://chiangmaiusedcar.com/herobanner/contact.webp"
+        image="https://www.chiangmaiusedcar.com/herobanner/contact.webp"
         locale="th_TH"
-        alternate={[{ href: 'https://chiangmaiusedcar.com/contact', hrefLang: 'th-TH' }]}
+        alternate={[{ href: 'https://www.chiangmaiusedcar.com/contact', hrefLang: 'th-TH' }]}
         pageType="contact"
       />
 

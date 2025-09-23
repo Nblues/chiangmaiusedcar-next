@@ -800,18 +800,6 @@ function CarDetailPage({ car, allCars }) {
                     <div className="text-lg font-bold text-gray-900 font-prompt">{car.color}</div>
                   </div>
                 )}
-                {car.year && (
-                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
-                    <div className="font-semibold text-gray-600 font-prompt">ปี</div>
-                    <div className="text-lg font-bold text-black font-prompt">{car.year}</div>
-                  </div>
-                )}
-                {car.color && (
-                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
-                    <div className="font-semibold text-gray-600 font-prompt">สี</div>
-                    <div className="text-lg font-bold text-black font-prompt">{car.color}</div>
-                  </div>
-                )}
                 {car.mileage && (
                   <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
                     <div className="font-semibold text-gray-600 font-prompt">เลขไมล์</div>

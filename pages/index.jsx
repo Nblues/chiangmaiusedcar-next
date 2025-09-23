@@ -1,12 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import SEO from '../components/SEO.jsx';
-import Breadcrumb from '../components/Breadcrumb';
-import { getHomepageCars } from '../lib/shopify.mjs';
+import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
 import { safeGet } from '../lib/safeFetch';
 import Link from 'next/link';
-import A11yImage from '../components/A11yImage';
 import { useRouter } from 'next/router';
 import { carAlt } from '../utils/a11y';
+
+// Lazy load heavy components to reduce TBT
+const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
+  loading: () => null,
+});
+const A11yImage = dynamic(() => import('../components/A11yImage'), {
+  loading: () => <div className="bg-gray-200 animate-pulse rounded aspect-video"></div>,
+});
+const SocialShareButtons = dynamic(() => import('../components/SocialShareButtons'), {
+  ssr: false,
+  loading: () => null,
+});
 
 // Helper: format price safely for display and microdata using our safe utility
 function getPriceInfo(amount) {
@@ -27,7 +38,32 @@ function getPriceInfo(amount) {
   }
 }
 
-export default function Home({ cars }) {
+export default function Home({ cars, brandCounts }) {
+  // Helper function to get brand count with fallback to sample data
+  const getBrandCount = useCallback(
+    brandName => {
+      const normalizedBrand = brandName.toLowerCase();
+
+      // Use real data if available, otherwise use sample data
+      if (brandCounts && Object.keys(brandCounts).length > 0) {
+        const count = brandCounts[normalizedBrand] || 0;
+        return count > 0 ? `${count} คัน` : '0 คัน';
+      }
+
+      // Fallback sample data
+      const sampleCounts = {
+        toyota: '50+ คัน',
+        honda: '30+ คัน',
+        nissan: '20+ คัน',
+        mazda: '15+ คัน',
+        mitsubishi: '10+ คัน',
+        ford: '8+ คัน',
+      };
+
+      return sampleCounts[normalizedBrand] || '0 คัน';
+    },
+    [brandCounts]
+  );
   // Facebook reviews: render only client
   const [showFbReviews, setShowFbReviews] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -39,19 +75,31 @@ export default function Home({ cars }) {
 
   const router = useRouter();
 
-  useEffect(() => {
-    setMounted(true);
+  // Memoize expensive computations
+  const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
 
-    // Delay Facebook reviews loading for better performance
-    const timer = setTimeout(() => {
-      setShowFbReviews(true);
-    }, 2000); // โหลดหลังจากหน้าแรกโหลดเสร็จ 2 วินาที
+  // Memoize static data to prevent re-creation
+  const brands = useMemo(
+    () => ['all', 'toyota', 'honda', 'nissan', 'mazda', 'mitsubishi', 'isuzu', 'ford'],
+    []
+  );
+  const priceRanges = useMemo(
+    () => [
+      { value: 'all', label: 'ทุกช่วงราคา' },
+      { value: '0-100000', label: 'ต่ำกว่า 1 แสน' },
+      { value: '100000-200000', label: '1-2 แสน' },
+      { value: '200000-300000', label: '2-3 แสน' },
+      { value: '300000-400000', label: '3-4 แสน' },
+      { value: '400000-500000', label: '4-5 แสน' },
+      { value: '500000-600000', label: '5-6 แสน' },
+      { value: '600000-700000', label: '6-7 แสน' },
+      { value: '700000', label: '7 แสนขึ้นไป' },
+    ],
+    []
+  );
 
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Handle search - redirect to all-cars with filters
-  const handleSearch = () => {
+  // Optimize heavy functions with useCallback
+  const handleSearch = useCallback(() => {
     if (!mounted) return;
 
     const params = new URLSearchParams();
@@ -63,88 +111,104 @@ export default function Home({ cars }) {
     const queryString = params.toString();
     const url = queryString ? `/all-cars?${queryString}` : '/all-cars';
     router.push(url);
-  };
+  }, [mounted, searchTerm, priceRange, brandFilter, router]);
 
-  const safeCars = Array.isArray(cars) ? cars : [];
+  // Optimize useEffect - reduce blocking time
+  useEffect(() => {
+    setMounted(true);
 
-  // ข้อมูลสำหรับ filters
-  const brands = ['all', 'toyota', 'honda', 'nissan', 'mazda', 'mitsubishi', 'isuzu', 'ford'];
-  const priceRanges = [
-    { value: 'all', label: 'ทุกช่วงราคา' },
-    { value: '0-100000', label: 'ต่ำกว่า 1 แสน' },
-    { value: '100000-200000', label: '1-2 แสน' },
-    { value: '200000-300000', label: '2-3 แสน' },
-    { value: '300000-400000', label: '3-4 แสน' },
-    { value: '400000-500000', label: '4-5 แสน' },
-    { value: '500000-600000', label: '5-6 แสน' },
-    { value: '600000-700000', label: '6-7 แสน' },
-    { value: '700000', label: '7 แสนขึ้นไป' },
-  ];
+    // Use requestIdleCallback for non-critical tasks
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const idleCallback = window.requestIdleCallback(
+        () => {
+          setShowFbReviews(true);
+        },
+        { timeout: 2000 }
+      );
 
-  // Breadcrumb Schema - Enhanced for 2025 SEO with accurate info
-  const breadcrumbList = [
-    { name: 'หน้าแรก', url: 'https://chiangmaiusedcar.com/' },
-    { name: 'รถมือสองเชียงใหม่ ครูหนึ่งรถสวย', url: 'https://chiangmaiusedcar.com/' },
-    { name: 'ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน', url: 'https://chiangmaiusedcar.com/' },
-  ];
+      return () => {
+        if (window.cancelIdleCallback) {
+          window.cancelIdleCallback(idleCallback);
+        }
+      };
+    } else {
+      // Fallback for browsers without requestIdleCallback
+      const timer = setTimeout(() => {
+        setShowFbReviews(true);
+      }, 2000);
 
-  // Organization Schema moved to SEO component; avoid duplicating JSON-LD here
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
-  // FAQ Schema - Enhanced for 2025 with trending keywords
-  const faqJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: [
-      {
-        '@type': 'Question',
-        name: 'ฟรีดาวน์ 0% รถมือสองเชียงใหม่ จริงไหม?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'จริง! ครูหนึ่งรถสวยให้ลูกค้าออกรถฟรีดาวน์ 0% ตามโปรโมชันและไฟแนนซ์ที่อนุมัติ รถ ECO Car ประหยัดน้ำมันและรธธรรมดาก็มี',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'เครดิตไม่ผ่าน ติดบูโรรถมือสองเชียงใหม่ออกได้ไหม?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'ได้! ครูหนึ่งรถสวยมีไฟแนนซ์หลากหลายแบบ เครดิตไม่ผ่านก็มีทาง สอบถามข้อมูลได้ทาง LINE หรือโทร 094-064-9018',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'รถมือสองเชียงใหม่ ครูหนึ่งรถสวย มีรับประกันไหม?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'ครูหนึ่งรถสวยให้รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม รถ ECO Car ก็มีรับประกัน พร้อมบริการหลังการขายครบครัน',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'รถ ECO Car ประหยัดน้ำมันมือสองเชียงใหม่ มีไหม?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'มี! ครูหนึ่งรถสวยมีรถ ECO Car ประหยัดน้ำมันหลากหลายรุ่น Toyota Vios, Honda City, Nissan Almera พร้อมส่ง ประหยัดน้ำมันสุดๆ',
-        },
-      },
-      {
-        '@type': 'Question',
-        name: 'ส่งรถฟรีทั่วไทย รถมือสองเชียงใหม่ จริงไหม?',
-        acceptedAnswer: {
-          '@type': 'Answer',
-          text: 'จริง! ครูหนึ่งรถสวยส่งฟรีทั่วไทย มีขนส่งเฉพาะและประกันภัยระหว่างขนส่ง ลูกค้ากรุงเทพ ภูเก็ต หาดใหญ่ สั่งได้เลย',
-        },
-      },
+  // Memoize heavy JSON-LD to prevent re-creation on every render
+  const breadcrumbList = useMemo(
+    () => [
+      { name: 'หน้าแรก', url: 'https://chiangmaiusedcar.com/' },
+      { name: 'รถมือสองเชียงใหม่ ครูหนึ่งรถสวย', url: 'https://chiangmaiusedcar.com/' },
+      { name: 'ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน', url: 'https://chiangmaiusedcar.com/' },
     ],
-  };
+    []
+  );
+
+  // Memoize FAQ Schema to reduce computation
+  const faqJsonLd = useMemo(
+    () => ({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'ฟรีดาวน์ 0% รถมือสองเชียงใหม่ จริงไหม?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'จริง! ครูหนึ่งรถสวยให้ลูกค้าออกรถฟรีดาวน์ 0% ตามโปรโมชันและไฟแนนซ์ที่อนุมัติ รถ ECO Car ประหยัดน้ำมันและรธธรรมดาก็มี',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'เครดิตไม่ผ่าน ติดบูโรรถมือสองเชียงใหม่ออกได้ไหม?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'ได้! ครูหนึ่งรถสวยมีไฟแนนซ์หลากหลายแบบ เครดิตไม่ผ่านก็มีทาง สอบถามข้อมูลได้ทาง LINE หรือโทร 094-064-9018',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'รถมือสองเชียงใหม่ ครูหนึ่งรถสวย มีรับประกันไหม?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'ครูหนึ่งรถสวยให้รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม รถ ECO Car ก็มีรับประกัน พร้อมบริการหลังการขายครบครัน',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'รถ ECO Car ประหยัดน้ำมันมือสองเชียงใหม่ มีไหม?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'มี! ครูหนึ่งรถสวยมีรถ ECO Car ประหยัดน้ำมันหลากหลายรุ่น Toyota Vios, Honda City, Nissan Almera พร้อมส่ง ประหยัดน้ำมันสุดๆ',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'ส่งรถฟรีทั่วไทย รถมือสองเชียงใหม่ จริงไหม?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'จริง! ครูหนึ่งรถสวยส่งฟรีทั่วไทย มีขนส่งเฉพาะและประกันภัยระหว่างขนส่ง ลูกค้ากรุงเทพ ภูเก็ต หาดใหญ่ สั่งได้เลย',
+          },
+        },
+      ],
+    }),
+    []
+  );
 
   return (
     <div>
       <SEO
         title="รถมือสองเชียงใหม่ คุณภาพดี ตรวจสภาพครบถ้วน | ครูหนึ่งรถสวย"
-        description="รถมือสองเชียงใหม่คุณภาพดี ครูหนึ่งรถสวย ตรวจสภาพครบถ้วน ฟรีดาวน์ ดอกเบี้ยต่ำ รับประกัน 1 ปี ส่งฟรีทั่วไทย เช็คประวัติรถ โทร 094-064-9018"
+        description="รถมือสองเชียงใหม่คุณภาพดี ครูหนึ่งรถสวย ศูนย์รวมแบรนด์ดังครบครัน ตรวจสภาพครบถ้วน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda เช็คประวัติรถ โทร 094-064-9018"
         url="/"
-        image="https://chiangmaiusedcar.com/herobanner/cnxcar.webp"
+        image="https://www.chiangmaiusedcar.com/herobanner/cnxcar.webp"
         type="website"
         pageType="home"
         structuredData={{
@@ -158,7 +222,7 @@ export default function Home({ cars }) {
             position: index + 1,
             item: {
               '@type': 'Car',
-              '@id': `https://chiangmaiusedcar.com/car/${car.handle}`,
+              '@id': `https://www.chiangmaiusedcar.com/car/${car.handle}`,
               name: car.title,
               description: `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท`,
               brand: car.vendor || car.brand || 'รถมือสอง',
@@ -203,18 +267,84 @@ export default function Home({ cars }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
 
+      {/* Service Features Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Service',
+            '@id': 'https://www.chiangmaiusedcar.com/#service',
+            name: 'ความเป็นเลิศของครูหนึ่งรถสวย',
+            description: 'ผู้นำด้านรถมือสองเชียงใหม่ด้วยมาตรฐานการบริการระดับสากล',
+            provider: {
+              '@id': 'https://www.chiangmaiusedcar.com/#organization',
+            },
+            serviceType: 'รถมือสองคุณภาพ',
+            hasOfferCatalog: {
+              '@type': 'OfferCatalog',
+              name: 'ศูนย์รวมแบรนด์ดังครบครัน',
+              itemListElement: [
+                {
+                  '@type': 'Offer',
+                  itemOffered: {
+                    '@type': 'Product',
+                    name: 'Toyota รถมือสองเชียงใหม่',
+                    description: 'รถ Toyota มือสอง 50+ คัน',
+                    category: 'รถยนต์',
+                  },
+                },
+                {
+                  '@type': 'Offer',
+                  itemOffered: {
+                    '@type': 'Product',
+                    name: 'Honda รถมือสองเชียงใหม่',
+                    description: 'รถ Honda มือสอง 30+ คัน',
+                    category: 'รถยนต์',
+                  },
+                },
+                {
+                  '@type': 'Offer',
+                  itemOffered: {
+                    '@type': 'Product',
+                    name: 'Nissan รถมือสองเชียงใหม่',
+                    description: 'รถ Nissan มือสอง 20+ คัน',
+                    category: 'รถยนต์',
+                  },
+                },
+                {
+                  '@type': 'Offer',
+                  itemOffered: {
+                    '@type': 'Product',
+                    name: 'Mazda รถมือสองเชียงใหม่',
+                    description: 'รถ Mazda มือสอง 15+ คัน',
+                    category: 'รถยนต์',
+                  },
+                },
+              ],
+            },
+            features: [
+              'รถบ้านแท้ 100% - 90% รถมือเดียว',
+              'ฟรีดาวน์ 0% ตามเงื่อนไขไฟแนนซ์',
+              'รับประกัน 1 ปีเต็ม ไม่จำกัดกิโลเมตร',
+              'ส่งฟรีทั่วไทย จัดส่งฟรีทั่วประเทศ',
+            ],
+          }),
+        }}
+      />
+
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
-        <div className="relative w-full max-w-7xl mx-auto">
+        <div className="relative w-full max-w-[1400px] mx-auto">
           <A11yImage
             src="/herobanner/cnxcar.webp"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             width={1920}
-            height={1080}
+            height={640}
             className="w-full h-auto object-contain"
             priority
-            quality={90}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
-            style={{ maxHeight: '80vh' }}
+            quality={75}
+            sizes="(max-width: 414px) 414px, (max-width: 768px) 768px, (max-width: 1200px) 1200px, 1920px"
+            style={{ maxHeight: '60vh' }}
           />
         </div>
       </header>
@@ -223,12 +353,12 @@ export default function Home({ cars }) {
       <Breadcrumb />
 
       <section id="hero" className="relative">
-        <div className="hero-card max-w-4xl w-[90%] mx-auto my-6 flex flex-col md:flex-row items-center gap-6 px-6 py-8 rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
+        <div className="hero-card max-w-6xl w-[95%] mx-auto my-6 flex flex-col md:flex-row items-center gap-6 px-8 py-8 rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
           <div className="flex-1">
             <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2">
               รถมือสองเชียงใหม่
             </h1>
-            <h2 className="text-xl md:text-2xl font-bold text-orange-500 mb-4">
+            <h2 className="text-xl md:text-2xl font-bold text-orange-700 mb-4">
               คุณภาพระดับพรีเมียม
             </h2>
             <p className="text-base leading-relaxed text-gray-900">
@@ -256,7 +386,7 @@ export default function Home({ cars }) {
       </section>
 
       <main
-        className="max-w-7xl mx-auto px-4 md:px-6 py-16 bg-white font-prompt"
+        className="max-w-[1400px] mx-auto px-6 md:px-8 lg:px-12 py-16 bg-white font-prompt"
         id="recommended-cars"
       >
         <div className="text-center mb-12">
@@ -265,7 +395,7 @@ export default function Home({ cars }) {
           </h2>
 
           {/* Search Bar - 2025 Modern Design */}
-          <div className="max-w-4xl mx-auto font-prompt">
+          <div className="max-w-6xl mx-auto font-prompt">
             <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 border-2 border-gray-200">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 {/* Search */}
@@ -343,8 +473,8 @@ export default function Home({ cars }) {
                   <div className="font-bold text-sm text-primary group-hover:text-white">
                     ต่ำกว่า 1 แสน
                   </div>
-                  <div className="text-xs font-bold text-accent group-hover:text-white">
-                    &lt; 100K
+                  <div className="text-xs font-bold text-orange-700 group-hover:text-white">
+                    {'< 100K'}
                   </div>
                 </Link>
                 <Link
@@ -354,7 +484,7 @@ export default function Home({ cars }) {
                   <div className="font-bold text-sm text-primary group-hover:text-white">
                     1-2 แสน
                   </div>
-                  <div className="text-xs font-bold text-accent group-hover:text-white">
+                  <div className="text-xs font-bold text-orange-700 group-hover:text-white">
                     100K-200K
                   </div>
                 </Link>
@@ -365,7 +495,7 @@ export default function Home({ cars }) {
                   <div className="font-bold text-sm text-primary group-hover:text-white">
                     2-3 แสน
                   </div>
-                  <div className="text-xs font-bold text-accent group-hover:text-white">
+                  <div className="text-xs font-bold text-orange-700 group-hover:text-white">
                     200K-300K
                   </div>
                 </Link>
@@ -376,7 +506,7 @@ export default function Home({ cars }) {
                   <div className="font-bold text-sm text-primary group-hover:text-white">
                     4-5 แสน
                   </div>
-                  <div className="text-xs font-bold text-accent group-hover:text-white">
+                  <div className="text-xs font-bold text-orange-700 group-hover:text-white">
                     400K-500K
                   </div>
                 </Link>
@@ -387,7 +517,7 @@ export default function Home({ cars }) {
                   <div className="font-bold text-sm text-primary group-hover:text-white">
                     6-7 แสน
                   </div>
-                  <div className="text-xs font-bold text-accent group-hover:text-white">
+                  <div className="text-xs font-bold text-orange-700 group-hover:text-white">
                     600K-700K
                   </div>
                 </Link>
@@ -395,11 +525,11 @@ export default function Home({ cars }) {
                   href="/all-cars?price=700000"
                   className="group text-center p-3 bg-white border-2 border-accent rounded-xl hover:bg-accent hover:border-accent transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
-                  <div className="font-bold text-sm text-accent group-hover:text-white">
+                  <div className="font-bold text-sm text-orange-700 group-hover:text-white">
                     7 แสนขึ้นไป
                   </div>
                   <div className="text-xs font-bold text-primary group-hover:text-white">
-                    &gt; 700K
+                    {'> 700K'}
                   </div>
                 </Link>
               </div>
@@ -489,7 +619,8 @@ export default function Home({ cars }) {
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                       itemProp="image"
                       loading="lazy"
-                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 300px"
+                      quality={75}
+                      sizes="(max-width: 414px) 180px, (max-width: 768px) 320px, (max-width: 1024px) 256px, 320px"
                     />
                     {safeGet(car, 'tags', []).includes('ใหม่') && (
                       <span className="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold shadow-md">
@@ -571,12 +702,12 @@ export default function Home({ cars }) {
 
       {/* รีวิว Facebook 9 รีวิวจริง */}
       {showFbReviews && (
-        <section className="max-w-7xl mx-auto py-12 px-6">
+        <section className="max-w-[1400px] mx-auto py-12 px-6 md:px-8 lg:px-12">
           <div className="text-center mb-8">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-prompt">
               รีวิวจากลูกค้าจริง
             </h2>
-            <p className="text-lg text-accent font-prompt">
+            <p className="text-lg text-orange-700 font-prompt">
               ความประทับใจจากลูกค้าที่เลือกใช้บริการ ครูหนึ่งรถสวย
             </p>
           </div>
@@ -626,7 +757,7 @@ export default function Home({ cars }) {
 
             {/* Horizontal Scroll Container */}
             <div
-              className="reviews-scroll-container flex gap-3 md:gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4 mx-0 md:mx-12 px-4 md:px-0"
+              className="reviews-scroll-container flex gap-3 md:gap-4 lg:gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4 mx-0 md:mx-16 lg:mx-20 px-4 md:px-0"
               style={{
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none',
@@ -772,7 +903,7 @@ export default function Home({ cars }) {
         </section>
       )}
 
-      <section className="bg-white py-6 sm:py-8 mt-6 rounded-2xl max-w-4xl mx-auto border border-gray-200">
+      <section className="bg-white py-6 sm:py-8 mt-6 rounded-2xl max-w-6xl mx-auto border border-gray-200">
         <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-primary font-prompt px-4 sm:px-6">
           คำถามที่พบบ่อย
         </h2>
@@ -795,7 +926,7 @@ export default function Home({ cars }) {
               </svg>
             </summary>
             <div className="text-gray-700 pt-3 sm:pt-4 text-sm sm:text-base font-prompt leading-relaxed">
-              <span className="font-semibold text-accent">จริง!</span>{' '}
+              <span className="font-semibold text-orange-700">จริง!</span>{' '}
               ลูกค้าสามารถออกรถฟรีดาวน์ตามโปรโมชัน ตรวจสภาพครบถ้วน เช็คประวัติรถก่อนส่งมอบ
             </div>
           </details>
@@ -817,7 +948,7 @@ export default function Home({ cars }) {
               </svg>
             </summary>
             <div className="text-gray-700 pt-3 sm:pt-4 text-sm sm:text-base font-prompt leading-relaxed">
-              <span className="font-semibold text-accent">ได้!</span>{' '}
+              <span className="font-semibold text-orange-700">ได้!</span>{' '}
               แพลตฟอร์มออนไลน์ของเรามีไฟแนนซ์หลากหลายแบบ สอบถามข้อมูลได้ทาง LINE หรือโทร
               <a href="tel:0940649018" className="text-primary font-bold hover:underline ml-1">
                 094-064-9018
@@ -842,20 +973,315 @@ export default function Home({ cars }) {
               </svg>
             </summary>
             <div className="text-gray-700 pt-3 sm:pt-4 text-sm sm:text-base font-prompt leading-relaxed">
-              <span className="font-semibold text-accent">รับประกัน</span>เครื่องยนต์และเกียร์{' '}
+              <span className="font-semibold text-orange-700">รับประกัน</span>เครื่องยนต์และเกียร์{' '}
               <span className="font-bold text-primary">1 ปีเต็ม</span> ตรวจสภาพครบถ้วนก่อนส่งมอบ
               พร้อมบริการหลังการขายครบครัน
             </div>
           </details>
         </div>
       </section>
+
+      {/* Why Choose Us Section - 2025 Modern Design */}
+      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 py-16 mt-8 rounded-3xl max-w-[1400px] mx-auto border border-primary/10 shadow-xl">
+        <div className="px-6 md:px-10">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-6">
+              <svg
+                className="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-prompt">
+              ความเป็นเลิศของครูหนึ่งรถสวย
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto font-prompt leading-relaxed">
+              <span className="text-primary font-semibold">รถบ้านแท้ 90% มือเดียว</span>{' '}
+              ไม่มีรถประมูล ตรวจสภาพครบถ้วนก่อนส่งมอบ{' '}
+              <span className="text-accent font-semibold">ลูกค้า 90% เชื่อมั่น</span> ไม่ต้องมาดูรถ
+            </p>
+            <div className="w-32 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-6"></div>
+          </div>
+
+          {/* Features Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {/* Feature 1 */}
+            <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+              <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-4 group-hover:bg-primary/20 transition-colors">
+                <svg
+                  className="w-6 h-6 text-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">รถบ้านแท้ 100%</h3>
+              <p className="text-gray-600 leading-relaxed font-prompt text-sm">
+                <span className="text-primary font-semibold">90% รถมือเดียว</span> จากเจ้าของโดยตรง
+                ไม่มีรถประมูล ไม่มีรถอุบัติเหตุ ตรวจเล่มได้ทุกหน้า
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-accent/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+              <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-xl mb-4 group-hover:bg-accent/20 transition-colors">
+                <svg
+                  className="w-6 h-6 text-accent"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">ฟรีดาวน์ 0%</h3>
+              <p className="text-gray-600 leading-relaxed font-prompt text-sm">
+                <span className="text-accent font-semibold">ออกรถไม่ต้องวางเงินดาวน์</span>{' '}
+                ตามเงื่อนไขไฟแนนซ์{' '}
+                <span className="text-primary font-semibold">เครดิตไม่ผ่านก็มีทาง</span>
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+              <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-4 group-hover:bg-primary/20 transition-colors">
+                <svg
+                  className="w-6 h-6 text-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">รับประกัน 1 ปี</h3>
+              <p className="text-gray-600 leading-relaxed font-prompt text-sm">
+                รับประกันเครื่องยนต์และเกียร์{' '}
+                <span className="text-primary font-semibold">1 ปีเต็ม ไม่จำกัดกิโลเมตร</span> พร้อม
+                <span className="text-accent font-semibold">บริการหลังการขาย 24/7</span>
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-accent/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+              <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-xl mb-4 group-hover:bg-accent/20 transition-colors">
+                <svg
+                  className="w-6 h-6 text-accent"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">ส่งฟรีทั่วไทย</h3>
+              <p className="text-gray-600 leading-relaxed font-prompt text-sm">
+                <span className="text-accent font-semibold">จัดส่งฟรีทุกจังหวัด</span>{' '}
+                พร้อมประกันการขนส่ง{' '}
+                <span className="text-primary font-semibold">ลูกค้า 90% เชื่อมั่น</span>{' '}
+                ไม่ต้องมาดูรถ
+              </p>
+            </div>
+          </div>
+
+          {/* Car Brands Section */}
+          <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-lg">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 font-prompt leading-tight">
+                ศูนย์รวมแบรนด์ดังครบครัน
+              </h3>
+              <p className="text-gray-600 font-prompt text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+                รถมือสองคุณภาพจากทุกแบรนด์ชั้นนำ ผ่านการคัดสรรอย่างเข้มงวด
+              </p>
+            </div>
+
+            {/* Brand Grid - Enhanced 2025 Design */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4 lg:gap-6 mb-8">
+              <Link
+                href="/all-cars?brand=toyota"
+                className="group relative bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md active:scale-98"
+                aria-label="ดูรถ Toyota ทั้งหมด"
+              >
+                <div className="font-bold text-primary text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt">
+                  Toyota
+                </div>
+                <div className="text-xs md:text-sm text-gray-600 font-medium bg-gray-100 rounded-lg py-1 px-2 font-prompt">
+                  {getBrandCount('toyota')}
+                </div>
+              </Link>
+
+              <Link
+                href="/all-cars?brand=honda"
+                className="group relative bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md active:scale-98"
+                aria-label="ดูรถ Honda ทั้งหมด"
+              >
+                <div className="font-bold text-primary text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt">
+                  Honda
+                </div>
+                <div className="text-xs md:text-sm text-gray-600 font-medium bg-gray-100 rounded-lg py-1 px-2 font-prompt">
+                  {getBrandCount('honda')}
+                </div>
+              </Link>
+
+              <Link
+                href="/all-cars?brand=nissan"
+                className="group relative bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md active:scale-98"
+                aria-label="ดูรถ Nissan ทั้งหมด"
+              >
+                <div className="font-bold text-primary text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt">
+                  Nissan
+                </div>
+                <div className="text-xs md:text-sm text-gray-600 font-medium bg-gray-100 rounded-lg py-1 px-2 font-prompt">
+                  {getBrandCount('nissan')}
+                </div>
+              </Link>
+
+              <Link
+                href="/all-cars?brand=mazda"
+                className="group relative bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md active:scale-98"
+                aria-label="ดูรถ Mazda ทั้งหมด"
+              >
+                <div className="font-bold text-primary text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt">
+                  Mazda
+                </div>
+                <div className="text-xs md:text-sm text-gray-600 font-medium bg-gray-100 rounded-lg py-1 px-2 font-prompt">
+                  {getBrandCount('mazda')}
+                </div>
+              </Link>
+
+              <Link
+                href="/all-cars?brand=mitsubishi"
+                className="group relative bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md active:scale-98"
+                aria-label="ดูรถ Mitsubishi ทั้งหมด"
+              >
+                <div className="font-bold text-primary text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt">
+                  Mitsubishi
+                </div>
+                <div className="text-xs md:text-sm text-gray-600 font-medium bg-gray-100 rounded-lg py-1 px-2 font-prompt">
+                  {getBrandCount('mitsubishi')}
+                </div>
+              </Link>
+
+              <Link
+                href="/all-cars?brand=ford"
+                className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-gray-200 hover:border-gray-300 hover:shadow-md active:scale-98 transition-all duration-200"
+                aria-label="ดูรถ Ford ทั้งหมด"
+              >
+                <div className="font-bold text-primary text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt">
+                  Ford
+                </div>
+                <div className="text-xs md:text-sm text-gray-600 font-medium bg-gray-100 rounded-lg py-1 px-2 font-prompt">
+                  {getBrandCount('ford')}
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/10 rounded-2xl md:rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/20 to-accent/20 rounded-2xl md:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-sm"></div>
+              </Link>
+            </div>
+
+            {/* Service Links - Enhanced 2025 Design */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
+              <Link
+                href="/contact"
+                className="group relative bg-gradient-to-r from-primary via-primary/95 to-primary/90 hover:from-primary/90 hover:via-primary/85 hover:to-primary/80 text-white font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center transition-all duration-500 hover:shadow-xl hover:shadow-primary/25 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                aria-label="ติดต่อสอบถามข้อมูลรถยนต์"
+              >
+                <span className="relative z-10">ติดต่อเรา</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </Link>
+              <Link
+                href="/about"
+                className="group relative bg-gradient-to-r from-gray-100 via-gray-50 to-white hover:from-primary/10 hover:via-primary/5 hover:to-white text-primary hover:text-primary font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center border border-gray-200/60 hover:border-primary/40 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                aria-label="เรียนรู้เพิ่มเติมเกี่ยวกับครูหนึ่งรถสวย"
+              >
+                <span className="relative z-10">เกี่ยวกับเรา</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </Link>
+              <Link
+                href="/promotion"
+                className="group relative bg-gradient-to-r from-accent via-accent/95 to-accent/90 hover:from-accent/90 hover:via-accent/85 hover:to-accent/80 text-white font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center transition-all duration-500 hover:shadow-xl hover:shadow-accent/25 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                aria-label="ดูโปรโมชั่นและข้อเสนอพิเศษ"
+              >
+                <span className="relative z-10">โปรโมชั่น</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </Link>
+              <Link
+                href="/credit-check"
+                className="group relative bg-gradient-to-r from-gray-100 via-gray-50 to-white hover:from-primary/10 hover:via-primary/5 hover:to-white text-primary hover:text-primary font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center border border-gray-200/60 hover:border-primary/40 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                aria-label="ตรวจสอบสถานะสินเชื่อ"
+              >
+                <span className="relative z-10">ตรวจเครดิต</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </Link>
+              <Link
+                href="/payment-calculator"
+                className="group relative bg-gradient-to-r from-gray-100 via-gray-50 to-white hover:from-accent/10 hover:via-accent/5 hover:to-white text-accent hover:text-accent font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center border border-gray-200/60 hover:border-accent/40 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                aria-label="คำนวณเงินผ่อนรถยนต์"
+              >
+                <span className="relative z-10">คิดเงินผ่อน</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </Link>
+              <Link
+                href="/sell-car"
+                className="group relative bg-gradient-to-r from-gray-100 via-gray-50 to-white hover:from-accent/10 hover:via-accent/5 hover:to-white text-accent hover:text-accent font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center border border-gray-200/60 hover:border-accent/40 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                aria-label="ขายรถกับครูหนึ่งรถสวย"
+              >
+                <span className="relative z-10">ขายรถ</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Share Buttons - Fixed Position */}
+      {mounted && (
+        <SocialShareButtons
+          url={typeof window !== 'undefined' ? window.location.href : ''}
+          title="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่คุณภาพดี"
+          description="รถมือสองเชียงใหม่คุณภาพดี ฟรีดาวน์ ดอกเบี้ยต่ำ รับประกัน 1 ปี ส่งฟรีทั่วไทย"
+          position="fixed"
+        />
+      )}
     </div>
   );
 }
 
-// Keep SSR for homepage due to search functionality
-export async function getServerSideProps() {
+// ISR - Homepage with car listings - revalidate every 5 minutes
+export async function getStaticProps() {
   let cars = [];
+  let brandCounts = {};
+
   try {
     const result = await getHomepageCars(8);
     cars = Array.isArray(result) ? result : [];
@@ -863,7 +1289,17 @@ export async function getServerSideProps() {
     console.error('getHomepageCars error:', e);
     cars = [];
   }
+
+  try {
+    const counts = await getBrandCounts();
+    brandCounts = counts || {};
+  } catch (e) {
+    console.error('getBrandCounts error:', e);
+    brandCounts = {};
+  }
+
   return {
-    props: { cars },
+    props: { cars, brandCounts },
+    revalidate: 300, // 5 minutes
   };
 }

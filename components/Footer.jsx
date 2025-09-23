@@ -55,6 +55,7 @@ export default function Footer() {
                     height={64}
                     className="w-full h-full object-cover scale-125"
                     priority
+                    quality={85}
                   />
                 </div>
               </div>
@@ -169,6 +170,21 @@ export default function Footer() {
                     />
                   </svg>
                   รถทั้งหมด
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/sell-car"
+                  className="text-gray-300 hover:text-accent-400 transition-colors flex items-center group"
+                >
+                  <svg
+                    className="w-4 h-4 mr-2 text-accent-500 group-hover:text-accent-400 transition-colors"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" />
+                  </svg>
+                  ขายรถ
                 </Link>
               </li>
               <li>
@@ -453,7 +469,7 @@ export default function Footer() {
                 ข้อกำหนดการใช้งาน
               </Link>
               <span className="text-gray-600">|</span>
-              <p className="text-gray-500 text-xs">Designed with ❤️ in Chiang Mai</p>
+              <p className="text-gray-300 text-xs">Designed with ❤️ in Chiang Mai</p>
             </div>
           </div>
         </div>

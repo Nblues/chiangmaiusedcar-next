@@ -6,6 +6,7 @@ import Image from 'next/image';
 const navItems = [
   { href: '/', label: 'หน้าแรก' },
   { href: '/all-cars', label: 'รถทั้งหมด' },
+  { href: '/sell-car', label: 'ขายรถ' },
   { href: '/about', label: 'เกี่ยวกับเรา' },
   { href: '/promotion', label: 'โปรโมชัน' },
   { href: '/contact', label: 'ติดต่อ' },
@@ -36,6 +37,7 @@ export default function Navbar() {
                 height={48}
                 className="w-full h-full object-cover scale-125"
                 priority
+                quality={85}
               />
             </div>
             <div className="text-2xl font-bold text-primary font-prompt">ครูหนึ่งรถสวย</div>
@@ -56,14 +58,6 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <a
-              href="https://lin.ee/8ugfzstD"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-primary hover:bg-primary-600 text-white px-4 py-2 rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-md hover:shadow-lg font-prompt ml-4 text-sm"
-            >
-              LINE สอบถาม
-            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -110,22 +104,6 @@ export default function Navbar() {
                   {item.label}
                 </Link>
               ))}
-              <a
-                href="https://lin.ee/8ugfzstD"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block btn-primary text-center mt-4 font-prompt font-semibold tracking-wide"
-                style={{
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  letterSpacing: '0.025em',
-                  WebkitFontSmoothing: 'antialiased',
-                  MozOsxFontSmoothing: 'grayscale',
-                }}
-                onClick={() => setMobileOpen(false)}
-              >
-                LINE สอบถาม
-              </a>
             </div>
           </div>
         )}

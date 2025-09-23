@@ -10,11 +10,50 @@ export function middleware(req: NextRequest) {
     ua.includes('twitterbot') ||
     ua.includes('telegrambot');
 
+  const { pathname } = req.nextUrl;
+
+  // Admin Protection - ป้องกันการเข้าถึงหน้า Admin
+  if (pathname.startsWith('/admin')) {
+    const userAgent = req.headers.get('user-agent') || '';
+
+    // บล็อค Search Engine Bots
+    const botPatterns = [
+      /googlebot/i,
+      /bingbot/i,
+      /slurp/i,
+      /duckduckbot/i,
+      /baiduspider/i,
+      /yandexbot/i,
+      /facebookexternalhit/i,
+      /twitterbot/i,
+      /linkedinbot/i,
+      /whatsapp/i,
+      /telegram/i,
+      /crawler/i,
+      /spider/i,
+      /bot/i,
+    ];
+
+    const isBot = botPatterns.some(pattern => pattern.test(userAgent));
+
+    if (isBot) {
+      return new NextResponse('Access Denied', { status: 403 });
+    }
+
+    // เพิ่ม headers เพื่อป้องกัน indexing สำหรับหน้า admin
+    const adminResponse = NextResponse.next();
+    adminResponse.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive, nosnippet');
+    adminResponse.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    adminResponse.headers.set('Pragma', 'no-cache');
+    adminResponse.headers.set('Expires', '0');
+
+    return adminResponse;
+  }
+
   // Create response
   const response = NextResponse.next();
 
   // 2025 Cache Management Headers
-  const pathname = req.nextUrl.pathname;
   const isStaticAsset =
     pathname.startsWith('/_next/static/') ||
     pathname.startsWith('/favicon') ||
@@ -76,10 +115,13 @@ export function middleware(req: NextRequest) {
     return response;
   }
 
-  // *** ใส่ logic redirect เดิมของโปรเจคหลังจากนี้ ***
   return response;
 }
 
 export const config = {
-  matcher: ['/((?!_next|api|static|assets|favicon.ico|robots.txt|sitemap.xml).*)'],
+  matcher: [
+    '/admin/:path*',
+    '/api/admin/:path*',
+    '/((?!_next|api|static|assets|favicon.ico|robots.txt|sitemap.xml).*)',
+  ],
 };

@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>สร้างรูปภาพตัวอย่างสำหรับทดสอบ</title>
+    <style>
+      body {
+        font-family: 'Prompt', sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      button {
+        background: #1a237e;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 10px;
+      }
+      button:hover {
+        background: #303f9f;
+      }
+      .preview {
+        margin: 20px 0;
+        text-align: center;
+      }
+      canvas {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🖼️ สร้างรูปภาพตัวอย่างสำหรับทดสอบ</h1>
+
+      <p>คลิกปุ่มด้านล่างเพื่อสร้างและดาวน์โหลดรูปภาพตัวอย่างสำหรับใช้ทดสอบระบบ:</p>
+
+      <div style="text-align: center">
+        <button onclick="createCarImage()">🚗 สร้างรูปรถยนต์</button>
+        <button onclick="createEngineImage()">⚙️ สร้างรูปเครื่องยนต์</button>
+        <button onclick="createInteriorImage()">🪑 สร้างรูปภายในรถ</button>
+        <button onclick="createComparisonImage()">📊 สร้างรูปเปรียบเทียบ</button>
+      </div>
+
+      <div class="preview" id="preview"></div>
+
+      <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0">
+        <h3>📋 วิธีใช้รูปภาพที่สร้าง:</h3>
+        <ol>
+          <li>คลิกปุ่มสร้างรูปภาพ</li>
+          <li>รูปภาพจะถูกดาวน์โหลดอัตโนมัติ</li>
+          <li>นำไปใช้ในระบบ Admin ที่ <a href="/admin">http://localhost:3000/admin</a></li>
+          <li>อัปโหลดในส่วน Image Gallery</li>
+          <li>แทรกในบทความ</li>
+        </ol>
+      </div>
+
+      <div style="background: #fff3e0; padding: 20px; border-radius: 8px">
+        <h3>💡 เทคนิคการใช้งาน:</h3>
+        <ul>
+          <li><strong>อัปโหลดหลายรูป:</strong> เลือกไฟล์หลายไฟล์พร้อมกัน</li>
+          <li><strong>แทรกรูป:</strong> คลิกรูปใน Gallery เพื่อแทรกในบทความ</li>
+          <li><strong>จัดเรียงรูป:</strong> ใช้ HTML เพื่อจัดเรียงรูปในรูปแบบต่างๆ</li>
+          <li><strong>ปรับขนาด:</strong> ใช้ style="width: 50%;" เพื่อกำหนดขนาด</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      function createCarImage() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 800;
+        canvas.height = 600;
+        const ctx = canvas.getContext('2d');
+
+        // Background gradient
+        const gradient = ctx.createLinearGradient(0, 0, 0, 600);
+        gradient.addColorStop(0, '#87CEEB');
+        gradient.addColorStop(1, '#ffffff');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 800, 600);
+
+        // Car body
+        ctx.fillStyle = '#ff6b35';
+        ctx.fillRect(150, 250, 500, 200);
+        ctx.fillRect(200, 200, 400, 100);
+
+        // Windows
+        ctx.fillStyle = '#4a90e2';
+        ctx.fillRect(220, 220, 150, 60);
+        ctx.fillRect(430, 220, 150, 60);
+
+        // Wheels
+        ctx.fillStyle = '#2c3e50';
+        ctx.beginPath();
+        ctx.arc(250, 450, 40, 0, 2 * Math.PI);
+        ctx.arc(550, 450, 40, 0, 2 * Math.PI);
+        ctx.fill();
+
+        // Text
+        ctx.fillStyle = '#2c3e50';
+        ctx.font = 'bold 36px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Honda City 2024', 400, 150);
+        ctx.font = '24px Arial';
+        ctx.fillText('รถยนต์นั่งขนาดเล็ก', 400, 550);
+
+        downloadCanvas(canvas, 'honda-city-2024.png');
+      }
+
+      function createEngineImage() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 800;
+        canvas.height = 600;
+        const ctx = canvas.getContext('2d');
+
+        // Background
+        ctx.fillStyle = '#34495e';
+        ctx.fillRect(0, 0, 800, 600);
+
+        // Engine block
+        ctx.fillStyle = '#7f8c8d';
+        ctx.fillRect(200, 150, 400, 300);
+
+        // Engine details
+        ctx.fillStyle = '#e74c3c';
+        ctx.fillRect(250, 200, 100, 50);
+        ctx.fillRect(450, 200, 100, 50);
+
+        ctx.fillStyle = '#3498db';
+        ctx.fillRect(300, 300, 200, 80);
+
+        // Text
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 32px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('เครื่องยนต์ VTEC Turbo', 400, 100);
+        ctx.font = '20px Arial';
+        ctx.fillText('ขนาด 1.0 ลิตร 122 แรงม้า', 400, 520);
+
+        downloadCanvas(canvas, 'engine-vtec-turbo.png');
+      }
+
+      function createInteriorImage() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 800;
+        canvas.height = 600;
+        const ctx = canvas.getContext('2d');
+
+        // Background
+        const gradient = ctx.createLinearGradient(0, 0, 800, 0);
+        gradient.addColorStop(0, '#2c3e50');
+        gradient.addColorStop(1, '#34495e');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 800, 600);
+
+        // Dashboard
+        ctx.fillStyle = '#1a1a1a';
+        ctx.fillRect(0, 0, 800, 200);
+
+        // Seats
+        ctx.fillStyle = '#8b4513';
+        ctx.fillRect(100, 300, 150, 200);
+        ctx.fillRect(550, 300, 150, 200);
+
+        // Steering wheel
+        ctx.fillStyle = '#2c3e50';
+        ctx.beginPath();
+        ctx.arc(200, 150, 60, 0, 2 * Math.PI);
+        ctx.fill();
+
+        // Screen
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(350, 80, 200, 120);
+        ctx.fillStyle = '#00ff00';
+        ctx.font = '16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Honda SENSING', 450, 140);
+
+        // Text
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 28px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('ห้องโดยสารภายใน', 400, 250);
+        ctx.font = '18px Arial';
+        ctx.fillText('เบาะหนัง พวงมาลัยหนัง จอแสดงผล 8 นิ้ว', 400, 550);
+
+        downloadCanvas(canvas, 'car-interior.png');
+      }
+
+      function createComparisonImage() {
+        const canvas = document.createElement('canvas');
+        canvas.width = 800;
+        canvas.height = 600;
+        const ctx = canvas.getContext('2d');
+
+        // Background
+        ctx.fillStyle = '#ecf0f1';
+        ctx.fillRect(0, 0, 800, 600);
+
+        // Title
+        ctx.fillStyle = '#2c3e50';
+        ctx.font = 'bold 32px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Honda City vs Toyota Vios', 400, 50);
+
+        // Left car (Honda)
+        ctx.fillStyle = '#e74c3c';
+        ctx.fillRect(50, 150, 200, 100);
+        ctx.fillRect(75, 120, 150, 50);
+
+        ctx.fillStyle = '#2c3e50';
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Honda City', 150, 300);
+        ctx.font = '18px Arial';
+        ctx.fillText('599,000 บาท', 150, 330);
+        ctx.fillText('1.0L VTEC Turbo', 150, 360);
+        ctx.fillText('122 แรงม้า', 150, 390);
+
+        // Right car (Toyota)
+        ctx.fillStyle = '#3498db';
+        ctx.fillRect(550, 150, 200, 100);
+        ctx.fillRect(575, 120, 150, 50);
+
+        ctx.fillStyle = '#2c3e50';
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Toyota Vios', 650, 300);
+        ctx.font = '18px Arial';
+        ctx.fillText('539,000 บาท', 650, 330);
+        ctx.fillText('1.5L Dual VVT-i', 650, 360);
+        ctx.fillText('107 แรงม้า', 650, 390);
+
+        // VS
+        ctx.fillStyle = '#f39c12';
+        ctx.font = 'bold 48px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('VS', 400, 200);
+
+        downloadCanvas(canvas, 'car-comparison.png');
+      }
+
+      function downloadCanvas(canvas, filename) {
+        // Show preview
+        const preview = document.getElementById('preview');
+        preview.innerHTML = '<h3>ตัวอย่างรูปภาพที่สร้าง:</h3>';
+        preview.appendChild(canvas);
+
+        // Download
+        canvas.toBlob(function (blob) {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = filename;
+          a.click();
+          URL.revokeObjectURL(url);
+
+          // Show success message
+          const message = document.createElement('p');
+          message.style.color = '#27ae60';
+          message.style.fontWeight = 'bold';
+          message.textContent = `✅ ดาวน์โหลด ${filename} สำเร็จ!`;
+          preview.appendChild(message);
+        });
+      }
+    </script>
+  </body>
+</html>

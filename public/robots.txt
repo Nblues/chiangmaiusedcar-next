@@ -10,6 +10,7 @@ Disallow: /drafts*
 Disallow: /admin*
 Disallow: /keyword-audit
 Disallow: /api-dashboard
+Disallow: /license
 
 # Googlebot
 User-agent: Googlebot
@@ -18,6 +19,7 @@ Disallow: /api*
 Disallow: /admin*
 Disallow: /keyword-audit
 Disallow: /api-dashboard
+Disallow: /license
 
 # Googlebot-Image
 User-agent: Googlebot-Image
@@ -40,6 +42,9 @@ Allow: /about
 Allow: /contact
 Disallow: /api*
 Disallow: /admin*
+Disallow: /keyword-audit
+Disallow: /api-dashboard
+Disallow: /license
 Crawl-delay: 1
 
 # Claude-Web
@@ -51,6 +56,9 @@ Allow: /about
 Allow: /contact
 Disallow: /api*
 Disallow: /admin*
+Disallow: /keyword-audit
+Disallow: /api-dashboard
+Disallow: /license
 Crawl-delay: 1
 
 # Bard
@@ -62,6 +70,9 @@ Allow: /about
 Allow: /contact
 Disallow: /api*
 Disallow: /admin*
+Disallow: /keyword-audit
+Disallow: /api-dashboard
+Disallow: /license
 Crawl-delay: 1
 
 # Instagram
@@ -69,6 +80,9 @@ User-agent: Instagram
 Allow: /
 Allow: /car/*
 Disallow: /api*
+Disallow: /keyword-audit
+Disallow: /api-dashboard
+Disallow: /license
 Crawl-delay: 3
 
 # TikTokBot
@@ -76,6 +90,9 @@ User-agent: TikTokBot
 Allow: /
 Allow: /car/*
 Disallow: /api*
+Disallow: /keyword-audit
+Disallow: /api-dashboard
+Disallow: /license
 Crawl-delay: 3
 
 # Host
@@ -87,10 +104,10 @@ Host: https://chiangmaiusedcar.com
 Sitemap: https://chiangmaiusedcar.com/sitemap.xml
 
 # Additional XML Sitemaps
-Sitemap: https://www.chiangmaiusedcar.com/sitemap-0.xml
+Sitemap: https://chiangmaiusedcar.com/sitemap-0.xml
 
 # Additional XML Sitemaps
-Sitemap: https://www.chiangmaiusedcar.com/sitemap-cars.xml
+Sitemap: https://chiangmaiusedcar.com/sitemap-cars.xml
 
 # Additional XML Sitemaps
-Sitemap: https://www.chiangmaiusedcar.com/sitemap-images.xml
+Sitemap: https://chiangmaiusedcar.com/sitemap-images.xml

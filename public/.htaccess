@@ -1,0 +1,19 @@
+# Admin Security Protection
+# ป้องกันการเข้าถึงหน้า Admin
+
+<Location "/admin">
+    Header always set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"
+    Header always set Cache-Control "no-cache, no-store, must-revalidate"
+    Header always set Pragma "no-cache"
+    Header always set Expires "0"
+</Location>
+
+# Block bots from admin
+RewriteEngine On
+RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|slurp|crawler|spider|bot) [NC]
+RewriteRule ^admin/ - [F,L]
+
+# Security headers
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-XSS-Protection "1; mode=block"

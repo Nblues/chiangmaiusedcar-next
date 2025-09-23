@@ -1,0 +1,15 @@
+{
+  "development": {
+    "webpackHMR": true,
+    "refreshOnUpdate": true,
+    "websocketUrl": "ws://localhost:3000/_next/webpack-hmr",
+    "retryAttempts": 3,
+    "retryDelay": 1000
+  },
+  "production": {
+    "webpackHMR": false,
+    "refreshOnUpdate": false,
+    "websocketUrl": null,
+    "disableLogs": true
+  }
+}
