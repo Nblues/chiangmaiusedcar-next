@@ -8,13 +8,15 @@
 
 ## 📋 Summary
 
-API credentials and tokens were accidentally committed to Git repository in `vercel.json` file, potentially exposing sensitive information to unauthorized access.
+API credentials and tokens were accidentally committed to Git repository in `vercel.json` file, potentially exposing
+sensitive information to unauthorized access.
 
 ---
 
 ## 🔍 Exposed Information
 
 ### 1. Shopify Storefront API Token
+
 ```
 File: vercel.json
 Token: bb70cb008199a94b83c98df0e45ada67
@@ -23,6 +25,7 @@ Risk: HIGH - Can access product data, inventory, customer orders
 ```
 
 ### 2. EmailJS Credentials
+
 ```
 Service ID: service_qlcksif
 Template ID: template_zd6e3f6
@@ -35,6 +38,7 @@ Risk: MEDIUM - Can send emails on behalf of your service
 ## ✅ Immediate Actions Taken
 
 1. ✅ **Removed hardcoded secrets from vercel.json**
+
    - Changed to use Vercel Secret references (@shopify_domain, @shopify_storefront_token, etc.)
    - Commit: TBD
 
@@ -52,6 +56,7 @@ Risk: MEDIUM - Can send emails on behalf of your service
 ### Priority 1: Rotate Shopify Token (DO THIS NOW)
 
 1. **Go to Shopify Admin**:
+
    - Navigate to: Settings → Apps and sales channels → Develop apps
    - Find your app: "chiangmaiusedcar" or similar
    - Click "API credentials"
@@ -59,6 +64,7 @@ Risk: MEDIUM - Can send emails on behalf of your service
    - **Generate new token**
 
 2. **Add New Token to Vercel**:
+
    ```bash
    vercel env add SHOPIFY_STOREFRONT_TOKEN
    # Paste NEW token when prompted
@@ -104,6 +110,7 @@ vercel env add NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
 ## 🛡️ Prevention Measures
 
 ### 1. Update .gitignore (Already Protected)
+
 ```gitignore
 .env
 .env.local
@@ -116,6 +123,7 @@ vercel.json (DO NOT IGNORE - just don't put secrets in it)
 ### 2. Use Environment Variables Correctly
 
 **❌ WRONG (What we had)**:
+
 ```json
 {
   "env": {
@@ -125,6 +133,7 @@ vercel.json (DO NOT IGNORE - just don't put secrets in it)
 ```
 
 **✅ CORRECT (Fixed)**:
+
 ```json
 {
   "build": {
@@ -136,6 +145,7 @@ vercel.json (DO NOT IGNORE - just don't put secrets in it)
 ```
 
 ### 3. Pre-commit Hooks
+
 Already configured in `.husky/pre-commit` to prevent committing secrets.
 
 ---
@@ -143,6 +153,7 @@ Already configured in `.husky/pre-commit` to prevent committing secrets.
 ## 📊 Impact Assessment
 
 ### Shopify Storefront API Token
+
 - **Exposed Since**: Unknown (needs Git history review)
 - **Scope**: Read-only access to:
   - Product catalog (public data)
@@ -156,6 +167,7 @@ Already configured in `.husky/pre-commit` to prevent committing secrets.
   - Access admin functions
 
 ### EmailJS Keys
+
 - **Risk**: Moderate
 - **Scope**: Can send emails using your templates
 - **Mitigation**: Domain restrictions should prevent abuse
@@ -195,16 +207,19 @@ Already configured in `.husky/pre-commit` to prevent committing secrets.
 ## 📞 Next Steps
 
 **IMMEDIATE (Within 1 hour)**:
+
 - [ ] Rotate Shopify Storefront API token
 - [ ] Add new token to Vercel
 - [ ] Test deployment with new credentials
 
 **SHORT-TERM (Within 24 hours)**:
+
 - [ ] Review EmailJS security settings
 - [ ] Monitor Shopify access logs
 - [ ] Audit other files for hardcoded secrets
 
 **LONG-TERM**:
+
 - [ ] Implement automated secret scanning
 - [ ] Regular security reviews
 - [ ] Document secret rotation procedures

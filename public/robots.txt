@@ -96,7 +96,7 @@ Disallow: /license
 Crawl-delay: 3
 
 # Host
-Host: https://chiangmaiusedcar.com
+Host: chiangmaiusedcar.com
 
 # Sitemaps
 
