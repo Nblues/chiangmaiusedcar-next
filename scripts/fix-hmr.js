@@ -24,7 +24,6 @@ function isDevelopmentMode() {
 }
 
 function log(message, type = 'info') {
-  const timestamp = new Date().toISOString();
   const colors = {
     info: '\x1b[36m', // Cyan
     success: '\x1b[32m', // Green
@@ -32,8 +31,9 @@ function log(message, type = 'info') {
     error: '\x1b[31m', // Red
     reset: '\x1b[0m', // Reset
   };
+  console.log(`${colors[type]}${message}${colors.reset}`);
 
-  console.log(`${colors[type]}[${timestamp}] ${message}${colors.reset}`);
+  // ...existing code...
 }
 
 function removeDirectory(dirPath) {

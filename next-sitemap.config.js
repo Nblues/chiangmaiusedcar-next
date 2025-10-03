@@ -1,11 +1,10 @@
 module.exports = {
-  siteUrl: process.env.SITE_URL || 'https://chiangmaiusedcar.com',
+  siteUrl: process.env.SITE_URL || 'https://www.chiangmaiusedcar.com',
   generateRobotsTxt: true,
   generateIndexSitemap: true,
   sitemapSize: 7000,
-  changefreq: 'daily',
-  priority: 0.7,
-  autoLastmod: true,
+  // Bing 2025: changefreq and priority are ignored - removed to reduce sitemap size
+  autoLastmod: true, // Use true lastmod from content, not sitemap generation time
 
   // Enhanced robots.txt with 2025 AI bot support
   robotsTxtOptions: {
@@ -76,12 +75,12 @@ module.exports = {
       },
     ],
     additionalSitemaps: [
-      'https://chiangmaiusedcar.com/sitemap-0.xml',
-      'https://chiangmaiusedcar.com/sitemap-cars.xml',
-      'https://chiangmaiusedcar.com/sitemap-images.xml',
+      'https://www.chiangmaiusedcar.com/sitemap-0.xml',
+      'https://www.chiangmaiusedcar.com/sitemap-cars.xml',
+      'https://www.chiangmaiusedcar.com/sitemap-images.xml',
     ],
     // Add host directive for consistency
-    host: 'https://chiangmaiusedcar.com',
+    host: 'https://www.chiangmaiusedcar.com',
     // 2025 enhancement: crawl delay for different bots
     transformRobotsTxt: async (config, robotsTxt) => {
       return robotsTxt
@@ -117,15 +116,15 @@ Sitemap: `
   additionalPaths: async config => {
     const paths = [];
 
-    // Static pages with enhanced priority
+    // Static pages - Bing 2025: only lastmod matters, not priority/changefreq
     const staticPages = [
-      { path: '/', priority: 1.0, changefreq: 'daily' },
-      { path: '/all-cars', priority: 0.9, changefreq: 'daily' },
-      { path: '/contact', priority: 0.9, changefreq: 'weekly' },
-      { path: '/about', priority: 0.8, changefreq: 'monthly' },
-      { path: '/promotion', priority: 0.9, changefreq: 'daily' },
-      { path: '/credit-check', priority: 0.8, changefreq: 'weekly' },
-      { path: '/payment-calculator', priority: 0.8, changefreq: 'weekly' },
+      { path: '/', lastmod: new Date().toISOString() }, // Always fresh
+      { path: '/all-cars', lastmod: new Date().toISOString() }, // Daily car updates
+      { path: '/contact', lastmod: '2025-10-02T00:00:00+00:00' }, // Static content
+      { path: '/about', lastmod: '2025-10-02T00:00:00+00:00' }, // Static content
+      { path: '/promotion', lastmod: new Date().toISOString() }, // Frequently updated
+      { path: '/credit-check', lastmod: '2025-10-02T00:00:00+00:00' }, // Static content
+      { path: '/payment-calculator', lastmod: '2025-10-02T00:00:00+00:00' }, // Static content
     ];
 
     // Add static pages
@@ -141,11 +140,11 @@ Sitemap: `
 
       for (const car of cars) {
         if (car.handle) {
+          // Bing 2025: Use real updatedAt from Shopify for accurate freshness signals
+          const lastModified = car.updatedAt || new Date().toISOString();
           paths.push(
             await config.transform(config, `/car/${car.handle}`, {
-              priority: 0.8,
-              changefreq: 'weekly',
-              lastmod: car.updatedAt || new Date().toISOString(),
+              lastmod: lastModified,
             })
           );
         }
@@ -156,52 +155,30 @@ Sitemap: `
 
     return paths;
   },
-  // Enhanced transform function with better lastmod handling
+  // Bing 2025 compliant transform: only lastmod matters for AI-powered crawling
   transform: async (config, path, options = {}) => {
-    // Default values
-    let priority = options.priority || 0.7;
-    let changefreq = options.changefreq || 'daily';
-    let lastmod = options.lastmod || new Date().toISOString();
+    // Use provided lastmod or fallback to current time
+    const lastmod = options.lastmod || new Date().toISOString();
 
-    // Override based on path patterns
-    if (path === '/') {
-      priority = 1.0;
-      changefreq = 'daily';
-    } else if (path.startsWith('/car/')) {
-      priority = 0.8;
-      changefreq = 'weekly';
-    } else if (['/all-cars', '/contact', '/promotion'].includes(path)) {
-      priority = 0.9;
-      changefreq = 'daily';
-    } else if (['/about', '/credit-check', '/payment-calculator'].includes(path)) {
-      priority = 0.8;
-      changefreq = 'weekly';
-    }
+    // Ensure ISO 8601 format with timezone (Bing recommendation)
+    const formattedLastmod = new Date(lastmod).toISOString();
 
     return {
       loc: path,
-      changefreq,
-      priority,
-      lastmod,
+      lastmod: formattedLastmod, // Only field that matters for Bing 2025
+      // Removed: changefreq (ignored by Bing)
+      // Removed: priority (ignored by Bing)
       alternateRefs: [
         {
-          href: `https://chiangmaiusedcar.com${path}`,
+          href: `https://www.chiangmaiusedcar.com${path}`,
           hreflang: 'th',
         },
         {
-          href: `https://chiangmaiusedcar.com${path}`,
+          href: `https://www.chiangmaiusedcar.com${path}`,
           hreflang: 'th-TH',
         },
       ],
-      // Enhanced metadata for better SEO
-      images: path.startsWith('/car/')
-        ? [
-            {
-              loc: `${config.siteUrl}/herobanner/chiangmaiusedcar.webp`,
-              caption: 'ครูหนึ่งรถสวย - รถมือสองเชียงใหม่',
-            },
-          ]
-        : undefined,
+      images: undefined, // Prevents undefined URLs
     };
   },
 };

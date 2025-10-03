@@ -27,8 +27,18 @@ async function generateEnhancedSitemap() {
 
     // Get all cars
     console.log('📡 Fetching cars data...');
-    const cars = await getAllCars();
-    console.log(`✅ Found ${cars.length} cars`);
+    const allCars = await getAllCars();
+
+    // Filter out test cars (handles starting with 'test-' or titles containing 'test')
+    const cars = allCars.filter(car => {
+      const isTestHandle = car.handle && car.handle.toLowerCase().startsWith('test-');
+      const isTestTitle = car.title && car.title.toLowerCase().includes('test');
+      return !isTestHandle && !isTestTitle;
+    });
+
+    console.log(
+      `✅ Found ${allCars.length} total cars (${cars.length} production, ${allCars.length - cars.length} test cars filtered out)`
+    );
 
     // Generate car URLs sitemap
     const carSitemapXML = generateCarSitemap(cars);
@@ -119,6 +129,16 @@ function generateCarSitemap(cars) {
   return xml;
 }
 
+// Validate if URL is absolute and not empty/undefined
+function isValidImageUrl(url) {
+  if (!url || url === '' || url === 'undefined') return false;
+  try {
+    return url.startsWith('http://') || url.startsWith('https://');
+  } catch (e) {
+    return false;
+  }
+}
+
 function generateImageSitemap(cars) {
   const baseUrl = sitemapConfig.siteUrl;
 
@@ -128,18 +148,23 @@ function generateImageSitemap(cars) {
 
   // Static images
   const staticImages = [
-    { url: '/herobanner/chiangmaiusedcar.webp', title: 'ครูหนึ่งรถสวย - รถมือสองเชียงใหม่' },
-    { url: '/herobanner/team.webp', title: 'ทีมงานครูหนึ่งรถสวย' },
-    { url: '/herobanner/allusedcars.webp', title: 'รถมือสองทั้งหมด' },
-    { url: '/favicon.webp', title: 'โลโก้ครูหนึ่งรถสวย' },
+    {
+      url: `${baseUrl}/herobanner/chiangmaiusedcar.webp`,
+      title: 'ครูหนึ่งรถสวย - รถมือสองเชียงใหม่',
+    },
+    { url: `${baseUrl}/herobanner/team.webp`, title: 'ทีมงานครูหนึ่งรถสวย' },
+    { url: `${baseUrl}/herobanner/allusedcars.webp`, title: 'รถมือสองทั้งหมด' },
+    { url: `${baseUrl}/favicon.webp`, title: 'โลโก้ครูหนึ่งรถสวย' },
   ];
 
   staticImages.forEach(img => {
+    if (!isValidImageUrl(img.url)) return;
+
     xml += `
   <url>
     <loc>${baseUrl}/</loc>
     <image:image>
-      <image:loc>${baseUrl}${img.url}</image:loc>
+      <image:loc>${img.url}</image:loc>
       <image:title>${img.title}</image:title>
       <image:caption>${img.title}</image:caption>
     </image:image>
@@ -155,7 +180,14 @@ function generateImageSitemap(cars) {
 
       car.images.slice(0, 5).forEach(image => {
         // Limit to 5 images per car
-        const imageUrl = image.url.startsWith('/') ? `${baseUrl}${image.url}` : image.url;
+        // Handle both relative and absolute URLs
+        let imageUrl = image.url || image.src || '';
+        if (!imageUrl || imageUrl === 'undefined') return;
+        if (imageUrl.startsWith('/')) imageUrl = `${baseUrl}${imageUrl}`;
+
+        // Skip invalid image URLs
+        if (!isValidImageUrl(imageUrl)) return;
+
         xml += `
     <image:image>
       <image:loc>${imageUrl}</image:loc>

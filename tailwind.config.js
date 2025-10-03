@@ -118,7 +118,7 @@ module.exports = {
     },
   },
   plugins: [
-    function ({ addUtilities }) {
+    function ({ addUtilities, theme }) {
       addUtilities({
         '.scrollbar-hide': {
           /* IE and Edge */
@@ -138,6 +138,47 @@ module.exports = {
         },
         '.text-shadow-xl': {
           'text-shadow': '4px 4px 8px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.8)',
+        },
+        // Form utilities
+        '.form-input': {
+          'border-width': '1px',
+          'border-color': theme('colors.form.border'),
+          'background-color': theme('colors.form.bg'),
+          'border-radius': '0.375rem',
+          padding: '0.5rem 0.75rem',
+          '&:focus': {
+            outline: 'none',
+            'border-color': theme('colors.form.focus'),
+            ring: '2px',
+            'ring-color': theme('colors.primary.300'),
+          },
+        },
+        '.form-select': {
+          'border-width': '1px',
+          'border-color': theme('colors.form.border'),
+          'background-color': theme('colors.form.bg'),
+          'border-radius': '0.375rem',
+          padding: '0.5rem 2rem 0.5rem 0.75rem',
+        },
+        '.form-label': {
+          'font-weight': '500',
+          color: theme('colors.gray.700'),
+          'margin-bottom': '0.25rem',
+        },
+        // Section-specific form styles
+        '.form-section-government': {
+          'background-color': theme('colors.primary.50'),
+          border: '1px solid',
+          'border-color': theme('colors.primary.200'),
+          padding: '1.5rem',
+          'border-radius': '0.5rem',
+        },
+        '.form-section-company': {
+          'background-color': theme('colors.accent.50'),
+          border: '1px solid',
+          'border-color': theme('colors.accent.200'),
+          padding: '1.5rem',
+          'border-radius': '0.5rem',
         },
       });
     },

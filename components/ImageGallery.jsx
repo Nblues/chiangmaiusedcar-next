@@ -12,6 +12,7 @@ import {
   resizeImage,
   saveImageToStorage,
 } from '../lib/imageUtils';
+import { getCloudflareImageUrl } from '../lib/cloudflare-cdn';
 
 const ImageGallery = ({ articleId, onImageSelect, selectMode = false }) => {
   const [images, setImages] = useState([]);
@@ -25,7 +26,12 @@ const ImageGallery = ({ articleId, onImageSelect, selectMode = false }) => {
   useEffect(() => {
     const loadImages = () => {
       const articleImages = getArticleImages(articleId);
-      setImages(articleImages);
+      // แปลง URL ให้ผ่าน Cloudflare CDN
+      const cdnImages = articleImages.map(img => ({
+        ...img,
+        data: getCloudflareImageUrl(img.data),
+      }));
+      setImages(cdnImages);
     };
 
     if (articleId) {
@@ -35,7 +41,12 @@ const ImageGallery = ({ articleId, onImageSelect, selectMode = false }) => {
 
   const loadImages = () => {
     const articleImages = getArticleImages(articleId);
-    setImages(articleImages);
+    // แปลง URL ให้ผ่าน Cloudflare CDN
+    const cdnImages = articleImages.map(img => ({
+      ...img,
+      data: getCloudflareImageUrl(img.data),
+    }));
+    setImages(cdnImages);
   };
 
   // อัปโหลดรูปภาพ
@@ -280,11 +291,39 @@ const ImageGallery = ({ articleId, onImageSelect, selectMode = false }) => {
                     }
                   }
                 }}
+                onKeyDown={e => {
+                  // Space หรือ Enter เพื่อเลือกรูป
+                  if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    if (selectMode) {
+                      handleSelectImage(image);
+                    } else {
+                      if (e.ctrlKey || e.metaKey) {
+                        toggleImageSelection(image.name);
+                      } else {
+                        handleSelectImage(image);
+                      }
+                    }
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={
+                  selectMode ? `เลือกรูป ${image.name} เป็นรูปปก` : `แทรกรูป ${image.name}`
+                }
               >
-                <img src={image.data} alt={image.name} className="w-full h-full object-cover" />
+                <img
+                  src={image.data}
+                  alt={image.name}
+                  className="w-full h-full object-cover"
+                  aria-hidden="true" // ซ่อนจาก screen readers เพราะมี aria-label ที่ parent แล้ว
+                />
 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
+                <div
+                  className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center"
+                  aria-hidden="true"
+                >
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity">
                     {selectMode ? (
                       <svg
@@ -292,6 +331,7 @@ const ImageGallery = ({ articleId, onImageSelect, selectMode = false }) => {
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                       >
                         <path
                           strokeLinecap="round"
@@ -306,6 +346,7 @@ const ImageGallery = ({ articleId, onImageSelect, selectMode = false }) => {
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                       >
                         <path
                           strokeLinecap="round"
@@ -515,6 +556,7 @@ const ImageGallery = ({ articleId, onImageSelect, selectMode = false }) => {
 };
 
 // Component สำหรับฟอร์มตัวเลือกรูปภาพ
+// Component สำหรับฟอร์มตัวเลือกรูปภาพ
 const ImageOptionsForm = ({ onInsert, onCancel }) => {
   const [size, setSize] = useState('medium');
   const [alignment, setAlignment] = useState('center');
@@ -565,13 +607,15 @@ const ImageOptionsForm = ({ onInsert, onCancel }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {/* ขนาดรูป */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2 font-prompt">
+    <form onSubmit={handleSubmit} className="space-y-4" aria-label="ตัวเลือกการแทรกรูปภาพ">
+      <fieldset aria-labelledby="size-group">
+        <legend
+          id="size-group"
+          className="block text-sm font-medium text-gray-700 mb-2 font-prompt"
+        >
           📏 ขนาดรูป
-        </label>
-        <div className="space-y-2">
+        </legend>
+        <div className="space-y-2" role="radiogroup" aria-labelledby="size-group">
           {sizeOptions.map(option => (
             <label key={option.value} className="flex items-start space-x-3 cursor-pointer">
               <input
@@ -581,22 +625,28 @@ const ImageOptionsForm = ({ onInsert, onCancel }) => {
                 checked={size === option.value}
                 onChange={e => setSize(e.target.value)}
                 className="mt-1"
+                aria-label={option.label}
+                aria-describedby={`size-desc-${option.value}`}
               />
               <div>
                 <div className="text-sm font-medium text-gray-900 font-prompt">{option.label}</div>
-                <div className="text-xs text-gray-600">{option.description}</div>
+                <div id={`size-desc-${option.value}`} className="text-xs text-gray-600">
+                  {option.description}
+                </div>
               </div>
             </label>
           ))}
         </div>
-      </div>
+      </fieldset>
 
-      {/* การจัดตำแหน่ง */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2 font-prompt">
+      <fieldset aria-labelledby="alignment-group">
+        <legend
+          id="alignment-group"
+          className="block text-sm font-medium text-gray-700 mb-2 font-prompt"
+        >
           📍 การจัดตำแหน่ง
-        </label>
-        <div className="space-y-2">
+        </legend>
+        <div className="space-y-2" role="radiogroup" aria-labelledby="alignment-group">
           {alignmentOptions.map(option => (
             <label key={option.value} className="flex items-start space-x-3 cursor-pointer">
               <input
@@ -606,38 +656,46 @@ const ImageOptionsForm = ({ onInsert, onCancel }) => {
                 checked={alignment === option.value}
                 onChange={e => setAlignment(e.target.value)}
                 className="mt-1"
+                aria-label={option.label}
+                aria-describedby={`alignment-desc-${option.value}`}
               />
               <div>
                 <div className="text-sm font-medium text-gray-900 font-prompt">{option.label}</div>
-                <div className="text-xs text-gray-600">{option.description}</div>
+                <div id={`alignment-desc-${option.value}`} className="text-xs text-gray-600">
+                  {option.description}
+                </div>
               </div>
             </label>
           ))}
         </div>
-      </div>
+      </fieldset>
 
-      {/* คำอธิบายภาพ */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2 font-prompt">
+        <label
+          htmlFor="image-caption"
+          className="block text-sm font-medium text-gray-700 mb-2 font-prompt"
+        >
           💬 คำอธิบายภาพ (ไม่บังคับ)
         </label>
         <input
+          id="image-caption"
           type="text"
           value={caption}
           onChange={e => setCaption(e.target.value)}
           placeholder="เพิ่มคำอธิบายใต้รูปภาพ..."
           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 font-prompt text-sm"
+          aria-describedby="caption-help"
         />
-        <p className="text-xs text-gray-600 mt-1">
+        <p id="caption-help" className="text-xs text-gray-600 mt-1">
           จะแสดงเป็น figcaption ตามมาตรฐาน HTML5 เหมาะสำหรับ SEO และ accessibility
         </p>
       </div>
 
-      {/* ปุ่มดำเนินการ */}
       <div className="flex space-x-3 pt-4">
         <button
           type="submit"
           className="flex-1 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg font-semibold font-prompt transition-colors"
+          aria-label="แทรกรูปภาพพร้อมตัวเลือกที่กำหนด"
         >
           ✅ แทรกรูป
         </button>
@@ -645,6 +703,7 @@ const ImageOptionsForm = ({ onInsert, onCancel }) => {
           type="button"
           onClick={onCancel}
           className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-prompt transition-colors"
+          aria-label="ยกเลิกการแทรกรูปภาพ"
         >
           ❌ ยกเลิก
         </button>

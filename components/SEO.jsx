@@ -223,6 +223,8 @@ export default function SEO({
 
   return (
     <Head>
+      {/* Note: Manual preload removed - Next.js Image with priority prop handles it automatically */}
+
       {/* Essential HTML5 Meta Tags for Viewport */}
       <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
@@ -278,6 +280,9 @@ export default function SEO({
       <meta name="google-site-verification" content="your-verification-code" />
       <meta name="msvalidate.01" content="your-bing-verification-code" />
 
+      {/* Facebook Domain Verification */}
+      <meta name="facebook-domain-verification" content="9hmqrusdwqmzwsj6ffc395xow44ek8" />
+
       {/* Enhanced semantic and entity markup for 2025 */}
       <meta name="business-type" content="AutoDealer" />
       <meta name="service-area" content="สันพระเนตร, สันทราย, หางดง, เชียงใหม่" />
@@ -297,8 +302,19 @@ export default function SEO({
       <meta property="og:locale" content="th_TH" />
       <meta property="og:locale:alternate" content="en_US" />
 
-      {/* Multiple Open Graph Images for better compatibility */}
-      {ogImages.map((img, index) => (
+      {/* Primary Open Graph Image - MUST be specified explicitly */}
+      <meta property="og:image" content={absoluteImage} />
+      <meta property="og:image:secure_url" content={absoluteImage} />
+      <meta property="og:image:type" content="image/webp" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta
+        property="og:image:alt"
+        content={`${enhancedTitle} - รถมือสองเชียงใหม่ ครูหนึ่งรถสวย`}
+      />
+
+      {/* Alternative Open Graph Images for better compatibility */}
+      {ogImages.slice(1).map((img, index) => (
         <React.Fragment key={index}>
           <meta property="og:image" content={img.url} />
           <meta property="og:image:secure_url" content={img.url} />

@@ -40,10 +40,10 @@ export default function SafeImage({
   height,
   fill = false,
   className = '',
-  quality = 85, // Increased from 80 for better quality/size balance
+  quality = 75, // Optimized for mobile performance
   priority = false,
   loading = 'lazy',
-  sizes,
+  sizes = '(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw',
   placeholder = 'blur',
   blurDataURL,
   fallbackSrc = '/images/placeholder-car.jpg',

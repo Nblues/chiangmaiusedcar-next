@@ -44,12 +44,7 @@ export default function CarPage({ car, similarCars }) {
       />
       <div className="car-details">
         <h1>{car.title}</h1>
-        <A11yImage
-          src={car.images[0]?.src}
-          alt={carAlt(car.title)}
-          width={800}
-          height={600}
-        />
+        <A11yImage src={car.images[0]?.src} alt={carAlt(car.title)} width={800} height={600} />
         <p>{car.description}</p>
         <p>Price: {safeFormatPrice(car.price)}</p>
         <button onClick={handleEnquireClick} disabled={isLoading}>
@@ -63,7 +58,7 @@ export default function CarPage({ car, similarCars }) {
 
 export async function getStaticPaths() {
   const cars = await getAllCars();
-  const paths = cars.map((car) => ({
+  const paths = cars.map(car => ({
     params: { handle: car.handle },
   }));
 
@@ -72,8 +67,8 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const cars = await getAllCars();
-  const car = cars.find((car) => car.handle === params.handle);
-  const similarCars = cars.filter((c) => c.id !== car.id).slice(0, 4);
+  const car = cars.find(car => car.handle === params.handle);
+  const similarCars = cars.filter(c => c.id !== car.id).slice(0, 4);
 
   return {
     props: {
@@ -84,4 +79,3 @@ export async function getStaticProps({ params }) {
 }
 
 // (Paste full content from pages/car/[handle].jsx below this line)
-

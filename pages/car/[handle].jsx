@@ -10,7 +10,7 @@ import Link from 'next/link';
 import A11yImage from '../../components/A11yImage';
 import { carAlt } from '../../utils/a11y';
 
-function CarDetailPage({ car, allCars }) {
+function CarDetailPage({ car, allCars = [] }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageLoading, setImageLoading] = useState(true);
   const [processedDescription, setProcessedDescription] = useState(null);
@@ -210,33 +210,45 @@ function CarDetailPage({ car, allCars }) {
   // Enhanced image for social sharing - ensure high quality and absolute URL
   let socialImage = safeGet(currentImage, 'url', '');
 
-  // Handle relative URLs
+  // Handle relative URLs - MUST be absolute for Facebook/LINE
   if (socialImage.startsWith('/')) {
-    socialImage = `https://chiangmaiusedcar.com${socialImage}`;
+    socialImage = `https://www.chiangmaiusedcar.com${socialImage}`;
+  } else if (!socialImage.startsWith('http')) {
+    socialImage = `https://www.chiangmaiusedcar.com/${socialImage}`;
   }
 
   // Fallback to default high-quality image if no car image
-  if (!socialImage || socialImage === 'https://chiangmaiusedcar.com') {
-    socialImage = 'https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
+  if (!socialImage || socialImage === 'https://www.chiangmaiusedcar.com' || socialImage === '') {
+    socialImage = 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
   }
 
-  // Add cache busting and optimization for Facebook sharing
+  // Ensure absolute URL with www for better Facebook compatibility
+  if (!socialImage.includes('www.')) {
+    socialImage = socialImage.replace(
+      'https://chiangmaiusedcar.com',
+      'https://www.chiangmaiusedcar.com'
+    );
+  }
+
+  // Add cache busting for Facebook sharing - use build-time timestamp
   if (socialImage && !socialImage.includes('?')) {
-    // Add timestamp for cache busting Facebook cards
-    const timestamp = Date.now();
-    socialImage = `${socialImage}?v=${timestamp}&w=1200&h=630&fit=crop&auto=format&q=90`;
+    const timestamp = Math.floor(Date.now() / (1000 * 60 * 60)); // Update every hour
+    socialImage = `${socialImage}?v=${timestamp}&w=1200&h=630`;
   }
 
-  // Debug mode - log for development
-  if (process.env.NODE_ENV === 'development') {
+  // Debug mode - log for development AND production for social debugging
+  if (typeof window !== 'undefined') {
     // eslint-disable-next-line no-console
     console.log('🔍 Car Detail SEO Debug:', {
       title: enhancedTitle,
       description: enhancedDescription,
       image: socialImage,
-      url: `/car/${safeGet(car, 'handle', '')}`,
+      imageAbsolute: socialImage.startsWith('https://'),
+      imageSize: '1200x630',
+      url: `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
       brandModel,
       yearPrice,
+      facebookDebugUrl: `https://developers.facebook.com/tools/debug/?q=https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
     });
   }
 
@@ -246,7 +258,7 @@ function CarDetailPage({ car, allCars }) {
         title={enhancedTitle}
         description={enhancedDescription}
         image={socialImage}
-        url={`/car/${safeGet(car, 'handle', '')}`}
+        url={`https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`}
         type="product"
         pageType="car"
         carData={{
@@ -936,7 +948,7 @@ function CarDetailPage({ car, allCars }) {
           </div>
 
           {/* Similar Cars Section */}
-          <SimilarCars currentCar={car} allCars={allCars || []} />
+          <SimilarCars currentCar={car} allCars={allCars} />
 
           {/* ขั้นตอนการซื้อรถ Modern 2025 */}
           <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
@@ -1108,10 +1120,11 @@ export async function getStaticProps({ params }) {
       };
     }
 
+    // ส่ง allCars ทั้งหมดให้ SimilarCars component คำนวณรถที่คล้ายกันเอง (ระบบเดิม)
     return {
       props: {
         car,
-        allCars: safeCars,
+        allCars: safeCars, // ส่งรถทั้งหมด
       },
       revalidate: 600, // 10 minutes
     };

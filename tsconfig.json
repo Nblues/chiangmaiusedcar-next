@@ -20,7 +20,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "types": ["node"],
+    "types": ["node", "@cloudflare/workers-types", "@types/jest"],
     "plugins": [
       {
         "name": "next"

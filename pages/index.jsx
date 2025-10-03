@@ -6,13 +6,11 @@ import { safeGet } from '../lib/safeFetch';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { carAlt } from '../utils/a11y';
+import A11yImage from '../components/A11yImage'; // Static import for LCP
 
-// Lazy load heavy components to reduce TBT
+// Lazy load non-critical components to reduce TBT
 const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
   loading: () => null,
-});
-const A11yImage = dynamic(() => import('../components/A11yImage'), {
-  loading: () => <div className="bg-gray-200 animate-pulse rounded aspect-video"></div>,
 });
 const SocialShareButtons = dynamic(() => import('../components/SocialShareButtons'), {
   ssr: false,
@@ -342,8 +340,8 @@ export default function Home({ cars, brandCounts }) {
             height={640}
             className="w-full h-auto object-contain"
             priority
-            quality={75}
-            sizes="(max-width: 414px) 414px, (max-width: 768px) 768px, (max-width: 1200px) 1200px, 1920px"
+            quality={60}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1400px"
             style={{ maxHeight: '60vh' }}
           />
         </div>

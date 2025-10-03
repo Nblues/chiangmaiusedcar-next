@@ -105,7 +105,7 @@ function ReviewSection() {
               <a
                 href={r.url}
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
                 className="text-accent hover:underline text-sm font-semibold"
                 aria-label={`อ่านรีวิวบน${r.source}`}
               >

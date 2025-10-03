@@ -1,4 +1,3 @@
-
 /**
  * Proxy configuration for WebSocket HMR forwarding
  * Use this with your reverse proxy (nginx, Apache, etc.)
@@ -18,9 +17,9 @@ module.exports = {
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header X-Forwarded-Proto $scheme;
       proxy_cache_bypass $http_upgrade;
-    `
+    `,
   },
-  
+
   // For Apache
   apache: {
     config: `
@@ -36,16 +35,16 @@ module.exports = {
       # Regular proxy
       ProxyPass /_next/webpack-hmr http://localhost:3000/_next/webpack-hmr
       ProxyPassReverse /_next/webpack-hmr http://localhost:3000/_next/webpack-hmr
-    `
+    `,
   },
-  
+
   // For Node.js proxy
   nodejs: {
     target: 'http://localhost:3000',
     changeOrigin: true,
     ws: true, // Enable WebSocket proxying
     pathRewrite: {
-      '^/_next/webpack-hmr': '/_next/webpack-hmr'
-    }
-  }
+      '^/_next/webpack-hmr': '/_next/webpack-hmr',
+    },
+  },
 };

@@ -1,108 +1,139 @@
 # SEO Verification Report
-Generated: 2025-09-11T10:23:03.402Z
+Generated: 2025-10-01T19:37:47.965Z
 Site: https://www.chiangmaiusedcar.com
 
 ## Summary
-✅ Passed: 35
-⚠️ Warnings: 14
-❌ Errors: 7
+✅ Passed: 48
+⚠️ Warnings: 24
+❌ Errors: 8
 
 ## Detailed Results
-[2025-09-11T10:23:03.339Z] INFO: 🚀 Starting SEO verification...
-[2025-09-11T10:23:03.347Z] INFO: 🤖 Checking robots.txt...
-[2025-09-11T10:23:03.347Z] ERROR: ❌ robots.txt missing Allow: /_next/static/
-[2025-09-11T10:23:03.348Z] ERROR: ❌ robots.txt missing Allow: /_next/image/
-[2025-09-11T10:23:03.348Z] ERROR: ❌ robots.txt missing Allow: *.js
-[2025-09-11T10:23:03.348Z] ERROR: ❌ robots.txt missing Allow: *.css
-[2025-09-11T10:23:03.348Z] ERROR: ❌ robots.txt missing Allow: *.webp
-[2025-09-11T10:23:03.349Z] WARNING: ⚠️ robots.txt should block /_next/data/
-[2025-09-11T10:23:03.349Z] SUCCESS: ✅ All sitemap URLs use consistent www subdomain
-[2025-09-11T10:23:03.351Z] INFO: 🗺️ Checking sitemaps...
-[2025-09-11T10:23:03.352Z] SUCCESS: ✅ sitemap.xml URLs are consistent
-[2025-09-11T10:23:03.352Z] SUCCESS: ✅ sitemap-0.xml URLs are consistent
-[2025-09-11T10:23:03.353Z] SUCCESS: ✅ sitemap-cars.xml URLs are consistent
-[2025-09-11T10:23:03.354Z] SUCCESS: ✅ sitemap-images.xml URLs are consistent
-[2025-09-11T10:23:03.354Z] INFO: 🔗 Checking canonical URLs in pages...
-[2025-09-11T10:23:03.357Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\about.jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.358Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\all-cars.jsx has canonical URL
-[2025-09-11T10:23:03.359Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\analytics.js may be missing canonical URL
-[2025-09-11T10:23:03.359Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\cache-control.js may be missing canonical URL
-[2025-09-11T10:23:03.360Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\debug-env.js may be missing canonical URL
-[2025-09-11T10:23:03.361Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\health.js may be missing canonical URL
-[2025-09-11T10:23:03.361Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\og-preview.js may be missing canonical URL
-[2025-09-11T10:23:03.362Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\revalidate.js may be missing canonical URL
-[2025-09-11T10:23:03.362Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\api-dashboard.jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.363Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\car\[handle].jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.364Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\contact.jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.365Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\credit-check.jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.367Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\index.jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.368Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\keyword-audit.jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.370Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\license.jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.371Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\payment-calculator.jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.372Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\privacy-policy.jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.372Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\promotion.jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.373Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\terms-of-service.jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.373Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\_error.jsx uses SEO component (canonical handled)
-[2025-09-11T10:23:03.374Z] INFO: 🖼️ Checking image alt tags...
-[2025-09-11T10:23:03.385Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\components\SimilarCars.jsx has image without alt: <Image
-                  src={
-                 ...
-[2025-09-11T10:23:03.385Z] INFO: 📊 Image Analysis: 7 total, 6 with alt, 1 without alt
-[2025-09-11T10:23:03.386Z] ERROR: ❌ 1 images missing alt attributes
-[2025-09-11T10:23:03.386Z] INFO: 📝 Checking meta tags...
-[2025-09-11T10:23:03.389Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\about.jsx uses SEO component
-[2025-09-11T10:23:03.389Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\all-cars.jsx uses SEO component
-[2025-09-11T10:23:03.390Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\analytics.js may be missing SEO component
-[2025-09-11T10:23:03.390Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\cache-control.js may be missing SEO component
-[2025-09-11T10:23:03.391Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\debug-env.js may be missing SEO component
-[2025-09-11T10:23:03.391Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\health.js may be missing SEO component
-[2025-09-11T10:23:03.391Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\og-preview.js may be missing SEO component
-[2025-09-11T10:23:03.392Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\revalidate.js may be missing SEO component
-[2025-09-11T10:23:03.392Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\api-dashboard.jsx uses SEO component
-[2025-09-11T10:23:03.394Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\car\[handle].jsx uses SEO component
-[2025-09-11T10:23:03.394Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\contact.jsx uses SEO component
-[2025-09-11T10:23:03.395Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\credit-check.jsx uses SEO component
-[2025-09-11T10:23:03.396Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\index.jsx uses SEO component
-[2025-09-11T10:23:03.396Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\keyword-audit.jsx uses SEO component
-[2025-09-11T10:23:03.397Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\license.jsx uses SEO component
-[2025-09-11T10:23:03.397Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\payment-calculator.jsx uses SEO component
-[2025-09-11T10:23:03.398Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\privacy-policy.jsx uses SEO component
-[2025-09-11T10:23:03.398Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\promotion.jsx uses SEO component
-[2025-09-11T10:23:03.399Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\terms-of-service.jsx uses SEO component
-[2025-09-11T10:23:03.399Z] ERROR: ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\_error.jsx may have noindex/nofollow in production
-[2025-09-11T10:23:03.399Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\_error.jsx uses SEO component
-[2025-09-11T10:23:03.399Z] INFO: ⚙️ Checking next.config.js...
-[2025-09-11T10:23:03.400Z] SUCCESS: ✅ next.config.js has redirects configuration
-[2025-09-11T10:23:03.401Z] SUCCESS: ✅ next.config.js has headers configuration
+[2025-10-01T19:37:47.866Z] INFO: 🚀 Starting SEO verification...
+[2025-10-01T19:37:47.875Z] INFO: 🤖 Checking robots.txt...
+[2025-10-01T19:37:47.876Z] SUCCESS: ✅ robots.txt allows /_next/static/
+[2025-10-01T19:37:47.876Z] SUCCESS: ✅ robots.txt allows /_next/image/
+[2025-10-01T19:37:47.876Z] SUCCESS: ✅ robots.txt allows *.js
+[2025-10-01T19:37:47.876Z] SUCCESS: ✅ robots.txt allows *.css
+[2025-10-01T19:37:47.876Z] SUCCESS: ✅ robots.txt allows *.webp
+[2025-10-01T19:37:47.877Z] SUCCESS: ✅ robots.txt correctly blocks /_next/data/
+[2025-10-01T19:37:47.877Z] SUCCESS: ✅ All sitemap URLs use consistent www subdomain
+[2025-10-01T19:37:47.879Z] INFO: 🗺️ Checking sitemaps...
+[2025-10-01T19:37:47.880Z] SUCCESS: ✅ sitemap.xml URLs are consistent
+[2025-10-01T19:37:47.881Z] SUCCESS: ✅ sitemap-0.xml URLs are consistent
+[2025-10-01T19:37:47.881Z] SUCCESS: ✅ sitemap-cars.xml URLs are consistent
+[2025-10-01T19:37:47.882Z] SUCCESS: ✅ sitemap-images.xml URLs are consistent
+[2025-10-01T19:37:47.882Z] INFO: 🔗 Checking canonical URLs in pages...
+[2025-10-01T19:37:47.891Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\404.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.892Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\about.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.893Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\index.jsx may be missing canonical URL
+[2025-10-01T19:37:47.893Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\new.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.894Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\[id]\edit.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.895Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\login.jsx may be missing canonical URL
+[2025-10-01T19:37:47.896Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\all-cars.jsx has canonical URL
+[2025-10-01T19:37:47.898Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\analytics.js may be missing canonical URL
+[2025-10-01T19:37:47.899Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\cache-control.js may be missing canonical URL
+[2025-10-01T19:37:47.899Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\debug-env.js may be missing canonical URL
+[2025-10-01T19:37:47.900Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\health.js may be missing canonical URL
+[2025-10-01T19:37:47.900Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\og-preview.js may be missing canonical URL
+[2025-10-01T19:37:47.901Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\revalidate.js may be missing canonical URL
+[2025-10-01T19:37:47.902Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\test-email.js may be missing canonical URL
+[2025-10-01T19:37:47.902Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\test-shopify.js may be missing canonical URL
+[2025-10-01T19:37:47.903Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\api-dashboard.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.907Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\car\[handle].jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.908Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\contact.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.909Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\credit-check.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.910Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\debug-auth.jsx may be missing canonical URL
+[2025-10-01T19:37:47.911Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\index.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.912Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\keyword-audit.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.913Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\license.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.914Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\payment-calculator.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.915Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\privacy-policy.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.915Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\promotion.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.916Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\sell-car.jsx has canonical URL
+[2025-10-01T19:37:47.918Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\terms-of-service.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.919Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\_error.jsx uses SEO component (canonical handled)
+[2025-10-01T19:37:47.920Z] INFO: 🖼️ Checking image alt tags...
+[2025-10-01T19:37:47.940Z] INFO: 📊 Image Analysis: 18 total, 18 with alt, 0 without alt
+[2025-10-01T19:37:47.941Z] SUCCESS: ✅ All images have alt attributes
+[2025-10-01T19:37:47.941Z] INFO: 📝 Checking meta tags...
+[2025-10-01T19:37:47.944Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\404.jsx uses SEO component
+[2025-10-01T19:37:47.945Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\about.jsx uses SEO component
+[2025-10-01T19:37:47.945Z] ERROR: ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\index.jsx may have noindex/nofollow in production
+[2025-10-01T19:37:47.945Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\index.jsx may be missing SEO component
+[2025-10-01T19:37:47.946Z] ERROR: ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\new.jsx may have noindex/nofollow in production
+[2025-10-01T19:37:47.946Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\new.jsx may be missing SEO component
+[2025-10-01T19:37:47.947Z] ERROR: ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\[id]\edit.jsx may have noindex/nofollow in production
+[2025-10-01T19:37:47.947Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\[id]\edit.jsx may be missing SEO component
+[2025-10-01T19:37:47.948Z] ERROR: ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\login.jsx may have noindex/nofollow in production
+[2025-10-01T19:37:47.948Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\login.jsx may be missing SEO component
+[2025-10-01T19:37:47.948Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\all-cars.jsx uses SEO component
+[2025-10-01T19:37:47.949Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\analytics.js may be missing SEO component
+[2025-10-01T19:37:47.949Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\cache-control.js may be missing SEO component
+[2025-10-01T19:37:47.949Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\debug-env.js may be missing SEO component
+[2025-10-01T19:37:47.949Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\health.js may be missing SEO component
+[2025-10-01T19:37:47.950Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\og-preview.js may be missing SEO component
+[2025-10-01T19:37:47.950Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\revalidate.js may be missing SEO component
+[2025-10-01T19:37:47.950Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\test-email.js may be missing SEO component
+[2025-10-01T19:37:47.951Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\test-shopify.js may be missing SEO component
+[2025-10-01T19:37:47.951Z] ERROR: ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\api-dashboard.jsx may have noindex/nofollow in production
+[2025-10-01T19:37:47.952Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\api-dashboard.jsx uses SEO component
+[2025-10-01T19:37:47.953Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\car\[handle].jsx uses SEO component
+[2025-10-01T19:37:47.953Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\contact.jsx uses SEO component
+[2025-10-01T19:37:47.956Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\credit-check.jsx uses SEO component
+[2025-10-01T19:37:47.957Z] WARNING: ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\debug-auth.jsx may be missing SEO component
+[2025-10-01T19:37:47.958Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\index.jsx uses SEO component
+[2025-10-01T19:37:47.958Z] ERROR: ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\keyword-audit.jsx may have noindex/nofollow in production
+[2025-10-01T19:37:47.959Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\keyword-audit.jsx uses SEO component
+[2025-10-01T19:37:47.959Z] ERROR: ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\license.jsx may have noindex/nofollow in production
+[2025-10-01T19:37:47.960Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\license.jsx uses SEO component
+[2025-10-01T19:37:47.961Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\payment-calculator.jsx uses SEO component
+[2025-10-01T19:37:47.961Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\privacy-policy.jsx uses SEO component
+[2025-10-01T19:37:47.962Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\promotion.jsx uses SEO component
+[2025-10-01T19:37:47.963Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\sell-car.jsx uses SEO component
+[2025-10-01T19:37:47.963Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\terms-of-service.jsx uses SEO component
+[2025-10-01T19:37:47.963Z] ERROR: ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\_error.jsx may have noindex/nofollow in production
+[2025-10-01T19:37:47.964Z] SUCCESS: ✅ C:\project davelopper\chiangmaiusedcar-setup\pages\_error.jsx uses SEO component
+[2025-10-01T19:37:47.964Z] INFO: ⚙️ Checking next.config.js...
+[2025-10-01T19:37:47.964Z] SUCCESS: ✅ next.config.js has redirects configuration
+[2025-10-01T19:37:47.964Z] SUCCESS: ✅ next.config.js has headers configuration
 
 ## Recommendations
 
 ### Critical Issues (Fix Required):
-- ❌ robots.txt missing Allow: /_next/static/
-- ❌ robots.txt missing Allow: /_next/image/
-- ❌ robots.txt missing Allow: *.js
-- ❌ robots.txt missing Allow: *.css
-- ❌ robots.txt missing Allow: *.webp
-- ❌ 1 images missing alt attributes
+- ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\index.jsx may have noindex/nofollow in production
+- ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\new.jsx may have noindex/nofollow in production
+- ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\[id]\edit.jsx may have noindex/nofollow in production
+- ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\login.jsx may have noindex/nofollow in production
+- ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\api-dashboard.jsx may have noindex/nofollow in production
+- ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\keyword-audit.jsx may have noindex/nofollow in production
+- ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\license.jsx may have noindex/nofollow in production
 - ❌ C:\project davelopper\chiangmaiusedcar-setup\pages\_error.jsx may have noindex/nofollow in production
 
 ### Warnings (Recommended Fixes):
-- ⚠️ robots.txt should block /_next/data/
+- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\index.jsx may be missing canonical URL
+- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\login.jsx may be missing canonical URL
 - ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\analytics.js may be missing canonical URL
 - ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\cache-control.js may be missing canonical URL
 - ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\debug-env.js may be missing canonical URL
 - ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\health.js may be missing canonical URL
 - ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\og-preview.js may be missing canonical URL
 - ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\revalidate.js may be missing canonical URL
-- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\components\SimilarCars.jsx has image without alt: <Image
-                  src={
-                 ...
+- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\test-email.js may be missing canonical URL
+- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\test-shopify.js may be missing canonical URL
+- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\debug-auth.jsx may be missing canonical URL
+- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\index.jsx may be missing SEO component
+- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\new.jsx may be missing SEO component
+- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\articles\[id]\edit.jsx may be missing SEO component
+- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\admin\login.jsx may be missing SEO component
 - ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\analytics.js may be missing SEO component
 - ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\cache-control.js may be missing SEO component
 - ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\debug-env.js may be missing SEO component
 - ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\health.js may be missing SEO component
 - ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\og-preview.js may be missing SEO component
 - ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\revalidate.js may be missing SEO component
+- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\test-email.js may be missing SEO component
+- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\api\test-shopify.js may be missing SEO component
+- ⚠️ C:\project davelopper\chiangmaiusedcar-setup\pages\debug-auth.jsx may be missing SEO component
 
 ### SEO Best Practices:
 - Ensure all URLs use https://www.chiangmaiusedcar.com

@@ -290,6 +290,7 @@ export default function Footer() {
                 href="https://www.facebook.com/KN2car"
                 target="_blank"
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-all duration-300 group"
+                rel="noreferrer"
               >
                 <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -308,6 +309,7 @@ export default function Footer() {
                 href="https://lin.ee/8ugfzstD"
                 target="_blank"
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-all duration-300 group"
+                rel="noreferrer"
               >
                 <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -326,6 +328,7 @@ export default function Footer() {
                 href="https://youtube.com/@chiangraiusedcar"
                 target="_blank"
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-all duration-300 group"
+                rel="noreferrer"
               >
                 <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -344,6 +347,7 @@ export default function Footer() {
                 href="https://www.tiktok.com/@krunueng_usedcar"
                 target="_blank"
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-all duration-300 group"
+                rel="noreferrer"
               >
                 <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -364,6 +368,7 @@ export default function Footer() {
               href="https://lin.ee/8ugfzstD"
               target="_blank"
               className="block w-full bg-primary hover:bg-primary-600 text-white text-center py-3 px-4 rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              rel="noreferrer"
             >
               สอบถามเลย
             </a>
@@ -384,6 +389,7 @@ export default function Footer() {
                 }
                 target="_blank"
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-all duration-300 group"
+                rel="noreferrer"
               >
                 <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -406,6 +412,7 @@ export default function Footer() {
                 href="https://g.co/kgs/Fe9dhXt"
                 target="_blank"
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-all duration-300 group"
+                rel="noreferrer"
               >
                 <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">

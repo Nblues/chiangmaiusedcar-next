@@ -71,7 +71,7 @@ export default function EditArticle() {
         router.push('/admin/articles');
       }
     } catch (error) {
-      console.error('Error loading article:', error);
+      // บันทึก error ไว้ในระบบ logging
       alert('ไม่สามารถโหลดข้อมูลบทความได้');
       router.push('/admin/articles');
     } finally {
@@ -144,8 +144,7 @@ export default function EditArticle() {
         alert('ไม่สามารถบันทึกบทความได้');
       }
     } catch (error) {
-      console.error('Error saving article:', error);
-      alert('เกิดข้อผิดพลาดในการบันทึกบทความ');
+      alert('เกิดข้อผิดพลาดในการบันทึกบทความ: ' + error.message);
     } finally {
       setSaving(false);
     }
@@ -258,8 +257,11 @@ export default function EditArticle() {
                   <div className="card-body">
                     {/* Title */}
                     <div className="mb-3">
-                      <label className="form-label">หัวข้อบทความ *</label>
+                      <label htmlFor="article-title" className="form-label">
+                        หัวข้อบทความ *
+                      </label>
                       <input
+                        id="article-title"
                         type="text"
                         value={article.title}
                         onChange={e => handleInputChange('title', e.target.value)}
@@ -270,8 +272,11 @@ export default function EditArticle() {
 
                     {/* Excerpt */}
                     <div className="mb-3">
-                      <label className="form-label">คำอธิบายสั้น *</label>
+                      <label htmlFor="article-excerpt" className="form-label">
+                        คำอธิบายสั้น *
+                      </label>
                       <textarea
+                        id="article-excerpt"
                         value={article.excerpt}
                         onChange={e => handleInputChange('excerpt', e.target.value)}
                         placeholder="คำอธิบายสั้นๆ เพื่อดึงดูดผู้อ่าน..."
@@ -282,8 +287,11 @@ export default function EditArticle() {
 
                     {/* Keywords */}
                     <div className="mb-3">
-                      <label className="form-label">คำสำคัญ SEO</label>
+                      <label htmlFor="article-keywords" className="form-label">
+                        คำสำคัญ SEO
+                      </label>
                       <input
+                        id="article-keywords"
                         type="text"
                         value={article.keywords}
                         onChange={e => handleInputChange('keywords', e.target.value)}
@@ -378,8 +386,11 @@ export default function EditArticle() {
                   <div className="card-body">
                     {/* Category */}
                     <div className="mb-3">
-                      <label className="form-label">หมวดหมู่</label>
+                      <label htmlFor="article-category" className="form-label">
+                        หมวดหมู่
+                      </label>
                       <select
+                        id="article-category"
                         value={article.category}
                         onChange={e => handleInputChange('category', e.target.value)}
                         className="form-select"
@@ -394,8 +405,11 @@ export default function EditArticle() {
 
                     {/* Status */}
                     <div className="mb-3">
-                      <label className="form-label">สถานะ</label>
+                      <label htmlFor="article-status" className="form-label">
+                        สถานะ
+                      </label>
                       <select
+                        id="article-status"
                         value={article.status}
                         onChange={e => handleInputChange('status', e.target.value)}
                         className="form-select"

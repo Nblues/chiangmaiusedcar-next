@@ -1,0 +1,79 @@
+{
+  "extends": ["next", "next/core-web-vitals"],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
+    "linebreak-style": 0,
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "react/no-unknown-property": ["error", { "ignore": ["jsx"] }],
+    "@next/next/no-img-element": "off",
+    "@next/next/no-html-link-for-pages": "off",
+    "jsx-a11y/anchor-is-valid": "warn",
+    "jsx-a11y/no-autofocus": "warn",
+    "jsx-a11y/alt-text": "error",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        "labelComponents": [],
+        "labelAttributes": [],
+        "controlComponents": [],
+        "assert": "either",
+        "depth": 25
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_|^e$|^err$|^error$|^event$",
+        "varsIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-require-imports": "warn",
+    "no-console": [
+      "warn",
+      {
+        "allow": ["warn", "error", "info"]
+      }
+    ],
+    "no-debugger": "warn",
+    "no-case-declarations": "warn",
+    "no-undef": "error",
+    "no-control-regex": "warn",
+    "no-misleading-character-class": "warn",
+    "no-dupe-class-members": "error",
+    "no-dupe-keys": "error",
+    "no-inner-declarations": "warn",
+    "no-unused-expressions": "warn"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      "files": ["scripts/**/*", "dev/scripts/**/*"],
+      "rules": {
+        "no-console": "off",
+        "@typescript-eslint/no-require-imports": "off",
+        "no-unused-vars": "off"
+      }
+    },
+    {
+      "files": ["pages/api/**/*"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
+}

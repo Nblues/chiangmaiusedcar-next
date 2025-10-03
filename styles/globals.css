@@ -48,12 +48,17 @@ html {
 }
 
 /* Touch-Friendly Navigation - Mobile Optimized */
-.pagination-stable button {
+.pagination-stable button,
+.btn-primary,
+.btn-secondary,
+.form-input,
+.form-select {
   will-change: transform, opacity;
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  transform: translateZ(0);
 }
 
 /* Mobile Touch Improvements */

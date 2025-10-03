@@ -251,7 +251,10 @@ export default function NewArticle() {
               {/* Title */}
               <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
                 <div className="flex justify-between items-center mb-2">
-                  <label className="text-sm font-medium text-gray-700 font-prompt">
+                  <label
+                    htmlFor="article-title"
+                    className="text-sm font-medium text-gray-700 font-prompt"
+                  >
                     หัวข้อบทความ *
                   </label>
                   <span
@@ -265,6 +268,7 @@ export default function NewArticle() {
                   </span>
                 </div>
                 <input
+                  id="article-title"
                   type="text"
                   value={article.title}
                   onChange={e => handleInputChange('title', e.target.value)}
@@ -280,7 +284,10 @@ export default function NewArticle() {
               {/* Excerpt */}
               <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
                 <div className="flex justify-between items-center mb-2">
-                  <label className="text-sm font-medium text-gray-700 font-prompt">
+                  <label
+                    htmlFor="article-excerpt"
+                    className="block text-sm font-medium text-gray-700 mb-2 font-prompt"
+                  >
                     คำอธิบายสั้น (Excerpt)
                   </label>
                   <span
@@ -294,6 +301,7 @@ export default function NewArticle() {
                   </span>
                 </div>
                 <textarea
+                  id="article-excerpt"
                   value={article.excerpt}
                   onChange={e => handleInputChange('excerpt', e.target.value)}
                   placeholder="เขียนคำอธิบายสั้น ๆ เพื่อดึงดูดผู้อ่าน..."
@@ -308,7 +316,10 @@ export default function NewArticle() {
 
               {/* Content */}
               <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
-                <label className="block text-sm font-medium text-gray-700 mb-2 font-prompt">
+                <label
+                  htmlFor="article-content"
+                  className="block text-sm font-medium text-gray-700 mb-2 font-prompt"
+                >
                   เนื้อหาบทความ *
                 </label>
                 <div className="mb-4">
@@ -523,10 +534,14 @@ export default function NewArticle() {
 
                 {/* Category */}
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2 font-prompt">
+                  <label
+                    htmlFor="article-category"
+                    className="block text-sm font-medium text-gray-700 mb-2 font-prompt"
+                  >
                     หมวดหมู่
                   </label>
                   <select
+                    id="article-category"
                     value={article.category}
                     onChange={e => handleInputChange('category', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 font-prompt"
@@ -556,10 +571,14 @@ export default function NewArticle() {
 
                 {/* Author */}
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2 font-prompt">
+                  <label
+                    htmlFor="article-author"
+                    className="block text-sm font-medium text-gray-700 mb-2 font-prompt"
+                  >
                     ผู้เขียน
                   </label>
                   <input
+                    id="article-author"
                     type="text"
                     value={article.author}
                     onChange={e => handleInputChange('author', e.target.value)}
@@ -574,10 +593,14 @@ export default function NewArticle() {
 
                 {/* Keywords */}
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2 font-prompt">
+                  <label
+                    htmlFor="article-keywords"
+                    className="block text-sm font-medium text-gray-700 mb-2 font-prompt"
+                  >
                     คำค้นหา (คั่นด้วยจุลภาค)
                   </label>
                   <input
+                    id="article-keywords"
                     type="text"
                     value={article.keywords}
                     onChange={e => handleInputChange('keywords', e.target.value)}
@@ -588,7 +611,10 @@ export default function NewArticle() {
 
                 {/* Featured Image */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2 font-prompt">
+                  <label
+                    htmlFor="article-image"
+                    className="block text-sm font-medium text-gray-700 mb-2 font-prompt"
+                  >
                     รูปปก
                   </label>
                   <div className="relative h-32 mb-3 rounded-lg overflow-hidden border border-gray-300">
@@ -632,6 +658,7 @@ export default function NewArticle() {
                   )}
 
                   <input
+                    id="article-image"
                     type="text"
                     value={article.image}
                     onChange={e => handleInputChange('image', e.target.value)}
@@ -681,7 +708,7 @@ export default function NewArticle() {
               />
 
               {/* เพิ่ม CSS สำหรับรูปภาพไม่ให้เบียดข้อความ */}
-              <style jsx>{`
+              <style>{`
                 .prose img {
                   margin: 30px 0 !important;
                   border-radius: 8px;

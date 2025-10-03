@@ -197,19 +197,45 @@ class SEOVerifier {
     for (const file of allFiles) {
       const content = fs.readFileSync(file, 'utf8');
 
-      // Find all img tags and Image components (including multi-line)
-      const imgMatches = content.match(/<(?:img|Image)[\s\S]*?>/g) || [];
+      // Find actual <img or <Image tags (not <ImageGallery, <ImageOptions, etc.)
+      // Match: <img or <Image followed by space/newline/tab
+      const imgRegex = /<(img|Image)[\s\n\t]/g;
+      let match;
 
-      imgMatches.forEach(match => {
+      while ((match = imgRegex.exec(content)) !== null) {
+        const startIndex = match.index;
+        const tagName = match[1];
+        let depth = 1;
+        let i = startIndex + match[0].length;
+        let tagContent = match[0];
+
+        // Scan forward to find the closing of this tag
+        while (i < content.length && depth > 0) {
+          if (content[i] === '<' && content.substring(i, i + 2) === '</') {
+            const closeTag = content.substring(i, i + tagName.length + 3);
+            if (closeTag === `</${tagName}>`) {
+              tagContent += content.substring(match.index + tagContent.length, i + closeTag.length);
+              depth = 0;
+            }
+          } else if (content[i] === '/' && content[i + 1] === '>') {
+            tagContent += content.substring(match.index + tagContent.length, i + 2);
+            depth = 0;
+          }
+          i++;
+        }
+
         totalImages++;
 
-        if (match.includes('alt=')) {
+        if (tagContent.includes('alt=')) {
           imagesWithAlt++;
         } else {
           imagesWithoutAlt++;
-          this.log(`⚠️ ${file} has image without alt: ${match.substring(0, 50)}...`, 'warning');
+          this.log(
+            `⚠️ ${file} has ${tagName} without alt: ${tagContent.substring(0, 100).replace(/\n/g, ' ')}...`,
+            'warning'
+          );
         }
-      });
+      }
     }
 
     this.log(

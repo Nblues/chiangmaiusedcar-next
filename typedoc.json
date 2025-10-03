@@ -1,0 +1,13 @@
+{
+  "entryPoints": ["./workers/**/*.ts"],
+  "out": "docs",
+  "name": "ครูหนึ่งรถสวย API Documentation",
+  "theme": "default",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeExternals": true,
+  "includeVersion": true,
+  "readme": "none",
+  "plugin": ["typedoc-plugin-markdown"],
+  "githubPages": true
+}

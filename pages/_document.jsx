@@ -8,6 +8,14 @@ export default function Document() {
   return (
     <Html lang="th">
       <Head>
+        {/* DNS Prefetch & Preconnect for Performance */}
+        <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://www.facebook.com" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+
         {/* Essential HTML5 Meta Tags for SEO 100/100 */}
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -100,11 +108,17 @@ export default function Document() {
         {/* Site Verification */}
         <meta name="google-site-verification" content="your-google-verification-code" />
 
-        {/* DNS Prefetch for performance */}
-        <link rel="dns-prefetch" href="//www.google-analytics.com" />
-        <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
-        <link rel="dns-prefetch" href="//cdn.shopify.com" />
-        <link rel="dns-prefetch" href="//files.myshopify.com" />
+        {/* Critical CSS for LCP - Inline to avoid render blocking */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+          .bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
+          .from-orange-100 { --tw-gradient-from: #ffedd5; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 237, 213, 0)); }
+          .to-blue-100 { --tw-gradient-to: #dbeafe; }
+          .aspect-video { aspect-ratio: 16 / 9; }
+        `,
+          }}
+        />
 
         {/* 2025 Performance Optimization */}
         <link rel="dns-prefetch" href="//vercel.com" />
@@ -116,6 +130,33 @@ export default function Document() {
 
         {/* Cloudflare compatibility script - must load early */}
         <script src="/cloudflare-compat.js" defer></script>
+
+        {/* Facebook Pixel Code */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(f,b,e,v,n,t,s)
+              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+              n.queue=[];t=b.createElement(e);t.async=!0;
+              t.src=v;s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)}(window, document,'script',
+              'https://connect.facebook.net/en_US/fbevents.js');
+              fbq('init', '939085106560508');
+              fbq('track', 'PageView');
+            `,
+          }}
+        />
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: 'none' }}
+            src="https://www.facebook.com/tr?id=939085106560508&ev=PageView&noscript=1"
+            alt=""
+          />
+        </noscript>
       </Head>
       <body>
         {/* Skip link for accessibility */}

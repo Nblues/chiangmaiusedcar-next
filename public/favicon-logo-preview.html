@@ -1,109 +1,118 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ตัวอย่าง Favicon - ครูหนึ่งรถสวย</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <link rel="icon" type="image/png" href="/logo/logo_main.png">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/logo/logo_main.png" />
     <style>
-        body {
-            font-family: 'Prompt', sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #f5f5f5;
-        }
-        .preview-container {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .favicon-preview {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin: 20px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-        .favicon-sizes {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        .favicon-item {
-            text-align: center;
-        }
-        .favicon-item img {
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .favicon-item span {
-            display: block;
-            margin-top: 5px;
-            font-size: 12px;
-            color: #666;
-        }
-        h1 {
-            color: #1a237e;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        h2 {
-            color: #1a237e;
-            border-bottom: 2px solid #ff9800;
-            padding-bottom: 10px;
-        }
-        .note {
-            background: #e3f2fd;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #1a237e;
-            margin: 20px 0;
-        }
+      body {
+        font-family: 'Prompt', sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .preview-container {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .favicon-preview {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin: 20px 0;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+      }
+      .favicon-sizes {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+      .favicon-item {
+        text-align: center;
+      }
+      .favicon-item img {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      .favicon-item span {
+        display: block;
+        margin-top: 5px;
+        font-size: 12px;
+        color: #666;
+      }
+      h1 {
+        color: #1a237e;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      h2 {
+        color: #1a237e;
+        border-bottom: 2px solid #ff9800;
+        padding-bottom: 10px;
+      }
+      .note {
+        background: #e3f2fd;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #1a237e;
+        margin: 20px 0;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>🚗 Favicon ใหม่ - ใช้ logo_main.png</h1>
-    
+
     <div class="preview-container">
-        <h2>ตัวอย่างการแสดงผล Favicon</h2>
-        
-        <div class="favicon-preview">
-            <strong>Favicon ในแท็บเบราว์เซอร์:</strong>
-            <div class="favicon-sizes">
-                <div class="favicon-item">
-                    <img src="/logo/logo_main.png" width="16" height="16" alt="16x16">
-                    <span>16×16</span>
-                </div>
-                <div class="favicon-item">
-                    <img src="/logo/logo_main.png" width="32" height="32" alt="32x32">
-                    <span>32×32</span>
-                </div>
-                <div class="favicon-item">
-                    <img src="/favicon.svg" width="48" height="48" alt="SVG">
-                    <span>SVG</span>
-                </div>
-            </div>
+      <h2>ตัวอย่างการแสดงผล Favicon</h2>
+
+      <div class="favicon-preview">
+        <strong>Favicon ในแท็บเบราว์เซอร์:</strong>
+        <div class="favicon-sizes">
+          <div class="favicon-item">
+            <img src="/logo/logo_main.png" width="16" height="16" alt="16x16" />
+            <span>16×16</span>
+          </div>
+          <div class="favicon-item">
+            <img src="/logo/logo_main.png" width="32" height="32" alt="32x32" />
+            <span>32×32</span>
+          </div>
+          <div class="favicon-item">
+            <img src="/favicon.svg" width="48" height="48" alt="SVG" />
+            <span>SVG</span>
+          </div>
         </div>
-        
-        <div class="note">
-            <strong>📋 การอัปเดต:</strong><br>
-            • ใช้ logo_main.png เป็น favicon โดยตรง<br>
-            • สร้าง favicon.svg wrapper สำหรับการแสดงผลที่ดีขึ้น<br>
-            • อัปเดต manifest.json ให้ใช้ logo_main.png<br>
-            • รองรับทุกขนาดและอุปกรณ์
-        </div>
-        
-        <div style="text-align: center; margin-top: 30px;">
-            <a href="/" style="background: #1a237e; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px;">
-                กลับหน้าแรก
-            </a>
-        </div>
+      </div>
+
+      <div class="note">
+        <strong>📋 การอัปเดต:</strong><br />
+        • ใช้ logo_main.png เป็น favicon โดยตรง<br />
+        • สร้าง favicon.svg wrapper สำหรับการแสดงผลที่ดีขึ้น<br />
+        • อัปเดต manifest.json ให้ใช้ logo_main.png<br />
+        • รองรับทุกขนาดและอุปกรณ์
+      </div>
+
+      <div style="text-align: center; margin-top: 30px">
+        <a
+          href="/"
+          style="
+            background: #1a237e;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+          "
+        >
+          กลับหน้าแรก
+        </a>
+      </div>
     </div>
-</body>
+  </body>
 </html>

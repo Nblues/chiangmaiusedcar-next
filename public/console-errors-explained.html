@@ -190,14 +190,23 @@
         <div class="error-card">
           <h3><span class="badge badge-error">FIXED</span> Manifest Share Target Warning</h3>
           <p><strong>ปัญหาเดิม</strong>:</p>
-          <div class="code">Manifest: Enctype should be set to either application/x-www-form-urlencoded or multipart/form-data. It currently defaults to application/x-www-form-urlencoded</div>
-          
-          <p><strong>สาเหตุ</strong>: ไม่มี <code>enctype</code> field ใน <code>share_target</code> configuration</p>
-          
+          <div class="code">
+            Manifest: Enctype should be set to either application/x-www-form-urlencoded or
+            multipart/form-data. It currently defaults to application/x-www-form-urlencoded
+          </div>
+
+          <p>
+            <strong>สาเหตุ</strong>: ไม่มี <code>enctype</code> field ใน
+            <code>share_target</code> configuration
+          </p>
+
           <div class="solution">
             <strong>🔧 วิธีแก้ไข</strong>:
             <ol>
-              <li>เพิ่ม <code>"enctype": "application/x-www-form-urlencoded"</code> ใน <code>share_target</code></li>
+              <li>
+                เพิ่ม <code>"enctype": "application/x-www-form-urlencoded"</code> ใน
+                <code>share_target</code>
+              </li>
               <li>หรือใช้ <code>"enctype": "multipart/form-data"</code> สำหรับการส่งไฟล์</li>
             </ol>
           </div>
@@ -352,7 +361,8 @@
               <a href="/manifest.json" target="_blank">📋 Manifest.json</a> - PWA configuration
             </li>
             <li>
-              <a href="/test-manifest.html" target="_blank">📋 Manifest Test Center</a> - ทดสอบ PWA Manifest
+              <a href="/test-manifest.html" target="_blank">📋 Manifest Test Center</a> - ทดสอบ PWA
+              Manifest
             </li>
           </ul>
         </div>

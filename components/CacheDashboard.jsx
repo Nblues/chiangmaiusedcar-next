@@ -239,7 +239,7 @@ export default function CacheDashboard() {
         >
           📖 Error Explanations
         </a>
-        
+
         <a
           href="/test-manifest.html"
           target="_blank"

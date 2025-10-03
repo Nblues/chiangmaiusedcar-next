@@ -10,11 +10,7 @@
   "orientation": "portrait-primary",
   "scope": "/",
   "id": "chiangmai-used-car",
-  "categories": [
-    "automotive",
-    "shopping",
-    "business"
-  ],
+  "categories": ["automotive", "shopping", "business"],
   "icons": [
     {
       "src": "/logo/logo_main.png",

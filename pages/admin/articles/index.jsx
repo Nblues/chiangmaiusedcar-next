@@ -43,8 +43,7 @@ export default function ArticlesList() {
       const data = await getArticles();
       setArticles(data);
     } catch (error) {
-      console.error('Error loading articles:', error);
-      alert('ไม่สามารถโหลดรายการบทความได้');
+      alert('ไม่สามารถโหลดรายการบทความได้: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -65,8 +64,7 @@ export default function ArticlesList() {
         alert('ไม่สามารถลบบทความได้');
       }
     } catch (error) {
-      console.error('Error deleting article:', error);
-      alert('เกิดข้อผิดพลาดในการลบบทความ');
+      alert('เกิดข้อผิดพลาดในการลบบทความ: ' + error.message);
     } finally {
       setDeleting(null);
     }
@@ -146,8 +144,11 @@ export default function ArticlesList() {
               <div className="card-body">
                 <div className="row g-3">
                   <div className="col-md-4">
-                    <label className="form-label">กรองตามสถานะ:</label>
+                    <label htmlFor="status-filter" className="form-label">
+                      กรองตามสถานะ:
+                    </label>
                     <select
+                      id="status-filter"
                       className="form-select"
                       value={filter}
                       onChange={e => setFilter(e.target.value)}
@@ -158,8 +159,11 @@ export default function ArticlesList() {
                     </select>
                   </div>
                   <div className="col-md-4">
-                    <label className="form-label">กรองตามหมวดหมู่:</label>
+                    <label htmlFor="category-filter" className="form-label">
+                      กรองตามหมวดหมู่:
+                    </label>
                     <select
+                      id="category-filter"
                       className="form-select"
                       value={categoryFilter}
                       onChange={e => setCategoryFilter(e.target.value)}

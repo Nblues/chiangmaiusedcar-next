@@ -6,10 +6,8 @@ const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 
-// Allowed domains for CSP bypass
+// Allowed domains for CSP bypass (EmailJS only - others are skipped)
 const ALLOWED_DOMAINS = [
-  'fonts.googleapis.com',
-  'fonts.gstatic.com',
   'api.emailjs.com',
   'cdn.emailjs.com'
 ];
@@ -89,19 +87,28 @@ self.addEventListener('fetch', e => {
   // Skip non-GET requests
   if (e.request.method !== 'GET') return;
 
-  // Allow Google Fonts and EmailJS requests to bypass CSP completely
   const url = new URL(e.request.url);
   const hostname = url.hostname;
   
-  // Check if this is a font or EmailJS request that needs CSP bypass
+  // Skip Facebook Pixel tracking completely - let browser handle it directly
+  if (hostname.includes('facebook.net') || hostname.includes('facebook.com')) {
+    return; // Don't intercept Facebook requests
+  }
+
+  // Skip Google Fonts - let browser handle it directly
+  if (hostname.includes('googleapis.com') || hostname.includes('gstatic.com')) {
+    return; // Don't intercept Google Fonts
+  }
+
+  // Allow EmailJS requests to bypass CSP
   if (ALLOWED_DOMAINS.some(domain => hostname.includes(domain) || hostname === domain)) {
     e.respondWith(
       fetch(e.request, {
-        mode: 'cors',
+        mode: 'no-cors',
         credentials: 'omit'
       }).catch(() => {
-        // If fetch fails, return a basic response
-        return new Response('', { status: 408 });
+        // If fetch fails, let browser handle it
+        return fetch(e.request);
       })
     );
     return;

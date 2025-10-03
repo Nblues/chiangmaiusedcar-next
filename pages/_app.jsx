@@ -202,7 +202,7 @@ export default function MyApp({ Component, pageProps }) {
           <Footer />
         </ClientOnly>
         <ClientOnly>
-          <Suspense fallback={<div style={{ display: 'none' }}></div>}>
+          <Suspense fallback={<div className="skeleton animate-pulse bg-gray-200 h-12"></div>}>
             <CookieConsent />
           </Suspense>
         </ClientOnly>

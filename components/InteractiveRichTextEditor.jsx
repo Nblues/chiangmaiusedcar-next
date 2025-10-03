@@ -102,7 +102,7 @@ const InteractiveRichTextEditor = ({
         let newContent = value.replace(imgRegex, '');
 
         // แทรกรูปในตำแหน่งใหม่
-        const imgTag = `<img src="${imgSrc}" style="max-width: ${draggedImage.style.maxWidth || '300px'}; height: auto; margin: 10px;" draggable="true" />`;
+        const imgTag = `<img src="${imgSrc}" alt="รูปภาพบทความ" style="max-width: ${draggedImage.style.maxWidth || '300px'}; height: auto; margin: 10px;" draggable="true" />`;
         newContent =
           newContent.substring(0, textOffset) + imgTag + newContent.substring(textOffset);
 

@@ -2,37 +2,35 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://www.chiangmaiusedcar.com</loc>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
+    <loc>https://www.chiangmaiusedcar.com/</loc>
     <image:image>
       <image:loc>https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp</image:loc>
+      <image:title>ครูหนึ่งรถสวย - รถมือสองเชียงใหม่</image:title>
       <image:caption>ครูหนึ่งรถสวย - รถมือสองเชียงใหม่</image:caption>
-      <image:title>หน้าแรกครูหนึ่งรถสวย</image:title>
-      <image:license>https://www.chiangmaiusedcar.com/terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.chiangmaiusedcar.com/herobanner/team.png</image:loc>
-      <image:caption>ทีมงานครูหนึ่งรถสวย</image:caption>
-      <image:title>เกี่ยวกับครูหนึ่งรถสวย</image:title>
-      <image:license>https://www.chiangmaiusedcar.com/terms</image:license>
-    </image:image>
-    <image:image>
-      <image:loc>https://www.chiangmaiusedcar.com/logo/logo_main.png</image:loc>
-      <image:caption>โลโก้ครูหนึ่งรถสวย</image:caption>
-      <image:title>ครูหนึ่งรถสวย Logo</image:title>
-      <image:license>https://www.chiangmaiusedcar.com/terms</image:license>
     </image:image>
   </url>
   <url>
-    <loc>https://www.chiangmaiusedcar.com/about</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://www.chiangmaiusedcar.com/</loc>
     <image:image>
-      <image:loc>https://www.chiangmaiusedcar.com/herobanner/team.png</image:loc>
-      <image:caption>ทีมงานครูหนึ่งรถสวย - ประสบการณ์ 10+ ปี</image:caption>
-      <image:title>เกี่ยวกับครูหนึ่งรถสวย</image:title>
-      <image:license>https://www.chiangmaiusedcar.com/terms</image:license>
+      <image:loc>https://www.chiangmaiusedcar.com/herobanner/team.webp</image:loc>
+      <image:title>ทีมงานครูหนึ่งรถสวย</image:title>
+      <image:caption>ทีมงานครูหนึ่งรถสวย</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/</loc>
+    <image:image>
+      <image:loc>https://www.chiangmaiusedcar.com/herobanner/allusedcars.webp</image:loc>
+      <image:title>รถมือสองทั้งหมด</image:title>
+      <image:caption>รถมือสองทั้งหมด</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/</loc>
+    <image:image>
+      <image:loc>https://www.chiangmaiusedcar.com/favicon.webp</image:loc>
+      <image:title>โลโก้ครูหนึ่งรถสวย</image:title>
+      <image:caption>โลโก้ครูหนึ่งรถสวย</image:caption>
     </image:image>
   </url>
 </urlset>

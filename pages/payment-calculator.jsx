@@ -31,8 +31,12 @@ export default function PaymentCalculator() {
       return;
     }
 
-    // คำนวณสำหรับหลายปี: 5, 6, 7 ปี
+    // คำนวณสำหรับหลายปี: 1-7 ปี
     const periods = [
+      { years: 1, months: 12, label: '1 ปี' },
+      { years: 2, months: 24, label: '2 ปี' },
+      { years: 3, months: 36, label: '3 ปี' },
+      { years: 4, months: 48, label: '4 ปี' },
       { years: 5, months: 60, label: '5 ปี' },
       { years: 6, months: 72, label: '6 ปี' },
       { years: 7, months: 84, label: '7 ปี' },
@@ -460,9 +464,16 @@ export default function PaymentCalculator() {
 
                   <div>
                     <p className="text-xs md:text-sm text-gray-600 mb-2">
-                      {parseInt(customerAge) > 40
-                        ? 'ค่าประกัน: 500 + VAT (รวม 535 บาท/เดือน)'
-                        : 'ค่าประกัน: 200 + VAT (รวม 214 บาท/เดือน)'}
+                      {(() => {
+                        const age = parseInt(customerAge) || 35;
+                        let rate;
+                        if (age <= 30) rate = 0.27;
+                        else if (age <= 40) rate = 0.4;
+                        else if (age <= 50) rate = 0.62;
+                        else if (age <= 60) rate = 1.0;
+                        else rate = 2.0;
+                        return `อัตราเบี้ยประกัน: ${rate}% ต่อปี (อายุ ${age} ปี) - ไม่มี VAT`;
+                      })()}
                     </p>
                   </div>
 
@@ -548,115 +559,109 @@ export default function PaymentCalculator() {
 
                     <div className="space-y-3 md:space-y-4">
                       <h4 className="text-base md:text-lg font-bold text-primary font-prompt">
-                        ตัวเลือกการผ่อนชำระ:
+                        รายละเอียดการผ่อนชำระ{' '}
+                        {(() => {
+                          const calc = result.calculations.find(
+                            c => c.months === parseInt(loanTerm)
+                          );
+                          return calc ? calc.label : '';
+                        })()}
+                        :
                       </h4>
-                      {result.calculations.map((calc, index) => (
-                        <div
-                          key={calc.years}
-                          className={`p-3 md:p-4 rounded-lg border ${
-                            index === 1
-                              ? 'bg-orange-50 border-orange-200 border-2'
-                              : 'bg-gray-50 border-gray-200'
-                          }`}
-                        >
-                          <div className="flex justify-between items-center mb-2">
-                            <h4
-                              className={`font-bold text-sm md:text-base ${
-                                index === 1 ? 'text-orange-600' : 'text-primary'
-                              }`}
-                            >
-                              {calc.label} ({calc.months} เดือน)
-                              {index === 1 && (
-                                <span className="ml-2 text-xs bg-orange-200 text-orange-700 px-2 py-1 rounded-full">
-                                  แนะนำ
+                      {(() => {
+                        const calc = result.calculations.find(c => c.months === parseInt(loanTerm));
+                        if (!calc) return null;
+                        return (
+                          <div className="p-3 md:p-4 rounded-lg bg-blue-50 border-2 border-blue-200">
+                            <div className="flex justify-between items-center mb-2">
+                              <h4 className="font-bold text-sm md:text-base text-primary">
+                                {calc.label} ({calc.months} เดือน)
+                              </h4>
+                            </div>
+
+                            {/* Mobile Layout: แสดงยอดรวมและรายละเอียด */}
+                            <div className="space-y-2 md:hidden">
+                              <div className="flex justify-between items-center p-3 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-2 border-primary shadow-md">
+                                <span className="text-sm font-semibold text-primary">
+                                  ค่างวดต่อเดือน (รวม VAT 7% + ประกันแล้ว):
                                 </span>
-                              )}
-                            </h4>
-                          </div>
-
-                          {/* Mobile Layout: Stack vertically */}
-                          <div className="space-y-2 md:hidden">
-                            <div className="flex justify-between items-center p-2 bg-white rounded border">
-                              <span className="text-xs text-gray-600">ค่างวดต่อเดือน:</span>
-                              <div className="font-bold text-sm text-primary">
-                                ฿{formatNumber(calc.monthlyPayment)}
-                              </div>
-                            </div>
-                            <div className="flex justify-between items-center p-2 bg-blue-50 rounded border border-blue-200">
-                              <span className="text-xs text-gray-600">ค่างวด + VAT:</span>
-                              <div className="font-bold text-sm text-blue-600">
-                                ฿{formatNumber(calc.monthlyPaymentWithVat)}
-                              </div>
-                            </div>
-                            <div className="flex justify-between items-center p-2 bg-blue-50 rounded border border-blue-200">
-                              <span className="text-xs text-gray-600">ยอดชำระรวม (+ ประกัน):</span>
-                              <div className="font-bold text-sm text-blue-600">
-                                ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}
-                              </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-1 text-xs">
-                              <div className="text-center p-1 bg-white rounded">
-                                <span className="text-gray-600 block">ประกัน:</span>
-                                <div className="font-semibold text-gray-700">
-                                  ฿{formatNumber(calc.insurance)}
+                                <div className="font-bold text-lg text-primary">
+                                  ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}
                                 </div>
                               </div>
-                              <div className="text-center p-1 bg-white rounded">
-                                <span className="text-gray-600 block">VAT:</span>
-                                <div className="font-semibold text-gray-700">
-                                  ฿{formatNumber(calc.vat)}
+                              <div className="grid grid-cols-2 gap-2 text-xs">
+                                <div className="p-2 bg-white rounded border">
+                                  <span className="text-gray-600 block">VAT 7% ต่องวด:</span>
+                                  <div className="font-semibold text-gray-700">
+                                    ฿{formatNumber(calc.vat)}
+                                  </div>
+                                </div>
+                                <div className="p-2 bg-white rounded border">
+                                  <span className="text-gray-600 block">ค่าประกัน/เดือน:</span>
+                                  <div className="font-semibold text-primary">
+                                    ฿{formatNumber(calc.insurance)}
+                                  </div>
+                                  <div className="text-xs text-gray-500">(ไม่รวม VAT)</div>
+                                </div>
+                                <div className="p-2 bg-white rounded border">
+                                  <span className="text-gray-600 block">ดอกเบี้ยรวม:</span>
+                                  <div className="font-semibold text-gray-700">
+                                    ฿{formatNumber(calc.totalInterest)}
+                                  </div>
+                                </div>
+                                <div className="p-2 bg-white rounded border">
+                                  <span className="text-gray-600 block">ยอดชำระรวม:</span>
+                                  <div className="font-semibold text-gray-700">
+                                    ฿{formatNumber(calc.totalPayment)}
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
 
-                          {/* Desktop Layout: Grid */}
-                          <div className="hidden md:grid md:grid-cols-2 gap-3 text-sm">
-                            <div>
-                              <span className="text-gray-600">ค่างวดต่อเดือน:</span>
-                              <div className="font-bold text-lg text-primary">
-                                ฿{formatNumber(calc.monthlyPayment)}
+                            {/* Desktop Layout: แสดงเฉพาะยอดรวม */}
+                            <div className="hidden md:block">
+                              <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg border-2 border-primary shadow-md mb-3">
+                                <span className="text-base font-semibold text-primary block mb-2">
+                                  ค่างวดต่อเดือน (รวม VAT 7% + ประกันแล้ว)
+                                </span>
+                                <div className="font-bold text-2xl text-primary">
+                                  ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}
+                                </div>
                               </div>
-                            </div>
-                            <div>
-                              <span className="text-gray-600">ค่างวด + VAT:</span>
-                              <div className="font-bold text-lg text-blue-600">
-                                ฿{formatNumber(calc.monthlyPaymentWithVat)}
-                              </div>
-                            </div>
-                            <div>
-                              <span className="text-gray-600">ยอดชำระรวม (+ ประกัน):</span>
-                              <div className="font-bold text-lg text-primary">
-                                ฿{formatNumber(calc.monthlyPaymentWithVatAndInsurance)}
-                              </div>
-                            </div>
-                            <div>
-                              <span className="text-gray-600">VAT 7% (ค่างวดอย่างเดียว):</span>
-                              <div className="font-semibold text-gray-700">
-                                ฿{formatNumber(calc.vat)}
-                              </div>
-                            </div>
-                            <div>
-                              <span className="text-gray-600">ค่าประกัน/เดือน:</span>
-                              <div className="font-semibold text-gray-700">
-                                ฿{formatNumber(calc.insurance)}
-                              </div>
-                            </div>
-                            <div>
-                              <span className="text-gray-600">ดอกเบี้ยรวม:</span>
-                              <div className="font-semibold text-gray-700">
-                                ฿{formatNumber(calc.totalInterest)}
-                              </div>
-                            </div>
-                            <div>
-                              <span className="text-gray-600">ยอดชำระรวม:</span>
-                              <div className="font-semibold text-gray-700">
-                                ฿{formatNumber(calc.totalPayment)}
+
+                              <div className="grid grid-cols-2 gap-3 text-sm">
+                                <div>
+                                  <span className="text-gray-600">VAT 7% ต่องวด:</span>
+                                  <div className="font-semibold text-gray-700">
+                                    ฿{formatNumber(calc.vat)}
+                                  </div>
+                                </div>
+                                <div>
+                                  <span className="text-gray-600">ค่าประกัน/เดือน:</span>
+                                  <div className="font-semibold text-primary">
+                                    ฿{formatNumber(calc.insurance)}
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    (เบี้ยประกันไม่มี VAT)
+                                  </div>
+                                </div>
+                                <div>
+                                  <span className="text-gray-600">ดอกเบี้ยรวม:</span>
+                                  <div className="font-semibold text-gray-700">
+                                    ฿{formatNumber(calc.totalInterest)}
+                                  </div>
+                                </div>
+                                <div>
+                                  <span className="text-gray-600">ยอดชำระรวม:</span>
+                                  <div className="font-semibold text-gray-700">
+                                    ฿{formatNumber(calc.totalPayment)}
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })()}
                     </div>
 
                     <div className="mt-4 md:mt-6 p-3 md:p-4 bg-blue-50 rounded-lg">

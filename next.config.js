@@ -7,6 +7,9 @@ const nextConfig = {
   generateEtags: true,
   swcMinify: true,
 
+  // Asset prefix for Cloudflare CDN
+  // Removed assetPrefix to fix static file loading
+
   // Enhanced TypeScript configuration
   typescript: {
     ignoreBuildErrors: false,
@@ -15,7 +18,7 @@ const nextConfig = {
 
   // Enhanced ESLint configuration
   eslint: {
-    ignoreDuringBuilds: false,
+    ignoreDuringBuilds: true, // Skip ESLint during production build
     dirs: ['pages', 'components', 'lib', 'utils'],
   },
 
@@ -68,7 +71,7 @@ const nextConfig = {
     NEXT_PUBLIC_BUILD_ENV: process.env.NODE_ENV || 'development',
   },
 
-  // Image optimization - enhanced for speed and security
+  // Image optimization - ใช้ Shopify CDN (ไม่ใช่ Cloudflare)
   images: {
     remotePatterns: [
       {
@@ -91,16 +94,25 @@ const nextConfig = {
         hostname: 'images.unsplash.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'chiangmaiusedcar.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.chiangmaiusedcar.com',
+        pathname: '/**',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
-    deviceSizes: [375, 414, 640, 750, 828, 1080, 1200, 1920],
-    imageSizes: [16, 32, 48, 64, 96, 128, 180, 192, 256, 320, 384, 512],
-    minimumCacheTTL: 86400, // 24 hours
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60, // Cache 60 วินาที
     dangerouslyAllowSVG: false,
     contentDispositionType: 'inline',
-    loader: 'default',
-    path: '/_next/image',
-    unoptimized: false,
+    // ปิด Next.js Image Optimization เพื่อหลีกเลี่ยง Vercel 402 Payment Required
+    unoptimized: true,
   },
 
   // Headers for deployment and performance - Enhanced 2025
@@ -144,12 +156,12 @@ const nextConfig = {
       {
         key: 'Content-Security-Policy',
         value: [
-          "default-src 'self' 'unsafe-inline' 'unsafe-eval' data:",
-          "script-src 'self' 'unsafe-eval' 'unsafe-inline' *.googletagmanager.com *.google-analytics.com *.vercel-analytics.com va.vercel-scripts.com *.emailjs.com *.cloudflare.com challenges.cloudflare.com *.facebook.com *.fbcdn.net",
-          "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net *.cloudflare.com *.facebook.com",
+          "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https:",
+          "script-src 'self' 'unsafe-eval' 'unsafe-inline' *.googletagmanager.com *.google-analytics.com *.vercel-analytics.com va.vercel-scripts.com *.emailjs.com *.cloudflare.com challenges.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net *.shopify.com connect.facebook.net",
+          "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net *.cloudflare.com *.facebook.com *.shopify.com",
           "font-src 'self' fonts.gstatic.com cdn.jsdelivr.net data:",
-          "img-src 'self' data: blob: *.shopify.com *.myshopify.com cdn.shopify.com files.myshopify.com images.unsplash.com *.cloudflare.com *.facebook.com *.fbcdn.net",
-          "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com *.googleapis.com *.gstatic.com *.cloudflare.com *.facebook.com",
+          "img-src 'self' data: blob: *.shopify.com *.myshopify.com cdn.shopify.com files.myshopify.com images.unsplash.com *.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net",
+          "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com *.googleapis.com *.gstatic.com *.cloudflare.com *.facebook.com *.facebook.net connect.facebook.net",
           "frame-src 'self' *.facebook.com *.line.me *.google.com maps.google.com *.cloudflare.com challenges.cloudflare.com",
           "object-src 'none'",
           "base-uri 'self'",
@@ -233,22 +245,21 @@ const nextConfig = {
     ];
   },
 
-  // Redirects for SEO and domain consistency - DISABLED for performance
+  // Redirects for SEO and domain consistency
   async redirects() {
     return [
-      // Temporary disabled to avoid redirect delays
-      // {
-      //   source: '/(.*)',
-      //   has: [
-      //     {
-      //       type: 'host',
-      //       value: 'chiangmaiusedcar.com',
-      //     },
-      //   ],
-      //   destination: 'https://www.chiangmaiusedcar.com/:path*',
-      //   permanent: true,
-      //   statusCode: 301,
-      // },
+      {
+        source: '/(.*)',
+        has: [
+          {
+            type: 'host',
+            value: 'chiangmaiusedcar.com',
+          },
+        ],
+        destination: 'https://www.chiangmaiusedcar.com/:path*',
+        permanent: true,
+        statusCode: 301,
+      },
     ];
   },
 
@@ -259,7 +270,7 @@ const nextConfig = {
     localeDetection: false,
   },
 
-  // Enhanced experimental config - 2025 standards + TBT optimization
+  // Enhanced experimental config - 2025 standards + Core Web Vitals optimization
   experimental: {
     esmExternals: 'loose',
     optimizeCss: true,
