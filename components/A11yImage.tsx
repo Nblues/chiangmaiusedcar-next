@@ -16,9 +16,9 @@ export default function A11yImage({
   fallbackAlt,
   alt,
   priority,
-  quality,
+  // quality, // Reserved for future use
   fill,
-  sizes,
+  // sizes, // Reserved for future use
   fetchpriority,
   className,
   style,
