@@ -12,6 +12,15 @@ Disallow: /keyword-audit
 Disallow: /api-dashboard
 Disallow: /license
 
+# Block test/debug files (moved to /dev-tools)
+Disallow: /*-preview.html
+Disallow: /debug-*.html
+Disallow: /test-*.html
+Disallow: /favicon-check.html
+Disallow: /favicon-comparison.html
+Disallow: /social-sharing-test.html
+Disallow: /console-errors-explained.html
+
 # Googlebot
 User-agent: Googlebot
 Allow: /

@@ -1,0 +1,28 @@
+# Development tools - ไม่ deploy
+
+/dev-tools
+
+# Documentation files
+
+\*.md
+!README.md
+
+# Test files
+
+**/_.test._
+**/_.spec._
+
+# Local environment
+
+.env.local
+.env\*.local
+
+# IDE
+
+.vscode
+.idea
+
+# Git
+
+.git
+.gitignore
