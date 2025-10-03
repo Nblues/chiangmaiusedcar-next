@@ -27,7 +27,7 @@ function getPriceInfo(amount) {
       numeric: valid ? String(num) : undefined,
       display: valid ? num.toLocaleString() : 'ติดต่อสอบถาม',
     };
-  } catch (error) {
+  } catch {
     return {
       valid: false,
       numeric: undefined,
@@ -1288,16 +1288,16 @@ export async function getStaticProps() {
   try {
     const result = await getHomepageCars(8);
     cars = Array.isArray(result) ? result : [];
-  } catch (e) {
-    console.error('getHomepageCars error:', e);
+  } catch {
+    // Silent error handling for production
     cars = [];
   }
 
   try {
     const counts = await getBrandCounts();
     brandCounts = counts || {};
-  } catch (e) {
-    console.error('getBrandCounts error:', e);
+  } catch {
+    // Silent error handling for production
     brandCounts = {};
   }
 

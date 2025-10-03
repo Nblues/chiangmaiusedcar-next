@@ -9,9 +9,11 @@
 ## ❌ ปัญหาที่พบ (จาก Google Test)
 
 ### Google Rich Results Test:
+
 **URL**: https://search.google.com/test/rich-results/result?id=NvcvvoVh6u29VoY2YK68Mw
 
 **ผลทดสอบ**: ⚠️ **44 items detected: Some are invalid**
+
 - Product Snippets: **12 items** - Some are invalid
 - Invalid items ไม่สามารถแสดง Rich Results ใน Google Search
 
@@ -20,22 +22,26 @@
 ## 🔍 สาเหตุ
 
 ### 1. **`@type` ไม่ถูกต้อง**
+
 ```json
 "@type": "Car"  // ❌ Google ไม่รู้จัก type นี้
 ```
 
 ### 2. **`brand` เป็น string แทน object**
+
 ```json
 "brand": "รถมือสอง"  // ❌ ไม่ใช่แบรนด์จริง + ไม่ใช่ object
 ```
 
 ### 3. **`model` และ `year` ว่างเปล่า**
+
 ```json
 "model": "",  // ❌ ว่างเปล่า
 "year": ""    // ❌ ว่างเปล่า
 ```
 
 ### 4. **ขาดข้อมูลสำคัญ**
+
 - ❌ ไม่มี `sku` (รหัสสินค้า)
 - ❌ ไม่มี `itemCondition` (Used/New)
 - ❌ ไม่มี `category`
@@ -52,6 +58,7 @@
 ### การเปลี่ยนแปลง:
 
 #### Before ❌
+
 ```javascript
 {
   '@type': 'Car',
@@ -71,6 +78,7 @@
 ```
 
 #### After ✅
+
 ```javascript
 {
   '@type': 'Product',  // ✅ เปลี่ยนเป็น Product
@@ -89,8 +97,8 @@
     price: car.price?.amount || '0',
     priceCurrency: 'THB',
     itemCondition: 'https://schema.org/UsedCondition',  // ✅ เพิ่ม condition
-    availability: car.availableForSale 
-      ? 'https://schema.org/InStock' 
+    availability: car.availableForSale
+      ? 'https://schema.org/InStock'
       : 'https://schema.org/OutOfStock',
     seller: {
       '@type': 'AutoDealer',
@@ -104,20 +112,21 @@
 
 ## 📋 สรุปการแก้ไข
 
-| Field | Before | After |
-|-------|--------|-------|
-| `@type` | `'Car'` ❌ | `'Product'` ✅ |
-| `brand` | `'รถมือสอง'` (string) ❌ | `{ '@type': 'Brand', name: 'Honda' }` ✅ |
-| `model` | `''` (empty) ❌ | `car.title` (fallback) ✅ |
-| `sku` | ไม่มี ❌ | `car.id \|\| car.handle` ✅ |
-| `category` | ไม่มี ❌ | `'รถยนต์มือสอง'` ✅ |
-| `itemCondition` | ไม่มี ❌ | `'https://schema.org/UsedCondition'` ✅ |
+| Field           | Before                   | After                                    |
+| --------------- | ------------------------ | ---------------------------------------- |
+| `@type`         | `'Car'` ❌               | `'Product'` ✅                           |
+| `brand`         | `'รถมือสอง'` (string) ❌ | `{ '@type': 'Brand', name: 'Honda' }` ✅ |
+| `model`         | `''` (empty) ❌          | `car.title` (fallback) ✅                |
+| `sku`           | ไม่มี ❌                 | `car.id \|\| car.handle` ✅              |
+| `category`      | ไม่มี ❌                 | `'รถยนต์มือสอง'` ✅                      |
+| `itemCondition` | ไม่มี ❌                 | `'https://schema.org/UsedCondition'` ✅  |
 
 ---
 
 ## 🧪 ทดสอบ
 
 ### Build Status:
+
 ```
 ✅ Build Successful
 ✅ 100 pages generated
@@ -126,6 +135,7 @@
 ```
 
 ### Files Changed:
+
 - `pages/index.jsx` - 8 lines modified
 - `pages/all-cars.jsx` - 9 lines modified
 
@@ -134,11 +144,13 @@
 ## 📊 คาดการณ์ผลลัพธ์
 
 ### Before:
+
 - ⚠️ 44 items detected: **Some are invalid**
 - ❌ Invalid Product schema
 - ❌ ไม่แสดง Rich Results ใน Google
 
 ### After (คาดการณ์):
+
 - ✅ All items valid
 - ✅ Product schema ถูกต้อง
 - ✅ แสดง Rich Results ใน Google:
@@ -152,6 +164,7 @@
 ## 🔄 ขั้นตอนต่อไป
 
 ### 1. Deploy (ทำแล้ว):
+
 ```bash
 git add pages/index.jsx pages/all-cars.jsx
 git commit -m "Fix: Google Rich Results Product schema"
@@ -160,11 +173,13 @@ vercel --prod
 ```
 
 ### 2. ทดสอบใหม่ (รอ 24-48 ชั่วโมง):
+
 - Google ต้อง crawl หน้าใหม่
 - ทดสอบอีกครั้งที่: https://search.google.com/test/rich-results
 - ใส่ URL: https://www.chiangmaiusedcar.com
 
 ### 3. ตรวจสอบ Google Search Console:
+
 - Enhancements → Products
 - ดูว่ามี errors ลดลงหรือไม่
 
@@ -175,6 +190,7 @@ vercel --prod
 ### ไฟล์ที่ไม่ต้องแก้:
 
 ✅ **`lib/seo/jsonld.js`** - ถูกต้องอยู่แล้ว!
+
 - ใช้ `@type: 'Product'`
 - มี `brand` เป็น object
 - มี `itemCondition: 'https://schema.org/UsedCondition'`
@@ -217,4 +233,5 @@ vercel --prod
 
 ---
 
-**สรุป**: แก้ไข Product schema ให้ถูกต้องตามมาตรฐาน Schema.org แล้ว เพื่อให้ Google แสดง Rich Results (รูป + ราคา) ในผลการค้นหา 🚀
+**สรุป**: แก้ไข Product schema ให้ถูกต้องตามมาตรฐาน Schema.org แล้ว เพื่อให้ Google แสดง Rich Results (รูป + ราคา)
+ในผลการค้นหา 🚀

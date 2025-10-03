@@ -131,8 +131,8 @@ export default function AllCars({ cars }) {
         shallow: true,
         scroll: false,
       });
-    } catch (error) {
-      console.warn('Router navigation failed:', error);
+    } catch {
+      // Silent error handling for production
     }
   };
 
@@ -688,9 +688,8 @@ export async function getStaticProps() {
     }));
 
     // แสดงรถทั้งหมดที่มีจริง ไม่จำกัดจำนวน
-  } catch (e) {
-    console.error('getAllCars error:', e);
-    // ไม่ throw error - ให้ UI แสดงข้อมูลว่างแทน
+  } catch {
+    // Silent error handling for production - ให้ UI แสดงข้อมูลว่างแทน
     cars = [];
   }
 
