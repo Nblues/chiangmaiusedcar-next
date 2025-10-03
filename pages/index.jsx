@@ -219,18 +219,23 @@ export default function Home({ cars, brandCounts }) {
             '@type': 'ListItem',
             position: index + 1,
             item: {
-              '@type': 'Car',
+              '@type': 'Product',
               '@id': `https://www.chiangmaiusedcar.com/car/${car.handle}`,
               name: car.title,
               description: `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท`,
-              brand: car.vendor || car.brand || 'รถมือสอง',
-              model: car.model || '',
-              year: car.year || '',
+              brand: {
+                '@type': 'Brand',
+                name: car.vendor || car.brand || car.title?.split(' ')[0] || 'รถยนต์',
+              },
+              model: car.model || car.title,
+              sku: car.id || car.handle,
+              category: 'รถยนต์มือสอง',
               image: car.images?.[0]?.url || '/herobanner/cnxcar.webp',
               offers: {
                 '@type': 'Offer',
                 price: car.price?.amount || '0',
                 priceCurrency: 'THB',
+                itemCondition: 'https://schema.org/UsedCondition',
                 availability: car.availableForSale
                   ? 'https://schema.org/InStock'
                   : 'https://schema.org/OutOfStock',
