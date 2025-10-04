@@ -345,7 +345,7 @@ export default function Home({ cars, brandCounts }) {
             height={640}
             className="w-full h-auto object-contain"
             priority
-            fetchPriority="high"
+            fetchpriority="high"
             quality={60}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1400px"
             style={{ maxHeight: '60vh' }}

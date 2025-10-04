@@ -132,7 +132,6 @@ export default function Document() {
           href="/herobanner/cnxcar.webp"
           as="image"
           type="image/webp"
-          fetchPriority="high"
         />
 
         {/* Cloudflare compatibility script - must load early */}
