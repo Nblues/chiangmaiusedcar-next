@@ -39,12 +39,11 @@ export default function FacebookPixel() {
         if (window.fbq) {
           window.fbq('init', '939085106560508');
           window.fbq('track', 'PageView');
-          console.log('✅ Facebook Pixel loaded (lazy)');
         }
       };
 
       script.onerror = () => {
-        console.warn('⚠️ Facebook Pixel failed to load');
+        // Silent fail - Facebook Pixel is non-critical
       };
 
       document.body.appendChild(script);

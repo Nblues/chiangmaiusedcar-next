@@ -77,15 +77,11 @@ function readLocationConfig(): SiteLocation | null {
 
     // ตรวจสอบความถูกต้องของข้อมูล
     if (!isValidCoordinates(location.lat, location.lng)) {
-      // eslint-disable-next-line no-console
-      console.warn(`⚠️  พิกัดในไฟล์ config ไม่ถูกต้อง: lat=${location.lat}, lng=${location.lng}`);
       return null;
     }
 
     return location;
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.warn(`⚠️  ไม่สามารถอ่านไฟล์ site-location.json: ${error}`);
+  } catch {
     return null;
   }
 } /**
@@ -128,11 +124,6 @@ export function getSiteLocation(): { lat: number; lng: number } {
     source: 'business.js (fallback)',
   };
   lastReadTime = now;
-
-  // eslint-disable-next-line no-console
-  console.log(
-    `📍 ใช้พิกัด fallback จาก business.js: lat=${fallbackLocation.lat}, lng=${fallbackLocation.lng}`
-  );
 
   return fallbackLocation;
 }

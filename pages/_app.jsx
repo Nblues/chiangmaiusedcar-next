@@ -40,7 +40,6 @@ export default function MyApp({ Component, pageProps }) {
             event.filename?.includes('facebook'))
         ) {
           event.preventDefault();
-          console.warn('Third-party script error suppressed:', event.error.message);
           return true;
         }
       };
@@ -55,7 +54,6 @@ export default function MyApp({ Component, pageProps }) {
           event.reason?.message?.includes('Script error')
         ) {
           event.preventDefault();
-          console.warn('Third-party promise rejection suppressed:', event.reason.message);
           return true;
         }
       };
@@ -91,9 +89,8 @@ export default function MyApp({ Component, pageProps }) {
             // Test and enable localStorage
             localStorage.setItem('fb_test', '1');
             localStorage.removeItem('fb_test');
-          } catch (e) {
-            // Fallback for storage restrictions
-            console.warn('Storage restricted in Facebook browser');
+          } catch {
+            // Fallback for storage restrictions - silent fail
           }
 
           // Add external browser suggestion for complex pages
