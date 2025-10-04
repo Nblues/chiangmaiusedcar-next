@@ -126,6 +126,16 @@ export default function Document() {
         <link rel="preconnect" href="https://cdn.shopify.com" />
         <link rel="preconnect" href="https://files.myshopify.com" />
 
+        {/* Preload Critical Resources for LCP Optimization */}
+        <link rel="preload" href="/logo/logo_main.webp" as="image" type="image/webp" />
+        <link
+          rel="preload"
+          href="https://fonts.gstatic.com/s/prompt/v9/jizDREVItHgc8qDIbSTKq4XkRg8.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+
         {/* Cloudflare compatibility script - must load early */}
         <script src="/cloudflare-compat.js" defer></script>
 
