@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react';
 import ClientOnly from '../components/ClientOnly';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import FacebookPixel from '../components/FacebookPixel';
 import '../styles/globals.css';
 import '../styles/interactive-editor.css';
 
@@ -233,6 +234,7 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
       {getLayout(<Component {...pageProps} />)}
       <Analytics />
+      <FacebookPixel />
     </>
   );
 }

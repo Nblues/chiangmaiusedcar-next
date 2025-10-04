@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { getSiteLocation, createMapEmbedUrl, createMapOpenUrl } from '../utils/siteLocation';
 
 export default function Footer() {
@@ -25,7 +24,7 @@ export default function Footer() {
           open: openUrl,
           embed: embedUrl,
         });
-      } catch (error) {
+      } catch {
         // Fallback to hardcoded values if utils fail
         setMapUrls({
           open: 'https://www.google.com/maps/place/ครูหนึ่งรถสวย+รถมือสอง/@18.80508571828391,99.03016129487551,17z',
@@ -48,15 +47,17 @@ export default function Footer() {
             <div className="flex items-center space-x-4 mb-6">
               <div className="relative">
                 <div className="w-16 h-16 rounded-full border-2 border-gold shadow-lg overflow-hidden">
-                  <Image
-                    src="/logo/logo_main.png"
-                    alt="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่"
-                    width={64}
-                    height={64}
-                    className="w-full h-full object-cover scale-125"
-                    priority
-                    quality={85}
-                  />
+                  <picture>
+                    <source srcSet="/logo/logo_main.webp" type="image/webp" />
+                    <img
+                      src="/logo/logo_main.png"
+                      alt="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่"
+                      width="64"
+                      height="64"
+                      className="w-full h-full object-cover scale-125"
+                      loading="eager"
+                    />
+                  </picture>
                 </div>
               </div>
               <div>

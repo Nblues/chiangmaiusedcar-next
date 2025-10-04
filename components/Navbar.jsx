@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
 
 const navItems = [
   { href: '/', label: 'หน้าแรก' },
@@ -30,15 +29,17 @@ export default function Navbar() {
           {/* LOGO */}
           <Link href="/" className="flex items-center space-x-3">
             <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-gold shadow-lg">
-              <Image
-                src="/logo/logo_main.png"
-                alt="ครูหนึ่งรถสวย โลโก้"
-                width={48}
-                height={48}
-                className="w-full h-full object-cover scale-125"
-                priority
-                quality={85}
-              />
+              <picture>
+                <source srcSet="/logo/logo_main.webp" type="image/webp" />
+                <img
+                  src="/logo/logo_main.png"
+                  alt="ครูหนึ่งรถสวย โลโก้"
+                  width="48"
+                  height="48"
+                  className="w-full h-full object-cover scale-125"
+                  loading="eager"
+                />
+              </picture>
             </div>
             <div className="text-2xl font-bold text-primary font-prompt">ครูหนึ่งรถสวย</div>
           </Link>
