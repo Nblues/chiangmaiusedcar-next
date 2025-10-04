@@ -6,6 +6,23 @@
 @import '@fontsource/prompt/400.css';
 @import '@fontsource/prompt/700.css';
 
+/* Font Display Optimization - Prevent FOIT/FOUT */
+@font-face {
+  font-family: 'Prompt';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap; /* Show fallback font immediately, then swap when loaded */
+  src: local('Prompt Regular'), local('Prompt-Regular');
+}
+
+@font-face {
+  font-family: 'Prompt';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap; /* Show fallback font immediately, then swap when loaded */
+  src: local('Prompt Bold'), local('Prompt-Bold');
+}
+
 @import './theme.css';
 
 /* ---- เพิ่ม custom css ได้ตรงนี้ ---- */
