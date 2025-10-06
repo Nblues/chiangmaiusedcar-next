@@ -261,6 +261,11 @@ function CarDetailPage({ car, allCars = [] }) {
         url={`https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`}
         type="product"
         pageType="car"
+        breadcrumbs={[
+          { name: 'หน้าแรก', url: '/' },
+          { name: 'รถมือสองทั้งหมด', url: '/all-cars' },
+          { name: brandModel || safeGet(car, 'title', 'รถมือสอง'), url: null },
+        ]}
         carData={{
           ...car,
           title: enhancedTitle,

@@ -19,6 +19,7 @@ export default function SEO({
   structuredData = null,
   pageType = 'default', // เพิ่มพารามิเตอร์ pageType สำหรับ social sharing 2025
   noindex = false, // เพิ่ม noindex prop สำหรับหน้าที่ไม่ต้องการให้แสดงในผลค้นหา
+  breadcrumbs = null, // เพิ่ม breadcrumbs สำหรับ BreadcrumbList Schema (SEO 2025)
 }) {
   // Memoize static values to prevent unnecessary re-renders
   const staticValues = useMemo(() => {
@@ -531,7 +532,7 @@ export default function SEO({
             },
             image: `${site}/herobanner/chiangmaiusedcar.webp`,
             description:
-              'ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่ ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย เครดิตไม่ผ่านก็มีทาง รถ ECO Car ประหยัดน้ำมัน สินเชื่อผ่านง่าย',
+              'ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่ ผู้เชี่ยวชาญรถมือสอง 10+ ปี ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย เครดิตไม่ผ่านก็มีทาง รถ ECO Car ประหยัดน้ำมัน บริการ ขายรถมือสอง รับซื้อรถมือสอง ประเมินราคารถฟรี สินเชื่อรถมือสอง',
 
             // 2025 SEO: Enhanced keywords in structured data (แนวทาง AK Car ปรับปรุง)
             keywords: [
@@ -587,22 +588,7 @@ export default function SEO({
               'รถมือสองปลอดภัยสูง',
             ],
 
-            // E-A-T and expertise markers
-            expertise: [
-              'ผู้เชี่ยวชาญรถมือสอง 10+ ปี',
-              'ประเมินราคายุติธรรม',
-              'รับรองคุณภาพรถทุกคัน',
-              'บริการครบวงจรรถมือสอง',
-            ],
-
-            serviceType: [
-              'ขายรถมือสอง',
-              'รับซื้อรถมือสอง',
-              'ประเมินราคารถฟรี',
-              'สินเชื่อรถมือสอง',
-              'รับประกันหลังการขาย',
-              'ส่งรถฟรีทั่วประเทศ',
-            ],
+            // Address and contact information
             address: {
               '@type': 'PostalAddress',
               streetAddress: 'เลขที่ 320 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี',
@@ -691,6 +677,25 @@ export default function SEO({
           }),
         }}
       />
+
+      {/* Breadcrumb Schema for better navigation in Google Search Results - 2025 SEO */}
+      {breadcrumbs && breadcrumbs.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'BreadcrumbList',
+              itemListElement: breadcrumbs.map((crumb, index) => ({
+                '@type': 'ListItem',
+                position: index + 1,
+                name: crumb.name,
+                item: crumb.url ? `${site}${crumb.url}` : undefined,
+              })),
+            }),
+          }}
+        />
+      )}
 
       {/* Extra structured data (page specific) */}
       {structuredData && (

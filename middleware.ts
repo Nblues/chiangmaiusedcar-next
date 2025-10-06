@@ -12,6 +12,16 @@ export function middleware(req: NextRequest) {
 
   const { pathname } = req.nextUrl;
 
+  // ✅ Case-Insensitive URL Redirect (SEO Enhancement 2025)
+  // Redirect uppercase URLs to lowercase (canonical URL enforcement)
+  const hasUpperCase = pathname !== pathname.toLowerCase();
+  if (hasUpperCase) {
+    const url = req.nextUrl.clone();
+    url.pathname = pathname.toLowerCase();
+    // 301 Permanent Redirect (tells Google this is the canonical URL)
+    return NextResponse.redirect(url, 301);
+  }
+
   // Admin Protection - ป้องกันการเข้าถึงหน้า Admin
   if (pathname.startsWith('/admin')) {
     const userAgent = req.headers.get('user-agent') || '';

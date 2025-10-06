@@ -127,12 +127,10 @@ export default function Document() {
         <link rel="preconnect" href="https://files.myshopify.com" />
 
         {/* Preload LCP Image for Homepage - Critical for Performance */}
-        <link
-          rel="preload"
-          href="/herobanner/cnxcar.webp"
-          as="image"
-          type="image/webp"
-        />
+        <link rel="preload" href="/herobanner/cnxcar.webp" as="image" type="image/webp" />
+
+        {/* Note: Prompt font is loaded via @fontsource/prompt in globals.css */}
+        {/* Font preload is handled automatically by Next.js for @fontsource packages */}
 
         {/* Cloudflare compatibility script - must load early */}
         <script src="/cloudflare-compat.js" defer></script>

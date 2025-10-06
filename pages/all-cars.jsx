@@ -160,11 +160,15 @@ export default function AllCars({ cars }) {
     <div className="min-h-screen">
       <SEO
         title={`รถมือสองเชียงใหม่ทั้งหมด${totalPages > 1 && currentPage > 1 ? ` หน้า ${currentPage}` : ''} ตรวจสภาพครบถ้วน เช็คประวัติรถ ฟรีดาวน์ | ครูหนึ่งรถสวย`}
-        description={`รถมือสองเชียงใหม่คุณภาพดี ${filteredCars.length} คัน แพลตฟอร์มออนไลน์ ตรวจสภาพครบถ้วน เช็คประวัติรถ ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย${totalPages > 1 ? ` หน้า ${currentPage}/${totalPages}` : ''} Toyota Honda Nissan โทร 094-064-9018`}
+        description={`ดูรถมือสอง ${filteredCars.length} คัน ตรวจสภาพครบ ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan ดอกเบี้ยต่ำ 2.99% นัดหมายดูรถโทร 094-064-9018 คลิกเลย!`}
         url={`/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`}
         image="https://www.chiangmaiusedcar.com/herobanner/cnxallcar.webp"
         type="website"
         pageType="all-cars"
+        breadcrumbs={[
+          { name: 'หน้าแรก', url: '/' },
+          { name: 'รถมือสองทั้งหมด', url: '/all-cars' },
+        ]}
         structuredData={{
           '@context': 'https://schema.org',
           '@type': 'CollectionPage',

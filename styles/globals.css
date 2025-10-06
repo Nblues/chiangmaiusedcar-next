@@ -94,10 +94,30 @@ html {
   }
 }
 
-/* Focus Visible - Accessibility */
+/* Enhanced Focus Visible - Accessibility 2025 Standards */
 :focus-visible {
-  outline: 2px solid currentColor;
+  outline: 3px solid #ff9800; /* สีส้ม accent สว่างชัดเจน */
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.2); /* เพิ่ม glow effect */
+  transition: outline 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* Focus for interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid #ff9800;
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.25);
+}
+
+/* Focus for primary buttons - contrast with background */
+.btn-primary:focus-visible {
+  outline: 3px solid #ffd700; /* สีทองสำหรับปุ่มหลัก */
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.3);
 }
 
 /* Screen Reader Only - Accessibility */

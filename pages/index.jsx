@@ -204,11 +204,12 @@ export default function Home({ cars, brandCounts }) {
     <div>
       <SEO
         title="รถมือสองเชียงใหม่ คุณภาพดี ตรวจสภาพครบถ้วน | ครูหนึ่งรถสวย"
-        description="รถมือสองเชียงใหม่คุณภาพดี ครูหนึ่งรถสวย ศูนย์รวมแบรนด์ดังครบครัน ตรวจสภาพครบถ้วน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda เช็คประวัติรถ โทร 094-064-9018"
+        description="ครูหนึ่งรถสวย รถมือสองเชียงใหม่ ตรวจสภาพครบ ฟรีดาวน์ 0% ดอกเบี้ยต่ำ 2.99% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan ดูรถนัดหมายโทร 094-064-9018 คลิกเลย!"
         url="/"
         image="https://www.chiangmaiusedcar.com/herobanner/cnxcar.webp"
         type="website"
         pageType="home"
+        breadcrumbs={[{ name: 'หน้าแรก', url: '/' }]}
         structuredData={{
           '@context': 'https://schema.org',
           '@type': 'ItemList',
@@ -268,72 +269,6 @@ export default function Home({ cars, brandCounts }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-
-      {/* Service Features Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Service',
-            '@id': 'https://www.chiangmaiusedcar.com/#service',
-            name: 'ความเป็นเลิศของครูหนึ่งรถสวย',
-            description: 'ผู้นำด้านรถมือสองเชียงใหม่ด้วยมาตรฐานการบริการระดับสากล',
-            provider: {
-              '@id': 'https://www.chiangmaiusedcar.com/#organization',
-            },
-            serviceType: 'รถมือสองคุณภาพ',
-            hasOfferCatalog: {
-              '@type': 'OfferCatalog',
-              name: 'ศูนย์รวมแบรนด์ดังครบครัน',
-              itemListElement: [
-                {
-                  '@type': 'Offer',
-                  itemOffered: {
-                    '@type': 'Product',
-                    name: 'Toyota รถมือสองเชียงใหม่',
-                    description: 'รถ Toyota มือสอง 50+ คัน',
-                    category: 'รถยนต์',
-                  },
-                },
-                {
-                  '@type': 'Offer',
-                  itemOffered: {
-                    '@type': 'Product',
-                    name: 'Honda รถมือสองเชียงใหม่',
-                    description: 'รถ Honda มือสอง 30+ คัน',
-                    category: 'รถยนต์',
-                  },
-                },
-                {
-                  '@type': 'Offer',
-                  itemOffered: {
-                    '@type': 'Product',
-                    name: 'Nissan รถมือสองเชียงใหม่',
-                    description: 'รถ Nissan มือสอง 20+ คัน',
-                    category: 'รถยนต์',
-                  },
-                },
-                {
-                  '@type': 'Offer',
-                  itemOffered: {
-                    '@type': 'Product',
-                    name: 'Mazda รถมือสองเชียงใหม่',
-                    description: 'รถ Mazda มือสอง 15+ คัน',
-                    category: 'รถยนต์',
-                  },
-                },
-              ],
-            },
-            features: [
-              'รถบ้านแท้ 100% - 90% รถมือเดียว',
-              'ฟรีดาวน์ 0% ตามเงื่อนไขไฟแนนซ์',
-              'รับประกัน 1 ปีเต็ม ไม่จำกัดกิโลเมตร',
-              'ส่งฟรีทั่วไทย จัดส่งฟรีทั่วประเทศ',
-            ],
-          }),
-        }}
       />
 
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
