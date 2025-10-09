@@ -45,14 +45,19 @@ function CarDetailPage({ car, allCars = [] }) {
     if (!mounted || !car) return;
     const images = safeGet(car, 'images', []);
     if (images.length < 2) return;
+    
+    // ⭐ Preload เฉพาะรูปถัดไปและรูปก่อนหน้า (ไม่โหลดทั้งหมด)
     const preloadIndexes = [];
     if (selectedImageIndex < images.length - 1) preloadIndexes.push(selectedImageIndex + 1);
     if (selectedImageIndex > 0) preloadIndexes.push(selectedImageIndex - 1);
+    
     preloadIndexes.forEach(idx => {
       const img = new window.Image();
       const originalUrl = safeGet(images[idx], 'url', '');
-      // ⭐ ใช้ optimized URL เหมือนกับตอนแสดงผล
+      // ⭐ ใช้ optimized URL ขนาด 1920px สำหรับรูปหลัก
       img.src = optimizeShopifyImage(originalUrl, 1920, 'webp');
+      // ⭐ ตั้ง fetchpriority ให้ต่ำกว่ารูปปัจจุบัน
+      img.fetchPriority = 'low';
     });
   }, [selectedImageIndex, car, mounted]);
 
@@ -290,6 +295,10 @@ function CarDetailPage({ car, allCars = [] }) {
     <>
       {/* Minimal SSR OG block to guarantee Facebook/LINE can read meta without JS */}
       <Head>
+        {/* ⭐ Preconnect to Shopify CDN for faster image loading */}
+        <link rel="preconnect" href="https://cdn.shopify.com" />
+        <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+        
         <meta property="og:type" content="product" />
         <meta property="og:title" content={enhancedTitle} />
         <meta property="og:description" content={enhancedDescription} />
@@ -497,59 +506,66 @@ function CarDetailPage({ car, allCars = [] }) {
               </div>
             </div>
 
-            {/* Thumbnails - Modern 2025 Style */}
+            {/* Thumbnails - Modern 2025 Style with Lazy Loading */}
             {carImages.length > 1 && (
               <div className="hidden sm:flex gap-3 mt-4 overflow-x-auto pb-2 scrollbar-hide">
-                {carImages.map((img, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImageIndex(index)}
-                    onKeyDown={e => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setSelectedImageIndex(index);
-                      }
-                    }}
-                    tabIndex={0}
-                    className={`relative flex-shrink-0 w-20 h-16 lg:w-24 lg:h-18 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                      selectedImageIndex === index
-                        ? 'border-primary ring-2 ring-primary/20'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                    type="button"
-                    aria-label={`ดูรูปที่ ${index + 1}`}
-                  >
-                    <A11yImage
-                      src={safeGet(img, 'url', '/herobanner/chiangmaiusedcar.webp')}
-                      alt={`${carAlt(car)} รูปที่ ${index + 1}`}
-                      fallbackAlt={`รูปที่ ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      imageType="thumbnail" // ⭐ ระบุเป็น thumbnail (400px)
-                      loading="lazy"
-                    />
-                    {/* Selected indicator */}
-                    {selectedImageIndex === index && (
-                      <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
-                        <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
-                          <svg
-                            className="w-4 h-4 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
+                {carImages.map((img, index) => {
+                  // ⭐ โหลด thumbnail แบบ lazy ยกเว้นรูปปัจจุบันและ 2 รูปข้างๆ
+                  const isNearby = Math.abs(index - selectedImageIndex) <= 2;
+                  const loadingStrategy = isNearby ? 'eager' : 'lazy';
+                  
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImageIndex(index)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setSelectedImageIndex(index);
+                        }
+                      }}
+                      tabIndex={0}
+                      className={`relative flex-shrink-0 w-20 h-16 lg:w-24 lg:h-18 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                        selectedImageIndex === index
+                          ? 'border-primary ring-2 ring-primary/20'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}
+                      type="button"
+                      aria-label={`ดูรูปที่ ${index + 1}`}
+                    >
+                      <A11yImage
+                        src={safeGet(img, 'url', '/herobanner/chiangmaiusedcar.webp')}
+                        alt={`${carAlt(car)} รูปที่ ${index + 1}`}
+                        fallbackAlt={`รูปที่ ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        imageType="thumbnail" // ⭐ ระบุเป็น thumbnail (400px)
+                        loading={loadingStrategy}
+                        fetchpriority={isNearby ? 'auto' : 'low'}
+                      />
+                      {/* Selected indicator */}
+                      {selectedImageIndex === index && (
+                        <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
+                          <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                            <svg
+                              className="w-4 h-4 text-white"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </button>
-                ))}
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             )}
 
@@ -596,7 +612,7 @@ function CarDetailPage({ car, allCars = [] }) {
                     // ใช้ URL จริงของ Shopify (ไม่แก้ไข) เพื่อป้องกัน 404
                     const shareUrl = `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`;
                     const shareText = createShareText(car);
-                    
+
                     if (navigator.share) {
                       navigator.share({ title: shareText, url: shareUrl });
                     } else {

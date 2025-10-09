@@ -7,30 +7,30 @@
  * สร้าง Pretty URL โดยลบคำภาษาไทยและอักขระพิเศษออก
  * @param {string} handle - Shopify handle ที่มีภาษาไทย encoded
  * @returns {string} URL ที่สะอาดและสั้นกว่า
- * 
+ *
  * @example
  * Input:  "isuzu-d-max-v-cross-3-0-ddi-vgs-turbo-4x4-mt-ปี-2014"
  * Output: "isuzu-d-max-v-cross-3-0-ddi-vgs-turbo-4x4-mt-2014"
  */
 export function createPrettyUrl(handle) {
   if (!handle) return '';
-  
+
   // ลบคำภาษาไทยที่ไม่จำเป็นออก (เช่น "ปี")
   const thaiWords = ['ปี', 'รุ่น', 'ปีนี้', 'ปีนั้น'];
   let cleanHandle = handle;
-  
+
   thaiWords.forEach(word => {
     // ลบทั้งแบบ encoded และแบบไม่ encoded
     cleanHandle = cleanHandle.replace(new RegExp(`-${word}-`, 'g'), '-');
     cleanHandle = cleanHandle.replace(new RegExp(`-${encodeURIComponent(word)}-`, 'gi'), '-');
   });
-  
+
   // ลบ dash ซ้ำซ้อน
   cleanHandle = cleanHandle.replace(/-+/g, '-');
-  
+
   // ลบ dash ที่ท้าย
   cleanHandle = cleanHandle.replace(/-$/, '');
-  
+
   return cleanHandle;
 }
 
@@ -39,7 +39,7 @@ export function createPrettyUrl(handle) {
  * @param {string} handle - Car handle
  * @param {object} car - Car data
  * @returns {string} Short URL
- * 
+ *
  * @example
  * Output: "https://www.chiangmaiusedcar.com/car/isuzu-d-max-2014"
  */
@@ -58,13 +58,13 @@ export function createShareText(car) {
   const model = car?.model || '';
   const year = car?.year || '';
   const price = car?.price?.amount ? formatPrice(car.price.amount) : '';
-  
+
   // สร้างข้อความแชร์ที่สั้นและน่าสนใจ
   let text = `🚗 ${brand} ${model}`;
   if (year) text += ` ${year}`;
   if (price) text += ` 💰 ${price} บาท`;
   text += ` | ครูหนึ่งรถสวย`;
-  
+
   return text;
 }
 

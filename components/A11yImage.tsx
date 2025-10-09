@@ -49,7 +49,7 @@ export default function A11yImage({
     const widthMap = {
       hero: 1920,
       card: 1024,
-      thumbnail: 400,
+      thumbnail: 240, // ⭐ ลดจาก 400 → 240 เพื่อโหลดเร็วขึ้น (thumbnail เล็ก)
       gallery: 800,
       default: 1200,
     };
@@ -63,7 +63,7 @@ export default function A11yImage({
       const srcSetWidths = {
         hero: [640, 1024, 1920],
         card: [320, 640, 1024],
-        thumbnail: [200, 400],
+        thumbnail: [120, 240], // ⭐ ลดขนาด srcSet สำหรับ thumbnail
         gallery: [400, 800, 1200],
         default: [640, 1024, 1920],
       };

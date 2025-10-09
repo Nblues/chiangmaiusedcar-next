@@ -57,8 +57,8 @@ export function generateSizes(type = 'default') {
     // การ์ดรถ (หน้ารายการรถ)
     card: '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
 
-    // Thumbnail เล็กๆ (gallery)
-    thumbnail: '(max-width: 640px) 200px, (max-width: 1024px) 150px, 200px',
+    // Thumbnail เล็กๆ (gallery) - ⭐ ลดขนาดลงเพื่อโหลดเร็วขึ้น
+    thumbnail: '(max-width: 640px) 80px, (max-width: 1024px) 96px, 120px',
 
     // Gallery รูปขนาดกลาง
     gallery: '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw',
