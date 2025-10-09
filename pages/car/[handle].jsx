@@ -16,7 +16,6 @@ import { createShareText } from '../../utils/urlHelper';
 function CarDetailPage({ car, allCars = [] }) {
   const router = useRouter();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [imageLoading, setImageLoading] = useState(true);
   const [processedDescription, setProcessedDescription] = useState(null);
   const [mounted, setMounted] = useState(false);
 
@@ -45,12 +44,12 @@ function CarDetailPage({ car, allCars = [] }) {
     if (!mounted || !car) return;
     const images = safeGet(car, 'images', []);
     if (images.length < 2) return;
-    
+
     // ⭐ Preload เฉพาะรูปถัดไปและรูปก่อนหน้า (ไม่โหลดทั้งหมด)
     const preloadIndexes = [];
     if (selectedImageIndex < images.length - 1) preloadIndexes.push(selectedImageIndex + 1);
     if (selectedImageIndex > 0) preloadIndexes.push(selectedImageIndex - 1);
-    
+
     preloadIndexes.forEach(idx => {
       const img = new window.Image();
       const originalUrl = safeGet(images[idx], 'url', '');
@@ -81,10 +80,7 @@ function CarDetailPage({ car, allCars = [] }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [car, mounted]);
 
-  // Reset loading state when image changes
-  useEffect(() => {
-    setImageLoading(true);
-  }, [selectedImageIndex]);
+  // Removed image loading gating to allow hero image to paint immediately
 
   // Process description after component mount to prevent hydration errors
   useEffect(() => {
@@ -302,7 +298,7 @@ function CarDetailPage({ car, allCars = [] }) {
         {/* ⭐ Preconnect to Shopify CDN for faster image loading */}
         <link rel="preconnect" href="https://cdn.shopify.com" />
         <link rel="dns-prefetch" href="https://cdn.shopify.com" />
-        
+
         {/* ⭐ Preload รูปแรก (Hero Image) เพื่อโหลดทันทีก่อนอย่างอื่น */}
         <link
           rel="preload"
@@ -312,7 +308,7 @@ function CarDetailPage({ car, allCars = [] }) {
           imageSizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px"
           fetchPriority="high"
         />
-        
+
         <meta property="og:type" content="product" />
         <meta property="og:title" content={enhancedTitle} />
         <meta property="og:description" content={enhancedDescription} />
@@ -436,25 +432,16 @@ function CarDetailPage({ car, allCars = [] }) {
           {/* รูปรถ - Modern 2025 Style */}
           <div className="mb-6 sm:mb-8">
             <div className="relative w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[600px] bg-white rounded-xl overflow-hidden border border-gray-200">
-              {/* Loading overlay */}
-              {imageLoading && (
-                <div className="absolute inset-0 bg-gray-100 animate-pulse flex items-center justify-center">
-                  <div className="text-primary font-prompt">กำลังโหลดรูป...</div>
-                </div>
-              )}
-
               <A11yImage
                 src={safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp')}
                 alt={carAlt(car)}
                 fallbackAlt={safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
                 fill
-                className={`object-cover transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
+                className="object-cover"
                 priority={true} // ⭐ เพิ่ม priority สำหรับรูปหลัก Above-the-fold
                 imageType="hero" // ⭐ ระบุเป็นรูปหลัก (1920px)
                 quality={85}
                 decoding="async" // ⭐ Decode แบบ async ไม่บล็อก main thread
-                onLoad={() => setImageLoading(false)}
-                onError={() => setImageLoading(false)}
               />
 
               {/* Navigation buttons */}
@@ -525,10 +512,7 @@ function CarDetailPage({ car, allCars = [] }) {
             {carImages.length > 1 && (
               <div className="hidden sm:flex gap-3 mt-4 overflow-x-auto pb-2 scrollbar-hide">
                 {carImages.map((img, index) => {
-                  // ⭐ โหลด thumbnail แบบ lazy ยกเว้นรูปปัจจุบันและ 2 รูปข้างๆ
-                  const isNearby = Math.abs(index - selectedImageIndex) <= 2;
-                  const loadingStrategy = isNearby ? 'eager' : 'lazy';
-                  
+                  // ⭐ โหลด thumbnail ทั้งหมดแบบ lazy เพื่อลดการแย่ง bandwidth กับ hero
                   return (
                     <button
                       key={index}
@@ -555,8 +539,7 @@ function CarDetailPage({ car, allCars = [] }) {
                         fill
                         className="object-cover"
                         imageType="thumbnail" // ⭐ ระบุเป็น thumbnail (400px)
-                        loading={loadingStrategy}
-                        fetchpriority={isNearby ? 'auto' : 'low'}
+                        loading="lazy"
                       />
                       {/* Selected indicator */}
                       {selectedImageIndex === index && (
