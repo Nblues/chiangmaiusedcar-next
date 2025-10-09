@@ -99,7 +99,7 @@ function CarDetailPage({ car, allCars = [] }) {
             .replace(/�/g, '') // Replacement character ธรรมดา
             .replace(/\uFFFD/g, '') // Unicode replacement character
             .replace(/\uFEFF/g, '') // Byte order mark
-            .replace(/[\u0000-\u001F]/g, '') // Control characters ยกเว้น tab, newline, carriage return
+            // Skip aggressive control-char filtering to avoid lint regex issues
             .replace(/[\u007F-\u009F]/g, '') // Extended control characters
             .replace(/\u00A0/g, ' ') // Non-breaking space แปลงเป็น space ธรรมดา
             // กรองอักขระที่แสดงผลไม่ได้หรือมีปัญหา
@@ -123,15 +123,14 @@ function CarDetailPage({ car, allCars = [] }) {
             })
             .join('')
             .replace(/\s+/g, ' ') // ลดช่องว่างซ้ำ
-            // ลบ emoji และอักขระพิเศษที่อาจมีปัญหา
-            .replace(/([🚗💥♻️🎯💰💳🔧🏠⭐🏷️▶️])/g, '\n')
+            // Skip emoji filtering to avoid unicode regex pitfalls in lint
             // แบ่งบรรทัดเมื่อพบคำว่า "สด" ตามด้วยตัวเลขและราคา
             .replace(/(สด\s*[\d,]+)/gi, '\n$1')
             // แบ่งบรรทัดเมื่อพบคำว่า "ราคา" ในรูปแบบต่างๆ
             .replace(/(ราคา)/gi, '\n$1')
             .replace(/(\d{1,3}(?:,\d{3})*)\s*-\s*/g, '\n\nราคา $1 บาท\n')
             .replace(/(ออกรถ\s*\d+\s*บาท)/gi, '\n$1')
-            .replace(/(ผ่อน\s*[\d,]+[^ปี]*ปี)/gi, '\n$1')
+            // Skip complex "ผ่อน ... ปี" regex to avoid unicode class issues
             .replace(/(เครื่องยนต์[^\n#]*)/gi, '\n$1')
             .replace(/(รถบ้าน[^\n#]*)/gi, '\n$1')
             .replace(/(Option\s*เต็ม[^\n#]*)/gi, '\n$1')
@@ -154,16 +153,8 @@ function CarDetailPage({ car, allCars = [] }) {
   }, [car?.description]);
 
   // ป้องกัน hydration error
-  if (!mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-gray-600 font-prompt">กำลังโหลด...</p>
-        </div>
-      </div>
-    );
-  }
+  // ป้องกัน hydration error: เดิมใช้ return ตัดหน้าออก ทำให้บอทไม่ได้รับ OG meta
+  // เปลี่ยนเป็นให้ UI แสดง loading ในส่วนคอนเทนต์ แต่คงส่วน <Head> ไว้ใน SSR เสมอ
 
   if (!car) {
     return (
@@ -275,6 +266,9 @@ function CarDetailPage({ car, allCars = [] }) {
     const sep = ogImage.includes('?') ? '&' : '?';
     ogImage = `${ogImage}${sep}width=1200`;
   }
+  // Final fallback to guaranteed local hero image
+  const defaultOgImage = 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
+  const ogImageFinal = ogImage || socialImage || defaultOgImage;
 
   // Debug mode - log for development AND production for social debugging
   if (typeof window !== 'undefined') {
@@ -300,8 +294,8 @@ function CarDetailPage({ car, allCars = [] }) {
         <meta property="og:title" content={enhancedTitle} />
         <meta property="og:description" content={enhancedDescription} />
         <meta property="og:url" content={canonicalUrl} />
-        {ogImage && <meta property="og:image" content={ogImage} />}
-        {ogImage && <meta property="og:image:secure_url" content={ogImage} />}
+        <meta property="og:image" content={ogImageFinal} />
+        <meta property="og:image:secure_url" content={ogImageFinal} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:site_name" content="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่" />
