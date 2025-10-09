@@ -5,7 +5,7 @@ import A11yImage from '../components/A11yImage';
 import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
 import { getAllCars } from '../lib/shopify.mjs';
-import { buildLocalBusinessJsonLd, sanitizePrice } from '../lib/seo/jsonld';
+import { sanitizePrice } from '../lib/seo/jsonld';
 import { safeGet, safeFormatPrice } from '../lib/safeFetch';
 import { carAlt } from '../utils/a11y';
 
@@ -179,59 +179,86 @@ export default function AllCars({ cars }) {
             '@type': 'ItemList',
             name: 'รายการรถมือสอง',
             numberOfItems: currentCars.length,
-            itemListElement: currentCars.map((car, index) => ({
-              '@type': 'ListItem',
-              position: startIndex + index + 1,
-              item: {
-                '@type': 'Product',
-                '@id': `https://www.chiangmaiusedcar.com/car/${car.handle}`,
-                name: car.title,
-                description: `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท`,
-                brand: {
-                  '@type': 'Brand',
-                  name: car.vendor || car.brand || car.title?.split(' ')[0] || 'รถยนต์',
-                },
-                model: car.model || car.title,
-                sku: car.id || car.handle,
-                category: 'รถยนต์มือสอง',
-                image: car.images?.[0]?.url
-                  ? car.images[0].url.startsWith('/')
-                    ? `https://chiangmaiusedcar.com${car.images[0].url}`
-                    : car.images[0].url
-                  : 'https://chiangmaiusedcar.com/herobanner/allusedcars.webp',
-                offers: {
-                  '@type': 'Offer',
-                  price: car.price?.amount || '0',
-                  priceCurrency: 'THB',
-                  itemCondition: 'https://schema.org/UsedCondition',
-                  availability:
-                    car.availableForSale !== false
-                      ? 'https://schema.org/InStock'
-                      : 'https://schema.org/OutOfStock',
-                  priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
-                  seller: {
-                    '@type': 'AutoDealer',
-                    name: 'ครูหนึ่งรถสวย',
-                    telephone: '+66940649018',
-                    address: {
-                      '@type': 'PostalAddress',
-                      addressLocality: 'เชียงใหม่',
-                      addressCountry: 'TH',
+            itemListElement: currentCars.map((car, index) => {
+              const sanitizedPrice = sanitizePrice(car.price?.amount);
+              const priceValidUntil = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString();
+              const carDescription =
+                car.description ||
+                `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} มือสองเชียงใหม่ สภาพสวย ราคาดี`.trim();
+
+              return {
+                '@type': 'ListItem',
+                position: startIndex + index + 1,
+                item: {
+                  '@type': 'Car', // เปลี่ยนจาก Product เป็น Car
+                  '@id': `https://www.chiangmaiusedcar.com/car/${car.handle}`,
+                  name: car.title,
+                  description: carDescription,
+                  brand: {
+                    '@type': 'Brand',
+                    name: car.vendor || car.brand || car.title?.split(' ')[0] || 'รถยนต์',
+                  },
+                  model: car.model || car.title,
+                  sku: car.id || car.handle,
+                  category: 'รถยนต์มือสอง',
+                  image: car.images?.[0]?.url
+                    ? car.images[0].url.startsWith('/')
+                      ? `https://www.chiangmaiusedcar.com${car.images[0].url}`
+                      : car.images[0].url
+                    : 'https://www.chiangmaiusedcar.com/herobanner/allusedcars.webp',
+                  offers: {
+                    '@type': 'Offer',
+                    price: sanitizedPrice,
+                    priceCurrency: 'THB',
+                    itemCondition: 'https://schema.org/UsedCondition',
+                    availability:
+                      car.availableForSale !== false
+                        ? 'https://schema.org/InStock'
+                        : 'https://schema.org/OutOfStock',
+                    priceValidUntil: sanitizedPrice ? priceValidUntil : undefined,
+                    seller: {
+                      '@type': 'AutoDealer',
+                      name: 'ครูหนึ่งรถสวย',
+                      telephone: '+66940649018',
+                      address: {
+                        '@type': 'PostalAddress',
+                        addressLocality: 'เชียงใหม่',
+                        addressCountry: 'TH',
+                      },
+                    },
+                    warranty: {
+                      '@type': 'WarrantyPromise',
+                      durationOfWarranty: 'P1Y',
+                      warrantyScope: 'เครื่องยนต์และเกียร์',
+                    },
+                    hasMerchantReturnPolicy: {
+                      '@type': 'MerchantReturnPolicy',
+                      applicableCountry: 'TH',
+                      returnPolicyCategory: 'http://schema.org/MerchantReturnUnlimitedWindow',
+                      merchantReturnDays: 7,
+                      returnFees: 'http://schema.org/FreeReturn',
+                    },
+                    shippingDetails: {
+                      '@type': 'OfferShippingDetails',
+                      shippingDestination: {
+                        '@type': 'DefinedRegion',
+                        addressCountry: 'TH',
+                      },
+                      shippingRate: {
+                        '@type': 'MonetaryAmount',
+                        value: 0,
+                        currency: 'THB',
+                      },
                     },
                   },
-                  warranty: {
-                    '@type': 'WarrantyPromise',
-                    durationOfWarranty: 'P1Y',
-                    warrantyScope: 'เครื่องยนต์และเกียร์',
-                  },
                 },
-              },
-            })),
+              };
+            }),
           },
           publisher: {
             '@type': 'AutoDealer',
             name: 'ครูหนึ่งรถสวย',
-            url: 'https://chiangmaiusedcar.com',
+            url: 'https://www.chiangmaiusedcar.com',
           },
         }}
       />
@@ -258,97 +285,6 @@ export default function AllCars({ cars }) {
         </Head>
       )}
 
-      {/* Structured Data for Car Collection */}
-      {mounted && currentCars.length > 0 && (
-        <Head>
-          {/* LocalBusiness Schema */}
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(buildLocalBusinessJsonLd()),
-            }}
-          />
-
-          {/* Collection Page Schema */}
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify({
-                '@context': 'https://schema.org',
-                '@type': 'CollectionPage',
-                name: `รถทั้งหมด - หน้า ${currentPage}`,
-                description: `รถมือสองคุณภาพดี ${filteredCars.length} คัน พร้อมส่งมอบ`,
-                url: `https://chiangmaiusedcar.com/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`,
-                mainEntity: {
-                  '@type': 'ItemList',
-                  name: 'รายการรถมือสอง',
-                  numberOfItems: currentCars.length,
-                  itemListElement: currentCars.map((car, index) => {
-                    const sanitizedPrice = sanitizePrice(car.price?.amount);
-                    const priceValidUntil = new Date(
-                      Date.now() + 90 * 24 * 60 * 60 * 1000
-                    ).toISOString();
-                    const carDescription =
-                      car.description ||
-                      `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} มือสองเชียงใหม่ สภาพสวย ราคาดี`.trim();
-
-                    return {
-                      '@type': 'ListItem',
-                      position: startIndex + index + 1,
-                      item: {
-                        '@type': 'Car',
-                        '@id': `https://chiangmaiusedcar.com/car/${car.handle}`,
-                        name: car.title,
-                        description: carDescription,
-                        brand: car.vendor || 'Unknown',
-                        offers: {
-                          '@type': 'Offer',
-                          price: sanitizedPrice,
-                          priceCurrency: 'THB',
-                          availability:
-                            car.availableForSale !== false
-                              ? 'https://schema.org/InStock'
-                              : 'https://schema.org/OutOfStock',
-                          priceValidUntil: sanitizedPrice ? priceValidUntil : undefined,
-                          seller: {
-                            '@type': 'AutoDealer',
-                            name: 'ครูหนึ่งรถสวย',
-                          },
-                          hasMerchantReturnPolicy: {
-                            '@type': 'MerchantReturnPolicy',
-                            applicableCountry: 'TH',
-                            returnPolicyCategory: 'http://schema.org/MerchantReturnUnlimitedWindow',
-                            merchantReturnDays: 7,
-                            returnFees: 'http://schema.org/FreeReturn',
-                          },
-                          shippingDetails: {
-                            '@type': 'OfferShippingDetails',
-                            shippingDestination: {
-                              '@type': 'DefinedRegion',
-                              addressCountry: 'TH',
-                            },
-                            shippingRate: {
-                              '@type': 'MonetaryAmount',
-                              value: 0,
-                              currency: 'THB',
-                            },
-                          },
-                        },
-                      },
-                    };
-                  }),
-                },
-                publisher: {
-                  '@type': 'AutoDealer',
-                  name: 'ครูหนึ่งรถสวย',
-                  url: 'https://chiangmaiusedcar.com',
-                },
-              }),
-            }}
-          />
-        </Head>
-      )}
-
       {/* Hero Banner - 2025 Modern Design */}
       <section className="relative w-full h-[150px] sm:h-[200px] md:h-[250px] lg:h-[300px] overflow-hidden bg-white">
         <A11yImage
@@ -357,8 +293,9 @@ export default function AllCars({ cars }) {
           fill
           className="object-cover object-top"
           priority
+          imageType="hero" // ⭐ ระบุเป็นรูปหลัก
           quality={85}
-          sizes="100vw"
+          optimizeImage={false} // ⭐ ปิด optimization สำหรับรูป static local
         />
 
         {/* Dark overlay for better text readability */}
@@ -552,8 +489,8 @@ export default function AllCars({ cars }) {
                           fallbackAlt={`${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} - ราคา ${safeFormatPrice(safeGet(car, 'price.amount')).display} บาท`}
                           fill
                           className="object-cover transition-transform duration-300 group-hover:scale-105"
+                          imageType="card" // ⭐ ระบุเป็นการ์ด (1024px)
                           loading="lazy"
-                          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 300px"
                         />
                       </figure>
                       <div className="p-2 md:p-3 flex flex-col">

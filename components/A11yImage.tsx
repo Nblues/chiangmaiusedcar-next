@@ -1,4 +1,10 @@
 import React from 'react';
+import {
+  optimizeShopifyImage,
+  generateSrcSet,
+  generateSizes,
+  BLUR_DATA_URL,
+} from '../utils/imageOptimizer';
 
 interface A11yImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   alt?: string;
@@ -10,6 +16,8 @@ interface A11yImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   fetchpriority?: 'high' | 'low' | 'auto';
   onLoad?: () => void;
   onError?: () => void;
+  imageType?: 'hero' | 'card' | 'thumbnail' | 'gallery' | 'default';
+  optimizeImage?: boolean; // ⭐ เปิด/ปิด optimization (default: true)
 }
 
 export default function A11yImage({
@@ -18,14 +26,55 @@ export default function A11yImage({
   priority,
   // quality, // Reserved for future use
   fill,
-  // sizes, // Reserved for future use
+  sizes: customSizes, // เปลี่ยนชื่อเพื่อไม่ชนกับ generated sizes
   fetchpriority,
   className,
   style,
   loading,
+  imageType = 'default',
+  optimizeImage = true, // ⭐ เปิด optimization ตามค่า default
+  src,
+  srcSet: customSrcSet, // ยอมรับ srcSet แบบกำหนดเอง
   ...props
 }: A11yImageProps) {
   const finalAlt = alt && alt.trim().length > 0 ? alt : (fallbackAlt ?? 'รูปภาพประกอบ');
+
+  // ⭐ Optimize Shopify images automatically
+  let optimizedSrc = src;
+  let generatedSrcSet = customSrcSet;
+  let generatedSizes = customSizes;
+
+  if (optimizeImage && src && typeof src === 'string') {
+    // กำหนดขนาดตาม imageType
+    const widthMap = {
+      hero: 1920,
+      card: 1024,
+      thumbnail: 400,
+      gallery: 800,
+      default: 1200,
+    };
+    const targetWidth = widthMap[imageType] || widthMap.default;
+
+    // ปรับขนาดรูป
+    optimizedSrc = optimizeShopifyImage(src, targetWidth, 'webp');
+
+    // สร้าง srcSet ถ้ายังไม่มี
+    if (!customSrcSet) {
+      const srcSetWidths = {
+        hero: [640, 1024, 1920],
+        card: [320, 640, 1024],
+        thumbnail: [200, 400],
+        gallery: [400, 800, 1200],
+        default: [640, 1024, 1920],
+      };
+      generatedSrcSet = generateSrcSet(src, srcSetWidths[imageType] || srcSetWidths.default);
+    }
+
+    // สร้าง sizes ถ้ายังไม่มี
+    if (!customSizes) {
+      generatedSizes = generateSizes(imageType);
+    }
+  }
 
   // ⭐ ตั้งค่า loading attribute อัตโนมัติ
   // - ถ้า priority=true → eager loading (โหลดทันที)
@@ -55,11 +104,20 @@ export default function A11yImage({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const imgAttributes: Record<string, any> = {
     ...props,
+    src: optimizedSrc,
     alt: finalAlt,
     loading: loadingAttr,
     style: finalStyle,
     className: finalClassName,
   };
+
+  // เพิ่ม srcSet และ sizes ถ้ามี
+  if (generatedSrcSet) {
+    imgAttributes.srcSet = generatedSrcSet;
+  }
+  if (generatedSizes) {
+    imgAttributes.sizes = generatedSizes;
+  }
 
   // Add fetchpriority as lowercase attribute (HTML spec)
   if (fetchPriorityAttr !== 'auto') {

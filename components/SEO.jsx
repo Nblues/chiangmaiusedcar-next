@@ -466,7 +466,7 @@ export default function SEO({
       <link rel="icon" type="image/png" sizes="192x192" href={`/favicon.png?v=${buildTime}`} />
       <link rel="icon" type="image/png" sizes="512x512" href={`/favicon.png?v=${buildTime}`} />
 
-      {/* Schema.org JSON-LD */}
+      {/* Schema.org JSON-LD - Organization (Single Source of Truth) */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -474,7 +474,7 @@ export default function SEO({
         }}
       />
 
-      {/* Car Product Schema (if carData is provided) */}
+      {/* Car Schema (only if carData is provided) - ลบการใส่ซ้ำ */}
       {carData && (
         <script
           type="application/ld+json"
@@ -483,12 +483,14 @@ export default function SEO({
               buildCarJsonLd(
                 {
                   year: carData.year,
-                  transmission: carData.transmission || 'Unknown',
+                  transmission: carData.transmission || 'Manual',
                   fuelType: carData.fuel_type || 'Gasoline',
                   engineSize: carData.engine,
                   mileage: carData.mileage,
                   seats: carData.seats,
                   color: carData.color,
+                  vin: carData.vin, // Optional - ไม่บังคับ
+                  bodyType: carData.body_type, // เพิ่ม body type
                 },
                 {
                   url: fullUrl,
@@ -497,134 +499,17 @@ export default function SEO({
                   images: carData.images?.map(img => img.url) || [absoluteImage],
                   brand: carData.brand,
                   sku: carData.sku || carData.id,
+                  mpn: carData.mpn,
                   price: carData.price?.amount,
                   currency: carData.price?.currencyCode || 'THB',
                   inStock: carData.availableForSale !== false,
+                  review: carData.review, // เพิ่ม review support
                 }
               )
             ),
           }}
         />
       )}
-
-      {/* Local Business/Organization Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'AutoDealer',
-            '@id': `${site}/#organization`,
-            name: 'ครูหนึ่งรถสวย - รถมือสองเชียงใหม่ ฟรีดาวน์ 0%',
-            alternateName: [
-              'KruNueng Used Cars',
-              'ครูหนึ่งรถสวย',
-              'รถมือสองเชียงใหม่คุณภาพ',
-              'ศูนย์รถมือสองเชียงใหม่',
-            ],
-            url: site,
-            logo: {
-              '@type': 'ImageObject',
-              url: `${site}/favicon.png`,
-              width: '512',
-              height: '512',
-              caption: 'ครูหนึ่งรถสวย Logo',
-            },
-            image: `${site}/herobanner/chiangmaiusedcar.webp`,
-            description:
-              'ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่ ผู้เชี่ยวชาญรถมือสอง 10+ ปี ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย เครดิตไม่ผ่านก็มีทาง รถ ECO Car ประหยัดน้ำมัน บริการ ขายรถมือสอง รับซื้อรถมือสอง ประเมินราคารถฟรี สินเชื่อรถมือสอง',
-
-            // 2025 SEO: Enhanced keywords in structured data (แนวทาง AK Car ปรับปรุง)
-            keywords: [
-              // Core Business Keywords
-              'รถมือสองเชียงใหม่',
-              'ครูหนึ่งรถสวย',
-              'ศูนย์รถมือสองเชียงใหม่',
-
-              // Popular Car Brands + Quantities (ตาม AK Car style)
-              'Toyota มือสองเชียงใหม่ 50+ คัน',
-              'Honda มือสองเชียงใหม่ 30+ คัน',
-              'Nissan มือสองเชียงใหม่ 20+ คัน',
-              'Mazda มือสองเชียงใหม่ 15+ คัน',
-              'Mitsubishi มือสองเชียงใหม่ 10+ คัน',
-
-              // Special Offers & Benefits
-              'ฟรีดาวน์ 0% เชียงใหม่',
-              'ดอกเบี้ยต่ำเริ่มต้น 2.99%',
-              'รับประกัน 1 ปีเต็ม',
-              'ส่งรถฟรีทั่วประเทศ',
-              'เครดิตไม่ผ่านก็มีทาง',
-
-              // Vehicle Types (เฉพาะเจาะจง)
-              'รถ ECO Car มือสองเชียงใหม่',
-              'รถกระบะ Double Cab มือสอง',
-              'รถ SUV 4WD มือสองเชียงใหม่',
-              'รถเก๋ง Sedan มือสองเชียงใหม่',
-              'รถครอบครัว 7 ที่นั่งมือสอง',
-
-              // Location Specific (หลายพื้นที่)
-              'รถมือสองสันพระเนตร',
-              'รถมือสองสันทราย',
-              'รถมือสองหางดง',
-              'รถมือสองแม่ริม',
-              'รถมือสองลำปาง',
-
-              // AI & Voice Search Ready
-              'รถมือสองดีที่ไหนเชียงใหม่',
-              'ซื้อรถมือสองเชียงใหม่ที่ไหนดี',
-              'หารถมือสองเชียงใหม่ราคาถูก',
-              'เต็นท์รถมือสองเชียงใหม่ไหนดี',
-
-              // Price Range (ตามแนว AK Car)
-              'รถมือสอง 200,000 บาทเชียงใหม่',
-              'รถมือสอง 300,000 บาทเชียงใหม่',
-              'รถมือสอง 500,000 บาทเชียงใหม่',
-              'รถมือสองราคาดีเชียงใหม่',
-
-              // Trending 2025 Keywords
-              'รถมือสอง Hybrid เชียงใหม่',
-              'รถประหยัดน้ำมันเชียงใหม่',
-              'รถมือสองเทคโนโลยีใหม่',
-              'รถมือสองปลอดภัยสูง',
-            ],
-
-            // Address and contact information
-            address: {
-              '@type': 'PostalAddress',
-              streetAddress: 'เลขที่ 320 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี',
-              addressLocality: 'สันพระเนตร',
-              addressRegion: 'เชียงใหม่',
-              postalCode: '50210',
-              addressCountry: 'TH',
-            },
-            geo: {
-              '@type': 'GeoCoordinates',
-              latitude: computedValues.siteLocation.lat,
-              longitude: computedValues.siteLocation.lng,
-            },
-            telephone: '+66940649018',
-            email: 'contact@chiangmaiusedcar.com',
-            openingHours: ['Mo-Su 08:00-20:00'],
-            priceRange: '฿฿',
-            paymentAccepted: ['Cash', 'Credit Card', 'Bank Transfer'],
-            currenciesAccepted: 'THB',
-            areaServed: {
-              '@type': 'Country',
-              name: 'Thailand',
-            },
-            serviceArea: {
-              '@type': 'Country',
-              name: 'Thailand',
-            },
-            sameAs: [
-              'https://www.facebook.com/KN2car',
-              'https://www.tiktok.com/@krunueng_usedcar',
-              'https://youtube.com/@chiangraiusedcar',
-              'https://lin.ee/8ugfzstD',
-            ],
-          }),
-        }}
-      />
 
       {/* WebSite Schema with Site Search */}
       <script
@@ -653,32 +538,7 @@ export default function SEO({
         }}
       />
 
-      {/* Image Schema for better image indexing */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'ImageObject',
-            url: absoluteImage,
-            width: '1200',
-            height: '630',
-            caption: metaTitle,
-            description: metaDesc,
-            author: {
-              '@type': 'Organization',
-              name: 'ครูหนึ่งรถสวย',
-            },
-            copyrightHolder: {
-              '@type': 'Organization',
-              name: 'ครูหนึ่งรถสวย',
-            },
-            license: `${site}/terms`,
-          }),
-        }}
-      />
-
-      {/* Breadcrumb Schema for better navigation in Google Search Results - 2025 SEO */}
+      {/* Breadcrumb Schema (Single Source) - 2025 SEO */}
       {breadcrumbs && breadcrumbs.length > 0 && (
         <script
           type="application/ld+json"

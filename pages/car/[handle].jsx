@@ -207,8 +207,10 @@ function CarDetailPage({ car, allCars = [] }) {
     .join(' • ')
     .substring(0, 150);
 
-  // Enhanced image for social sharing - ensure high quality and absolute URL
-  let socialImage = safeGet(currentImage, 'url', '');
+  // Enhanced image for social sharing - ALWAYS use first image (not current selected)
+  // This ensures consistent sharing preview regardless of which image user is viewing
+  const firstCarImage = carImages[0] || currentImage;
+  let socialImage = safeGet(firstCarImage, 'url', '');
 
   // Handle relative URLs - MUST be absolute for Facebook/LINE
   if (socialImage.startsWith('/')) {
@@ -307,7 +309,7 @@ function CarDetailPage({ car, allCars = [] }) {
           .join(', ')}
       />
 
-      {/* Enhanced Car Product JSON-LD Schema */}
+      {/* Enhanced Car JSON-LD Schema - Single Source (ลบ Breadcrumb ซ้ำซ้อน) */}
       <Head>
         <script
           type="application/ld+json"
@@ -321,19 +323,21 @@ function CarDetailPage({ car, allCars = [] }) {
                 model: safeGet(car, 'model', ''),
                 images: carImages.map(img =>
                   safeGet(img, 'url', '').startsWith('/')
-                    ? `https://chiangmaiusedcar.com${safeGet(img, 'url', '')}`
+                    ? `https://www.chiangmaiusedcar.com${safeGet(img, 'url', '')}`
                     : safeGet(img, 'url', '')
                 ),
-                price: safeGet(car, 'price.amount', 0), // Default to 0 if no price
+                price: safeGet(car, 'price.amount', 0),
                 currency: safeGet(car, 'price.currencyCode', 'THB'),
-                url: `https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
+                url: `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
                 sku: safeGet(car, 'id') || safeGet(car, 'handle'),
+                vin: safeGet(car, 'vin'), // Optional - ไม่บังคับ
                 mileage: safeGet(car, 'mileage'),
                 transmission: safeGet(car, 'transmission', 'Manual'),
                 fuelType: safeGet(car, 'fuel_type', 'Gasoline'),
                 engineSize: safeGet(car, 'engine'),
                 color: safeGet(car, 'color'),
                 seats: safeGet(car, 'seats'),
+                bodyType: safeGet(car, 'body_type'), // เพิ่ม body type
                 availability: safeGet(car, 'availableForSale', true) ? 'InStock' : 'OutOfStock',
                 priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
                   .toISOString()
@@ -341,45 +345,11 @@ function CarDetailPage({ car, allCars = [] }) {
                 returnPolicy: 'NoReturnRefund',
                 shippingCost: 0,
                 warrantyPeriod: '1 ปี',
+                // ใช้ข้อมูล review จริงถ้ามี (ไม่ hard-code)
+                ratingValue: safeGet(car, 'review.ratingValue'),
+                reviewCount: safeGet(car, 'review.reviewCount'),
               })
             ),
-          }}
-        />
-
-        {/* Enhanced Breadcrumb JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'BreadcrumbList',
-              itemListElement: [
-                {
-                  '@type': 'ListItem',
-                  position: 1,
-                  name: 'หน้าแรก',
-                  item: 'https://chiangmaiusedcar.com/',
-                },
-                {
-                  '@type': 'ListItem',
-                  position: 2,
-                  name: 'รถทั้งหมด',
-                  item: 'https://chiangmaiusedcar.com/all-cars',
-                },
-                {
-                  '@type': 'ListItem',
-                  position: 3,
-                  name: safeGet(car, 'vendor') || safeGet(car, 'brand', 'รถมือสอง'),
-                  item: `https://chiangmaiusedcar.com/all-cars?brand=${encodeURIComponent(safeGet(car, 'vendor', '') || safeGet(car, 'brand', ''))}`,
-                },
-                {
-                  '@type': 'ListItem',
-                  position: 4,
-                  name: safeGet(car, 'title', 'รถมือสองคุณภาพดี'),
-                  item: `https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
-                },
-              ],
-            }),
           }}
         />
       </Head>
@@ -412,8 +382,8 @@ function CarDetailPage({ car, allCars = [] }) {
                 fill
                 className={`object-cover transition-opacity duration-300 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
                 priority={true} // ⭐ เพิ่ม priority สำหรับรูปหลัก Above-the-fold
+                imageType="hero" // ⭐ ระบุเป็นรูปหลัก (1920px)
                 quality={85}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
                 onLoad={() => setImageLoading(false)}
                 onError={() => setImageLoading(false)}
               />
@@ -510,7 +480,7 @@ function CarDetailPage({ car, allCars = [] }) {
                       fallbackAlt={`รูปที่ ${index + 1}`}
                       fill
                       className="object-cover"
-                      sizes="96px"
+                      imageType="thumbnail" // ⭐ ระบุเป็น thumbnail (400px)
                       loading="lazy"
                     />
                     {/* Selected indicator */}
