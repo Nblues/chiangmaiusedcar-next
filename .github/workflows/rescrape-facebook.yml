@@ -1,0 +1,92 @@
+name: Auto Re-scrape Facebook OG Cache
+
+# Trigger เมื่อ deploy สำเร็จ
+on:
+  # เมื่อ push ไป master (หลัง deploy)
+  push:
+    branches:
+      - master
+    paths:
+      - 'pages/**'
+      - 'components/**'
+      - 'lib/**'
+      - 'public/**'
+      - 'next.config.js'
+  
+  # หรือเรียกใช้ manual
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: 'จำนวนรถที่จะ re-scrape (เว้นว่างสำหรับทั้งหมด)'
+        required: false
+        default: ''
+
+jobs:
+  rescrape:
+    name: Re-scrape Facebook OG Preview
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Wait for Vercel Deployment
+        run: |
+          echo "⏳ รอ Vercel deploy เสร็จ..."
+          sleep 60
+          
+      - name: Health Check
+        run: |
+          echo "🔍 ตรวจสอบว่าเว็บไซต์พร้อมใช้งาน..."
+          for i in {1..5}; do
+            if curl -s -o /dev/null -w "%{http_code}" https://www.chiangmaiusedcar.com/ | grep -q "200"; then
+              echo "✅ เว็บไซต์พร้อมใช้งาน"
+              break
+            fi
+            echo "⏳ รอบที่ $i - รอ 10 วินาที..."
+            sleep 10
+          done
+          
+      - name: Re-scrape Facebook Cache
+        env:
+          RESCRAPE_SECRET: ${{ secrets.RESCRAPE_SECRET }}
+          SITE_URL: https://www.chiangmaiusedcar.com
+        run: |
+          echo "🔄 เริ่ม re-scrape Facebook OG cache..."
+          
+          # สร้าง URL สำหรับ API
+          API_URL="${SITE_URL}/api/social/rescrape?secret=${RESCRAPE_SECRET}"
+          
+          # เพิ่ม limit ถ้ามีการระบุ
+          if [ -n "${{ github.event.inputs.limit }}" ]; then
+            API_URL="${API_URL}&limit=${{ github.event.inputs.limit }}"
+            echo "📊 Re-scrape รถ ${{ github.event.inputs.limit }} คันแรก"
+          else
+            echo "📊 Re-scrape รถทั้งหมด"
+          fi
+          
+          # เรียก API
+          RESPONSE=$(curl -s -X POST "$API_URL" \
+            -H "Content-Type: application/json" \
+            -w "\n%{http_code}")
+          
+          # แยก body กับ status code
+          HTTP_BODY=$(echo "$RESPONSE" | head -n -1)
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
+          
+          # ตรวจสอบผลลัพธ์
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✅ Re-scrape สำเร็จ!"
+            echo "$HTTP_BODY" | jq '.'
+            
+            # แสดงจำนวนที่ประมวลผล
+            COUNT=$(echo "$HTTP_BODY" | jq -r '.count // 0')
+            echo "📈 ประมวลผลแล้ว: $COUNT URLs"
+          else
+            echo "❌ Re-scrape ล้มเหลว (HTTP $HTTP_CODE)"
+            echo "$HTTP_BODY"
+            exit 1
+          fi
+          
+      - name: Notify Success
+        if: success()
+        run: |
+          echo "🎉 Facebook OG cache ได้รับการ refresh แล้ว!"
+          echo "🔗 ทดสอบได้ที่: https://developers.facebook.com/tools/debug/"

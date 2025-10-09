@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable linebreak-style */
 // API: POST /api/social/rescrape
 // Re-scrape Facebook Open Graph cache for one or all car detail URLs.
 // Security: Requires ?secret=... matching process.env.RESCRAPE_SECRET
