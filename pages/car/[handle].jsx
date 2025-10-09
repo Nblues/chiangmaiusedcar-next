@@ -259,6 +259,23 @@ function CarDetailPage({ car, allCars = [] }) {
     socialImage = `${socialImage}?v=${timestamp}&w=1200&h=630`;
   }
 
+  // Server-rendered Open Graph essentials (SSR-safe, no client-only logic)
+  // Build canonical URL and primary OG image directly from props to guarantee tags on first HTML
+  const canonicalUrl = `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`;
+  // Prefer original Shopify URL when available to avoid relative paths
+  let ogImage = safeGet(firstCarImage, 'originalUrl', '') || safeGet(firstCarImage, 'url', '');
+  if (ogImage && ogImage.startsWith('/')) {
+    ogImage = `https://www.chiangmaiusedcar.com${ogImage}`;
+  }
+  if (ogImage && !ogImage.startsWith('http')) {
+    ogImage = `https://www.chiangmaiusedcar.com/${ogImage}`;
+  }
+  // Ensure Shopify image has a sensible width for social preview
+  if (ogImage && ogImage.includes('cdn.shopify.com') && !/[?&]width=\d+/.test(ogImage)) {
+    const sep = ogImage.includes('?') ? '&' : '?';
+    ogImage = `${ogImage}${sep}width=1200`;
+  }
+
   // Debug mode - log for development AND production for social debugging
   if (typeof window !== 'undefined') {
     // eslint-disable-next-line no-console
@@ -277,6 +294,19 @@ function CarDetailPage({ car, allCars = [] }) {
 
   return (
     <>
+      {/* Minimal SSR OG block to guarantee Facebook/LINE can read meta without JS */}
+      <Head>
+        <meta property="og:type" content="product" />
+        <meta property="og:title" content={enhancedTitle} />
+        <meta property="og:description" content={enhancedDescription} />
+        <meta property="og:url" content={canonicalUrl} />
+        {ogImage && <meta property="og:image" content={ogImage} />}
+        {ogImage && <meta property="og:image:secure_url" content={ogImage} />}
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่" />
+      </Head>
+
       <SEO
         title={enhancedTitle}
         description={enhancedDescription}
@@ -299,7 +329,7 @@ function CarDetailPage({ car, allCars = [] }) {
           images: carImages.map(img => ({
             ...img,
             url: safeGet(img, 'url', '').startsWith('/')
-              ? `https://chiangmaiusedcar.com${safeGet(img, 'url', '')}`
+              ? `https://www.chiangmaiusedcar.com${safeGet(img, 'url', '')}`
               : safeGet(img, 'url', ''),
           })),
           // Ensure structured data has required fields for Google Rich Results
@@ -607,7 +637,7 @@ function CarDetailPage({ car, allCars = [] }) {
                   แชร์ Facebook
                 </a>
                 <a
-                  href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
+                  href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-accent hover:bg-orange-600 text-white flex items-center gap-2 px-4 py-3 rounded-lg font-prompt transition-colors"
@@ -1098,6 +1128,7 @@ export async function getStaticPaths() {
       fallback: 'blocking', // Enable ISR for new cars
     };
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('getStaticPaths error:', error);
     return {
       paths: [],
@@ -1129,6 +1160,7 @@ export async function getStaticProps({ params }) {
       revalidate: 600, // 10 minutes
     };
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('getStaticProps error:', error);
     // ไม่ throw error - ให้หน้า 404 แทน
     return {
