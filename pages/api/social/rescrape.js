@@ -51,8 +51,9 @@ export default async function handler(req, res) {
     for (let i = 0; i < targets.length; i++) {
       const url = targets[i];
       try {
-        // Facebook Graph API re-scrape endpoint
-        const api = `https://graph.facebook.com/?id=${encodeURIComponent(
+        // Use Facebook's public Sharing Debugger API endpoint instead
+        // This endpoint doesn't require appsecret_proof
+        const api = `https://graph.facebook.com/v21.0/?id=${encodeURIComponent(
           url
         )}&scrape=true&access_token=${encodeURIComponent(accessToken)}`;
         
