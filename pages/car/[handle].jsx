@@ -11,6 +11,9 @@ import Link from 'next/link';
 import A11yImage from '../../components/A11yImage';
 import { carAlt } from '../../utils/a11y';
 import { optimizeShopifyImage } from '../../utils/imageOptimizer';
+import { createPrettyUrl, createShareText } from '../../utils/urlHelper';
+import { carAlt } from '../../utils/a11y';
+import { optimizeShopifyImage } from '../../utils/imageOptimizer';
 
 function CarDetailPage({ car, allCars = [] }) {
   const router = useRouter();
@@ -27,9 +30,12 @@ function CarDetailPage({ car, allCars = [] }) {
   // Clean URL - ลบ query parameters ที่ไม่จำเป็น (เช่น ?handle=...)
   useEffect(() => {
     if (!mounted || !router.isReady) return;
-    
+
     // ถ้ามี query parameters ใดๆ ให้ลบออก (เพราะ car detail ไม่ต้องการ query params)
-    if (Object.keys(router.query).length > 1 || (router.query.handle && router.asPath.includes('?'))) {
+    if (
+      Object.keys(router.query).length > 1 ||
+      (router.query.handle && router.asPath.includes('?'))
+    ) {
       const cleanPath = `/car/${router.query.handle}`;
       // ใช้ replace แทน push เพื่อไม่ให้เพิ่มใน history
       router.replace(cleanPath, undefined, { shallow: true });
@@ -565,13 +571,18 @@ function CarDetailPage({ car, allCars = [] }) {
               <div className="flex flex-wrap gap-2 sm:gap-3">
                 <button
                   onClick={() => {
-                    const shareUrl = `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`;
-                    const shareText = `${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} ราคา ${safeFormatPrice(safeGet(car, 'price.amount')).display} บาท | ครูหนึ่งรถสวย`;
-                    navigator.share
-                      ? navigator.share({ title: shareText, url: shareUrl })
-                      : navigator.clipboard
-                          .writeText(`${shareText} ${shareUrl}`)
-                          .then(() => alert('คัดลอกลิ้งค์แล้ว!'));
+                    // สร้าง Pretty URL ที่สั้นและสวยกว่า (ลบคำภาษาไทย)
+                    const prettyHandle = createPrettyUrl(safeGet(car, 'handle', ''));
+                    const shareUrl = `https://www.chiangmaiusedcar.com/car/${prettyHandle}`;
+                    const shareText = createShareText(car);
+                    
+                    if (navigator.share) {
+                      navigator.share({ title: shareText, url: shareUrl });
+                    } else {
+                      navigator.clipboard
+                        .writeText(`${shareText}\n${shareUrl}`)
+                        .then(() => alert('✅ คัดลอกลิ้งค์แล้ว!\n\n' + shareUrl));
+                    }
                   }}
                   className="bg-white hover:bg-gray-50 text-black border border-gray-200 flex items-center gap-2 px-4 py-3 rounded-lg font-prompt transition-colors"
                   aria-label="แชร์ข้อมูลรถคันนี้"
@@ -584,10 +595,10 @@ function CarDetailPage({ car, allCars = [] }) {
                       d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
                     />
                   </svg>
-                  แชร์ข้อมูลรถ
+                  แชร์ลิ้งค์สั้น
                 </button>
                 <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://www.chiangmaiusedcar.com/car/${createPrettyUrl(safeGet(car, 'handle', ''))}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-primary hover:bg-blue-700 text-white flex items-center gap-2 px-4 py-3 rounded-lg font-prompt transition-colors"
