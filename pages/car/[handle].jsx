@@ -13,7 +13,7 @@ import { carAlt } from '../../utils/a11y';
 import { optimizeShopifyImage, generateSrcSet } from '../../utils/imageOptimizer';
 import { createShareText } from '../../utils/urlHelper';
 
-function CarDetailPage({ car, allCars = [] }) {
+function CarDetailPage({ car, recommendedCars = [] }) {
   const router = useRouter();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [processedDescription, setProcessedDescription] = useState(null);
@@ -986,7 +986,7 @@ function CarDetailPage({ car, allCars = [] }) {
           </div>
 
           {/* Similar Cars Section */}
-          <SimilarCars currentCar={car} allCars={allCars} />
+          <SimilarCars currentCar={car} recommendations={recommendedCars} />
 
           {/* ขั้นตอนการซื้อรถ Modern 2025 */}
           <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
@@ -1187,11 +1187,76 @@ export async function getStaticProps({ params }) {
       };
     }
 
-    // ส่ง allCars ทั้งหมดให้ SimilarCars component คำนวณรถที่คล้ายกันเอง (ระบบเดิม)
+    // คำนวณรถที่แนะนำแบบชาญฉลาดบนฝั่งเซิร์ฟเวอร์ (ลด page data จากการส่ง allCars ทั้งหมด)
+    const currentPrice = Number(car.price?.amount) || 0;
+    const currentBrand = car.vendor || car.brand || '';
+    const currentYear = Number(car.year) || 0;
+
+    const recommendedCars = safeCars
+      .filter(
+        c =>
+          c &&
+          c.handle !== car.handle &&
+          c.availableForSale !== false &&
+          c.price?.amount &&
+          Number(c.price.amount) > 0
+      )
+      .map(c => {
+        let score = 0;
+        const carPrice = Number(c.price.amount);
+        const carBrand = c.vendor || c.brand || '';
+        const carYear = Number(c.year) || 0;
+
+        // คะแนนตามยี่ห้อ
+        if (carBrand && currentBrand && carBrand.toLowerCase() === currentBrand.toLowerCase()) {
+          score += 1000;
+        }
+
+        // คะแนนตามราคา (ใกล้เคียงดีกว่า)
+        const priceDiff = Math.abs(carPrice - currentPrice);
+        const priceScore =
+          currentPrice > 0 ? Math.max(0, 500 - (priceDiff / currentPrice) * 500) : 0;
+        score += priceScore;
+
+        // คะแนนตามปี (ใกล้เคียงดีกว่า)
+        if (currentYear > 0 && carYear > 0) {
+          const yearDiff = Math.abs(carYear - currentYear);
+          const yearScore = Math.max(0, 200 - yearDiff * 20);
+          score += yearScore;
+        }
+
+        // คะแนนตามช่วงราคา
+        if (currentPrice > 0) {
+          if (currentPrice >= 1000000) {
+            if (carPrice >= 1000000) score += 100;
+          } else if (currentPrice >= 500000) {
+            if (carPrice >= 500000 && carPrice < 1000000) score += 100;
+          } else {
+            if (carPrice < 500000) score += 100;
+          }
+        }
+
+        return { ...c, similarityScore: score };
+      })
+      .sort((a, b) => b.similarityScore - a.similarityScore)
+      .slice(0, 4)
+      // ส่งเฉพาะฟิลด์ที่จำเป็นไปยัง client เพื่อลด payload
+      .map(c => ({
+        id: c.id,
+        handle: c.handle,
+        title: c.title,
+        vendor: c.vendor || c.brand,
+        brand: c.brand,
+        year: c.year,
+        mileage: c.mileage,
+        price: { amount: Number(c.price.amount) },
+        images: Array.isArray(c.images) && c.images.length > 0 ? [{ url: c.images[0].url }] : [],
+      }));
+
     return {
       props: {
         car,
-        allCars: safeCars, // ส่งรถทั้งหมด
+        recommendedCars,
       },
       revalidate: 600, // 10 minutes
     };

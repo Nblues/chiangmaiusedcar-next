@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { carAlt } from '../utils/a11y';
 
 // คอมโพเนนต์แนะนำรถที่คล้ายกัน
-function SimilarCars({ currentCar, allCars = [] }) {
+function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
   // หาฟังก์ชันรถที่คล้ายกัน - อัลกอริทึมปรับปรุงใหม่
   const findSimilarCars = () => {
     // ป้องกันกรณีข้อมูลไม่ครบ
@@ -66,7 +66,10 @@ function SimilarCars({ currentCar, allCars = [] }) {
       .slice(0, 4); // แสดงแค่ 4 คันที่คล้ายที่สุด
   };
 
-  const similarCars = findSimilarCars();
+  const similarCars =
+    Array.isArray(recommendations) && recommendations.length > 0
+      ? recommendations
+      : findSimilarCars();
 
   if (similarCars.length === 0) {
     // แสดง empty state แทนการไม่แสดงอะไรเลย
