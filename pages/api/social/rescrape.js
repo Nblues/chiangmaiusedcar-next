@@ -5,7 +5,9 @@
 // Security: Requires ?secret=... matching process.env.RESCRAPE_SECRET
 // Config:
 //   - FACEBOOK_GRAPH_ACCESS_TOKEN (App/Page Access Token with permissions to scrape URLs)
+//   - FACEBOOK_APP_SECRET (required for appsecret_proof when calling from server)
 
+import crypto from 'crypto';
 import { getAllCars } from '../../../lib/shopify.mjs';
 
 const SITE = 'https://www.chiangmaiusedcar.com';
@@ -26,12 +28,27 @@ export default async function handler(req, res) {
     }
 
     const accessToken = process.env.FACEBOOK_GRAPH_ACCESS_TOKEN;
+    const appSecret = process.env.FACEBOOK_APP_SECRET;
+    
     if (!accessToken) {
       return res.status(500).json({
         ok: false,
         error: 'FACEBOOK_GRAPH_ACCESS_TOKEN is not configured',
       });
     }
+
+    if (!appSecret) {
+      return res.status(500).json({
+        ok: false,
+        error: 'FACEBOOK_APP_SECRET is not configured (required for server-side API calls)',
+      });
+    }
+
+    // Generate appsecret_proof for secure server-side API calls
+    const appsecretProof = crypto
+      .createHmac('sha256', appSecret)
+      .update(accessToken)
+      .digest('hex');
 
     let targets = [];
     if (handle && typeof handle === 'string') {
@@ -55,7 +72,7 @@ export default async function handler(req, res) {
         // This endpoint doesn't require appsecret_proof
         const api = `https://graph.facebook.com/v21.0/?id=${encodeURIComponent(
           url
-        )}&scrape=true&access_token=${encodeURIComponent(accessToken)}`;
+        )}&scrape=true&access_token=${encodeURIComponent(accessToken)}&appsecret_proof=${appsecretProof}`;
         
         const r = await fetch(api, { method: 'POST' });
         const text = await r.text();
