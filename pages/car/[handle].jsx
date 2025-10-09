@@ -240,19 +240,8 @@ function CarDetailPage({ car, allCars = [] }) {
     socialImage = `https://www.chiangmaiusedcar.com/${socialImage}`;
   }
 
-  // ⚠️ Facebook มักไม่ชอบ Shopify CDN - ใช้รูปจาก domain เราเอง
-  // ถ้ารูปจาก Shopify CDN ให้ fallback เป็นรูปจาก public folder
-  const isShopifyCdn =
-    socialImage.includes('cdn.shopify.com') || socialImage.includes('shopify.com');
-
-  // Fallback to default high-quality image if no car image or Shopify CDN
-  if (
-    !socialImage ||
-    socialImage === 'https://www.chiangmaiusedcar.com' ||
-    socialImage === '' ||
-    isShopifyCdn
-  ) {
-    // ใช้รูป hero banner ที่อยู่บน domain เราเอง (Facebook เข้าถึงได้แน่นอน)
+  // Fallback to default high-quality image if no car image
+  if (!socialImage || socialImage === 'https://www.chiangmaiusedcar.com' || socialImage === '') {
     socialImage = 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
   }
 
@@ -279,8 +268,6 @@ function CarDetailPage({ car, allCars = [] }) {
       image: socialImage,
       imageAbsolute: socialImage.startsWith('https://'),
       imageSize: '1200x630',
-      isShopifyCdn: isShopifyCdn,
-      originalImage: safeGet(firstCarImage, 'url', ''),
       url: `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
       brandModel,
       yearPrice,
@@ -1111,7 +1098,6 @@ export async function getStaticPaths() {
       fallback: 'blocking', // Enable ISR for new cars
     };
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('getStaticPaths error:', error);
     return {
       paths: [],
@@ -1143,7 +1129,6 @@ export async function getStaticProps({ params }) {
       revalidate: 600, // 10 minutes
     };
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('getStaticProps error:', error);
     // ไม่ throw error - ให้หน้า 404 แทน
     return {
