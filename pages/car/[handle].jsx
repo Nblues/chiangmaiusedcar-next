@@ -1137,11 +1137,39 @@ export async function getStaticProps({ params }) {
 
     // ป้องกันกรณีที่ cars เป็น null หรือ undefined
     const safeCars = Array.isArray(cars) ? cars : [];
-    const car = safeCars.find(c => c?.handle === params?.handle) || null;
 
+    const requestedRaw = params?.handle || '';
+    const requested = decodeURIComponent(requestedRaw);
+
+    // 1) ตรงตัว
+    let car = safeCars.find(c => c?.handle === requestedRaw) || null;
+
+    // 2) เทียบกับ decoded
     if (!car) {
+      car = safeCars.find(c => c?.handle === requested) || null;
+    }
+
+    // 3) เผื่อมีคำต่อท้าย เช่น -รุ่นท็อป ให้แมทช์แบบ prefix ที่ยาวสุด
+    if (!car) {
+      const candidates = safeCars
+        .filter(c => typeof c?.handle === 'string')
+        .filter(c => requestedRaw.startsWith(c.handle) || requested.startsWith(c.handle))
+        .sort((a, b) => b.handle.length - a.handle.length);
+      car = candidates[0] || null;
+    }
+
+    // ไม่พบจริง ๆ
+    if (!car) {
+      return { notFound: true };
+    }
+
+    // Redirect ไป canonical URL ถ้าไม่ตรง
+    if (requestedRaw !== car.handle) {
       return {
-        notFound: true,
+        redirect: {
+          destination: `/car/${car.handle}`,
+          permanent: true,
+        },
       };
     }
 
