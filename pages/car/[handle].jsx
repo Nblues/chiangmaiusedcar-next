@@ -10,7 +10,7 @@ import { safeGet, safeFormatPrice } from '../../lib/safeFetch';
 import Link from 'next/link';
 import A11yImage from '../../components/A11yImage';
 import { carAlt } from '../../utils/a11y';
-import { optimizeShopifyImage } from '../../utils/imageOptimizer';
+import { optimizeShopifyImage, generateSrcSet } from '../../utils/imageOptimizer';
 import { createShareText } from '../../utils/urlHelper';
 
 function CarDetailPage({ car, allCars = [] }) {
@@ -197,6 +197,10 @@ function CarDetailPage({ car, allCars = [] }) {
   ]);
   const currentImage = carImages[selectedImageIndex] || carImages[0];
 
+  // ⭐ เตรียม URL รูปแรกสำหรับ preload (ก่อน render)
+  const firstImageUrl = safeGet(carImages[0], 'url', '/herobanner/chiangmaiusedcar.webp');
+  const optimizedFirstImage = optimizeShopifyImage(firstImageUrl, 1920, 'webp');
+
   // Enhanced SEO data for better link sharing - optimized for social media
   const brandModel = [safeGet(car, 'vendor') || safeGet(car, 'brand'), safeGet(car, 'model')]
     .filter(Boolean)
@@ -298,6 +302,16 @@ function CarDetailPage({ car, allCars = [] }) {
         {/* ⭐ Preconnect to Shopify CDN for faster image loading */}
         <link rel="preconnect" href="https://cdn.shopify.com" />
         <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+        
+        {/* ⭐ Preload รูปแรก (Hero Image) เพื่อโหลดทันทีก่อนอย่างอื่น */}
+        <link
+          rel="preload"
+          as="image"
+          href={optimizedFirstImage}
+          imageSrcSet={generateSrcSet(firstImageUrl, [640, 1024, 1920], 'webp')}
+          imageSizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px"
+          fetchPriority="high"
+        />
         
         <meta property="og:type" content="product" />
         <meta property="og:title" content={enhancedTitle} />
@@ -438,6 +452,7 @@ function CarDetailPage({ car, allCars = [] }) {
                 priority={true} // ⭐ เพิ่ม priority สำหรับรูปหลัก Above-the-fold
                 imageType="hero" // ⭐ ระบุเป็นรูปหลัก (1920px)
                 quality={85}
+                decoding="async" // ⭐ Decode แบบ async ไม่บล็อก main thread
                 onLoad={() => setImageLoading(false)}
                 onError={() => setImageLoading(false)}
               />
