@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import SEO from '../../components/SEO';
@@ -18,11 +18,52 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [processedDescription, setProcessedDescription] = useState(null);
   const [mounted, setMounted] = useState(false);
+  // สำหรับ back ที่ฉลาด: จำหน้าล่าสุดที่มาจากภายในเว็บ (เก็บใน sessionStorage เท่านั้น)
+  // สถานะโหลดรูปหลัก (Hero)
+  const [isHeroLoading, setIsHeroLoading] = useState(true);
+  const [showHeroLoading, setShowHeroLoading] = useState(false);
+  const heroLoadingTimerRef = useRef(null);
 
   // Hydration protection
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // จดจำหน้าเดิม (referrer) เพื่อให้กดย้อนกลับได้ถูกหน้า (เช่น all-cars ที่มี filter)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const ref = document.referrer;
+      if (!ref) return;
+      const refUrl = new URL(ref);
+      const sameOrigin = refUrl.origin === window.location.origin;
+      if (sameOrigin) {
+        const refPath = refUrl.pathname + (refUrl.search || '') + (refUrl.hash || '');
+        // เก็บไว้ใน sessionStorage เพื่อเรียกใช้กับปุ่ม "กลับ" ภายในหน้า
+        sessionStorage.setItem('lastListUrl', refPath);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const goBackSmart = () => {
+    if (typeof window === 'undefined') return;
+    const last = sessionStorage.getItem('lastListUrl');
+    // ถ้ามีประวัติหน้าเดิมใน session และเป็นโดเมนเดียวกัน ให้กลับไป
+    if (document.referrer && last) {
+      // พยายามใช้ browser back ถ้า history มี
+      if (window.history.length > 1) {
+        window.history.back();
+        return;
+      }
+      // กรณีไม่มี history (เปิดแท็บใหม่) ให้ไปที่ last โดยตรง
+      window.location.href = last;
+      return;
+    }
+    // สำรอง: กลับหน้ารวมรถ
+    window.location.href = '/all-cars';
+  };
 
   // Clean URL - ลบ query parameters ที่ไม่จำเป็น (เช่น ?handle=...)
   useEffect(() => {
@@ -81,6 +122,28 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   }, [car, mounted]);
 
   // Removed image loading gating to allow hero image to paint immediately
+
+  // จัดการตัวบอกสถานะ “กำลังโหลดรูป…” แบบไม่รบกวนการแสดงผล
+  useEffect(() => {
+    if (!mounted) return;
+    // เมื่อเปลี่ยนรูป ให้เริ่มสถานะโหลดใหม่
+    setIsHeroLoading(true);
+    setShowHeroLoading(false);
+    if (heroLoadingTimerRef.current) {
+      clearTimeout(heroLoadingTimerRef.current);
+    }
+    // หน่วงเล็กน้อยเพื่อหลีกเลี่ยงการกะพริบของข้อความโหลด (ถ้ารูปมาเร็วจะไม่แสดง)
+    heroLoadingTimerRef.current = setTimeout(() => {
+      setShowHeroLoading(true);
+    }, 400);
+
+    return () => {
+      if (heroLoadingTimerRef.current) {
+        clearTimeout(heroLoadingTimerRef.current);
+      }
+    };
+    // แสดงสถานะทุกครั้งที่เปลี่ยน index หรือรูปชุดใหม่
+  }, [selectedImageIndex, mounted]);
 
   // Process description after component mount to prevent hydration errors
   useEffect(() => {
@@ -442,7 +505,53 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                 imageType="hero" // ⭐ ระบุเป็นรูปหลัก (1920px)
                 quality={85}
                 decoding="async" // ⭐ Decode แบบ async ไม่บล็อก main thread
+                onLoad={() => {
+                  setIsHeroLoading(false);
+                  setShowHeroLoading(false);
+                  if (heroLoadingTimerRef.current) {
+                    clearTimeout(heroLoadingTimerRef.current);
+                  }
+                }}
+                onError={() => {
+                  // ถ้าโหลดผิดพลาด ให้ปิดสถานะโหลด เพื่อไม่ให้ผู้ใช้สับสน
+                  setIsHeroLoading(false);
+                  setShowHeroLoading(false);
+                  if (heroLoadingTimerRef.current) {
+                    clearTimeout(heroLoadingTimerRef.current);
+                  }
+                }}
               />
+
+              {/* Loading hint for slow images (non-blocking) */}
+              {isHeroLoading && showHeroLoading && (
+                <div
+                  className="absolute inset-x-0 bottom-2 sm:bottom-4 mx-auto w-fit flex items-center gap-2 bg-black/60 text-white px-3 py-2 rounded-md text-xs sm:text-sm font-prompt pointer-events-none"
+                  aria-live="polite"
+                >
+                  <svg
+                    className="w-4 h-4 animate-spin text-white"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  <span>กำลังโหลดรูป…</span>
+                </div>
+              )}
 
               {/* Navigation buttons */}
               {carImages.length > 1 && (
@@ -789,7 +898,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                     โทรหาฉัน
                   </a>
                   <a
-                    href="https://line.me/ti/p/@krunuengusedcar"
+                    href="https://lin.ee/8ugfzstD"
                     className="bg-accent hover:bg-orange-600 text-white text-center py-3 px-4 rounded-lg font-bold transition-colors font-prompt w-full"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -973,7 +1082,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   โทร 094-064-9018
                 </a>
                 <a
-                  href="https://line.me/ti/p/@krunuengusedcar"
+                  href="https://lin.ee/8ugfzstD"
                   className="bg-white hover:bg-gray-50 text-black border border-gray-200 block text-center py-4 px-6 rounded-lg font-bold text-lg transition-colors font-prompt w-full"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -1029,12 +1138,19 @@ function CarDetailPage({ car, recommendedCars = [] }) {
 
           {/* ปุ่มกลับ Modern 2025 */}
           <div className="text-center pb-8">
-            <Link
-              href="/all-cars"
+            <button
+              onClick={goBackSmart}
+              type="button"
               className="bg-primary hover:bg-blue-700 text-white inline-block px-6 py-3 rounded-lg font-semibold transition-colors text-lg font-prompt"
+              aria-label="กลับไปหน้าก่อนหน้า"
             >
-              กลับหน้ารวมรถ
-            </Link>
+              กลับหน้าก่อนหน้า
+            </button>
+            <div className="mt-2">
+              <Link href="/all-cars" className="text-sm text-gray-500 underline font-prompt">
+                หรือกลับหน้ารวมรถ
+              </Link>
+            </div>
           </div>
         </div>
       </main>
