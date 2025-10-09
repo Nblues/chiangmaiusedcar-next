@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import SEO from '../../components/SEO';
 import Breadcrumb from '../../components/Breadcrumb';
 import SimilarCars from '../../components/SimilarCars';
@@ -12,6 +13,7 @@ import { carAlt } from '../../utils/a11y';
 import { optimizeShopifyImage } from '../../utils/imageOptimizer';
 
 function CarDetailPage({ car, allCars = [] }) {
+  const router = useRouter();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [imageLoading, setImageLoading] = useState(true);
   const [processedDescription, setProcessedDescription] = useState(null);
@@ -21,6 +23,18 @@ function CarDetailPage({ car, allCars = [] }) {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Clean URL - ลบ query parameters ที่ไม่จำเป็น (เช่น ?handle=...)
+  useEffect(() => {
+    if (!mounted || !router.isReady) return;
+    
+    // ถ้ามี query parameters ใดๆ ให้ลบออก (เพราะ car detail ไม่ต้องการ query params)
+    if (Object.keys(router.query).length > 1 || (router.query.handle && router.asPath.includes('?'))) {
+      const cleanPath = `/car/${router.query.handle}`;
+      // ใช้ replace แทน push เพื่อไม่ให้เพิ่มใน history
+      router.replace(cleanPath, undefined, { shallow: true });
+    }
+  }, [router, mounted]);
 
   // Preload next/prev images for instant switching with optimization
   useEffect(() => {
@@ -551,7 +565,7 @@ function CarDetailPage({ car, allCars = [] }) {
               <div className="flex flex-wrap gap-2 sm:gap-3">
                 <button
                   onClick={() => {
-                    const shareUrl = `https://chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`;
+                    const shareUrl = `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`;
                     const shareText = `${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} ราคา ${safeFormatPrice(safeGet(car, 'price.amount')).display} บาท | ครูหนึ่งรถสวย`;
                     navigator.share
                       ? navigator.share({ title: shareText, url: shareUrl })
