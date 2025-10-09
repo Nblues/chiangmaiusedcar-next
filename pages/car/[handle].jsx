@@ -9,6 +9,7 @@ import { safeGet, safeFormatPrice } from '../../lib/safeFetch';
 import Link from 'next/link';
 import A11yImage from '../../components/A11yImage';
 import { carAlt } from '../../utils/a11y';
+import { optimizeShopifyImage } from '../../utils/imageOptimizer';
 
 function CarDetailPage({ car, allCars = [] }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -21,7 +22,7 @@ function CarDetailPage({ car, allCars = [] }) {
     setMounted(true);
   }, []);
 
-  // Preload next/prev images for instant switching
+  // Preload next/prev images for instant switching with optimization
   useEffect(() => {
     if (!mounted || !car) return;
     const images = safeGet(car, 'images', []);
@@ -31,7 +32,9 @@ function CarDetailPage({ car, allCars = [] }) {
     if (selectedImageIndex > 0) preloadIndexes.push(selectedImageIndex - 1);
     preloadIndexes.forEach(idx => {
       const img = new window.Image();
-      img.src = safeGet(images[idx], 'url', '');
+      const originalUrl = safeGet(images[idx], 'url', '');
+      // ⭐ ใช้ optimized URL เหมือนกับตอนแสดงผล
+      img.src = optimizeShopifyImage(originalUrl, 1920, 'webp');
     });
   }, [selectedImageIndex, car, mounted]);
 
