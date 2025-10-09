@@ -12,8 +12,6 @@ import A11yImage from '../../components/A11yImage';
 import { carAlt } from '../../utils/a11y';
 import { optimizeShopifyImage } from '../../utils/imageOptimizer';
 import { createPrettyUrl, createShareText } from '../../utils/urlHelper';
-import { carAlt } from '../../utils/a11y';
-import { optimizeShopifyImage } from '../../utils/imageOptimizer';
 
 function CarDetailPage({ car, allCars = [] }) {
   const router = useRouter();
