@@ -41,9 +41,7 @@ export function generateSrcSet(url, widths = [640, 1024, 1920], format = 'webp')
     return '';
   }
 
-  return widths
-    .map(width => `${optimizeShopifyImage(url, width, format)} ${width}w`)
-    .join(', ');
+  return widths.map(width => `${optimizeShopifyImage(url, width, format)} ${width}w`).join(', ');
 }
 
 /**
@@ -107,17 +105,17 @@ export const BLUR_DATA_URL =
 
 /**
  * ตัวอย่างการใช้งาน
- * 
+ *
  * // Basic usage
  * <img src={optimizeShopifyImage(car.image, 1200)} />
- * 
+ *
  * // With srcset
- * <img 
+ * <img
  *   src={optimizeShopifyImage(car.image, 1200)}
  *   srcSet={generateSrcSet(car.image, [640, 1024, 1920])}
  *   sizes={generateSizes('card')}
  * />
- * 
+ *
  * // With Next.js Image
  * <Image
  *   src={optimizeShopifyImage(car.image, 1920)}

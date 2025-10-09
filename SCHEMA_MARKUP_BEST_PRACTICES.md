@@ -22,7 +22,7 @@
   "logo": "https://www.chiangmaiusedcar.com/logo.png",
   "image": "https://www.chiangmaiusedcar.com/og-image.jpg",
   "description": "ขายรถมือสองคุณภาพ เชียงใหม่ ราคาดี มีรับประกัน ฟรีดาวน์ ผ่อนสบาย",
-  
+
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "123 ถนนเชียงใหม่-ลำปาง",
@@ -31,13 +31,13 @@
     "postalCode": "50000",
     "addressCountry": "TH"
   },
-  
+
   "geo": {
     "@type": "GeoCoordinates",
     "latitude": "18.7883",
     "longitude": "98.9853"
   },
-  
+
   "contactPoint": {
     "@type": "ContactPoint",
     "telephone": "+66-89-123-4567",
@@ -45,7 +45,7 @@
     "areaServed": "TH",
     "availableLanguage": ["th", "en"]
   },
-  
+
   "openingHoursSpecification": [
     {
       "@type": "OpeningHoursSpecification",
@@ -54,13 +54,13 @@
       "closes": "19:00"
     }
   ],
-  
+
   "sameAs": [
     "https://www.facebook.com/chiangmaiusedcar",
     "https://line.me/R/ti/p/@chiangmaiusedcar",
     "https://www.instagram.com/chiangmaiusedcar"
   ],
-  
+
   "priceRange": "฿฿-฿฿฿"
 }
 ```
@@ -83,16 +83,16 @@
     "https://cdn.shopify.com/s/files/1/0123/4567/8901/products/vios-02.jpg",
     "https://cdn.shopify.com/s/files/1/0123/4567/8901/products/vios-03.jpg"
   ],
-  
+
   "brand": {
     "@type": "Brand",
     "name": "Toyota"
   },
-  
+
   "model": "Vios 1.5 E",
   "vehicleModelDate": "2016",
   "productionDate": "2016",
-  
+
   "color": "ขาว",
   "bodyType": "Sedan",
   "vehicleTransmission": "อัตโนมัติ",
@@ -106,20 +106,20 @@
     },
     "fuelType": "Gasoline"
   },
-  
+
   "mileageFromOdometer": {
     "@type": "QuantitativeValue",
     "value": 45000,
     "unitCode": "KMT"
   },
-  
+
   "numberOfDoors": 4,
   "vehicleSeatingCapacity": 5,
-  
+
   "vehicleIdentificationNumber": "JTDBL40E109012345",
-  
+
   "vehicleCondition": "https://schema.org/UsedCondition",
-  
+
   "offers": {
     "@type": "Offer",
     "url": "https://www.chiangmaiusedcar.com/car/toyota-vios-1-5-e-2016",
@@ -150,7 +150,7 @@
   "name": "รถมือสองทั้งหมด - ครูหนึ่งรถสวย",
   "description": "รถมือสองคุณภาพสูง เชียงใหม่ มีให้เลือกหลากหลายรุ่น",
   "numberOfItems": 125,
-  
+
   "itemListElement": [
     {
       "@type": "ListItem",
@@ -279,6 +279,7 @@
 ### ❌ ห้ามทำ:
 
 1. **ห้ามใช้ Product แทน Car**
+
 ```json
 // ❌ ผิด
 {
@@ -294,20 +295,29 @@
 ```
 
 2. **ห้ามซ้ำ Schema เดียวกัน**
+
 ```html
 <!-- ❌ ห้าม: Organization ซ้ำ 2 ที่ -->
-<script type="application/ld+json">{"@type": "Organization"}</script>
-<script type="application/ld+json">{"@type": "Organization"}</script>
+<script type="application/ld+json">
+  { "@type": "Organization" }
+</script>
+<script type="application/ld+json">
+  { "@type": "Organization" }
+</script>
 
 <!-- ✅ ถูก: Organization มีแค่ 1 ที่ -->
-<script type="application/ld+json">{"@type": "Organization"}</script>
+<script type="application/ld+json">
+  { "@type": "Organization" }
+</script>
 ```
 
 3. **ห้ามใส่ข้อมูลเท็จ**
+
 - ไม่ควรใส่ `aggregateRating` ถ้าไม่มีรีวิวจริง
 - ไม่ควรใส่ `availability: InStock` ถ้ารถขายไปแล้ว
 
 4. **ห้ามใช้ข้อมูลที่ไม่เห็นในหน้าเว็บ**
+
 - Schema ต้องตรงกับสิ่งที่ user เห็นจริงๆ
 
 ---
@@ -315,13 +325,14 @@
 ## ✅ Best Practices
 
 ### 1. ใช้ JSON-LD (ไม่ใช่ Microdata)
+
 ```html
 <!-- ✅ แนะนำ: JSON-LD -->
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Car"
-}
+  {
+    "@context": "https://schema.org",
+    "@type": "Car"
+  }
 </script>
 
 <!-- ❌ ไม่แนะนำ: Microdata -->
@@ -331,6 +342,7 @@
 ```
 
 ### 2. ใส่ @id สำหรับ Entity หลัก
+
 ```json
 {
   "@context": "https://schema.org",
@@ -341,6 +353,7 @@
 ```
 
 ### 3. ใช้ Brand Object
+
 ```json
 // ✅ ถูก
 "brand": {
@@ -353,6 +366,7 @@
 ```
 
 ### 4. ใส่หน่วยวัดที่ถูกต้อง
+
 ```json
 "mileageFromOdometer": {
   "@type": "QuantitativeValue",
@@ -362,6 +376,7 @@
 ```
 
 ### 5. ใช้ URL แบบ Canonical
+
 ```json
 "url": "https://www.chiangmaiusedcar.com/car/toyota-vios-2016",
 "image": "https://cdn.shopify.com/s/files/1/0123/4567/8901/products/vios-01.jpg"
@@ -372,9 +387,11 @@
 ## 🔍 เครื่องมือทดสอบ
 
 ### 1. Google Rich Results Test
+
 **URL**: https://search.google.com/test/rich-results
 
 **ทดสอบ**:
+
 - Organization
 - LocalBusiness
 - Car (หน้า detail)
@@ -382,16 +399,20 @@
 - BreadcrumbList
 
 ### 2. Schema Markup Validator
+
 **URL**: https://validator.schema.org/
 
 **ทดสอบ**:
+
 - ความถูกต้องของ JSON-LD
 - ความสมบูรณ์ของ properties
 
 ### 3. Google Search Console
+
 **URL**: https://search.google.com/search-console
 
 **เช็ค**:
+
 - Rich Results report
 - Coverage issues
 - Enhancement suggestions
@@ -401,12 +422,14 @@
 ## 📈 ผลลัพธ์ที่คาดหวัง
 
 ### ใน Google Search:
+
 1. **Rich Snippet**: แสดงรูปรถ, ราคา, ยี่ห้อ, ปี
 2. **Knowledge Panel**: ข้อมูลร้าน, ที่อยู่, เบอร์โทร
 3. **Sitelinks**: เมนูย่อยใน Search Results
 4. **Breadcrumb**: แสดง path navigation
 
 ### ใน Google Maps:
+
 1. แสดงข้อมูล Business Profile
 2. Opening hours
 3. Reviews & Ratings
@@ -417,15 +440,18 @@
 ## 🎯 สรุป Priority
 
 ### ⭐⭐⭐ สำคัญที่สุด (Must Have):
+
 1. **Organization/LocalBusiness** - ทุกหน้า
 2. **Car Schema** - หน้า car detail
 3. **BreadcrumbList** - ทุกหน้าย่อย
 
 ### ⭐⭐ สำคัญ (Should Have):
+
 4. **ItemList** - หน้า all-cars
 5. **WebSite** - หน้าแรก (สำหรับ Search)
 
 ### ⭐ เพิ่มเติม (Nice to Have):
+
 6. **FAQPage** - หน้า FAQ
 7. **Article** - หน้าบล็อก
 8. **Review** - หน้ารีวิว
@@ -446,7 +472,7 @@ export function buildCarJsonLd(car) {
     image: car.images.map(img => img.url),
     brand: {
       '@type': 'Brand',
-      name: car.brand
+      name: car.brand,
     },
     model: car.model,
     vehicleModelDate: car.year,
@@ -454,25 +480,25 @@ export function buildCarJsonLd(car) {
     bodyType: car.body_type,
     vehicleTransmission: car.transmission,
     fuelType: car.fuel_type,
-    mileageFromOdometer: car.mileage ? {
-      '@type': 'QuantitativeValue',
-      value: parseInt(car.mileage),
-      unitCode: 'KMT'
-    } : undefined,
+    mileageFromOdometer: car.mileage
+      ? {
+          '@type': 'QuantitativeValue',
+          value: parseInt(car.mileage),
+          unitCode: 'KMT',
+        }
+      : undefined,
     vehicleCondition: 'https://schema.org/UsedCondition',
     offers: {
       '@type': 'Offer',
       url: `https://www.chiangmaiusedcar.com/car/${car.handle}`,
       priceCurrency: 'THB',
       price: car.price.amount,
-      availability: car.availableForSale 
-        ? 'https://schema.org/InStock' 
-        : 'https://schema.org/OutOfStock',
+      availability: car.availableForSale ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
       seller: {
         '@type': 'Organization',
-        name: 'ครูหนึ่งรถสวย'
-      }
-    }
+        name: 'ครูหนึ่งรถสวย',
+      },
+    },
   };
 }
 ```

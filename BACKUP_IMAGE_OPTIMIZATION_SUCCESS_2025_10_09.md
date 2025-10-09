@@ -35,16 +35,19 @@ git checkout -b backup-image-optimization 59cc526
 ### 1. Image Optimization (ใหม่ - 9 ต.ค. 2025)
 
 **ไฟล์ใหม่:**
+
 - ✅ `utils/imageOptimizer.js` - Shopify CDN image resizing
 - ✅ `IMAGE_OPTIMIZATION_REPORT.md` - วิเคราะห์ปัญหา
 - ✅ `IMAGE_OPTIMIZATION_COMPLETE.md` - คู่มือใช้งาน
 
 **ไฟล์แก้ไข:**
+
 - ✅ `components/A11yImage.tsx` - เพิ่ม imageType prop
 - ✅ `pages/car/[handle].jsx` - ใช้ hero, thumbnail optimization
 - ✅ `pages/all-cars.jsx` - ใช้ card optimization
 
 **ผลลัพธ์:**
+
 - 📉 ขนาดรูป: 2-5 MB → 200-600 KB (ลด 80-90%)
 - ⚡ เวลาโหลด: 3-8s → 0.5-1.5s (เร็ว 5-6x)
 - ✅ LCP: 4.5s → ~1.8s (ผ่าน Core Web Vitals)
@@ -53,6 +56,7 @@ git checkout -b backup-image-optimization 59cc526
 ### 2. SEO & Schema Markup (6 ต.ค. 2025)
 
 **ไฟล์เอกสาร:**
+
 - ✅ `SCHEMA_MARKUP_BEST_PRACTICES.md`
 - ✅ `SCHEMA_MARKUP_OPTIMIZATION_2025.md`
 - ✅ `SEO_ANALYSIS_AKCARCENTER.md`
@@ -61,6 +65,7 @@ git checkout -b backup-image-optimization 59cc526
 - ✅ `GMB_WEBSITE_CHECK_GUIDE.md`
 
 **ผลลัพธ์:**
+
 - ✅ Schema.org Car markup complete
 - ✅ Organization + LocalBusiness structured data
 - ✅ Meta tags optimized
@@ -70,11 +75,13 @@ git checkout -b backup-image-optimization 59cc526
 ### 3. Shopify Integration Fixes
 
 **ไฟล์แก้ไข:**
+
 - ✅ `lib/shopify.mjs` - แก้ metafields GraphQL error
 - ✅ `lib/carDataParser.js` - เพิ่ม body_type, fuel_type parsing
 - ✅ `lib/seo/jsonld.js` - Enhanced Car schema
 
 **เอกสาร:**
+
 - ✅ `SHOPIFY_METAFIELDS_ISSUE_RESOLVED.md`
 - ✅ `SHOPIFY_METAFIELDS_GUIDE.md`
 - ✅ `METAFIELDS_COMPLETE_UPDATE.md`
@@ -87,18 +94,21 @@ git checkout -b backup-image-optimization 59cc526
 ### ✅ ทำงานได้ดี
 
 1. **Frontend**
+
    - Next.js 14.2.5 ✅
    - Pages Router ✅
    - SSR + Client-side rendering ✅
    - Dynamic imports ✅
 
 2. **Performance**
+
    - Image optimization ✅ (ใหม่!)
    - Lazy loading ✅
    - Code splitting ✅
    - CDN caching ✅
 
 3. **SEO**
+
    - Schema.org markup ✅
    - Meta tags ✅
    - Sitemap ✅
@@ -113,11 +123,13 @@ git checkout -b backup-image-optimization 59cc526
 ### ⚠️ Known Issues (ไม่ร้ายแรง)
 
 1. **Service Worker Registration Failed**
+
    - Error: `SW registration failed: Error: Rejected`
    - ผลกระทบ: ไม่มี offline mode และ PWA install
    - สถานะ: ไม่จำเป็นต้องแก้ (เว็บทำงานปกติ)
 
 2. **Memory Issues ใน Development**
+
    - Error: `Array buffer allocation failed`
    - สาเหตุ: ข้อมูลรถเยอะ (688 kB per page)
    - สถานะ: ปกติใน local, production โอเค
@@ -218,20 +230,20 @@ NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=xxxxx
 
 ### ก่อน Image Optimization
 
-| Metric | Score | Status |
-|--------|-------|--------|
-| LCP | 4.5s | ❌ Fail |
-| FID | 100ms | ✅ Pass |
-| CLS | 0.05 | ✅ Pass |
+| Metric  | Score  | Status               |
+| ------- | ------ | -------------------- |
+| LCP     | 4.5s   | ❌ Fail              |
+| FID     | 100ms  | ✅ Pass              |
+| CLS     | 0.05   | ✅ Pass              |
 | Overall | 72/100 | ⚠️ Needs Improvement |
 
 ### หลัง Image Optimization (คาดการณ์)
 
-| Metric | Score | Status |
-|--------|-------|--------|
-| LCP | 1.8s | ✅ Pass |
-| FID | 100ms | ✅ Pass |
-| CLS | 0.05 | ✅ Pass |
+| Metric  | Score  | Status  |
+| ------- | ------ | ------- |
+| LCP     | 1.8s   | ✅ Pass |
+| FID     | 100ms  | ✅ Pass |
+| CLS     | 0.05   | ✅ Pass |
 | Overall | 95/100 | ✅ Good |
 
 ---
@@ -294,7 +306,7 @@ pnpm dlx @unlighthouse/cli --site https://www.chiangmaiusedcar.com
 
 ## 🔐 Security Checklist
 
-- ✅ Admin routes protected (/admin/*)
+- ✅ Admin routes protected (/admin/\*)
 - ✅ Robots.txt configured
 - ✅ CSP headers set
 - ✅ Environment variables secured
@@ -310,7 +322,7 @@ pnpm dlx @unlighthouse/cli --site https://www.chiangmaiusedcar.com
 **Production**: https://www.chiangmaiusedcar.com  
 **Developer**: GitHub Copilot + Team  
 **Framework**: Next.js 14.2.5 (Pages Router)  
-**CMS**: Shopify (Headless)  
+**CMS**: Shopify (Headless)
 
 ---
 
@@ -319,6 +331,7 @@ pnpm dlx @unlighthouse/cli --site https://www.chiangmaiusedcar.com
 **สถานะ**: ✅ **Stable & Ready for Production**
 
 **Achievements Today (9 Oct 2025)**:
+
 - ✅ Image size reduced by 80-90%
 - ✅ Load time improved 5-6x
 - ✅ Core Web Vitals expected to pass

@@ -10,6 +10,7 @@
 ### ปัญหาเดิม ❌
 
 **`lib/shopify.mjs` - getAllCars() function**:
+
 ```javascript
 // ❌ ไม่มี metafields query
 metafields: {}, // Empty object since metafields don't exist
@@ -19,6 +20,7 @@ color: null,    // Not parsed yet
 ### หลังแก้ไข ✅
 
 **`lib/shopify.mjs` - getAllCars() function**:
+
 ```javascript
 // ✅ เพิ่ม metafields query
 metafields(namespace: "spec", first: 20) {
@@ -47,26 +49,26 @@ vin: metafields['spec:vin'] || null,
 
 ## 📊 Metafields ที่รองรับครบแล้ว
 
-| Key | getAllCars() | getCarByHandle() | สถานะ |
-|-----|--------------|------------------|--------|
-| `spec:year` | ✅ | ✅ | พร้อมใช้ |
-| `spec:brand` | ✅ | ✅ | พร้อมใช้ |
-| `spec:model` | ✅ | ✅ | พร้อมใช้ |
-| `spec:color` | ✅ | ✅ | พร้อมใช้ |
-| `spec:mileage` | ✅ | ✅ | พร้อมใช้ |
-| `spec:transmission` | ✅ | ✅ | พร้อมใช้ |
-| `spec:gear` | ✅ | ✅ | alias ของ transmission |
-| `spec:fuel_type` | ✅ | ✅ | พร้อมใช้ |
-| `spec:engine` | ✅ | ✅ | พร้อมใช้ |
-| `spec:displacement` | ✅ | ✅ | พร้อมใช้ |
-| `spec:seats` | ✅ | ✅ | พร้อมใช้ |
-| `spec:body_type` | ✅ | ✅ | **เพิ่มใหม่** |
-| `spec:vin` | ✅ | ✅ | **เพิ่มใหม่** |
-| `spec:province` | ✅ | ✅ | พร้อมใช้ |
-| `spec:free_down` | ✅ | ✅ | พร้อมใช้ |
-| `spec:low_installment` | ✅ | ✅ | พร้อมใช้ |
-| `spec:warranty` | ✅ | ✅ | พร้อมใช้ |
-| `spec:condition` | ✅ | ✅ | พร้อมใช้ |
+| Key                    | getAllCars() | getCarByHandle() | สถานะ                  |
+| ---------------------- | ------------ | ---------------- | ---------------------- |
+| `spec:year`            | ✅           | ✅               | พร้อมใช้               |
+| `spec:brand`           | ✅           | ✅               | พร้อมใช้               |
+| `spec:model`           | ✅           | ✅               | พร้อมใช้               |
+| `spec:color`           | ✅           | ✅               | พร้อมใช้               |
+| `spec:mileage`         | ✅           | ✅               | พร้อมใช้               |
+| `spec:transmission`    | ✅           | ✅               | พร้อมใช้               |
+| `spec:gear`            | ✅           | ✅               | alias ของ transmission |
+| `spec:fuel_type`       | ✅           | ✅               | พร้อมใช้               |
+| `spec:engine`          | ✅           | ✅               | พร้อมใช้               |
+| `spec:displacement`    | ✅           | ✅               | พร้อมใช้               |
+| `spec:seats`           | ✅           | ✅               | พร้อมใช้               |
+| `spec:body_type`       | ✅           | ✅               | **เพิ่มใหม่**          |
+| `spec:vin`             | ✅           | ✅               | **เพิ่มใหม่**          |
+| `spec:province`        | ✅           | ✅               | พร้อมใช้               |
+| `spec:free_down`       | ✅           | ✅               | พร้อมใช้               |
+| `spec:low_installment` | ✅           | ✅               | พร้อมใช้               |
+| `spec:warranty`        | ✅           | ✅               | พร้อมใช้               |
+| `spec:condition`       | ✅           | ✅               | พร้อมใช้               |
 
 **สรุป**: **รองรับ 18 metafields** ทั้ง getAllCars() และ getCarByHandle() เหมือนกันทุกประการ
 
@@ -81,6 +83,7 @@ vin: metafields['spec:vin'] || null,
 3. ตรวจสอบว่ามี namespace `spec` หรือไม่
 
 **ตัวอย่าง Metafields ที่ต้องมี**:
+
 ```
 spec.color = "ขาว"
 spec.mileage = "45000"
@@ -99,12 +102,14 @@ http://localhost:3000/all-cars
 ```
 
 **เปิด Console (F12) พิมพ์**:
+
 ```javascript
 // ดู props ของหน้า all-cars
-console.log(window.__NEXT_DATA__.props.pageProps.cars[0])
+console.log(window.__NEXT_DATA__.props.pageProps.cars[0]);
 ```
 
 **Expected Result**:
+
 ```javascript
 {
   id: "...",
