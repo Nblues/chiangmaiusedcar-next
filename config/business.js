@@ -44,7 +44,7 @@ export const BUSINESS_INFO = {
     },
     tiktok: 'https://www.tiktok.com/@krunueng_usedcar',
     youtube: 'https://youtube.com/@chiangraiusedcar',
-    lemon8: 'https://s.lemon8-app.com/al/GgUmdUUsrT',
+    lemon8: 'https://www.lemon8-app.com/@kn.goodcar?region=th',
     line: process.env.NEXT_PUBLIC_LINE_URL || 'https://lin.ee/8ugfzstD',
   },
 

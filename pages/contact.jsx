@@ -27,9 +27,8 @@ export default function Contact() {
 
       setMapEmbedUrl(embedUrl);
       setMapOpenUrl(openUrl);
-    } catch (error) {
-      console.error('❌ Error creating map URLs:', error);
-      // Fallback URLs with updated coordinates - ใช้ Google Maps ที่แน่ใจว่าทำงาน
+    } catch {
+      // Silently fallback to static URLs if dynamic creation fails
       const fallbackEmbedUrl =
         'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3777.089193583984!2d99.02736887517952!3d18.804897754158845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30da25a34cba1f05%3A0x9cb559411066b7cb!2z4LiE4Lij4Li54Lir4LiZ4Li24LmI4LiH4Lij4LiW4Liq4Lin4Lii!5e0!3m2!1sth!2sth!4v1694441234567!5m2!1sth!2sth';
       const fallbackOpenUrl =
@@ -135,7 +134,7 @@ export default function Contact() {
       'https://www.facebook.com/nuengblues',
       'https://www.tiktok.com/@krunueng_usedcar',
       'https://youtube.com/@chiangraiusedcar',
-      'https://s.lemon8-app.com/al/GgUmdUUsrT',
+      'https://www.lemon8-app.com/@kn.goodcar?region=th',
       'https://lin.ee/8ugfzstD',
     ],
     contactPoint: {
@@ -407,7 +406,7 @@ export default function Contact() {
 
               {/* Lemon8 */}
               <a
-                href="https://s.lemon8-app.com/al/GgUmdUUsrT"
+                href="https://www.lemon8-app.com/@kn.goodcar?region=th"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-yellow-500 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"

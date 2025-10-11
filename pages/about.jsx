@@ -77,7 +77,7 @@ export default function About() {
             'https://www.facebook.com/nuengblues',
             'https://www.tiktok.com/@krunueng_usedcar',
             'https://youtube.com/@chiangraiusedcar',
-            'https://s.lemon8-app.com/al/GgUmdUUsrT',
+            'https://www.lemon8-app.com/@kn.goodcar?region=th',
             'https://lin.ee/8ugfzstD',
           ],
           award: [
@@ -132,7 +132,9 @@ export default function About() {
                 placeholder="blur"
                 blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkbHB0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
                 onLoad={() => setImageLoaded(true)}
-                onError={() => console.error('Image failed to load')}
+                onError={() => {
+                  // Image load failed - component will handle gracefully
+                }}
                 priority={false}
               />
             </div>
@@ -368,7 +370,7 @@ export default function About() {
                   Lemon8 Followers
                 </div>
                 <a
-                  href="https://s.lemon8-app.com/al/GgUmdUUsrT"
+                  href="https://www.lemon8-app.com/@kn.goodcar?region=th"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-yellow-600 hover:text-yellow-800 font-medium font-prompt transition-colors"
