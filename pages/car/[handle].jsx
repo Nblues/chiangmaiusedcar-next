@@ -23,6 +23,9 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const [isHeroLoading, setIsHeroLoading] = useState(true);
   const [showHeroLoading, setShowHeroLoading] = useState(false);
   const heroLoadingTimerRef = useRef(null);
+  const heroFailSafeRef = useRef(null);
+  const heroPreloaderRef = useRef(null);
+  const carHandle = safeGet(car, 'handle');
 
   // Hydration protection
   useEffect(() => {
@@ -126,24 +129,67 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   // จัดการตัวบอกสถานะ “กำลังโหลดรูป…” แบบไม่รบกวนการแสดงผล
   useEffect(() => {
     if (!mounted) return;
-    // เมื่อเปลี่ยนรูป ให้เริ่มสถานะโหลดใหม่
+
+    // เริ่มสถานะโหลดใหม่ทุกครั้งที่เปลี่ยนรูปหรือเปลี่ยนรถ
     setIsHeroLoading(true);
     setShowHeroLoading(false);
-    if (heroLoadingTimerRef.current) {
-      clearTimeout(heroLoadingTimerRef.current);
-    }
-    // หน่วงเล็กน้อยเพื่อหลีกเลี่ยงการกะพริบของข้อความโหลด (ถ้ารูปมาเร็วจะไม่แสดง)
+
+    // ล้างตัวจับเวลาก่อนหน้า
+    if (heroLoadingTimerRef.current) clearTimeout(heroLoadingTimerRef.current);
+    if (heroFailSafeRef.current) clearTimeout(heroFailSafeRef.current);
+
+    // แสดงข้อความโหลดเฉพาะกรณีช้ากว่า 400ms เพื่อลดการกะพริบ
     heroLoadingTimerRef.current = setTimeout(() => {
       setShowHeroLoading(true);
     }, 400);
 
+    // พรีโหลดรูปปัจจุบันด้วย Image() เพื่อให้ onload ทำงานแม้ภาพอยู่ในแคช
+    try {
+      const currentUrl = safeGet(
+        (safeGet(car, 'images', []) || [])[selectedImageIndex] || {},
+        'url',
+        '/herobanner/chiangmaiusedcar.webp'
+      );
+      const optimized = optimizeShopifyImage(currentUrl, 1920, 'webp');
+      const img = new Image();
+      heroPreloaderRef.current = img;
+      img.src = optimized;
+      if (img.complete) {
+        // โหลดเสร็จแล้วจากแคช
+        setIsHeroLoading(false);
+        setShowHeroLoading(false);
+      } else {
+        img.onload = () => {
+          setIsHeroLoading(false);
+          setShowHeroLoading(false);
+        };
+        img.onerror = () => {
+          // ซ่อนข้อความโหลดเพื่อไม่ให้ค้าง แม้โหลดผิดพลาดจริงจังรูปหลักยังอาจแสดงจากแหล่งเดิมได้
+          setIsHeroLoading(false);
+          setShowHeroLoading(false);
+        };
+      }
+    } catch {
+      // ถ้าพรีโหลดมีปัญหา ให้ปล่อย failsafe ทำงาน
+    }
+
+    // Failsafe ปิดข้อความโหลดอัตโนมัติหลัง 8 วินาที
+    heroFailSafeRef.current = setTimeout(() => {
+      setIsHeroLoading(false);
+      setShowHeroLoading(false);
+    }, 8000);
+
     return () => {
-      if (heroLoadingTimerRef.current) {
-        clearTimeout(heroLoadingTimerRef.current);
+      if (heroLoadingTimerRef.current) clearTimeout(heroLoadingTimerRef.current);
+      if (heroFailSafeRef.current) clearTimeout(heroFailSafeRef.current);
+      if (heroPreloaderRef.current) {
+        heroPreloaderRef.current.onload = null;
+        heroPreloaderRef.current.onerror = null;
+        heroPreloaderRef.current = null;
       }
     };
-    // แสดงสถานะทุกครั้งที่เปลี่ยน index หรือรูปชุดใหม่
-  }, [selectedImageIndex, mounted]);
+    // แสดงสถานะทุกครั้งที่เปลี่ยน index หรือรูปชุดใหม่ หรือเปลี่ยนรถ
+  }, [selectedImageIndex, mounted, carHandle, car]);
 
   // Process description after component mount to prevent hydration errors
   useEffect(() => {
