@@ -5,7 +5,8 @@ Snapshot tag: `backup-2025-10-10-car-detail-ux-backline`
 ## Scope in this backup
 
 - Car detail page improvements
-  - Smart Back: button returns to the exact previous list page (keeps filters/pagination) using sessionStorage, with safe fallbacks
+  - Smart Back: button returns to the exact previous list page (keeps filters/pagination) using sessionStorage, with
+    safe fallbacks
   - LINE contact: fix “ทดลองขับฟรี” to use working short URL `https://lin.ee/8ugfzstD`
   - Loading hint: non-blocking “กำลังโหลดรูป…” indicator on hero image when slow
 - Performance work done earlier

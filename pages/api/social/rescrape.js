@@ -29,7 +29,7 @@ export default async function handler(req, res) {
 
     const accessToken = process.env.FACEBOOK_GRAPH_ACCESS_TOKEN;
     const appSecret = process.env.FACEBOOK_APP_SECRET;
-    
+
     if (!accessToken) {
       return res.status(500).json({
         ok: false,
@@ -45,10 +45,7 @@ export default async function handler(req, res) {
     }
 
     // Generate appsecret_proof for secure server-side API calls
-    const appsecretProof = crypto
-      .createHmac('sha256', appSecret)
-      .update(accessToken)
-      .digest('hex');
+    const appsecretProof = crypto.createHmac('sha256', appSecret).update(accessToken).digest('hex');
 
     let targets = [];
     if (handle && typeof handle === 'string') {
@@ -73,7 +70,7 @@ export default async function handler(req, res) {
         const api = `https://graph.facebook.com/v21.0/?id=${encodeURIComponent(
           url
         )}&scrape=true&access_token=${encodeURIComponent(accessToken)}&appsecret_proof=${appsecretProof}`;
-        
+
         const r = await fetch(api, { method: 'POST' });
         const text = await r.text();
         let data = null;

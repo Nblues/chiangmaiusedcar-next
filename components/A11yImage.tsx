@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  optimizeShopifyImage,
-  generateSrcSet,
-  generateSizes,
-  BLUR_DATA_URL,
-} from '../utils/imageOptimizer';
+import { optimizeShopifyImage, generateSrcSet, generateSizes } from '../utils/imageOptimizer';
 
 interface A11yImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   alt?: string;
@@ -83,7 +78,17 @@ export default function A11yImage({
 
   // ⭐ ตั้งค่า fetchpriority attribute
   // - รูป priority=true → fetchpriority="high" (โหลดก่อนทรัพยากรอื่น)
-  const fetchPriorityAttr = priority ? 'high' : fetchpriority || 'auto';
+  // - ถ้าเป็นรูปที่ไม่สำคัญ (thumbnail/gallery/card) ให้ default เป็น "low" เพื่อลดแย่งแบนด์วิดท์
+  let fetchPriorityAttr: 'high' | 'low' | 'auto';
+  if (priority) {
+    fetchPriorityAttr = 'high';
+  } else if (fetchpriority) {
+    fetchPriorityAttr = fetchpriority;
+  } else if (imageType === 'thumbnail' || imageType === 'gallery' || imageType === 'card') {
+    fetchPriorityAttr = 'low';
+  } else {
+    fetchPriorityAttr = 'auto';
+  }
 
   // ถ้าใช้ fill={true} ให้ใช้ absolute positioning
   const finalStyle = fill
@@ -107,6 +112,8 @@ export default function A11yImage({
     src: optimizedSrc,
     alt: finalAlt,
     loading: loadingAttr,
+    // ⭐ ตั้งค่า decoding ค่าเริ่มต้นเป็น 'async' สำหรับรูป non-LCP เพื่อลดบล็อกการเรนเดอร์
+    decoding: props && 'decoding' in props && props.decoding ? props.decoding : 'async',
     style: finalStyle,
     className: finalClassName,
   };
