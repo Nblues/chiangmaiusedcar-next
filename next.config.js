@@ -7,6 +7,13 @@ const nextConfig = {
   generateEtags: true,
   swcMinify: true,
 
+  // Modern JavaScript - Aggressive optimization for modern browsers
+  compiler: {
+    // Target ES2022 for modern browsers (Chrome 85+, Safari 14+)
+    target: 'es2022',
+    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
+  },
+
   // Asset prefix for Cloudflare CDN
   // Removed assetPrefix to fix static file loading
 
@@ -282,6 +289,11 @@ const nextConfig = {
       '@vercel/analytics',
       'react-dom',
     ],
+    // Modern JavaScript - Aggressive polyfill reduction
+    browsersListForSwc: true,
+    legacyBrowsers: false, // Disable IE11 and old browsers
+    // SWC Configuration for minimal polyfills
+    swcPlugins: [],
     // Reduce Total Blocking Time
     turbo: {
       rules: {
@@ -289,9 +301,24 @@ const nextConfig = {
           loaders: ['swc-loader'],
           options: {
             jsc: {
-              target: 'es2020',
+              target: 'es2022', // ES2022 for modern features
               loose: true,
-              externalHelpers: true,
+              externalHelpers: false, // Don't inject helpers
+              minify: {
+                compress: true,
+                mangle: true,
+              },
+            },
+            env: {
+              targets: {
+                chrome: '85',
+                edge: '85',
+                firefox: '78',
+                safari: '14',
+                ios: '14',
+              },
+              mode: 'entry',
+              coreJs: false, // Disable core-js polyfills
             },
             minify: true,
           },
