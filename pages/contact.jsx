@@ -516,7 +516,7 @@ export default function Contact() {
               <div className="space-y-3">
                 <a
                   href="tel:0940649018"
-                  className="flex items-center text-accent hover:text-accent-600 font-semibold group"
+                  className="flex items-center text-accent-700 hover:text-accent-600 font-semibold group"
                   aria-label="โทร 094-064-9018"
                 >
                   <svg
@@ -595,7 +595,7 @@ export default function Contact() {
             <div className="space-y-4">
               <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
-                  <span className="text-accent font-extrabold">Q:</span>
+                  <span className="text-accent font-extrabold text-lg">Q:</span>
                   ติดต่อครูหนึ่งรถสวยได้อย่างไร?
                 </summary>
                 <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
@@ -607,7 +607,7 @@ export default function Contact() {
               </details>
               <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
-                  <span className="text-accent font-extrabold">Q:</span>
+                  <span className="text-accent font-extrabold text-lg">Q:</span>
                   เวลาทำการของร้าน?
                 </summary>
                 <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
@@ -618,7 +618,7 @@ export default function Contact() {
               </details>
               <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
-                  <span className="text-accent font-extrabold">Q:</span>
+                  <span className="text-accent font-extrabold text-lg">Q:</span>
                   สามารถนัดดูรถได้ไหม?
                 </summary>
                 <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
@@ -630,7 +630,7 @@ export default function Contact() {
               </details>
               <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
-                  <span className="text-accent font-extrabold">Q:</span>
+                  <span className="text-accent font-extrabold text-lg">Q:</span>
                   ครูหนึ่งรถสวยมีช่องทางโซเชียลมีเดียอะไรบ้าง?
                 </summary>
                 <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">

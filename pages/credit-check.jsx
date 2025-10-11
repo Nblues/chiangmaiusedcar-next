@@ -974,7 +974,7 @@ export default function CreditCheck() {
             <div className="space-y-4">
               <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent-800 flex items-center gap-3 text-lg">
-                  <span className="text-accent-800 font-extrabold">Q:</span>
+                  <span className="text-accent-800 font-extrabold text-lg">Q:</span>
                   ประเมินไฟแนนซ์ฟรีจริงหรือไม่?
                 </summary>
                 <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
@@ -987,7 +987,7 @@ export default function CreditCheck() {
 
               <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent-800 flex items-center gap-3 text-lg">
-                  <span className="text-accent-800 font-extrabold">Q:</span>
+                  <span className="text-accent-800 font-extrabold text-lg">Q:</span>
                   ใช้เวลานานแค่ไหนถึงจะรู้ผล?
                 </summary>
                 <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">
@@ -999,7 +999,7 @@ export default function CreditCheck() {
 
               <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent-800 flex items-center gap-3 text-lg">
-                  <span className="text-accent-800 font-extrabold">Q:</span>
+                  <span className="text-accent-800 font-extrabold text-lg">Q:</span>
                   เครดิตดีจะได้สิทธิพิเศษอะไรบ้าง?
                 </summary>
                 <div className="mt-4 pl-8 border-l-4 border-accent bg-accent/5 p-4 rounded-lg">

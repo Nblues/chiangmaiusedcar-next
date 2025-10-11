@@ -1,7 +1,8 @@
 /**
- * Facebook Pixel Component - Lazy Loaded
- * โหลดหลังจากหน้าเว็บโหลดเสร็จแล้ว เพื่อไม่ block initial page load
- * ลด TBT (Total Blocking Time) และเพิ่ม Performance Score
+ * Facebook Pixel Component - Interaction-based Lazy Loading
+ * โหลดเมื่อผู้ใช้มีปฏิสัมพันธ์กับหน้าเว็บ (scroll, click, touch) หรือรอ 5 วินาที
+ * ลด JavaScript ที่ไม่จำเป็น, ลด TBT และเพิ่ม Performance Score
+ * ประหยัดพื้นที่ ~48 KiB ของ unused JavaScript
  */
 
 'use client';
@@ -9,10 +10,16 @@ import { useEffect } from 'react';
 
 export default function FacebookPixel() {
   useEffect(() => {
-    // Lazy load Facebook Pixel หลังจาก page โหลดเสร็จ 3 วินาที
-    const timeoutId = setTimeout(() => {
-      // ตรวจสอบว่ายังไม่ได้โหลด
-      if (window.fbq) return;
+    let loaded = false;
+    let timeoutId = null;
+
+    const loadFacebookPixel = () => {
+      // ป้องกันการโหลดซ้ำ
+      if (loaded || window.fbq) return;
+      loaded = true;
+
+      // ยกเลิก timeout ถ้ามี
+      if (timeoutId) clearTimeout(timeoutId);
 
       // สร้าง fbq function stub
       window.fbq = function () {
@@ -47,9 +54,39 @@ export default function FacebookPixel() {
       };
 
       document.body.appendChild(script);
-    }, 3000); // โหลดหลัง 3 วินาที
+    };
 
-    return () => clearTimeout(timeoutId);
+    // Event listeners สำหรับการโต้ตอบของผู้ใช้
+    const interactionEvents = ['scroll', 'click', 'touchstart', 'mousemove', 'keydown'];
+    
+    const handleInteraction = () => {
+      loadFacebookPixel();
+      // ลบ event listeners หลังจากโหลดแล้ว
+      interactionEvents.forEach(event => {
+        window.removeEventListener(event, handleInteraction);
+      });
+    };
+
+    // ติดตั้ง event listeners
+    interactionEvents.forEach(event => {
+      window.addEventListener(event, handleInteraction, { passive: true, once: true });
+    });
+
+    // Fallback: โหลดหลัง 5 วินาทีถ้าไม่มีการโต้ตอบ
+    timeoutId = setTimeout(() => {
+      loadFacebookPixel();
+      // ลบ event listeners
+      interactionEvents.forEach(event => {
+        window.removeEventListener(event, handleInteraction);
+      });
+    }, 5000);
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      interactionEvents.forEach(event => {
+        window.removeEventListener(event, handleInteraction);
+      });
+    };
   }, []);
 
   // Noscript fallback

@@ -948,7 +948,8 @@ export default function Home({ cars, brandCounts }) {
             <p className="text-lg text-gray-600 max-w-2xl mx-auto font-prompt leading-relaxed">
               <span className="text-primary font-semibold">รถบ้านแท้ 90% มือเดียว</span>{' '}
               ไม่มีรถประมูล ตรวจสภาพครบถ้วนก่อนส่งมอบ{' '}
-              <span className="text-accent font-semibold">ลูกค้า 90% เชื่อมั่น</span> ไม่ต้องมาดูรถ
+              <span className="text-accent-700 font-semibold">ลูกค้า 90% เชื่อมั่น</span>{' '}
+              ไม่ต้องมาดูรถ
             </p>
             <div className="w-32 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-6"></div>
           </div>
@@ -998,7 +999,7 @@ export default function Home({ cars, brandCounts }) {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">ฟรีดาวน์ 0%</h3>
               <p className="text-gray-600 leading-relaxed font-prompt text-sm">
-                <span className="text-accent font-semibold">ออกรถไม่ต้องวางเงินดาวน์</span>{' '}
+                <span className="text-accent-700 font-semibold">ออกรถไม่ต้องวางเงินดาวน์</span>{' '}
                 ตามเงื่อนไขไฟแนนซ์{' '}
                 <span className="text-primary font-semibold">เครดิตไม่ผ่านก็มีทาง</span>
               </p>
@@ -1025,7 +1026,7 @@ export default function Home({ cars, brandCounts }) {
               <p className="text-gray-600 leading-relaxed font-prompt text-sm">
                 รับประกันเครื่องยนต์และเกียร์{' '}
                 <span className="text-primary font-semibold">1 ปีเต็ม ไม่จำกัดกิโลเมตร</span> พร้อม
-                <span className="text-accent font-semibold">บริการหลังการขาย 24/7</span>
+                <span className="text-accent-700 font-semibold">บริการหลังการขาย 24/7</span>
               </p>
             </div>
 
@@ -1048,7 +1049,7 @@ export default function Home({ cars, brandCounts }) {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">ส่งฟรีทั่วไทย</h3>
               <p className="text-gray-600 leading-relaxed font-prompt text-sm">
-                <span className="text-accent font-semibold">จัดส่งฟรีทุกจังหวัด</span>{' '}
+                <span className="text-accent-700 font-semibold">จัดส่งฟรีทุกจังหวัด</span>{' '}
                 พร้อมประกันการขนส่ง{' '}
                 <span className="text-primary font-semibold">ลูกค้า 90% เชื่อมั่น</span>{' '}
                 ไม่ต้องมาดูรถ
@@ -1186,7 +1187,7 @@ export default function Home({ cars, brandCounts }) {
               </Link>
               <Link
                 href="/payment-calculator"
-                className="group relative bg-gradient-to-r from-gray-100 via-gray-50 to-white hover:from-accent/10 hover:via-accent/5 hover:to-white text-accent hover:text-accent font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center border border-gray-200/60 hover:border-accent/40 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                className="group relative bg-gradient-to-r from-gray-100 via-gray-50 to-white hover:from-accent/10 hover:via-accent/5 hover:to-white text-accent-700 hover:text-accent font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center border border-gray-200/60 hover:border-accent/40 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
                 aria-label="คำนวณเงินผ่อนรถยนต์"
               >
                 <span className="relative z-10">คิดเงินผ่อน</span>
@@ -1194,7 +1195,7 @@ export default function Home({ cars, brandCounts }) {
               </Link>
               <Link
                 href="/sell-car"
-                className="group relative bg-gradient-to-r from-gray-100 via-gray-50 to-white hover:from-accent/10 hover:via-accent/5 hover:to-white text-accent hover:text-accent font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center border border-gray-200/60 hover:border-accent/40 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                className="group relative bg-gradient-to-r from-gray-100 via-gray-50 to-white hover:from-accent/10 hover:via-accent/5 hover:to-white text-accent-700 hover:text-accent font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center border border-gray-200/60 hover:border-accent/40 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
                 aria-label="ขายรถกับครูหนึ่งรถสวย"
               >
                 <span className="relative z-10">ขายรถ</span>
