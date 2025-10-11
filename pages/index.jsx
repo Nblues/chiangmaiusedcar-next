@@ -279,6 +279,7 @@ export default function Home({ cars, brandCounts }) {
             width={1920}
             height={640}
             className="w-full h-auto object-contain"
+            imageType="hero"
             priority
             fetchpriority="high"
             quality={60}
@@ -554,6 +555,7 @@ export default function Home({ cars, brandCounts }) {
                       src={safeGet(car, 'images.0.url') || '/cover.jpg'}
                       alt={carAlt(car)}
                       fallbackAlt={`${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} - ราคา ${getPriceInfo(safeGet(car, 'price.amount')).display} บาท`}
+                      imageType="card"
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                       itemProp="image"
