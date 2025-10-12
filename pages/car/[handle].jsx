@@ -358,10 +358,18 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     );
   }
 
-  // Add cache busting for Facebook sharing - use build-time timestamp
+  // Add cache busting for social sharing - force fresh image for LINE/Facebook
+  // Use car handle + timestamp to ensure unique URL per car and time period
   if (socialImage && !socialImage.includes('?')) {
-    const timestamp = Math.floor(Date.now() / (1000 * 60 * 60)); // Update every hour
-    socialImage = `${socialImage}?v=${timestamp}&w=1200&h=630`;
+    // Create unique cache buster using car handle and date (changes daily)
+    const carHandle = safeGet(car, 'handle', '');
+    const dateStamp = new Date().toISOString().split('T')[0].replace(/-/g, ''); // YYYYMMDD
+    socialImage = `${socialImage}?car=${encodeURIComponent(carHandle)}&v=${dateStamp}&w=1200&h=630&fit=cover`;
+  } else if (socialImage && !socialImage.includes('&w=')) {
+    // If query params exist but no size params, add them
+    const carHandle = safeGet(car, 'handle', '');
+    const dateStamp = new Date().toISOString().split('T')[0].replace(/-/g, '');
+    socialImage = `${socialImage}&car=${encodeURIComponent(carHandle)}&v=${dateStamp}&w=1200&h=630&fit=cover`;
   }
 
   // Server-rendered Open Graph essentials (SSR-safe, no client-only logic)
@@ -375,10 +383,21 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   if (ogImage && !ogImage.startsWith('http')) {
     ogImage = `https://www.chiangmaiusedcar.com/${ogImage}`;
   }
-  // Ensure Shopify image has a sensible width for social preview
-  if (ogImage && ogImage.includes('cdn.shopify.com') && !/[?&]width=\d+/.test(ogImage)) {
+  // Ensure Shopify image has proper dimensions for social preview with cache busting
+  if (ogImage && ogImage.includes('cdn.shopify.com')) {
     const sep = ogImage.includes('?') ? '&' : '?';
-    ogImage = `${ogImage}${sep}width=1200`;
+    const carHandle = safeGet(car, 'handle', '');
+    const dateStamp = new Date().toISOString().split('T')[0].replace(/-/g, ''); // YYYYMMDD
+    
+    // Only add width if not already present
+    if (!/[?&]width=\d+/.test(ogImage)) {
+      ogImage = `${ogImage}${sep}width=1200&height=630`;
+    }
+    
+    // Add unique cache buster for LINE
+    if (!ogImage.includes('&v=')) {
+      ogImage = `${ogImage}&car=${encodeURIComponent(carHandle)}&v=${dateStamp}`;
+    }
   }
   // Final fallback to guaranteed local hero image
   const defaultOgImage = 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
