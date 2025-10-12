@@ -58,7 +58,7 @@ export default function FacebookPixel() {
 
     // Event listeners สำหรับการโต้ตอบของผู้ใช้
     const interactionEvents = ['scroll', 'click', 'touchstart', 'mousemove', 'keydown'];
-    
+
     const handleInteraction = () => {
       loadFacebookPixel();
       // ลบ event listeners หลังจากโหลดแล้ว

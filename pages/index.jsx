@@ -1057,149 +1057,350 @@ export default function Home({ cars, brandCounts }) {
             </div>
           </div>
 
-          {/* Car Brands Section */}
-          <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-lg">
-            <div className="text-center mb-8">
+          {/* Car Brands Section - Glass Effect */}
+          <div className="relative rounded-3xl p-8 border border-white/20 shadow-2xl overflow-hidden bg-transparent">
+            {/* Animated Background Elements */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(26,35,126,0.03),transparent_50%)]"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.02),transparent_50%)]"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_80%,rgba(37,99,235,0.02),transparent_50%)]"></div>
+
+            <div className="relative z-10 text-center mb-8">
               <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 font-prompt leading-tight">
                 ศูนย์รวมแบรนด์ดังครบครัน
               </h3>
-              <p className="text-gray-600 font-prompt text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+              <p className="text-gray-700 font-prompt text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
                 รถมือสองคุณภาพจากทุกแบรนด์ชั้นนำ ผ่านการคัดสรรอย่างเข้มงวด
               </p>
             </div>
 
-            {/* Brand Grid - Enhanced 2025 Design */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4 lg:gap-6 mb-8">
+            {/* Brand Grid - Ultra Glass Design */}
+            <div className="relative z-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 lg:gap-6 mb-8">
               <Link
                 href="/all-cars?brand=toyota"
-                className="group relative bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md active:scale-98"
+                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
+                style={{
+                  boxShadow:
+                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
+                }}
                 aria-label="ดูรถ Toyota ทั้งหมด"
               >
-                <div className="font-bold text-primary text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt">
-                  Toyota
-                </div>
-                <div className="text-xs md:text-sm text-gray-600 font-medium bg-gray-100 rounded-lg py-1 px-2 font-prompt">
-                  {getBrandCount('toyota')}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10">
+                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
+                    Toyota
+                  </div>
+                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
+                    {getBrandCount('toyota')}
+                  </div>
                 </div>
               </Link>
 
               <Link
                 href="/all-cars?brand=honda"
-                className="group relative bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md active:scale-98"
+                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
+                style={{
+                  boxShadow:
+                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
+                }}
                 aria-label="ดูรถ Honda ทั้งหมด"
               >
-                <div className="font-bold text-primary text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt">
-                  Honda
-                </div>
-                <div className="text-xs md:text-sm text-gray-600 font-medium bg-gray-100 rounded-lg py-1 px-2 font-prompt">
-                  {getBrandCount('honda')}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10">
+                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
+                    Honda
+                  </div>
+                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
+                    {getBrandCount('honda')}
+                  </div>
                 </div>
               </Link>
 
               <Link
                 href="/all-cars?brand=nissan"
-                className="group relative bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md active:scale-98"
+                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
+                style={{
+                  boxShadow:
+                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
+                }}
                 aria-label="ดูรถ Nissan ทั้งหมด"
               >
-                <div className="font-bold text-primary text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt">
-                  Nissan
-                </div>
-                <div className="text-xs md:text-sm text-gray-600 font-medium bg-gray-100 rounded-lg py-1 px-2 font-prompt">
-                  {getBrandCount('nissan')}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10">
+                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
+                    Nissan
+                  </div>
+                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
+                    {getBrandCount('nissan')}
+                  </div>
                 </div>
               </Link>
 
               <Link
                 href="/all-cars?brand=mazda"
-                className="group relative bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md active:scale-98"
+                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
+                style={{
+                  boxShadow:
+                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
+                }}
                 aria-label="ดูรถ Mazda ทั้งหมด"
               >
-                <div className="font-bold text-primary text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt">
-                  Mazda
-                </div>
-                <div className="text-xs md:text-sm text-gray-600 font-medium bg-gray-100 rounded-lg py-1 px-2 font-prompt">
-                  {getBrandCount('mazda')}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10">
+                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
+                    Mazda
+                  </div>
+                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
+                    {getBrandCount('mazda')}
+                  </div>
                 </div>
               </Link>
 
               <Link
                 href="/all-cars?brand=mitsubishi"
-                className="group relative bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md active:scale-98"
+                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
+                style={{
+                  boxShadow:
+                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
+                }}
                 aria-label="ดูรถ Mitsubishi ทั้งหมด"
               >
-                <div className="font-bold text-primary text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt">
-                  Mitsubishi
-                </div>
-                <div className="text-xs md:text-sm text-gray-600 font-medium bg-gray-100 rounded-lg py-1 px-2 font-prompt">
-                  {getBrandCount('mitsubishi')}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10">
+                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
+                    Mitsubishi
+                  </div>
+                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
+                    {getBrandCount('mitsubishi')}
+                  </div>
                 </div>
               </Link>
 
               <Link
                 href="/all-cars?brand=ford"
-                className="bg-white rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-gray-200 hover:border-gray-300 hover:shadow-md active:scale-98 transition-all duration-200"
+                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
+                style={{
+                  boxShadow:
+                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
+                }}
                 aria-label="ดูรถ Ford ทั้งหมด"
               >
-                <div className="font-bold text-primary text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt">
-                  Ford
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10">
+                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
+                    Ford
+                  </div>
+                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
+                    {getBrandCount('ford')}
+                  </div>
                 </div>
-                <div className="text-xs md:text-sm text-gray-600 font-medium bg-gray-100 rounded-lg py-1 px-2 font-prompt">
-                  {getBrandCount('ford')}
+              </Link>
+
+              <Link
+                href="/all-cars?brand=isuzu"
+                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
+                style={{
+                  boxShadow:
+                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
+                }}
+                aria-label="ดูรถ Isuzu ทั้งหมด"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10">
+                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
+                    Isuzu
+                  </div>
+                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
+                    {getBrandCount('isuzu')}
+                  </div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/10 rounded-2xl md:rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/20 to-accent/20 rounded-2xl md:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-sm"></div>
+              </Link>
+
+              <Link
+                href="/all-cars?brand=hyundai"
+                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
+                style={{
+                  boxShadow:
+                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
+                }}
+                aria-label="ดูรถ Hyundai ทั้งหมด"
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10">
+                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
+                    Hyundai
+                  </div>
+                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
+                    {getBrandCount('hyundai')}
+                  </div>
+                </div>
               </Link>
             </div>
 
-            {/* Service Links - Enhanced 2025 Design */}
+            {/* Service Links - Ultra Modern 2025 Neomorphic Glass Design */}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 md:gap-4">
               <Link
                 href="/contact"
-                className="group relative bg-gradient-to-r from-primary via-primary/95 to-primary/90 hover:from-primary/90 hover:via-primary/85 hover:to-primary/80 text-white font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center transition-all duration-500 hover:shadow-xl hover:shadow-primary/25 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                className="group relative backdrop-blur-xl bg-white/85 hover:bg-white/90 text-primary font-semibold text-xs md:text-sm py-4 md:py-5 px-3 md:px-4 rounded-2xl md:rounded-3xl text-center transition-all duration-700 hover:scale-[1.02] active:scale-95 overflow-hidden font-prompt shadow-[4px_4px_8px_rgba(163,177,198,0.3),-2px_-2px_6px_rgba(255,255,255,0.7)] hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4),-3px_-3px_8px_rgba(255,255,255,0.8),inset_1px_1px_2px_rgba(26,35,126,0.08)] border border-white/60"
                 aria-label="ติดต่อสอบถามข้อมูลรถยนต์"
               >
-                <span className="relative z-10">ติดต่อเรา</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="relative z-10 flex items-center justify-center gap-2">
+                  <svg
+                    className="w-5 h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    />
+                  </svg>
+                  <span className="group-hover:tracking-wider transition-all duration-700">
+                    ติดต่อเรา
+                  </span>
+                </div>
               </Link>
               <Link
                 href="/about"
-                className="group relative bg-gradient-to-r from-gray-100 via-gray-50 to-white hover:from-primary/10 hover:via-primary/5 hover:to-white text-primary hover:text-primary font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center border border-gray-200/60 hover:border-primary/40 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                className="group relative backdrop-blur-xl bg-white/85 hover:bg-white/90 text-primary font-semibold text-xs md:text-sm py-4 md:py-5 px-3 md:px-4 rounded-2xl md:rounded-3xl text-center transition-all duration-700 hover:scale-[1.02] active:scale-95 overflow-hidden font-prompt shadow-[4px_4px_8px_rgba(163,177,198,0.3),-2px_-2px_6px_rgba(255,255,255,0.7)] hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4),-3px_-3px_8px_rgba(255,255,255,0.8),inset_1px_1px_2px_rgba(26,35,126,0.08)] border border-white/60"
                 aria-label="เรียนรู้เพิ่มเติมเกี่ยวกับครูหนึ่งรถสวย"
               >
-                <span className="relative z-10">เกี่ยวกับเรา</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="relative z-10 flex items-center justify-center gap-2">
+                  <svg
+                    className="w-5 h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                  <span className="group-hover:tracking-wider transition-all duration-700">
+                    เกี่ยวกับเรา
+                  </span>
+                </div>
               </Link>
               <Link
                 href="/promotion"
-                className="group relative bg-gradient-to-r from-accent via-accent/95 to-accent/90 hover:from-accent/90 hover:via-accent/85 hover:to-accent/80 text-white font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center transition-all duration-500 hover:shadow-xl hover:shadow-accent/25 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                className="group relative backdrop-blur-xl bg-white/85 hover:bg-white/90 text-primary font-semibold text-xs md:text-sm py-4 md:py-5 px-3 md:px-4 rounded-2xl md:rounded-3xl text-center transition-all duration-700 hover:scale-[1.02] active:scale-95 overflow-hidden font-prompt shadow-[4px_4px_8px_rgba(163,177,198,0.3),-2px_-2px_6px_rgba(255,255,255,0.7)] hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4),-3px_-3px_8px_rgba(255,255,255,0.8),inset_1px_1px_2px_rgba(26,35,126,0.08)] border border-white/60"
                 aria-label="ดูโปรโมชั่นและข้อเสนอพิเศษ"
               >
-                <span className="relative z-10">โปรโมชั่น</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,152,0,0.2),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="relative z-10 flex items-center justify-center gap-2">
+                  <svg
+                    className="w-5 h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"
+                    />
+                  </svg>
+                  <span className="group-hover:tracking-wider transition-all duration-700">
+                    โปรโมชั่น
+                  </span>
+                </div>
               </Link>
               <Link
                 href="/credit-check"
-                className="group relative bg-gradient-to-r from-gray-100 via-gray-50 to-white hover:from-primary/10 hover:via-primary/5 hover:to-white text-primary hover:text-primary font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center border border-gray-200/60 hover:border-primary/40 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                className="group relative backdrop-blur-xl bg-white/85 hover:bg-white/90 text-primary font-semibold text-xs md:text-sm py-4 md:py-5 px-3 md:px-4 rounded-2xl md:rounded-3xl text-center transition-all duration-700 hover:scale-[1.02] active:scale-95 overflow-hidden font-prompt shadow-[4px_4px_8px_rgba(163,177,198,0.3),-2px_-2px_6px_rgba(255,255,255,0.7)] hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4),-3px_-3px_8px_rgba(255,255,255,0.8),inset_1px_1px_2px_rgba(26,35,126,0.08)] border border-white/60"
                 aria-label="ตรวจสอบสถานะสินเชื่อ"
               >
-                <span className="relative z-10">ตรวจเครดิต</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="relative z-10 flex items-center justify-center gap-2">
+                  <svg
+                    className="w-5 h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                    />
+                  </svg>
+                  <span className="group-hover:tracking-wider transition-all duration-700">
+                    ตรวจเครดิต
+                  </span>
+                </div>
               </Link>
               <Link
                 href="/payment-calculator"
-                className="group relative bg-gradient-to-r from-gray-100 via-gray-50 to-white hover:from-accent/10 hover:via-accent/5 hover:to-white text-accent-700 hover:text-accent font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center border border-gray-200/60 hover:border-accent/40 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                className="group relative backdrop-blur-xl bg-white/85 hover:bg-white/90 text-primary font-semibold text-xs md:text-sm py-4 md:py-5 px-3 md:px-4 rounded-2xl md:rounded-3xl text-center transition-all duration-700 hover:scale-[1.02] active:scale-95 overflow-hidden font-prompt shadow-[4px_4px_8px_rgba(163,177,198,0.3),-2px_-2px_6px_rgba(255,255,255,0.7)] hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4),-3px_-3px_8px_rgba(255,255,255,0.8),inset_1px_1px_2px_rgba(26,35,126,0.08)] border border-white/60"
                 aria-label="คำนวณเงินผ่อนรถยนต์"
               >
-                <span className="relative z-10">คิดเงินผ่อน</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="relative z-10 flex items-center justify-center gap-2">
+                  <svg
+                    className="w-5 h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <span className="group-hover:tracking-wider transition-all duration-700">
+                    คิดเงินผ่อน
+                  </span>
+                </div>
               </Link>
               <Link
                 href="/sell-car"
-                className="group relative bg-gradient-to-r from-gray-100 via-gray-50 to-white hover:from-accent/10 hover:via-accent/5 hover:to-white text-accent-700 hover:text-accent font-semibold text-xs md:text-sm py-3 md:py-4 px-3 md:px-4 rounded-xl md:rounded-2xl text-center border border-gray-200/60 hover:border-accent/40 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1 active:scale-95 overflow-hidden font-prompt"
+                className="group relative backdrop-blur-xl bg-white/85 hover:bg-white/90 text-primary font-semibold text-xs md:text-sm py-4 md:py-5 px-3 md:px-4 rounded-2xl md:rounded-3xl text-center transition-all duration-700 hover:scale-[1.02] active:scale-95 overflow-hidden font-prompt shadow-[4px_4px_8px_rgba(163,177,198,0.3),-2px_-2px_6px_rgba(255,255,255,0.7)] hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4),-3px_-3px_8px_rgba(255,255,255,0.8),inset_1px_1px_2px_rgba(26,35,126,0.08)] border border-white/60"
                 aria-label="ขายรถกับครูหนึ่งรถสวย"
               >
-                <span className="relative z-10">ขายรถ</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="relative z-10 flex items-center justify-center gap-2">
+                  <svg
+                    className="w-5 h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
+                    />
+                  </svg>
+                  <span className="group-hover:tracking-wider transition-all duration-700">
+                    ขายรถ
+                  </span>
+                </div>
               </Link>
             </div>
           </div>

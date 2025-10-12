@@ -104,7 +104,12 @@ export default function Document() {
         <meta name="bingbot" content="index, follow" />
 
         {/* Site Verification */}
-        <meta name="google-site-verification" content="your-google-verification-code" />
+        {process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && (
+          <meta
+            name="google-site-verification"
+            content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION}
+          />
+        )}
 
         {/* Critical CSS for LCP - Inline to avoid render blocking */}
         <style
@@ -126,8 +131,8 @@ export default function Document() {
         <link rel="preconnect" href="https://cdn.shopify.com" />
         <link rel="preconnect" href="https://files.myshopify.com" />
 
-        {/* Preload LCP Image for Homepage - Critical for Performance */}
-        <link rel="preload" href="/herobanner/cnxcar.webp" as="image" type="image/webp" />
+        {/* Note: Hero banner image preload removed - not needed with fetchpriority="high" on img tag */}
+        {/* This prevents "preload not used" warnings on non-homepage pages */}
 
         {/* Note: Prompt font is loaded via @fontsource/prompt in globals.css */}
         {/* Font preload is handled automatically by Next.js for @fontsource packages */}

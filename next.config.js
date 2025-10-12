@@ -1,3 +1,14 @@
+/* eslint-disable */
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+  openAnalyzer: false,
+  analyzerMode: 'static',
+  generateStatsFile: true,
+  reportFilename: ({ isServer }) => (isServer ? 'analyze/server.html' : 'analyze/client.html'),
+  statsFilename: ({ isServer }) =>
+    isServer ? 'analyze/server-stats.json' : 'analyze/client-stats.json',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Performance & SEO optimizations
@@ -9,8 +20,6 @@ const nextConfig = {
 
   // Modern JavaScript - Aggressive optimization for modern browsers
   compiler: {
-    // Target ES2022 for modern browsers (Chrome 85+, Safari 14+)
-    target: 'es2022',
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
 
@@ -289,9 +298,6 @@ const nextConfig = {
       '@vercel/analytics',
       'react-dom',
     ],
-    // Modern JavaScript - Aggressive polyfill reduction
-    browsersListForSwc: true,
-    legacyBrowsers: false, // Disable IE11 and old browsers
     // SWC Configuration for minimal polyfills
     swcPlugins: [],
     // Reduce Total Blocking Time
@@ -335,4 +341,4 @@ const nextConfig = {
   trailingSlash: false,
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);

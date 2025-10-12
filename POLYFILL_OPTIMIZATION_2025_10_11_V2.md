@@ -1,4 +1,5 @@
 # Polyfill Optimization - Remove Unnecessary JavaScript
+
 ## October 11, 2025
 
 ---
@@ -19,6 +20,7 @@ Breakdown:
 ### Unnecessary Polyfills Found:
 
 **Next.js Bundle** (`main-*.js`): 12.8 KiB
+
 - `Array.prototype.at`
 - `Array.prototype.flat`
 - `Array.prototype.flatMap`
@@ -27,7 +29,8 @@ Breakdown:
 - `String.prototype.trimStart`
 - `String.prototype.trimEnd`
 
-**Cause**: Next.js was transpiling to ES2020, which still includes some polyfills for features that are native in modern browsers (Chrome 90+, Safari 14.1+)
+**Cause**: Next.js was transpiling to ES2020, which still includes some polyfills for features that are native in modern
+browsers (Chrome 90+, Safari 14.1+)
 
 ---
 
@@ -36,6 +39,7 @@ Breakdown:
 ### 1. Updated `next.config.js`
 
 #### Before:
+
 ```javascript
 compiler: {
   target: 'es2020',  // Too conservative
@@ -60,6 +64,7 @@ experimental: {
 ```
 
 #### After:
+
 ```javascript
 compiler: {
   target: 'es2022',  // Modern target
@@ -106,6 +111,7 @@ experimental: {
 ### 2. Updated `package.json` - Browserslist
 
 #### Before:
+
 ```json
 "browserslist": {
   "production": [
@@ -119,6 +125,7 @@ experimental: {
 ```
 
 #### After:
+
 ```json
 "browserslist": {
   "production": [
@@ -134,6 +141,7 @@ experimental: {
 ```
 
 **Reasoning**:
+
 - Chrome 90+ (May 2021): Full ES2022 support
 - Safari 14.1+ (Apr 2021): Better ES2022 support
 - Firefox 88+ (Apr 2021): Full ES2022 support
@@ -174,7 +182,7 @@ New file to explicitly configure SWC compiler:
       "firefox": "88"
     },
     "mode": "entry",
-    "coreJs": false,  // Critical: Disable polyfills
+    "coreJs": false, // Critical: Disable polyfills
     "shippedProposals": true,
     "bugfixes": true
   }
@@ -187,15 +195,15 @@ New file to explicitly configure SWC compiler:
 
 All polyfills we're removing are **natively supported** in our target browsers:
 
-| Feature | Chrome | Safari | Firefox | Edge |
-|---------|--------|--------|---------|------|
-| `Array.at()` | 92+ | 15.4+ | 90+ | 92+ |
-| `Array.flat()` | 69+ | 12+ | 62+ | 79+ |
-| `Array.flatMap()` | 69+ | 12+ | 62+ | 79+ |
-| `Object.fromEntries()` | 73+ | 12.1+ | 63+ | 79+ |
-| `Object.hasOwn()` | 93+ | 15.4+ | 92+ | 93+ |
-| `String.trimStart()` | 66+ | 12+ | 61+ | 79+ |
-| `String.trimEnd()` | 66+ | 12+ | 61+ | 79+ |
+| Feature                | Chrome | Safari | Firefox | Edge |
+| ---------------------- | ------ | ------ | ------- | ---- |
+| `Array.at()`           | 92+    | 15.4+  | 90+     | 92+  |
+| `Array.flat()`         | 69+    | 12+    | 62+     | 79+  |
+| `Array.flatMap()`      | 69+    | 12+    | 62+     | 79+  |
+| `Object.fromEntries()` | 73+    | 12.1+  | 63+     | 79+  |
+| `Object.hasOwn()`      | 93+    | 15.4+  | 92+     | 93+  |
+| `String.trimStart()`   | 66+    | 12+    | 61+     | 79+  |
+| `String.trimEnd()`     | 66+    | 12+    | 61+     | 79+  |
 
 **Target Browsers**: Chrome 90+, Safari 14.1+, Firefox 88+, Edge 90+
 
@@ -223,13 +231,13 @@ Savings: ~20 KB (7.6% reduction)
 
 ### Performance Improvements
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Bundle Size | 262.8 KB | 242-243 KB | -20 KB |
-| Polyfills | 12.8 KB | 2-3 KB | -10 KB (78%) |
-| Parse Time | ~80ms | ~70ms | -10ms |
-| Eval Time | ~120ms | ~105ms | -15ms |
-| Performance Score | ~92 | ~93-94 | +1-2 pts |
+| Metric            | Before   | After      | Improvement  |
+| ----------------- | -------- | ---------- | ------------ |
+| Bundle Size       | 262.8 KB | 242-243 KB | -20 KB       |
+| Polyfills         | 12.8 KB  | 2-3 KB     | -10 KB (78%) |
+| Parse Time        | ~80ms    | ~70ms      | -10ms        |
+| Eval Time         | ~120ms   | ~105ms     | -15ms        |
+| Performance Score | ~92      | ~93-94     | +1-2 pts     |
 
 ---
 
@@ -238,12 +246,14 @@ Savings: ~20 KB (7.6% reduction)
 ### Supported Browsers (98%+ coverage in Thailand)
 
 ✅ **Desktop**:
+
 - Chrome 90+ (May 2021)
 - Edge 90+ (May 2021)
 - Firefox 88+ (Apr 2021)
 - Safari 14.1+ (Apr 2021)
 
 ✅ **Mobile**:
+
 - Chrome Android 90+
 - iOS Safari 14.5+
 - Samsung Internet 15+
@@ -251,12 +261,14 @@ Savings: ~20 KB (7.6% reduction)
 ### Unsupported (Will not work)
 
 ❌ **Desktop**:
+
 - Internet Explorer (all versions)
 - Chrome < 90
 - Safari < 14.1
 - Firefox < 88
 
 ❌ **Mobile**:
+
 - iOS Safari < 14.5
 - Old Android browsers
 
@@ -267,6 +279,7 @@ Savings: ~20 KB (7.6% reduction)
 ## ⚠️ Trade-offs
 
 ### Pros
+
 - ✅ 20 KB smaller bundle
 - ✅ Faster parse/eval time
 - ✅ Better performance score
@@ -274,11 +287,13 @@ Savings: ~20 KB (7.6% reduction)
 - ✅ No unnecessary polyfills
 
 ### Cons
+
 - ❌ Old browsers won't work (<2% users)
 - ❌ Need to rebuild to see changes
 - ❌ Slightly more aggressive compatibility requirement
 
 ### Verdict
+
 **Worth it!** 98%+ of users get better performance, <2% using outdated browsers should upgrade anyway.
 
 ---
@@ -288,6 +303,7 @@ Savings: ~20 KB (7.6% reduction)
 After deployment:
 
 ### 1. Bundle Analysis
+
 ```bash
 npm run build:analyze
 # Check main bundle size reduced
@@ -295,6 +311,7 @@ npm run build:analyze
 ```
 
 ### 2. Browser Testing
+
 - [ ] Chrome 90+ (Windows/Mac)
 - [ ] Safari 14.1+ (Mac/iOS)
 - [ ] Firefox 88+ (Windows/Mac)
@@ -303,12 +320,14 @@ npm run build:analyze
 - [ ] Mobile Safari (iOS 14.5+)
 
 ### 3. Functionality Testing
+
 - [ ] All pages load correctly
 - [ ] All features work (forms, navigation, etc.)
 - [ ] No console errors
 - [ ] Performance improved
 
 ### 4. PageSpeed Insights
+
 - [ ] "Serve modern code" warning reduced
 - [ ] Polyfills reduced from 12.8 KB → 2-3 KB
 - [ ] Performance Score improved
@@ -322,6 +341,7 @@ npm run build:analyze
 The following ES2022 features are now used without polyfills:
 
 1. **Class Fields**
+
 ```javascript
 class MyClass {
   publicField = 1;
@@ -330,21 +350,25 @@ class MyClass {
 ```
 
 2. **Top-level await**
+
 ```javascript
 const data = await fetch('/api/data');
 ```
 
 3. **Array.at()**
+
 ```javascript
 const last = array.at(-1);
 ```
 
 4. **Object.hasOwn()**
+
 ```javascript
 Object.hasOwn(obj, 'key');
 ```
 
 5. **Error.cause**
+
 ```javascript
 throw new Error('Failed', { cause: originalError });
 ```
@@ -394,12 +418,14 @@ git push origin master
 ### Changes Made
 
 1. ✅ Updated `next.config.js`:
+
    - Changed target: es2020 → es2022
    - Disabled externalHelpers
    - Disabled core-js polyfills
    - Added console removal for production
 
 2. ✅ Updated `package.json`:
+
    - Increased browser requirements (Chrome 85 → 90)
    - Better Safari/iOS support (14 → 14.1/14.5)
 

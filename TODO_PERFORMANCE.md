@@ -132,16 +132,15 @@ pnpm build && pnpm start
 
 ## 📝 Notes
 
-- Performance monitoring is implemented but needs \_app.jsx integration
+- Performance monitoring is implemented and integrated into `pages/_app.jsx` (2025-10-12)
 - All configuration files are production-ready
 - Bundle analysis will generate reports in `./analyze/` folder
 - Security headers are already configured and active
-- Web Vitals will be automatically tracked once integrated
+- Web Vitals are automatically tracked in production and warnings are sent to `/api/analytics`
 
 ## 🎉 Next Steps
 
-1. Integrate performance monitoring in `_app.jsx`
-2. Set up environment variables
-3. Test bundle analysis
-4. Deploy to production
-5. Monitor real-world performance metrics
+1. Set up environment variables
+2. Test bundle analysis
+3. Deploy to production
+4. Monitor real-world performance metrics

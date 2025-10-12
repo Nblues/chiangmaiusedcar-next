@@ -278,8 +278,15 @@ export default function SEO({
       />
 
       {/* 2025 SEO: Meta keywords deprecated - using structured data instead */}
-      <meta name="google-site-verification" content="your-verification-code" />
-      <meta name="msvalidate.01" content="your-bing-verification-code" />
+      {process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && (
+        <meta
+          name="google-site-verification"
+          content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION}
+        />
+      )}
+      {process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION && (
+        <meta name="msvalidate.01" content={process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION} />
+      )}
 
       {/* Facebook Domain Verification */}
       <meta name="facebook-domain-verification" content="9hmqrusdwqmzwsj6ffc395xow44ek8" />

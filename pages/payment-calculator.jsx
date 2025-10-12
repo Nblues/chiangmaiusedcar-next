@@ -370,6 +370,7 @@ export default function PaymentCalculator() {
                     <input
                       type="text"
                       id="carPrice"
+                      name="carPrice"
                       inputMode="numeric"
                       pattern="[0-9]*"
                       className="form-input text-sm md:text-base"
@@ -397,6 +398,7 @@ export default function PaymentCalculator() {
                     <input
                       type="text"
                       id="downPayment"
+                      name="downPayment"
                       inputMode="numeric"
                       pattern="[0-9]*"
                       className="form-input text-sm md:text-base"
@@ -423,6 +425,7 @@ export default function PaymentCalculator() {
                       </label>
                       <select
                         id="interestRate"
+                        name="interestRate"
                         className="form-select text-sm md:text-base"
                         value={interestRate}
                         onChange={e => setInterestRate(e.target.value)}
@@ -446,6 +449,7 @@ export default function PaymentCalculator() {
                       </label>
                       <select
                         id="customerAge"
+                        name="customerAge"
                         className="form-select text-sm md:text-base"
                         value={customerAge}
                         onChange={e => setCustomerAge(e.target.value)}
@@ -483,6 +487,7 @@ export default function PaymentCalculator() {
                     </label>
                     <select
                       id="loanTerm"
+                      name="loanTerm"
                       className="form-select text-sm md:text-base"
                       value={loanTerm}
                       onChange={e => setLoanTerm(e.target.value)}

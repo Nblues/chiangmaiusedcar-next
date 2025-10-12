@@ -1,4 +1,5 @@
 # Cloudflare Compatibility Script Optimization
+
 ## October 11, 2025
 
 ---
@@ -15,6 +16,7 @@ Impact: Blocks main thread, increases TBT
 ```
 
 **Long Task** = งานที่ใช้เวลา > 50ms บนเทรดหลัก
+
 - ❌ ทำให้เว็บ "ค้าง" หรือตอบสนองช้า
 - ❌ ส่งผลต่อ **TBT (Total Blocking Time)**
 - ❌ ส่งผลต่อ **FID (First Input Delay)**
@@ -103,36 +105,38 @@ setTimeout(showNotice, 3000); // Fallback only
 
 ### ก่อนแก้ไข
 
-| Metric | Value | Status |
-|--------|-------|--------|
-| Execution Time | 65ms | ❌ Long Task |
-| User Agent Checks | 15+ calls | ❌ Redundant |
-| Capability Tests | 6 tests | ❌ Unnecessary |
-| Cookie Test | Synchronous | ❌ Blocking |
-| Storage Test | Synchronous | ❌ Blocking |
-| DOM Operations | Immediate | ❌ Blocking |
-| Event Listeners | Multiple setTimeout | ❌ Wasteful |
-| Code Size | ~5.7 KB | ❌ Large |
+| Metric            | Value               | Status         |
+| ----------------- | ------------------- | -------------- |
+| Execution Time    | 65ms                | ❌ Long Task   |
+| User Agent Checks | 15+ calls           | ❌ Redundant   |
+| Capability Tests  | 6 tests             | ❌ Unnecessary |
+| Cookie Test       | Synchronous         | ❌ Blocking    |
+| Storage Test      | Synchronous         | ❌ Blocking    |
+| DOM Operations    | Immediate           | ❌ Blocking    |
+| Event Listeners   | Multiple setTimeout | ❌ Wasteful    |
+| Code Size         | ~5.7 KB             | ❌ Large       |
 
 ### หลังแก้ไข
 
-| Metric | Value | Status |
-|--------|-------|--------|
-| Execution Time | 15-20ms | ✅ Normal |
-| User Agent Checks | 1 regex | ✅ Optimized |
-| Capability Tests | Removed | ✅ Minimal |
-| Cookie Test | Removed | ✅ Non-blocking |
-| Storage Test | Deferred (idle) | ✅ Non-blocking |
-| DOM Operations | Interaction-based | ✅ Lazy |
-| Event Listeners | requestIdleCallback | ✅ Efficient |
-| Code Size | ~2.1 KB | ✅ Reduced 63% |
+| Metric            | Value               | Status          |
+| ----------------- | ------------------- | --------------- |
+| Execution Time    | 15-20ms             | ✅ Normal       |
+| User Agent Checks | 1 regex             | ✅ Optimized    |
+| Capability Tests  | Removed             | ✅ Minimal      |
+| Cookie Test       | Removed             | ✅ Non-blocking |
+| Storage Test      | Deferred (idle)     | ✅ Non-blocking |
+| DOM Operations    | Interaction-based   | ✅ Lazy         |
+| Event Listeners   | requestIdleCallback | ✅ Efficient    |
+| Code Size         | ~2.1 KB             | ✅ Reduced 63%  |
 
 ---
 
 ## 🚀 การปรับปรุง
 
 ### 1. Single-Pass User Agent Detection
+
 **Before**:
+
 ```javascript
 const isFacebookApp = userAgent.includes('FBAN') || userAgent.includes('FBAV') || userAgent.includes('FB_IAB');
 const isMessenger = userAgent.includes('MessengerForiOS') || userAgent.includes('MessengerLiteForiOS');
@@ -140,6 +144,7 @@ const isInAppBrowser = isFacebookApp || isMessenger || userAgent.includes('Insta
 ```
 
 **After**:
+
 ```javascript
 const isInApp = /FBAN|FBAV|FB_IAB|Messenger|Instagram|Line/i.test(ua);
 ```
@@ -149,13 +154,16 @@ const isInApp = /FBAN|FBAV|FB_IAB|Messenger|Instagram|Line/i.test(ua);
 ---
 
 ### 2. Defer Non-Critical Tests
+
 **Before**:
+
 ```javascript
 localStorage.setItem('fb_browser_test', '1'); // Synchronous
 localStorage.removeItem('fb_browser_test');
 ```
 
 **After**:
+
 ```javascript
 requestIdleCallback(() => {
   localStorage.setItem('t', '1'); // Runs when idle
@@ -168,9 +176,11 @@ requestIdleCallback(() => {
 ---
 
 ### 3. Remove Redundant Tests
+
 **Removed**:
+
 - ❌ `eval('1+1')` test
-- ❌ `new Function()` test  
+- ❌ `new Function()` test
 - ❌ `new Date().getTime()` test
 - ❌ `JSON.stringify()` test
 - ❌ Cookie synchronous test
@@ -183,12 +193,15 @@ requestIdleCallback(() => {
 ---
 
 ### 4. Interaction-Based DOM Creation
+
 **Before**:
+
 ```javascript
 setTimeout(addExternalBrowserButton, 1000); // Always runs
 ```
 
 **After**:
+
 ```javascript
 // Only runs on user interaction or after 3s
 ['scroll', 'click', 'touchstart'].forEach(e => {
@@ -202,13 +215,16 @@ setTimeout(showNotice, 3000); // Fallback
 ---
 
 ### 5. Simplified Event Listeners
+
 **Before**:
+
 ```javascript
 document.addEventListener('DOMContentLoaded', markDOMReady);
 setTimeout(markDOMReady, 3000); // Redundant fallback
 ```
 
 **After**:
+
 ```javascript
 document.addEventListener('DOMContentLoaded', markReady, { once: true });
 // No redundant setTimeout
@@ -238,45 +254,58 @@ After:
 
 ### Detailed Improvements
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Execution Time | 65ms | 15-20ms | -70% |
-| TBT Impact | +15ms | 0ms | -100% |
-| Code Size | 5.7 KB | 2.1 KB | -63% |
-| User Agent Checks | 15+ | 1 | -93% |
-| Synchronous Operations | 8 | 2 | -75% |
-| Performance Score | ~85 | ~87-88 | +2-3 pts |
+| Metric                 | Before | After   | Improvement |
+| ---------------------- | ------ | ------- | ----------- |
+| Execution Time         | 65ms   | 15-20ms | -70%        |
+| TBT Impact             | +15ms  | 0ms     | -100%       |
+| Code Size              | 5.7 KB | 2.1 KB  | -63%        |
+| User Agent Checks      | 15+    | 1       | -93%        |
+| Synchronous Operations | 8      | 2       | -75%        |
+| Performance Score      | ~85    | ~87-88  | +2-3 pts    |
 
 ---
 
 ## 🎯 Best Practices ใช้
 
 ### 1. **Single Regex Pattern**
+
 ✅ ใช้ regex เดียวแทนการ `.includes()` หลายครั้ง
+
 ```javascript
-/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line/i.test(ua)
+/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line/i.test(ua);
 ```
 
 ### 2. **requestIdleCallback()**
+
 ✅ เลื่อนงานที่ไม่จำเป็นไปทำตอน browser ว่าง
+
 ```javascript
-requestIdleCallback(() => { /* non-critical work */ });
+requestIdleCallback(() => {
+  /* non-critical work */
+});
 ```
 
 ### 3. **Passive Event Listeners**
+
 ✅ ไม่ block scrolling
+
 ```javascript
 { passive: true, once: true }
 ```
 
 ### 4. **Lazy DOM Creation**
+
 ✅ สร้าง DOM element เมื่อจำเป็นเท่านั้น
+
 ```javascript
 // Only create when user interacts
-const handler = () => { createNotice(); };
+const handler = () => {
+  createNotice();
+};
 ```
 
 ### 5. **Remove Redundant Tests**
+
 ✅ ไว้วางใจ modern browsers แทนการทดสอบทุกอย่าง
 
 ---
@@ -284,6 +313,7 @@ const handler = () => { createNotice(); };
 ## 🧪 การทดสอบ
 
 ### Functional Testing
+
 - [x] Facebook In-App Browser detection ทำงานถูกต้อง
 - [x] External browser notice แสดงเมื่อ scroll/click
 - [x] Compatibility flags ถูกตั้งค่า
@@ -291,12 +321,14 @@ const handler = () => { createNotice(); };
 - [x] ไม่กระทบฟีเจอร์เดิม
 
 ### Performance Testing
+
 - [ ] Long Task ลดจาก 65ms → 15-20ms
 - [ ] TBT ลดลง ~15ms
 - [ ] Performance Score +2-3 points
 - [ ] Main Thread Blocking Time ลดลง
 
 ### Browser Compatibility
+
 - [x] Chrome/Edge (Chromium)
 - [x] Firefox
 - [x] Safari (macOS/iOS)
@@ -311,6 +343,7 @@ const handler = () => { createNotice(); };
 ### Trade-offs
 
 **Pros**:
+
 - ✅ ลด execution time 70%
 - ✅ ลด code size 63%
 - ✅ ไม่มี Long Task
@@ -318,6 +351,7 @@ const handler = () => { createNotice(); };
 - ✅ Better TBT
 
 **Cons**:
+
 - ⚠️ localStorage test อาจเกิดช้ากว่าเดิมเล็กน้อย (แต่ไม่กระทบ UX)
 - ⚠️ External browser notice อาจแสดงช้ากว่าเดิม 1-2 วินาที (แต่ไม่ block page load)
 

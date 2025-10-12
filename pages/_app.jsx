@@ -13,6 +13,20 @@ const CookieConsent = lazy(() => import('../components/CookieConsent'));
 const PWAInstallPrompt = lazy(() => import('../components/PWAInstallPrompt'));
 
 export default function MyApp({ Component, pageProps }) {
+  // Initialize performance monitoring (Web Vitals + custom observers) without blocking main bundle
+  useEffect(() => {
+    // Dynamic import to avoid increasing initial bundle size
+    import('../lib/performance')
+      .then(mod => {
+        if (typeof mod.initPerformanceObserver === 'function') {
+          mod.initPerformanceObserver();
+        }
+      })
+      .catch(() => {
+        // silent fail - performance monitoring is non-critical
+      });
+  }, []);
+
   // Enhanced error handling for Facebook In-App Browser and Vercel issues
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -37,7 +51,18 @@ export default function MyApp({ Component, pageProps }) {
             event.error.message?.includes('Non-Error promise rejection') ||
             event.filename?.includes('content.js') ||
             event.filename?.includes('cloudflare') ||
-            event.filename?.includes('facebook'))
+            event.filename?.includes('facebook') ||
+            event.filename?.includes('vercel-scripts') ||
+            event.filename?.includes('vercel-analytics'))
+        ) {
+          event.preventDefault();
+          return true;
+        }
+
+        // Suppress network errors from analytics scripts (408, 503, etc.)
+        if (
+          event.target?.src?.includes('vercel-scripts') ||
+          event.target?.src?.includes('vercel-analytics')
         ) {
           event.preventDefault();
           return true;
@@ -238,21 +263,30 @@ export default function MyApp({ Component, pageProps }) {
 
 // Report web vitals for better SEO performance monitoring
 export function reportWebVitals(metric) {
-  if (typeof window !== 'undefined') {
-    // Log only in development
-    if (process.env.NODE_ENV === 'development') {
-      // eslint-disable-next-line no-console
-      console.log('Web Vitals:', metric);
-    }
+  if (typeof window === 'undefined') return;
 
-    // Send to analytics service if available
-    if (window.gtag) {
-      window.gtag('event', metric.name, {
-        value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
-        event_category: 'Web Vitals',
-        event_label: metric.id,
-        non_interaction: true,
-      });
-    }
+  // Optional dev logging
+  if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line no-console
+    console.log('Web Vitals:', metric);
   }
+
+  // Delegate to performance helper (dynamic import keeps it out of main bundle)
+  import('../lib/performance')
+    .then(({ checkWebVitals }) => {
+      if (typeof checkWebVitals === 'function') {
+        checkWebVitals(metric);
+      }
+    })
+    .catch(() => {
+      // Fallback to GA if available
+      if (window.gtag) {
+        window.gtag('event', metric.name, {
+          value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+          event_category: 'Web Vitals',
+          event_label: metric.id,
+          non_interaction: true,
+        });
+      }
+    });
 }

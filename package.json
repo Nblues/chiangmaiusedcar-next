@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "prebuild": "node scripts/check-no-html-imports.cjs",
-    "dev": "next dev -p 3000",
+    "dev": "cross-env NODE_OPTIONS='--max-old-space-size=4096' next dev -p 3000",
     "dev:hmr": "node scripts/fix-hmr.js && npm run dev",
-    "build": "cross-env NODE_ENV=production next build",
+    "build": "cross-env NODE_OPTIONS='--max-old-space-size=4096' NODE_ENV=production next build",
     "build:memory": "cross-env NODE_OPTIONS=--max-old-space-size=4096 NODE_ENV=production next build",
     "build:production": "cross-env NODE_ENV=production next build --config next.config.production.js",
     "build:secure": "npm run security-check && npm run build",

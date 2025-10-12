@@ -21,6 +21,7 @@
 ```
 
 **ปัญหา:**
+
 - มี sitemap-0.xml ซ้ำ 2 URLs (non-www และ www)
 - ทำให้ search engines สับสนว่า canonical URL คือตัวไหน
 - ขัดกับ redirect rule ที่ redirect non-www → www
@@ -41,6 +42,7 @@
 ```
 
 **การเปลี่ยนแปลง:**
+
 - ✅ ลบ `https://chiangmaiusedcar.com/sitemap-0.xml` (non-www)
 - ✅ เหลือแค่ `https://www.chiangmaiusedcar.com/` ทั้งหมด
 - ✅ สอดคล้องกับ canonical URL strategy
@@ -52,12 +54,14 @@
 ### 1. `/public/sitemap.xml`
 
 **ก่อน:**
+
 ```xml
 <sitemap><loc>https://chiangmaiusedcar.com/sitemap-0.xml</loc></sitemap>
 <sitemap><loc>https://www.chiangmaiusedcar.com/sitemap-0.xml</loc></sitemap>
 ```
 
 **หลัง:**
+
 ```xml
 <sitemap><loc>https://www.chiangmaiusedcar.com/sitemap-0.xml</loc></sitemap>
 ```
@@ -69,14 +73,17 @@
 ### ✅ ข้อดี
 
 1. **URL Consistency**
+
    - ใช้ www canonical URLs เท่านั้น
    - ไม่มี duplicate content issues
 
 2. **SEO Improvement**
+
    - Search engines ไม่สับสนเรื่อง canonical URL
    - Crawl budget ใช้อย่างมีประสิทธิภาพ
 
 3. **Compliance**
+
    - สอดคล้องกับ redirect rules (non-www → www)
    - ตรงกับ canonical tags ในทุกหน้า
 
@@ -89,17 +96,21 @@
 ## 🔗 Sitemap URLs ทั้งหมด (หลังแก้ไข)
 
 ### Main Sitemap Index
+
 ```
 https://www.chiangmaiusedcar.com/sitemap.xml
 ```
 
 ### Child Sitemaps
+
 1. **sitemap-0.xml** - หน้าหลัก (Homepage, About, Contact, All Cars)
+
    ```
    https://www.chiangmaiusedcar.com/sitemap-0.xml
    ```
 
 2. **sitemap-cars.xml** - หน้ารถแต่ละคัน
+
    ```
    https://www.chiangmaiusedcar.com/sitemap-cars.xml
    ```
@@ -116,6 +127,7 @@ https://www.chiangmaiusedcar.com/sitemap.xml
 ### ✅ Validate Sitemap
 
 1. **Google Search Console**
+
    ```
    1. เข้า https://search.google.com/search-console
    2. เลือก property: www.chiangmaiusedcar.com
@@ -125,6 +137,7 @@ https://www.chiangmaiusedcar.com/sitemap.xml
    ```
 
 2. **XML Sitemap Validator**
+
    ```
    เปิดเว็บ: https://www.xml-sitemaps.com/validate-xml-sitemap.html
    ใส่ URL: https://www.chiangmaiusedcar.com/sitemap.xml
@@ -132,10 +145,11 @@ https://www.chiangmaiusedcar.com/sitemap.xml
    ```
 
 3. **Robots.txt Check**
+
    ```
    ตรวจสอบว่า robots.txt ชี้ sitemap ถูกต้อง:
    https://www.chiangmaiusedcar.com/robots.txt
-   
+
    ควรมีบรรทัด:
    Sitemap: https://www.chiangmaiusedcar.com/sitemap.xml
    ```
@@ -158,6 +172,7 @@ git push origin master
 ### 2. Submit to Google Search Console ⏳ (หลัง deploy)
 
 **ขั้นตอน:**
+
 1. เข้า https://search.google.com/search-console
 2. เลือก property: www.chiangmaiusedcar.com
 3. ไปที่ Sitemaps (เมนูด้านซ้าย)
@@ -170,12 +185,14 @@ git push origin master
 ### 3. ตรวจสอบผลลัพธ์ ⏳ (หลัง 24-48 ชม.)
 
 **ใน Google Search Console:**
+
 - ไปที่ Sitemaps
 - ดู "Discovered URLs"
 - ตรวจสอบว่าไม่มี errors
 - ดู "Last read" date ว่า Google crawl แล้ว
 
 **ตรวจสอบ Coverage:**
+
 - ไปที่ Coverage report
 - ดูว่า pages ถูก indexed ถูกต้อง
 - ไม่มี duplicate content warnings
@@ -210,6 +227,7 @@ git push origin master
 ### Canonical URL Strategy
 
 **ทั้งโปรเจกต์ใช้ www canonical:**
+
 - ✅ Sitemap: www URLs only
 - ✅ Canonical tags: www URLs
 - ✅ Redirects: non-www → www (301)
@@ -217,6 +235,7 @@ git push origin master
 - ✅ Social sharing: www URLs
 
 **ความสำคัญ:**
+
 - Prevents duplicate content issues
 - Consolidates link equity
 - Improves crawl efficiency
@@ -227,12 +246,14 @@ git push origin master
 ## 🎯 Impact
 
 ### Before Fix
+
 - ❌ Sitemap มี duplicate entries
 - ❌ Search engines เห็น 2 versions
 - ❌ Crawl budget เสียไปกับ duplicates
 - ❌ Potential duplicate content issues
 
 ### After Fix
+
 - ✅ Sitemap สะอาด (www only)
 - ✅ Search engines เห็น canonical version เดียว
 - ✅ Crawl budget ใช้อย่างมีประสิทธิภาพ
