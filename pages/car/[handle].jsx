@@ -388,12 +388,12 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     const sep = ogImage.includes('?') ? '&' : '?';
     const carHandle = safeGet(car, 'handle', '');
     const dateStamp = new Date().toISOString().split('T')[0].replace(/-/g, ''); // YYYYMMDD
-    
+
     // Only add width if not already present
     if (!/[?&]width=\d+/.test(ogImage)) {
       ogImage = `${ogImage}${sep}width=1200&height=630`;
     }
-    
+
     // Add unique cache buster for LINE
     if (!ogImage.includes('&v=')) {
       ogImage = `${ogImage}&car=${encodeURIComponent(carHandle)}&v=${dateStamp}`;
@@ -434,7 +434,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
           href={optimizedFirstImage}
           imageSrcSet={generateSrcSet(firstImageUrl, [640, 1024, 1920], 'webp')}
           imageSizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px"
-          fetchPriority="high"
         />
 
         <meta property="og:type" content="product" />

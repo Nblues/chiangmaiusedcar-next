@@ -35,7 +35,8 @@ export default function CacheDashboard() {
       } else {
         setSwStatus('not-registered');
       }
-    } catch (error) {
+    } catch {
+      // Error checking service worker status
       setSwStatus('error');
     }
   };
@@ -48,14 +49,15 @@ export default function CacheDashboard() {
 
     try {
       switch (action) {
-        case 'register':
+        case 'register': {
           const isDev = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
           const swFile = isDev ? '/sw-dev.js' : '/sw.js';
           await navigator.serviceWorker.register(swFile, { scope: '/' });
           alert('✅ ลงทะเบียน Service Worker สำเร็จ');
           break;
+        }
 
-        case 'unregister':
+        case 'unregister': {
           const registration = await navigator.serviceWorker.getRegistration('/');
           if (registration) {
             await registration.unregister();
@@ -64,8 +66,9 @@ export default function CacheDashboard() {
             alert('⚠️ ไม่พบ Service Worker ที่ลงทะเบียน');
           }
           break;
+        }
 
-        case 'update':
+        case 'update': {
           const reg = await navigator.serviceWorker.getRegistration('/');
           if (reg) {
             await reg.update();
@@ -73,6 +76,10 @@ export default function CacheDashboard() {
           } else {
             alert('⚠️ ไม่พบ Service Worker ที่จะอัปเดต');
           }
+          break;
+        }
+
+        default:
           break;
       }
 

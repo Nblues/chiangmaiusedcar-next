@@ -45,7 +45,11 @@ const SocialShareButtons = ({
         alert('✅ คัดลอกลิงก์เรียบร้อย!');
       }
     } catch (err) {
-      console.error('Copy failed:', err);
+      // Only log in development
+      if (process.env.NODE_ENV === 'development') {
+        // eslint-disable-next-line no-console
+        console.error('Copy failed:', err);
+      }
       alert('❌ ไม่สามารถคัดลอกลิงก์ได้');
     }
   };
@@ -60,8 +64,8 @@ const SocialShareButtons = ({
     const shareUrl = shareUrls[platform];
     if (shareUrl) {
       // Track sharing event (optional)
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'share', {
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+        window.gtag('event', 'share', {
           event_category: 'Social',
           event_label: platform,
           value: 1,

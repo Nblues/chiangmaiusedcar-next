@@ -123,6 +123,9 @@ const nextConfig = {
     contentDispositionType: 'inline',
     // ปิด Next.js Image Optimization เพื่อหลีกเลี่ยง Vercel 402 Payment Required
     unoptimized: true,
+    // Disable image optimization worker to prevent Jest worker errors
+    loader: 'custom',
+    loaderFile: './lib/imageLoader.js',
   },
 
   // Headers for deployment and performance - Enhanced 2025
@@ -292,6 +295,11 @@ const nextConfig = {
       '@vercel/analytics',
       'react-dom',
     ],
+    // Prevent Jest worker errors in development
+    ...(process.env.NODE_ENV === 'development' && {
+      workerThreads: false,
+      cpus: 1,
+    }),
     // SWC Configuration for minimal polyfills
     swcPlugins: [],
     // Reduce Total Blocking Time

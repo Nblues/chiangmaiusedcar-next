@@ -16,6 +16,7 @@ Multiple components were using the same `z-index: 50`, causing potential overlap
 - **CacheDashboard**: `z-50` (fixed bottom-right) ⚠️ Conflict
 
 This caused:
+
 - Social share buttons overlapping with cookie consent
 - PWA install banner competing with cookie consent
 - Cache dashboard (dev only) overlapping with social buttons
@@ -46,48 +47,64 @@ zIndex: {
 ## Changes Applied
 
 ### 1. Tailwind Config
+
 **File**: `tailwind.config.js`
+
 - Added custom z-index scale with semantic names
 - Created clear hierarchy from 0 to 9999
 
 ### 2. Navbar
+
 **File**: `components/Navbar.jsx`
+
 - **Before**: `z-50`
 - **After**: `z-60`
 - **Reason**: Should be above base elements but below user interactions
 
 ### 3. Cookie Consent
+
 **File**: `components/CookieConsent.jsx`
+
 - **Before**: `z-50`
 - **After**: `z-70`
 - **Reason**: Important legal notice, should be above navbar
 
 ### 4. Social Share Buttons
+
 **File**: `components/SocialShareButtons.jsx`
+
 - **Before**: `z-50`
 - **After**: `z-80`
 - **Reason**: Interactive element, should be above cookie consent
 
 ### 5. PWA Install Banner
+
 **File**: `components/PWAInstallPrompt.jsx`
+
 - **Before**: `z-50` (banner)
 - **After**: `z-90`
 - **Reason**: Important user action, should be highly visible
 
 ### 6. PWA Install Modal
+
 **File**: `components/PWAInstallPrompt.jsx`
+
 - **Before**: `z-[9999]`
 - **After**: `z-overlay`
 - **Reason**: Full-screen overlay, must be on top of everything
 
 ### 7. Image Gallery Modal
+
 **File**: `components/ImageGallery.jsx`
+
 - **Before**: `z-50`
 - **After**: `z-modal`
 - **Reason**: Modal overlay, should be just below PWA modal
 
 ### 8. Cache Dashboard (Dev Only)
+
 **File**: `components/CacheDashboard.jsx`
+
 - **Before**: `z-50`
 - **After**: `z-100`
 - **Reason**: Development tool, should be always visible when debugging
@@ -139,7 +156,8 @@ When adding new components:
 
 ## Rollback (if needed)
 
-If this causes issues, you can revert by changing all components back to `z-50`, but this will reintroduce the overlap problems.
+If this causes issues, you can revert by changing all components back to `z-50`, but this will reintroduce the overlap
+problems.
 
 ---
 

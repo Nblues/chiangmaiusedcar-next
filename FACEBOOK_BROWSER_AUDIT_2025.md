@@ -31,6 +31,7 @@
 ```
 
 **Standard Compliance:**
+
 - ✅ **Accept-CH** (Client Hints): รองรับ Facebook's adaptive image loading
 - ✅ **format-detection**: ป้องกัน auto-linking ที่ทำให้เกิดปัญหาใน Facebook
 - ✅ **mobile-web-app-capable**: รองรับการเปิดเป็น PWA จาก Facebook
@@ -40,14 +41,12 @@
 
 ```javascript
 // pages/_app.jsx
-const isFacebookApp = userAgent.includes('FBAN') || 
-                      userAgent.includes('FBAV') || 
-                      userAgent.includes('FB_IAB');
-const isMessenger = userAgent.includes('MessengerForiOS') || 
-                    userAgent.includes('MessengerLiteForiOS');
+const isFacebookApp = userAgent.includes('FBAN') || userAgent.includes('FBAV') || userAgent.includes('FB_IAB');
+const isMessenger = userAgent.includes('MessengerForiOS') || userAgent.includes('MessengerLiteForiOS');
 ```
 
 **Standard Compliance:**
+
 - ✅ Detects all Facebook browser variants (FBAN, FBAV, FB_IAB)
 - ✅ Detects Messenger browsers (iOS + Android)
 - ✅ Proper fallback handling
@@ -57,14 +56,12 @@ const isMessenger = userAgent.includes('MessengerForiOS') ||
 ```javascript
 // pages/_app.jsx - Dynamic viewport adjustment
 if (viewport && (isFacebookApp || isMessenger)) {
-  viewport.setAttribute(
-    'content',
-    'width=device-width, initial-scale=1.0, maximum-scale=5.0'
-  );
+  viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0');
 }
 ```
 
 **Standard Compliance:**
+
 - ✅ **maximum-scale=5.0**: Allows zoom (Facebook requirement)
 - ✅ **Dynamic adjustment**: Only applies to Facebook browsers
 - ✅ **Accessibility**: Meets WCAG 2.1 zoom requirements
@@ -81,18 +78,21 @@ const handleImages = () => {
     img.style.height = 'auto';
     img.style.display = 'block';
     img.style.objectFit = 'cover';
-    
+
     // Force reload if failed
     if (!img.complete || img.naturalHeight === 0) {
       const originalSrc = img.src;
       img.src = '';
-      setTimeout(() => { img.src = originalSrc; }, 100);
+      setTimeout(() => {
+        img.src = originalSrc;
+      }, 100);
     }
   });
 };
 ```
 
 **Standard Compliance:**
+
 - ✅ Handles Next.js Image components in Facebook
 - ✅ Automatic image reload on failure
 - ✅ Proper CSS properties for Facebook rendering
@@ -119,6 +119,7 @@ const handleImages = () => {
 ```
 
 **Standard Compliance:**
+
 - ✅ All required OG tags present
 - ✅ Secure URLs (HTTPS)
 - ✅ Proper locale settings (th_TH primary)
@@ -135,6 +136,7 @@ const handleImages = () => {
 ```
 
 **Standard Compliance:**
+
 - ✅ **1200x630px**: Facebook's recommended image size
 - ✅ **WebP format**: Modern, optimized format
 - ✅ **Multiple sizes**: Fallbacks for different placements
@@ -151,6 +153,7 @@ const handleImages = () => {
 ```
 
 **Standard Compliance:**
+
 - ✅ Twitter cards work in Facebook too
 - ✅ Large image format
 - ✅ All required fields present
@@ -167,6 +170,7 @@ const handleImages = () => {
 ```
 
 **Standard Compliance:**
+
 - ✅ **width=device-width**: Proper mobile scaling
 - ✅ **initial-scale=1.0**: No zoom on load
 - ✅ **maximum-scale=5.0**: Allows accessibility zoom
@@ -184,6 +188,7 @@ const handleImages = () => {
 ```
 
 **Standard Compliance:**
+
 - ✅ **44x44px**: Meets Apple and Google guidelines
 - ✅ **Spacing**: Adequate space between tap targets
 - ✅ **Facebook touch**: Optimized for Facebook's tap detection
@@ -201,6 +206,7 @@ document.body.style.transform = 'translateZ(0)';
 ```
 
 **Standard Compliance:**
+
 - ✅ Hardware acceleration
 - ✅ Proper CSS isolation
 - ✅ No layout shifts
@@ -225,6 +231,7 @@ const isInApp = /FBAN|FBAV|FB_IAB|Messenger|Instagram|Line/i.test(ua);
 ```
 
 **Standard Compliance:**
+
 - ✅ **Fast execution**: ~15-20ms (was 65ms)
 - ✅ **Single regex**: No multiple UA checks
 - ✅ **Deferred operations**: Uses requestIdleCallback
@@ -243,6 +250,7 @@ images: {
 ```
 
 **Standard Compliance:**
+
 - ✅ **Modern formats**: WebP/AVIF support
 - ✅ **Responsive sizes**: Multiple breakpoints
 - ✅ **Facebook compatible**: unoptimized=true prevents issues
@@ -251,9 +259,11 @@ images: {
 ### ⚠️ Minor Issues (-8 points)
 
 1. **Jest Worker Error** (development only):
+
    ```
    Jest worker encountered 2 child process exceptions
    ```
+
    - Impact: Development only, doesn't affect production
    - Fix: Review Next.js image optimization workers
 
@@ -277,6 +287,7 @@ images: {
 ```
 
 **Standard Compliance:**
+
 - ✅ Proper ARIA labels
 - ✅ Semantic HTML
 - ✅ Keyboard navigation
@@ -293,6 +304,7 @@ colors: {
 ```
 
 **Standard Compliance:**
+
 - ✅ **Primary**: 15.6:1 contrast ratio (WCAG AAA)
 - ✅ **Accent**: 4.8:1 contrast ratio (WCAG AA)
 - ✅ **Text**: Readable in Facebook's white background
@@ -308,6 +320,7 @@ colors: {
 ## 📋 Checklist: Facebook Browser Standards 2025
 
 ### ✅ Essential Meta Tags
+
 - [x] Accept-CH header
 - [x] Viewport meta tag with zoom
 - [x] format-detection
@@ -315,6 +328,7 @@ colors: {
 - [x] apple-mobile-web-app-capable
 
 ### ✅ Open Graph Protocol
+
 - [x] og:title
 - [x] og:description
 - [x] og:image (1200x630)
@@ -324,18 +338,21 @@ colors: {
 - [x] og:locale
 
 ### ✅ Performance
+
 - [x] Fast script execution (<50ms)
 - [x] No render-blocking resources
 - [x] Optimized images
 - [x] Lazy loading
 
 ### ✅ Compatibility
+
 - [x] User agent detection
 - [x] Dynamic viewport adjustment
 - [x] Image fallback handling
 - [x] Error boundaries
 
 ### ✅ User Experience
+
 - [x] Touch target sizes (44x44)
 - [x] Smooth scrolling
 - [x] No layout shifts
@@ -346,17 +363,20 @@ colors: {
 ## 🎯 Recommendations
 
 ### Priority 1 (High Impact)
+
 1. ✅ **DONE**: Facebook browser detection
 2. ✅ **DONE**: Dynamic viewport adjustment
 3. ✅ **DONE**: Image optimization
 4. ✅ **DONE**: OG tags implementation
 
 ### Priority 2 (Medium Impact)
+
 1. ⚠️ **TODO**: Fix `fetchPriority` warning (use lowercase)
 2. ⚠️ **TODO**: Add missing alt text to images
 3. ⚠️ **TODO**: Improve focus indicators
 
 ### Priority 3 (Low Impact)
+
 1. 💡 **OPTIONAL**: Add Facebook SDK for advanced features
 2. 💡 **OPTIONAL**: Implement Facebook Analytics
 3. 💡 **OPTIONAL**: Add Facebook Login integration
@@ -366,22 +386,26 @@ colors: {
 ## 🌍 International Standards Compliance
 
 ### ✅ W3C Standards
+
 - [x] HTML5 semantic elements
 - [x] ARIA landmarks
 - [x] Valid markup
 
 ### ✅ WCAG 2.1 (Level AA)
+
 - [x] Color contrast
 - [x] Keyboard navigation
 - [x] Zoom support (up to 5x)
 - [x] Screen reader support
 
 ### ✅ Open Graph Protocol (Facebook)
+
 - [x] All required properties
 - [x] Recommended image sizes
 - [x] Proper meta tag format
 
 ### ✅ Mobile-First Design
+
 - [x] Responsive layouts
 - [x] Touch-friendly UI
 - [x] Fast mobile performance
@@ -391,6 +415,7 @@ colors: {
 ## 📊 Testing Results
 
 ### Browser Compatibility
+
 - ✅ Facebook In-App Browser (iOS): **Perfect**
 - ✅ Facebook In-App Browser (Android): **Perfect**
 - ✅ Messenger (iOS): **Perfect**
@@ -399,12 +424,14 @@ colors: {
 - ✅ LINE In-App: **Good**
 
 ### Performance Metrics
+
 - LCP: **2.1s** (Good)
 - FID: **45ms** (Good)
 - CLS: **0.08** (Good)
 - TBT: **~20ms** (Excellent - reduced from 65ms)
 
 ### SEO Scores
+
 - Google Lighthouse: **95/100**
 - Facebook Debugger: **No errors**
 - Open Graph: **98/100**
