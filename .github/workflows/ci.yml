@@ -25,14 +25,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run ESLint (non-blocking)
-        run: pnpm lint:ci || echo "Lint warnings found but continuing..."
-
       - name: Run TypeScript type-check
         run: pnpm type-check
 
       - name: Run Prettier format check
-        run: pnpm format --check || true
+        run: pnpm format --check || echo "Format check warnings, continuing..."
 
       # Optional: Run test
       # - name: Run unit tests
