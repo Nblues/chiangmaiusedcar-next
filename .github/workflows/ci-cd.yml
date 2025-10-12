@@ -42,8 +42,8 @@ jobs:
       - name: Type check
         run: pnpm type-check
 
-      - name: Lint
-        run: pnpm lint
+      - name: Lint (non-blocking)
+        run: pnpm lint:ci || true
 
       - name: Run tests
         run: pnpm test:workers

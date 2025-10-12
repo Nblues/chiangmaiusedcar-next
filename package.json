@@ -15,6 +15,7 @@
     "analyze": "cross-env ANALYZE=true NODE_ENV=production next build",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
+    "lint:ci": "next lint --config .eslintrc.ci.json",
     "lint:a11y": "eslint --config .eslintrc.a11y.json --ext .js,.jsx,.ts,.tsx pages components",
     "type-check": "tsc --noEmit",
     "type-check:watch": "tsc --noEmit --watch",
