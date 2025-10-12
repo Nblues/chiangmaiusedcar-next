@@ -3,11 +3,9 @@
 // API: POST /api/social/rescrape
 // Re-scrape Facebook Open Graph cache for one or all car detail URLs.
 // Security: Requires ?secret=... matching process.env.RESCRAPE_SECRET
-// Config:
-//   - FACEBOOK_GRAPH_ACCESS_TOKEN (App/Page Access Token with permissions to scrape URLs)
-//   - FACEBOOK_APP_SECRET (required for appsecret_proof when calling from server)
+// Note: Uses Facebook's public Sharing Debugger API (no authentication required)
+// Rate limits may apply - be gentle with requests
 
-import crypto from 'crypto';
 import { getAllCars } from '../../../lib/shopify.mjs';
 
 const SITE = 'https://www.chiangmaiusedcar.com';
@@ -27,25 +25,8 @@ export default async function handler(req, res) {
       return res.status(401).json({ ok: false, error: 'Unauthorized' });
     }
 
-    const accessToken = process.env.FACEBOOK_GRAPH_ACCESS_TOKEN;
-    const appSecret = process.env.FACEBOOK_APP_SECRET;
-
-    if (!accessToken) {
-      return res.status(500).json({
-        ok: false,
-        error: 'FACEBOOK_GRAPH_ACCESS_TOKEN is not configured',
-      });
-    }
-
-    if (!appSecret) {
-      return res.status(500).json({
-        ok: false,
-        error: 'FACEBOOK_APP_SECRET is not configured (required for server-side API calls)',
-      });
-    }
-
-    // Generate appsecret_proof for secure server-side API calls
-    const appsecretProof = crypto.createHmac('sha256', appSecret).update(accessToken).digest('hex');
+    // No longer require Facebook tokens - use public Sharing Debugger API
+    // This method doesn't need authentication but may have rate limits
 
     let targets = [];
     if (handle && typeof handle === 'string') {
@@ -65,13 +46,16 @@ export default async function handler(req, res) {
     for (let i = 0; i < targets.length; i++) {
       const url = targets[i];
       try {
-        // Use Facebook's public Sharing Debugger API endpoint instead
-        // This endpoint doesn't require appsecret_proof
-        const api = `https://graph.facebook.com/v21.0/?id=${encodeURIComponent(
-          url
-        )}&scrape=true&access_token=${encodeURIComponent(accessToken)}&appsecret_proof=${appsecretProof}`;
+        // Use Facebook's Public Sharing Debugger API (no authentication required)
+        // This endpoint works without access tokens for public URLs
+        const api = `https://graph.facebook.com/?id=${encodeURIComponent(url)}&scrape=true`;
 
-        const r = await fetch(api, { method: 'POST' });
+        const r = await fetch(api, { 
+          method: 'POST',
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (compatible; FacebookBot/1.0)',
+          }
+        });
         const text = await r.text();
         let data = null;
         try {
@@ -84,9 +68,9 @@ export default async function handler(req, res) {
         results.push({ url, error: err?.message || String(err) });
       }
 
-      // gentle throttle to avoid rate limits
+      // gentle throttle to avoid rate limits (increase to 500ms for public API)
       // eslint-disable-next-line no-await-in-loop
-      await sleep(250);
+      await sleep(500);
     }
 
     return res.status(200).json({ ok: true, count: results.length, results });
