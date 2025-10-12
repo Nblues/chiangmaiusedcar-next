@@ -39,7 +39,6 @@ const nextConfig = {
   },
 
   // Webpack configuration for bundle optimization
-  // WebSocket HMR Configuration
   webpack: (config, { dev, isServer }) => {
     // Existing webpack configuration
     if (!isServer) {
@@ -51,34 +50,23 @@ const nextConfig = {
       };
     }
 
-    // HMR WebSocket configuration for development
-    if (dev && !isServer) {
-      config.devServer = {
-        ...config.devServer,
-        hot: true,
-        liveReload: true,
-        client: {
-          webSocketURL: 'ws://localhost:3000/_next/webpack-hmr',
-          overlay: {
-            errors: true,
-            warnings: false,
-          },
-          reconnect: 3,
-        },
-      };
-
-      // Ensure HMR WebSocket endpoint is properly configured
-      if (config.devServer) {
-        config.devServer.allowedHosts = 'all';
-        config.devServer.headers = {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-          'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
-        };
-      }
-    }
-
     return config;
+  },
+
+  // WebSocket configuration for HMR - Fixed for Windows
+  webpackDevMiddleware: config => {
+    config.watchOptions = {
+      poll: 800, // Reduced polling interval for faster HMR
+      aggregateTimeout: 200,
+      ignored: ['**/node_modules/**', '**/.git/**', '**/.next/**'],
+    };
+    return config;
+  },
+
+  // Dev server configuration for stable WebSocket connection
+  devIndicators: {
+    buildActivity: true,
+    buildActivityPosition: 'bottom-right',
   },
 
   // Environment variables validation
