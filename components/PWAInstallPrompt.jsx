@@ -90,7 +90,7 @@ const PWAInstallPrompt = () => {
       // สำหรับ iOS แสดง modal พร้อมคำแนะนำโดยละเอียด
       const modal = document.createElement('div');
       modal.className =
-        'fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 font-prompt';
+        'fixed inset-0 z-overlay flex items-center justify-center bg-black bg-opacity-50 font-prompt';
       modal.innerHTML = `
         <div class="bg-white mx-4 p-6 rounded-2xl max-w-sm w-full">
           <div class="text-center mb-4">
@@ -206,7 +206,7 @@ const PWAInstallPrompt = () => {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 font-prompt">
+    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-90 font-prompt">
       <div className="bg-white border border-gray-200 rounded-2xl shadow-2xl p-6 animate-slide-up">
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0">

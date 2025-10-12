@@ -67,4 +67,4 @@ These features still work perfectly:
 
 ---
 
-*Facebook will automatically scrape your URLs when shared - no automation needed.*
+_Facebook will automatically scrape your URLs when shared - no automation needed._

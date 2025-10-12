@@ -21,7 +21,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-accent pt-[env(safe-area-inset-top)]"
+      className="bg-white shadow-lg sticky top-0 z-60 border-b-2 border-accent pt-[env(safe-area-inset-top)]"
       aria-label="เมนูหลัก"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -17,6 +17,22 @@ module.exports = {
         xs: '475px',
         '3xl': '1600px',
       },
+      zIndex: {
+        // Z-index hierarchy to prevent overlap
+        0: '0',
+        10: '10',
+        20: '20',
+        30: '30',
+        40: '40',
+        50: '50', // Base UI elements
+        60: '60', // Sticky navbar
+        70: '70', // Cookie consent
+        80: '80', // Social share buttons
+        90: '90', // PWA install banner
+        100: '100', // Cache dashboard (dev only)
+        modal: '9998', // Image gallery modals
+        overlay: '9999', // PWA install modal (highest)
+      },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'slide-up': 'slideUp 0.3s ease-out',

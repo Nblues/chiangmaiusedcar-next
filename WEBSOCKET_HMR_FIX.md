@@ -46,12 +46,14 @@ devIndicators: {
 ## Changes Made
 
 ### Before:
+
 - `poll: 1000` (slow)
 - `aggregateTimeout: 300` (slow)
 - `ignored: /node_modules/` (regex only)
 - No `devIndicators` config
 
 ### After:
+
 - ✅ `poll: 800` (20% faster)
 - ✅ `aggregateTimeout: 200` (33% faster)
 - ✅ `ignored: ['**/node_modules/**', '**/.git/**', '**/.next/**']` (proper glob patterns)
@@ -80,11 +82,13 @@ To verify the fix:
 ## Expected Behavior
 
 **Before Fix:**
+
 - Multiple WebSocket connection failures
 - Console warnings every few seconds
 - Slower hot reload
 
 **After Fix:**
+
 - ✅ Stable WebSocket connection
 - ✅ Clean console (no repeated errors)
 - ✅ Faster hot module replacement
@@ -92,13 +96,15 @@ To verify the fix:
 ## Related Configuration
 
 This fix complements existing Next.js config:
+
 - `reactStrictMode: true` - Already enabled
 - `swcMinify: true` - Already enabled for fast builds
 - `compress: false` - Let Vercel handle (optimal)
 
 ## Notes
 
-- **Windows-Specific**: This fix is especially important on Windows where file watching can be less efficient than Unix systems
+- **Windows-Specific**: This fix is especially important on Windows where file watching can be less efficient than Unix
+  systems
 - **Dev Only**: These settings only affect development server, no impact on production build
 - **No Breaking Changes**: Fully backward compatible
 

@@ -38,7 +38,7 @@ const nextConfig = {
     dirs: ['pages', 'components', 'lib', 'utils'],
   },
 
-  // Webpack configuration for bundle optimization
+  // Webpack configuration for bundle optimization and HMR
   webpack: (config, { dev, isServer }) => {
     // Existing webpack configuration
     if (!isServer) {
@@ -50,20 +50,26 @@ const nextConfig = {
       };
     }
 
-    return config;
-  },
+    // Optimize file watching for Windows dev server
+    if (dev && !isServer) {
+      config.watchOptions = {
+        poll: 800, // Faster polling for Windows
+        aggregateTimeout: 200,
+        ignored: ['**/node_modules/**', '**/.git/**', '**/.next/**'],
+      };
+    }
 
-  // WebSocket configuration for HMR - Fixed for Windows
-  webpackDevMiddleware: config => {
-    config.watchOptions = {
-      poll: 800, // Reduced polling interval for faster HMR
-      aggregateTimeout: 200,
-      ignored: ['**/node_modules/**', '**/.git/**', '**/.next/**'],
-    };
     return config;
   },
 
   // Dev server configuration for stable WebSocket connection
+  onDemandEntries: {
+    // Period (in ms) where the server will keep pages in the buffer
+    maxInactiveAge: 60 * 1000,
+    // Number of pages that should be kept simultaneously without being disposed
+    pagesBufferLength: 5,
+  },
+
   devIndicators: {
     buildActivity: true,
     buildActivityPosition: 'bottom-right',

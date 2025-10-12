@@ -6,38 +6,46 @@
 ## Variables Removed
 
 ### 1. FACEBOOK_APP_SECRET
+
 - **Environments**: Production, Preview, Development
 - **Reason**: Facebook OG re-scrape system removed, never used
 
 ### 2. FACEBOOK_GRAPH_ACCESS_TOKEN
+
 - **Environments**: Production, Preview, Development
 - **Reason**: Token expired, API endpoint removed
 
 ### 3. RESCRAPE_SECRET
+
 - **Environments**: Production, Preview, Development
 - **Reason**: `/api/social/rescrape` endpoint deleted
 
 ## Remaining Active Variables
 
 ### Shopify Integration ✅
+
 - `SHOPIFY_STOREFRONT_TOKEN` (Production)
 - `SHOPIFY_DOMAIN` (Production, Development)
 - `SHOPIFY_WEBHOOK_SECRET` (Production)
 
 ### EmailJS Contact Form ✅
+
 - `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` (Production)
 - `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID` (Production)
 - `NEXT_PUBLIC_EMAILJS_SERVICE_ID` (Production)
 
 ### reCAPTCHA ✅
+
 - `RECAPTCHA_SECRET_KEY` (Production)
 - `NEXT_PUBLIC_RECAPTCHA_SITE_KEY` (Production)
 
 ### Google Maps ✅
+
 - `MAPS_API_KEY` (Production)
 - `NEXT_PUBLIC_GMAPS_KEY` (Development)
 
 ### Other ✅
+
 - `SITE_URL` (Production)
 - `FIREBASE_CONFIG` (Production)
 - `REVALIDATE_SECRET` (Preview, Development)
@@ -76,4 +84,4 @@ vercel env rm RESCRAPE_SECRET development --yes
 
 ---
 
-*Environment variables are now aligned with active features only.*
+_Environment variables are now aligned with active features only._
