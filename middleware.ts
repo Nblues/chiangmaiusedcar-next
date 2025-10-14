@@ -26,6 +26,26 @@ export function middleware(req: NextRequest) {
   if (pathname.startsWith('/admin')) {
     const userAgent = req.headers.get('user-agent') || '';
 
+    // IP Whitelist (Optional) - เฉพาะ production
+    if (process.env.NODE_ENV === 'production' && process.env.ADMIN_ALLOWED_IPS) {
+      const clientIp = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '';
+      const allowedIps = process.env.ADMIN_ALLOWED_IPS.split(',').map(ip => ip.trim());
+
+      const isAllowedIp = allowedIps.some(allowedIp => {
+        if (allowedIp.includes('/')) {
+          // CIDR notation support (e.g., 192.168.1.0/24)
+          const ipPrefix = allowedIp.split('/')[0];
+          return ipPrefix ? clientIp.startsWith(ipPrefix) : false;
+        }
+        return clientIp === allowedIp;
+      });
+
+      if (!isAllowedIp && !pathname.startsWith('/admin/login')) {
+        // Only enforce IP whitelist for dashboard, not login page
+        return new NextResponse('Access Denied - Unauthorized IP', { status: 403 });
+      }
+    }
+
     // บล็อค Search Engine Bots
     const botPatterns = [
       /googlebot/i,
@@ -56,6 +76,8 @@ export function middleware(req: NextRequest) {
     adminResponse.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     adminResponse.headers.set('Pragma', 'no-cache');
     adminResponse.headers.set('Expires', '0');
+    adminResponse.headers.set('X-Frame-Options', 'DENY'); // ป้องกัน clickjacking
+    adminResponse.headers.set('Content-Security-Policy', "frame-ancestors 'none'"); // เพิ่มความปลอดภัย
 
     return adminResponse;
   }

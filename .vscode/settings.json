@@ -2,7 +2,7 @@
   // TypeScript/JavaScript performance
   "typescript.preferences.includePackageJsonAutoImports": "off",
   "typescript.suggest.autoImports": false,
-  "typescript.disableAutomaticTypeAcquisition": true,
+  "typescript.disableAutomaticTypeAcquisition": false,
   "typescript.preferences.includeCompletionsWithSnippetText": false,
   "typescript.tsdk": "node_modules/typescript/lib",
 
@@ -54,13 +54,21 @@
     "**/build/**": true
   },
 
-  // Memory optimization
+  // Memory optimization - เพิ่ม RAM เต็มที่ (12GB RAM system)
   "extensions.autoUpdate": false,
   "extensions.autoCheckUpdates": false,
+  "typescript.tsserver.maxTsServerMemory": 8192,
+  "javascript.suggest.enabled": true,
+  "typescript.suggest.enabled": true,
+  "editor.minimap.enabled": false,
+  "editor.codeLens": false,
+  "problems.decorations.enabled": true,
+  "typescript.tsserver.useSyntaxServer": "auto",
 
   // Terminal settings
   "terminal.integrated.enablePersistentSessions": false,
   "terminal.integrated.persistentSessionReviveProcess": "never",
+  "terminal.integrated.scrollback": 5000,
 
   // Git performance
   "git.enabled": true,

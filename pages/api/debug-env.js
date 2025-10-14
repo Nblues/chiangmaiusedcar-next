@@ -29,8 +29,10 @@ export default function handler(req, res) {
   };
 
   res.status(200).json({
+    success: true,
     envVars,
     clientVars,
     timestamp: new Date().toISOString(),
+    message: 'Environment variables checked',
   });
 }

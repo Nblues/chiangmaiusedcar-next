@@ -1,5 +1,7 @@
 // pages/api/cache-control.js - API สำหรับการจัดการ cache headers ตามมาตรฐานสากล
 
+import { isAuthenticated } from '../../middleware/adminAuth';
+
 export default function handler(req, res) {
   const { method, query } = req;
   const { type = 'no-cache', maxAge = 0, resource } = query;
@@ -12,6 +14,17 @@ export default function handler(req, res) {
   if (method === 'OPTIONS') {
     res.status(200).end();
     return;
+  }
+
+  // ตรวจสอบ authentication สำหรับการเปลี่ยนแปลง cache settings
+  if (method === 'POST' || method === 'PUT') {
+    if (!isAuthenticated(req)) {
+      return res.status(401).json({
+        success: false,
+        error: 'Unauthorized',
+        message: 'กรุณา login ก่อนเปลี่ยนแปลง cache settings',
+      });
+    }
   }
 
   try {

@@ -10,6 +10,15 @@ import { useEffect } from 'react';
 
 export default function FacebookPixel() {
   useEffect(() => {
+    // ตรวจสอบว่าอยู่ใน production และมี Pixel ID
+    const pixelId = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    // ถ้าไม่มี Pixel ID หรือไม่ใช่ production ให้ข้ามการโหลด
+    if (!pixelId || !isProduction) {
+      return;
+    }
+
     let loaded = false;
     let timeoutId = null;
 
@@ -44,13 +53,15 @@ export default function FacebookPixel() {
       script.onload = () => {
         // Initialize Facebook Pixel
         if (window.fbq) {
-          window.fbq('init', '939085106560508');
+          window.fbq('init', pixelId);
           window.fbq('track', 'PageView');
         }
       };
 
       script.onerror = () => {
         // Silent fail - Facebook Pixel is non-critical
+        // eslint-disable-next-line no-console
+        console.warn('Facebook Pixel failed to load - check traffic permissions');
       };
 
       document.body.appendChild(script);
@@ -90,13 +101,16 @@ export default function FacebookPixel() {
   }, []);
 
   // Noscript fallback
+  const pixelId = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
+  if (!pixelId) return null;
+
   return (
     <noscript>
       <img
         height="1"
         width="1"
         style={{ display: 'none' }}
-        src="https://www.facebook.com/tr?id=939085106560508&ev=PageView&noscript=1"
+        src={`https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1`}
         alt=""
       />
     </noscript>

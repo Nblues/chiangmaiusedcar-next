@@ -40,6 +40,31 @@ const nextConfig = {
 
   // Webpack configuration for bundle optimization and HMR
   webpack: (config, { dev, isServer }) => {
+    // Memory optimization - เพิ่ม cache และลด memory footprint
+    if (dev) {
+      config.cache = {
+        type: 'filesystem',
+        maxMemoryGenerations: 1, // ลดเหลือ 1 เพื่อประหยัด memory
+        buildDependencies: {
+          config: [__filename],
+        },
+      };
+
+      // ลด memory usage ใน dev mode
+      config.optimization = {
+        ...config.optimization,
+        minimize: false,
+        runtimeChunk: false,
+        splitChunks: false,
+        removeAvailableModules: false,
+        removeEmptyChunks: false,
+        mergeDuplicateChunks: false,
+      };
+
+      // ลด parallelism เพื่อประหยัด memory
+      config.parallelism = 1;
+    }
+
     // Existing webpack configuration
     if (!isServer) {
       config.resolve.fallback = {
@@ -53,9 +78,9 @@ const nextConfig = {
     // Optimize file watching for Windows dev server
     if (dev && !isServer) {
       config.watchOptions = {
-        poll: 800, // Faster polling for Windows
-        aggregateTimeout: 200,
-        ignored: ['**/node_modules/**', '**/.git/**', '**/.next/**'],
+        poll: 1000, // ลด polling frequency
+        aggregateTimeout: 300,
+        ignored: ['**/node_modules/**', '**/.git/**', '**/.next/**', '**/public/**'],
       };
     }
 
@@ -63,11 +88,13 @@ const nextConfig = {
   },
 
   // Dev server configuration for stable WebSocket connection
+
+  // Dev server configuration for stable WebSocket connection
   onDemandEntries: {
     // Period (in ms) where the server will keep pages in the buffer
-    maxInactiveAge: 60 * 1000,
+    maxInactiveAge: 25 * 1000, // ลดเป็น 25 วินาที
     // Number of pages that should be kept simultaneously without being disposed
-    pagesBufferLength: 5,
+    pagesBufferLength: 1, // เก็บแค่ 1 หน้าเพื่อประหยัด memory
   },
 
   devIndicators: {
@@ -148,8 +175,24 @@ const nextConfig = {
         value: 'nosniff',
       },
       {
+        key: 'Cross-Origin-Opener-Policy',
+        value: 'same-origin',
+      },
+      {
         key: 'Referrer-Policy',
         value: 'strict-origin-when-cross-origin',
+      },
+      {
+        key: 'Permissions-Policy',
+        value: 'camera=(), microphone=(), geolocation=(self), payment=()',
+      },
+      {
+        key: 'Strict-Transport-Security',
+        value: 'max-age=31536000; includeSubDomains; preload',
+      },
+      {
+        key: 'X-Permitted-Cross-Domain-Policies',
+        value: 'none',
       },
       {
         key: 'Server-Timing',
@@ -159,11 +202,11 @@ const nextConfig = {
       {
         key: 'Link',
         value: [
-          '</fonts.googleapis.com>; rel=preconnect; crossorigin',
-          '</fonts.gstatic.com>; rel=preconnect; crossorigin',
-          '</cdn.shopify.com>; rel=preconnect; crossorigin',
-          '</images.unsplash.com>; rel=preconnect; crossorigin',
-          '</va.vercel-scripts.com>; rel=preconnect; crossorigin',
+          '<https://fonts.googleapis.com>; rel=preconnect; crossorigin',
+          '<https://fonts.gstatic.com>; rel=preconnect; crossorigin',
+          '<https://cdn.shopify.com>; rel=preconnect; crossorigin',
+          '<https://images.unsplash.com>; rel=preconnect; crossorigin',
+          '<https://va.vercel-scripts.com>; rel=preconnect; crossorigin',
         ].join(', '),
       },
       {
@@ -231,13 +274,9 @@ const nextConfig = {
             key: 'Vary',
             value: 'Accept-Encoding, Accept',
           },
-          {
-            key: 'ETag',
-            value: `"${Date.now()}"`,
-          },
         ],
       },
-      // API routes - no caching
+      // API routes - no caching + CORS
       {
         source: '/api/(.*)',
         headers: [
@@ -252,6 +291,29 @@ const nextConfig = {
           {
             key: 'Expires',
             value: '0',
+          },
+          {
+            key: 'Access-Control-Allow-Origin',
+            value:
+              process.env.NODE_ENV === 'production'
+                ? process.env.SITE_URL || 'https://www.chiangmaiusedcar.com'
+                : 'http://localhost:3000',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET, POST, PUT, DELETE, OPTIONS',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type, Authorization, X-CSRF-Token, X-Requested-With',
+          },
+          {
+            key: 'Access-Control-Allow-Credentials',
+            value: 'true',
+          },
+          {
+            key: 'Access-Control-Max-Age',
+            value: '86400',
           },
         ],
       },
@@ -273,6 +335,22 @@ const nextConfig = {
         permanent: true,
         statusCode: 301,
       },
+      // Legacy article management paths -> new admin dashboard
+      {
+        source: '/admin/articles',
+        destination: '/admin/dashboard',
+        permanent: true,
+      },
+      {
+        source: '/admin/articles/new',
+        destination: '/admin/dashboard',
+        permanent: true,
+      },
+      {
+        source: '/admin/articles/:path*',
+        destination: '/admin/dashboard',
+        permanent: true,
+      },
     ];
   },
 
@@ -286,53 +364,13 @@ const nextConfig = {
   // Enhanced experimental config - 2025 standards + Core Web Vitals optimization
   experimental: {
     esmExternals: 'loose',
-    optimizeCss: true,
     scrollRestoration: true,
     serverComponentsExternalPackages: ['shopify-api-node'],
-    optimizePackageImports: [
-      '@headlessui/react',
-      'framer-motion',
-      '@vercel/analytics',
-      'react-dom',
-    ],
     // Prevent Jest worker errors in development
     ...(process.env.NODE_ENV === 'development' && {
       workerThreads: false,
       cpus: 1,
     }),
-    // SWC Configuration for minimal polyfills
-    swcPlugins: [],
-    // Reduce Total Blocking Time
-    turbo: {
-      rules: {
-        '*.{js,jsx,ts,tsx}': {
-          loaders: ['swc-loader'],
-          options: {
-            jsc: {
-              target: 'es2022', // ES2022 for modern features
-              loose: true,
-              externalHelpers: false, // Don't inject helpers
-              minify: {
-                compress: true,
-                mangle: true,
-              },
-            },
-            env: {
-              targets: {
-                chrome: '85',
-                edge: '85',
-                firefox: '78',
-                safari: '14',
-                ios: '14',
-              },
-              mode: 'entry',
-              coreJs: false, // Disable core-js polyfills
-            },
-            minify: true,
-          },
-        },
-      },
-    },
   },
 
   // Production optimization

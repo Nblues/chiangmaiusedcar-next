@@ -41,6 +41,7 @@ export default async function handler(req, res) {
     const issuesCount = Object.keys(services).length - healthyCount;
 
     const response = {
+      success: true,
       status: issuesCount === 0 ? 'healthy' : 'partial',
       timestamp,
       summary: {
@@ -49,6 +50,8 @@ export default async function handler(req, res) {
         issues: issuesCount,
       },
       services,
+      message:
+        issuesCount === 0 ? 'All systems operational' : `${issuesCount} service(s) need attention`,
     };
 
     res.status(200).json(response);

@@ -1,6 +1,8 @@
 // pages/api/revalidate.js - ISR Cache Revalidation API
 // มาตรฐานสากล 2025: On-demand revalidation สำหรับเนื้อหาล่าสุด
 
+import { isAuthenticated } from '../../middleware/adminAuth';
+
 export default async function handler(req, res) {
   // ตั้งค่า headers ป้องกัน cache
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
@@ -18,16 +20,19 @@ export default async function handler(req, res) {
   }
 
   try {
-    // ตรวจสอบ secret token สำหรับ production
+    // ตรวจสอบ secret token หรือ authentication
     const { secret, paths, force } = req.method === 'POST' ? req.body : req.query;
     const expectedSecret = process.env.REVALIDATE_SECRET || 'dev-secret';
 
-    // Allow access in development or with correct secret
-    if (process.env.NODE_ENV !== 'development' && secret !== expectedSecret) {
+    // Allow with correct secret OR admin authentication
+    const hasValidSecret = process.env.NODE_ENV === 'development' || secret === expectedSecret;
+    const isAdmin = isAuthenticated(req);
+
+    if (!hasValidSecret && !isAdmin) {
       return res.status(401).json({
         success: false,
-        error: 'Invalid token',
-        message: 'Revalidation secret is required',
+        error: 'Unauthorized',
+        message: 'Revalidation secret or admin authentication required',
       });
     }
 

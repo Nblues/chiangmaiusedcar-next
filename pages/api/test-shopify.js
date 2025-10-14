@@ -27,7 +27,8 @@ export default async function handler(req, res) {
     // Try to fetch cars
     const carsData = await getAllCars();
 
-    if (!carsData || !carsData.cars) {
+    // getAllCars() returns an array directly, not an object with .cars property
+    if (!carsData || !Array.isArray(carsData)) {
       return res.status(500).json({
         success: false,
         error: 'Failed to fetch cars from Shopify',
@@ -35,11 +36,11 @@ export default async function handler(req, res) {
       });
     }
 
-    const limitedCars = carsData.cars.slice(0, limitNum);
+    const limitedCars = carsData.slice(0, limitNum);
 
     return res.status(200).json({
       success: true,
-      totalCars: carsData.cars.length,
+      totalCars: carsData.length,
       cars: limitedCars,
       metadata: {
         domain: process.env.SHOPIFY_DOMAIN,

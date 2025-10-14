@@ -8,6 +8,8 @@ import { getAllCars } from '../lib/shopify.mjs';
 import { sanitizePrice } from '../lib/seo/jsonld';
 import { safeGet, safeFormatPrice } from '../lib/safeFetch';
 import { carAlt } from '../utils/a11y';
+import fs from 'fs';
+import path from 'path';
 
 export default function AllCars({ cars }) {
   const router = useRouter();
@@ -429,7 +431,7 @@ export default function AllCars({ cars }) {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
               {Array.from({ length: 8 }).map((_, index) => (
                 <div
-                  key={index}
+                  key={`skeleton-${index}`}
                   className="bg-white rounded-2xl md:rounded-3xl shadow-lg overflow-hidden border-2 border-gray-200 animate-pulse"
                 >
                   <div className="w-full h-28 md:h-48 bg-gray-200"></div>
@@ -462,7 +464,7 @@ export default function AllCars({ cars }) {
             <>
               {/* Cards Grid - 2025 Modern Layout */}
               <div className="car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
-                {currentCars.map(car => (
+                {currentCars.map((car, idx) => (
                   <article
                     key={car.id}
                     className="car-card group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border-2 border-gray-200 hover:border-primary flex flex-col h-full relative font-prompt transform hover:scale-[1.02]"
@@ -490,8 +492,16 @@ export default function AllCars({ cars }) {
                           fill
                           className="object-cover transition-transform duration-300 group-hover:scale-105"
                           imageType="card" // ⭐ ระบุเป็นการ์ด (1024px)
-                          loading="lazy"
+                          loading={idx === 0 && currentPage === 1 ? 'eager' : 'lazy'}
+                          priority={idx === 0 && currentPage === 1}
+                          fetchpriority={idx === 0 && currentPage === 1 ? 'high' : 'low'}
                         />
+                        {/* Reserved Badge */}
+                        {safeGet(car, 'status') === 'reserved' && (
+                          <div className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-xs md:text-sm font-bold shadow-lg animate-pulse font-prompt">
+                            จองแล้ว
+                          </div>
+                        )}
                       </figure>
                       <div className="p-2 md:p-3 flex flex-col">
                         <h3 className="card-title font-extrabold text-sm md:text-lg text-gray-900 mb-1 md:mb-2 group-hover:text-primary transition-colors line-clamp-2 font-prompt">
@@ -616,6 +626,18 @@ export async function getStaticProps() {
     const result = await getAllCars();
     cars = Array.isArray(result) ? result : [];
 
+    // Load car statuses from file storage
+    let carStatuses = {};
+    try {
+      const statusFile = path.join(process.cwd(), 'data', 'car-status.json');
+      if (fs.existsSync(statusFile)) {
+        const fileContent = fs.readFileSync(statusFile, 'utf8');
+        carStatuses = JSON.parse(fileContent);
+      }
+    } catch {
+      // Silently fail - status will default to 'available'
+    }
+
     // ลดขนาดข้อมูลโดยเก็บเฉพาะฟิลด์ที่จำเป็น
     cars = cars.map(car => ({
       id: car.id,
@@ -626,6 +648,7 @@ export async function getStaticProps() {
       price: car.price,
       images: car.images?.slice(0, 1) || [], // เก็บแค่รูปแรกสำหรับ listing
       availableForSale: car.availableForSale,
+      status: carStatuses[car.id]?.status || 'available', // Add status from file
     }));
 
     // แสดงรถทั้งหมดที่มีจริง ไม่จำกัดจำนวน

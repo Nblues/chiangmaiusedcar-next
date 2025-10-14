@@ -12,6 +12,8 @@ import A11yImage from '../../components/A11yImage';
 import { carAlt } from '../../utils/a11y';
 import { optimizeShopifyImage, generateSrcSet } from '../../utils/imageOptimizer';
 import { createShareText } from '../../utils/urlHelper';
+import fs from 'fs';
+import path from 'path';
 
 function CarDetailPage({ car, recommendedCars = [] }) {
   const router = useRouter();
@@ -586,6 +588,13 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                 }}
               />
 
+              {/* Reserved Badge */}
+              {safeGet(car, 'status') === 'reserved' && (
+                <div className="absolute top-4 left-4 bg-red-500 text-white px-6 py-3 rounded-xl text-base sm:text-lg font-bold shadow-2xl animate-pulse font-prompt z-10">
+                  🚫 จองแล้ว
+                </div>
+              )}
+
               {/* Loading hint for slow images (non-blocking) */}
               {isHeroLoading && showHeroLoading && (
                 <div
@@ -688,7 +697,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   // ⭐ โหลด thumbnail ทั้งหมดแบบ lazy เพื่อลดการแย่ง bandwidth กับ hero
                   return (
                     <button
-                      key={index}
+                      key={`${safeGet(img, 'url', 'thumb')}-${index}`}
                       onClick={() => setSelectedImageIndex(index)}
                       onKeyDown={e => {
                         if (e.key === 'Enter' || e.key === ' ') {
@@ -746,7 +755,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                 <div className="flex gap-2 mt-2 overflow-x-auto pb-2 scrollbar-hide px-1">
                   {carImages.map((img, index) => (
                     <button
-                      key={`mobile-${index}`}
+                      key={`mobile-${safeGet(img, 'url', 'thumb')}-${index}`}
                       onClick={() => setSelectedImageIndex(index)}
                       className={`relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden border transition-all duration-200 ${
                         selectedImageIndex === index
@@ -1071,7 +1080,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                           {/* แสดงข้อความหลัก */}
                           {processedDescription.paragraphs.map((paragraph, index) => (
                             <div
-                              key={index}
+                              key={`p-${index}-${paragraph.slice(0, 20)}`}
                               className="whitespace-pre-line break-words leading-relaxed"
                             >
                               {paragraph}
@@ -1084,7 +1093,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                               <div className="flex flex-wrap gap-2">
                                 {processedDescription.hashtags.map((hashtag, index) => (
                                   <a
-                                    key={index}
+                                    key={`tag-${hashtag}-${index}`}
                                     href={`/all-cars?search=${encodeURIComponent(hashtag.substring(1))}`}
                                     className="inline-block bg-primary text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer font-prompt"
                                     onClick={e => {
@@ -1332,6 +1341,18 @@ export async function getStaticProps({ params }) {
     // ป้องกันกรณีที่ cars เป็น null หรือ undefined
     const safeCars = Array.isArray(cars) ? cars : [];
 
+    // Load car statuses from file storage
+    let carStatuses = {};
+    try {
+      const statusFile = path.join(process.cwd(), 'data', 'car-status.json');
+      if (fs.existsSync(statusFile)) {
+        const fileContent = fs.readFileSync(statusFile, 'utf8');
+        carStatuses = JSON.parse(fileContent);
+      }
+    } catch {
+      // Silently fail - status will default to 'available'
+    }
+
     const requestedRaw = params?.handle || '';
     const requested = decodeURIComponent(requestedRaw);
 
@@ -1355,6 +1376,11 @@ export async function getStaticProps({ params }) {
     // ไม่พบจริง ๆ
     if (!car) {
       return { notFound: true };
+    }
+
+    // Add status to car object
+    if (car) {
+      car.status = carStatuses[car.id]?.status || 'available';
     }
 
     // Redirect ไป canonical URL ถ้าไม่ตรง

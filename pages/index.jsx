@@ -200,13 +200,18 @@ export default function Home({ cars, brandCounts }) {
     []
   );
 
+  // Daily cache busting for LINE sharing
+  const currentDate = new Date();
+  const dateStamp = currentDate.toISOString().split('T')[0].replace(/-/g, '');
+  const homeOgImage = `https://www.chiangmaiusedcar.com/herobanner/cnxcar.webp?v=${dateStamp}&w=1200&h=630&fit=cover`;
+
   return (
     <div>
       <SEO
         title="รถมือสองเชียงใหม่ คุณภาพดี ตรวจสภาพครบถ้วน | ครูหนึ่งรถสวย"
         description="ครูหนึ่งรถสวย รถมือสองเชียงใหม่ ตรวจสภาพครบ ฟรีดาวน์ 0% ดอกเบี้ยต่ำ 2.99% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan ดูรถนัดหมายโทร 094-064-9018 คลิกเลย!"
         url="/"
-        image="https://www.chiangmaiusedcar.com/herobanner/cnxcar.webp"
+        image={homeOgImage}
         type="website"
         pageType="home"
         breadcrumbs={[{ name: 'หน้าแรก', url: '/' }]}

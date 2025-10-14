@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
 
-export default function AdminLogin() {
+// Add displayName for admin layout detection
+function AdminLogin() {
   const router = useRouter();
   const [credentials, setCredentials] = useState({
     username: '',
@@ -12,22 +13,46 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // Read CSRF token from cookie if present
+  const getCookie = name => {
+    if (typeof document === 'undefined') return '';
+    const escaped = name.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
+    const match = document.cookie.match(new RegExp('(?:^|; )' + escaped + '=([^;]*)'));
+    return match ? decodeURIComponent(match[1]) : '';
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
-      // ในการใช้งานจริงจะตรวจสอบกับ API
-      if (credentials.username === 'admin' && credentials.password === 'admin123') {
-        // Set both authentication keys
-        localStorage.setItem('admin_auth', 'true');
-        localStorage.setItem('adminLoggedIn', 'true');
-        router.push('/admin/articles');
+      const csrfToken = getCookie('__Host-csrfToken') || getCookie('csrfToken');
+      // เรียก API login
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          ...(csrfToken ? { 'X-CSRF-Token': csrfToken } : {}),
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          username: credentials.username,
+          password: credentials.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Login สำเร็จ - redirect ไป dashboard
+        router.push('/admin/dashboard');
       } else {
-        setError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+        setError(data.error || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
       }
-    } catch (err) {
+    } catch {
       setError('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
     } finally {
       setLoading(false);
@@ -35,10 +60,15 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-white to-accent/10 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <Head>
-        <title>เข้าสู่ระบบ Admin | ครูหนึ่งรถสวย</title>
+        <title>เข้าสู่ระบบผู้ดูแลระบบ | ครูหนึ่งรถสวย</title>
         <meta name="robots" content="noindex, nofollow" />
+        {/* Prevent caching on sensitive auth page */}
+        <meta httpEquiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="0" />
+        <meta name="referrer" content="no-referrer" />
       </Head>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -47,33 +77,17 @@ export default function AdminLogin() {
             <Image src="/favicon.png" alt="ครูหนึ่งรถสวย" fill className="object-contain" />
           </div>
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900 font-prompt">
-          เข้าสู่ระบบ Admin
-        </h2>
+        <h1 className="mt-6 text-center text-3xl font-bold text-gray-900 font-prompt">
+          เข้าสู่ระบบผู้ดูแล
+        </h1>
         <p className="mt-2 text-center text-sm text-gray-600 font-prompt">
           ระบบจัดการหลังบ้าน ครูหนึ่งรถสวย
         </p>
-
-        {/* Quick Login Button */}
-        <div className="mt-4 text-center">
-          <button
-            onClick={() => {
-              setCredentials({ username: 'admin', password: 'admin123' });
-              localStorage.setItem('admin_auth', 'true');
-              localStorage.setItem('adminLoggedIn', 'true');
-              alert('Login สำเร็จ! กำลังไปหน้าจัดการบทความ...');
-              router.push('/admin/articles');
-            }}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-prompt"
-          >
-            🚀 Quick Login (admin/admin123)
-          </button>
-        </div>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="bg-white/80 backdrop-blur-xl py-8 px-6 shadow-lg sm:rounded-2xl sm:px-10 border border-gray-200">
+          <form className="space-y-6" onSubmit={handleSubmit} autoComplete="on">
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm font-prompt">
                 {error}
@@ -81,10 +95,7 @@ export default function AdminLogin() {
             )}
 
             <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700 font-prompt"
-              >
+              <label htmlFor="username" className="form-label">
                 ชื่อผู้ใช้
               </label>
               <div className="mt-1">
@@ -95,17 +106,17 @@ export default function AdminLogin() {
                   required
                   value={credentials.username}
                   onChange={e => setCredentials(prev => ({ ...prev, username: e.target.value }))}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm font-prompt"
-                  placeholder="admin"
+                  className="form-input w-full"
+                  placeholder="ชื่อผู้ใช้"
+                  autoComplete="username"
+                  inputMode="text"
+                  minLength={3}
                 />
               </div>
             </div>
 
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 font-prompt"
-              >
+              <label htmlFor="password" className="form-label">
                 รหัสผ่าน
               </label>
               <div className="mt-1">
@@ -116,8 +127,10 @@ export default function AdminLogin() {
                   required
                   value={credentials.password}
                   onChange={e => setCredentials(prev => ({ ...prev, password: e.target.value }))}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm font-prompt"
+                  className="form-input w-full"
                   placeholder="••••••••"
+                  autoComplete="current-password"
+                  minLength={8}
                 />
               </div>
             </div>
@@ -126,33 +139,12 @@ export default function AdminLogin() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed font-prompt"
+                className="btn-primary w-full py-3 rounded-2xl font-prompt disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}
               </button>
             </div>
           </form>
-
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500 font-prompt">ข้อมูลทดสอบ</span>
-              </div>
-            </div>
-
-            <div className="mt-4 bg-gray-50 rounded-lg p-4 text-sm text-gray-600 font-prompt">
-              <p className="font-semibold mb-2">สำหรับการทดสอบ:</p>
-              <p>
-                ชื่อผู้ใช้: <code className="bg-gray-200 px-1 rounded">admin</code>
-              </p>
-              <p>
-                รหัสผ่าน: <code className="bg-gray-200 px-1 rounded">admin123</code>
-              </p>
-            </div>
-          </div>
 
           <div className="mt-6 text-center">
             <a href="/" className="text-sm text-primary hover:text-primary/70 font-prompt">
@@ -164,3 +156,17 @@ export default function AdminLogin() {
     </div>
   );
 }
+
+// Set displayName for admin layout detection
+AdminLogin.displayName = 'AdminLogin';
+
+// Use custom layout (minimal, no Navbar/Footer/PWA)
+AdminLogin.getLayout = function getLayout(page) {
+  return (
+    <main id="main" role="main">
+      {page}
+    </main>
+  );
+};
+
+export default AdminLogin;
