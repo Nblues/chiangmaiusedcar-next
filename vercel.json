@@ -7,16 +7,6 @@
       "maxDuration": 10
     }
   },
-  "crons": [
-    {
-      "path": "/api/cron/backup-daily",
-      "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/cron/backup-weekly",
-      "schedule": "0 3 * * 0"
-    }
-  ],
   "env": {
     "SHOPIFY_DOMAIN": "kn-goodcar.com",
     "SHOPIFY_STOREFRONT_TOKEN": "bb70cb008199a94b83c98df0e45ada67",

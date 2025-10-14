@@ -8,7 +8,7 @@ export default function handler(req, res) {
   const hasAdmin = !!process.env.ADMIN_USERNAME;
   const hasPassword = !!process.env.ADMIN_PASSWORD;
   const hasSecret = !!process.env.SESSION_SECRET;
-  
+
   // ไม่แสดงค่าจริง เพื่อความปลอดภัย
   const result = {
     env: process.env.NODE_ENV,
@@ -20,7 +20,9 @@ export default function handler(req, res) {
     },
     // แสดง 3 ตัวอักษรแรกเพื่อยืนยัน
     preview: {
-      username: process.env.ADMIN_USERNAME ? process.env.ADMIN_USERNAME.substring(0, 3) + '...' : 'none',
+      username: process.env.ADMIN_USERNAME
+        ? process.env.ADMIN_USERNAME.substring(0, 3) + '...'
+        : 'none',
       usernameLength: process.env.ADMIN_USERNAME ? process.env.ADMIN_USERNAME.length : 0,
       secretLength: process.env.SESSION_SECRET ? process.env.SESSION_SECRET.length : 0,
     },

@@ -20,7 +20,11 @@ export default function TestSocialImages({ cars }) {
     { type: 'contact', path: '/contact', image: DEFAULT_SOCIAL_IMAGES.contact },
     { type: 'promotion', path: '/promotion', image: DEFAULT_SOCIAL_IMAGES.promotion },
     { type: 'credit-check', path: '/credit-check', image: DEFAULT_SOCIAL_IMAGES['credit-check'] },
-    { type: 'payment-calculator', path: '/payment-calculator', image: DEFAULT_SOCIAL_IMAGES['payment-calculator'] },
+    {
+      type: 'payment-calculator',
+      path: '/payment-calculator',
+      image: DEFAULT_SOCIAL_IMAGES['payment-calculator'],
+    },
   ];
 
   return (

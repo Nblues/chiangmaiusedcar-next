@@ -59,9 +59,31 @@ pnpm type-check  # TypeScript syntax check
 
 ## การเข้าถึง Admin
 
+### Development (Local)
+
 - URL: `/admin`
 - Username: `admin`
-- Password: `admin123`
+- Password: `changeme123`
+
+ข้อมูล credentials จะถูกอ่านจาก `.env.local`:
+
+```env
+ADMIN_USERNAME=kngoodcar
+ADMIN_PASSWORD=Kn-goodcar**5277
+SESSION_SECRET=your-secret-key-here
+```
+
+### Production (Vercel)
+
+**⚠️ สำคัญ**: ต้องตั้งค่า Environment Variables บน Vercel ก่อน
+
+1. เข้า Vercel Dashboard → Settings → Environment Variables
+2. เพิ่ม `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `SESSION_SECRET`
+3. Redeploy production
+
+📖 **คู่มือครบถ้วน**: ดูที่ `VERCEL_ENV_QUICK_SETUP.md` หรือ `VERCEL_ENV_VARIABLES_REQUIRED.md`
+
+🔍 **ตรวจสอบ env vars**: รัน `node scripts/check-vercel-env.mjs`
 
 ## โครงสร้างไฟล์
 

@@ -1,0 +1,32 @@
+# 🚨 VERCEL ENV VARIABLES - ต้องตั้งค่าก่อน Deploy
+
+## ❌ ปัญหา
+
+Admin login ไม่ทำงานบน production เพราะยังไม่มี environment variables
+
+## ✅ แก้ไข (5 นาที)
+
+### 1. เข้า Vercel
+
+<https://vercel.com/dashboard> → โปรเจค → Settings → Environment Variables
+
+### 2. เพิ่ม 3 ตัวนี้
+
+| Name | Value | Environments |
+|------|-------|--------------|
+| `ADMIN_USERNAME` | `kngoodcar` | ✅ All (Prod+Preview+Dev) |
+| `ADMIN_PASSWORD` | `Kn-goodcar**5277` | ✅ All (Prod+Preview+Dev) |
+| `SESSION_SECRET` | `f84a65d8b96928512fc7938a14c15c72d5a23689354a2fbc8312c102d1d10f33` | ✅ All (Prod+Preview+Dev) |
+
+### 3. Redeploy
+
+Deployments → latest → ⋮ → Redeploy (ไม่ใช้ cache)
+
+### 4. Test
+
+<https://www.chiangmaiusedcar.com/admin/login>
+
+---
+
+📖 **Full guide**: `VERCEL_ENV_QUICK_SETUP.md`  
+🔍 **Check status**: `node scripts/check-vercel-env.mjs`
