@@ -8,6 +8,7 @@ import {
   createSessionCookie,
   createCsrfCookie,
   getClientIp,
+  verifyCsrf,
 } from '../../../middleware/adminAuth';
 
 // Simple in-memory rate limiter per IP
@@ -53,6 +54,11 @@ export default async function handler(req, res) {
       return res
         .status(429)
         .json({ success: false, error: 'Too many attempts. Please try again later.' });
+    }
+
+    // CSRF check
+    if (!verifyCsrf(req)) {
+      return res.status(403).json({ success: false, error: 'Invalid CSRF token' });
     }
 
     const { username, password } = req.body;

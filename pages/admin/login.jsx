@@ -13,21 +13,12 @@ function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Read CSRF token from cookie if present
-  const getCookie = name => {
-    if (typeof document === 'undefined') return '';
-    const escaped = name.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&');
-    const match = document.cookie.match(new RegExp('(?:^|; )' + escaped + '=([^;]*)'));
-    return match ? decodeURIComponent(match[1]) : '';
-  };
-
   const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
-      const csrfToken = getCookie('__Host-csrfToken') || getCookie('csrfToken');
       // เรียก API login
       const response = await fetch('/api/admin/login', {
         method: 'POST',
@@ -35,7 +26,6 @@ function AdminLogin() {
           'Content-Type': 'application/json',
           Accept: 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
-          ...(csrfToken ? { 'X-CSRF-Token': csrfToken } : {}),
         },
         credentials: 'include',
         body: JSON.stringify({
