@@ -13,18 +13,37 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
+  // Allow GET for quick probing (temporary diagnostic)
+  if (req.method === 'GET') {
+    return res.status(200).json({
+      ok: true,
+      method: req.method,
+      note: 'Use POST with JSON { username, password } to compare',
+      headers: {
+        host: req.headers.host,
+        'content-type': req.headers['content-type'] || null,
+        'user-agent': req.headers['user-agent'] || null,
+      },
+    });
+  }
+
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'Method not allowed', method: req.method });
   }
 
   // Parse body if needed
   let body = req.body;
+  const contentType = req.headers['content-type'] || '';
   if (typeof body === 'string') {
     try {
       body = JSON.parse(body);
     } catch (err) {
       return res.status(400).json({ error: 'Invalid JSON', details: err.message });
     }
+  }
+  if (!body && contentType.includes('application/json')) {
+    // Body parser might have failed or body was empty
+    return res.status(400).json({ error: 'Empty JSON body', contentType });
   }
 
   const { username, password } = body;

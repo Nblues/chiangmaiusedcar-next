@@ -35,6 +35,7 @@ function incr(ip) {
 }
 
 export default async function handler(req, res) {
+  let stage = 'start';
   // Set no-cache headers
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
   res.setHeader('Pragma', 'no-cache');
@@ -53,6 +54,7 @@ export default async function handler(req, res) {
   }
 
   try {
+    stage = 'rate-limit-check';
     const ip = getClientIp(req);
     if (isRateLimited(ip)) {
       return res
@@ -61,6 +63,7 @@ export default async function handler(req, res) {
     }
 
     // Parse body safely (avoid destructuring undefined)
+    stage = 'parse-body';
     let body = req.body;
     if (typeof body === 'string') {
       try {
@@ -73,6 +76,7 @@ export default async function handler(req, res) {
     const password = body?.password;
 
     // Validate input
+    stage = 'validate-input';
     if (!username || !password) {
       incr(ip);
       return res.status(400).json({
@@ -81,8 +85,9 @@ export default async function handler(req, res) {
       });
     }
 
-  // Authenticate
-  const token = authenticate(username, password);
+    // Authenticate
+    stage = 'authenticate';
+    const token = authenticate(username, password);
 
     if (!token) {
       // Add delay to prevent brute force
@@ -95,7 +100,8 @@ export default async function handler(req, res) {
       });
     }
 
-    // Set session cookie
+  // Set session cookie
+  stage = 'set-cookies';
     // Also issue a CSRF cookie for subsequent state-changing requests
     res.setHeader('Set-Cookie', [createSessionCookie(token), createCsrfCookie()]);
 
@@ -106,10 +112,11 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Login error:', error?.message || error);
+    console.error('Login error:', stage, error?.message || error);
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
+      stage,
     });
   }
 }
