@@ -1,0 +1,29 @@
+### Test Admin Login API
+POST https://www.chiangmaiusedcar.com/api/admin/login
+Content-Type: application/json
+
+{
+  "username": "kngoodcar",
+  "password": "Kn-goodcar**5277"
+}
+
+### Test Admin Login API (Production Deployment URL)
+POST https://chiangmaiusedcar-setup-1t4b2j1o5-chiangmaiusedcars-projects.vercel.app/api/admin/login
+Content-Type: application/json
+
+{
+  "username": "kngoodcar",
+  "password": "Kn-goodcar**5277"
+}
+
+### Test with Debug Endpoint (if deployed)
+POST https://www.chiangmaiusedcar.com/api/admin/debug-login
+Content-Type: application/json
+
+{
+  "username": "kngoodcar",
+  "password": "Kn-goodcar**5277"
+}
+
+### Check Environment Variables
+GET https://www.chiangmaiusedcar.com/api/admin/test-env
