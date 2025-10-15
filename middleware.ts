@@ -154,6 +154,7 @@ export const config = {
   matcher: [
     '/admin/:path*',
     '/api/admin/:path*',
-    '/((?!_next|api|static|assets|favicon.ico|robots.txt|sitemap.xml).*)',
+    '/',
+    '/((?!_next|static|assets|favicon|robots|sitemap|api).*)',
   ],
 };
