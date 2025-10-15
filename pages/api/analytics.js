@@ -17,7 +17,15 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   try {
-    const metrics = req.body;
+    let metrics = req.body;
+
+    if (typeof metrics === 'string') {
+      try {
+        metrics = JSON.parse(metrics);
+      } catch {
+        return res.status(400).json({ error: 'Invalid metrics payload (not JSON)' });
+      }
+    }
 
     // Validate metrics data
     if (!metrics || typeof metrics !== 'object') {
@@ -75,6 +83,7 @@ async function sendToAnalyticsService(metrics) {
       });
     } catch (error) {
       // Safe fallback - don't block SSR
+      // eslint-disable-next-line no-console
       console.error('Vercel Analytics error:', error.message);
     }
   }
@@ -99,6 +108,7 @@ async function sendToAnalyticsService(metrics) {
       });
     } catch (error) {
       // Safe fallback - don't block SSR
+      // eslint-disable-next-line no-console
       console.error('Google Analytics error:', error.message);
     }
   }
@@ -116,6 +126,7 @@ async function sendToAnalyticsService(metrics) {
       });
     } catch (error) {
       // Safe fallback - don't block SSR
+      // eslint-disable-next-line no-console
       console.error('Custom Analytics error:', error.message);
     }
   }

@@ -1,7 +1,6 @@
 import { isAuthenticated } from '../../../../middleware/adminAuth';
 import { getAllCars } from '../../../../lib/shopify.mjs';
-import fs from 'fs';
-import path from 'path';
+import { readCarStatuses } from '../../../../lib/carStatusStore.js';
 
 /**
  * API: GET /api/admin/cars/list
@@ -24,17 +23,7 @@ export default async function handler(req, res) {
     const cars = await getAllCars();
 
     // Load status from file storage (fallback)
-    let fileStatuses = {};
-    try {
-      const statusFile = path.join(process.cwd(), 'data', 'car-status.json');
-      if (fs.existsSync(statusFile)) {
-        const fileContent = fs.readFileSync(statusFile, 'utf8');
-        fileStatuses = JSON.parse(fileContent);
-      }
-    } catch {
-      // Silently fail if file doesn't exist
-      fileStatuses = {};
-    }
+    const fileStatuses = readCarStatuses();
 
     // Transform products to car format with normalized status
     const carsWithStatus = cars.map(car => {

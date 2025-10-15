@@ -3,7 +3,8 @@
 ## 🚨 อาการที่พบ
 
 เมื่อเรียก API endpoints (เช่น `/api/ping`, `/api/admin/login`, `/api/test-env`):
-- ได้หน้า HTML "Authentication Required" 
+
+- ได้หน้า HTML "Authentication Required"
 - Redirect ไป `vercel.com/sso-api`
 - Error: `FUNCTION_INVOCATION_FAILED`
 - แต่หน้า static (HTML) ทำงานปกติ (200 OK)
@@ -13,11 +14,13 @@
 **Vercel Deployment Protection** ถูกเปิดใช้งานสำหรับ Production → ทุก API request ถูกบล็อคต้องมี authentication token
 
 นี่**ไม่ใช่**ปัญหา:
+
 - ❌ Environment variables (แก้แล้ว - ไม่มี `\r\n`)
 - ❌ Code errors (ทดสอบแล้ว - build สำเร็จ)
 - ❌ Firebase/Shopify config (ไม่เกี่ยวข้อง)
 
 นี่**คือ**ปัญหา:
+
 - ✅ Vercel Project Settings → Deployment Protection เปิดอยู่
 
 ---
@@ -33,6 +36,7 @@
 ### ขั้นตอนที่ 2: ปิด Deployment Protection
 
 **วิธีที่ 1** (Vercel UI ปัจจุบัน):
+
 ```
 Project → Settings → Security
 └── Deployment Protection
@@ -41,6 +45,7 @@ Project → Settings → Security
 ```
 
 **วิธีที่ 2** (Vercel UI เวอร์ชันเก่า):
+
 ```
 Project → Settings → General
 └── Deployment Protection
@@ -50,6 +55,7 @@ Project → Settings → General
 ```
 
 **วิธีที่ 3** (สำหรับ Team/Enterprise):
+
 ```
 Project → Settings → Deployment Protection
 └── Configure Protection
@@ -77,6 +83,7 @@ curl.exe https://www.chiangmaiusedcar.com/api/test-env
 ```
 
 **ผลลัพธ์ที่ถูกต้อง:**
+
 - `/api/ping` → `pong` (plain text)
 - `/api/runtime-check` → `{"ok":true,"ts":1760465xxx,"node":"v20.x.x"}`
 - `/api/test-env` → JSON object with `variables` field
@@ -94,20 +101,36 @@ curl.exe https://www.chiangmaiusedcar.com/api/test-env
 ```
 Project → Deployments → เลือก deployment ล่าสุด
 → คลิก "..." (menu) → Protection → "Generate Bypass Link"
-→ คัดลอก token (ตัวอย่าง: `AbCdEf123456...`)
+→ คัดลอก URL (จะมี query: x-vercel-protection-bypass=TOKEN)
+→ แยกเฉพาะค่า TOKEN (อย่าเผยแพร่สาธารณะ)
 ```
 
-### 2. ใช้ Bypass Token
+### 2. ใช้แบบ Manual (รวดเร็ว)
 
 ```powershell
-# ตั้ง bypass cookie (รันครั้งเดียว)
-curl.exe "https://www.chiangmaiusedcar.com/api/ping?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=YOUR_TOKEN_HERE"
-
-# หลังจากนั้น request ถัดไปจะใช้งานได้ (ใน session เดียวกัน)
-curl.exe https://www.chiangmaiusedcar.com/api/test-env
+curl.exe "https://www.chiangmaiusedcar.com/api/ping?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=YOUR_TOKEN"
 ```
 
-**หมายเหตุ:** Token หมดอายุตาม session/เวลาที่ตั้งไว้
+### 3. ใช้ผ่านสคริปต์ (อัตโนมัติ แนะนำ)
+
+```powershell
+# ตั้ง bypass cookie + ตรวจสอบ
+./scripts/use-vercel-bypass.ps1 -BypassToken YOUR_TOKEN -VerifyEndpoints
+
+# หรือ health check พร้อม token
+./scripts/check-api-health-simple.ps1 -BypassToken YOUR_TOKEN
+
+# ทดสอบ admin login พร้อม token
+./scripts/test-admin-login.ps1 -BypassToken YOUR_TOKEN
+```
+
+### 4. วิธีทำงานของสคริปต์
+
+- ส่ง request ไปยัง /api/ping พร้อม query ที่ให้ Vercel ตั้ง cookie bypass
+- Cookie: \_\_vc_protection_bypass จะถูกเก็บใน session (PowerShell WebSession)
+- ใช้ session เดิมทดสอบ endpoints อื่น
+
+**หมายเหตุ:** Token ผูกกับเวลา / policy โปรเจกต์ อาจต้องสร้างใหม่หากหมดอายุ
 
 ---
 
@@ -131,6 +154,7 @@ curl.exe https://www.chiangmaiusedcar.com/api/test-env
 ```
 
 จะแสดง:
+
 - ✅ API ทำงาน → Protection ปิดแล้ว
 - ❌ Authentication Required → Protection ยังเปิดอยู่
 
@@ -148,9 +172,9 @@ curl.exe https://www.chiangmaiusedcar.com/api/test-env
 **Root Cause:** Vercel Deployment Protection เปิดสำหรับ Production  
 **Solution:** ปิด Protection ใน Settings → Security → Deployment Protection  
 **Time:** 1-2 นาที  
-**Impact:** API จะทำงานได้ทันที หน้า static ไม่ได้รับผลกระทบ  
+**Impact:** API จะทำงานได้ทันที หน้า static ไม่ได้รับผลกระทบ
 
 ---
 
-*เอกสารนี้สร้างเมื่อ: 2025-10-14*  
-*Status: ✅ Root cause identified, waiting for user to disable protection*
+_เอกสารนี้สร้างเมื่อ: 2025-10-14_  
+_Status: ✅ Root cause identified, waiting for user to disable protection_

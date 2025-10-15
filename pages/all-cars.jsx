@@ -8,8 +8,7 @@ import { getAllCars } from '../lib/shopify.mjs';
 import { sanitizePrice } from '../lib/seo/jsonld';
 import { safeGet, safeFormatPrice } from '../lib/safeFetch';
 import { carAlt } from '../utils/a11y';
-import fs from 'fs';
-import path from 'path';
+import { readCarStatuses } from '../lib/carStatusStore.js';
 
 export default function AllCars({ cars }) {
   const router = useRouter();
@@ -627,16 +626,7 @@ export async function getStaticProps() {
     cars = Array.isArray(result) ? result : [];
 
     // Load car statuses from file storage
-    let carStatuses = {};
-    try {
-      const statusFile = path.join(process.cwd(), 'data', 'car-status.json');
-      if (fs.existsSync(statusFile)) {
-        const fileContent = fs.readFileSync(statusFile, 'utf8');
-        carStatuses = JSON.parse(fileContent);
-      }
-    } catch {
-      // Silently fail - status will default to 'available'
-    }
+    const carStatuses = readCarStatuses();
 
     // ลดขนาดข้อมูลโดยเก็บเฉพาะฟิลด์ที่จำเป็น
     cars = cars.map(car => ({

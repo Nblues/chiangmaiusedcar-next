@@ -1,4 +1,5 @@
 import { isAuthenticated, verifyCsrf } from '../../../../middleware/adminAuth';
+import { updateCarStatus } from '../../../../lib/carStatusStore.js';
 
 /**
  * API: POST /api/admin/cars/toggle-status
@@ -44,102 +45,99 @@ export default async function handler(req, res) {
     const adminToken = process.env.SHOPIFY_ADMIN_TOKEN;
 
     if (!adminToken) {
-      // Fallback: Store in JSON file if no Admin API access
-      return handleFileStorage(carId, status, res);
+      const { statusRecord, path: filePath } = updateCarStatus(carId, status);
+      return res.status(200).json({
+        success: true,
+        carId,
+        status: statusRecord.status,
+        message: 'Status updated successfully (file storage)',
+        storage: 'file',
+        filePath,
+      });
     }
 
     // Extract product ID from Shopify GID
     const productId = carId.replace('gid://shopify/Product/', '');
 
-    // Update metafield via Shopify Admin API
-    const response = await fetch(
-      `https://${shopifyDomain}/admin/api/2024-01/products/${productId}/metafields.json`,
+    // Try to locate an existing metafield so we can update instead of creating duplicates
+    const metafieldLookup = await fetch(
+      `https://${shopifyDomain}/admin/api/2024-01/products/${productId}/metafields.json?namespace=custom&key=status`,
       {
-        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-Shopify-Access-Token': adminToken,
         },
-        body: JSON.stringify({
-          metafield: {
-            namespace: 'custom',
-            key: 'status',
-            value: status,
-            type: 'single_line_text_field',
-          },
-        }),
       }
     );
 
-    if (!response.ok) {
-      throw new Error(`Shopify API error: ${response.statusText}`);
+    if (!metafieldLookup.ok) {
+      throw new Error(`Shopify metafield lookup failed: ${metafieldLookup.statusText}`);
     }
 
-    const data = await response.json();
+    const lookupPayload = await metafieldLookup.json();
+    const existingMetafield = Array.isArray(lookupPayload?.metafields)
+      ? lookupPayload.metafields[0]
+      : null;
+
+    let apiResponse;
+
+    if (existingMetafield?.id) {
+      apiResponse = await fetch(
+        `https://${shopifyDomain}/admin/api/2024-01/metafields/${existingMetafield.id}.json`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Shopify-Access-Token': adminToken,
+          },
+          body: JSON.stringify({
+            metafield: {
+              id: existingMetafield.id,
+              value: status,
+              type: 'single_line_text_field',
+            },
+          }),
+        }
+      );
+    } else {
+      apiResponse = await fetch(
+        `https://${shopifyDomain}/admin/api/2024-01/products/${productId}/metafields.json`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Shopify-Access-Token': adminToken,
+          },
+          body: JSON.stringify({
+            metafield: {
+              namespace: 'custom',
+              key: 'status',
+              value: status,
+              type: 'single_line_text_field',
+            },
+          }),
+        }
+      );
+    }
+
+    if (!apiResponse.ok) {
+      const bodyText = await apiResponse.text();
+      throw new Error(`Shopify API error: ${apiResponse.status} ${bodyText}`);
+    }
+
+    const payload = await apiResponse.json();
 
     return res.status(200).json({
       success: true,
       carId,
       status,
       message: 'Status updated successfully',
-      metafield: data.metafield,
+      metafield: payload.metafield,
     });
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
       // eslint-disable-next-line no-console
       console.error('Failed to update car status:', error);
-    }
-    return res.status(500).json({
-      success: false,
-      error: 'Failed to update status',
-      message: error.message,
-    });
-  }
-}
-
-/**
- * Fallback: Store status in JSON file if Shopify Admin API not available
- */
-async function handleFileStorage(carId, status, res) {
-  const fs = require('fs');
-  const path = require('path');
-
-  try {
-    const dataDir = path.join(process.cwd(), 'data');
-    const statusFile = path.join(dataDir, 'car-status.json');
-
-    // Create data directory if not exists
-    if (!fs.existsSync(dataDir)) {
-      fs.mkdirSync(dataDir, { recursive: true });
-    }
-
-    // Read existing data
-    let carStatuses = {};
-    if (fs.existsSync(statusFile)) {
-      const fileContent = fs.readFileSync(statusFile, 'utf8');
-      carStatuses = JSON.parse(fileContent);
-    }
-
-    // Update status
-    carStatuses[carId] = {
-      status,
-      updatedAt: new Date().toISOString(),
-    };
-
-    // Write back to file
-    fs.writeFileSync(statusFile, JSON.stringify(carStatuses, null, 2), 'utf8');
-
-    return res.status(200).json({
-      success: true,
-      carId,
-      status,
-      message: 'Status updated successfully (file storage)',
-      storage: 'file',
-    });
-  } catch (error) {
-    if (process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
-      console.error('Failed to update status (file storage):', error);
     }
     return res.status(500).json({
       success: false,

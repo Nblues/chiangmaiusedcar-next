@@ -12,8 +12,7 @@ import A11yImage from '../../components/A11yImage';
 import { carAlt } from '../../utils/a11y';
 import { optimizeShopifyImage, generateSrcSet } from '../../utils/imageOptimizer';
 import { createShareText } from '../../utils/urlHelper';
-import fs from 'fs';
-import path from 'path';
+import { readCarStatuses } from '../../lib/carStatusStore.js';
 
 function CarDetailPage({ car, recommendedCars = [] }) {
   const router = useRouter();
@@ -1342,16 +1341,7 @@ export async function getStaticProps({ params }) {
     const safeCars = Array.isArray(cars) ? cars : [];
 
     // Load car statuses from file storage
-    let carStatuses = {};
-    try {
-      const statusFile = path.join(process.cwd(), 'data', 'car-status.json');
-      if (fs.existsSync(statusFile)) {
-        const fileContent = fs.readFileSync(statusFile, 'utf8');
-        carStatuses = JSON.parse(fileContent);
-      }
-    } catch {
-      // Silently fail - status will default to 'available'
-    }
+    const carStatuses = readCarStatuses();
 
     const requestedRaw = params?.handle || '';
     const requested = decodeURIComponent(requestedRaw);

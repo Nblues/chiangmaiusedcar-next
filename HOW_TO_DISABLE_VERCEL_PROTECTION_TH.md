@@ -1,6 +1,7 @@
 # 🎯 คำแนะนำทีละขั้นตอน: ปิด Vercel Deployment Protection
 
 ## สถานการณ์ปัจจุบัน
+
 - ✅ Code ถูกต้อง
 - ✅ Environment variables ตั้งค่าแล้ว (ADMIN_USERNAME, ADMIN_PASSWORD, SESSION_SECRET)
 - ✅ Build สำเร็จ
@@ -22,6 +23,7 @@
 ### 3️⃣ หาเมนู Deployment Protection
 
 ในเมนูด้านซ้าย มองหา:
+
 - **"Security"** หรือ
 - **"Deployment Protection"** หรือ
 - **"General"** (บางเวอร์ชัน)
@@ -47,6 +49,7 @@
 ```
 
 **สิ่งที่ต้องทำ:**
+
 - ถ้าเห็น toggle/switch สำหรับ "Production" → **ปิด (OFF/Disabled)**
 - ถ้าเห็นปุ่ม "Disable Protection" → **คลิก**
 - ถ้าเห็น dropdown "Enable for" → **เลือก "Preview Only"** (ไม่เลือก Production)
@@ -121,6 +124,7 @@ Testing: /api/health ✅ PASS
 ### ถ้ายังไม่เจอเมนู "Deployment Protection"
 
 ลองหาในที่เหล่านี้:
+
 - Settings → Security → Protection
 - Settings → General → Deployment Protection
 - Settings → Advanced → Protection
@@ -141,6 +145,7 @@ vercel project ls
 ## 🎉 หลังจากแก้สำเร็จ
 
 คุณจะสามารถ:
+
 - ✅ เข้า <https://www.chiangmaiusedcar.com/admin/login>
 - ✅ Login ด้วย username: `kngoodcar` / password: `Kn-goodcar**5277`
 - ✅ เข้าใช้งาน Admin Dashboard
@@ -158,5 +163,5 @@ vercel project ls
 
 ---
 
-*เอกสารนี้สร้างเมื่อ: 2025-10-14*  
-*อัปเดตล่าสุด: 2025-10-14 01:30 AM*
+_เอกสารนี้สร้างเมื่อ: 2025-10-14_  
+_อัปเดตล่าสุด: 2025-10-14 01:30 AM_

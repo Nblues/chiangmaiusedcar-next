@@ -2,12 +2,14 @@
 # Check if Vercel Deployment Protection is blocking APIs
 
 param(
-    [string]$Domain = "https://www.chiangmaiusedcar.com"
+    [string]$Domain = "https://www.chiangmaiusedcar.com",
+    [string]$BypassToken
 )
 
 Write-Host ""
 Write-Host "=== API Health Check ===" -ForegroundColor Cyan
 Write-Host "Domain: $Domain" -ForegroundColor Gray
+if ($BypassToken) { Write-Host "BypassToken: (provided)" -ForegroundColor Gray }
 Write-Host ""
 
 $endpoints = @(
@@ -18,12 +20,32 @@ $endpoints = @(
 $allPassed = $true
 $protectionDetected = $false
 
+function Invoke-WithOptionalBypass($url) {
+    if ($script:bypassSession) {
+        return Invoke-WebRequest -Uri $url -Method GET -UseBasicParsing -TimeoutSec 10 -WebSession $script:bypassSession -ErrorAction Stop
+    } else {
+        return Invoke-WebRequest -Uri $url -Method GET -UseBasicParsing -TimeoutSec 10 -ErrorAction Stop
+    }
+}
+
+# Attempt bypass cookie if token supplied
+if ($BypassToken) {
+    Write-Host "Setting bypass cookie (token length $($BypassToken.Length))..." -ForegroundColor Yellow
+    $bypassUrl = "$Domain/api/ping?x-vercel-set-bypass-cookie=true&x-vercel-protection-bypass=$([uri]::EscapeDataString($BypassToken))"
+    try {
+        $null = Invoke-WebRequest -Uri $bypassUrl -UseBasicParsing -SessionVariable bypassSession -TimeoutSec 10
+        Write-Host "Bypass cookie request sent." -ForegroundColor Green
+    } catch {
+        Write-Host "Failed to set bypass cookie: $($_.Exception.Message)" -ForegroundColor Red
+    }
+}
+
 foreach ($endpoint in $endpoints) {
     $url = "$Domain$($endpoint.Path)"
     Write-Host "Testing: $($endpoint.Path) ... " -ForegroundColor Yellow -NoNewline
     
     try {
-        $response = Invoke-WebRequest -Uri $url -Method GET -UseBasicParsing -TimeoutSec 10 -ErrorAction Stop
+        $response = Invoke-WithOptionalBypass $url
         $content = $response.Content
         
         if ($content -like "*$($endpoint.ExpectedContent)*") {
@@ -40,7 +62,7 @@ foreach ($endpoint in $endpoints) {
         }
         
     } catch {
-        Write-Host "ERROR" -ForegroundColor Red
+    Write-Host "ERROR" -ForegroundColor Red
         Write-Host "  $($_.Exception.Message)" -ForegroundColor Red
         
         if ($_.Exception.Message -like "*Authentication Required*") {
@@ -54,7 +76,7 @@ foreach ($endpoint in $endpoints) {
 Write-Host ""
 Write-Host "=== Summary ===" -ForegroundColor Cyan
 
-if ($protectionDetected) {
+if ($protectionDetected -and -not $BypassToken) {
     Write-Host ""
     Write-Host "[BLOCKED] Vercel Deployment Protection DETECTED!" -ForegroundColor Red
     Write-Host ""
@@ -70,6 +92,11 @@ if ($protectionDetected) {
     Write-Host "See: VERCEL_DEPLOYMENT_PROTECTION_FIX.md for details" -ForegroundColor Cyan
     Write-Host ""
     exit 1
+}
+
+if ($protectionDetected -and $BypassToken) {
+    Write-Host "[INFO] Protection indicators still detected even after bypass attempt." -ForegroundColor Yellow
+    Write-Host "       Ensure token is correct or disable Protection in dashboard." -ForegroundColor Yellow
 }
 
 if ($allPassed) {
