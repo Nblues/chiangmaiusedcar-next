@@ -1,7 +1,5 @@
 {
   "framework": "nextjs",
-  "buildCommand": "pnpm build",
-  "installCommand": "pnpm install",
   "functions": {
     "pages/api/*.js": {
       "maxDuration": 10
