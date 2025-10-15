@@ -46,14 +46,20 @@ export default async function handler(req, res) {
       // eslint-disable-next-line no-console
       console.log('📊 Performance Metrics:', JSON.stringify(processedMetrics, null, 2));
     }
-    
-    // Send to analytics service in background (completely non-blocking, no await)
-    // We don't wait for this and don't care if it fails
-    setImmediate(() => {
-      sendToAnalyticsService(processedMetrics).catch(() => {
-        // Silently ignore errors - analytics should never break the app
+
+    // Only forward to external analytics for the primary domain (avoid preview/staging)
+    const host = (req.headers['x-forwarded-host'] || req.headers.host || '').toString();
+    const isPrimaryDomain = /(^|\.)chiangmaiusedcar\.com$/i.test(host);
+
+    if (isPrimaryDomain) {
+      // Send to analytics service in background (completely non-blocking, no await)
+      // We don't wait for this and don't care if it fails
+      setImmediate(() => {
+        sendToAnalyticsService(processedMetrics).catch(() => {
+          // Silently ignore errors - analytics should never break the app
+        });
       });
-    });
+    }
 
     // Respond with success immediately (don't wait for external services)
     res.status(200).json({
