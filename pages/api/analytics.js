@@ -45,14 +45,15 @@ export default async function handler(req, res) {
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line no-console
       console.log('📊 Performance Metrics:', JSON.stringify(processedMetrics, null, 2));
-    } else {
-      // In production, send to analytics service (non-blocking)
-      // Examples: Google Analytics, Vercel Analytics, DataDog, etc.
-      sendToAnalyticsService(processedMetrics).catch(err => {
-        // eslint-disable-next-line no-console
-        console.error('Analytics service error (non-critical):', err.message);
-      });
     }
+    
+    // Send to analytics service in background (completely non-blocking, no await)
+    // We don't wait for this and don't care if it fails
+    setImmediate(() => {
+      sendToAnalyticsService(processedMetrics).catch(() => {
+        // Silently ignore errors - analytics should never break the app
+      });
+    });
 
     // Respond with success immediately (don't wait for external services)
     res.status(200).json({
@@ -75,31 +76,44 @@ export default async function handler(req, res) {
 
 /**
  * Send metrics to external analytics service using safeFetch
+ * This runs in the background and should never throw errors
  */
 async function sendToAnalyticsService(metrics) {
-  // Example integrations with timeout and error handling:
+  // Skip if no analytics services are configured
+  const hasAnalytics =
+    process.env.VERCEL_ANALYTICS_ID ||
+    (process.env.GA_MEASUREMENT_ID && process.env.GA_API_SECRET) ||
+    (process.env.CUSTOM_ANALYTICS_ENDPOINT && process.env.CUSTOM_ANALYTICS_TOKEN);
+
+  if (!hasAnalytics) {
+    // Just log in production if no analytics configured
+    if (process.env.NODE_ENV === 'production') {
+      // eslint-disable-next-line no-console
+      console.log('📊 Metrics logged:', metrics.type, metrics.url);
+    }
+    return; // Exit early if no analytics configured
+  }
+
+  // All external calls wrapped in try-catch to prevent any errors from propagating
+  const promises = [];
 
   // 1. Vercel Analytics (if using Vercel)
   if (process.env.VERCEL_ANALYTICS_ID) {
-    try {
-      await safeFetch('https://vitals.vercel-analytics.com/v1/vitals', {
+    promises.push(
+      safeFetch('https://vitals.vercel-analytics.com/v1/vitals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(metrics),
-      });
-    } catch (error) {
-      // Safe fallback - don't block SSR
-      // eslint-disable-next-line no-console
-      console.error('Vercel Analytics error:', error.message);
-    }
+      }).catch(() => {}) // Silently ignore
+    );
   }
 
   // 2. Google Analytics 4 (Measurement Protocol)
   if (process.env.GA_MEASUREMENT_ID && process.env.GA_API_SECRET) {
     const gaEndpoint = `https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`;
 
-    try {
-      await safeFetch(gaEndpoint, {
+    promises.push(
+      safeFetch(gaEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -111,39 +125,26 @@ async function sendToAnalyticsService(metrics) {
             },
           ],
         }),
-      });
-    } catch (error) {
-      // Safe fallback - don't block SSR
-      // eslint-disable-next-line no-console
-      console.error('Google Analytics error:', error.message);
-    }
+      }).catch(() => {}) // Silently ignore
+    );
   }
 
   // 3. Custom analytics service
   if (process.env.CUSTOM_ANALYTICS_ENDPOINT && process.env.CUSTOM_ANALYTICS_TOKEN) {
-    try {
-      await safeFetch(process.env.CUSTOM_ANALYTICS_ENDPOINT, {
+    promises.push(
+      safeFetch(process.env.CUSTOM_ANALYTICS_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${process.env.CUSTOM_ANALYTICS_TOKEN}`,
         },
         body: JSON.stringify(metrics),
-      });
-    } catch (error) {
-      // Safe fallback - don't block SSR
-      // eslint-disable-next-line no-console
-      console.error('Custom Analytics error:', error.message);
-    }
+      }).catch(() => {}) // Silently ignore
+    );
   }
 
-  // For now, just log in production (you can remove this when you have real analytics)
-  if (process.env.NODE_ENV === 'production') {
-    // eslint-disable-next-line no-console
-    console.log('📊 Performance metrics logged:', {
-      type: metrics.type,
-      timestamp: metrics.serverTimestamp,
-      url: metrics.url,
-    });
+  // Fire all requests and don't wait for results
+  if (promises.length > 0) {
+    Promise.allSettled(promises).catch(() => {}); // Extra safety net
   }
 }
