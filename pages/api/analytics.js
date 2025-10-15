@@ -46,12 +46,15 @@ export default async function handler(req, res) {
       // eslint-disable-next-line no-console
       console.log('📊 Performance Metrics:', JSON.stringify(processedMetrics, null, 2));
     } else {
-      // In production, send to analytics service
+      // In production, send to analytics service (non-blocking)
       // Examples: Google Analytics, Vercel Analytics, DataDog, etc.
-      await sendToAnalyticsService(processedMetrics);
+      sendToAnalyticsService(processedMetrics).catch(err => {
+        // eslint-disable-next-line no-console
+        console.error('Analytics service error (non-critical):', err.message);
+      });
     }
 
-    // Respond with success
+    // Respond with success immediately (don't wait for external services)
     res.status(200).json({
       success: true,
       message: 'Metrics received',
@@ -60,9 +63,12 @@ export default async function handler(req, res) {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Analytics API error:', error);
-    res.status(500).json({
-      error: 'Internal server error',
-      message: 'Failed to process metrics',
+    
+    // Still return success to not break client
+    res.status(200).json({
+      success: true,
+      message: 'Metrics logged (with warnings)',
+      timestamp: new Date().toISOString(),
     });
   }
 }
