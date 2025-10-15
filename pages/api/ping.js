@@ -10,4 +10,6 @@ export const config = {
   api: {
     bodyParser: false,
   },
+  // Ensure this API runs on Node.js runtime (not Edge)
+  runtime: 'nodejs',
 };

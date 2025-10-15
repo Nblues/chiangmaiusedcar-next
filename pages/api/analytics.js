@@ -17,7 +17,16 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   try {
-    const metrics = req.body;
+    // Accept both text/plain (from sendBeacon) and application/json
+    let raw = req.body;
+    let metrics = raw;
+    if (typeof raw === 'string') {
+      try {
+        metrics = JSON.parse(raw);
+      } catch {
+        metrics = { _raw: raw };
+      }
+    }
 
     // Validate metrics data
     if (!metrics || typeof metrics !== 'object') {
@@ -59,6 +68,16 @@ export default async function handler(req, res) {
   }
 }
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '128kb',
+    },
+    externalResolver: true,
+  },
+  runtime: 'nodejs',
+};
+
 /**
  * Send metrics to external analytics service using safeFetch
  */
@@ -75,7 +94,10 @@ async function sendToAnalyticsService(metrics) {
       });
     } catch (error) {
       // Safe fallback - don't block SSR
-      console.error('Vercel Analytics error:', error.message);
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.error('Vercel Analytics error:', error.message);
+      }
     }
   }
 
@@ -99,7 +121,10 @@ async function sendToAnalyticsService(metrics) {
       });
     } catch (error) {
       // Safe fallback - don't block SSR
-      console.error('Google Analytics error:', error.message);
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.error('Google Analytics error:', error.message);
+      }
     }
   }
 
@@ -116,7 +141,10 @@ async function sendToAnalyticsService(metrics) {
       });
     } catch (error) {
       // Safe fallback - don't block SSR
-      console.error('Custom Analytics error:', error.message);
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.error('Custom Analytics error:', error.message);
+      }
     }
   }
 
