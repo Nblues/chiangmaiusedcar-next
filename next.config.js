@@ -213,11 +213,11 @@ const nextConfig = {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https:",
-          "script-src 'self' 'unsafe-eval' 'unsafe-inline' *.googletagmanager.com *.google-analytics.com *.vercel-analytics.com va.vercel-scripts.com *.emailjs.com *.cloudflare.com challenges.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net *.shopify.com connect.facebook.net",
+          "script-src 'self' 'unsafe-eval' 'unsafe-inline' *.googletagmanager.com *.google-analytics.com *.vercel-analytics.com va.vercel-scripts.com vercel.live *.vercel.live *.emailjs.com *.cloudflare.com challenges.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net *.shopify.com connect.facebook.net",
           "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net *.cloudflare.com *.facebook.com *.shopify.com",
           "font-src 'self' fonts.gstatic.com cdn.jsdelivr.net data:",
           "img-src 'self' data: blob: *.shopify.com *.myshopify.com cdn.shopify.com files.myshopify.com images.unsplash.com *.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net",
-          "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com *.googleapis.com *.gstatic.com *.cloudflare.com *.facebook.com *.facebook.net connect.facebook.net",
+          "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com vercel.live *.vercel.live api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com *.googleapis.com *.gstatic.com *.cloudflare.com *.facebook.com *.facebook.net connect.facebook.net",
           "frame-src 'self' *.facebook.com *.line.me *.google.com maps.google.com *.cloudflare.com challenges.cloudflare.com",
           "object-src 'none'",
           "base-uri 'self'",
