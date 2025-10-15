@@ -2,6 +2,7 @@
   "name": "chiangmaiusedcar-next",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "pnpm@10.13.1",
   "scripts": {
     "prebuild": "node scripts/check-no-html-imports.cjs",
     "dev": "cross-env NODE_OPTIONS=--max-old-space-size=10240 next dev -p 3000",
