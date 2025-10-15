@@ -40,6 +40,11 @@ export default async function handler(req, res) {
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
 
+  // Preflight support
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({
       success: false,
@@ -55,7 +60,17 @@ export default async function handler(req, res) {
         .json({ success: false, error: 'Too many attempts. Please try again later.' });
     }
 
-    const { username, password } = req.body;
+    // Parse body safely (avoid destructuring undefined)
+    let body = req.body;
+    if (typeof body === 'string') {
+      try {
+        body = JSON.parse(body);
+      } catch {
+        body = null;
+      }
+    }
+    const username = body?.username;
+    const password = body?.password;
 
     // Validate input
     if (!username || !password) {
@@ -66,8 +81,8 @@ export default async function handler(req, res) {
       });
     }
 
-    // Authenticate
-    const token = authenticate(username, password);
+  // Authenticate
+  const token = authenticate(username, password);
 
     if (!token) {
       // Add delay to prevent brute force
@@ -90,10 +105,8 @@ export default async function handler(req, res) {
       user: { username },
     });
   } catch (error) {
-    if (process.env.NODE_ENV !== 'production') {
-      // eslint-disable-next-line no-console
-      console.error('Login error:', error);
-    }
+    // eslint-disable-next-line no-console
+    console.error('Login error:', error?.message || error);
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
