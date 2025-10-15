@@ -34,10 +34,15 @@ export default async function handler(req, res) {
     }
 
     // Add server-side timestamp
+    const xfwd = req.headers['x-forwarded-for'] || req.headers['x-real-ip'];
+    const clientIp = Array.isArray(xfwd)
+      ? xfwd[0]
+      : xfwd || (req.socket && req.socket.remoteAddress) || 'unknown';
+
     const processedMetrics = {
       ...metrics,
       serverTimestamp: new Date().toISOString(),
-      ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+      ip: clientIp,
       userAgent: req.headers['user-agent'],
     };
 

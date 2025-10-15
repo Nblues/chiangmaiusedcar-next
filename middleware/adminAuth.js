@@ -148,7 +148,12 @@ export function verifyCsrf(req) {
 }
 
 export function getClientIp(req) {
-  const xfwd = req.headers['x-forwarded-for'];
-  if (typeof xfwd === 'string' && xfwd.length > 0) return xfwd.split(',')[0].trim();
-  return req.socket?.remoteAddress || 'unknown';
+  try {
+    const xfwd = req.headers['x-forwarded-for'] || req.headers['x-real-ip'];
+    if (Array.isArray(xfwd) && xfwd.length > 0) return xfwd[0];
+    if (typeof xfwd === 'string' && xfwd.length > 0) return xfwd.split(',')[0].trim();
+    return req.socket?.remoteAddress || 'unknown';
+  } catch {
+    return 'unknown';
+  }
 }
