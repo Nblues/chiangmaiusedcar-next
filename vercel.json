@@ -3,7 +3,8 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install",
   "functions": {
-    "pages/api/*.js": {
+    "api/**/*.js": {
+      "runtime": "nodejs22.x",
       "maxDuration": 10
     }
   },
