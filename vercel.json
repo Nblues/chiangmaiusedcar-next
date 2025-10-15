@@ -2,12 +2,6 @@
   "framework": "nextjs",
   "buildCommand": "npm run build",
   "installCommand": "npm install",
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs22.x",
-      "maxDuration": 10
-    }
-  },
   "crons": [
     {
       "path": "/api/cron/backup-daily",
