@@ -155,6 +155,6 @@ export const config = {
     '/admin/:path*',
     '/api/admin/:path*',
     '/',
-    '/((?!_next|static|assets|favicon|robots|sitemap|api).*)',
+    '/((?!_next|static|assets|favicon|robots|sitemap|manifest|browserconfig|api|sw).*)',
   ],
 };
