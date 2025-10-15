@@ -22,8 +22,8 @@ export default async function handler(req, res) {
   if (typeof body === 'string') {
     try {
       body = JSON.parse(body);
-    } catch (e) {
-      return res.status(400).json({ error: 'Invalid JSON' });
+    } catch (err) {
+      return res.status(400).json({ error: 'Invalid JSON', details: err.message });
     }
   }
 
@@ -32,23 +32,37 @@ export default async function handler(req, res) {
   // Show what we're comparing (without exposing full password)
   const envUsername = process.env.ADMIN_USERNAME;
   const envPassword = process.env.ADMIN_PASSWORD;
+  const sessionSecret = process.env.SESSION_SECRET;
+
+  // Detailed character comparison
+  const receivedBytes = password ? Buffer.from(password).toString('hex') : '';
+  const expectedBytes = envPassword ? Buffer.from(envPassword).toString('hex') : '';
 
   return res.status(200).json({
     received: {
       username: username,
       usernameLength: username?.length || 0,
+      password: password?.substring(0, 5) + '***',
       passwordLength: password?.length || 0,
+      passwordHex: receivedBytes.substring(0, 20) + '...',
     },
     expected: {
-      username: envUsername,
+      username: envUsername || 'NOT_SET',
       usernameLength: envUsername?.length || 0,
+      password: envPassword?.substring(0, 5) + '***',
       passwordLength: envPassword?.length || 0,
-      hasWhitespace: envPassword?.includes(' ') || envPassword?.includes('\\n') || envPassword?.includes('\\r'),
+      passwordHex: expectedBytes.substring(0, 20) + '...',
+      hasWhitespace: envPassword?.includes(' ') || envPassword?.includes('\n') || envPassword?.includes('\r'),
+      hasSessionSecret: !!sessionSecret,
     },
     match: {
       username: username === envUsername,
       password: password === envPassword,
+      exactMatch: username === envUsername && password === envPassword,
     },
-    nodeEnv: process.env.NODE_ENV,
+    debug: {
+      nodeEnv: process.env.NODE_ENV,
+      allEnvVarsPresent: !!(envUsername && envPassword && sessionSecret),
+    },
   });
 }
