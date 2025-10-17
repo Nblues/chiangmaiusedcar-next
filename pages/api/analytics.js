@@ -17,13 +17,14 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   try {
-    let metrics = req.body;
-
-    if (typeof metrics === 'string') {
+    // Accept both text/plain (from sendBeacon) and application/json
+    let raw = req.body;
+    let metrics = raw;
+    if (typeof raw === 'string') {
       try {
-        metrics = JSON.parse(metrics);
+        metrics = JSON.parse(raw);
       } catch {
-        return res.status(400).json({ error: 'Invalid metrics payload (not JSON)' });
+        metrics = { _raw: raw };
       }
     }
 
@@ -33,10 +34,15 @@ export default async function handler(req, res) {
     }
 
     // Add server-side timestamp
+    const xfwd = req.headers['x-forwarded-for'] || req.headers['x-real-ip'];
+    const clientIp = Array.isArray(xfwd)
+      ? xfwd[0]
+      : xfwd || (req.socket && req.socket.remoteAddress) || 'unknown';
+
     const processedMetrics = {
       ...metrics,
       serverTimestamp: new Date().toISOString(),
-      ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+      ip: clientIp,
       userAgent: req.headers['user-agent'],
     };
 
@@ -45,23 +51,13 @@ export default async function handler(req, res) {
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line no-console
       console.log('📊 Performance Metrics:', JSON.stringify(processedMetrics, null, 2));
+    } else {
+      // In production, send to analytics service
+      // Examples: Google Analytics, Vercel Analytics, DataDog, etc.
+      await sendToAnalyticsService(processedMetrics);
     }
 
-    // Only forward to external analytics for the primary domain (avoid preview/staging)
-    const host = (req.headers['x-forwarded-host'] || req.headers.host || '').toString();
-    const isPrimaryDomain = /(^|\.)chiangmaiusedcar\.com$/i.test(host);
-
-    if (isPrimaryDomain) {
-      // Send to analytics service in background (completely non-blocking, no await)
-      // We don't wait for this and don't care if it fails
-      setImmediate(() => {
-        sendToAnalyticsService(processedMetrics).catch(() => {
-          // Silently ignore errors - analytics should never break the app
-        });
-      });
-    }
-
-    // Respond with success immediately (don't wait for external services)
+    // Respond with success
     res.status(200).json({
       success: true,
       message: 'Metrics received',
@@ -70,56 +66,52 @@ export default async function handler(req, res) {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Analytics API error:', error);
-
-    // Still return success to not break client
-    res.status(200).json({
-      success: true,
-      message: 'Metrics logged (with warnings)',
-      timestamp: new Date().toISOString(),
+    res.status(500).json({
+      error: 'Internal server error',
+      message: 'Failed to process metrics',
     });
   }
 }
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '128kb',
+    },
+    externalResolver: true,
+  },
+  runtime: 'nodejs',
+};
+
 /**
  * Send metrics to external analytics service using safeFetch
- * This runs in the background and should never throw errors
  */
 async function sendToAnalyticsService(metrics) {
-  // Skip if no analytics services are configured
-  const hasAnalytics =
-    process.env.VERCEL_ANALYTICS_ID ||
-    (process.env.GA_MEASUREMENT_ID && process.env.GA_API_SECRET) ||
-    (process.env.CUSTOM_ANALYTICS_ENDPOINT && process.env.CUSTOM_ANALYTICS_TOKEN);
-
-  if (!hasAnalytics) {
-    // Just log in production if no analytics configured
-    if (process.env.NODE_ENV === 'production') {
-      // eslint-disable-next-line no-console
-      console.log('📊 Metrics logged:', metrics.type, metrics.url);
-    }
-    return; // Exit early if no analytics configured
-  }
-
-  // All external calls wrapped in try-catch to prevent any errors from propagating
-  const promises = [];
+  // Example integrations with timeout and error handling:
 
   // 1. Vercel Analytics (if using Vercel)
   if (process.env.VERCEL_ANALYTICS_ID) {
-    promises.push(
-      safeFetch('https://vitals.vercel-analytics.com/v1/vitals', {
+    try {
+      await safeFetch('https://vitals.vercel-analytics.com/v1/vitals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(metrics),
-      }).catch(() => {}) // Silently ignore
-    );
+      });
+    } catch (error) {
+      // Safe fallback - don't block SSR
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.error('Vercel Analytics error:', error.message);
+      }
+    }
   }
 
   // 2. Google Analytics 4 (Measurement Protocol)
   if (process.env.GA_MEASUREMENT_ID && process.env.GA_API_SECRET) {
     const gaEndpoint = `https://www.google-analytics.com/mp/collect?measurement_id=${process.env.GA_MEASUREMENT_ID}&api_secret=${process.env.GA_API_SECRET}`;
 
-    promises.push(
-      safeFetch(gaEndpoint, {
+    try {
+      await safeFetch(gaEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -131,26 +123,43 @@ async function sendToAnalyticsService(metrics) {
             },
           ],
         }),
-      }).catch(() => {}) // Silently ignore
-    );
+      });
+    } catch (error) {
+      // Safe fallback - don't block SSR
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.error('Google Analytics error:', error.message);
+      }
+    }
   }
 
   // 3. Custom analytics service
   if (process.env.CUSTOM_ANALYTICS_ENDPOINT && process.env.CUSTOM_ANALYTICS_TOKEN) {
-    promises.push(
-      safeFetch(process.env.CUSTOM_ANALYTICS_ENDPOINT, {
+    try {
+      await safeFetch(process.env.CUSTOM_ANALYTICS_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${process.env.CUSTOM_ANALYTICS_TOKEN}`,
         },
         body: JSON.stringify(metrics),
-      }).catch(() => {}) // Silently ignore
-    );
+      });
+    } catch (error) {
+      // Safe fallback - don't block SSR
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.error('Custom Analytics error:', error.message);
+      }
+    }
   }
 
-  // Fire all requests and don't wait for results
-  if (promises.length > 0) {
-    Promise.allSettled(promises).catch(() => {}); // Extra safety net
+  // For now, just log in production (you can remove this when you have real analytics)
+  if (process.env.NODE_ENV === 'production') {
+    // eslint-disable-next-line no-console
+    console.log('📊 Performance metrics logged:', {
+      type: metrics.type,
+      timestamp: metrics.serverTimestamp,
+      url: metrics.url,
+    });
   }
 }

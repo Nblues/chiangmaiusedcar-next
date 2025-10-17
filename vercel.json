@@ -5,6 +5,16 @@
       "maxDuration": 10
     }
   },
+  "crons": [
+    {
+      "path": "/api/cron/backup-daily",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/backup-weekly",
+      "schedule": "0 3 * * 0"
+    }
+  ],
   "env": {
     "NEXT_PUBLIC_EMAILJS_SERVICE_ID": "service_qlcksif",
     "NEXT_PUBLIC_EMAILJS_TEMPLATE_ID": "template_zd6e3f6",
