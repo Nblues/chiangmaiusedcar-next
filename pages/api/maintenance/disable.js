@@ -5,20 +5,34 @@
 
 import fs from 'fs';
 import path from 'path';
-import { isAuthenticated } from '../../../middleware/adminAuth';
+import { isAuthenticated, verifyCsrf } from '../../../middleware/adminAuth';
+import { verifyApiAuth } from '../../../lib/apiAuth';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // ตรวจสอบ authentication
+  // ตรวจสอบ authentication (session หรือ API auth)
+  let authedBy = 'session';
   if (!isAuthenticated(req)) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized',
-      message: 'กรุณา login ก่อนปิดโหมดปิดปรับปรุง',
-    });
+    const apiAuth = verifyApiAuth(req, { requireHmac: true });
+    if (!apiAuth.ok) {
+      res.setHeader(
+        'WWW-Authenticate',
+        'APIKey realm="chiangmaiusedcar", headers="X-API-Key, X-Timestamp, X-Signature"'
+      );
+      return res.status(401).json({
+        success: false,
+        error: 'Unauthorized',
+        message: 'กรุณา login หรือส่ง API headers ให้ถูกต้อง',
+      });
+    }
+    authedBy = 'api';
+  }
+
+  if (authedBy === 'session' && !verifyCsrf(req)) {
+    return res.status(403).json({ success: false, error: 'Invalid CSRF token' });
   }
 
   try {
@@ -84,6 +98,7 @@ export default async function handler(req, res) {
 
       fs.appendFileSync(activityLogPath, JSON.stringify(logEntry) + '\n');
     } catch (logError) {
+      // eslint-disable-next-line no-console
       console.error('Failed to log maintenance activity:', logError);
     }
 
@@ -92,6 +107,7 @@ export default async function handler(req, res) {
       wasEnabled: true,
       duration,
       message: 'Maintenance mode disabled successfully',
+      authedBy,
       summary: {
         startedAt: maintenanceData.startedAt,
         endedAt: new Date().toISOString(),
@@ -106,6 +122,7 @@ export default async function handler(req, res) {
       ],
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Disable maintenance error:', error);
     res.status(500).json({
       success: false,

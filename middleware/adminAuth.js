@@ -8,10 +8,48 @@
 import { serialize, parse } from 'cookie';
 import crypto from 'crypto';
 
-// Configuration (env-driven)
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'changeme123';
-const SESSION_SECRET = process.env.SESSION_SECRET || 'default-secret-change-in-production';
+// Helpers to sanitize env strings (remove CR/LF and trim)
+function sanitizeEnv(value, fallback) {
+  const v = value !== undefined ? value : fallback;
+  if (typeof v !== 'string') return v;
+  // Remove CR and LF anywhere, then trim spaces
+  return v.replace(/\r/g, '').replace(/\n/g, '').trim();
+}
+
+// Configuration (env-driven, sanitized)
+const ADMIN_USERNAME = sanitizeEnv(process.env.ADMIN_USERNAME, 'admin');
+const ADMIN_PASSWORD = sanitizeEnv(process.env.ADMIN_PASSWORD, 'changeme123');
+const SESSION_SECRET = sanitizeEnv(
+  process.env.SESSION_SECRET,
+  'default-secret-change-in-production'
+);
+
+// Light telemetry if sanitation occurred (no secrets printed)
+try {
+  const rawU = process.env.ADMIN_USERNAME || '';
+  const rawP = process.env.ADMIN_PASSWORD || '';
+  const rawS = process.env.SESSION_SECRET || '';
+  if (/\r|\n|\s$/.test(rawU)) {
+    if (typeof process.emitWarning === 'function') {
+      process.emitWarning('ADMIN_USERNAME had trailing whitespace; sanitized');
+    }
+  }
+  if (/\r|\n|\s$/.test(rawP)) {
+    if (typeof process.emitWarning === 'function') {
+      process.emitWarning('ADMIN_PASSWORD had trailing whitespace; sanitized');
+    }
+  }
+  if (/\r|\n|\s$/.test(rawS)) {
+    if (typeof process.emitWarning === 'function') {
+      process.emitWarning('SESSION_SECRET had trailing whitespace; sanitized');
+    }
+  }
+} catch {
+  // Optional telemetry only; ignore any failures
+  if (typeof process.emitWarning === 'function') {
+    process.emitWarning('Sanitization telemetry suppressed due to error');
+  }
+}
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 const CSRF_DURATION = 2 * 60 * 60 * 1000; // 2 hours
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import SEO from '../components/SEO.jsx';
 import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
+import { readCarStatuses } from '../lib/carStatusStore.js';
 import { safeGet } from '../lib/safeFetch';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -553,6 +554,19 @@ export default function Home({ cars, brandCounts }) {
                       : '/all-cars'
                   }
                   className="block focus:outline-none flex-1"
+                  onClick={() => {
+                    try {
+                      if (typeof window !== 'undefined') {
+                        // จดจำ URL ปัจจุบัน (รวมพารามิเตอร์) ก่อนเข้าหน้ารถ
+                        sessionStorage.setItem(
+                          'lastListUrl',
+                          window.location.pathname + window.location.search + window.location.hash
+                        );
+                      }
+                    } catch {
+                      // ignore
+                    }
+                  }}
                   tabIndex={0}
                 >
                   <figure className="relative w-full h-28 md:h-48 overflow-hidden bg-orange-600/10">
@@ -568,6 +582,12 @@ export default function Home({ cars, brandCounts }) {
                       quality={75}
                       sizes="(max-width: 414px) 180px, (max-width: 768px) 320px, (max-width: 1024px) 256px, 320px"
                     />
+                    {/* Reserved Badge */}
+                    {safeGet(car, 'status') === 'reserved' && (
+                      <div className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-xs md:text-sm font-bold shadow-lg font-prompt">
+                        จองแล้ว
+                      </div>
+                    )}
                     {safeGet(car, 'tags', []).includes('ใหม่') && (
                       <span className="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold shadow-md">
                         ใหม่
@@ -620,6 +640,18 @@ export default function Home({ cars, brandCounts }) {
                     }
                     className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-2xl min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-prompt"
                     aria-label={`ดูรายละเอียด ${safeGet(car, 'title', 'รถยนต์')}`}
+                    onClick={() => {
+                      try {
+                        if (typeof window !== 'undefined') {
+                          sessionStorage.setItem(
+                            'lastListUrl',
+                            window.location.pathname + window.location.search + window.location.hash
+                          );
+                        }
+                      } catch {
+                        // ignore
+                      }
+                    }}
                   >
                     ดูรายละเอียด
                   </Link>
@@ -1433,6 +1465,13 @@ export async function getStaticProps() {
   try {
     const result = await getHomepageCars(8);
     cars = Array.isArray(result) ? result : [];
+    // Add status to homepage cars (do not filter; show badge instead)
+    try {
+      const carStatuses = readCarStatuses();
+      cars = cars.map(c => ({ ...c, status: carStatuses[c.id]?.status || 'available' }));
+    } catch {
+      // ignore status read errors
+    }
   } catch {
     // Silent error handling for production
     cars = [];

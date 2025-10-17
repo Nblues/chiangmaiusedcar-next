@@ -6,8 +6,6 @@
     }
   },
   "env": {
-    "SHOPIFY_DOMAIN": "kn-goodcar.com",
-    "SHOPIFY_STOREFRONT_TOKEN": "bb70cb008199a94b83c98df0e45ada67",
     "NEXT_PUBLIC_EMAILJS_SERVICE_ID": "service_qlcksif",
     "NEXT_PUBLIC_EMAILJS_TEMPLATE_ID": "template_zd6e3f6",
     "NEXT_PUBLIC_EMAILJS_PUBLIC_KEY": "P3wnNJB_Y_PddrdBJ",
@@ -35,7 +33,7 @@
         },
         {
           "key": "Permissions-Policy",
-          "value": "geolocation=*, microphone=(), camera=()"
+          "value": "geolocation=(self), microphone=(), camera=(), payment=()"
         },
         {
           "key": "Referrer-Policy",

@@ -34,13 +34,33 @@ function AdminLogin() {
         }),
       });
 
-      const data = await response.json();
+      // ป้องกัน JSON parse error เมื่อเซิร์ฟเวอร์ตอบกลับว่างเปล่าหรือไม่ใช่ JSON
+      let data = null;
+      try {
+        data = await response.json();
+      } catch {
+        data = null;
+      }
 
-      if (response.ok && data.success) {
+      if (response.ok && data?.success) {
         // Login สำเร็จ - redirect ไป dashboard
         router.push('/admin/dashboard');
       } else {
-        setError(data.error || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+        // แสดงข้อความตามสถานะที่เจอ เพื่อบอกสาเหตุชัดเจน
+        if (response.status === 429) {
+          setError('พยายามเข้าสู่ระบบหลายครั้งเกินไป กรุณารอประมาณ 10 นาทีแล้วลองใหม่');
+        } else if (response.status === 401) {
+          setError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+        } else if (response.status === 400) {
+          setError('กรุณากรอกชื่อผู้ใช้และรหัสผ่านให้ครบถ้วน');
+        } else if (response.status === 405) {
+          setError('วิธีการเรียกไม่ถูกต้อง (Method Not Allowed)');
+        } else if (response.status === 500) {
+          const stage = data?.stage ? ` (stage: ${data.stage})` : '';
+          setError(`เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์${stage}`);
+        } else {
+          setError(data?.error || 'ไม่สามารถเข้าสู่ระบบได้ กรุณาลองใหม่');
+        }
       }
     } catch {
       setError('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');

@@ -134,8 +134,8 @@ Sitemap: `
 
     // Dynamic car URLs (if cars data is available)
     try {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { getAllCars } = require('./lib/shopify');
+      // Use ESM-compatible dynamic import to load Shopify helper in Node 20
+      const { getAllCars } = await import('./lib/shopify.mjs');
       const cars = await getAllCars();
 
       for (const car of cars) {
@@ -150,7 +150,10 @@ Sitemap: `
         }
       }
     } catch (error) {
-      console.warn('Warning: Could not load cars for sitemap generation:', error.message);
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.warn('Warning: Could not load cars for sitemap generation:', error?.message);
+      }
     }
 
     return paths;

@@ -54,18 +54,37 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const goBackSmart = () => {
     if (typeof window === 'undefined') return;
     const last = sessionStorage.getItem('lastListUrl');
-    // ถ้ามีประวัติหน้าเดิมใน session และเป็นโดเมนเดียวกัน ให้กลับไป
-    if (document.referrer && last) {
-      // พยายามใช้ browser back ถ้า history มี
+
+    // 1) ถ้ามี lastListUrl ที่เราบันทึกไว้ ให้ลองย้อนกลับก่อน
+    if (last) {
       if (window.history.length > 1) {
         window.history.back();
         return;
       }
-      // กรณีไม่มี history (เปิดแท็บใหม่) ให้ไปที่ last โดยตรง
       window.location.href = last;
       return;
     }
-    // สำรอง: กลับหน้ารวมรถ
+
+    // 2) ไม่มี lastListUrl: ใช้ document.referrer ถ้ามาจากโดเมนเดียวกัน
+    try {
+      const ref = document.referrer;
+      if (ref) {
+        const refUrl = new URL(ref);
+        if (refUrl.origin === window.location.origin) {
+          if (window.history.length > 1) {
+            window.history.back();
+            return;
+          }
+          const refPath = refUrl.pathname + (refUrl.search || '') + (refUrl.hash || '');
+          window.location.href = refPath || '/all-cars';
+          return;
+        }
+      }
+    } catch {
+      // ignore
+    }
+
+    // 3) สำรองสุดท้าย: กลับหน้ารวมรถ
     window.location.href = '/all-cars';
   };
 
@@ -589,8 +608,19 @@ function CarDetailPage({ car, recommendedCars = [] }) {
 
               {/* Reserved Badge */}
               {safeGet(car, 'status') === 'reserved' && (
-                <div className="absolute top-4 left-4 bg-red-500 text-white px-6 py-3 rounded-xl text-base sm:text-lg font-bold shadow-2xl animate-pulse font-prompt z-10">
-                  🚫 จองแล้ว
+                <div className="absolute top-4 left-4 bg-red-600 text-white px-6 py-3 rounded-xl text-base sm:text-lg font-bold shadow-2xl animate-pulse font-prompt z-10 flex items-center gap-2">
+                  {/* White ban icon for high contrast */}
+                  <svg
+                    className="w-5 h-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+                    <line x1="5" y1="19" x2="19" y2="5" stroke="currentColor" strokeWidth="2" />
+                  </svg>
+                  <span>จองแล้ว</span>
                 </div>
               )}
 

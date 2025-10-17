@@ -10,6 +10,9 @@ import {
   getClientIp,
 } from '../../../middleware/adminAuth';
 
+// Ensure Node.js runtime and JSON body parsing
+export const config = { runtime: 'nodejs', api: { bodyParser: true, externalResolver: true } };
+
 // Simple in-memory rate limiter per IP
 const attempts = new Map();
 const WINDOW_MS = 10 * 60 * 1000; // 10 minutes
@@ -72,7 +75,7 @@ export default async function handler(req, res) {
         body = null;
       }
     }
-    const username = body?.username;
+    const username = typeof body?.username === 'string' ? body.username.trim() : body?.username;
     const password = body?.password;
 
     // Validate input
@@ -100,8 +103,8 @@ export default async function handler(req, res) {
       });
     }
 
-  // Set session cookie
-  stage = 'set-cookies';
+    // Set session cookie
+    stage = 'set-cookies';
     // Also issue a CSRF cookie for subsequent state-changing requests
     res.setHeader('Set-Cookie', [createSessionCookie(token), createCsrfCookie()]);
 

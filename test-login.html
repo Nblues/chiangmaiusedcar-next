@@ -1,102 +1,170 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="th">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Test Admin Login</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 40px; background: #f5f5f5; }
-        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { color: #1a237e; margin-bottom: 30px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #333; }
-        input, select { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px; }
-        button { width: 100%; padding: 14px; background: #1a237e; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        button:hover { background: #0d1b5e; }
-        #result { margin-top: 20px; padding: 15px; border-radius: 4px; white-space: pre-wrap; font-family: monospace; font-size: 12px; display: none; }
-        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+      body {
+        font-family: Arial, sans-serif;
+        padding: 40px;
+        background: #f5f5f5;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #1a237e;
+        margin-bottom: 30px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #333;
+      }
+      input,
+      select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      button {
+        width: 100%;
+        padding: 14px;
+        background: #1a237e;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+      button:hover {
+        background: #0d1b5e;
+      }
+      #result {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 4px;
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 12px;
+        display: none;
+      }
+      .success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+      .error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>🔐 Test Admin Login</h1>
-        
-        <div class="form-group">
-            <label for="endpoint">Endpoint:</label>
-            <select id="endpoint">
-                <option value="https://www.chiangmaiusedcar.com/api/admin/login">Production (chiangmaiusedcar.com)</option>
-                <option value="https://chiangmaiusedcar-setup-2wgyawdhr-chiangmaiusedcars-projects.vercel.app/api/admin/login">Latest Deployment</option>
-                <option value="https://www.chiangmaiusedcar.com/api/admin/debug-login">Debug Endpoint</option>
-            </select>
-        </div>
+      <h1>🔐 Test Admin Login</h1>
 
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" value="kngoodcar">
-        </div>
+      <div class="form-group">
+        <label for="endpoint">Endpoint:</label>
+        <select id="endpoint">
+          <option value="https://www.chiangmaiusedcar.com/api/admin/login">
+            Production (chiangmaiusedcar.com)
+          </option>
+          <option
+            value="https://chiangmaiusedcar-setup-2wgyawdhr-chiangmaiusedcars-projects.vercel.app/api/admin/login"
+          >
+            Latest Deployment
+          </option>
+          <option value="https://www.chiangmaiusedcar.com/api/admin/debug-login">
+            Debug Endpoint
+          </option>
+        </select>
+      </div>
 
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" value="Kn-goodcar**5277">
-        </div>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" value="kngoodcar" />
+      </div>
 
-        <button onclick="testLogin()">🚀 Test Login</button>
-        <button onclick="testDebug()" style="background: #ff9800; margin-top: 10px;">🔍 Test Debug</button>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" value="Kn-goodcar**5277" />
+      </div>
 
-        <div id="result"></div>
+      <button onclick="testLogin()">🚀 Test Login</button>
+      <button onclick="testDebug()" style="background: #ff9800; margin-top: 10px">
+        🔍 Test Debug
+      </button>
+
+      <div id="result"></div>
     </div>
 
     <script>
-        async function testLogin() {
-            const endpoint = document.getElementById('endpoint').value;
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const resultDiv = document.getElementById('result');
+      async function testLogin() {
+        const endpoint = document.getElementById('endpoint').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const resultDiv = document.getElementById('result');
 
-            resultDiv.style.display = 'block';
-            resultDiv.className = '';
-            resultDiv.textContent = 'กำลังทดสอบ...';
+        resultDiv.style.display = 'block';
+        resultDiv.className = '';
+        resultDiv.textContent = 'กำลังทดสอบ...';
 
-            try {
-                const response = await fetch(endpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password }),
-                    credentials: 'include'
-                });
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+            credentials: 'include',
+          });
 
-                const data = await response.json();
-                const headers = {};
-                response.headers.forEach((value, key) => {
-                    headers[key] = value;
-                });
+          const data = await response.json();
+          const headers = {};
+          response.headers.forEach((value, key) => {
+            headers[key] = value;
+          });
 
-                const result = {
-                    status: response.status,
-                    statusText: response.statusText,
-                    headers: headers,
-                    data: data
-                };
+          const result = {
+            status: response.status,
+            statusText: response.statusText,
+            headers: headers,
+            data: data,
+          };
 
-                resultDiv.className = response.ok ? 'success' : 'error';
-                resultDiv.textContent = JSON.stringify(result, null, 2);
-            } catch (error) {
-                resultDiv.className = 'error';
-                resultDiv.textContent = `❌ Error: ${error.message}`;
-            }
+          resultDiv.className = response.ok ? 'success' : 'error';
+          resultDiv.textContent = JSON.stringify(result, null, 2);
+        } catch (error) {
+          resultDiv.className = 'error';
+          resultDiv.textContent = `❌ Error: ${error.message}`;
         }
+      }
 
-        async function testDebug() {
-            document.getElementById('endpoint').value = 'https://www.chiangmaiusedcar.com/api/admin/debug-login';
-            await testLogin();
-        }
+      async function testDebug() {
+        document.getElementById('endpoint').value =
+          'https://www.chiangmaiusedcar.com/api/admin/debug-login';
+        await testLogin();
+      }
 
-        // Auto-test on load after 2 seconds
-        setTimeout(() => {
-            console.log('Ready to test. Click "Test Login" button.');
-        }, 2000);
+      // Auto-test on load after 2 seconds
+      setTimeout(() => {
+        console.log('Ready to test. Click "Test Login" button.');
+      }, 2000);
     </script>
-</body>
+  </body>
 </html>

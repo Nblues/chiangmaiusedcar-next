@@ -20,7 +20,7 @@ export default async function handler(req, res) {
             ? '✅ Configured'
             : '❌ Missing config',
         domain: process.env.SHOPIFY_DOMAIN || 'Not configured',
-        api_version: '2023-04',
+        api_version: process.env.SHOPIFY_API_VERSION || '2025-01',
       },
       emailjs: {
         status: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ? '✅ Configured' : '❌ Missing config',
@@ -56,8 +56,11 @@ export default async function handler(req, res) {
 
     res.status(200).json(response);
   } catch (error) {
-    console.error('Health check error:', error);
-    res.status(500).json({
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.error('Health check error:', error);
+    }
+    return res.status(500).json({
       status: 'error',
       error: error.message,
       timestamp: new Date().toISOString(),

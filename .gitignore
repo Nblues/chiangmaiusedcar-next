@@ -129,3 +129,6 @@ auth.json
 .expo/
 expo-env.d.ts
 .vercel
+
+.vercel
+.env*.local

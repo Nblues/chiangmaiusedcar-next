@@ -157,6 +157,11 @@ const nextConfig = {
 
   // Headers for deployment and performance - Enhanced 2025
   async headers() {
+    // Sanitize SITE_URL to avoid CR/LF or trailing spaces breaking CORS headers
+    const cleanSiteUrl = (() => {
+      const raw = process.env.SITE_URL || 'https://www.chiangmaiusedcar.com';
+      return typeof raw === 'string' ? raw.replace(/\r/g, '').replace(/\n/g, '').trim() : raw;
+    })();
     const securityHeaders = [
       {
         key: 'X-DNS-Prefetch-Control',
@@ -294,10 +299,7 @@ const nextConfig = {
           },
           {
             key: 'Access-Control-Allow-Origin',
-            value:
-              process.env.NODE_ENV === 'production'
-                ? process.env.SITE_URL || 'https://www.chiangmaiusedcar.com'
-                : 'http://localhost:3000',
+            value: process.env.NODE_ENV === 'production' ? cleanSiteUrl : 'http://localhost:3000',
           },
           {
             key: 'Access-Control-Allow-Methods',

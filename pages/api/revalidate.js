@@ -2,6 +2,7 @@
 // มาตรฐานสากล 2025: On-demand revalidation สำหรับเนื้อหาล่าสุด
 
 import { isAuthenticated } from '../../middleware/adminAuth';
+import { verifyApiAuth } from '../../lib/apiAuth';
 
 export default async function handler(req, res) {
   // ตั้งค่า headers ป้องกัน cache
@@ -27,12 +28,13 @@ export default async function handler(req, res) {
     // Allow with correct secret OR admin authentication
     const hasValidSecret = process.env.NODE_ENV === 'development' || secret === expectedSecret;
     const isAdmin = isAuthenticated(req);
+    const apiAuth = verifyApiAuth(req);
 
-    if (!hasValidSecret && !isAdmin) {
+    if (!hasValidSecret && !isAdmin && !apiAuth.ok) {
       return res.status(401).json({
         success: false,
         error: 'Unauthorized',
-        message: 'Revalidation secret or admin authentication required',
+        message: 'Revalidation requires secret, admin session, or API auth headers',
       });
     }
 
@@ -123,6 +125,7 @@ export default async function handler(req, res) {
       message: `Revalidated ${revalidationResults.length} paths successfully`,
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('❌ Revalidation error:', error);
 
     res.status(500).json({
@@ -168,6 +171,7 @@ async function getPageLastModified(path) {
     // Default to current time if no cache
     return Date.now();
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.warn('Could not get page last modified time:', error);
     return null;
   }

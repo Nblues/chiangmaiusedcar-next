@@ -6,19 +6,30 @@
 import fs from 'fs';
 import path from 'path';
 import { bucket } from '../../../lib/firebase-admin';
-import { isAuthenticated } from '../../../middleware/adminAuth';
+import { isAuthenticated, verifyCsrf } from '../../../middleware/adminAuth';
+import { verifyApiAuth } from '../../../lib/apiAuth';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // ตรวจสอบ authentication
+  // ตรวจสอบ authentication (session หรือ API auth)
+  let authedBy = 'session';
   if (!isAuthenticated(req)) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized',
-    });
+    const apiAuth = verifyApiAuth(req, { requireHmac: true });
+    if (!apiAuth.ok) {
+      res.setHeader(
+        'WWW-Authenticate',
+        'APIKey realm="chiangmaiusedcar", headers="X-API-Key, X-Timestamp, X-Signature"'
+      );
+      return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+    authedBy = 'api';
+  }
+
+  if (authedBy === 'session' && !verifyCsrf(req)) {
+    return res.status(403).json({ success: false, error: 'Invalid CSRF token' });
   }
 
   try {
@@ -90,6 +101,7 @@ export default async function handler(req, res) {
         uploadedToFirebase: firebaseUploadSuccess,
         firebaseUrl,
       },
+      authedBy,
       message: firebaseUploadSuccess
         ? 'Backup created and uploaded to Firebase successfully'
         : 'Backup created locally (Firebase not configured or disabled)',

@@ -478,6 +478,20 @@ export default function AllCars({ cars }) {
                       }
                       className="block focus:outline-none flex-1"
                       prefetch={false}
+                      onClick={() => {
+                        try {
+                          if (typeof window !== 'undefined') {
+                            sessionStorage.setItem(
+                              'lastListUrl',
+                              window.location.pathname +
+                                window.location.search +
+                                window.location.hash
+                            );
+                          }
+                        } catch {
+                          // ignore
+                        }
+                      }}
                     >
                       <figure className="thumb relative w-full h-28 md:h-48 overflow-hidden bg-gray-100">
                         <A11yImage
@@ -535,6 +549,20 @@ export default function AllCars({ cars }) {
                         className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-2xl min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-prompt"
                         aria-label={`ดูรายละเอียด ${safeGet(car, 'title', 'รถยนต์')}`}
                         prefetch={false}
+                        onClick={() => {
+                          try {
+                            if (typeof window !== 'undefined') {
+                              sessionStorage.setItem(
+                                'lastListUrl',
+                                window.location.pathname +
+                                  window.location.search +
+                                  window.location.hash
+                              );
+                            }
+                          } catch {
+                            // ignore
+                          }
+                        }}
                       >
                         ดูรายละเอียด
                       </Link>

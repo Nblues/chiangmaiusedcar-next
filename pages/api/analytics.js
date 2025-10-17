@@ -70,7 +70,7 @@ export default async function handler(req, res) {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Analytics API error:', error);
-    
+
     // Still return success to not break client
     res.status(200).json({
       success: true,

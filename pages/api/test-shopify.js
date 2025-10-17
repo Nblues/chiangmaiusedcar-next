@@ -44,12 +44,15 @@ export default async function handler(req, res) {
       cars: limitedCars,
       metadata: {
         domain: process.env.SHOPIFY_DOMAIN,
-        apiVersion: '2023-04',
+        apiVersion: process.env.SHOPIFY_API_VERSION || '2025-01',
         hasToken: !!process.env.SHOPIFY_STOREFRONT_TOKEN,
       },
     });
   } catch (error) {
-    console.error('Shopify test error:', error);
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.error('Shopify test error:', error);
+    }
     return res.status(500).json({
       success: false,
       error: error.message,

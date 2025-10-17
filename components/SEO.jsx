@@ -239,7 +239,6 @@ export default function SEO({
       {/* Force Facebook to refresh cache */}
       <meta property="og:updated_time" content={buildTime} />
       <meta property="article:modified_time" content={buildTime} />
-      <meta name="robots" content="index, follow, max-image-preview:large" />
 
       {/* Enhanced Language and Locale Settings - Unified th-TH */}
       <meta httpEquiv="Content-Language" content="th-TH" />
@@ -300,6 +299,10 @@ export default function SEO({
       <meta name="color-scheme" content="light" />
       <meta name="format-detection" content="telephone=yes" />
       <link rel="canonical" href={fullUrl} />
+      {/* Hreflang alternates for Thai and default */}
+      <link rel="alternate" hrefLang="th" href={fullUrl} />
+      <link rel="alternate" hrefLang="th-TH" href={fullUrl} />
+      <link rel="alternate" hrefLang="x-default" href={fullUrl} />
 
       {/* Enhanced Open Graph Meta Tags for Better Link Sharing */}
       <meta property="og:type" content={type} />
