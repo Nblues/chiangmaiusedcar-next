@@ -21,7 +21,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 9.12.0
+          version: 10.0.0
 
       - name: Get pnpm store directory
         shell: bash
@@ -64,7 +64,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 9.12.0
+          version: 10.0.0
 
       - name: Install Vercel CLI
         run: pnpm add -g vercel@latest
