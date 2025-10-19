@@ -83,9 +83,17 @@ module.exports = {
     host: 'https://www.chiangmaiusedcar.com',
     // 2025 enhancement: crawl delay for different bots
     transformRobotsTxt: async (config, robotsTxt) => {
-      return robotsTxt
-        .replace('User-agent: *', `# Enhanced for AI Crawlers 2025\nUser-agent: *`)
-        .replace(/Sitemap: (https?:\/\/[^\n]+)/g, '\n# Additional XML Sitemaps\nSitemap: $1');
+      // Fix broken sitemap URLs and add comments
+      return (
+        robotsTxt
+          .replace('User-agent: *', `# Enhanced for AI Crawlers 2025\nUser-agent: *`)
+          // Fix broken URLs (remove newlines in the middle of URLs)
+          .replace(/Sitemap:\s*([^\n]*)\n\s*\/([^\n]+)/g, 'Sitemap: $1/$2')
+          // Replace localhost with production URL
+          .replace(/http:\/\/localhost:3000/g, 'https://www.chiangmaiusedcar.com')
+          // Add comment before each sitemap
+          .replace(/\nSitemap:/g, '\n\n# Additional XML Sitemaps\nSitemap:')
+      );
     },
   },
   exclude: [
