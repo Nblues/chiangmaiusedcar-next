@@ -20,7 +20,7 @@ export default async function handler(req, res) {
             ? '✅ Configured'
             : '❌ Missing config',
         domain: process.env.SHOPIFY_DOMAIN || 'Not configured',
-        api_version: process.env.SHOPIFY_API_VERSION || '2025-01',
+        api_version: process.env.SHOPIFY_API_VERSION || '2024-10',
       },
       emailjs: {
         status: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ? '✅ Configured' : '❌ Missing config',

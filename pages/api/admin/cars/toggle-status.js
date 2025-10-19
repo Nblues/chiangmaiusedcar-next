@@ -72,8 +72,8 @@ export default async function handler(req, res) {
         const domain = process.env.SHOPIFY_DOMAIN;
         const token = process.env.SHOPIFY_STOREFRONT_TOKEN;
         if (!domain || !token) return null;
-  const apiVersion = process.env.SHOPIFY_API_VERSION || '2025-01';
-  const resp = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
+        const apiVersion = process.env.SHOPIFY_API_VERSION || '2024-10';
+        const resp = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

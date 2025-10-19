@@ -44,7 +44,7 @@ export default async function handler(req, res) {
       cars: limitedCars,
       metadata: {
         domain: process.env.SHOPIFY_DOMAIN,
-        apiVersion: process.env.SHOPIFY_API_VERSION || '2025-01',
+        apiVersion: process.env.SHOPIFY_API_VERSION || '2024-10',
         hasToken: !!process.env.SHOPIFY_STOREFRONT_TOKEN,
       },
     });
