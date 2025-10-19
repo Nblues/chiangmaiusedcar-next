@@ -139,13 +139,11 @@ export default function Document() {
         <link rel="preconnect" href="https://files.myshopify.com" />
 
         {/* Hero banner image preload for LCP optimization - homepage only */}
-        {/* Preload as="image" with fetchpriority="high" for instant LCP rendering */}
         <link
           rel="preload"
           as="image"
           href="/herobanner/cnxcar.webp"
           type="image/webp"
-          fetchPriority="high"
           imageSrcSet="/herobanner/cnxcar.webp 640w, /herobanner/cnxcar.webp 1024w, /herobanner/cnxcar.webp 1400w"
           imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1400px"
         />
