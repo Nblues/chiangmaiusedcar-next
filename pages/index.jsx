@@ -286,18 +286,19 @@ export default function Home({ cars, brandCounts }) {
 
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-[1400px] mx-auto">
-          <A11yImage
+          {/* LCP Optimized: Native img instead of A11yImage for critical hero banner */}
+          <img
             src="/herobanner/cnxcar.webp"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-            width={1400}
-            height={467}
+            width="1400"
+            height="467"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
             className="w-full h-auto object-contain"
-            imageType="hero"
-            priority
-            fetchpriority="high"
-            quality={85}
-            sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1400px"
             style={{ maxHeight: '60vh' }}
+            srcSet="/herobanner/cnxcar.webp 640w, /herobanner/cnxcar.webp 1024w, /herobanner/cnxcar.webp 1400w"
+            sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1400px"
           />
         </div>
       </header>

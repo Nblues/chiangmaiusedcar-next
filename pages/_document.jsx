@@ -8,11 +8,33 @@ export default function Document() {
   return (
     <Html lang="th">
       <Head>
+        {/* Critical CSS for Hero Section - Inline to prevent render blocking */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              .hero-header{position:relative;width:100%;height:auto;display:flex;align-items:center;justify-content:center;background:linear-gradient(to right,#fed7aa,#bfdbfe)}
+              .hero-container{position:relative;width:100%;max-width:1400px;margin:0 auto}
+              .hero-image{width:100%;height:auto;object-fit:contain;max-height:60vh}
+            `,
+          }}
+        />
+
         {/* DNS Prefetch & Preconnect for Performance */}
         <link rel="dns-prefetch" href="https://cdn.shopify.com" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+
+        {/* LCP Optimization: Preload Hero Image (Critical for homepage) */}
+        <link
+          rel="preload"
+          as="image"
+          href="/herobanner/cnxcar.webp"
+          type="image/webp"
+          fetchPriority="high"
+          imageSizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1400px"
+          imageSrcSet="/herobanner/cnxcar.webp 640w, /herobanner/cnxcar.webp 1024w, /herobanner/cnxcar.webp 1400w"
+        />
 
         {/* Essential HTML5 Meta Tags for SEO 100/100 */}
         <meta charSet="utf-8" />
