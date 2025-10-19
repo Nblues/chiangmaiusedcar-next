@@ -1,0 +1,23 @@
+# Modern browsers only - Remove legacy polyfills
+# This configuration targets ES2020+ features to reduce bundle size
+# and eliminate unnecessary polyfills like Array.at, Array.flat, etc.
+
+[production]
+# Modern browsers with native support for ES2020+ features
+chrome >= 90
+edge >= 90
+firefox >= 88
+safari >= 14.1
+ios >= 14.5
+
+# Exclude legacy browsers
+not dead
+not op_mini all
+not ie 11
+not samsung < 13
+not kaios > 0
+
+[development]
+last 1 chrome version
+last 1 firefox version
+last 1 safari version

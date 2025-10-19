@@ -126,7 +126,10 @@
       "safari >= 14.1",
       "ios >= 14.5",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "not ie 11",
+      "not samsung < 13",
+      "not kaios > 0"
     ],
     "development": [
       "last 1 chrome version",

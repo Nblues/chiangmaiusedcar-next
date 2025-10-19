@@ -23,6 +23,19 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
   },
 
+  // SWC Transform - Target modern browsers (ES2020+) to reduce polyfills
+  // This removes unnecessary polyfills for Array.at, Array.flat, Object.fromEntries, etc.
+  experimental: {
+    esmExternals: 'loose',
+    scrollRestoration: true,
+    serverComponentsExternalPackages: ['shopify-api-node'],
+    // Prevent Jest worker errors in development
+    ...(process.env.NODE_ENV === 'development' && {
+      workerThreads: false,
+      cpus: 1,
+    }),
+  },
+
   // Asset prefix for Cloudflare CDN
   // Removed assetPrefix to fix static file loading
 
@@ -388,18 +401,6 @@ const nextConfig = {
     locales: ['th', 'en'],
     defaultLocale: 'th',
     localeDetection: false,
-  },
-
-  // Enhanced experimental config - 2025 standards + Core Web Vitals optimization
-  experimental: {
-    esmExternals: 'loose',
-    scrollRestoration: true,
-    serverComponentsExternalPackages: ['shopify-api-node'],
-    // Prevent Jest worker errors in development
-    ...(process.env.NODE_ENV === 'development' && {
-      workerThreads: false,
-      cpus: 1,
-    }),
   },
 
   // Production optimization
