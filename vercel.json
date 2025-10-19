@@ -1,22 +1,20 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
+  "buildCommand": "pnpm build",
+  "devCommand": "pnpm dev",
+  "installCommand": "pnpm install",
   "functions": {
     "pages/api/*.js": {
       "maxDuration": 10
     }
   },
-  "env": {
-    "NEXT_PUBLIC_EMAILJS_SERVICE_ID": "service_qlcksif",
-    "NEXT_PUBLIC_EMAILJS_TEMPLATE_ID": "template_zd6e3f6",
-    "NEXT_PUBLIC_EMAILJS_PUBLIC_KEY": "P3wnNJB_Y_PddrdBJ",
-    "SITE_URL": "https://www.chiangmaiusedcar.com",
-    "NEXT_PUBLIC_SITE_URL": "https://www.chiangmaiusedcar.com",
-    "FACEBOOK_COMPATIBLE": "true",
-    "VERCEL_PROTECTION_BYPASS": "true",
-    "NODE_ENV": "production"
-  },
-  "alias": ["chiangmaiusedcar.com"],
-  "redirects": [],
+  "crons": [
+    {
+      "path": "/api/cron/backup-daily",
+      "schedule": "0 2 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

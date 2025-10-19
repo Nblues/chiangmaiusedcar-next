@@ -1,0 +1,23 @@
+# Code Owners
+# These owners will be automatically requested for review
+# when someone opens a pull request.
+
+# Default owner for everything in the repo
+* @Nblues
+
+# Admin and authentication
+/pages/admin/ @Nblues
+/lib/adminAuth.js @Nblues
+
+# Configuration files
+*.config.js @Nblues
+.github/ @Nblues
+vercel.json @Nblues
+
+# Security-sensitive files
+.env.* @Nblues
+/lib/security/ @Nblues
+
+# Documentation
+*.md @Nblues
+/docs/ @Nblues
