@@ -151,8 +151,8 @@ export default function Document() {
         {/* Note: Prompt font is loaded via @fontsource/prompt in globals.css */}
         {/* Font preload is handled automatically by Next.js for @fontsource packages */}
 
-        {/* Cloudflare compatibility script - must load early */}
-        <script src="/cloudflare-compat.js" defer></script>
+        {/* Browser compatibility script - detects FB in-app browser and sets compatibility flags */}
+        <script src="/browser-compat.js" defer></script>
 
         {/* Facebook Pixel - Lazy loaded via component in _app.jsx for better performance */}
       </Head>

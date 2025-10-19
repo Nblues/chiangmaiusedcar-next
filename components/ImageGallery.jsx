@@ -12,7 +12,6 @@ import {
   resizeImage,
   saveImageToStorage,
 } from '../lib/imageUtils';
-import { getCloudflareImageUrl } from '../lib/cloudflare-cdn';
 
 const ImageGallery = ({ articleId, onImageSelect, selectMode = false }) => {
   const [images, setImages] = useState([]);
@@ -26,12 +25,8 @@ const ImageGallery = ({ articleId, onImageSelect, selectMode = false }) => {
   useEffect(() => {
     const loadImages = () => {
       const articleImages = getArticleImages(articleId);
-      // แปลง URL ให้ผ่าน Cloudflare CDN
-      const cdnImages = articleImages.map(img => ({
-        ...img,
-        data: getCloudflareImageUrl(img.data),
-      }));
-      setImages(cdnImages);
+      // ใช้ Shopify CDN โดยตรง (ไม่ผ่าน Cloudflare)
+      setImages(articleImages);
     };
 
     if (articleId) {
@@ -41,12 +36,8 @@ const ImageGallery = ({ articleId, onImageSelect, selectMode = false }) => {
 
   const loadImages = () => {
     const articleImages = getArticleImages(articleId);
-    // แปลง URL ให้ผ่าน Cloudflare CDN
-    const cdnImages = articleImages.map(img => ({
-      ...img,
-      data: getCloudflareImageUrl(img.data),
-    }));
-    setImages(cdnImages);
+    // ใช้ Shopify CDN โดยตรง (ไม่ผ่าน Cloudflare)
+    setImages(articleImages);
   };
 
   // อัปโหลดรูปภาพ
