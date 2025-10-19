@@ -253,6 +253,33 @@ const nextConfig = {
           },
         ],
       },
+      // Vercel Analytics & Monitoring Scripts - optimal caching
+      {
+        source: '/_vercel/insights/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Vary',
+            value: 'Accept-Encoding',
+          },
+        ],
+      },
+      {
+        source: '/_vercel/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Vary',
+            value: 'Accept-Encoding',
+          },
+        ],
+      },
       // Public assets - medium-term caching
       {
         source: '/(.*\\.(?:js|css|woff2|woff|ttf|svg|png|jpg|jpeg|gif|webp|ico))$',
