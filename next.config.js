@@ -421,22 +421,6 @@ const nextConfig = {
         permanent: true,
         statusCode: 301,
       },
-      // Legacy article management paths -> new admin dashboard
-      {
-        source: '/admin/articles',
-        destination: '/admin/dashboard',
-        permanent: true,
-      },
-      {
-        source: '/admin/articles/new',
-        destination: '/admin/dashboard',
-        permanent: true,
-      },
-      {
-        source: '/admin/articles/:path*',
-        destination: '/admin/dashboard',
-        permanent: true,
-      },
     ];
   },
 

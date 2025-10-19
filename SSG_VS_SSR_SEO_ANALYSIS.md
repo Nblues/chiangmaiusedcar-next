@@ -1,5 +1,7 @@
 # SSG vs SSR - SEO Impact Analysis
+
 ## เว็บไซต์: chiangmaiusedcar.com (หน้ารถ /car/[handle])
+
 ## วันที่: October 11, 2025
 
 ---
@@ -7,6 +9,7 @@
 ## 📊 **เปรียบเทียบ SSG vs SSR**
 
 ### **ปัจจุบัน: Static Site Generation (SSG)**
+
 ```javascript
 export async function getStaticProps({ params }) {
   // Pre-render ทุกหน้ารถตอน build time
@@ -17,6 +20,7 @@ export async function getStaticProps({ params }) {
 ```
 
 ### **แนวทาง: Server-Side Rendering (SSR)**
+
 ```javascript
 export async function getServerSideProps({ params }) {
   // Render ทุกครั้งที่ user request
@@ -33,18 +37,22 @@ export async function getServerSideProps({ params }) {
 ### ✅ **SSG (Static Site Generation) - ปัจจุบัน**
 
 #### **ข้อดีด้าน SEO:**
+
 1. ⚡ **Speed ที่สุด** - Pre-rendered HTML
+
    - TTFB (Time to First Byte): 50-200ms
    - FCP (First Contentful Paint): 300-800ms
    - LCP (Largest Contentful Paint): 800-1500ms
    - **PageSpeed Score: 95-100** ⭐⭐⭐⭐⭐
 
 2. 🤖 **Googlebot Crawlability - Perfect!**
+
    - HTML พร้อมทันทีไม่ต้องรอ JavaScript
    - Google เห็นเนื้อหาเต็มที่ทันที
    - Crawl Budget ประหยัด (ไม่ต้องรอ server)
 
 3. 💰 **Cost-Effective**
+
    - Serve จาก CDN (Vercel Edge Network)
    - ไม่ต้องใช้ server resources ตลอดเวลา
    - ถูกกว่า SSR มาก
@@ -54,7 +62,9 @@ export async function getServerSideProps({ params }) {
    - User ใกล้ไหนก็โหลดเร็ว
 
 #### **ข้อเสียด้าน SEO:**
+
 1. ⏰ **Content Freshness**
+
    - ข้อมูลอาจเก่าได้ถึง 10 นาที (revalidate: 600)
    - ถ้าเปลี่ยนราคารถ ต้องรอ 10 นาที
 
@@ -67,12 +77,15 @@ export async function getServerSideProps({ params }) {
 ### ⚠️ **SSR (Server-Side Rendering) - แนวทางใหม่**
 
 #### **ข้อดีด้าน SEO:**
+
 1. 🔄 **Real-time Content**
+
    - ข้อมูลใหม่ล่าสุดทุกครั้ง
    - ราคา/สต็อกอัพเดททันที
    - ไม่มีปัญหา stale data
 
 2. ✅ **No Build Errors**
+
    - ไม่มี memory overflow
    - ไม่ต้อง pre-build ทุกหน้า
    - Deploy เสร็จเร็วกว่า
@@ -83,13 +96,16 @@ export async function getServerSideProps({ params }) {
    - Structured Data ครบเหมือนเดิม
 
 #### **ข้อเสียด้าน SEO:**
+
 1. 🐌 **ช้ากว่า SSG เล็กน้อย**
+
    - TTFB: 200-500ms (ช้ากว่า SSG 150-300ms)
    - FCP: 500-1200ms (ช้ากว่า SSG 200-400ms)
    - LCP: 1200-2500ms (ช้ากว่า SSG 400-1000ms)
    - **PageSpeed Score: 85-92** ⭐⭐⭐⭐
 
 2. 💸 **Cost สูงกว่า**
+
    - ต้องใช้ serverless function ทุก request
    - Vercel Pro: $20/เดือนอาจไม่พอ
    - อาจต้องใช้ Vercel Enterprise
@@ -104,29 +120,31 @@ export async function getServerSideProps({ params }) {
 
 ### **Google PageSpeed Insights (Mobile):**
 
-| Metric | SSG (ปัจจุบัน) | SSR (ใหม่) | ผลต่าง |
-|--------|-----------------|------------|--------|
-| **Performance** | 95-100 | 85-92 | -8 คะแนน |
-| **TTFB** | 50-200ms | 200-500ms | +200ms |
-| **FCP** | 300-800ms | 500-1200ms | +400ms |
-| **LCP** | 800-1500ms | 1200-2500ms | +800ms |
-| **TBT** | 100-300ms | 150-400ms | +100ms |
-| **CLS** | 0.01-0.05 | 0.01-0.05 | เท่ากัน |
-| **SEO** | 95-100 | 95-100 | เท่ากัน |
-| **Accessibility** | 97 | 97 | เท่ากัน |
-| **Best Practices** | 95-100 | 95-100 | เท่ากัน |
+| Metric             | SSG (ปัจจุบัน) | SSR (ใหม่)  | ผลต่าง   |
+| ------------------ | -------------- | ----------- | -------- |
+| **Performance**    | 95-100         | 85-92       | -8 คะแนน |
+| **TTFB**           | 50-200ms       | 200-500ms   | +200ms   |
+| **FCP**            | 300-800ms      | 500-1200ms  | +400ms   |
+| **LCP**            | 800-1500ms     | 1200-2500ms | +800ms   |
+| **TBT**            | 100-300ms      | 150-400ms   | +100ms   |
+| **CLS**            | 0.01-0.05      | 0.01-0.05   | เท่ากัน  |
+| **SEO**            | 95-100         | 95-100      | เท่ากัน  |
+| **Accessibility**  | 97             | 97          | เท่ากัน  |
+| **Best Practices** | 95-100         | 95-100      | เท่ากัน  |
 
 ---
 
 ## 🔍 **Google Ranking Factors (Core Web Vitals):**
 
 ### **SSG:**
+
 - ✅ LCP < 2.5s: **Pass** (800-1500ms)
 - ✅ FID < 100ms: **Pass** (50-100ms)
 - ✅ CLS < 0.1: **Pass** (0.01-0.05)
 - **Result: ⭐⭐⭐⭐⭐ Excellent!**
 
 ### **SSR:**
+
 - ⚠️ LCP < 2.5s: **Pass but slower** (1200-2500ms)
 - ✅ FID < 100ms: **Pass** (50-100ms)
 - ✅ CLS < 0.1: **Pass** (0.01-0.05)
@@ -171,6 +189,7 @@ export default async function handler(req, res) {
 ### **❌ ไม่แนะนำเปลี่ยนเป็น SSR เต็มรูปแบบ**
 
 **เหตุผล:**
+
 1. 📉 **Performance ลดลง 8-10 คะแนน** (95-100 → 85-92)
 2. 🐌 **LCP ช้าขึ้น 400-1000ms** (ส่งผลต่อ SEO)
 3. 💸 **Cost เพิ่มขึ้น** (serverless functions ทุก request)
@@ -179,6 +198,7 @@ export default async function handler(req, res) {
 ### **✅ แนะนำใช้ Hybrid Approach**
 
 **วิธีที่ดีที่สุด:**
+
 ```
 SSG with Incremental Static Regeneration (ISR)
 + On-Demand Revalidation
@@ -186,6 +206,7 @@ SSG with Incremental Static Regeneration (ISR)
 ```
 
 **ข้อดี:**
+
 - ⚡ **Fast as SSG** (95-100 performance)
 - 🔄 **Fresh as SSR** (revalidate on-demand)
 - 💰 **Cost-effective** (ส่วนใหญ่ serve จาก CDN)
@@ -197,6 +218,7 @@ SSG with Incremental Static Regeneration (ISR)
 ## 🛠️ **การแก้ปัญหาปัจจุบัน (Memory Error):**
 
 ### **Option 1: Increase Memory (Quick Fix)** ⭐
+
 ```json
 // package.json
 {
@@ -206,11 +228,13 @@ SSG with Incremental Static Regeneration (ISR)
   }
 }
 ```
+
 **ผลกระทบ SEO:** ✅ ไม่มี (เหมือนเดิม 100%)
 
 ---
 
 ### **Option 2: Use ISR with Fallback (Best!)** ⭐⭐⭐⭐⭐
+
 ```javascript
 export async function getStaticPaths() {
   // ไม่ pre-build อะไร ให้ build on-demand
@@ -228,8 +252,9 @@ export async function getStaticProps({ params }) {
   };
 }
 ```
-**ผลกระทบ SEO:** ✅ ไม่มี (เหมือนเดิม 100%)
-**ข้อดีเพิ่ม:** 
+
+**ผลกระทบ SEO:** ✅ ไม่มี (เหมือนเดิม 100%) **ข้อดีเพิ่ม:**
+
 - ไม่มี memory error
 - รถใหม่แสดงทันที
 - Cache นานขึ้น (ลด server load)
@@ -237,6 +262,7 @@ export async function getStaticProps({ params }) {
 ---
 
 ### **Option 3: Optimize getAllCars() (Permanent Fix)** ⭐⭐⭐⭐
+
 ```javascript
 // แทนที่จะดึงรถทั้งหมด
 const allCars = await getAllCars(); // ❌ เยอะเกินไป
@@ -245,8 +271,9 @@ const allCars = await getAllCars(); // ❌ เยอะเกินไป
 const car = await getCarByHandle(params.handle); // ✅ ดึงแค่คันเดียว
 const recommendedCars = await getRecommendedCars(car.id, 4); // ✅ ดึงแค่ 4 คัน
 ```
-**ผลกระทบ SEO:** ✅ ไม่มี (เหมือนเดิม 100%)
-**ข้อดีเพิ่ม:**
+
+**ผลกระทบ SEO:** ✅ ไม่มี (เหมือนเดิม 100%) **ข้อดีเพิ่ม:**
+
 - Faster build time
 - Less memory usage
 - Better performance
@@ -256,6 +283,7 @@ const recommendedCars = await getRecommendedCars(car.id, 4); // ✅ ดึงแ
 ## 📊 **ROI Analysis:**
 
 ### **SSG (ปัจจุบัน) - ถ้าแก้ Memory Error:**
+
 - **Performance:** 95-100 ⭐⭐⭐⭐⭐
 - **SEO Score:** 95-100 ⭐⭐⭐⭐⭐
 - **User Experience:** Excellent
@@ -263,6 +291,7 @@ const recommendedCars = await getRecommendedCars(car.id, 4); // ✅ ดึงแ
 - **Maintenance:** ง่าย
 
 ### **SSR (ใหม่):**
+
 - **Performance:** 85-92 ⭐⭐⭐⭐
 - **SEO Score:** 95-100 ⭐⭐⭐⭐⭐
 - **User Experience:** Good
@@ -270,6 +299,7 @@ const recommendedCars = await getRecommendedCars(car.id, 4); // ✅ ดึงแ
 - **Maintenance:** ปานกลาง
 
 ### **Hybrid (ISR + On-Demand):**
+
 - **Performance:** 95-100 ⭐⭐⭐⭐⭐
 - **SEO Score:** 95-100 ⭐⭐⭐⭐⭐
 - **User Experience:** Excellent
@@ -283,6 +313,7 @@ const recommendedCars = await getRecommendedCars(car.id, 4); // ✅ ดึงแ
 ### **❌ ไม่ควรเปลี่ยนเป็น SSR เต็มรูปแบบ**
 
 **เหตุผล:**
+
 1. **SEO จะแย่ลง 8-10 คะแนน** (Performance 95-100 → 85-92)
 2. **LCP ช้าขึ้น 400-1000ms** (ส่งผลต่อ Google Ranking)
 3. **Cost เพิ่มขึ้น 2-5 เท่า**
@@ -291,6 +322,7 @@ const recommendedCars = await getRecommendedCars(car.id, 4); // ✅ ดึงแ
 ### **✅ ควรแก้ด้วย Hybrid Approach**
 
 **แนวทางที่แนะนำ:**
+
 ```
 1. เพิ่ม Memory Limit (NODE_OPTIONS)
 2. ใช้ fallback: 'blocking' (Build on-demand)
@@ -299,6 +331,7 @@ const recommendedCars = await getRecommendedCars(car.id, 4); // ✅ ดึงแ
 ```
 
 **ผลลัพธ์:**
+
 - ✅ **SEO ยังคงเป็น 95-100** (ไม่เปลี่ยนแปลง)
 - ✅ **Performance ยังคงเป็น 95-100** (ไม่เปลี่ยนแปลง)
 - ✅ **ไม่มี Memory Error** (แก้ปัญหาได้)
@@ -310,10 +343,12 @@ const recommendedCars = await getRecommendedCars(car.id, 4); // ✅ ดึงแ
 ## 🎯 **Action Items (ลำดับความสำคัญ):**
 
 ### **Priority 1: แก้ Memory Error (ทำเลย!)** ⭐⭐⭐⭐⭐
+
 ```bash
 # เพิ่ม memory limit
 pnpm add -D cross-env
 ```
+
 ```json
 // package.json
 {
@@ -325,6 +360,7 @@ pnpm add -D cross-env
 ```
 
 ### **Priority 2: ใช้ Fallback Blocking** ⭐⭐⭐⭐
+
 ```javascript
 // pages/car/[handle].jsx
 export async function getStaticPaths() {
@@ -336,6 +372,7 @@ export async function getStaticPaths() {
 ```
 
 ### **Priority 3: Optimize Data Fetching** ⭐⭐⭐
+
 ```javascript
 // lib/shopify.mjs - สร้าง function ใหม่
 export async function getCarByHandle(handle) {

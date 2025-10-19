@@ -1,6 +1,7 @@
 # 🔧 คู่มือเพิ่ม Environment Variables ใน Vercel
 
 ## ⚠️ ปัญหาที่พบ
+
 - www.chiangmaiusedcar.com/api/ping → 500 Error
 - สาเหตุ: **ไม่มี Environment Variables ใน Vercel Project**
 
@@ -175,6 +176,7 @@ Invoke-WebRequest -Uri "https://www.chiangmaiusedcar.com/api/ping" -UseBasicPars
 ## 📞 ติดปัญหา?
 
 ถ้าทำตามแล้วยังไม่ได้ ให้:
+
 1. Screenshot หน้า Environment Variables
 2. Screenshot Function Logs (error message)
 3. ส่งมาให้ผมดู

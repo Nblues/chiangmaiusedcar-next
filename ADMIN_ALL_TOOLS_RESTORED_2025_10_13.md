@@ -10,16 +10,19 @@
 ## เครื่องมือทั้งหมด (21 Tools)
 
 ### 1. System Health (สถานะระบบ) - 3 เครื่องมือ
+
 - ✅ **Health Check** - ตรวจสอบสถานะระบบทั้งหมด
 - ✅ **Shopify Status** - ตรวจสอบการเชื่อมต่อ Shopify API
 - ✅ **Email Status** - ตรวจสอบระบบส่งอีเมล
 
 ### 2. Testing (ทดสอบระบบ) - 3 เครื่องมือ
+
 - ✅ **Test Shopify** - ทดสอบการเชื่อมต่อ Shopify GraphQL
 - ✅ **Test Email** - ทดสอบระบบส่งอีเมล EmailJS
 - ✅ **Debug Environment** - ตรวจสอบ Environment Variables
 
 ### 3. Cache Management (จัดการ Cache) - 7 เครื่องมือ
+
 - ✅ **Revalidate All** - รีเฟรชหน้าเว็บทั้งหมด
 - ✅ **Revalidate Home** - รีเฟรชหน้าแรกเท่านั้น
 - ✅ **Revalidate Cars** - รีเฟรชหน้ารายการรถ
@@ -29,52 +32,60 @@
 - ✅ **Images Cache** - Cache รูปภาพพร้อม revalidation
 
 ### 4. SEO & Indexing (SEO และ Indexing) - 4 เครื่องมือ
+
 - ✅ **IndexNow: Home** - ส่งหน้าแรกไป IndexNow
 - ✅ **IndexNow: Cars** - ส่งหน้ารถทั้งหมดไป IndexNow
 - ✅ **OG Preview** - ตรวจสอบ Open Graph tags
 - ✅ **Keyword Checker** - ตรวจสอบคีย์เวิร์ด (custom component)
 
 ### 5. Social Media (โซเชียลมีเดีย) - 1 เครื่องมือ
+
 - ✅ **Facebook Re-scrape** - รีเฟรช Open Graph cache ของ Facebook
 
-### 6. Debug & Monitor (Debug และ Monitor) - 3 เครื่องมือ  
+### 6. Debug & Monitor (Debug และ Monitor) - 3 เครื่องมือ
+
 (รวมเครื่องมือที่ซ้ำกับ Testing แล้ว = 2 เครื่องมือ)
+
 - ✅ **Environment** - ตรวจสอบ ENV variables
 - ✅ **Analytics Test** - ทดสอบส่งข้อมูล Analytics
 
 ## UI Features
 
 ### Category Headers
+
 - **Icon แต่ละหมวด**: ใช้ SVG icons ที่แตกต่างกันสำหรับแต่ละหมวด
 - **Badge จำนวน**: แสดงจำนวนเครื่องมือในแต่ละหมวด
 - **Collapsible**: คลิกเพื่อเปิด/ปิดหมวด
 - **Rotate Icon**: ลูกศรหมุน 180° เมื่อเปิดหมวด
 
 ### Tool Cards
+
 - **Standard Tools**: แสดงเป็นปุ่มที่คลิกได้
 - **Custom Tools**: Keyword Checker ใช้ custom component
 - **Hover Effects**: Border และ shadow เมื่อ hover
 - **Loading State**: แสดง spinner เมื่อกำลังทำงาน
 
 ### Status Indicators (แสดงสถานะ)
+
 - 🟢 **Green (Success)**: `bg-green-50 border-green-200` + "✅ สำเร็จ"
 - 🔴 **Red (Error)**: `bg-red-50 border-red-200` + "❌ ล้มเหลว"
 - **Details Dropdown**: แสดงผลลัพธ์ JSON แบบละเอียด
 
 ## Color Scheme
 
-| Category | Primary Color | BG Color | Text Color |
-|----------|--------------|----------|------------|
-| System Health | `from-primary to-blue-700` | `bg-primary/5` | `text-primary` |
-| Testing | `from-accent to-orange-600` | `bg-accent/5` | `text-accent` |
-| Cache | `from-purple-500 to-purple-700` | `bg-purple-50` | `text-purple-700` |
-| SEO | `from-green-500 to-green-700` | `bg-green-50` | `text-green-700` |
-| Social | `from-pink-500 to-pink-700` | `bg-pink-50` | `text-pink-700` |
-| Debug | `from-gray-500 to-gray-700` | `bg-gray-50` | `text-gray-700` |
+| Category      | Primary Color                   | BG Color       | Text Color        |
+| ------------- | ------------------------------- | -------------- | ----------------- |
+| System Health | `from-primary to-blue-700`      | `bg-primary/5` | `text-primary`    |
+| Testing       | `from-accent to-orange-600`     | `bg-accent/5`  | `text-accent`     |
+| Cache         | `from-purple-500 to-purple-700` | `bg-purple-50` | `text-purple-700` |
+| SEO           | `from-green-500 to-green-700`   | `bg-green-50`  | `text-green-700`  |
+| Social        | `from-pink-500 to-pink-700`     | `bg-pink-50`   | `text-pink-700`   |
+| Debug         | `from-gray-500 to-gray-700`     | `bg-gray-50`   | `text-gray-700`   |
 
 ## Technical Details
 
 ### Component Structure
+
 ```jsx
 ToolsPanel (Main Component)
 ├── KeywordCheckerTool (Custom Component for Keyword Checker)
@@ -93,6 +104,7 @@ ToolsPanel (Main Component)
 ```
 
 ### API Endpoints Used
+
 1. `/api/health` - Health check
 2. `/api/test-shopify` - Shopify API test
 3. `/api/test-email` - Email service test
@@ -108,14 +120,16 @@ ToolsPanel (Main Component)
 ## Known Issues
 
 ### Line Endings Warning (CRLF)
+
 - **ปัญหา**: Prettier แจ้งเตือนเรื่อง CRLF line endings (`Delete ␍`)
 - **ผลกระทบ**: ไม่กระทบการทำงาน (โค้ดทำงานได้ปกติ)
-- **วิธีแก้**: 
+- **วิธีแก้**:
+
   ```bash
   # แปลง CRLF → LF
   git config core.autocrlf false
   dos2unix components/admin/ToolsPanel.jsx
-  
+
   # หรือใช้ VS Code
   # คลิกที่ "CRLF" ที่มุมขวาล่าง → เลือก "LF"
   ```
@@ -143,7 +157,8 @@ ToolsPanel (Main Component)
 
 ## Summary
 
-เครื่องมือทั้ง 21 ตัวได้กลับมาครบแล้ว พร้อมใช้งานใน Admin Dashboard พร้อมระบบแสดงสถานะเป็นสีเขียว (สำเร็จ) และสีแดง (ล้มเหลว) 🎉
+เครื่องมือทั้ง 21 ตัวได้กลับมาครบแล้ว พร้อมใช้งานใน Admin Dashboard พร้อมระบบแสดงสถานะเป็นสีเขียว (สำเร็จ) และสีแดง
+(ล้มเหลว) 🎉
 
 ---
 

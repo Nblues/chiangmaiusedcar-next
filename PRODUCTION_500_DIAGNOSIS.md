@@ -3,11 +3,13 @@
 ## Current Status
 
 **Deployment Info:**
+
 - Commit: 42b06c3 (with all fixes)
 - Branch: master
 - Vercel Project: chiangmaiusedcar-next
 
 **Test Results:**
+
 - ❌ www.chiangmaiusedcar.com/api/ping → **500 Internal Server Error**
 - ❌ www.chiangmaiusedcar.com/api/runtime-check → **500 Internal Server Error**
 - ⚠️ Generated URL /api/ping → **401 Unauthorized** (Deployment Protection)
@@ -24,11 +26,13 @@
 ### What's Different?
 
 **Generated URL:** chiangmaiusedcar-next-git-master-chiangmaiusedcars-projects.vercel.app
+
 - Protected by Deployment Protection (401)
 - Direct connection to this specific deployment
 - Should work once protection bypassed/disabled
 
 **Custom Domain:** www.chiangmaiusedcar.com
+
 - May route through different edge nodes
 - May have different env vars or configuration
 - Getting 500 suggests serverless function crash

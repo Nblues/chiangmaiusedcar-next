@@ -1,4 +1,5 @@
 # การแก้ปัญหาปุ่ม "สอบถามรถยนต์"
+
 ## วันที่: October 11, 2025
 
 ---
@@ -8,9 +9,11 @@
 **ปุ่ม:** "สอบถามรถยนต์" (ปุ่มสีส้ม ใต้ hero banner)
 
 **พฤติกรรมที่คาดหวัง:**
+
 - คลิกแล้วควรเปิด LINE Official Account: `https://lin.ee/8ugfzstD`
 
 **พฤติกรรมที่เกิดขึ้นจริง:**
+
 - คลิกแล้วไปที่หน้า: `/all-cars?brand=ford` ❌
 
 ---
@@ -31,6 +34,7 @@
 ```
 
 **โค้ดถูกต้อง!** ✅
+
 - มี `href="https://lin.ee/8ugfzstD"` ถูกต้อง
 - มี `target="_blank"` เปิดแท็บใหม่
 - มี `rel="noopener noreferrer"` ปลอดภัย
@@ -42,17 +46,20 @@
 ### **1. Browser Cache (มีโอกาสสูง)** ⭐⭐⭐⭐⭐
 
 **อาการ:**
+
 - เว็บโหลดหน้าเก่าที่ cache ไว้
 - Next.js hot reload อาจไม่อัปเดตทันที
 - Browser ใช้ HTML เก่า
 
 **วิธีทดสอบ:**
+
 1. กด `Ctrl + Shift + R` (Hard Refresh)
 2. หรือ `Ctrl + F5`
 3. หรือเปิด Incognito Mode (`Ctrl + Shift + N`)
 4. หรือลบ cache แล้วรีเฟรช
 
 **วิธีแก้:**
+
 ```bash
 # ใน Chrome DevTools
 1. F12 เปิด DevTools
@@ -65,14 +72,16 @@
 ### **2. Element ซ้อนทับ (Overlapping)** ⭐⭐⭐⭐
 
 **อาการ:**
+
 - มี element อื่นซ้อนทับปุ่ม (z-index สูงกว่า)
 - คลิกโดนของอื่นแทน
 
 **วิธีทดสอบ:**
+
 ```javascript
 // ใน Browser Console (F12)
 // 1. หา element ที่คลิกจริงๆ
-document.addEventListener('click', (e) => {
+document.addEventListener('click', e => {
   console.log('Clicked element:', e.target);
   console.log('Link href:', e.target.href);
   console.log('All attributes:', e.target.attributes);
@@ -86,6 +95,7 @@ console.log('Z-index:', window.getComputedStyle(btn).zIndex);
 ```
 
 **วิธีแก้ถ้าพบปัญหา:**
+
 ```jsx
 // เพิ่ม z-index ให้ปุ่ม
 <a
@@ -103,10 +113,12 @@ console.log('Z-index:', window.getComputedStyle(btn).zIndex);
 ### **3. JavaScript Override** ⭐⭐
 
 **อาการ:**
+
 - มี JavaScript ที่ intercept click event
 - preventDefault() หรือ redirect ไปที่อื่น
 
 **วิธีทดสอบ:**
+
 ```javascript
 // ใน Browser Console
 const btn = document.querySelector('a[href="https://lin.ee/8ugfzstD"]');
@@ -114,6 +126,7 @@ console.log('Event listeners:', getEventListeners(btn));
 ```
 
 **วิธีแก้:**
+
 - ตรวจสอบว่ามี onClick handler ไหม (ไม่มีในโค้ดปัจจุบัน ✅)
 
 ---
@@ -121,10 +134,12 @@ console.log('Event listeners:', getEventListeners(btn));
 ### **4. CSS Pointer Events** ⭐
 
 **อาการ:**
+
 - มี `pointer-events: none` ทำให้คลิกไม่ได้
 - คลิกโดนของข้างล่างแทน
 
 **วิธีทดสอบ:**
+
 ```javascript
 // ใน Browser Console
 const btn = document.querySelector('a[href="https://lin.ee/8ugfzstD"]');
@@ -136,10 +151,12 @@ console.log('Pointer events:', window.getComputedStyle(btn).pointerEvents);
 ### **5. Next.js Hot Reload ปัญหา** ⭐⭐⭐
 
 **อาการ:**
+
 - Fast Refresh ไม่อัปเดตโค้ดใหม่
 - ต้อง restart server
 
 **วิธีแก้:**
+
 ```bash
 # Restart dev server
 # กด Ctrl+C หยุด server
@@ -176,6 +193,7 @@ pnpm dev
 ```
 
 **ดูว่า:**
+
 - มี `href="https://lin.ee/8ugfzstD"` ไหม?
 - มี element อื่นซ้อนทับไหม?
 
@@ -185,15 +203,19 @@ pnpm dev
 
 ```javascript
 // วางใน Browser Console (F12 → Console)
-document.addEventListener('click', (e) => {
-  if (e.target.textContent.includes('สอบถามรถยนต์')) {
-    console.log('=== Button Click Debug ===');
-    console.log('Element:', e.target);
-    console.log('Tag:', e.target.tagName);
-    console.log('Href:', e.target.href);
-    console.log('Parent:', e.target.parentElement);
-  }
-}, true);
+document.addEventListener(
+  'click',
+  e => {
+    if (e.target.textContent.includes('สอบถามรถยนต์')) {
+      console.log('=== Button Click Debug ===');
+      console.log('Element:', e.target);
+      console.log('Tag:', e.target.tagName);
+      console.log('Href:', e.target.href);
+      console.log('Parent:', e.target.parentElement);
+    }
+  },
+  true
+);
 ```
 
 **แล้วคลิกปุ่ม** → ดู Console output
@@ -245,40 +267,46 @@ document.addEventListener('click', (e) => {
 
 ## 📊 **ความน่าจะเป็นของสาเหตุ:**
 
-| สาเหตุ | โอกาส | แนวทางแก้ |
-|--------|-------|-----------|
-| Browser Cache | 90% | Hard Refresh (Ctrl+Shift+R) |
-| Next.js Hot Reload | 5% | Restart dev server |
-| Element Overlap | 3% | เพิ่ม z-index |
-| JavaScript Override | 1% | ตรวจสอบ event listeners |
-| CSS Pointer Events | 1% | ตรวจสอบ CSS |
+| สาเหตุ              | โอกาส | แนวทางแก้                   |
+| ------------------- | ----- | --------------------------- |
+| Browser Cache       | 90%   | Hard Refresh (Ctrl+Shift+R) |
+| Next.js Hot Reload  | 5%    | Restart dev server          |
+| Element Overlap     | 3%    | เพิ่ม z-index               |
+| JavaScript Override | 1%    | ตรวจสอบ event listeners     |
+| CSS Pointer Events  | 1%    | ตรวจสอบ CSS                 |
 
 ---
 
 ## 🔧 **Quick Fix (ทำทันที):**
 
 ### **Option 1: Hard Refresh** ⭐⭐⭐⭐⭐ (แนะนำ)
+
 ```
 1. เปิด http://localhost:3000
 2. กด Ctrl + Shift + R
 3. คลิกปุ่มอีกครั้ง
 ```
+
 **Time:** 10 วินาที
 
 ### **Option 2: Incognito Mode** ⭐⭐⭐⭐
+
 ```
 1. กด Ctrl + Shift + N
 2. ไปที่ http://localhost:3000
 3. คลิกปุ่ม
 ```
+
 **Time:** 20 วินาที
 
 ### **Option 3: Clear Cache** ⭐⭐⭐
+
 ```
 1. F12 → Network tab
 2. Disable cache (checkbox)
 3. Refresh หน้า
 ```
+
 **Time:** 30 วินาที
 
 ---

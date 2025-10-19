@@ -99,7 +99,9 @@ html {
   outline: 3px solid #ff9800; /* สีส้ม accent สว่างชัดเจน */
   outline-offset: 3px;
   box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.2); /* เพิ่ม glow effect */
-  transition: outline 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition:
+    outline 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
 }
 
 /* Focus for interactive elements */

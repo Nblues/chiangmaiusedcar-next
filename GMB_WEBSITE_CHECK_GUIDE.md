@@ -388,7 +388,7 @@ Week 2-4:
 - [ ] เข้า https://business.google.com
 - [ ] Login Google Account
 - [ ] เลือก Business "ครูหนึ่งรถสวย"
-- [ ] ดู Website URL: ********\_********
+- [ ] ดู Website URL: **\*\*\*\***\_**\*\*\*\***
 - [ ] ตรงกับ chiangmaiusedcar.com? (ใช่/ไม่)
 
 ### ถ้าไม่ตรง/ไม่มี:

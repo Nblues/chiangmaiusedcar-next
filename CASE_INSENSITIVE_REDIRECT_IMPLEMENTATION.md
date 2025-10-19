@@ -94,6 +94,7 @@ export const config = {
 ### ✅ Performance Optimized
 
 **Excluded Paths** (ไม่รัน middleware):
+
 - `/_next/static/*` - Next.js static files
 - `/_next/image/*` - Image optimization
 - `/favicon.ico` - Favicon
@@ -109,36 +110,36 @@ export const config = {
 
 ### ✅ Basic Redirects
 
-| Input URL | Expected Redirect | Status |
-|-----------|-------------------|--------|
-| `/Car/Honda-City-2020` | `/car/honda-city-2020` | ✅ |
-| `/ALL-CARS` | `/all-cars` | ✅ |
-| `/About` | `/about` | ✅ |
-| `/CONTACT` | `/contact` | ✅ |
-| `/Sell-Car` | `/sell-car` | ✅ |
+| Input URL              | Expected Redirect      | Status |
+| ---------------------- | ---------------------- | ------ |
+| `/Car/Honda-City-2020` | `/car/honda-city-2020` | ✅     |
+| `/ALL-CARS`            | `/all-cars`            | ✅     |
+| `/About`               | `/about`               | ✅     |
+| `/CONTACT`             | `/contact`             | ✅     |
+| `/Sell-Car`            | `/sell-car`            | ✅     |
 
 ### ✅ With Query Parameters
 
-| Input URL | Expected Redirect | Status |
-|-----------|-------------------|--------|
-| `/All-Cars?brand=honda` | `/all-cars?brand=honda` | ✅ |
-| `/Car/Honda-City?color=white` | `/car/honda-city?color=white` | ✅ |
+| Input URL                     | Expected Redirect             | Status |
+| ----------------------------- | ----------------------------- | ------ |
+| `/All-Cars?brand=honda`       | `/all-cars?brand=honda`       | ✅     |
+| `/Car/Honda-City?color=white` | `/car/honda-city?color=white` | ✅     |
 
 ### ✅ Already Lowercase (No Redirect)
 
-| Input URL | Action | Status |
-|-----------|--------|--------|
-| `/car/honda-city-2020` | Pass through (no redirect) | ✅ |
-| `/all-cars` | Pass through (no redirect) | ✅ |
-| `/about` | Pass through (no redirect) | ✅ |
+| Input URL              | Action                     | Status |
+| ---------------------- | -------------------------- | ------ |
+| `/car/honda-city-2020` | Pass through (no redirect) | ✅     |
+| `/all-cars`            | Pass through (no redirect) | ✅     |
+| `/about`               | Pass through (no redirect) | ✅     |
 
 ### ✅ Static Files (Excluded)
 
-| Input URL | Action | Status |
-|-----------|--------|--------|
-| `/Logo.png` | No middleware (excluded) | ✅ |
-| `/Style.css` | No middleware (excluded) | ✅ |
-| `/_next/static/...` | No middleware (excluded) | ✅ |
+| Input URL           | Action                   | Status |
+| ------------------- | ------------------------ | ------ |
+| `/Logo.png`         | No middleware (excluded) | ✅     |
+| `/Style.css`        | No middleware (excluded) | ✅     |
+| `/_next/static/...` | No middleware (excluded) | ✅     |
 
 ---
 
@@ -173,6 +174,7 @@ Benefits:
 ### URL Structure Score
 
 **Before**:
+
 ```
 9. Case Handling: 8/10 ⚠️
    - URLs are case-sensitive
@@ -182,6 +184,7 @@ Overall URL Score: 98/100 (A+)
 ```
 
 **After**:
+
 ```
 9. Case Handling: 10/10 ✅
    - Automatic lowercase redirect
@@ -194,6 +197,7 @@ Overall URL Score: 100/100 (A+) 🎉
 ### Overall SEO Score
 
 **Before**:
+
 ```
 1. Schema.org:           99/100 (A+)
 2. Google Essentials:    95/100 (A+)
@@ -203,6 +207,7 @@ Overall Average:         97/100 (A+)
 ```
 
 **After**:
+
 ```
 1. Schema.org:           99/100 (A+)
 2. Google Essentials:    95/100 (A+)
@@ -280,6 +285,7 @@ favicon.ico      → Favicon file
 ### 3. Performance Impact
 
 **Benchmark**:
+
 - Middleware execution: < 1ms (edge runtime)
 - No JavaScript required: Works without client-side code
 - Smart exclusions: Static files bypass middleware
@@ -366,6 +372,7 @@ git push origin master
 ### ✅ Post-Deployment Verification
 
 1. **Test Production URLs**:
+
    ```
    https://chiangmaiusedcar.com/About
    https://chiangmaiusedcar.com/ALL-CARS
@@ -373,6 +380,7 @@ git push origin master
    ```
 
 2. **Check HTTP Status**:
+
    - Should return `301 Moved Permanently`
    - Location header should have lowercase URL
 
