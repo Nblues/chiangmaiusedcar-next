@@ -4,7 +4,7 @@ Thank you for your interest in contributing to this project!
 
 ## 🚫 Private Repository
 
-This is a **private commercial project** for Chiangmai Used Car (ครูหนึ่งรถสวย). 
+This is a **private commercial project** for Chiangmai Used Car (ครูหนึ่งรถสวย).
 
 ## For Team Members
 
@@ -13,16 +13,19 @@ If you're part of the development team, please follow these guidelines:
 ### Development Workflow
 
 1. **Create a branch**
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
 
 2. **Make your changes**
+
    - Follow the existing code style
    - Use Thai comments for business logic
    - Test thoroughly before committing
 
 3. **Commit with conventional commits**
+
    ```bash
    git commit -m "feat: add new car filter feature"
    git commit -m "fix: resolve mobile layout issue"
@@ -55,6 +58,7 @@ If you're part of the development team, please follow these guidelines:
 ### Testing Checklist
 
 Before submitting:
+
 - [ ] Code builds without errors (`pnpm build`)
 - [ ] Linting passes (`pnpm lint`)
 - [ ] Type checking passes (`pnpm type-check`)

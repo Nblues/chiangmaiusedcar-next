@@ -606,7 +606,7 @@ export default function Home({ cars, brandCounts }) {
                         const price = getPriceInfo(safeGet(car, 'price.amount'));
                         return (
                           <p
-                            className="text-lg md:text-xl font-bold text-orange-600 font-prompt"
+                            className="text-lg md:text-xl font-bold text-orange-700 font-prompt"
                             itemProp="offers"
                             itemScope
                             itemType="https://schema.org/Offer"
@@ -985,7 +985,7 @@ export default function Home({ cars, brandCounts }) {
             <p className="text-lg text-gray-600 max-w-2xl mx-auto font-prompt leading-relaxed">
               <span className="text-primary font-semibold">รถบ้านแท้ 90% มือเดียว</span>{' '}
               ไม่มีรถประมูล ตรวจสภาพครบถ้วนก่อนส่งมอบ{' '}
-              <span className="text-accent-700 font-semibold">ลูกค้า 90% เชื่อมั่น</span>{' '}
+              <span className="text-orange-700 font-semibold">ลูกค้า 90% เชื่อมั่น</span>{' '}
               ไม่ต้องมาดูรถ
             </p>
             <div className="w-32 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-6"></div>
@@ -1036,7 +1036,7 @@ export default function Home({ cars, brandCounts }) {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">ฟรีดาวน์ 0%</h3>
               <p className="text-gray-600 leading-relaxed font-prompt text-sm">
-                <span className="text-accent-700 font-semibold">ออกรถไม่ต้องวางเงินดาวน์</span>{' '}
+                <span className="text-orange-700 font-semibold">ออกรถไม่ต้องวางเงินดาวน์</span>{' '}
                 ตามเงื่อนไขไฟแนนซ์{' '}
                 <span className="text-primary font-semibold">เครดิตไม่ผ่านก็มีทาง</span>
               </p>
@@ -1063,7 +1063,7 @@ export default function Home({ cars, brandCounts }) {
               <p className="text-gray-600 leading-relaxed font-prompt text-sm">
                 รับประกันเครื่องยนต์และเกียร์{' '}
                 <span className="text-primary font-semibold">1 ปีเต็ม ไม่จำกัดกิโลเมตร</span> พร้อม
-                <span className="text-accent-700 font-semibold">บริการหลังการขาย 24/7</span>
+                <span className="text-orange-700 font-semibold">บริการหลังการขาย 24/7</span>
               </p>
             </div>
 
@@ -1086,7 +1086,7 @@ export default function Home({ cars, brandCounts }) {
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">ส่งฟรีทั่วไทย</h3>
               <p className="text-gray-600 leading-relaxed font-prompt text-sm">
-                <span className="text-accent-700 font-semibold">จัดส่งฟรีทุกจังหวัด</span>{' '}
+                <span className="text-orange-700 font-semibold">จัดส่งฟรีทุกจังหวัด</span>{' '}
                 พร้อมประกันการขนส่ง{' '}
                 <span className="text-primary font-semibold">ลูกค้า 90% เชื่อมั่น</span>{' '}
                 ไม่ต้องมาดูรถ

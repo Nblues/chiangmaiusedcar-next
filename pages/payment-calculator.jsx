@@ -731,7 +731,7 @@ export default function PaymentCalculator() {
             </a>
             <a
               href="tel:094-0649018"
-              className="bg-white text-accent-700 hover:bg-gray-50 border-2 border-accent hover:border-accent/80 px-6 md:px-8 py-3 rounded-2xl font-semibold transition-all duration-300 font-prompt text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-white text-orange-700 hover:bg-gray-50 border-2 border-accent hover:border-accent/80 px-6 md:px-8 py-3 rounded-2xl font-semibold transition-all duration-300 font-prompt text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
               aria-label="โทร 094-064-9018"
             >
               โทร 094-064-9018

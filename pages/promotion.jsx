@@ -497,7 +497,7 @@ export default function Promotion() {
                     </svg>
                   </div>
                   <h2 id="credit-offer" className="text-3xl font-bold mb-6 font-prompt">
-                    <span className="text-accent-700">ลูกค้าเครดิตดี</span>
+                    <span className="text-orange-700">ลูกค้าเครดิตดี</span>
                   </h2>
                   <div className="space-y-4">
                     <p className="text-xl font-prompt">ดอกเบี้ยเริ่มต้น</p>

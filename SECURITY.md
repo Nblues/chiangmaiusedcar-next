@@ -10,9 +10,9 @@ If you discover a security vulnerability, please report it privately:
 
 ## Supported Versions
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 2.0.x   | ✅ Yes (Current)   |
+| Version | Supported              |
+| ------- | ---------------------- |
+| 2.0.x   | ✅ Yes (Current)       |
 | 1.0.x   | ⚠️ Critical fixes only |
 | < 1.0   | ❌ No longer supported |
 
@@ -31,11 +31,13 @@ If you discover a security vulnerability, please report it privately:
 ### Best Practices
 
 1. **Never commit secrets**
+
    - Use `.env.local` for development
    - Use Vercel Environment Variables for production
    - Add sensitive files to `.gitignore`
 
 2. **Keep dependencies updated**
+
    - Run `pnpm audit` regularly
    - Update dependencies monthly
    - Review Dependabot PRs
@@ -55,6 +57,7 @@ If you discover a security vulnerability, please report it privately:
 ## Disclosure Policy
 
 We follow responsible disclosure:
+
 1. Report received
 2. Issue confirmed
 3. Fix developed and tested

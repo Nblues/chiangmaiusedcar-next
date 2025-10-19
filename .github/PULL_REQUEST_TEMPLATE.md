@@ -33,8 +33,8 @@ Closes #(issue number)
 
 ## 📸 Screenshots (if applicable)
 
-| Before | After |
-|--------|-------|
+| Before       | After        |
+| ------------ | ------------ |
 | (screenshot) | (screenshot) |
 
 ## 🧪 Testing Instructions
