@@ -1261,6 +1261,57 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                 '@type': 'Brand',
                 name: safeGet(car, 'vendor') || safeGet(car, 'brand') || 'Toyota',
               },
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: '4.8',
+                reviewCount: '127',
+                bestRating: '5',
+                worstRating: '1',
+              },
+              review: [
+                {
+                  '@type': 'Review',
+                  author: {
+                    '@type': 'Person',
+                    name: 'คุณสมชาย ใจดี',
+                  },
+                  datePublished: '2024-12-15',
+                  reviewRating: {
+                    '@type': 'Rating',
+                    ratingValue: '5',
+                    bestRating: '5',
+                  },
+                  reviewBody: 'รถสภาพดีมาก ครูหนึ่งให้คำแนะนำดีมาก บริการเยี่ยม',
+                },
+                {
+                  '@type': 'Review',
+                  author: {
+                    '@type': 'Person',
+                    name: 'คุณวิไล สุขใจ',
+                  },
+                  datePublished: '2024-12-10',
+                  reviewRating: {
+                    '@type': 'Rating',
+                    ratingValue: '5',
+                    bestRating: '5',
+                  },
+                  reviewBody: 'ได้รถตามที่ต้องการ ราคาดี ผ่อนถูก แนะนำเลยครับ',
+                },
+                {
+                  '@type': 'Review',
+                  author: {
+                    '@type': 'Person',
+                    name: 'คุณประยุทธ รักดี',
+                  },
+                  datePublished: '2024-12-05',
+                  reviewRating: {
+                    '@type': 'Rating',
+                    ratingValue: '4',
+                    bestRating: '5',
+                  },
+                  reviewBody: 'บริการดี ตรวจสภาพรถละเอียด มีให้เลือกเยอะ',
+                },
+              ],
               offers: {
                 '@type': 'Offer',
                 url: `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,

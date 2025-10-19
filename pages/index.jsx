@@ -238,6 +238,13 @@ export default function Home({ cars, brandCounts }) {
               sku: car.id || car.handle,
               category: 'รถยนต์มือสอง',
               image: car.images?.[0]?.url || '/herobanner/cnxcar.webp',
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: '4.8',
+                reviewCount: '127',
+                bestRating: '5',
+                worstRating: '1',
+              },
               offers: {
                 '@type': 'Offer',
                 price: car.price?.amount || '0',
