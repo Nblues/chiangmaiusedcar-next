@@ -46,6 +46,13 @@ test-results.xml
 *.key
 *.crt
 
+# Temporary credentials (added 2025-10-19)
+.tmp_*.txt
+api_key.txt
+*_password*.txt
+*_session*.txt
+*_username*.txt
+
 # ========================
 # 🧪 Firebase (Local)
 # ========================
