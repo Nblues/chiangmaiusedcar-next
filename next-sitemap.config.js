@@ -1,6 +1,6 @@
 module.exports = {
   siteUrl: process.env.SITE_URL || 'https://www.chiangmaiusedcar.com',
-  generateRobotsTxt: true,
+  generateRobotsTxt: true, // เปิด auto-generate robots.txt
   generateIndexSitemap: true,
   sitemapSize: 7000,
   // Bing 2025: changefreq and priority are ignored - removed to reduce sitemap size
@@ -91,6 +91,8 @@ module.exports = {
           .replace(/Sitemap:\s*([^\n]*)\n\s*\/([^\n]+)/g, 'Sitemap: $1/$2')
           // Replace localhost with production URL
           .replace(/http:\/\/localhost:3000/g, 'https://www.chiangmaiusedcar.com')
+          // Fix non-www URLs to use www
+          .replace(/https:\/\/chiangmaiusedcar\.com(?!\/)/g, 'https://www.chiangmaiusedcar.com')
           // Add comment before each sitemap
           .replace(/\nSitemap:/g, '\n\n# Additional XML Sitemaps\nSitemap:')
       );
