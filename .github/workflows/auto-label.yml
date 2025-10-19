@@ -1,0 +1,97 @@
+name: Auto Label Issues and PRs
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Label Bug Reports
+        if: github.event_name == 'issues'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const body = issue.body || '';
+
+            // Auto-label based on content
+            const labels = [];
+
+            if (body.includes('## Bug Description') || body.includes('[Bug]')) {
+              labels.push('bug');
+            }
+            if (body.includes('enhancement') || body.includes('Feature')) {
+              labels.push('enhancement');
+            }
+            if (body.includes('documentation')) {
+              labels.push('documentation');
+            }
+            if (body.includes('security') || body.includes('vulnerability')) {
+              labels.push('security');
+              labels.push('priority: high');
+            }
+
+            if (labels.length > 0) {
+              github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: labels
+              });
+            }
+
+      - name: Label Pull Requests
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const title = pr.title.toLowerCase();
+            const labels = [];
+
+            // Auto-label based on conventional commits
+            if (title.startsWith('feat:') || title.startsWith('feature:')) {
+              labels.push('enhancement');
+            }
+            if (title.startsWith('fix:')) {
+              labels.push('bug');
+            }
+            if (title.startsWith('docs:')) {
+              labels.push('documentation');
+            }
+            if (title.startsWith('style:') || title.startsWith('design:')) {
+              labels.push('design');
+            }
+            if (title.startsWith('refactor:')) {
+              labels.push('refactoring');
+            }
+            if (title.startsWith('perf:') || title.startsWith('performance:')) {
+              labels.push('performance');
+            }
+            if (title.startsWith('test:')) {
+              labels.push('testing');
+            }
+            if (title.startsWith('chore:') || title.startsWith('ci:')) {
+              labels.push('maintenance');
+            }
+            if (title.includes('security') || title.includes('vulnerability')) {
+              labels.push('security');
+            }
+
+            if (labels.length > 0) {
+              github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: labels
+              });
+            }
