@@ -19,20 +19,22 @@ const LOGO_SIZE = 128; // ขนาดสูงสุด 128px (แสดงท�
 
 async function optimizeHeroImage(inputPath, outputDir) {
   const filename = path.basename(inputPath, path.extname(inputPath));
-  
+
   console.log(`\n📸 Processing: ${filename}`);
 
   try {
     // อ่านข้อมูลรูปภาพ
     const image = sharp(inputPath);
     const metadata = await image.metadata();
-    
-    console.log(`   Original: ${metadata.width}x${metadata.height} (${(metadata.size / 1024).toFixed(2)} KB)`);
+
+    console.log(
+      `   Original: ${metadata.width}x${metadata.height} (${(metadata.size / 1024).toFixed(2)} KB)`
+    );
 
     // สร้าง responsive versions
     for (const size of HERO_SIZES) {
       const outputPath = path.join(outputDir, `${filename}${size.suffix}.webp`);
-      
+
       await image
         .clone()
         .resize(size.width, null, {
@@ -50,7 +52,8 @@ async function optimizeHeroImage(inputPath, outputDir) {
     const originalOutput = path.join(outputDir, `${filename}.webp`);
     await image
       .clone()
-      .resize(1400, null, { // จำกัดความกว้างสูงสุด 1400px
+      .resize(1400, null, {
+        // จำกัดความกว้างสูงสุด 1400px
         fit: 'inside',
         withoutEnlargement: true,
       })
@@ -59,7 +62,6 @@ async function optimizeHeroImage(inputPath, outputDir) {
 
     const stats = fs.statSync(originalOutput);
     console.log(`   ✅ Optimized original: (${(stats.size / 1024).toFixed(2)} KB)`);
-
   } catch (error) {
     console.error(`   ❌ Error processing ${filename}:`, error.message);
   }
@@ -67,12 +69,14 @@ async function optimizeHeroImage(inputPath, outputDir) {
 
 async function optimizeLogo(inputPath, outputPath) {
   console.log(`\n🎨 Optimizing logo: ${path.basename(inputPath)}`);
-  
+
   try {
     const image = sharp(inputPath);
     const metadata = await image.metadata();
-    
-    console.log(`   Original: ${metadata.width}x${metadata.height} (${(metadata.size / 1024).toFixed(2)} KB)`);
+
+    console.log(
+      `   Original: ${metadata.width}x${metadata.height} (${(metadata.size / 1024).toFixed(2)} KB)`
+    );
 
     await image
       .resize(LOGO_SIZE, LOGO_SIZE, {
@@ -83,8 +87,9 @@ async function optimizeLogo(inputPath, outputPath) {
       .toFile(outputPath);
 
     const stats = fs.statSync(outputPath);
-    console.log(`   ✅ Optimized: ${LOGO_SIZE}x${LOGO_SIZE} (${(stats.size / 1024).toFixed(2)} KB)`);
-
+    console.log(
+      `   ✅ Optimized: ${LOGO_SIZE}x${LOGO_SIZE} (${(stats.size / 1024).toFixed(2)} KB)`
+    );
   } catch (error) {
     console.error(`   ❌ Error optimizing logo:`, error.message);
   }
