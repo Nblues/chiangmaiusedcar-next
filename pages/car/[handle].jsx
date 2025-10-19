@@ -423,22 +423,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const defaultOgImage = 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
   const ogImageFinal = ogImage || socialImage || defaultOgImage;
 
-  // Debug mode - log for development AND production for social debugging
-  if (typeof window !== 'undefined') {
-    // eslint-disable-next-line no-console
-    console.log('🔍 Car Detail SEO Debug:', {
-      title: enhancedTitle,
-      description: enhancedDescription,
-      image: socialImage,
-      imageAbsolute: socialImage.startsWith('https://'),
-      imageSize: '1200x630',
-      url: `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
-      brandModel,
-      yearPrice,
-      facebookDebugUrl: `https://developers.facebook.com/tools/debug/?q=https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
-    });
-  }
-
   return (
     <>
       {/* Minimal SSR OG block to guarantee Facebook/LINE can read meta without JS */}
@@ -454,6 +438,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
           href={optimizedFirstImage}
           imageSrcSet={generateSrcSet(firstImageUrl, [640, 1024, 1920], 'webp')}
           imageSizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px"
+          fetchPriority="high"
         />
 
         <meta property="og:type" content="product" />
