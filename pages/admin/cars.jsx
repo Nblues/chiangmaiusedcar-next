@@ -51,6 +51,7 @@ function AdminCarsManagement() {
         setFilteredCars(data.cars || []);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to fetch cars:', error);
     } finally {
       setIsLoading(false);
@@ -61,6 +62,7 @@ function AdminCarsManagement() {
   const toggleCarStatus = async (carId, currentStatus) => {
     setIsUpdating(prev => ({ ...prev, [carId]: true }));
 
+    // eslint-disable-next-line no-console
     console.log('🔄 Toggling car status:', { carId, currentStatus });
 
     try {
@@ -116,6 +118,9 @@ function AdminCarsManagement() {
               : car
           )
         );
+
+        // ✅ Fetch fresh data from API to sync with file storage
+        await fetchCars();
       } else {
         const error = await response.json();
         // console.error('❌ Error response:', error);
