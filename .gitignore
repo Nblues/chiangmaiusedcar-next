@@ -124,6 +124,12 @@ lighthouse-report.html
 auth.json
 
 # ========================
+# 🐶 Husky Generated Files
+# ========================
+.husky/pre-commit.js
+.husky/_/
+
+# ========================
 # 📱 Mobile & PWA
 # ========================
 .expo/
