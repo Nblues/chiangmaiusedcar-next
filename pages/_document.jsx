@@ -115,10 +115,17 @@ export default function Document() {
         <style
           dangerouslySetInnerHTML={{
             __html: `
+          /* Hero banner styles - Critical for LCP */
+          header.relative { position: relative; width: 100%; height: auto; display: flex; align-items: center; justify-content: center; }
           .bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
           .from-orange-100 { --tw-gradient-from: #ffedd5; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 237, 213, 0)); }
           .to-blue-100 { --tw-gradient-to: #dbeafe; }
           .aspect-video { aspect-ratio: 16 / 9; }
+          .object-contain { object-fit: contain; }
+          .w-full { width: 100%; }
+          .h-auto { height: auto; }
+          .max-w-\\[1400px\\] { max-width: 1400px; }
+          .mx-auto { margin-left: auto; margin-right: auto; }
         `,
           }}
         />
@@ -131,8 +138,17 @@ export default function Document() {
         <link rel="preconnect" href="https://cdn.shopify.com" />
         <link rel="preconnect" href="https://files.myshopify.com" />
 
-        {/* Note: Hero banner image preload removed - not needed with fetchpriority="high" on img tag */}
-        {/* This prevents "preload not used" warnings on non-homepage pages */}
+        {/* Hero banner image preload for LCP optimization - homepage only */}
+        {/* Preload as="image" with fetchpriority="high" for instant LCP rendering */}
+        <link
+          rel="preload"
+          as="image"
+          href="/herobanner/cnxcar.webp"
+          type="image/webp"
+          fetchPriority="high"
+          imageSrcSet="/herobanner/cnxcar.webp 640w, /herobanner/cnxcar.webp 1024w, /herobanner/cnxcar.webp 1400w"
+          imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1400px"
+        />
 
         {/* Note: Prompt font is loaded via @fontsource/prompt in globals.css */}
         {/* Font preload is handled automatically by Next.js for @fontsource packages */}
