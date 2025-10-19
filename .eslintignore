@@ -5,7 +5,8 @@ build
 dist
 .vercel
 .cache
-.husky
+.husky/
+.husky/**
 *.min.js
 public/sw.js
 public/workbox-*.js
