@@ -240,10 +240,10 @@ export default function Home({ cars, brandCounts }) {
               image: car.images?.[0]?.url || '/herobanner/cnxcar.webp',
               aggregateRating: {
                 '@type': 'AggregateRating',
-                ratingValue: '4.8',
-                reviewCount: '127',
+                ratingValue: '5.0',
+                reviewCount: '20',
                 bestRating: '5',
-                worstRating: '1',
+                worstRating: '5',
               },
               offers: {
                 '@type': 'Offer',
