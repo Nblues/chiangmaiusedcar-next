@@ -317,13 +317,21 @@ const nextConfig = {
           },
         ],
       },
-      // HTML pages - short-term caching with revalidation
+      // HTML pages - Aggressive edge caching for better TTFB
       {
         source: '/((?!api|_next/static).*)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=60, s-maxage=300, stale-while-revalidate=86400',
+            value: 'public, max-age=300, s-maxage=600, stale-while-revalidate=86400',
+          },
+          {
+            key: 'CDN-Cache-Control',
+            value: 'public, max-age=600, stale-while-revalidate=86400',
+          },
+          {
+            key: 'Vercel-CDN-Cache-Control',
+            value: 'max-age=600, stale-while-revalidate=86400',
           },
           {
             key: 'Vary',

@@ -1495,6 +1495,6 @@ export async function getStaticProps() {
 
   return {
     props: { cars, brandCounts },
-    revalidate: 300, // 5 minutes
+    revalidate: 600, // 10 minutes - Reduce regeneration frequency for better TTFB
   };
 }
