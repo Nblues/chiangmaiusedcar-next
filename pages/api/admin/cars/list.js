@@ -4,7 +4,7 @@ import { readCarStatuses } from '../../../../lib/carStatusStore.js';
 
 /**
  * API: GET /api/admin/cars/list
- * Fetch all cars with their status from Shopify
+ * Fetch all cars with their status from Shopify + Vercel KV
  * Returns: { success: true, cars: [...] }
  */
 export default async function handler(req, res) {
@@ -22,13 +22,13 @@ export default async function handler(req, res) {
     // Fetch all products from Shopify
     const cars = await getAllCars();
 
-    // Load status from file storage (fallback)
-    const fileStatuses = readCarStatuses();
+    // Load status from Vercel KV
+    const kvStatuses = await readCarStatuses();
 
-    // Transform products to car format with normalized status
+    // Transform products to car format with status from KV
     const carsWithStatus = cars.map(car => {
-      // Get status from file storage or default to 'available'
-      const statusRaw = fileStatuses[car.id]?.status ?? 'available';
+      // Get status from KV or default to 'available'
+      const statusRaw = kvStatuses[car.id]?.status ?? 'available';
       // Normalize status to allowed set: 'available' | 'reserved'
       let status = typeof statusRaw === 'string' ? statusRaw.trim().toLowerCase() : 'available';
       if (status !== 'available' && status !== 'reserved') status = 'available';

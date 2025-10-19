@@ -6,6 +6,8 @@ import { updateCarStatus } from '../../../../lib/carStatusStore.js';
  * API: POST /api/admin/cars/toggle-status
  * Toggle car availability status (available <-> reserved)
  * Body: { carId: string, status: 'available' | 'reserved' }
+ *
+ * Storage: Vercel KV (Redis) - ข้อมูลถาวร 100%
  */
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -92,102 +94,8 @@ export default async function handler(req, res) {
       }
     };
 
-    // Use Shopify Admin API to update product metafield
-    const shopifyDomain = process.env.SHOPIFY_DOMAIN;
-    const adminToken = process.env.SHOPIFY_ADMIN_TOKEN;
-
-    if (!adminToken) {
-      // File-based status update for environments without Shopify Admin API token
-      const { statusRecord, path: filePath } = updateCarStatus(carId, status);
-      // Attempt on-demand revalidation for pages showing car listings and specific car page
-      const handleToRevalidate = providedHandle || (await getHandleById(carId));
-      await revalidatePaths(handleToRevalidate);
-      return res.status(200).json({
-        success: true,
-        carId,
-        status: statusRecord.status,
-        message: 'Status updated successfully (file storage)',
-        storage: 'file',
-        filePath,
-        revalidated: true,
-        revalidatedHandle: handleToRevalidate || undefined,
-        authedBy,
-      });
-    }
-
-    // Extract product ID from Shopify GID
-    const productId = carId.replace('gid://shopify/Product/', '');
-
-    // Try to locate an existing metafield so we can update instead of creating duplicates
-    const metafieldLookup = await fetch(
-      `https://${shopifyDomain}/admin/api/2024-01/products/${productId}/metafields.json?namespace=custom&key=status`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Shopify-Access-Token': adminToken,
-        },
-      }
-    );
-
-    if (!metafieldLookup.ok) {
-      throw new Error(`Shopify metafield lookup failed: ${metafieldLookup.statusText}`);
-    }
-
-    const lookupPayload = await metafieldLookup.json();
-    const existingMetafield = Array.isArray(lookupPayload?.metafields)
-      ? lookupPayload.metafields[0]
-      : null;
-
-    let apiResponse;
-
-    if (existingMetafield?.id) {
-      apiResponse = await fetch(
-        `https://${shopifyDomain}/admin/api/2024-01/metafields/${existingMetafield.id}.json`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Shopify-Access-Token': adminToken,
-          },
-          body: JSON.stringify({
-            metafield: {
-              id: existingMetafield.id,
-              value: status,
-              type: 'single_line_text_field',
-            },
-          }),
-        }
-      );
-    } else {
-      apiResponse = await fetch(
-        `https://${shopifyDomain}/admin/api/2024-01/products/${productId}/metafields.json`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Shopify-Access-Token': adminToken,
-          },
-          body: JSON.stringify({
-            metafield: {
-              namespace: 'custom',
-              key: 'status',
-              value: status,
-              type: 'single_line_text_field',
-            },
-          }),
-        }
-      );
-    }
-
-    if (!apiResponse.ok) {
-      const bodyText = await apiResponse.text();
-      throw new Error(`Shopify API error: ${apiResponse.status} ${bodyText}`);
-    }
-
-    const payload = await apiResponse.json();
-
-    // Mirror status to file store as well for immediate frontend reflection
-    const mirror = updateCarStatus(carId, status);
+    // Update status in Vercel KV (our own storage)
+    const { statusRecord, storage } = await updateCarStatus(carId, status);
 
     // Attempt on-demand revalidation for pages showing car listings and specific car page
     const handleToRevalidate = providedHandle || (await getHandleById(carId));
@@ -196,10 +104,10 @@ export default async function handler(req, res) {
     return res.status(200).json({
       success: true,
       carId,
-      status,
+      status: statusRecord.status,
       message: 'Status updated successfully',
-      metafield: payload.metafield,
-      mirrored: { storage: 'file', path: mirror.path },
+      storage, // 'vercel-kv'
+      updatedAt: statusRecord.updatedAt,
       revalidated: true,
       revalidatedHandle: handleToRevalidate || undefined,
       authedBy,
