@@ -84,17 +84,8 @@ module.exports = {
     // 2025 enhancement: crawl delay for different bots
     transformRobotsTxt: async (config, robotsTxt) => {
       return robotsTxt
-        .replace(
-          'User-agent: *',
-          `# Enhanced for AI Crawlers 2025
-User-agent: *`
-        )
-        .replace(
-          /Sitemap: /g,
-          `
-# Additional XML Sitemaps
-Sitemap: `
-        );
+        .replace('User-agent: *', `# Enhanced for AI Crawlers 2025\nUser-agent: *`)
+        .replace(/Sitemap: (https?:\/\/[^\n]+)/g, '\n# Additional XML Sitemaps\nSitemap: $1');
     },
   },
   exclude: [
