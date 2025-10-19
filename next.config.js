@@ -78,6 +78,16 @@ const nextConfig = {
       config.parallelism = 1;
     }
 
+    // Production CSS optimization - Remove unused CSS
+    if (!dev && !isServer) {
+      config.optimization = {
+        ...config.optimization,
+        usedExports: true,
+        sideEffects: false,
+        minimize: true,
+      };
+    }
+
     // Existing webpack configuration
     if (!isServer) {
       config.resolve.fallback = {

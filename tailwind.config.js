@@ -4,6 +4,20 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
     './app/**/*.{js,ts,jsx,tsx}',
+    './lib/**/*.{js,ts,jsx,tsx}',
+  ],
+  // Safelist for dynamic classes that might be purged incorrectly
+  safelist: [
+    'text-shadow',
+    'text-shadow-lg',
+    'text-shadow-xl',
+    'form-input',
+    'form-select',
+    'form-label',
+    'form-section-government',
+    'form-section-company',
+    'btn-primary',
+    'btn-secondary',
   ],
   future: {
     hoverOnlyWhenSupported: true,
