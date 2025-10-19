@@ -117,24 +117,5 @@
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=8.0.0"
-  },
-  "browserslist": {
-    "production": [
-      "chrome >= 90",
-      "edge >= 90",
-      "firefox >= 88",
-      "safari >= 14.1",
-      "ios >= 14.5",
-      "not dead",
-      "not op_mini all",
-      "not ie 11",
-      "not samsung < 13",
-      "not kaios > 0"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }
