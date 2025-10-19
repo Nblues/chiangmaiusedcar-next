@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+build
+dist
+.vercel
+.cache
+.husky
+*.min.js
+public/sw.js
+public/workbox-*.js
