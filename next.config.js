@@ -375,6 +375,40 @@ const nextConfig = {
   // Redirects for SEO and domain consistency
   async redirects() {
     return [
+      // Exclude static files from redirect
+      {
+        source: '/robots.txt',
+        has: [
+          {
+            type: 'host',
+            value: 'chiangmaiusedcar.com',
+          },
+        ],
+        destination: 'https://www.chiangmaiusedcar.com/robots.txt',
+        permanent: false, // Use 302 for static files
+      },
+      {
+        source: '/sitemap.xml',
+        has: [
+          {
+            type: 'host',
+            value: 'chiangmaiusedcar.com',
+          },
+        ],
+        destination: 'https://www.chiangmaiusedcar.com/sitemap.xml',
+        permanent: false,
+      },
+      {
+        source: '/sitemap-:path*.xml',
+        has: [
+          {
+            type: 'host',
+            value: 'chiangmaiusedcar.com',
+          },
+        ],
+        destination: 'https://www.chiangmaiusedcar.com/sitemap-:path*.xml',
+        permanent: false,
+      },
       {
         source: '/(.*)',
         has: [

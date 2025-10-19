@@ -35,15 +35,14 @@ export function createPrettyUrl(handle) {
 }
 
 /**
- * สร้าง Short URL สำหรับ Social Sharing
+ * สร้าง Short URL สำหรับแชร์
  * @param {string} handle - Car handle
- * @param {object} car - Car data
- * @returns {string} Short URL
+ * @returns {string} Short URL for sharing
  *
  * @example
  * Output: "https://www.chiangmaiusedcar.com/car/isuzu-d-max-2014"
  */
-export function createShortShareUrl(handle, car) {
+export function createShortShareUrl(handle) {
   const prettyHandle = createPrettyUrl(handle);
   return `https://www.chiangmaiusedcar.com/car/${prettyHandle}`;
 }
@@ -53,7 +52,7 @@ export function createShortShareUrl(handle, car) {
  * @param {object} car - Car data
  * @returns {string} Share text with emoji
  */
-export function createShareText(car) {
+export function createShareText(car = {}) {
   const brand = car?.vendor || car?.brand || '';
   const model = car?.model || '';
   const year = car?.year || '';

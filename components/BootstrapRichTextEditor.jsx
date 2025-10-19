@@ -319,7 +319,7 @@ const BootstrapRichTextEditor = ({
       />
 
       {/* Custom CSS for 2025 Styles */}
-      <style jsx>{`
+      <style>{`
         /* Custom 2025 Enhancements */
         .card {
           transition: all 0.3s ease;

@@ -13,13 +13,13 @@ export default function handler(req, res) {
       },
       timestamp: new Date().toISOString(),
     };
-    
+
     return res.status(200).json({ status: 'ok', debug });
   } catch (error) {
-    return res.status(500).json({ 
-      status: 'error', 
+    return res.status(500).json({
+      status: 'error',
       message: error.message,
-      stack: error.stack 
+      stack: error.stack,
     });
   }
 }

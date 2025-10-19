@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import dynamic from 'next/dynamic';
 import SEO from '../../components/SEO';
 
 function AdminCarsManagement() {
