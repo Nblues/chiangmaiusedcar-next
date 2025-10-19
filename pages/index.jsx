@@ -282,14 +282,14 @@ export default function Home({ cars, brandCounts }) {
           <A11yImage
             src="/herobanner/cnxcar.webp"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-            width={1920}
-            height={640}
+            width={1400}
+            height={467}
             className="w-full h-auto object-contain"
             imageType="hero"
             priority
             fetchpriority="high"
-            quality={60}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1400px"
+            quality={85}
+            sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1400px"
             style={{ maxHeight: '60vh' }}
           />
         </div>
