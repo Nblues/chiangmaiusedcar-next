@@ -89,6 +89,8 @@ module.exports = {
           .replace('User-agent: *', `# Enhanced for AI Crawlers 2025\nUser-agent: *`)
           // Fix broken URLs (remove newlines in the middle of URLs)
           .replace(/Sitemap:\s*([^\n]*)\n\s*\/([^\n]+)/g, 'Sitemap: $1/$2')
+          // Fix URLs without path - add /sitemap.xml
+          .replace(/Sitemap:\s+(https?:\/\/[^/\s]+)\s*$/gm, 'Sitemap: $1/sitemap.xml')
           // Replace localhost with production URL
           .replace(/http:\/\/localhost:3000/g, 'https://www.chiangmaiusedcar.com')
           // Fix non-www URLs to use www
