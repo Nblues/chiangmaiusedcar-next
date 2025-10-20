@@ -65,6 +65,18 @@ function AdminCarsManagement() {
     // eslint-disable-next-line no-console
     console.log('🔄 Toggling car status:', { carId, currentStatus });
 
+    // ตรวจสอบว่า currentStatus เป็น undefined หรือไม่
+    if (!currentStatus) {
+      // eslint-disable-next-line no-console
+      console.error(
+        '❌ currentStatus is undefined! Car data:',
+        cars.find(c => c.id === carId)
+      );
+      alert('ไม่สามารถเปลี่ยนสถานะได้: ไม่พบสถานะปัจจุบัน');
+      setIsUpdating(prev => ({ ...prev, [carId]: false }));
+      return;
+    }
+
     try {
       const newStatus = currentStatus === 'available' ? 'reserved' : 'available';
       // console.log('📤 Sending request:', { carId, status: newStatus });
