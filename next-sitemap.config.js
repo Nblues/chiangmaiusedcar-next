@@ -1,5 +1,8 @@
 module.exports = {
-  siteUrl: process.env.SITE_URL || 'https://www.chiangmaiusedcar.com',
+  // Sanitize siteUrl to avoid trailing spaces/slashes causing invalid URLs in sitemaps
+  siteUrl: String(process.env.SITE_URL || 'https://www.chiangmaiusedcar.com')
+    .trim()
+    .replace(/\/+$/g, ''),
   generateRobotsTxt: true, // เปิด auto-generate robots.txt
   generateIndexSitemap: true,
   sitemapSize: 7000,

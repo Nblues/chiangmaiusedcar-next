@@ -1,31 +1,34 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable linebreak-style */
 import { NextResponse } from 'next/server';
 
 export function middleware(request) {
   const response = NextResponse.next();
 
-  // Add aggressive edge caching headers for homepage to improve TTFB
+  // Homepage: disable browser cache, keep CDN cache for fast TTFB
   if (request.nextUrl.pathname === '/') {
     response.headers.set(
       'Cache-Control',
-      'public, max-age=300, s-maxage=600, stale-while-revalidate=86400'
+      'public, max-age=0, must-revalidate, s-maxage=600, stale-while-revalidate=86400'
     );
-    response.headers.set('CDN-Cache-Control', 'public, max-age=600, stale-while-revalidate=86400');
-    response.headers.set('Vercel-CDN-Cache-Control', 'max-age=600, stale-while-revalidate=86400');
+    response.headers.set('CDN-Cache-Control', 'public, s-maxage=600, stale-while-revalidate=86400');
+    response.headers.set('Vercel-CDN-Cache-Control', 's-maxage=600, stale-while-revalidate=86400');
   }
 
-  // Add cache headers for car listing pages
+  // Car detail pages: disable browser cache, keep longer CDN cache
   if (request.nextUrl.pathname.startsWith('/car/')) {
     response.headers.set(
       'Cache-Control',
-      'public, max-age=600, s-maxage=3600, stale-while-revalidate=86400'
+      'public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=86400'
     );
     response.headers.set(
       'CDN-Cache-Control',
-      'public, max-age=3600, stale-while-revalidate=86400'
+      'public, s-maxage=3600, stale-while-revalidate=86400'
     );
+    response.headers.set('Vercel-CDN-Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
   }
 
-  // Add cache headers for static pages
+  // Listing and static pages: disable browser cache, keep CDN cache
   if (
     request.nextUrl.pathname === '/all-cars' ||
     request.nextUrl.pathname === '/promotion' ||
@@ -33,12 +36,13 @@ export function middleware(request) {
   ) {
     response.headers.set(
       'Cache-Control',
-      'public, max-age=600, s-maxage=1800, stale-while-revalidate=86400'
+      'public, max-age=0, must-revalidate, s-maxage=1800, stale-while-revalidate=86400'
     );
     response.headers.set(
       'CDN-Cache-Control',
-      'public, max-age=1800, stale-while-revalidate=86400'
+      'public, s-maxage=1800, stale-while-revalidate=86400'
     );
+    response.headers.set('Vercel-CDN-Cache-Control', 's-maxage=1800, stale-while-revalidate=86400');
   }
 
   return response;

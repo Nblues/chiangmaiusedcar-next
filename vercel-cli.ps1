@@ -80,12 +80,12 @@ if (Test-Path $pnpmCmd) {
     if (Invoke-Tool -ToolPath $pnpmCmd -Args (@('dlx','vercel@latest') + $VercelArgs)) { exit 0 }
 }
 
-# Fallback: Guidance
-Write-Host ""; Write-Host "❌ ไม่สามารถรัน Vercel CLI ได้ในเครื่องนี้" -ForegroundColor Red
-Write-Host ""; Write-Host "📝 ใช้ Vercel Dashboard แทนได้ครบถ้วน:" -ForegroundColor Cyan
+# Fallback: Guidance (ASCII only to avoid encoding parse issues)
+Write-Host ""; Write-Host "ERROR: Could not run Vercel CLI on this machine" -ForegroundColor Red
+Write-Host ""; Write-Host "Use Vercel Dashboard as an alternative:" -ForegroundColor Cyan
 Write-Host "   https://vercel.com/nblues/chiangmaiusedcar-next" -ForegroundColor Blue
-Write-Host ""; Write-Host "หรือแก้ npm/node ตามคู่มือ (Option 2) แล้วติดตั้ง CLI:" -ForegroundColor Yellow
-Write-Host "   1) ติดตั้ง Node.js LTS ใหม่จาก https://nodejs.org/" -ForegroundColor Gray
-Write-Host "   2) เปิด PowerShell ใหม่ แล้วรัน: npm install -g vercel" -ForegroundColor Gray
-Write-Host "   3) จากนั้นรัน: vercel login" -ForegroundColor Gray
+Write-Host ""; Write-Host "Or fix npm/node and install CLI:" -ForegroundColor Yellow
+Write-Host "   1) Install Node.js LTS from https://nodejs.org/" -ForegroundColor Gray
+Write-Host "   2) Open new PowerShell and run: npm install -g vercel" -ForegroundColor Gray
+Write-Host "   3) Then run: vercel login" -ForegroundColor Gray
 exit 1

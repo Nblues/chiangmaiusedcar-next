@@ -1,4 +1,5 @@
 import React, { useEffect, lazy, Suspense } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Analytics } from '@vercel/analytics/react';
 import ClientOnly from '../components/ClientOnly';
@@ -12,6 +13,9 @@ import '../styles/interactive-editor.css';
 const CookieConsent = lazy(() => import('../components/CookieConsent'));
 
 export default function MyApp({ Component, pageProps }) {
+  const router = useRouter();
+  const path = router?.asPath || router?.pathname || '';
+  const isAdminRoute = path.startsWith('/admin');
   // Initialize performance monitoring (Web Vitals + custom observers) without blocking main bundle
   useEffect(() => {
     // Dynamic import to avoid increasing initial bundle size
@@ -225,11 +229,13 @@ export default function MyApp({ Component, pageProps }) {
           <ClientOnly>
             <Footer />
           </ClientOnly>
-          <ClientOnly>
-            <Suspense fallback={<div className="skeleton animate-pulse bg-gray-200 h-12"></div>}>
-              <CookieConsent />
-            </Suspense>
-          </ClientOnly>
+          {!isAdminRoute && (
+            <ClientOnly>
+              <Suspense fallback={<div className="skeleton animate-pulse bg-gray-200 h-12"></div>}>
+                <CookieConsent />
+              </Suspense>
+            </ClientOnly>
+          )}
         </>
       );
     });
@@ -247,7 +253,7 @@ export default function MyApp({ Component, pageProps }) {
         {/* Preconnect for critical resources */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://cdn.shopify.com" />
+        <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
 
         {/* Font optimization: Using @fontsource/prompt instead of preload */}
       </Head>

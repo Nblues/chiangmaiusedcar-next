@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import SEO from '../components/SEO.jsx';
 import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
@@ -66,6 +67,7 @@ export default function Home({ cars, brandCounts }) {
   // Facebook reviews: render only client
   const [showFbReviews, setShowFbReviews] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [liveStatuses, setLiveStatuses] = useState(null);
 
   // Search state
   const [searchTerm, setSearchTerm] = useState('');
@@ -76,6 +78,20 @@ export default function Home({ cars, brandCounts }) {
 
   // Memoize expensive computations
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
+  // Merge live statuses with SSR cars when available
+  const carsWithLive = useMemo(() => {
+    if (!liveStatuses) return safeCars;
+    try {
+      return safeCars.map(c => {
+        const s = liveStatuses[c.id]?.status;
+        return s ? { ...c, status: s } : c;
+      });
+    } catch {
+      return safeCars;
+    }
+  }, [safeCars, liveStatuses]);
+  // Precompute IDs for fetching statuses
+  const ids = useMemo(() => safeCars.map(c => c.id).filter(Boolean), [safeCars]);
 
   // Memoize static data to prevent re-creation
   const brands = useMemo(
@@ -116,6 +132,44 @@ export default function Home({ cars, brandCounts }) {
   useEffect(() => {
     setMounted(true);
 
+    // Fetch live statuses after mount (and when IDs change) to reflect toggles immediately
+    (async () => {
+      try {
+        if (!ids || ids.length === 0) return;
+        const qs = new URLSearchParams({ ids: ids.join(',') });
+        const resp = await fetch(`/api/public/car-status?${qs.toString()}`, {
+          cache: 'no-store',
+        });
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (data?.ok) setLiveStatuses(data.statuses || {});
+      } catch {
+        // ignore
+      }
+    })();
+
+    // Re-fetch when returning to the tab to keep status fresh
+    let removeVis;
+    if (typeof document !== 'undefined') {
+      const onVis = async () => {
+        try {
+          if (document.visibilityState !== 'visible') return;
+          if (!ids || ids.length === 0) return;
+          const qs = new URLSearchParams({ ids: ids.join(',') });
+          const resp = await fetch(`/api/public/car-status?${qs.toString()}`, {
+            cache: 'no-store',
+          });
+          if (!resp.ok) return;
+          const data = await resp.json();
+          if (data?.ok) setLiveStatuses(data.statuses || {});
+        } catch {
+          // ignore
+        }
+      };
+      document.addEventListener('visibilitychange', onVis);
+      removeVis = () => document.removeEventListener('visibilitychange', onVis);
+    }
+
     // Use requestIdleCallback for non-critical tasks
     if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
       const idleCallback = window.requestIdleCallback(
@@ -126,6 +180,7 @@ export default function Home({ cars, brandCounts }) {
       );
 
       return () => {
+        if (removeVis) removeVis();
         if (window.cancelIdleCallback) {
           window.cancelIdleCallback(idleCallback);
         }
@@ -136,9 +191,12 @@ export default function Home({ cars, brandCounts }) {
         setShowFbReviews(true);
       }, 2000);
 
-      return () => clearTimeout(timer);
+      return () => {
+        if (removeVis) removeVis();
+        clearTimeout(timer);
+      };
     }
-  }, []);
+  }, [ids]);
 
   // Memoize heavy JSON-LD to prevent re-creation on every render
   const breadcrumbList = useMemo(
@@ -222,7 +280,7 @@ export default function Home({ cars, brandCounts }) {
           name: 'รถมือสองแนะนำ',
           description: 'รถมือสองคุณภาพดีจากครูหนึ่งรถสวย',
           numberOfItems: safeCars.length,
-          itemListElement: safeCars.slice(0, 10).map((car, index) => ({
+          itemListElement: carsWithLive.slice(0, 10).map((car, index) => ({
             '@type': 'ListItem',
             position: index + 1,
             item: {
@@ -287,18 +345,15 @@ export default function Home({ cars, brandCounts }) {
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-[1400px] mx-auto">
           {/* LCP Optimized: Native img instead of A11yImage for critical hero banner */}
-          <img
+          <Image
             src="/herobanner/cnxcar.webp"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-            width="1400"
-            height="467"
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
+            width={1400}
+            height={467}
+            priority
+            sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1400px"
             className="w-full h-auto object-contain"
             style={{ maxHeight: '60vh' }}
-            srcSet="/herobanner/cnxcar.webp 640w, /herobanner/cnxcar.webp 1024w, /herobanner/cnxcar.webp 1400w"
-            sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1400px"
           />
         </div>
       </header>
@@ -528,7 +583,7 @@ export default function Home({ cars, brandCounts }) {
                 </div>
               </div>
             ))
-          ) : safeCars.length === 0 ? (
+          ) : carsWithLive.length === 0 ? (
             // Empty state when no cars available
             <div className="col-span-full text-center py-12">
               <div className="text-6xl mb-4">🚗</div>
@@ -548,7 +603,7 @@ export default function Home({ cars, brandCounts }) {
               </a>
             </div>
           ) : (
-            safeCars.slice(0, 8).map(car => (
+            carsWithLive.slice(0, 8).map(car => (
               <article
                 key={car.id}
                 className="group bg-white rounded-xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
@@ -1475,7 +1530,7 @@ export async function getStaticProps() {
     cars = Array.isArray(result) ? result : [];
     // Add status to homepage cars (do not filter; show badge instead)
     try {
-      const carStatuses = readCarStatuses();
+      const carStatuses = await readCarStatuses();
       cars = cars.map(c => ({ ...c, status: carStatuses[c.id]?.status || 'available' }));
     } catch {
       // ignore status read errors

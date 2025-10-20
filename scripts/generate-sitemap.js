@@ -12,6 +12,9 @@
  * - Mobile-specific sitemaps
  */
 
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('fs');
 const path = require('path');
 
@@ -66,7 +69,7 @@ async function generateEnhancedSitemap() {
 }
 
 function generateCarSitemap(cars) {
-  const baseUrl = sitemapConfig.siteUrl;
+  const baseUrl = String(sitemapConfig.siteUrl).trim().replace(/\/+$/g, '');
   const now = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
 
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -95,33 +98,7 @@ function generateCarSitemap(cars) {
     }
   });
 
-  // Add brand and pagination URLs
-  const brands = [...new Set(cars.map(car => car.vendor || car.brand).filter(Boolean))];
-  brands.forEach(brand => {
-    const encodedBrand = encodeURIComponent(brand.toLowerCase());
-    xml += `
-  <url>
-    <loc>${baseUrl}/all-cars?brand=${encodedBrand}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <lastmod>${now}</lastmod>
-    <xhtml:link rel="alternate" hreflang="th" href="${baseUrl}/all-cars?brand=${encodedBrand}"/>
-  </url>`;
-  });
-
-  // Add pagination (estimate based on cars count)
-  const carsPerPage = 12;
-  const totalPages = Math.ceil(cars.length / carsPerPage);
-  for (let page = 2; page <= Math.min(totalPages, 10); page++) {
-    xml += `
-  <url>
-    <loc>${baseUrl}/all-cars?page=${page}</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-    <lastmod>${now}</lastmod>
-    <xhtml:link rel="alternate" hreflang="th" href="${baseUrl}/all-cars?page=${page}"/>
-  </url>`;
-  }
+  // ไม่ใส่ brand filters และ pagination ลงใน sitemap เพื่อลดดัชนีซ้ำซ้อน
 
   xml += `
 </urlset>`;
@@ -134,13 +111,13 @@ function isValidImageUrl(url) {
   if (!url || url === '' || url === 'undefined') return false;
   try {
     return url.startsWith('http://') || url.startsWith('https://');
-  } catch (e) {
+  } catch {
     return false;
   }
 }
 
 function generateImageSitemap(cars) {
-  const baseUrl = sitemapConfig.siteUrl;
+  const baseUrl = String(sitemapConfig.siteUrl).trim().replace(/\/+$/g, '');
 
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -208,7 +185,7 @@ function generateImageSitemap(cars) {
 }
 
 function generateMainSitemap() {
-  const baseUrl = sitemapConfig.siteUrl;
+  const baseUrl = String(sitemapConfig.siteUrl).trim().replace(/\/+$/g, '');
   const now = new Date().toISOString().split('T')[0];
 
   return `<?xml version="1.0" encoding="UTF-8"?>

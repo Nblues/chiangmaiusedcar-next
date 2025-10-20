@@ -171,8 +171,11 @@ const nextConfig = {
     minimumCacheTTL: 60, // Cache 60 วินาที
     dangerouslyAllowSVG: false,
     contentDispositionType: 'inline',
-    // ใช้ Next.js Image Optimization ปกติบน Vercel
-    unoptimized: false,
+    // ปิด Next.js Image Optimization เพื่อหลีกเลี่ยง Vercel 402 Payment Required
+    unoptimized: true,
+    // Disable image optimization worker to prevent Jest worker errors
+    loader: 'custom',
+    loaderFile: './lib/imageLoader.js',
   },
 
   // Headers for deployment and performance - Enhanced 2025

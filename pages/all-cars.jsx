@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
@@ -18,6 +18,7 @@ export default function AllCars({ cars }) {
   const [brandFilter, setBrandFilter] = useState('all');
   const [mounted, setMounted] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [liveStatuses, setLiveStatuses] = useState(null);
 
   // จำนวนรถต่อหน้า: 8 คัน (มือถือ: 2x4 แถว, เดสก์ท็อป: 4x2 แถว)
   const carsPerPage = 8;
@@ -103,6 +104,49 @@ export default function AllCars({ cars }) {
   const startIndex = (currentPage - 1) * carsPerPage;
   const endIndex = startIndex + carsPerPage;
   const currentCars = filteredCars.slice(startIndex, endIndex);
+  const currentIds = useMemo(() => currentCars.map(c => c.id).filter(Boolean), [currentCars]);
+  const currentCarsWithLive = useMemo(() => {
+    if (!liveStatuses) return currentCars;
+    try {
+      return currentCars.map(c => {
+        const s = liveStatuses[c.id]?.status;
+        return s ? { ...c, status: s } : c;
+      });
+    } catch {
+      return currentCars;
+    }
+  }, [currentCars, liveStatuses]);
+
+  // Fetch latest statuses for current page cars on mount and page/filter change
+  useEffect(() => {
+    (async () => {
+      try {
+        if (!mounted) return;
+        if (!currentIds || currentIds.length === 0) return;
+        const qs = new URLSearchParams({ ids: currentIds.join(',') });
+        const resp = await fetch(`/api/public/car-status?${qs.toString()}`, { cache: 'no-store' });
+        if (!resp.ok) return;
+        const data = await resp.json();
+        if (data?.ok) setLiveStatuses(data.statuses || {});
+      } catch {
+        // ignore
+      }
+    })();
+  }, [mounted, currentIds]);
+
+  // Determine if current view is filtered (query params affecting list)
+  const isFiltered = useMemo(() => {
+    const hasSearch = !!(searchTerm && String(searchTerm).trim());
+    const hasPrice = priceRange !== 'all';
+    const hasBrand = brandFilter !== 'all';
+    return hasSearch || hasPrice || hasBrand;
+  }, [searchTerm, priceRange, brandFilter]);
+
+  // Canonical URL for SEO component
+  const seoPath = useMemo(() => {
+    if (isFiltered) return '/all-cars';
+    return currentPage > 1 ? `/all-cars?page=${currentPage}` : '/all-cars';
+  }, [isFiltered, currentPage]);
 
   // ฟังก์ชันสำหรับสร้างลิงก์ SEO-friendly
   const getPageUrl = page => {
@@ -162,10 +206,11 @@ export default function AllCars({ cars }) {
       <SEO
         title={`รถมือสองเชียงใหม่ทั้งหมด${totalPages > 1 && currentPage > 1 ? ` หน้า ${currentPage}` : ''} ตรวจสภาพครบถ้วน เช็คประวัติรถ ฟรีดาวน์ | ครูหนึ่งรถสวย`}
         description={`ดูรถมือสอง ${filteredCars.length} คัน ตรวจสภาพครบ ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan ดอกเบี้ยต่ำ 2.99% นัดหมายดูรถโทร 094-064-9018 คลิกเลย!`}
-        url={`/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`}
+        url={seoPath}
         image="https://www.chiangmaiusedcar.com/herobanner/cnxallcar.webp"
         type="website"
         pageType="all-cars"
+        noindex={isFiltered}
         breadcrumbs={[
           { name: 'หน้าแรก', url: '/' },
           { name: 'รถมือสองทั้งหมด', url: '/all-cars' },
@@ -265,7 +310,7 @@ export default function AllCars({ cars }) {
       />
 
       {/* Pagination Link Tags for SEO */}
-      {mounted && totalPages > 1 && (
+      {mounted && totalPages > 1 && !isFiltered && (
         <Head>
           {currentPage > 1 && (
             <link
@@ -279,10 +324,6 @@ export default function AllCars({ cars }) {
               href={`https://www.chiangmaiusedcar.com${getPageUrl(currentPage + 1)}`}
             />
           )}
-          <link
-            rel="canonical"
-            href={`https://www.chiangmaiusedcar.com${getPageUrl(currentPage)}`}
-          />
         </Head>
       )}
 
@@ -463,7 +504,7 @@ export default function AllCars({ cars }) {
             <>
               {/* Cards Grid - 2025 Modern Layout */}
               <div className="car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
-                {currentCars.map((car, idx) => (
+                {currentCarsWithLive.map((car, idx) => (
                   <article
                     key={car.id}
                     className="car-card group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border-2 border-gray-200 hover:border-primary flex flex-col h-full relative font-prompt transform hover:scale-[1.02]"
@@ -654,7 +695,7 @@ export async function getStaticProps() {
     cars = Array.isArray(result) ? result : [];
 
     // Load car statuses from file storage
-    const carStatuses = readCarStatuses();
+    const carStatuses = await readCarStatuses();
 
     // ลดขนาดข้อมูลโดยเก็บเฉพาะฟิลด์ที่จำเป็น
     cars = cars.map(car => ({

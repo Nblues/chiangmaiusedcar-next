@@ -77,7 +77,7 @@ function AdminCarsManagement() {
       return;
     }
 
-    try {
+    const doRequest = async () => {
       const newStatus = currentStatus === 'available' ? 'reserved' : 'available';
       // console.log('📤 Sending request:', { carId, status: newStatus });
 
@@ -144,11 +144,33 @@ function AdminCarsManagement() {
 
         // ✅ Fetch fresh data from API to sync with file storage
         await fetchCars();
-      } else {
-        const error = await response.json();
-        // eslint-disable-next-line no-console
-        console.error('❌ Error response:', response.status, error);
-        alert(`ไม่สามารถเปลี่ยนสถานะได้: ${error.error || 'Unknown error'}`);
+        return true;
+      }
+
+      // Non-OK path
+      const error = await safeParseJson(response);
+      // eslint-disable-next-line no-console
+      console.error('❌ Error response:', response.status, error);
+      return { status: response.status, error };
+    };
+
+    try {
+      let result = await doRequest();
+      // If CSRF issue or unauthorized, try to refresh CSRF via /api/admin/verify then retry once
+      if (result && result.status && (result.status === 401 || result.status === 403)) {
+        try {
+          // Refresh session/CSRF cookie
+          await fetch('/api/admin/verify', { credentials: 'include' });
+        } catch {
+          // ignore
+        }
+        // Retry once
+        result = await doRequest();
+      }
+
+      if (result !== true) {
+        const msg = typeof result?.error?.error === 'string' ? result.error.error : 'Unknown error';
+        alert(`ไม่สามารถเปลี่ยนสถานะได้: ${msg}`);
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -158,6 +180,15 @@ function AdminCarsManagement() {
       setIsUpdating(prev => ({ ...prev, [carId]: false }));
     }
   };
+
+  // Safe JSON parse helper
+  async function safeParseJson(response) {
+    try {
+      return await response.json();
+    } catch {
+      return {};
+    }
+  }
 
   // Filter cars based on search and status
   useEffect(() => {
@@ -424,20 +455,24 @@ function AdminCarsManagement() {
                     <div className="pt-3 border-t border-gray-200">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-gray-700">สถานะ:</span>
-                        <button
-                          type="button"
-                          className="cursor-pointer focus:outline-none"
-                          aria-label={`สถานะ${car.title}: ${car.status === 'available' ? 'พร้อมขาย' : 'จองแล้ว'}. คลิกเพื่อเปลี่ยน`}
-                          onClick={e => {
-                            e.preventDefault();
-                            if (!isUpdating[car.id]) {
-                              toggleCarStatus(car.id, car.status);
-                            }
-                          }}
-                          disabled={isUpdating[car.id]}
+                        <label
+                          className="cursor-pointer"
+                          aria-label="Toggle car reservation status"
                         >
+                          <input
+                            type="checkbox"
+                            checked={car.status === 'reserved'}
+                            onChange={() => {
+                              if (!isUpdating[car.id]) {
+                                toggleCarStatus(car.id, car.status);
+                              }
+                            }}
+                            disabled={isUpdating[car.id]}
+                            className="sr-only peer"
+                            aria-label={`สถานะ${car.title}: ${car.status === 'available' ? 'พร้อมขาย' : 'จองแล้ว'}`}
+                          />
                           <div
-                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-offset-2 ${
                               car.status === 'available' ? 'bg-green-500' : 'bg-red-500'
                             } ${isUpdating[car.id] ? 'opacity-50 cursor-not-allowed' : ''}`}
                           >
@@ -447,7 +482,7 @@ function AdminCarsManagement() {
                               }`}
                             />
                           </div>
-                        </button>
+                        </label>
                       </div>
                       <p className="text-xs text-gray-500 mt-1">
                         {car.status === 'available'

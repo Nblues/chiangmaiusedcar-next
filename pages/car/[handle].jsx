@@ -1440,7 +1440,7 @@ export async function getStaticProps({ params }) {
     const safeCars = Array.isArray(cars) ? cars : [];
 
     // Load car statuses from file storage
-    const carStatuses = readCarStatuses();
+    const carStatuses = await readCarStatuses();
 
     const requestedRaw = params?.handle || '';
     const requested = decodeURIComponent(requestedRaw);
