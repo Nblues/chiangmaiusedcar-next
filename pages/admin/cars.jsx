@@ -424,24 +424,20 @@ function AdminCarsManagement() {
                     <div className="pt-3 border-t border-gray-200">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-gray-700">สถานะ:</span>
-                        <label
-                          className="cursor-pointer"
-                          aria-label="Toggle car reservation status"
+                        <button
+                          type="button"
+                          className="cursor-pointer focus:outline-none"
+                          aria-label={`สถานะ${car.title}: ${car.status === 'available' ? 'พร้อมขาย' : 'จองแล้ว'}. คลิกเพื่อเปลี่ยน`}
+                          onClick={e => {
+                            e.preventDefault();
+                            if (!isUpdating[car.id]) {
+                              toggleCarStatus(car.id, car.status);
+                            }
+                          }}
+                          disabled={isUpdating[car.id]}
                         >
-                          <input
-                            type="checkbox"
-                            checked={car.status === 'reserved'}
-                            onChange={() => {
-                              if (!isUpdating[car.id]) {
-                                toggleCarStatus(car.id, car.status);
-                              }
-                            }}
-                            disabled={isUpdating[car.id]}
-                            className="sr-only peer"
-                            aria-label={`สถานะ${car.title}: ${car.status === 'available' ? 'พร้อมขาย' : 'จองแล้ว'}`}
-                          />
                           <div
-                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-offset-2 ${
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                               car.status === 'available' ? 'bg-green-500' : 'bg-red-500'
                             } ${isUpdating[car.id] ? 'opacity-50 cursor-not-allowed' : ''}`}
                           >
@@ -451,7 +447,7 @@ function AdminCarsManagement() {
                               }`}
                             />
                           </div>
-                        </label>
+                        </button>
                       </div>
                       <p className="text-xs text-gray-500 mt-1">
                         {car.status === 'available'
