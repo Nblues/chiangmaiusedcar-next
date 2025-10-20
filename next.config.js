@@ -34,11 +34,6 @@ const nextConfig = {
       workerThreads: false,
       cpus: 1,
     }),
-    // Optimize for Vercel infrastructure issues
-    ...(process.env.NODE_ENV === 'production' && {
-      workerThreads: true,
-      cpus: 2, // Limit CPU usage during infrastructure issues
-    }),
   },
 
   // Asset prefix for Cloudflare CDN
