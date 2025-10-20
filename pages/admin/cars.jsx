@@ -424,33 +424,54 @@ function AdminCarsManagement() {
                     <div className="pt-3 border-t border-gray-200">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-gray-700">สถานะ:</span>
-                        <button
-                          type="button"
-                          onClick={e => {
-                            e.preventDefault();
-                            e.stopPropagation();
+                        <div
+                          onClick={() => {
                             // eslint-disable-next-line no-console
-                            console.log('🖱️ Button clicked!', {
+                            console.log('🔵 Wrapper clicked!', {
                               carId: car.id,
-                              carStatus: car.status,
-                              carTitle: car.title,
                               isDisabled: isUpdating[car.id],
                             });
                             if (!isUpdating[car.id]) {
                               toggleCarStatus(car.id, car.status);
                             }
                           }}
-                          disabled={isUpdating[car.id]}
-                          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 z-10 ${
-                            car.status === 'available' ? 'bg-green-500' : 'bg-red-500'
-                          } ${isUpdating[car.id] ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                          className="cursor-pointer"
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              if (!isUpdating[car.id]) {
+                                toggleCarStatus(car.id, car.status);
+                              }
+                            }
+                          }}
                         >
-                          <span
-                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform pointer-events-none ${
-                              car.status === 'available' ? 'translate-x-6' : 'translate-x-1'
-                            }`}
-                          />
-                        </button>
+                          <button
+                            type="button"
+                            onClick={e => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              // eslint-disable-next-line no-console
+                              console.log('🖱️ Button clicked!', {
+                                carId: car.id,
+                                carStatus: car.status,
+                                carTitle: car.title,
+                                isDisabled: isUpdating[car.id],
+                              });
+                            }}
+                            disabled={isUpdating[car.id]}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                              car.status === 'available' ? 'bg-green-500' : 'bg-red-500'
+                            } ${isUpdating[car.id] ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                          >
+                            <span
+                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform pointer-events-none ${
+                                car.status === 'available' ? 'translate-x-6' : 'translate-x-1'
+                              }`}
+                            />
+                          </button>
+                        </div>
                       </div>
                       <p className="text-xs text-gray-500 mt-1">
                         {car.status === 'available'
