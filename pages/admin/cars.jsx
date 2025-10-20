@@ -412,7 +412,15 @@ function AdminCarsManagement() {
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-gray-700">สถานะ:</span>
                         <button
-                          onClick={() => toggleCarStatus(car.id, car.status)}
+                          onClick={() => {
+                            // eslint-disable-next-line no-console
+                            console.log('🖱️ Button clicked!', {
+                              carId: car.id,
+                              carStatus: car.status,
+                              carTitle: car.title,
+                            });
+                            toggleCarStatus(car.id, car.status);
+                          }}
                           disabled={isUpdating[car.id]}
                           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                             car.status === 'available' ? 'bg-green-500' : 'bg-red-500'
