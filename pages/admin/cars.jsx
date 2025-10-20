@@ -424,54 +424,34 @@ function AdminCarsManagement() {
                     <div className="pt-3 border-t border-gray-200">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-gray-700">สถานะ:</span>
-                        <div
-                          onClick={() => {
-                            // eslint-disable-next-line no-console
-                            console.log('🔵 Wrapper clicked!', {
-                              carId: car.id,
-                              isDisabled: isUpdating[car.id],
-                            });
-                            if (!isUpdating[car.id]) {
-                              toggleCarStatus(car.id, car.status);
-                            }
-                          }}
+                        <label
                           className="cursor-pointer"
-                          role="button"
-                          tabIndex={0}
-                          onKeyDown={e => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              e.preventDefault();
+                          aria-label="Toggle car reservation status"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={car.status === 'reserved'}
+                            onChange={() => {
                               if (!isUpdating[car.id]) {
                                 toggleCarStatus(car.id, car.status);
                               }
-                            }
-                          }}
-                        >
-                          <button
-                            type="button"
-                            onClick={e => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              // eslint-disable-next-line no-console
-                              console.log('🖱️ Button clicked!', {
-                                carId: car.id,
-                                carStatus: car.status,
-                                carTitle: car.title,
-                                isDisabled: isUpdating[car.id],
-                              });
                             }}
                             disabled={isUpdating[car.id]}
-                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                            className="sr-only peer"
+                            aria-label={`สถานะ${car.title}: ${car.status === 'available' ? 'พร้อมขาย' : 'จองแล้ว'}`}
+                          />
+                          <div
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-offset-2 ${
                               car.status === 'available' ? 'bg-green-500' : 'bg-red-500'
-                            } ${isUpdating[car.id] ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                            } ${isUpdating[car.id] ? 'opacity-50 cursor-not-allowed' : ''}`}
                           >
                             <span
-                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform pointer-events-none ${
+                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
                                 car.status === 'available' ? 'translate-x-6' : 'translate-x-1'
                               }`}
                             />
-                          </button>
-                        </div>
+                          </div>
+                        </label>
                       </div>
                       <p className="text-xs text-gray-500 mt-1">
                         {car.status === 'available'
