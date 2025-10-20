@@ -89,6 +89,14 @@ function AdminCarsManagement() {
       };
       const csrfToken = getCookie('__Host-csrfToken') || getCookie('csrfToken');
 
+      // eslint-disable-next-line no-console
+      console.log('📤 Sending request:', {
+        url: '/api/admin/cars/toggle-status',
+        carId,
+        newStatus,
+        csrfToken: csrfToken ? 'Present' : 'Missing',
+      });
+
       const response = await fetch('/api/admin/cars/toggle-status', {
         method: 'POST',
         credentials: 'include',
@@ -102,10 +110,13 @@ function AdminCarsManagement() {
         }),
       });
 
-      // console.log('📥 Response status:', response.status);
+      // eslint-disable-next-line no-console
+      console.log('📥 Response status:', response.status, response.statusText);
 
       if (response.ok) {
-        // const data = await response.json();
+        const data = await response.json();
+        // eslint-disable-next-line no-console
+        console.log('✅ Success:', data);
 
         // Update local state
         setCars(prevCars =>
@@ -135,12 +146,14 @@ function AdminCarsManagement() {
         await fetchCars();
       } else {
         const error = await response.json();
-        // console.error('❌ Error response:', error);
+        // eslint-disable-next-line no-console
+        console.error('❌ Error response:', response.status, error);
         alert(`ไม่สามารถเปลี่ยนสถานะได้: ${error.error || 'Unknown error'}`);
       }
-    } catch {
-      // console.error('❌ Failed to toggle status:', error);
-      alert('ไม่สามารถเปลี่ยนสถานะได้ กรุณาลองใหม่');
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('❌ Network/Fetch error:', error);
+      alert(`ไม่สามารถเปลี่ยนสถานะได้: ${error.message || 'Network error'}`);
     } finally {
       setIsUpdating(prev => ({ ...prev, [carId]: false }));
     }
@@ -412,22 +425,28 @@ function AdminCarsManagement() {
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-gray-700">สถานะ:</span>
                         <button
-                          onClick={() => {
+                          type="button"
+                          onClick={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
                             // eslint-disable-next-line no-console
                             console.log('🖱️ Button clicked!', {
                               carId: car.id,
                               carStatus: car.status,
                               carTitle: car.title,
+                              isDisabled: isUpdating[car.id],
                             });
-                            toggleCarStatus(car.id, car.status);
+                            if (!isUpdating[car.id]) {
+                              toggleCarStatus(car.id, car.status);
+                            }
                           }}
                           disabled={isUpdating[car.id]}
-                          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 z-10 ${
                             car.status === 'available' ? 'bg-green-500' : 'bg-red-500'
-                          } ${isUpdating[car.id] ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          } ${isUpdating[car.id] ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                         >
                           <span
-                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform pointer-events-none ${
                               car.status === 'available' ? 'translate-x-6' : 'translate-x-1'
                             }`}
                           />
