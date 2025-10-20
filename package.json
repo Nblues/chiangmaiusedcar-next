@@ -39,9 +39,13 @@
     "seo:audit": "node seo/audit/run-audit.js",
     "rescrape": "node scripts/rescrape-facebook.js",
     "rescrape:limit": "node scripts/rescrape-facebook.js 50",
-    "deploy": "npm run test:build && vercel --prod",
+    "vercel": "powershell -NoProfile -ExecutionPolicy Bypass -File ./vercel-cli.ps1",
+    "deploy": "npm run test:build && powershell -NoProfile -ExecutionPolicy Bypass -File ./vercel-cli.ps1 --prod",
     "deploy:rescrape": "npm run deploy && sleep 60 && npm run rescrape",
-    "deploy:preview": "vercel",
+    "deploy:preview": "powershell -NoProfile -ExecutionPolicy Bypass -File ./vercel-cli.ps1",
+    "vercel:check": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/check-vercel-cli.ps1",
+    "kv:selftest": "node ./scripts/kv-selftest.mjs",
+    "kv:seed": "node ./scripts/kv-seed.mjs",
     "build:analyze": "cross-env ANALYZE=true NODE_ENV=production NODE_OPTIONS=\"--max-old-space-size=10240 --max-semi-space-size=512\" UV_THREADPOOL_SIZE=8 next build",
     "production": "npm run build && npm run start:production",
     "hmr:fix": "node scripts/fix-hmr.js",
@@ -108,6 +112,7 @@
     "playwright-chromium": "^1.55.0",
     "postcss": "^8.5.6",
     "prettier": "3.3.3",
+    "sharp": "^0.34.4",
     "tailwindcss": "^3.4.17",
     "ts-node": "^10.9.2",
     "typedoc": "^0.28.13",
@@ -116,7 +121,7 @@
     "webpack-bundle-analyzer": "^4.10.2"
   },
   "engines": {
-    "node": ">=20.0.0",
+    "node": "20.x || 22.x",
     "pnpm": ">=8.0.0"
   }
 }

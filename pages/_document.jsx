@@ -22,10 +22,13 @@ export default function Document() {
         {/* DNS Prefetch & Preconnect for Performance */}
         <link rel="dns-prefetch" href="https://cdn.shopify.com" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://vercel.com" />
+        <link rel="dns-prefetch" href="https://analytics.vercel.com" />
         <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://files.myshopify.com" crossOrigin="anonymous" />
 
-        {/* LCP Optimization: Preload Hero Image (Critical for homepage) */}
+        {/* 🚀 LCP Optimization: Preload Hero Image (Critical for homepage) */}
         <link
           rel="preload"
           as="image"
@@ -152,26 +155,9 @@ export default function Document() {
           }}
         />
 
-        {/* 2025 Performance Optimization */}
-        <link rel="dns-prefetch" href="//vercel.com" />
-        <link rel="dns-prefetch" href="//analytics.vercel.com" />
-
-        {/* Critical resource preconnections */}
-        <link rel="preconnect" href="https://cdn.shopify.com" />
-        <link rel="preconnect" href="https://files.myshopify.com" />
-
-        {/* Hero banner image preload for LCP optimization - homepage only */}
-        <link
-          rel="preload"
-          as="image"
-          href="/herobanner/cnxcar.webp"
-          type="image/webp"
-          imageSrcSet="/herobanner/cnxcar.webp 640w, /herobanner/cnxcar.webp 1024w, /herobanner/cnxcar.webp 1400w"
-          imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1400px"
-        />
-
         {/* Note: Prompt font is loaded via @fontsource/prompt in globals.css */}
         {/* Font preload is handled automatically by Next.js for @fontsource packages */}
+        {/* LCP preload has been moved to the top for better browser hint processing */}
 
         {/* Browser compatibility script - detects FB in-app browser and sets compatibility flags */}
         <script src="/browser-compat.js" defer></script>
