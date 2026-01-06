@@ -401,18 +401,14 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     );
   }
 
-  // Add cache busting for social sharing - force fresh image for LINE/Facebook
-  // Use car handle + timestamp to ensure unique URL per car and time period
-  if (socialImage && !socialImage.includes('?')) {
-    // Create unique cache buster using car handle and date (changes daily)
-    const carHandle = safeGet(car, 'handle', '');
-    const dateStamp = new Date().toISOString().split('T')[0].replace(/-/g, ''); // YYYYMMDD
-    socialImage = `${socialImage}?car=${encodeURIComponent(carHandle)}&v=${dateStamp}&w=1200&h=630&fit=cover`;
-  } else if (socialImage && !socialImage.includes('&w=')) {
-    // If query params exist but no size params, add them
-    const carHandle = safeGet(car, 'handle', '');
-    const dateStamp = new Date().toISOString().split('T')[0].replace(/-/g, '');
-    socialImage = `${socialImage}&car=${encodeURIComponent(carHandle)}&v=${dateStamp}&w=1200&h=630&fit=cover`;
+  // ⭐ สำหรับ Shopify CDN: เพิ่มขนาดรูปที่เหมาะกับ LINE/Facebook (1200x630)
+  // ไม่ใช้ cache busting เพื่อให้ LINE cache ได้ถูกต้อง
+  if (socialImage.includes('cdn.shopify.com')) {
+    const separator = socialImage.includes('?') ? '&' : '?';
+    // เพิ่มขนาดเฉพาะถ้ายังไม่มี
+    if (!socialImage.includes('width=') && !socialImage.includes('&width=')) {
+      socialImage = `${socialImage}${separator}width=1200&height=630`;
+    }
   }
 
   // Server-rendered Open Graph essentials (SSR-safe, no client-only logic)
@@ -420,8 +416,9 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const rawHandle = safeGet(car, 'handle', '');
   const prettyHandle = createPrettyUrl(rawHandle) || rawHandle;
   const canonicalUrl = `https://www.chiangmaiusedcar.com/car/${prettyHandle}`;
-  // Prefer original Shopify URL when available to avoid relative paths
-  let ogImage = safeGet(firstCarImage, 'originalUrl', '') || safeGet(firstCarImage, 'url', '');
+  
+  // ⭐ ใช้รูปแรกจาก Shopify โดยตรง (ไม่ผ่าน optimization)
+  let ogImage = safeGet(firstCarImage, 'url', '');
   if (ogImage && ogImage.startsWith('/')) {
     ogImage = `https://www.chiangmaiusedcar.com${ogImage}`;
   }
