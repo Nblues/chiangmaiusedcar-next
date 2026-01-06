@@ -379,7 +379,7 @@ export default function CreditCheck() {
                 <div className="w-24 h-1.5 bg-gradient-to-r from-accent to-orange-500 rounded-full"></div>
               </div>
               <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                กรอกข้อมูลเพื่อประเมินคุณสมบัติเบื้องต้นในการขอสินเชื่อ
+                กรอกข้อมูลเพื่อประเมิน
               </p>
             </div>
 
