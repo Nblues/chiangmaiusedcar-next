@@ -23,11 +23,29 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const [isHeroLoading, setIsHeroLoading] = useState(true);
   const [showHeroLoading, setShowHeroLoading] = useState(false);
   const heroLoadingTimerRef = useRef(null);
+  // สถานะโหลดรูป thumbnails (ติดตามแต่ละรูป)
+  const [thumbnailLoadingState, setThumbnailLoadingState] = useState({});
 
   // Hydration protection
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // ตั้งค่า initial loading state สำหรับ thumbnails
+  useEffect(() => {
+    if (!car) return;
+    
+    const images = safeGet(car, 'images', []);
+    if (images.length === 0) return;
+    
+    // ตั้งค่าทุกรูปเป็น loading ตอนแรก
+    const initialState = {};
+    images.forEach((_, index) => {
+      initialState[index] = true;
+      initialState[`mobile-${index}`] = true;
+    });
+    setThumbnailLoadingState(initialState);
+  }, [car]);
 
   // จดจำหน้าเดิม (referrer) เพื่อให้กดย้อนกลับได้ถูกหน้า (เช่น all-cars ที่มี filter)
   useEffect(() => {
@@ -549,7 +567,36 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                         className="object-cover"
                         imageType="thumbnail" // ⭐ ระบุเป็น thumbnail (400px)
                         loading="lazy"
+                        onLoad={() => {
+                          setThumbnailLoadingState(prev => ({ ...prev, [index]: false }));
+                        }}
                       />
+                      {/* Loading indicator for thumbnail */}
+                      {thumbnailLoadingState[index] && (
+                        <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
+                          <svg
+                            className="w-4 h-4 animate-spin text-primary"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                            ></path>
+                          </svg>
+                        </div>
+                      )}
                       {/* Selected indicator */}
                       {selectedImageIndex === index && (
                         <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
@@ -600,7 +647,36 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                         className="object-cover"
                         sizes="64px"
                         loading="lazy"
+                        onLoad={() => {
+                          setThumbnailLoadingState(prev => ({ ...prev, [`mobile-${index}`]: false }));
+                        }}
                       />
+                      {/* Loading indicator for mobile thumbnail */}
+                      {thumbnailLoadingState[`mobile-${index}`] && (
+                        <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
+                          <svg
+                            className="w-3 h-3 animate-spin text-primary"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                            ></path>
+                          </svg>
+                        </div>
+                      )}
                     </button>
                   ))}
                 </div>
