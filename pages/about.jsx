@@ -35,8 +35,8 @@ export default function About() {
   return (
     <div>
       <SEO
-        title="เกี่ยวกับครูหนึ่งรถสวย - แพลตฟอร์มออนไลน์รถมือสองเชียงใหม่ ตรวจสภาพครบถ้วน | Facebook 1M+"
-        description="เรื่องราวครูหนึ่งรถสวย แพลตฟอร์มออนไลน์รถมือสองเชียงใหม่ ตรวจสภาพครบถ้วน เช็คประวัติรถ ประสบการณ์ 10+ ปี Facebook 1M+ TikTok 150K+ รับประกัน 1 ปี โทร 094-064-9018"
+        title="ครูหนึ่งรถสวย ศูนย์รวมรถยนต์มือสองคุณภาพดี - เกี่ยวกับเรา | Facebook 1M+"
+        description="ครูหนึ่งรถสวย แพลตฟอร์มออนไลน์ศูนย์รวมรถบ้านคุณภาพดีในภาคเหนือ ตรวจสภาพครบถ้วน เช็คประวัติรถ ประสบการณ์ 10+ ปี Facebook 1M+ TikTok 150K+ รับประกัน 1 ปี โทร 094-064-9018"
         url="/about"
         image="https://www.chiangmaiusedcar.com/herobanner/team.webp"
         type="profile"
@@ -46,18 +46,18 @@ export default function About() {
           '@type': 'Person',
           name: 'ครูหนึ่งรถสวย',
           alternateName: 'KruNueng Used Cars',
-          description: 'ผู้เชี่ยวชาญรถมือสองเชียงใหม่ ประสบการณ์ 10+ ปี',
+          description: 'ผู้เชี่ยวชาญตลาดรถยนต์มือสองภาคเหนือ ประสบการณ์ 10+ ปี',
           image: 'https://www.chiangmaiusedcar.com/herobanner/team.webp',
           url: 'https://www.chiangmaiusedcar.com/about',
-          jobTitle: 'ผู้เชี่ยวชาญรถมือสอง',
+          jobTitle: 'ผู้เชี่ยวชาญรถยนต์มือสอง',
           worksFor: {
             '@type': 'AutoDealer',
             name: 'ครูหนึ่งรถสวย',
             url: 'https://www.chiangmaiusedcar.com',
           },
           knowsAbout: [
-            'รถมือสองเชียงใหม่',
-            'รถยนต์มือสอง',
+            'รถยนต์มือสองภาคเหนือ',
+            'ตลาดรถบ้านคุณภาพดี',
             'การประเมินรถ',
             'สินเชื่อรถยนต์',
             'Toyota',

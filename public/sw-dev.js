@@ -3,10 +3,18 @@
  * Optimized for development environment
  */
 
-const CACHE_NAME = 'dev-cache-v1.1';
+const CACHE_NAME = 'dev-cache-v1.2';
 
 // Essential files for development
-const FILES_TO_CACHE = ['/', '/logo/logo_main.png', '/favicon.webp', '/manifest.json'];
+const FILES_TO_CACHE = [
+  '/',
+  '/logo/logo_main.png',
+  '/logo/logo_favicon.webp',
+  '/favicon.webp',
+  '/favicon.png',
+  '/favicon.ico',
+  '/manifest.json',
+];
 
 // Install event - setup development cache
 self.addEventListener('install', e => {

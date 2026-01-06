@@ -9,8 +9,11 @@ import { sanitizePrice } from '../lib/seo/jsonld';
 import { safeGet, safeFormatPrice } from '../lib/safeFetch';
 import { carAlt } from '../utils/a11y';
 import { readCarStatuses } from '../lib/carStatusStore.js';
+import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
+import { getCachedStatuses, setCachedStatuses } from '../lib/carStatusCache';
 
 export default function AllCars({ cars }) {
+  const seoAllCars = SEO_KEYWORD_MAP.allCars;
   const router = useRouter();
   const [filteredCars, setFilteredCars] = useState(cars);
   const [searchTerm, setSearchTerm] = useState('');
@@ -117,21 +120,50 @@ export default function AllCars({ cars }) {
     }
   }, [currentCars, liveStatuses]);
 
-  // Fetch latest statuses for current page cars on mount and page/filter change
+  // Fetch latest statuses for current page cars on mount and page/filter change (with cache)
   useEffect(() => {
-    (async () => {
+    if (!mounted || !currentIds || currentIds.length === 0) return;
+
+    const fetchStatuses = async () => {
       try {
-        if (!mounted) return;
-        if (!currentIds || currentIds.length === 0) return;
+        // Check cache first
+        const cached = getCachedStatuses(currentIds);
+        if (cached) {
+          setLiveStatuses(cached);
+          return;
+        }
+
         const qs = new URLSearchParams({ ids: currentIds.join(',') });
-        const resp = await fetch(`/api/public/car-status?${qs.toString()}`, { cache: 'no-store' });
-        if (!resp.ok) return;
+        const resp = await fetch(`/api/public/car-status?${qs.toString()}`, {
+          cache: 'no-store',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!resp.ok) {
+          if (process.env.NODE_ENV === 'development') {
+            // eslint-disable-next-line no-console
+            console.warn(`car-status API returned ${resp.status}`);
+          }
+          return;
+        }
+
         const data = await resp.json();
-        if (data?.ok) setLiveStatuses(data.statuses || {});
-      } catch {
-        // ignore
+        if (data?.ok && data.statuses) {
+          setCachedStatuses(data.statuses);
+          setLiveStatuses(data.statuses);
+        }
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          // eslint-disable-next-line no-console
+          console.warn('Failed to fetch car statuses:', error?.message);
+        }
+        // Silently fail - don't break the page on fetch error
       }
-    })();
+    };
+
+    fetchStatuses();
   }, [mounted, currentIds]);
 
   // Determine if current view is filtered (query params affecting list)
@@ -204,8 +236,8 @@ export default function AllCars({ cars }) {
   return (
     <div className="min-h-screen">
       <SEO
-        title={`รถมือสองเชียงใหม่ทั้งหมด${totalPages > 1 && currentPage > 1 ? ` หน้า ${currentPage}` : ''} ตรวจสภาพครบถ้วน เช็คประวัติรถ ฟรีดาวน์ | ครูหนึ่งรถสวย`}
-        description={`ดูรถมือสอง ${filteredCars.length} คัน ตรวจสภาพครบ ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan ดอกเบี้ยต่ำ 2.99% นัดหมายดูรถโทร 094-064-9018 คลิกเลย!`}
+        title={`${seoAllCars.titleBase}${totalPages > 1 && currentPage > 1 ? ` หน้า ${currentPage}` : ''} | ครูหนึ่งรถสวย`}
+        description={`ดูรถยนต์มือสองคุณภาพดีทั้งหมด ${filteredCars.length} คัน ในเชียงใหม่และภาคเหนือ คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda นัดหมายดูรถโทร 094-064-9018`}
         url={seoPath}
         image="https://www.chiangmaiusedcar.com/herobanner/cnxallcar.webp"
         type="website"
@@ -353,8 +385,11 @@ export default function AllCars({ cars }) {
                   '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
               }}
             >
-              รถมือสองทั้งหมด
+              รถยนต์มือสองคุณภาพดีทั้งหมด
             </h1>
+            <h2 className="absolute -left-[9999px] w-[1px] h-[1px] overflow-hidden">
+              ค้นหารถยนต์มือสองคุณภาพดี ตรวจสภาพครบถ้วน ฟรีดาวน์
+            </h2>
             <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap">
               <p
                 className="text-xs sm:text-sm md:text-lg lg:text-xl font-prompt text-white font-bold"
@@ -548,10 +583,10 @@ export default function AllCars({ cars }) {
                           imageType="card" // ⭐ ระบุเป็นการ์ด (1024px)
                           loading={idx === 0 && currentPage === 1 ? 'eager' : 'lazy'}
                           priority={idx === 0 && currentPage === 1}
-                          fetchpriority={idx === 0 && currentPage === 1 ? 'high' : 'low'}
                         />
                         {/* Reserved Badge */}
-                        {safeGet(car, 'status') === 'reserved' && (
+                        {(safeGet(car, 'status') === 'reserved' ||
+                          safeGet(car, 'tags', []).includes('reserved')) && (
                           <div className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-xs md:text-sm font-bold shadow-lg animate-pulse font-prompt">
                             จองแล้ว
                           </div>

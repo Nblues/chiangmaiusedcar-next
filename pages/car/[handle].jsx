@@ -5,12 +5,11 @@ import SEO from '../../components/SEO';
 import Breadcrumb from '../../components/Breadcrumb';
 import SimilarCars from '../../components/SimilarCars';
 import { getAllCars } from '../../lib/shopify.mjs';
-import { buildEnhancedCarJsonLd, buildImageObjectJsonLd } from '../../lib/seo/jsonld';
 import { safeGet, safeFormatPrice } from '../../lib/safeFetch';
 import Link from 'next/link';
 import A11yImage from '../../components/A11yImage';
 import { carAlt } from '../../utils/a11y';
-import { optimizeShopifyImage, generateSrcSet } from '../../utils/imageOptimizer';
+import { optimizeShopifyImage } from '../../utils/imageOptimizer';
 import { createShareText } from '../../utils/urlHelper';
 import { readCarStatuses } from '../../lib/carStatusStore.js';
 
@@ -24,9 +23,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const [isHeroLoading, setIsHeroLoading] = useState(true);
   const [showHeroLoading, setShowHeroLoading] = useState(false);
   const heroLoadingTimerRef = useRef(null);
-  const heroFailSafeRef = useRef(null);
-  const heroPreloaderRef = useRef(null);
-  const carHandle = safeGet(car, 'handle');
 
   // Hydration protection
   useEffect(() => {
@@ -124,162 +120,42 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     });
   }, [selectedImageIndex, car, mounted]);
 
-  // Keyboard navigation for image gallery
+  // Process and clean the car description into readable paragraphs and hashtags
   useEffect(() => {
-    if (!mounted || !car) return;
-    const images = safeGet(car, 'images', []);
-    if (images.length < 2) return;
+    const processText = (input = '') => {
+      const text = String(input || '')
+        // Convert HTML line breaks to new lines
+        .replace(/<br\s*\/?>/gi, '\n')
+        // Remove any remaining HTML tags
+        .replace(/<[^>]+>/g, '')
+        // Normalize CRLF to LF
+        .replace(/\r\n|\r/g, '\n')
+        // Add line breaks before certain Thai keywords for readability
+        .replace(/(ราคา)/gi, '\n$1')
+        // Handle price ranges like "1,000 - " into a readable price line
+        .replace(/(\d{1,3}(?:,\d{3})*)\s*-\s*/g, '\n\nราคา $1 บาท\n')
+        .replace(/(ออกรถ\s*\d+\s*บาท)/gi, '\n$1')
+        // Group common spec lines onto their own lines
+        .replace(/(เครื่องยนต์[^\n#]*)/gi, '\n$1')
+        .replace(/(รถบ้าน[^\n#]*)/gi, '\n$1')
+        .replace(/(Option\s*เต็ม[^\n#]*)/gi, '\n$1')
+        .trim();
 
-    const handleKeyDown = e => {
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        setSelectedImageIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
-      } else if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        setSelectedImageIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
-      }
+      return text;
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [car, mounted]);
+    const processed = processText(car?.description || '');
+    const hashtagMatches = processed.match(/#[\w\u0E00-\u0E7F]+/g) || [];
+    const textWithoutHashtags = processed.replace(/#[\w\u0E00-\u0E7F]+/g, '').trim();
+    const paragraphs = textWithoutHashtags
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
 
-  // Removed image loading gating to allow hero image to paint immediately
-
-  // จัดการตัวบอกสถานะ “กำลังโหลดรูป…” แบบไม่รบกวนการแสดงผล
-  useEffect(() => {
-    if (!mounted) return;
-
-    // เริ่มสถานะโหลดใหม่ทุกครั้งที่เปลี่ยนรูปหรือเปลี่ยนรถ
-    setIsHeroLoading(true);
-    setShowHeroLoading(false);
-
-    // ล้างตัวจับเวลาก่อนหน้า
-    if (heroLoadingTimerRef.current) clearTimeout(heroLoadingTimerRef.current);
-    if (heroFailSafeRef.current) clearTimeout(heroFailSafeRef.current);
-
-    // แสดงข้อความโหลดเฉพาะกรณีช้ากว่า 400ms เพื่อลดการกะพริบ
-    heroLoadingTimerRef.current = setTimeout(() => {
-      setShowHeroLoading(true);
-    }, 400);
-
-    // พรีโหลดรูปปัจจุบันด้วย Image() เพื่อให้ onload ทำงานแม้ภาพอยู่ในแคช
-    try {
-      const currentUrl = safeGet(
-        (safeGet(car, 'images', []) || [])[selectedImageIndex] || {},
-        'url',
-        '/herobanner/chiangmaiusedcar.webp'
-      );
-      const optimized = optimizeShopifyImage(currentUrl, 1920, 'webp');
-      const img = new Image();
-      heroPreloaderRef.current = img;
-      img.src = optimized;
-      if (img.complete) {
-        // โหลดเสร็จแล้วจากแคช
-        setIsHeroLoading(false);
-        setShowHeroLoading(false);
-      } else {
-        img.onload = () => {
-          setIsHeroLoading(false);
-          setShowHeroLoading(false);
-        };
-        img.onerror = () => {
-          // ซ่อนข้อความโหลดเพื่อไม่ให้ค้าง แม้โหลดผิดพลาดจริงจังรูปหลักยังอาจแสดงจากแหล่งเดิมได้
-          setIsHeroLoading(false);
-          setShowHeroLoading(false);
-        };
-      }
-    } catch {
-      // ถ้าพรีโหลดมีปัญหา ให้ปล่อย failsafe ทำงาน
-    }
-
-    // Failsafe ปิดข้อความโหลดอัตโนมัติหลัง 8 วินาที
-    heroFailSafeRef.current = setTimeout(() => {
-      setIsHeroLoading(false);
-      setShowHeroLoading(false);
-    }, 8000);
-
-    return () => {
-      if (heroLoadingTimerRef.current) clearTimeout(heroLoadingTimerRef.current);
-      if (heroFailSafeRef.current) clearTimeout(heroFailSafeRef.current);
-      if (heroPreloaderRef.current) {
-        heroPreloaderRef.current.onload = null;
-        heroPreloaderRef.current.onerror = null;
-        heroPreloaderRef.current = null;
-      }
-    };
-    // แสดงสถานะทุกครั้งที่เปลี่ยน index หรือรูปชุดใหม่ หรือเปลี่ยนรถ
-  }, [selectedImageIndex, mounted, carHandle, car]);
-
-  // Process description after component mount to prevent hydration errors
-  useEffect(() => {
-    if (car?.description) {
-      // ฟังก์ชันประมวลผลข้อความ
-      const processText = text => {
-        return (
-          text
-            .replace(/\\n/g, '\n')
-            .replace(/\\r\\n/g, '\n')
-            .replace(/\\r/g, '\n')
-            .replace(/<br\s*\/?>/gi, '\n')
-            .replace(/<\/p><p>/gi, '\n\n')
-            .replace(/<\/?p>/gi, '')
-            .replace(/<\/?div>/gi, '')
-            // ลบอักขระที่มีปัญหาหลายรูปแบบ
-            .replace(/�/g, '') // Replacement character ธรรมดา
-            .replace(/\uFFFD/g, '') // Unicode replacement character
-            .replace(/\uFEFF/g, '') // Byte order mark
-            // Skip aggressive control-char filtering to avoid lint regex issues
-            .replace(/[\u007F-\u009F]/g, '') // Extended control characters
-            .replace(/\u00A0/g, ' ') // Non-breaking space แปลงเป็น space ธรรมดา
-            // กรองอักขระที่แสดงผลไม่ได้หรือมีปัญหา
-            .split('')
-            .map(char => {
-              const code = char.charCodeAt(0);
-              // เก็บเฉพาะอักขระที่แสดงผลได้ดี
-              if (
-                (code >= 32 && code <= 126) || // ASCII printable
-                (code >= 160 && code <= 255) || // Latin-1 supplement
-                (code >= 0x0e00 && code <= 0x0e7f) || // Thai
-                char === '\n' ||
-                char === '\r' ||
-                char === '\t' || // Whitespace
-                /[#@]/.test(char) // Hashtag และ mention symbols
-              ) {
-                return char;
-              }
-              // แทนที่อักขระที่ไม่รองรับด้วยช่องว่าง
-              return ' ';
-            })
-            .join('')
-            .replace(/\s+/g, ' ') // ลดช่องว่างซ้ำ
-            // Skip emoji filtering to avoid unicode regex pitfalls in lint
-            // แบ่งบรรทัดเมื่อพบคำว่า "สด" ตามด้วยตัวเลขและราคา
-            .replace(/(สด\s*[\d,]+)/gi, '\n$1')
-            // แบ่งบรรทัดเมื่อพบคำว่า "ราคา" ในรูปแบบต่างๆ
-            .replace(/(ราคา)/gi, '\n$1')
-            .replace(/(\d{1,3}(?:,\d{3})*)\s*-\s*/g, '\n\nราคา $1 บาท\n')
-            .replace(/(ออกรถ\s*\d+\s*บาท)/gi, '\n$1')
-            // Skip complex "ผ่อน ... ปี" regex to avoid unicode class issues
-            .replace(/(เครื่องยนต์[^\n#]*)/gi, '\n$1')
-            .replace(/(รถบ้าน[^\n#]*)/gi, '\n$1')
-            .replace(/(Option\s*เต็ม[^\n#]*)/gi, '\n$1')
-        );
-      };
-
-      const processed = processText(car.description);
-      const hashtagMatches = processed.match(/#[\w\u0E00-\u0E7F]+/g) || [];
-      const textWithoutHashtags = processed.replace(/#[\w\u0E00-\u0E7F]+/g, '').trim();
-      const paragraphs = textWithoutHashtags
-        .split('\n')
-        .map(line => line.trim())
-        .filter(line => line.length > 0);
-
-      setProcessedDescription({
-        paragraphs,
-        hashtags: hashtagMatches,
-      });
-    }
+    setProcessedDescription({
+      paragraphs,
+      hashtags: hashtagMatches,
+    });
   }, [car?.description]);
 
   // ป้องกัน hydration error
@@ -321,10 +197,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     { url: '/herobanner/chiangmaiusedcar.webp', alt: safeGet(car, 'title', 'รถมือสอง') },
   ]);
   const currentImage = carImages[selectedImageIndex] || carImages[0];
-
-  // ⭐ เตรียม URL รูปแรกสำหรับ preload (ก่อน render)
-  const firstImageUrl = safeGet(carImages[0], 'url', '/herobanner/chiangmaiusedcar.webp');
-  const optimizedFirstImage = optimizeShopifyImage(firstImageUrl, 1920, 'webp');
 
   // Enhanced SEO data for better link sharing - optimized for social media
   const brandModel = [safeGet(car, 'vendor') || safeGet(car, 'brand'), safeGet(car, 'model')]
@@ -431,32 +303,15 @@ function CarDetailPage({ car, recommendedCars = [] }) {
         <link rel="preconnect" href="https://cdn.shopify.com" />
         <link rel="dns-prefetch" href="https://cdn.shopify.com" />
 
-        {/* ⭐ Preload รูปแรก (Hero Image) เพื่อโหลดทันทีก่อนอย่างอื่น */}
-        <link
-          rel="preload"
-          as="image"
-          href={optimizedFirstImage}
-          imageSrcSet={generateSrcSet(firstImageUrl, [640, 1024, 1920], 'webp')}
-          imageSizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px"
-          fetchPriority="high"
-        />
-
-        <meta property="og:type" content="product" />
-        <meta property="og:title" content={enhancedTitle} />
-        <meta property="og:description" content={enhancedDescription} />
-        <meta property="og:url" content={canonicalUrl} />
-        <meta property="og:image" content={ogImageFinal} />
-        <meta property="og:image:secure_url" content={ogImageFinal} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:site_name" content="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่" />
+        {/* Image preload handled automatically by Next.js Image priority prop */}
       </Head>
 
+      {/* SEO component handles all meta tags including OG tags */}
       <SEO
         title={enhancedTitle}
         description={enhancedDescription}
-        image={socialImage}
-        url={`https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`}
+        image={ogImageFinal}
+        url={canonicalUrl}
         type="product"
         pageType="car"
         breadcrumbs={[
@@ -505,50 +360,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
           .join(', ')}
       />
 
-      {/* Enhanced Car JSON-LD Schema - Single Source (ลบ Breadcrumb ซ้ำซ้อน) */}
-      <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(
-              buildEnhancedCarJsonLd({
-                name: enhancedTitle,
-                description: enhancedDescription,
-                brand: safeGet(car, 'vendor') || safeGet(car, 'brand', 'รถมือสอง'),
-                year: safeGet(car, 'year', ''),
-                model: safeGet(car, 'model', ''),
-                images: carImages.map(img =>
-                  safeGet(img, 'url', '').startsWith('/')
-                    ? `https://www.chiangmaiusedcar.com${safeGet(img, 'url', '')}`
-                    : safeGet(img, 'url', '')
-                ),
-                price: safeGet(car, 'price.amount', 0),
-                currency: safeGet(car, 'price.currencyCode', 'THB'),
-                url: `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
-                sku: safeGet(car, 'id') || safeGet(car, 'handle'),
-                vin: safeGet(car, 'vin'), // Optional - ไม่บังคับ
-                mileage: safeGet(car, 'mileage'),
-                transmission: safeGet(car, 'transmission', 'Manual'),
-                fuelType: safeGet(car, 'fuel_type', 'Gasoline'),
-                engineSize: safeGet(car, 'engine'),
-                color: safeGet(car, 'color'),
-                seats: safeGet(car, 'seats'),
-                bodyType: safeGet(car, 'body_type'), // เพิ่ม body type
-                availability: safeGet(car, 'availableForSale', true) ? 'InStock' : 'OutOfStock',
-                priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
-                  .toISOString()
-                  .split('T')[0],
-                returnPolicy: 'NoReturnRefund',
-                shippingCost: 0,
-                warrantyPeriod: '1 ปี',
-                // ใช้ข้อมูล review จริงถ้ามี (ไม่ hard-code)
-                ratingValue: safeGet(car, 'review.ratingValue'),
-                reviewCount: safeGet(car, 'review.reviewCount'),
-              })
-            ),
-          }}
-        />
-      </Head>
+      {/* All JSON-LD schemas handled by SEO component */}
 
       <main className="min-h-screen bg-white">
         <div className="max-w-6xl mx-auto p-2 sm:p-4 lg:p-6">
@@ -592,7 +404,8 @@ function CarDetailPage({ car, recommendedCars = [] }) {
               />
 
               {/* Reserved Badge */}
-              {safeGet(car, 'status') === 'reserved' && (
+              {(safeGet(car, 'status') === 'reserved' ||
+                safeGet(car, 'tags', []).includes('reserved')) && (
                 <div className="absolute top-4 left-4 bg-red-600 text-white px-6 py-3 rounded-xl text-base sm:text-lg font-bold shadow-2xl animate-pulse font-prompt z-10 flex items-center gap-2">
                   {/* White ban icon for high contrast */}
                   <svg
@@ -1242,165 +1055,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
         </div>
       </main>
 
-      {/* Enhanced Car Product JSON-LD Schema with Reviews */}
-      <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Product',
-              name: enhancedTitle,
-              image: carImages.map(img =>
-                safeGet(img, 'url', '').startsWith('/')
-                  ? `https://www.chiangmaiusedcar.com${safeGet(img, 'url', '')}`
-                  : safeGet(img, 'url', '')
-              ),
-              description: enhancedDescription,
-              brand: {
-                '@type': 'Brand',
-                name: safeGet(car, 'vendor') || safeGet(car, 'brand') || 'Toyota',
-              },
-              aggregateRating: {
-                '@type': 'AggregateRating',
-                ratingValue: '5.0',
-                reviewCount: '20',
-                bestRating: '5',
-                worstRating: '5',
-              },
-              review: [
-                {
-                  '@type': 'Review',
-                  author: {
-                    '@type': 'Person',
-                    name: 'คุณอุ๋น',
-                  },
-                  datePublished: '2024-10-15',
-                  reviewRating: {
-                    '@type': 'Rating',
-                    ratingValue: '5',
-                    bestRating: '5',
-                  },
-                  reviewBody: 'บริการดีมาก รถสวย คุณภาพดี ส่งมาถึงบ้านตามที่นัดหมาย แนะนำเลยครับ',
-                  url: 'https://www.facebook.com/oonmaxx/posts/pfbid0YcUhHBngfrZmqz4SWWF5rKkVFzrTSMyw4dzayqhbcnEFviMCEwWPc9vhqcQ5Fnzvl',
-                },
-                {
-                  '@type': 'Review',
-                  author: {
-                    '@type': 'Person',
-                    name: 'คุณใต้',
-                  },
-                  datePublished: '2024-10-12',
-                  reviewRating: {
-                    '@type': 'Rating',
-                    ratingValue: '5',
-                    bestRating: '5',
-                  },
-                  reviewBody: 'ขอบคุณครูหนึ่งรถสวยมากค่ะ ได้รถตามที่ใจหวัง ราคาดี คุ้มค่า',
-                  url: 'https://www.facebook.com/tai.thanchanok.7/posts/pfbid02o1H8XvSfrYBy3SJyHAjGQySsunfzAtL7pZha7pLCQnXj4GQXVQisp7mMXczdVrLol',
-                },
-                {
-                  '@type': 'Review',
-                  author: {
-                    '@type': 'Person',
-                    name: 'คุณหนู',
-                  },
-                  datePublished: '2024-10-08',
-                  reviewRating: {
-                    '@type': 'Rating',
-                    ratingValue: '5',
-                    bestRating: '5',
-                  },
-                  reviewBody: 'รถดีมาก เครื่องยนต์ดี ไม่มีปัญหา ขอบคุณที่ให้คำแนะนำดีๆ',
-                  url: 'https://www.facebook.com/nongnoo.kookkook/posts/pfbid0tpxVdnyyomBdnd2UECRPa567pYnev2b2fTe9jcmVtK6mTWSQFTM8PmyQQRXx8Kqjl',
-                },
-                {
-                  '@type': 'Review',
-                  author: {
-                    '@type': 'Person',
-                    name: 'คุณเนาวรัตน์',
-                  },
-                  datePublished: '2024-10-05',
-                  reviewRating: {
-                    '@type': 'Rating',
-                    ratingValue: '5',
-                    bestRating: '5',
-                  },
-                  reviewBody: 'พอใจมากค่ะ รถตรงปก ไม่โกหก จัดส่งตรงเวลา',
-                  url: 'https://www.facebook.com/NaowaratUpachal/posts/pfbid0K9xEwV4KmtjFaQvZ7g7PsVchrPE1vko4esuchpSuuvBNrwVfhJ1KMkiqhYhxKhtSl',
-                },
-                {
-                  '@type': 'Review',
-                  author: {
-                    '@type': 'Person',
-                    name: 'คุณนงที',
-                  },
-                  datePublished: '2024-10-01',
-                  reviewRating: {
-                    '@type': 'Rating',
-                    ratingValue: '5',
-                    bestRating: '5',
-                  },
-                  reviewBody: 'ประทับใจการบริการ ให้คำปรึกษาดี รถคุณภาพดี แนะนำเพื่อนๆ',
-                  url: 'https://www.facebook.com/nongtee.myson/posts/pfbid02xgQBPEGhpPyeVemBEymTBUDmByZ33GJh2fvcWCfoznu5MjhQ82ZDptUXC53RHz5el',
-                },
-              ],
-              offers: {
-                '@type': 'Offer',
-                url: `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`,
-                price: safeGet(car, 'price.amount') || '659000',
-                priceCurrency: 'THB',
-                priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
-                  .toISOString()
-                  .split('T')[0],
-                availability: 'https://schema.org/InStock',
-                itemCondition: 'https://schema.org/UsedCondition',
-                shippingDetails: {
-                  '@type': 'OfferShippingDetails',
-                  shippingRate: { '@type': 'MonetaryAmount', value: '0', currency: 'THB' },
-                  shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'TH' },
-                },
-                hasMerchantReturnPolicy: {
-                  '@type': 'MerchantReturnPolicy',
-                  applicableCountry: 'TH',
-                  returnPolicyCategory: 'https://schema.org/NoReturnRefund',
-                },
-                seller: {
-                  '@type': 'AutoDealer',
-                  name: 'ครูหนึ่งรถสวย',
-                  url: 'https://www.chiangmaiusedcar.com',
-                  telephone: '+66940649018',
-                },
-              },
-            }),
-          }}
-        />
-
-        {/* Primary Image Object Schema */}
-        {carImages[0] && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(
-                buildImageObjectJsonLd({
-                  url: safeGet(carImages[0], 'url', '').startsWith('/')
-                    ? `https://www.chiangmaiusedcar.com${safeGet(carImages[0], 'url', '')}`
-                    : safeGet(carImages[0], 'url', ''),
-                  caption: `${safeGet(car, 'vendor', 'Toyota')} ${safeGet(car, 'title', 'Camry')} ${safeGet(car, 'year', '2018')} ฟรีดาวน์ ผ่อนถูก`,
-                  altText: safeGet(carImages[0], 'altText') || enhancedTitle,
-                  carTitle: safeGet(car, 'title') || safeGet(car, 'model', 'Camry'),
-                  carBrand: safeGet(car, 'vendor') || safeGet(car, 'brand', 'Toyota'),
-                  carYear: safeGet(car, 'year', '2018'),
-                  uploadDate: new Date().toISOString().split('T')[0],
-                  width: safeGet(carImages[0], 'width', 1200),
-                  height: safeGet(carImages[0], 'height', 800),
-                  contentType: 'image/jpeg',
-                })
-              ),
-            }}
-          />
-        )}
-      </Head>
+      {/* All structured data handled by SEO component */}
     </>
   );
 }

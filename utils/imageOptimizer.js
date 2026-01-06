@@ -22,11 +22,24 @@ export function optimizeShopifyImage(url, width = 1200, format = 'webp') {
     return url;
   }
 
-  // ถ้ามี query params อยู่แล้ว
-  const separator = url.includes('?') ? '&' : '?';
+  try {
+    // Parse URL เพื่อหลีกเลี่ยง width ซ้ำ
+    const urlObj = new URL(url);
 
-  // เพิ่ม width และ format parameters
-  return `${url}${separator}width=${width}&format=${format}`;
+    // ลบ width, format ที่มีอยู่ (จะเพิ่มใหม่)
+    urlObj.searchParams.delete('width');
+    urlObj.searchParams.delete('format');
+
+    // เพิ่ม width และ format ใหม่
+    if (width) urlObj.searchParams.append('width', width);
+    if (format) urlObj.searchParams.append('format', format);
+
+    return urlObj.toString();
+  } catch {
+    // Fallback: เพิ่มแบบเดิม (ถ้า URL parse ล้มเหลว)
+    const separator = url.includes('?') ? '&' : '?';
+    return `${url}${separator}width=${width}&format=${format}`;
+  }
 }
 
 /**

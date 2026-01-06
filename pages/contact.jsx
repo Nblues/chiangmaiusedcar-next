@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import SEO from '../components/SEO';
 import A11yImage from '../components/A11yImage';
-import {
-  createMapEmbedUrl,
-  createMapOpenUrl,
-  getSiteLocation,
-  clearLocationCache,
-} from '../utils/siteLocation';
+import { createMapEmbedUrl, createMapOpenUrl, clearLocationCache } from '../utils/siteLocation';
+import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 
 export default function Contact() {
+  const seoContact = SEO_KEYWORD_MAP.contact;
   // State สำหรับแผนที่
   const [mapEmbedUrl, setMapEmbedUrl] = useState('');
   const [mapOpenUrl, setMapOpenUrl] = useState('');
@@ -38,30 +35,6 @@ export default function Contact() {
       setMapOpenUrl(fallbackOpenUrl);
     }
   }, []);
-
-  const siteLocation = mounted
-    ? getSiteLocation()
-    : { lat: 18.80508571828391, lng: 99.03016129487551 };
-
-  // Breadcrumb Schema
-  const breadcrumbSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'หน้าแรก',
-        item: 'https://www.chiangmaiusedcar.com/',
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'ติดต่อเรา',
-        item: 'https://www.chiangmaiusedcar.com/contact',
-      },
-    ],
-  };
 
   // FAQ Schema
   const faqSchema = {
@@ -103,80 +76,23 @@ export default function Contact() {
     ],
   };
 
-  // Organization Schema with Social Media
-  const organizationSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'AutoDealer',
-    name: 'ครูหนึ่งรถสวย',
-    alternateName: 'KN2Car',
-    description: 'ศูนย์รวมรถมือสองคุณภาพดีในเชียงใหม่ ฟรีดาวน์ ผ่อนถูก รับประกันหลังการขาย 1 ปี',
-    url: 'https://chiangmaiusedcar.com',
-    telephone: '+66940649018',
-    email: 'info@chiangmaiusedcar.com',
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'เลขที่ 320 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี',
-      addressLocality: 'สันพระเนตร',
-      addressRegion: 'เชียงใหม่',
-      postalCode: '50210',
-      addressCountry: 'TH',
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: siteLocation.lat,
-      longitude: siteLocation.lng,
-    },
-    openingHours: 'Mo-Su 09:00-20:00',
-    paymentAccepted: ['Cash', 'Credit Card', 'Bank Transfer'],
-    currenciesAccepted: 'THB',
-    sameAs: [
-      'https://www.facebook.com/KN2car',
-      'https://www.facebook.com/nuengblues',
-      'https://www.tiktok.com/@krunueng_usedcar',
-      'https://youtube.com/@chiangraiusedcar',
-      'https://www.lemon8-app.com/@kn.goodcar?region=th',
-      'https://lin.ee/8ugfzstD',
-    ],
-    contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: '+66940649018',
-      contactType: 'customer service',
-      availableLanguage: ['Thai'],
-      hoursAvailable: {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        opens: '09:00',
-        closes: '20:00',
-      },
-    },
-  };
-
   return (
     <>
       <SEO
-        title="ติดต่อเรา - ครูหนึ่งรถสวย | แพลตฟอร์มออนไลน์รถมือสองเชียงใหม่ โทร 094-064-9018"
-        description="ติดต่อครูหนึ่งรถสวย แพลตฟอร์มออนไลน์รถมือสองเชียงใหม่ ตรวจสภาพครบถ้วน เช็คประวัติรถ โทร 094-064-9018, LINE, Facebook 1 ล้านติดตาม คุณภาพดี รับประกัน"
+        title={seoContact.title}
+        description={seoContact.description}
         url="/contact"
         image="https://www.chiangmaiusedcar.com/herobanner/contact.webp"
-        locale="th_TH"
-        alternate={[{ href: 'https://www.chiangmaiusedcar.com/contact', hrefLang: 'th-TH' }]}
         pageType="contact"
-      />
-
-      {/* Breadcrumb Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        breadcrumbs={[
+          { name: 'หน้าแรก', url: '/' },
+          { name: 'ติดต่อเรา', url: '/contact' },
+        ]}
       />
       {/* FAQ Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      {/* Organization Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
       />
 
       <main className="min-h-screen bg-white">
@@ -332,7 +248,7 @@ export default function Contact() {
                     <p className="text-xs text-gray-500">ส่วนตัว</p>
                   </div>
                 </div>
-                <p className="text-sm font-semibold text-blue-500">1 แสน+ ติดตาม</p>
+                <p className="text-sm font-semibold text-blue-500">1.6 แสน ติดตาม</p>
               </a>
 
               {/* Facebook Group */}
@@ -378,7 +294,7 @@ export default function Contact() {
                     <p className="text-xs text-gray-500">วิดีโอสั้น</p>
                   </div>
                 </div>
-                <p className="text-sm font-semibold text-gray-900">1.5 แสน ติดตาม</p>
+                <p className="text-sm font-semibold text-gray-900">1.6 แสน ติดตาม</p>
               </a>
 
               {/* YouTube */}
@@ -559,7 +475,7 @@ export default function Contact() {
               </h3>
               <div className="space-y-3">
                 <p className="text-gray-700">
-                  เลขที่ 320 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี
+                  เลขที่ 324 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี
                   <br />
                   ตำบลสันพระเนตร อำเภอสันทราย เชียงใหม่ 50210
                 </p>

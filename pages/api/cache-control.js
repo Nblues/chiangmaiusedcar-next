@@ -43,7 +43,7 @@ export default function handler(req, res) {
         description = 'ไม่มีการ cache - เนื้อหาล่าสุดเสมอ (HTML pages)';
         break;
 
-      case 'static':
+      case 'static': {
         // สำหรับ static assets - cache นาน
         const staticMaxAge = parseInt(maxAge) || 31536000; // 1 year default
         cacheHeaders = {
@@ -52,8 +52,9 @@ export default function handler(req, res) {
         };
         description = `Cache static assets เป็นเวลา ${staticMaxAge} วินาที`;
         break;
+      }
 
-      case 'images':
+      case 'images': {
         // สำหรับ images - stale-while-revalidate
         const imageMaxAge = parseInt(maxAge) || 2592000; // 30 days default
         cacheHeaders = {
@@ -62,8 +63,9 @@ export default function handler(req, res) {
         };
         description = `Cache images เป็นเวลา ${imageMaxAge} วินาที พร้อม background revalidation`;
         break;
+      }
 
-      case 'api':
+      case 'api': {
         // สำหรับ API responses - short cache หรือ no cache
         const apiMaxAge = parseInt(maxAge) || 0;
         if (apiMaxAge > 0) {
@@ -81,8 +83,9 @@ export default function handler(req, res) {
           description = 'ไม่ cache API response';
         }
         break;
+      }
 
-      case 'short':
+      case 'short': {
         // สำหรับ short-term cache (sitemaps, feeds)
         const shortMaxAge = parseInt(maxAge) || 3600; // 1 hour default
         cacheHeaders = {
@@ -90,8 +93,9 @@ export default function handler(req, res) {
         };
         description = `Cache ระยะสั้น ${shortMaxAge} วินาที`;
         break;
+      }
 
-      case 'sw':
+      case 'sw': {
         // สำหรับ Service Worker - ไม่ cache เพื่ออัปเดตทันที
         cacheHeaders = {
           'Cache-Control': 'public, max-age=0, must-revalidate',
@@ -99,6 +103,7 @@ export default function handler(req, res) {
         };
         description = 'Service Worker - อัปเดตทันที';
         break;
+      }
 
       default:
         throw new Error(`Unknown cache type: ${type}`);

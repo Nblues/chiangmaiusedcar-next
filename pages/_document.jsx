@@ -28,15 +28,13 @@ export default function Document() {
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://files.myshopify.com" crossOrigin="anonymous" />
 
-        {/* 🚀 LCP Optimization: Preload Hero Image (Critical for homepage) */}
+        {/* 🚀 LCP Optimization: Preload critical hero image for faster LCP */}
         <link
           rel="preload"
           as="image"
           href="/herobanner/cnxcar.webp"
           type="image/webp"
           fetchPriority="high"
-          imageSizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1400px"
-          imageSrcSet="/herobanner/cnxcar.webp 640w, /herobanner/cnxcar.webp 1024w, /herobanner/cnxcar.webp 1400w"
         />
 
         {/* Essential HTML5 Meta Tags for SEO 100/100 */}
@@ -58,41 +56,64 @@ export default function Document() {
         <meta name="last-modified" content={buildTime} />
         <meta name="etag" content={`"${buildTime}"`} />
 
-        {/* Favicon Settings - 2025 Standards using favicon.webp */}
-        <link rel="icon" type="image/webp" href="/favicon.webp" />
-        <link rel="icon" type="image/png" href="/favicon.png" />
+        {/* Favicon Settings - 2025 Standards optimized for performance */}
+        {/* Primary: logo_favicon.webp - custom logo */}
+        <link rel="icon" type="image/webp" href={`/logo/logo_favicon.webp?${cacheVersion}`} />
+        {/* Fallback: PNG for better compatibility */}
+        <link rel="icon" type="image/png" href={`/favicon.png?${cacheVersion}`} />
+        {/* Legacy fallback: ICO for very old browsers */}
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="shortcut icon" href="/favicon.webp" />
+        <link rel="icon" sizes="any" href="/favicon.ico" />
+        <link rel="shortcut icon" href="/favicon.ico" />
 
-        {/* Multi-size WebP icons for better SEO - 2025 Requirements */}
-        <link rel="icon" type="image/webp" sizes="16x16" href="/favicon.webp" />
-        <link rel="icon" type="image/webp" sizes="32x32" href="/favicon.webp" />
-        <link rel="icon" type="image/webp" sizes="48x48" href="/favicon.webp" />
-        <link rel="icon" type="image/webp" sizes="96x96" href="/favicon.webp" />
-        <link rel="icon" type="image/webp" sizes="144x144" href="/favicon.webp" />
-        <link rel="icon" type="image/webp" sizes="192x192" href="/favicon.webp" />
-        <link rel="icon" type="image/webp" sizes="256x256" href="/favicon.webp" />
-        <link rel="icon" type="image/webp" sizes="384x384" href="/favicon.webp" />
-        <link rel="icon" type="image/webp" sizes="512x512" href="/favicon.webp" />
+        {/* Multi-size PNG icons for better SEO - use favicon-XxX.png variants */}
+        <link rel="icon" type="image/png" sizes="16x16" href={`/favicon-16.png?${cacheVersion}`} />
+        <link rel="icon" type="image/png" sizes="32x32" href={`/favicon-32.png?${cacheVersion}`} />
+        <link rel="icon" type="image/png" sizes="48x48" href={`/favicon-48.png?${cacheVersion}`} />
+        <link rel="icon" type="image/png" sizes="96x96" href={`/favicon-96.png?${cacheVersion}`} />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="192x192"
+          href={`/favicon-192.png?${cacheVersion}`}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="256x256"
+          href={`/favicon-256.png?${cacheVersion}`}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="384x384"
+          href={`/favicon-384.png?${cacheVersion}`}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="512x512"
+          href={`/favicon-512.png?${cacheVersion}`}
+        />
 
-        {/* Apple Touch Icons - 2025 Standards */}
-        <link rel="apple-touch-icon" href="/favicon.webp" />
-        <link rel="apple-touch-icon" sizes="57x57" href="/favicon.webp" />
-        <link rel="apple-touch-icon" sizes="60x60" href="/favicon.webp" />
-        <link rel="apple-touch-icon" sizes="72x72" href="/favicon.webp" />
-        <link rel="apple-touch-icon" sizes="76x76" href="/favicon.webp" />
-        <link rel="apple-touch-icon" sizes="114x114" href="/favicon.webp" />
-        <link rel="apple-touch-icon" sizes="120x120" href="/favicon.webp" />
-        <link rel="apple-touch-icon" sizes="144x144" href="/favicon.webp" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/favicon.webp" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/favicon.webp" />
+        {/* Apple Touch Icons - use favicon-XxX.png for better performance */}
+        <link rel="apple-touch-icon" href={`/favicon-192.png?${cacheVersion}`} />
+        <link rel="apple-touch-icon" sizes="57x57" href={`/favicon-48.png?${cacheVersion}`} />
+        <link rel="apple-touch-icon" sizes="60x60" href={`/favicon-48.png?${cacheVersion}`} />
+        <link rel="apple-touch-icon" sizes="72x72" href={`/favicon-96.png?${cacheVersion}`} />
+        <link rel="apple-touch-icon" sizes="76x76" href={`/favicon-96.png?${cacheVersion}`} />
+        <link rel="apple-touch-icon" sizes="114x114" href={`/favicon-96.png?${cacheVersion}`} />
+        <link rel="apple-touch-icon" sizes="120x120" href={`/favicon-192.png?${cacheVersion}`} />
+        <link rel="apple-touch-icon" sizes="144x144" href={`/favicon-192.png?${cacheVersion}`} />
+        <link rel="apple-touch-icon" sizes="152x152" href={`/favicon-192.png?${cacheVersion}`} />
+        <link rel="apple-touch-icon" sizes="180x180" href={`/favicon-192.png?${cacheVersion}`} />
 
         {/* Android/Chrome Icons - 2025 PWA Standards */}
-        <link rel="icon" sizes="192x192" href="/favicon.webp" />
-        <link rel="icon" sizes="512x512" href="/favicon.webp" />
+        <link rel="icon" sizes="192x192" href={`/logo/logo_favicon.webp?${cacheVersion}`} />
+        <link rel="icon" sizes="512x512" href={`/logo/logo_favicon.webp?${cacheVersion}`} />
 
         {/* Microsoft Tiles - 2025 Edge Standards */}
-        <meta name="msapplication-TileImage" content="/favicon.webp" />
+        <meta name="msapplication-TileImage" content={`/logo/logo_favicon.webp?${cacheVersion}`} />
         <meta name="msapplication-TileColor" content="#1a237e" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
 

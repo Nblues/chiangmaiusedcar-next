@@ -10,6 +10,7 @@
 // Security: Requires ?secret=... matching process.env.RESCRAPE_SECRET
 
 import { getAllCars } from '../../../lib/shopify.mjs';
+import { isAuthenticated } from '../../../middleware/adminAuth';
 
 const SITE = 'https://www.chiangmaiusedcar.com';
 
@@ -20,8 +21,16 @@ export default async function handler(req, res) {
     }
 
     const { secret, handle, limit } = req.query;
-    if (!process.env.RESCRAPE_SECRET || secret !== process.env.RESCRAPE_SECRET) {
-      return res.status(401).json({ ok: false, error: 'Unauthorized' });
+    const secretOk = !!(process.env.RESCRAPE_SECRET && secret === process.env.RESCRAPE_SECRET);
+    const sessionOk = isAuthenticated(req);
+    if (!secretOk && !sessionOk) {
+      return res.status(401).json({
+        ok: false,
+        error: 'Unauthorized',
+        hint: sessionOk
+          ? undefined
+          : 'Login as admin or provide ?secret=... (RESCRAPE_SECRET) to use this endpoint',
+      });
     }
 
     // Note: Facebook requires access tokens for automated re-scraping via Graph API.
@@ -56,6 +65,7 @@ export default async function handler(req, res) {
       count: results.length,
       message:
         'Facebook requires access tokens for automated re-scraping. URLs generated for manual re-scraping or natural sharing.',
+      authorizedBy: secretOk ? 'secret' : 'admin-session',
       results,
       instructions: {
         automated:

@@ -6,6 +6,11 @@
 export const config = { runtime: 'nodejs', api: { bodyParser: true, externalResolver: true } };
 
 export default async function handler(req, res) {
+  // Never expose this endpoint in production
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(404).json({ error: 'Not found' });
+  }
+
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');

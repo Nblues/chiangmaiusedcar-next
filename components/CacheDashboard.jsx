@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useCacheManager } from '../lib/cache';
-        <a
-          href="/console-errors-explained.html"
-          target="_blank"
-          className="block w-full text-center px-3 py-2 bg-accent text-white text-xs rounded hover:bg-accent-700"
-        >
-          🐛 Console Debug
-        </a>
+
+export default function CacheDashboard() {
+  const { cacheInfo, clearCaches, triggerRevalidation, forceReload } = useCacheManager();
   const [swStatus, setSwStatus] = useState('checking...');
+  const [lastUpdate, setLastUpdate] = useState('');
+  const [isRevalidating, setIsRevalidating] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
+  const [isPWA, setIsPWA] = useState(false);
+
+  useEffect(() => {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    const isIOSStandalone = window.navigator.standalone === true;
+    setIsPWA(isStandalone || isIOSStandalone);
+  }, []);
 
   useEffect(() => {
     setLastUpdate(new Date().toLocaleString('th-TH'));
@@ -128,11 +134,16 @@ import { useCacheManager } from '../lib/cache';
 
   const handleClearCaches = async () => {
     if (confirm('🗑️ คุณต้องการลบ cache ทั้งหมดใช่หรือไม่?\nเว็บไซต์จะโหลดใหม่หลังจากลบ cache')) {
-      const success = await clearCaches();
-      if (success) {
-        setTimeout(() => {
-          forceReload();
-        }, 1000);
+      setIsClearing(true);
+      try {
+        const success = await clearCaches();
+        if (success) {
+          setTimeout(() => {
+            forceReload();
+          }, 1000);
+        }
+      } finally {
+        setIsClearing(false);
       }
     }
   };

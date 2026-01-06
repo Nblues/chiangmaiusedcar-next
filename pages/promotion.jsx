@@ -2,14 +2,14 @@ import React from 'react';
 import SEO from '../components/SEO';
 import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
-import { buildLocalBusinessJsonLd } from '../lib/seo/jsonld';
+// Organization JSON-LD is injected centrally by <SEO /> to avoid duplicates
 
 export default function Promotion() {
   const baseUrl = 'https://www.chiangmaiusedcar.com';
   const pageUrl = `${baseUrl}/promotion`;
-  const pageTitle = 'โปรโมชัน ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน | ครูหนึ่งรถสวย';
+  const pageTitle = 'โปรโมชัน ศูนย์รวมรถยนต์มือสองคุณภาพดี ฟรีดาวน์ 0% รถ ECO Car | ครูหนึ่งรถสวย';
   const pageDescription =
-    'โปรโมชันรถมือสองเชียงใหม่ ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน เครดิตไม่ผ่านก็มีทาง ของแถมจัดเต็ม รับประกัน 1 ปี | ครูหนึ่งรถสวย';
+    'โปรโมชันพิเศษ รถบ้านคุณภาพดีในภาคเหนือ ฟรีดาวน์ 0% รถ ECO Car ประหยัดน้ำมัน อนุมัติง่าย ของแถมจัดเต็ม รับประกัน 1 ปี | ครูหนึ่งรถสวย';
   const pageImage = `${baseUrl}/herobanner/cnxcontact.webp`;
 
   return (
@@ -22,12 +22,6 @@ export default function Promotion() {
         pageType="promotion"
       />
       <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(buildLocalBusinessJsonLd()),
-          }}
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -178,7 +172,7 @@ export default function Promotion() {
                   </ul>
                 </div>
 
-                {/* ดอกเบี้ยต่ำ */}
+                {/* อัตราพิเศษ */}
                 <div className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-accent/20 hover:border-accent hover:-translate-y-2">
                   <div className="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                     <svg
@@ -196,7 +190,7 @@ export default function Promotion() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 font-prompt mb-4">
-                    ดอกเบี้ย 4.50%
+                    อัตราดอกเบี้ยพิเศษ 4.50%
                   </h3>
                   <ul className="text-sm text-gray-600 space-y-2 font-prompt text-left">
                     <li className="flex items-center">
@@ -209,7 +203,7 @@ export default function Promotion() {
                     </li>
                     <li className="flex items-center">
                       <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>
-                      เครดิตไม่ผ่านก็มีทาง
+                      อนุมัติง่าย ผ่อนสบาย
                     </li>
                   </ul>
                 </div>
@@ -237,11 +231,11 @@ export default function Promotion() {
                   <ul className="text-sm text-gray-600 space-y-2 font-prompt text-left">
                     <li className="flex items-center">
                       <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                      รับประกันเครื่องยนต์
+                      คุ้มครองเครื่องยนต์
                     </li>
                     <li className="flex items-center">
                       <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                      รับประกันระบบเกียร์
+                      คุ้มครองระบบเกียร์
                     </li>
                     <li className="flex items-center">
                       <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>ไม่จำกัดกิโลเมตร
@@ -375,7 +369,7 @@ export default function Promotion() {
                       <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>สัญญาส่งมอบ
                     </li>
                     <li className="flex items-center">
-                      <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>สัญญารับประกัน
+                      <span className="w-2 h-2 bg-accent rounded-full mr-3"></span>สัญญาคุ้มครอง
                     </li>
                   </ul>
                 </div>
@@ -398,7 +392,7 @@ export default function Promotion() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 font-prompt mb-4">
-                    การส่งมอบและรับประกัน
+                    การส่งมอบและการดูแลหลังขาย
                   </h3>
                   <ul className="space-y-3 text-gray-600 font-prompt">
                     <li className="flex items-center">
@@ -467,7 +461,7 @@ export default function Promotion() {
                     </svg>
                   </div>
                   <h2 id="warranty-info" className="text-3xl font-bold mb-6 font-prompt">
-                    รับประกันเต็มระบบ
+                    ดูแลหลังขายเต็มระบบ
                   </h2>
                   <div className="space-y-4">
                     <p className="text-xl font-prompt">เครื่องยนต์ + เกียร์</p>

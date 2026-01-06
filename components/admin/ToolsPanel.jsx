@@ -1242,7 +1242,7 @@ export default function ToolsPanel() {
               />
             </svg>
             <div>
-              <h1 className="text-xl font-bold text-white font-prompt">Admin Tools Dashboard</h1>
+              <h2 className="text-xl font-bold text-white font-prompt">Admin Tools Dashboard</h2>
               <p className="text-sm text-white/80 mt-0.5">เครื่องมือจัดการระบบทั้งหมด</p>
             </div>
           </div>

@@ -1,0 +1,171 @@
+﻿node : 
+At line:1 char:61
++ ... edcar-setup; node ./node_modules/next/dist/bin/next lint 2>&1 | Out-F ...
++                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+./pages/admin/cars.jsx
+263:85  Error: Replace 
+`เธเธฑเธ”เธเธฒเธฃเธฃเธ–เธ—เธฑเนเธเธซเธกเธ”ยท-ยทAdminยทDashboard` with `โยทยทยทยทยทยท
+ยทยทยทยทยทยทยทยทเธเธฑเธ”เธเธฒเธฃเธฃเธ–เธ—เธฑเนเธเธซเธกเธ”ยท-ยทAdminยทDashboardโยทยทย
+ทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+
+./pages/admin/dashboard.jsx
+83:85  Error: Replace 
+`AdminยทDashboardยท-ยทเธฃเธฐเธเธเธเธฑเธ”เธเธฒเธฃเธซเธฅเธฑเธเธเนเธฒเธ` with `โยทย
+ทยทยทยทยทยทยทยทยทยทยทยทยทAdminยทDashboardยท-ยทเธฃเธฐเธเธเธเธฑเธ”เธเธฒเธฃเธซเธฅเธฑเธเธ
+เนเธฒเธโยทยทยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+
+./pages/all-cars.jsx
+135:1  Error: Delete `ยทยทยทยทยทยทยทยท`  prettier/prettier
+390:85  Error: Replace `เธเนเธเธซเธฒเธฃเธ–เธขเธเธ•เนเธกเธทเธญเธชเธญเธเธเธธเธ“เธ
+เธฒเธเธ”เธตยทเธ•เธฃเธงเธเธชเธเธฒเธเธเธฃเธเธ–เนเธงเธยทเธเธฃเธตเธ”เธฒเธงเธเน` 
+with `โยทยทยทยทยทยทยทยทยทยทยทยทยทยทเธเนเธเธซเธฒเธฃเธ–เธขเธเธ•เนเธกเธทเธญเธชเธญเธเธ
+เธธเธ“เธเธฒเธเธ”เธตยทเธ•เธฃเธงเธเธชเธ
+เธฒเธเธเธฃเธเธ–เนเธงเธยทเธเธฃเธตเธ”เธฒเธงเธเนโยทยทยทยทยทยทยทยทยทยทยทยท`  
+prettier/prettier
+
+./pages/car/[handle].jsx
+12:32  Error: 'generateSrcSet' is defined but never used.  
+@typescript-eslint/no-unused-vars
+203:9  Error: 'optimizedFirstImage' is assigned a value but never used.  
+@typescript-eslint/no-unused-vars
+273:9  Error: 'canonicalUrl' is assigned a value but never used.  
+@typescript-eslint/no-unused-vars
+300:9  Error: 'ogImageFinal' is assigned a value but never used.  
+@typescript-eslint/no-unused-vars
+311:1  Error: Delete `โ`  prettier/prettier
+
+./pages/index.jsx
+13:9  Error: Replace 
+`ยทgetCachedStatuses,ยทsetCachedStatuses,ยทdebounceVisibilityRefetchยท` with 
+`โยทยทgetCachedStatuses,โยทยทsetCachedStatuses,โยทยทdebounceVisibilityRefetch,โ`  
+prettier/prettier
+46:9  Error: 'getBrandCount' is assigned a value but never used.  
+@typescript-eslint/no-unused-vars
+142:1  Error: Delete `ยทยทยทยทยทยทยทยท`  prettier/prettier
+149:1  Error: Delete `ยทยทยทยทยทยทยทยท`  prettier/prettier
+173:1  Error: Delete `ยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+180:1  Error: Delete `ยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+196:1  Error: Delete `ยทยทยทยทยทยท`  prettier/prettier
+408:96  Error: Insert `โยทยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+413:13  Error: Delete `โยทยทยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+420:65  Error: Delete `ยท`  prettier/prettier
+421:48  Error: Delete `ยท`  prettier/prettier
+422:52  Error: Delete `ยท`  prettier/prettier
+433:60  Error: Delete `ยท`  prettier/prettier
+434:46  Error: Delete `ยท`  prettier/prettier
+435:43  Error: Delete `ยท`  prettier/prettier
+446:72  Error: Delete `ยท`  prettier/prettier
+447:55  Error: Delete `ยท`  prettier/prettier
+448:39  Error: Delete `ยท`  prettier/prettier
+451:23  Error: Delete `โ`  prettier/prettier
+459:20  Error: Replace `ยทhref="/all-cars?brand=toyota"ยทclassName="text-primaryยทhover:un
+derlineยทfont-semiboldยทmx-1">Toyota` with `โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทhref="/all-
+cars?brand=toyota"โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทclassName="text-primaryยทhover:underl
+ineยทfont-semiboldยทmx-1"โยทยทยทยทยทยทยทยทยทยทยทยทยทยท>โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยท
+ยทToyotaโยทยทยทยทยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+460:20  Error: Replace `ยทhref="/all-cars?brand=honda"ยทclassName="text-primaryยทhover:und
+erlineยทfont-semiboldยทmx-1">Honda` with `โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทhref="/all-ca
+rs?brand=honda"โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทclassName="text-primaryยทhover:underline
+ยทfont-semiboldยทmx-1"โยทยทยทยทยทยทยทยทยทยทยทยทยทยท>โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทH
+ondaโยทยทยทยทยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+461:20  Error: Replace `ยทhref="/all-cars?brand=nissan"ยทclassName="text-primaryยทhover:un
+derlineยทfont-semiboldยทmx-1">Nissan` with `โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทhref="/all-
+cars?brand=nissan"โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทclassName="text-primaryยทhover:underl
+ineยทfont-semiboldยทmx-1"โยทยทยทยทยทยทยทยทยทยทยทยทยทยท>โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยท
+ยทNissanโยทยทยทยทยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+462:20  Error: Replace `ยทhref="/all-cars?brand=mazda"ยทclassName="text-primaryยทhover:und
+erlineยทfont-semiboldยทmx-1">Mazda` with `โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทhref="/all-ca
+rs?brand=mazda"โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทclassName="text-primaryยทhover:underline
+ยทfont-semiboldยทmx-1"โยทยทยทยทยทยทยทยทยทยทยทยทยทยท>โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทM
+azdaโยทยทยทยทยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+463:20  Error: Replace `ยทhref="/all-cars?brand=isuzu"ยทclassName="text-primaryยทhover:und
+erlineยทfont-semiboldยทmx-1">Isuzu` with `โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทhref="/all-ca
+rs?brand=isuzu"โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทclassName="text-primaryยทhover:underline
+ยทfont-semiboldยทmx-1"โยทยทยทยทยทยทยทยทยทยทยทยทยทยท>โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทI
+suzuโยทยทยทยทยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+465:20  Error: Replace `ยทhref="/all-cars?type=เน€เธเนเธ"ยทclassName="text-accentยทhove
+r:underlineยทfont-semiboldยทmx-1">เธฃเธ–เน€เธเนเธ` with `โยทยทยทยทยทยทยทยทยทยทยทยทยทย
+ทยทยทhref="/all-cars?type=เน€เธเนเธ"โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทclassName="text-
+accentยทhover:underlineยทfont-semiboldยทmx-1"โยทยทยทยทยทยทยทยทยทยทยทยทยทยท>โยทยทยทยทยท
+ยทยทยทยทยทยทยทยทยทยทยทเธฃเธ–เน€เธเนเธโยทยทยทยทยทยทยทยทยทยทยทยทยทยท`  
+prettier/prettier
+466:20  Error: Replace `ยทhref="/all-cars?type=เธเธฃเธฐเธเธฐ"ยทclassName="text-accentยทh
+over:underlineยทfont-semiboldยทmx-1">เธฃเธ–เธเธฃเธฐเธเธฐ` with `โยทยทยทยทยทยทยทยทยทยทย
+ทยทยทยทยทยทhref="/all-cars?type=เธเธฃเธฐเธเธฐ"โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทclassNa
+me="text-accentยทhover:underlineยทfont-semiboldยทmx-1"โยทยทยทยทยทยทยทยทยทยทยทยทยทยท>โย
+ทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทเธฃเธ–เธเธฃเธฐเธเธฐโยทยทยทยทยทยทยทยทยทยทยทยทยทยท`  
+prettier/prettier
+467:20  Error: Replace `ยทhref="/all-cars?type=SUV"ยทclassName="text-accentยทhover:underli
+neยทfont-semiboldยทmx-1">เธฃเธ–ยทSUV` with `โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทhref="/all-
+cars?type=SUV"โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทclassName="text-accentยทhover:underlineยท
+font-semiboldยทmx-1"โยทยทยทยทยทยทยทยทยทยทยทยทยทยท>โยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทยทเธฃ
+เธ–ยทSUVโยทยทยทยทยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+470:1  Error: Delete `ยทยทยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+472:96  Error: Replace `เธเธฃเธถเธเธฉเธฒเธชเธดเธเน€เธเธทเนเธญเธเธฃเธต` with `โยทยท
+ยทยทยทยทยทยทยทยทยทยทยทยทยทยทเธเธฃเธถเธเธฉเธฒเธชเธดเธเน€เธเธทเนเธญเธเธฃเธตโยทยทยทยท
+ยทยทยทยทยทยทยทยทยทยท`  prettier/prettier
+474:93  Error: Replace `เธเธฃเธฐเน€เธกเธดเธเธฃเธฒเธเธฒเธฃเธ–เธเธฃเธต` with `โยทยทยทย
+ทยทยทยทยทยทยทยทยทยทยทยทยทเธเธฃเธฐเน€เธกเธดเธเธฃเธฒเธเธฒเธฃเธ–เธเธฃเธตโยทยทยทยทยทยทยท
+ยทยทยทยทยทยทยท`  prettier/prettier
+481:17  Error: Delete `ยท`  prettier/prettier
+482:38  Error: Delete `ยท`  prettier/prettier
+488:17  Error: Delete `โ`  prettier/prettier
+
+./pages/keyword-audit.jsx
+81:81  Error: Replace 
+`เธ•เธฃเธงเธเธชเธญเธเธเธตเธขเนเน€เธงเธดเธฃเนเธ”ยทSEOยท-ยทKeywordยทAuditยทTool` with `
+โยทยทยทยทยทยทยทยทยทยทเธ•เธฃเธงเธเธชเธญเธเธเธตเธขเนเน€เธงเธดเธฃเนเธ”ยทSEOยท-ยทKeywor
+dยทAuditยทToolโยทยทยทยทยทยทยทยท`  prettier/prettier
+
+./pages/promotion.jsx
+10:20  Error: Delete `โยทยทยท`  prettier/prettier
+
+./pages/sell-car.jsx
+107:89  Error: Delete `ยทเธเธตเนเธเธเธธเธฃเธเธดเธเธฃเธ–เธขเธเธ•เน`  
+prettier/prettier
+108:18  Error: Insert `ยทเธเธตเนเธเธเธธเธฃเธเธดเธเธฃเธ–เธขเธเธ•เน`  
+prettier/prettier
+
+./pages/_document.jsx
+37:11  Error: Unknown property 'fetchpriority' found, use 'fetchPriority' instead  
+react/no-unknown-property
+
+./components/A11yImage.tsx
+135:10  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider 
+using `<Image />` from `next/image` to automatically optimize images. This may incur 
+additional usage or cost from your provider. See: 
+https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/FacebookPixel.jsx
+109:7  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider 
+using `<Image />` from `next/image` to automatically optimize images. This may incur 
+additional usage or cost from your provider. See: 
+https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/ImageGallery.jsx
+306:17  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider 
+using `<Image />` from `next/image` to automatically optimize images. This may incur 
+additional usage or cost from your provider. See: 
+https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+462:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider 
+using `<Image />` from `next/image` to automatically optimize images. This may incur 
+additional usage or cost from your provider. See: 
+https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/PWAInstallPrompt.jsx
+214:15  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider 
+using `<Image />` from `next/image` to automatically optimize images. This may incur 
+additional usage or cost from your provider. See: 
+https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+./components/SafeImage.tsx
+130:10  Warning: Using `<img>` could result in slower LCP and higher bandwidth. Consider 
+using `<Image />` from `next/image` to automatically optimize images. This may incur 
+additional usage or cost from your provider. See: 
+https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+info  - Need to disable some ESLint rules? Learn more here: 
+https://nextjs.org/docs/basic-features/eslint#disabling-rules

@@ -81,20 +81,19 @@ module.exports = {
           800: '#283593',
           900: '#1a237e', // same as DEFAULT
         },
-        // Accent used for primary CTAs. Adjusted to a darker orange to meet
-        // WCAG contrast when used with white text on CTA buttons/badges.
+        // Accent used for primary CTAs - Original orange
         accent: {
-          DEFAULT: '#bf360c', // deeper orange (accessible with white)
-          50: '#fff2ec',
-          100: '#ffd9c9',
-          200: '#ffbfa0',
-          300: '#ff9b6d',
-          400: '#f77a42',
-          500: '#bf360c', // same as DEFAULT
-          600: '#a6310b',
-          700: '#8c2a0a',
-          800: '#6f2107',
-          900: '#4e1705',
+          DEFAULT: '#ff9800', // Original orange
+          50: '#fff3e0',
+          100: '#ffe0b2',
+          200: '#ffcc80',
+          300: '#ffb74d',
+          400: '#ffa726',
+          500: '#ff9800', // same as DEFAULT
+          600: '#fb8c00',
+          700: '#f57c00',
+          800: '#e65100',
+          900: '#bf360c',
         },
         white: '#fff',
         black: '#181818',
@@ -128,8 +127,8 @@ module.exports = {
         // สีฟอร์ม input border
         form: {
           bg: '#fff',
-          // use the new accent as form border to keep the theme consistent
-          border: '#bf360c',
+          // use the accent as form border to keep the theme consistent
+          border: '#ff9800',
           focus: '#1a237e',
         },
         // ปุ่ม Success/Error
@@ -144,8 +143,8 @@ module.exports = {
         // Badge สีพิเศษ
         badge: {
           free: '#06c755',
-          // align badge 'cheap' with accessible accent
-          cheap: '#bf360c',
+          // align badge 'cheap' with accent
+          cheap: '#ff9800',
           new: '#ff5252',
         },
       },

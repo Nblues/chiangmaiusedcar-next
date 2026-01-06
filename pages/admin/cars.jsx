@@ -19,15 +19,20 @@ function AdminCarsManagement() {
       try {
         const response = await fetch('/api/admin/verify', {
           credentials: 'include',
+          signal: AbortSignal.timeout(10000), // 10 second timeout
         });
 
         if (response.ok) {
           setIsAuthenticated(true);
           fetchCars();
         } else {
+          // eslint-disable-next-line no-console
+          console.warn('Auth check failed:', response.status);
           router.push('/admin/login');
         }
-      } catch {
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Auth check error:', error);
         router.push('/admin/login');
       } finally {
         setIsLoading(false);
@@ -148,47 +153,63 @@ function AdminCarsManagement() {
       }
 
       // Non-OK path
-      const error = await safeParseJson(response);
+      let errorData = null;
+      try {
+        errorData = await response.json();
+      } catch {
+        errorData = { error: 'Invalid server response' };
+      }
+
       // eslint-disable-next-line no-console
-      console.error('❌ Error response:', response.status, error);
-      return { status: response.status, error };
+      console.error('❌ Error response:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorData,
+      });
+
+      return { status: response.status, error: errorData };
     };
 
     try {
       let result = await doRequest();
+
       // If CSRF issue or unauthorized, try to refresh CSRF via /api/admin/verify then retry once
       if (result && result.status && (result.status === 401 || result.status === 403)) {
+        // eslint-disable-next-line no-console
+        console.warn('🔄 Auth issue detected, refreshing CSRF and retrying...');
         try {
           // Refresh session/CSRF cookie
           await fetch('/api/admin/verify', { credentials: 'include' });
         } catch {
-          // ignore
+          // ignore refresh error
         }
         // Retry once
         result = await doRequest();
       }
 
       if (result !== true) {
-        const msg = typeof result?.error?.error === 'string' ? result.error.error : 'Unknown error';
-        alert(`ไม่สามารถเปลี่ยนสถานะได้: ${msg}`);
+        // Extract error message
+        let errorMsg = 'Unknown error';
+        if (result?.error?.error) {
+          errorMsg = result.error.error;
+        } else if (result?.error?.message) {
+          errorMsg = result.error.message;
+        } else if (result?.status) {
+          errorMsg = `HTTP ${result.status}: ${result.error?.details || 'Request failed'}`;
+        }
+
+        // eslint-disable-next-line no-console
+        console.error('Final error message:', errorMsg);
+        alert(`ไม่สามารถเปลี่ยนสถานะได้:\n${errorMsg}`);
       }
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('❌ Network/Fetch error:', error);
-      alert(`ไม่สามารถเปลี่ยนสถานะได้: ${error.message || 'Network error'}`);
+      alert(`ไม่สามารถเปลี่ยนสถานะได้:\n${error.message || 'ข้อผิดพลาดในการเชื่อมต่อ'}`);
     } finally {
       setIsUpdating(prev => ({ ...prev, [carId]: false }));
     }
   };
-
-  // Safe JSON parse helper
-  async function safeParseJson(response) {
-    try {
-      return await response.json();
-    } catch {
-      return {};
-    }
-  }
 
   // Filter cars based on search and status
   useEffect(() => {
@@ -239,6 +260,9 @@ function AdminCarsManagement() {
         {/* Header */}
         <header className="bg-gradient-to-r from-primary to-blue-700 shadow-sm border-b border-gray-200 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <h1 className="absolute -left-[9999px] w-[1px] h-[1px] overflow-hidden">
+              จัดการรถทั้งหมด - Admin Dashboard
+            </h1>
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <button
@@ -453,42 +477,45 @@ function AdminCarsManagement() {
 
                     {/* Toggle Switch */}
                     <div className="pt-3 border-t border-gray-200">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-gray-700">สถานะ:</span>
-                        <label
-                          className="cursor-pointer"
-                          aria-label="Toggle car reservation status"
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="flex-1">
+                          <span className="text-sm font-medium text-gray-700">สถานะ:</span>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {car.status === 'available'
+                              ? 'คลิกเพื่อเปลี่ยนเป็นจองแล้ว'
+                              : 'คลิกเพื่อเปลี่ยนเป็นพร้อมขาย'}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            if (!isUpdating[car.id]) {
+                              toggleCarStatus(car.id, car.status);
+                            }
+                          }}
+                          disabled={isUpdating[car.id]}
+                          className={`relative inline-flex h-8 w-14 items-center rounded-full transition-all duration-300 font-medium text-sm ${
+                            car.status === 'available'
+                              ? 'bg-green-500 hover:bg-green-600'
+                              : 'bg-red-500 hover:bg-red-600'
+                          } ${
+                            isUpdating[car.id]
+                              ? 'opacity-50 cursor-not-allowed'
+                              : 'cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2'
+                          }`}
+                          aria-label={`สถานะ${car.title}: ${car.status === 'available' ? 'พร้อมขาย' : 'จองแล้ว'}`}
+                          title={isUpdating[car.id] ? 'กำลังอัปเดต...' : 'คลิกเพื่อเปลี่ยนสถานะ'}
                         >
-                          <input
-                            type="checkbox"
-                            checked={car.status === 'reserved'}
-                            onChange={() => {
-                              if (!isUpdating[car.id]) {
-                                toggleCarStatus(car.id, car.status);
-                              }
-                            }}
-                            disabled={isUpdating[car.id]}
-                            className="sr-only peer"
-                            aria-label={`สถานะ${car.title}: ${car.status === 'available' ? 'พร้อมขาย' : 'จองแล้ว'}`}
-                          />
-                          <div
-                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-offset-2 ${
-                              car.status === 'available' ? 'bg-green-500' : 'bg-red-500'
-                            } ${isUpdating[car.id] ? 'opacity-50 cursor-not-allowed' : ''}`}
+                          <span
+                            className={`h-6 w-6 transform rounded-full bg-white shadow-md transition-all duration-300 flex items-center justify-center text-xs font-bold ${
+                              car.status === 'available'
+                                ? 'translate-x-1 text-green-500'
+                                : 'translate-x-7 text-red-500'
+                            }`}
                           >
-                            <span
-                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                                car.status === 'available' ? 'translate-x-6' : 'translate-x-1'
-                              }`}
-                            />
-                          </div>
-                        </label>
+                            {isUpdating[car.id] ? '⟳' : car.status === 'available' ? '✓' : '✕'}
+                          </span>
+                        </button>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">
-                        {car.status === 'available'
-                          ? 'คลิกเพื่อเปลี่ยนเป็นจองแล้ว'
-                          : 'คลิกเพื่อเปลี่ยนเป็นพร้อมขาย'}
-                      </p>
                     </div>
                   </div>
                 </div>

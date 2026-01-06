@@ -255,6 +255,9 @@ export default function MyApp({ Component, pageProps }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
 
+        {/* Web App Manifest for PWA support - 2025 Standards */}
+        <link rel="manifest" href="/manifest.json" />
+
         {/* Font optimization: Using @fontsource/prompt instead of preload */}
       </Head>
       {getLayout(<Component {...pageProps} />)}

@@ -86,7 +86,7 @@ export default async function handler(req, res) {
         preview = {
           title: 'โปรโมชั่นสุดพิเศษ - ฟรีดาวน์ 0% ผ่อนนาน | ครูหนึ่งรถสวย',
           description:
-            'โปรโมชั่นสุดพิเศษ ฟรีดาวน์ 0% ผ่อนนาน 72 เดือน ดอกเบี้ยต่ำ รับประกัน 1 ปี ส่งฟรีทั่วไทย รถมือสองคุณภาพดี โทร 094-064-9018',
+            'โปรโมชั่นสุดพิเศษ ฟรีดาวน์ 0% ผ่อนนาน 72 เดือน อัตราดอกเบี้ยพิเศษ รับประกัน 1 ปี ส่งฟรีทั่วไทย รถมือสองคุณภาพดี โทร 094-064-9018',
           image: 'https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp',
           url: 'https://chiangmaiusedcar.com/promotion',
           type: 'website',

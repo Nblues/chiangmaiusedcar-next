@@ -20,6 +20,7 @@ export default function SEO({
   pageType = 'default', // เพิ่มพารามิเตอร์ pageType สำหรับ social sharing 2025
   noindex = false, // เพิ่ม noindex prop สำหรับหน้าที่ไม่ต้องการให้แสดงในผลค้นหา
   breadcrumbs = null, // เพิ่ม breadcrumbs สำหรับ BreadcrumbList Schema (SEO 2025)
+  keywords = null, // ใส่ keywords ลง structured data (แทน meta keywords)
 }) {
   // Memoize static values to prevent unnecessary re-renders
   const staticValues = useMemo(() => {
@@ -27,14 +28,17 @@ export default function SEO({
     const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่';
     const defaultDescription =
       process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
-      'รถมือสองเชียงใหม่คุณภาพดี ครูหนึ่งรถสวย ตรวจสภาพครบถ้วน ฟรีดาวน์ ดอกเบี้ยต่ำ รับประกัน 1 ปี ส่งฟรีทั่วไทย เช็คประวัติรถ โทร 094-064-9018';
+      'ศูนย์รวมรถยนต์มือสองคุณภาพดีในเชียงใหม่ ครูหนึ่งรถสวย ตรวจสภาพครบถ้วน ฟรีดาวน์ ดอกเบี้ยต่ำ รับประกัน 1 ปี ส่งฟรีทั่วไทย เช็คประวัติรถ โทร 094-064-9018';
 
     // 2025 SEO: Keywords moved to structured data - keeping for compatibility
     const aiOptimizedKeywords = [
       // Core Business (Brand + Location)
       'รถมือสองเชียงใหม่',
+      'รถยนต์มือสองเชียงใหม่',
+      'ศูนย์รวมรถบ้านเชียงใหม่',
       'ครูหนึ่งรถสวย',
-      'ศูนย์รถมือสองเชียงใหม่',
+      'ตลาดรถมือสองล้านนา',
+      'ศูนย์รถมือสองภาคเหนือ',
 
       // Popular Brands + Stock Count (AK Car Style)
       'Toyota มือสองเชียงใหม่ 50+ คัน',
@@ -63,9 +67,10 @@ export default function SEO({
 
       // Local Areas (Multi-Location)
       'รถมือสองสันพระเนตร',
-      'รถมือสองสันทราย',
-      'รถมือสองหางดง',
-      'รถมือสองแม่ริม',
+      'รถยนต์มือสองสันทราย',
+      'ศูนย์รถมือสองหางดง',
+      'ตลาดรถมือสองแม่ริม',
+      'รถบ้านคุณภาพสันกำแพง',
 
       // Price Ranges (AK Car Approach)
       'รถมือสอง 200,000 บาทเชียงใหม่',
@@ -153,6 +158,19 @@ export default function SEO({
     };
   }, [title, description, url, staticValues, image, pageType]);
 
+  const normalizedKeywords = useMemo(() => {
+    if (!keywords) return null;
+    if (Array.isArray(keywords)) {
+      return keywords
+        .map(k => (k == null ? '' : String(k)))
+        .map(k => k.trim())
+        .filter(Boolean)
+        .join(', ');
+    }
+    const v = String(keywords).trim();
+    return v.length > 0 ? v : null;
+  }, [keywords]);
+
   // Memoize absolute image URL
   const absoluteImage = useMemo(() => {
     const { site } = staticValues;
@@ -213,8 +231,10 @@ export default function SEO({
     }
   }, [debugKey, computedValues, type]);
 
-  const { site, buildTime, siteAuthor } = staticValues;
+  const { site, buildTime, siteAuthor, aiOptimizedKeywords } = staticValues;
   const { fullUrl, metaTitle, metaDesc, enhancedTitle, enhancedDesc, timestamp } = computedValues;
+
+  const siteKeywords = normalizedKeywords || aiOptimizedKeywords;
 
   // Get platform-specific images for enhanced 2025 social sharing
   const twitterImage = getPlatformImage(pageType, 'twitter_large');
@@ -464,17 +484,43 @@ export default function SEO({
       <meta name="revisit-after" content="1 day" />
 
       {/* Enhanced Favicon with cache busting - 2025 Standards */}
-      <link rel="icon" href={`/favicon.png?v=${buildTime}`} type="image/png" />
+      <link rel="icon" href={`/logo/logo_favicon.webp?v=${buildTime}`} type="image/webp" />
+      <link rel="icon" href={`/favicon.svg?v=${buildTime}`} type="image/svg+xml" />
       <link rel="icon" href={`/favicon.ico?v=${buildTime}`} type="image/x-icon" />
-      <link rel="apple-touch-icon" href={`/favicon.png?v=${buildTime}`} />
-      <link rel="shortcut icon" href={`/favicon.png?v=${buildTime}`} />
+      <link rel="apple-touch-icon" href={`/logo/logo_favicon.webp?v=${buildTime}`} />
+      <link rel="shortcut icon" href={`/logo/logo_favicon.webp?v=${buildTime}`} />
 
       {/* Additional favicon sizes for better search engine recognition */}
-      <link rel="icon" type="image/png" sizes="16x16" href={`/favicon.png?v=${buildTime}`} />
-      <link rel="icon" type="image/png" sizes="32x32" href={`/favicon.png?v=${buildTime}`} />
-      <link rel="icon" type="image/png" sizes="96x96" href={`/favicon.png?v=${buildTime}`} />
-      <link rel="icon" type="image/png" sizes="192x192" href={`/favicon.png?v=${buildTime}`} />
-      <link rel="icon" type="image/png" sizes="512x512" href={`/favicon.png?v=${buildTime}`} />
+      <link
+        rel="icon"
+        type="image/webp"
+        sizes="16x16"
+        href={`/logo/logo_favicon.webp?v=${buildTime}`}
+      />
+      <link
+        rel="icon"
+        type="image/webp"
+        sizes="32x32"
+        href={`/logo/logo_favicon.webp?v=${buildTime}`}
+      />
+      <link
+        rel="icon"
+        type="image/webp"
+        sizes="96x96"
+        href={`/logo/logo_favicon.webp?v=${buildTime}`}
+      />
+      <link
+        rel="icon"
+        type="image/webp"
+        sizes="192x192"
+        href={`/logo/logo_favicon.webp?v=${buildTime}`}
+      />
+      <link
+        rel="icon"
+        type="image/webp"
+        sizes="512x512"
+        href={`/logo/logo_favicon.webp?v=${buildTime}`}
+      />
 
       {/* Schema.org JSON-LD - Organization (Single Source of Truth) */}
       <script
@@ -532,6 +578,7 @@ export default function SEO({
             url: site,
             name: 'ครูหนึ่งรถสวย',
             description: metaDesc,
+            keywords: siteKeywords,
             publisher: {
               '@id': `${site}/#organization`,
             },

@@ -99,7 +99,7 @@ const PWAInstallPrompt = () => {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">ติดตั้งแอพ ครูหนึ่งรถสวย</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">ติดตั้งแอพ ครูหนึ่งรถสวย</h3>
           </div>
           
           <div class="space-y-3 text-sm text-gray-700 mb-6">

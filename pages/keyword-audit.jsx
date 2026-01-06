@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 import SEO from '../components/SEO';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+
+const Navbar = dynamic(() => import('../components/Navbar'), { ssr: false });
+const Footer = dynamic(() => import('../components/Footer'), { ssr: false });
 
 export default function KeywordAudit() {
   const [auditResults, setAuditResults] = useState(null);
@@ -76,6 +78,9 @@ export default function KeywordAudit() {
         <Head>
           <title>กำลังตรวจสอบคีย์เวิร์ด - ครูหนึ่งรถสวย</title>
         </Head>
+        <h1 className="absolute -left-[9999px] w-[1px] h-[1px] overflow-hidden">
+          ตรวจสอบคีย์เวิร์ด SEO - Keyword Audit Tool
+        </h1>
         <Navbar />
         <div className="container mx-auto px-4 py-12">
           <div className="text-center">
@@ -291,12 +296,4 @@ export default function KeywordAudit() {
       <Footer />
     </div>
   );
-}
-
-// Client-side only - ไม่ใช้ SSR เพื่อป้องกัน NextRouter error
-// SSR for audit results that need real-time verification
-export async function getServerSideProps() {
-  return {
-    props: {},
-  };
 }

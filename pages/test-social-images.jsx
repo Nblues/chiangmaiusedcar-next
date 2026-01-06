@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { getHomepageCars } from '../lib/shopify.mjs';
@@ -35,7 +36,7 @@ export default function TestSocialImages({ cars }) {
       </Head>
 
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-primary mb-4">🔍 ทดสอบระบบรูปภาพสำหรับแชร์ลิงก์</h1>
+        <h1 className="text-4xl font-bold text-primary mb-4">ทดสอบระบบรูปภาพสำหรับแชร์ลิงก์</h1>
         <p className="text-gray-600 mb-8">
           ตรวจสอบว่ารูปที่แสดงเมื่อแชร์ลิงก์ตรงกับรูปที่ใช้ในเว็บจริงหรือไม่
         </p>

@@ -1,13 +1,21 @@
 // Service Worker สำหรับการจัดการแคชตามมาตรฐานสากล 2025
 // Cache Strategy: Stale-While-Revalidate + Network First สำหรับเนื้อหาล่าสุด
 
-const CACHE_VERSION = 'v2025-1.0.0';
+const CACHE_VERSION = 'v2026-1.0.1';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 
 // กำหนดรายการไฟล์ที่ต้อง cache
-const STATIC_ASSETS = ['/', '/offline.html', '/manifest.json', '/favicon.webp'];
+const STATIC_ASSETS = [
+  '/',
+  '/offline.html',
+  '/manifest.json',
+  '/favicon.webp',
+  '/favicon.png',
+  '/favicon.ico',
+  '/logo/logo_favicon.webp',
+];
 
 // Cache configuration
 const CACHE_CONFIG = {

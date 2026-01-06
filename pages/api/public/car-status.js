@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable linebreak-style */
-import { readCarStatuses } from '../../../lib/carStatusStore.js';
+import { readCarStatuses, readCarStatusesByIds } from '../../../lib/carStatusStore.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
             .filter(Boolean)
         : null;
 
-    const statuses = await readCarStatuses();
+    const statuses = wantIds ? await readCarStatusesByIds(wantIds) : await readCarStatuses();
 
     const filtered = wantIds
       ? Object.fromEntries(wantIds.map(id => [id, statuses[id] || undefined]))

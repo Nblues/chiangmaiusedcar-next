@@ -2,6 +2,12 @@ import { isAuthenticated, verifyCsrf } from '../../../../middleware/adminAuth';
 import { verifyApiAuth } from '../../../../lib/apiAuth';
 import { updateCarStatus } from '../../../../lib/carStatusStore.js';
 
+// Ensure Node.js runtime and JSON body parsing
+export const config = {
+  runtime: 'nodejs',
+  api: { bodyParser: true, externalResolver: true },
+};
+
 /**
  * API: POST /api/admin/cars/toggle-status
  * Toggle car availability status (available <-> reserved)
@@ -10,6 +16,9 @@ import { updateCarStatus } from '../../../../lib/carStatusStore.js';
  * Storage: Vercel KV (Redis) - ข้อมูลถาวร 100%
  */
 export default async function handler(req, res) {
+  // Set no-cache headers
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
@@ -52,6 +61,133 @@ export default async function handler(req, res) {
   }
 
   try {
+    const resolveShopifyAdminDomain = () => {
+      const explicit = process.env.SHOPIFY_ADMIN_DOMAIN;
+      if (explicit && typeof explicit === 'string' && explicit.trim()) return explicit.trim();
+
+      const storefrontDomainRaw = process.env.SHOPIFY_DOMAIN;
+      if (!storefrontDomainRaw || typeof storefrontDomainRaw !== 'string') return null;
+
+      const storefrontHost = storefrontDomainRaw
+        .replace(/^https?:\/\//i, '')
+        .split('/')[0]
+        .trim()
+        .replace(/^www\./i, '');
+
+      // If already a myshopify host, use it.
+      if (storefrontHost.endsWith('.myshopify.com')) return storefrontHost;
+
+      // Heuristic: custom domain often matches shop name (e.g., kn-goodcar.com -> kn-goodcar.myshopify.com)
+      const shopName = storefrontHost.split('.')[0];
+      if (!shopName) return null;
+      return `${shopName}.myshopify.com`;
+    };
+
+    const updateShopifyReservedTag = async (productId, nextStatus) => {
+      const adminToken = process.env.SHOPIFY_ADMIN_TOKEN;
+      const adminDomain = resolveShopifyAdminDomain();
+      if (!adminToken || !adminDomain) {
+        return {
+          ok: false,
+          skipped: true,
+          reason: 'Missing SHOPIFY_ADMIN_TOKEN or resolvable admin domain',
+          hasAdminToken: !!adminToken,
+          adminDomain: adminDomain || null,
+        };
+      }
+
+      const apiVersion =
+        process.env.SHOPIFY_ADMIN_API_VERSION || process.env.SHOPIFY_API_VERSION || '2024-10';
+      const endpoint = `https://${adminDomain}/admin/api/${apiVersion}/graphql.json`;
+
+      const reservedTag = 'reserved';
+      const shouldHaveReserved = nextStatus === 'reserved';
+
+      const queryResp = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Access-Token': adminToken,
+        },
+        body: JSON.stringify({
+          query: `query ProductTags($id: ID!) { product(id: $id) { id tags } }`,
+          variables: { id: productId },
+        }),
+      });
+
+      if (!queryResp.ok) {
+        const text = await queryResp.text().catch(() => '');
+        return {
+          ok: false,
+          error: `Shopify tags query failed (${queryResp.status})`,
+          details: text,
+          adminDomain,
+          apiVersion,
+        };
+      }
+
+      const queryJson = await queryResp.json();
+      const tags = queryJson?.data?.product?.tags;
+      if (!Array.isArray(tags)) {
+        return { ok: false, error: 'Shopify tags query returned no tags', adminDomain, apiVersion };
+      }
+
+      const hasReserved = tags.includes(reservedTag);
+      const nextTags = shouldHaveReserved
+        ? hasReserved
+          ? tags
+          : [...tags, reservedTag]
+        : tags.filter(t => t !== reservedTag);
+
+      // No changes needed
+      if (nextTags.length === tags.length && hasReserved === shouldHaveReserved) {
+        return { ok: true, changed: false, tagsCount: tags.length, adminDomain, apiVersion };
+      }
+
+      const mutResp = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Access-Token': adminToken,
+        },
+        body: JSON.stringify({
+          query: `mutation ProductUpdate($input: ProductInput!) { productUpdate(input: $input) { product { id tags } userErrors { field message } } }`,
+          variables: { input: { id: productId, tags: nextTags } },
+        }),
+      });
+
+      if (!mutResp.ok) {
+        const text = await mutResp.text().catch(() => '');
+        return {
+          ok: false,
+          error: `Shopify productUpdate failed (${mutResp.status})`,
+          details: text,
+          adminDomain,
+          apiVersion,
+        };
+      }
+
+      const mutJson = await mutResp.json();
+      const errs = mutJson?.data?.productUpdate?.userErrors;
+      if (Array.isArray(errs) && errs.length > 0) {
+        return {
+          ok: false,
+          error: 'Shopify productUpdate userErrors',
+          userErrors: errs,
+          adminDomain,
+          apiVersion,
+        };
+      }
+
+      return {
+        ok: true,
+        changed: true,
+        tagsCount: mutJson?.data?.productUpdate?.product?.tags?.length || null,
+        adminDomain,
+        apiVersion,
+      };
+    };
+
     // Helper: attempt to revalidate common paths and specific car handle
     const revalidatePaths = async handleToRevalidate => {
       try {
@@ -62,8 +198,12 @@ export default async function handler(req, res) {
             await res.revalidate(`/car/${encodeURIComponent(handleToRevalidate)}`);
           }
         }
-      } catch {
-        // ignore revalidation errors to avoid failing the main request
+      } catch (revalidateError) {
+        // Log revalidation errors but don't fail the request
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.warn('Revalidation failed:', revalidateError.message);
+        }
       }
     };
 
@@ -73,7 +213,13 @@ export default async function handler(req, res) {
       try {
         const domain = process.env.SHOPIFY_DOMAIN;
         const token = process.env.SHOPIFY_STOREFRONT_TOKEN;
-        if (!domain || !token) return null;
+        if (!domain || !token) {
+          if (process.env.NODE_ENV !== 'production') {
+            // eslint-disable-next-line no-console
+            console.warn('Shopify credentials not configured for handle lookup');
+          }
+          return null;
+        }
         const apiVersion = process.env.SHOPIFY_API_VERSION || '2024-10';
         const resp = await fetch(`https://${domain}/api/${apiVersion}/graphql.json`, {
           method: 'POST',
@@ -86,16 +232,60 @@ export default async function handler(req, res) {
             variables: { id },
           }),
         });
-        if (!resp.ok) return null;
+        if (!resp.ok) {
+          if (process.env.NODE_ENV !== 'production') {
+            // eslint-disable-next-line no-console
+            console.warn(`Shopify API error: ${resp.status}`);
+          }
+          return null;
+        }
         const data = await resp.json();
         return data?.data?.node?.handle || null;
-      } catch {
+      } catch (shopifyError) {
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-console
+          console.warn('Failed to fetch handle from Shopify:', shopifyError.message);
+        }
         return null;
       }
     };
 
     // Update status in Vercel KV (our own storage)
-    const { statusRecord, storage } = await updateCarStatus(carId, status);
+    let result;
+    try {
+      result = await updateCarStatus(carId, status);
+    } catch (kvError) {
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.error('KV Update Error:', kvError);
+      }
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to update car status in database',
+        details: kvError.message,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    const { statusRecord, storage, warning } = result;
+
+    // If KV didn't persist (e.g., Upstash max requests exceeded), fallback to Shopify tags for persistence
+    let shopifyTag = null;
+    if (storage !== 'vercel-kv') {
+      try {
+        shopifyTag = await updateShopifyReservedTag(carId, statusRecord.status);
+      } catch (shopifyError) {
+        shopifyTag = { ok: false, error: shopifyError?.message || 'Shopify tag update failed' };
+      }
+    }
+
+    // Log success
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.log(
+        `✅ Status updated: ${carId} → ${status} (storage: ${storage})${warning ? ` WARNING: ${warning}` : ''}`
+      );
+    }
 
     // Attempt on-demand revalidation for pages showing car listings and specific car page
     const handleToRevalidate = providedHandle || (await getHandleById(carId));
@@ -106,21 +296,24 @@ export default async function handler(req, res) {
       carId,
       status: statusRecord.status,
       message: 'Status updated successfully',
-      storage, // 'vercel-kv'
+      storage, // 'vercel-kv' or 'memory-only'
       updatedAt: statusRecord.updatedAt,
       revalidated: true,
       revalidatedHandle: handleToRevalidate || undefined,
       authedBy,
+      warning: warning || undefined,
+      shopifyTag: shopifyTag || undefined,
     });
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
       // eslint-disable-next-line no-console
-      console.error('Failed to update car status:', error);
+      console.error('❌ Toggle Status API Error:', error);
     }
     return res.status(500).json({
       success: false,
       error: 'Failed to update status',
       message: error.message,
+      timestamp: new Date().toISOString(),
     });
   }
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 
 // Add displayName for admin layout detection
 function AdminLogin() {
@@ -62,8 +63,20 @@ function AdminLogin() {
           setError(data?.error || 'ไม่สามารถเข้าสู่ระบบได้ กรุณาลองใหม่');
         }
       }
-    } catch {
-      setError('เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
+    } catch (err) {
+      const message =
+        err && typeof err === 'object' && 'message' in err && typeof err.message === 'string'
+          ? err.message
+          : '';
+
+      // Most common case in dev: server not reachable / dev server stopped
+      const origin =
+        typeof window !== 'undefined' && window.location?.origin ? window.location.origin : '';
+      const hint = origin
+        ? `ตรวจสอบว่าเปิดเว็บจาก ${origin} และรัน pnpm dev อยู่`
+        : 'ตรวจสอบว่าเซิร์ฟเวอร์กำลังรัน (pnpm dev)';
+
+      setError(`ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ (${hint})${message ? `: ${message}` : ''}`);
     } finally {
       setLoading(false);
     }
@@ -157,9 +170,9 @@ function AdminLogin() {
           </form>
 
           <div className="mt-6 text-center">
-            <a href="/" className="text-sm text-primary hover:text-primary/70 font-prompt">
+            <Link href="/" className="text-sm text-primary hover:text-primary/70 font-prompt">
               ← กลับไปหน้าแรก
-            </a>
+            </Link>
           </div>
         </div>
       </div>

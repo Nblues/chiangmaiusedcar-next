@@ -174,7 +174,7 @@ export default function TermsOfService() {
                     <strong>ครูหนึ่งรถสวย</strong>
                   </p>
                   <p className="text-gray-700">
-                    320 หมู่ 2 ต.สันพระเนตร อ.สันทราย จ.เชียงใหม่ 50210
+                    324 หมู่ 2 ต.สันพระเนตร อ.สันทราย จ.เชียงใหม่ 50210
                   </p>
                   <p className="text-gray-700">
                     <strong>โทร:</strong> 094-064-9018

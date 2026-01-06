@@ -222,8 +222,8 @@ export default function PaymentCalculator() {
   return (
     <div>
       <SEO
-        title="คำนวนค่างวดรถยนต์ - ครูหนึ่งรถสวย | รถมือสองเชียงใหม่"
-        description="เครื่องมือคำนวนค่างวดรถยนต์ คำนวนค่าผ่อนรายเดือน ดอกเบี้ย และยอดชำระรวม ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
+        title="คำนวณค่างวด รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย"
+        description="คำนวณค่างวด รถมือสองเชียงใหม่ เครื่องมือคำนวณค่าผ่อนรายเดือน ดอกเบี้ย และยอดชำระรวม | ครูหนึ่งรถสวย"
         url="/payment-calculator"
         image="https://www.chiangmaiusedcar.com/herobanner/paymentcalculator.webp"
         pageType="payment-calculator"
@@ -233,7 +233,7 @@ export default function PaymentCalculator() {
       <section className="relative bg-primary text-white py-8 md:py-16 border-t border-gray-200">
         <A11yImage
           src="/herobanner/paymentcalculator.webp"
-          alt="ครูหนึ่งรถสวย - คำนวนค่างวดรถยนต์ เครื่องมือคำนวนเงินดาวน์และค่างวดรายเดือน"
+          alt="ครูหนึ่งรถสวย - คำนวณค่างวดรถยนต์ เครื่องมือคำนวณเงินดาวน์และค่างวดรายเดือน"
           width={1920}
           height={400}
           priority
@@ -243,7 +243,7 @@ export default function PaymentCalculator() {
           <div className="max-w-7xl mx-auto px-4 md:px-6 text-center">
             <div className="bg-black bg-opacity-40 rounded-2xl p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm border border-white border-opacity-20">
               <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 font-prompt text-white drop-shadow-2xl">
-                คำนวนค่างวดรถยนต์
+                คำนวณค่างวดรถยนต์
               </h1>
               <p
                 className="text-sm md:text-lg lg:text-xl max-w-4xl mx-auto font-prompt text-white font-medium leading-relaxed"
@@ -252,7 +252,7 @@ export default function PaymentCalculator() {
                     '3px 3px 6px rgba(0,0,0,0.9), -2px -2px 4px rgba(0,0,0,0.9), 2px -2px 4px rgba(0,0,0,0.9), -2px 2px 4px rgba(0,0,0,0.9)',
                 }}
               >
-                คำนวนค่าผ่อนรายเดือนและดอกเบี้ยได้ง่ายๆ
+                คำนวณค่าผ่อนรายเดือนและดอกเบี้ยได้ง่ายๆ
               </p>
             </div>
 

@@ -1,7 +1,8 @@
 {
-  "lat": 18.8048977,
-  "lng": 99.0301667,
-  "source": "Google Maps API + Business Profile",
-  "updatedAt": "2025-10-19T10:29:37.966Z",
-  "originalUrl": "https://maps.app.goo.gl/LwBKM6WGbGUEhNYZ7"
+  "lat": 18.8049109,
+  "lng": 99.0301679,
+  "source": "Google Maps Business Profile",
+  "updatedAt": "2026-01-06T00:00:00.000Z",
+  "placeId": "0x30da25a34cba1f05:0x9cb559411066b7cb",
+  "address": "เลขที่ 324 หมู่ 2 ถนน สมโภชเชียงใหม่ 700 ปี ตำบล สันพระเนตร อำเภอสันทราย เชียงใหม่ 50210"
 }

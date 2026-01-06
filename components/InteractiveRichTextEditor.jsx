@@ -376,6 +376,7 @@ const InteractiveRichTextEditor = ({
       </div>
 
       {/* CSS สำหรับ Interactive Features */}
+      {/* eslint-disable-next-line react/no-unknown-property */}
       <style jsx>{`
         .resizable-image-wrapper img {
           display: block;

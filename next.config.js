@@ -34,6 +34,11 @@ const nextConfig = {
       workerThreads: false,
       cpus: 1,
     }),
+    // Low-memory build mode (useful on Windows where V8 can OOM during deserialization)
+    ...(process.env.LOW_MEMORY_BUILD === 'true' && {
+      workerThreads: false,
+      cpus: 1,
+    }),
   },
 
   // Asset prefix for Cloudflare CDN

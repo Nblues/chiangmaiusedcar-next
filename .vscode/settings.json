@@ -72,11 +72,11 @@
 
   // Git performance
   "git.enabled": true,
-  "git.autorefresh": false,
+  "git.autorefresh": true,
   "git.autofetch": false,
-
-  // Disable telemetry
-  "telemetry.telemetryLevel": "off",
+  "git.statusLimit": 20000,
+false,
+  "git.autofetch": falsel": "off",
 
   // Format and lint
   "editor.formatOnSave": true,

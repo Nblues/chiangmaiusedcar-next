@@ -1,22 +1,22 @@
 import React from 'react';
 import SEO from '../components/SEO';
 import Head from 'next/head';
+import Link from 'next/link';
 import A11yImage from '../components/A11yImage';
-import { buildLocalBusinessJsonLd } from '../lib/seo/jsonld';
+import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
+// Organization JSON-LD is injected centrally by <SEO /> to avoid duplicates
 
 export default function SellCar() {
+  const seoSellCar = SEO_KEYWORD_MAP.sellCar;
   const baseUrl = 'https://www.chiangmaiusedcar.com';
   const pageUrl = `${baseUrl}/sell-car`;
-  const pageTitle = 'ขายรถ ฝากขายรถมือสอง เช็คราคารถ | ครูหนึ่งรถสวย';
-  const pageDescription =
-    'ขายรถมือสองเชียงใหม่ ฝากขายรถ เช็คราคาขาย ราคากลางรับซื้อ ประเมินราคาฟรี รับซื้อรถทุกสภาพ โทร 094-064-9018 | ครูหนึ่งรถสวย';
   const pageImage = `${baseUrl}/herobanner/chiangmaiusedcars.webp`;
 
   return (
     <>
       <SEO
-        title={pageTitle}
-        description={pageDescription}
+        title={seoSellCar.title}
+        description={seoSellCar.description}
         url="/sell-car"
         image={pageImage}
         pageType="sell-car"
@@ -26,17 +26,11 @@ export default function SellCar() {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(buildLocalBusinessJsonLd()),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'WebPage',
-              name: pageTitle,
-              description: pageDescription,
+              name: seoSellCar.title,
+              description: seoSellCar.description,
               url: pageUrl,
               provider: {
                 '@type': 'AutoDealer',
@@ -52,7 +46,7 @@ export default function SellCar() {
         <div className="relative w-full max-w-7xl mx-auto">
           <A11yImage
             src="/herobanner/chiangmaiusedcars.webp"
-            alt="ขายรถมือสองเชียงใหม่ - ครูหนึ่งรถสวย ประเมินราคา แลกเทิร์นรถยนต์"
+            alt="ขายรถยนต์มือสอง - ครูหนึ่งรถสวย ประเมินราคายุติธรรม แลกเทิร์นรถ"
             width={1920}
             height={640}
             className="w-full h-auto object-contain"
@@ -70,10 +64,10 @@ export default function SellCar() {
           <div className="hero-card max-w-4xl w-[90%] mx-auto my-6 flex flex-col md:flex-row items-center gap-6 px-6 py-8 rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
             <div className="flex-1">
               <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2 font-prompt">
-                ขายรถ • ประเมินราคา
+                ขายรถยนต์มือสอง • ประเมินราคายุติธรรม
               </h1>
               <h2 className="text-xl md:text-2xl font-bold text-orange-700 mb-4 font-prompt">
-                แลกเทิร์นรถยนต์
+                แลกเทิร์น รับซื้อทุกสภาพ
               </h2>
               <p className="text-base leading-relaxed text-gray-900">
                 ครูหนึ่งรถสวย รับซื้อรถมือสองทุกยี่ห้อ ประเมินราคาฟรี แลกเทิร์นรถยนต์
@@ -104,22 +98,22 @@ export default function SellCar() {
           <div className="max-w-6xl mx-auto px-6">
             <article className="bg-white rounded-lg shadow-lg p-8">
               <h2 className="text-3xl font-bold text-primary mb-6 font-prompt">
-                ขายรถมือสองเชียงใหม่ ราคาดี ขายเร็ว ไว้ใจได้
+                ขายรถยนต์มือสอง ราคายุติธรรม ขายเร็ว ไว้ใจได้
               </h2>
 
               <div className="prose prose-lg max-w-none">
                 <p className="text-gray-700 leading-relaxed mb-6">
-                  การขายรถมือสองในเชียงใหม่ต้องเลือกสถานที่ที่เชื่อถือได้
-                  ครูหนึ่งรถสวยเป็นศูนย์รวมรถมือสองคุณภาพ มีประสบการณ์มากกว่า 10 ปีในธุรกิจรถยนต์
-                  พร้อมให้บริการขายรถ ประเมินราคา และแลกเทิร์นรถยนต์ทุกยี่ห้อ ดู
-                  <a href="/" className="text-primary hover:underline">
+                  การขายรถบ้านในภาคเหนือต้องเลือกศูนย์ที่เชื่อถือได้
+                  ครูหนึ่งรถสวยเป็นแพลตฟอร์มซื้อขายรถยนต์คุณภาพดี มีประสบการณ์มากกว่า 10
+                  ปีในธุรกิจรถยนต์ พร้อมให้บริการขายรถ ประเมินราคา และแลกเทิร์นรถยนต์ทุกยี่ห้อ ดู
+                  <Link href="/" className="text-primary hover:underline">
                     หน้าแรก
-                  </a>
+                  </Link>
                   ของเราเพื่อข้อมูลเพิ่มเติม
                 </p>
 
                 <h3 className="text-2xl font-bold text-primary mb-4 font-prompt">
-                  บริการขายรถมือสองครบวงจร
+                  บริการรับซื้อขายรถยนต์ครบวงจร
                 </h3>
 
                 <div className="grid md:grid-cols-2 gap-8 mb-8">
@@ -152,13 +146,13 @@ export default function SellCar() {
                   ด้วยประสบการณ์ยาวนานในธุรกิจรถยนต์ เรามีลูกค้าประจำมากมาย
                   และเครือข่ายการขายที่กว้างขวาง ทำให้สามารถขายรถของคุณได้อย่างรวดเร็ว ภายใน 7 วัน
                   พร้อมทั้งให้ราคาที่ดีที่สุด ตรวจสอบ
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     สต็อกรถมือสอง
-                  </a>
+                  </Link>
                   ของเราหรืออ่าน
-                  <a href="/promotion" className="text-primary hover:underline">
+                  <Link href="/promotion" className="text-primary hover:underline">
                     โปรโมชั่นพิเศษ
-                  </a>
+                  </Link>
                   เพิ่มเติม
                 </p>
 
@@ -191,28 +185,28 @@ export default function SellCar() {
                     <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                       1
                     </div>
-                    <h5 className="font-semibold text-gray-900 mb-2">ติดต่อ LINE</h5>
+                    <h4 className="font-semibold text-gray-900 mb-2">ติดต่อ LINE</h4>
                     <p className="text-gray-600 text-sm">ส่งรูปรถและรายละเอียด</p>
                   </div>
                   <div className="text-center">
                     <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                       2
                     </div>
-                    <h5 className="font-semibold text-gray-900 mb-2">นัดดูรถ</h5>
+                    <h4 className="font-semibold text-gray-900 mb-2">นัดดูรถ</h4>
                     <p className="text-gray-600 text-sm">ตรวจสอบสภาพรถจริง</p>
                   </div>
                   <div className="text-center">
                     <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                       3
                     </div>
-                    <h5 className="font-semibold text-gray-900 mb-2">ประเมินราคา</h5>
+                    <h4 className="font-semibold text-gray-900 mb-2">ประเมินราคา</h4>
                     <p className="text-gray-600 text-sm">ให้ราคาที่ยุติธรรม</p>
                   </div>
                   <div className="text-center">
                     <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                       4
                     </div>
-                    <h5 className="font-semibold text-gray-900 mb-2">จ่ายเงิน</h5>
+                    <h4 className="font-semibold text-gray-900 mb-2">จ่ายเงิน</h4>
                     <p className="text-gray-600 text-sm">รับเงินสดทันที</p>
                   </div>
                 </div>
@@ -223,75 +217,75 @@ export default function SellCar() {
 
                 <p className="text-gray-700 leading-relaxed mb-6">
                   เรารับซื้อรถยนต์ทุกยี่ห้อ ไม่ว่าจะเป็น{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Toyota
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Honda
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Nissan
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Mazda
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Mitsubishi
-                  </a>
+                  </Link>
                   ,
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Isuzu
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Ford
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Chevrolet
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     BMW
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Mercedes-Benz
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Audi
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Hyundai
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Kia
-                  </a>
+                  </Link>
                   ,{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     Suzuki
-                  </a>
+                  </Link>
                   หรือยี่ห้ออื่นๆ รวมถึง
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     รถปิคอัพ
-                  </a>{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  </Link>{' '}
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     รถ SUV
-                  </a>{' '}
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  </Link>{' '}
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     รถเก๋ง
-                  </a>{' '}
+                  </Link>{' '}
                   และ
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     รถคอมแพค
-                  </a>
+                  </Link>
                 </p>
 
                 <div className="bg-gray-100 p-6 rounded-lg mb-8">
@@ -310,13 +304,13 @@ export default function SellCar() {
                   </div>
                   <p className="text-gray-600 text-sm mt-4">
                     ต้องการข้อมูลเพิ่มเติม? ดู
-                    <a href="/payment-calculator" className="text-primary hover:underline">
+                    <Link href="/payment-calculator" className="text-primary hover:underline">
                       คำนวณค่างวด
-                    </a>
+                    </Link>
                     หรือ
-                    <a href="/credit-check" className="text-primary hover:underline">
+                    <Link href="/credit-check" className="text-primary hover:underline">
                       ตรวจสอบเครดิต
-                    </a>
+                    </Link>
                   </p>
                 </div>
 
@@ -328,17 +322,17 @@ export default function SellCar() {
                   หากคุณต้องการขายรถด่วน หรือต้องการประเมินราคารถฟรี สามารถติดต่อเราได้ทันทีผ่าน
                   LINE หรือโทรศัพท์ ทีมงานของเราพร้อมให้คำปรึกษาและบริการที่ดีที่สุด
                   เพื่อให้คุณขายรถได้ในราคาที่คุ้มค่าและรวดเร็ว ดูตัวอย่าง
-                  <a href="/all-cars" className="text-primary hover:underline">
+                  <Link href="/all-cars" className="text-primary hover:underline">
                     รถมือสองคุณภาพดี
-                  </a>
+                  </Link>
                   ที่เรามีจำหน่าย หรือเรียนรู้เพิ่มเติมเกี่ยวกับ
-                  <a href="/about" className="text-primary hover:underline">
+                  <Link href="/about" className="text-primary hover:underline">
                     เรื่องราวของเรา
-                  </a>
+                  </Link>
                   และ
-                  <a href="/contact" className="text-primary hover:underline">
+                  <Link href="/contact" className="text-primary hover:underline">
                     ช่องทางติดต่อ
-                  </a>
+                  </Link>
                 </p>
 
                 <div className="text-center mt-8">

@@ -1,6 +1,6 @@
 import { isAuthenticated } from '../../../../middleware/adminAuth';
 import { getAllCars } from '../../../../lib/shopify.mjs';
-import { readCarStatuses } from '../../../../lib/carStatusStore.js';
+import { readCarStatusesByIds } from '../../../../lib/carStatusStore.js';
 
 /**
  * API: GET /api/admin/cars/list
@@ -8,6 +8,10 @@ import { readCarStatuses } from '../../../../lib/carStatusStore.js';
  * Returns: { success: true, cars: [...] }
  */
 export default async function handler(req, res) {
+  // Set no-cache headers
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+
   // Only allow GET requests
   if (req.method !== 'GET') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
@@ -20,15 +24,49 @@ export default async function handler(req, res) {
 
   try {
     // Fetch all products from Shopify
-    const cars = await getAllCars();
+    let cars;
+    try {
+      cars = await getAllCars();
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.log(`✅ Fetched ${cars.length} cars from Shopify`);
+      }
+    } catch (shopifyError) {
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.error('❌ Shopify fetch error:', shopifyError.message);
+      }
+      return res.status(500).json({
+        success: false,
+        error: 'Failed to fetch cars from Shopify',
+        details: shopifyError.message,
+      });
+    }
 
-    // Load status from Vercel KV
-    const kvStatuses = await readCarStatuses();
+    // Load status from Vercel KV (by ids; avoids expensive key scans)
+    let kvStatuses;
+    try {
+      const ids = Array.isArray(cars) ? cars.map(c => c?.id).filter(Boolean) : [];
+      kvStatuses = await readCarStatusesByIds(ids);
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.log(`✅ Loaded ${Object.keys(kvStatuses).length} statuses from KV`);
+      }
+    } catch (kvError) {
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.error('⚠️  KV read error:', kvError.message);
+      }
+      // Don't fail the request, just use empty statuses
+      kvStatuses = {};
+    }
 
     // Transform products to car format with status from KV
     const carsWithStatus = cars.map(car => {
       // Get status from KV or default to 'available'
-      const statusRaw = kvStatuses[car.id]?.status ?? 'available';
+      const tagFallback =
+        Array.isArray(car.tags) && car.tags.includes('reserved') ? 'reserved' : 'available';
+      const statusRaw = kvStatuses[car.id]?.status ?? tagFallback;
       // Normalize status to allowed set: 'available' | 'reserved'
       let status = typeof statusRaw === 'string' ? statusRaw.trim().toLowerCase() : 'available';
       if (status !== 'available' && status !== 'reserved') status = 'available';

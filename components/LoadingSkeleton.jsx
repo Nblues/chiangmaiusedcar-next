@@ -27,4 +27,6 @@ export const CardSkeleton = memo(function CardSkeleton() {
   );
 });
 
-export default { CardSkeleton, ImageGallerySkeleton };
+const loadingSkeleton = { CardSkeleton, ImageGallerySkeleton };
+
+export default loadingSkeleton;

@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
 import SEO from '../components/SEO';
 import { safeAPIFetch } from '../lib/safeFetch';
 
@@ -284,10 +285,10 @@ export default function APIDashboard() {
           <div className="bg-white shadow rounded-lg p-6">
             <h2 className="text-xl font-prompt font-semibold mb-4">🔗 Navigation</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <a href="/" className="p-4 border rounded hover:bg-gray-50 transition-colors">
+              <Link href="/" className="p-4 border rounded hover:bg-gray-50 transition-colors">
                 <div className="font-medium">กลับหน้าหลัก</div>
                 <div className="text-sm text-gray-600">หน้าเว็บไซต์</div>
-              </a>
+              </Link>
               <button
                 type="button"
                 onClick={refreshTests}

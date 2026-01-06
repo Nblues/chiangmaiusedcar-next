@@ -1,7 +1,7 @@
 // Service Worker สำหรับการจัดการแคชตามมาตรฐานสากล 2025
 // Cache Strategy: Stale-While-Revalidate + Network First สำหรับเนื้อหาล่าสุด
 
-const CACHE_VERSION = 'v2025-1.0.1';
+const CACHE_VERSION = 'v2026-1.0.2';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
@@ -18,6 +18,9 @@ const STATIC_ASSETS = [
   '/offline.html',
   '/manifest.json',
   '/favicon.webp',
+  '/favicon.png',
+  '/favicon.ico',
+  '/logo/logo_favicon.webp',
   // '/_next/static/css/main.css', // ถ้ามีไฟล์ css หลักให้ใส่ชื่อไฟล์
   // '/_next/static/chunks/framework.js', // ถ้ามีไฟล์ js หลักให้ใส่ชื่อไฟล์
 ];
