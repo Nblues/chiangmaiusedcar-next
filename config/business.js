@@ -15,20 +15,24 @@ export const BUSINESS_INFO = {
   domain: process.env.NEXT_PUBLIC_DOMAIN || 'chiangmaiusedcar.com',
   baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://chiangmaiusedcar.com',
 
-  // ข้อมูลที่ตั้ง
+  // ข้อมูลที่ตั้ง (อัปเดตตาม Google Maps - 2026-01-06)
   address: {
-    street: 'เลขที่ 320 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี',
-    district: 'สันพระเนตร',
+    street: 'เลขที่ 324 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี',
+    subdistrict: 'สันพระเนตร',
+    district: 'สันทราย',
     province: 'เชียงใหม่',
     postalCode: '50210',
     country: 'TH',
   },
 
-  // พิกัดร้าน (พิกัดที่แม่นยำจาก Google Maps - อัปเดต 2025-09-11)
+  // พิกัดร้าน (อัปเดตจาก Google Maps - 2026-01-06)
   coordinates: {
-    latitude: 18.8048977,
-    longitude: 99.0301667,
+    latitude: 18.8049109,
+    longitude: 99.0301679,
   },
+
+  // Google Maps Place ID
+  placeId: '0x30da25a34cba1f05:0x9cb559411066b7cb',
 
   // เวลาทำการ
   operatingHours: {
@@ -79,8 +83,8 @@ export const createMapsLink = () => {
   return `https://www.google.com/maps/search/${encodeURIComponent(address)}`;
 };
 
-// ฟังก์ชันสำหรับ place link
+// ฟังก์ชันสำหรับ place link (ใช้ Place ID จาก Google Maps)
 export const createPlaceLink = () => {
-  const { latitude, longitude } = BUSINESS_INFO.coordinates;
-  return `https://www.google.com/maps/place/${BUSINESS_INFO.name}/@${latitude},${longitude},17z/data=!3m1!4b1!4m6!3m5!1s0x0:0x0!8m2!3d${latitude}!4d${longitude}!16s%2Fg%2F11c0qg8q8q`;
+  const placeId = BUSINESS_INFO.placeId;
+  return `https://www.google.com/maps/place/?q=place_id:${placeId}`;
 };

@@ -466,7 +466,7 @@ export default function Home({ cars, brandCounts }) {
                   <button
                     type="button"
                     onClick={handleSearch}
-                    className="w-full bg-accent hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 font-prompt shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="w-full bg-accent hover:bg-accent-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 font-prompt shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
                     ค้นหา
                   </button>

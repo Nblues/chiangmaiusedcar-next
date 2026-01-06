@@ -31,6 +31,7 @@ export default function CarActionButtons({ car }) {
         }
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Share failed:', error);
       // Final fallback to Facebook share
       window.open(
@@ -77,7 +78,7 @@ export default function CarActionButtons({ car }) {
         {/* Share */}
         <button
           onClick={shareCar}
-          className="flex items-center justify-center px-6 py-4 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-prompt"
+          className="flex items-center justify-center px-6 py-4 rounded-xl bg-accent hover:bg-accent-700 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-prompt"
           title="แชร์รถคันนี้"
           aria-label="แชร์ข้อมูลรถคันนี้"
         >

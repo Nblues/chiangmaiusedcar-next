@@ -844,7 +844,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-accent hover:bg-orange-600 text-white flex items-center gap-2 px-4 py-3 rounded-lg font-prompt transition-colors"
+                  className="bg-accent hover:bg-accent-700 text-white flex items-center gap-2 px-4 py-3 rounded-lg font-prompt transition-colors"
                   aria-label="แชร์รถคันนี้ทาง LINE"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -986,7 +986,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   </a>
                   <a
                     href="https://lin.ee/8ugfzstD"
-                    className="bg-accent hover:bg-orange-600 text-white text-center py-3 px-4 rounded-lg font-bold transition-colors font-prompt w-full"
+                    className="bg-accent hover:bg-accent-700 text-white text-center py-3 px-4 rounded-lg font-bold transition-colors font-prompt w-full"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="แชท LINE ครูหนึ่งรถสวย"

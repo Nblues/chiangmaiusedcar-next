@@ -100,7 +100,7 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
           <p className="text-gray-600 font-prompt mb-4">ขออภัย ยังไม่มีรถที่ใกล้เคียงให้แนะนำ</p>
           <Link
             href="/all-cars"
-            className="bg-accent hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold text-base transition-colors font-prompt inline-block"
+            className="bg-accent hover:bg-accent-700 text-white px-6 py-3 rounded-lg font-semibold text-base transition-colors font-prompt inline-block"
           >
             ดูรถทั้งหมด
           </Link>
@@ -217,7 +217,7 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
                 </div>
 
                 <div className="mt-2 md:mt-3">
-                  <span className="block text-center bg-accent hover:bg-orange-600 text-white text-xs py-1.5 md:py-2 px-2 md:px-3 rounded-lg transition-colors font-prompt font-bold">
+                  <span className="block text-center bg-accent hover:bg-accent-700 text-white text-xs py-1.5 md:py-2 px-2 md:px-3 rounded-lg transition-colors font-prompt font-bold">
                     <span className="hidden md:inline">ดูรายละเอียด →</span>
                     <span className="md:hidden">ดูเพิ่ม</span>
                   </span>

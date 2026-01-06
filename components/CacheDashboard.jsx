@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useCacheManager } from '../lib/cache';
-
-export default function CacheDashboard() {
-  const { cacheInfo, isClearing, clearCaches, forceReload, triggerRevalidation, isPWA } =
-    useCacheManager();
-
-  const [isRevalidating, setIsRevalidating] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState(null);
+        <a
+          href="/console-errors-explained.html"
+          target="_blank"
+          className="block w-full text-center px-3 py-2 bg-accent text-white text-xs rounded hover:bg-accent-700"
+        >
+          🐛 Console Debug
+        </a>
   const [swStatus, setSwStatus] = useState('checking...');
 
   useEffect(() => {
@@ -234,7 +234,7 @@ export default function CacheDashboard() {
         <a
           href="/debug-console.html"
           target="_blank"
-          className="block w-full text-center px-3 py-2 bg-orange-500 text-white text-xs rounded hover:bg-orange-600"
+          className="block w-full text-center px-3 py-2 bg-accent text-white text-xs rounded hover:bg-accent-700"
         >
           🐛 Console Debug
         </a>

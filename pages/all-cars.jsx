@@ -454,7 +454,7 @@ export default function AllCars({ cars }) {
                     router.push('/all-cars', undefined, { shallow: true });
                   }
                 }}
-                className="w-full bg-accent hover:bg-orange-600 text-white font-semibold py-3 px-4 rounded-2xl transition-all duration-300 font-prompt shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full bg-accent hover:bg-accent-700 text-white font-semibold py-3 px-4 rounded-2xl transition-all duration-300 font-prompt shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
               >
                 รีเซ็ต
               </button>
