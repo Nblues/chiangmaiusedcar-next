@@ -370,7 +370,7 @@ export default function CreditCheck() {
           <div className="bg-white rounded-3xl shadow-xl p-4 sm:p-6 md:p-10 lg:p-12 border border-primary/10">
             <div className="text-center mb-8 sm:mb-12">
               <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4 leading-tight">
-                แบบฟอร์มประเมินสิทธิ์สินเชื่อ
+                แบบฟอร์มประเมินสินเชื่อ
               </h2>
               <h3 className="absolute -left-[9999px] w-[1px] h-[1px] overflow-hidden">
                 บริการจัดไฟแนนซ์ ฟรีดาวน์ รับประกัน อนุมัติง่าย
