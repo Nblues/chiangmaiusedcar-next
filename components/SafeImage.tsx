@@ -118,7 +118,17 @@ export default function SafeImage({
 }
 
 // Basic version for simple use cases
-export function SimpleSafeImage({ src, alt }: { src: string; alt: string }) {
+export function SimpleSafeImage({
+  src,
+  alt,
+  width = 500,
+  height = 300,
+}: {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+}) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -127,5 +137,5 @@ export function SimpleSafeImage({ src, alt }: { src: string; alt: string }) {
 
   if (!mounted) return null;
 
-  return <img src={src} alt={alt} />;
+  return <Image src={src} alt={alt} width={width} height={height} />;
 }

@@ -10,7 +10,7 @@ import Link from 'next/link';
 import A11yImage from '../../components/A11yImage';
 import { carAlt } from '../../utils/a11y';
 import { optimizeShopifyImage } from '../../utils/imageOptimizer';
-import { createShareText } from '../../utils/urlHelper';
+import { createPrettyUrl, createShareText, createShortShareUrl } from '../../utils/urlHelper';
 import { readCarStatuses } from '../../lib/carStatusStore.js';
 
 function CarDetailPage({ car, recommendedCars = [] }) {
@@ -25,6 +25,40 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const heroLoadingTimerRef = useRef(null);
   // สถานะโหลดรูป thumbnails (ติดตามแต่ละรูป)
   const [thumbnailLoadingState, setThumbnailLoadingState] = useState({});
+
+  const copyTextToClipboard = async text => {
+    if (typeof window === 'undefined') return false;
+    const value = String(text || '');
+    if (!value) return false;
+
+    // Preferred: Clipboard API (may be blocked by Permissions-Policy)
+    try {
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+        return true;
+      }
+    } catch {
+      // fall through to legacy copy
+    }
+
+    // Fallback: execCommand('copy') via temporary textarea
+    try {
+      const textarea = document.createElement('textarea');
+      textarea.value = value;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.top = '-9999px';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      const ok = document.execCommand && document.execCommand('copy');
+      document.body.removeChild(textarea);
+      return Boolean(ok);
+    } catch {
+      return false;
+    }
+  };
 
   // Hydration protection
   useEffect(() => {
@@ -46,6 +80,33 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     });
     setThumbnailLoadingState(initialState);
   }, [car]);
+
+  // ตั้งสถานะโหลดรูปหลักทุกครั้งที่สลับรูป (กันกรณี cache/production ทำให้ UX เพี้ยน)
+  useEffect(() => {
+    if (!mounted || !car) return;
+
+    const images = safeGet(car, 'images', []);
+    if (images.length === 0) return;
+
+    setIsHeroLoading(true);
+    setShowHeroLoading(false);
+
+    if (heroLoadingTimerRef.current) {
+      clearTimeout(heroLoadingTimerRef.current);
+    }
+
+    // แสดง hint เฉพาะกรณีโหลดช้า (non-blocking)
+    heroLoadingTimerRef.current = setTimeout(() => {
+      setShowHeroLoading(true);
+    }, 300);
+
+    return () => {
+      if (heroLoadingTimerRef.current) {
+        clearTimeout(heroLoadingTimerRef.current);
+        heroLoadingTimerRef.current = null;
+      }
+    };
+  }, [selectedImageIndex, car, mounted]);
 
   // จดจำหน้าเดิม (referrer) เพื่อให้กดย้อนกลับได้ถูกหน้า (เช่น all-cars ที่มี filter)
   useEffect(() => {
@@ -284,7 +345,9 @@ function CarDetailPage({ car, recommendedCars = [] }) {
 
   // Server-rendered Open Graph essentials (SSR-safe, no client-only logic)
   // Build canonical URL and primary OG image directly from props to guarantee tags on first HTML
-  const canonicalUrl = `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`;
+  const rawHandle = safeGet(car, 'handle', '');
+  const prettyHandle = createPrettyUrl(rawHandle) || rawHandle;
+  const canonicalUrl = `https://www.chiangmaiusedcar.com/car/${prettyHandle}`;
   // Prefer original Shopify URL when available to avoid relative paths
   let ogImage = safeGet(firstCarImage, 'originalUrl', '') || safeGet(firstCarImage, 'url', '');
   if (ogImage && ogImage.startsWith('/')) {
@@ -395,6 +458,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
           <div className="mb-6 sm:mb-8">
             <div className="relative w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[600px] bg-white rounded-xl overflow-hidden border border-gray-200">
               <A11yImage
+                key={safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp')}
                 src={safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp')}
                 alt={carAlt(car)}
                 fallbackAlt={safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
@@ -409,6 +473,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   setShowHeroLoading(false);
                   if (heroLoadingTimerRef.current) {
                     clearTimeout(heroLoadingTimerRef.current);
+                    heroLoadingTimerRef.current = null;
                   }
                 }}
                 onError={() => {
@@ -417,6 +482,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   setShowHeroLoading(false);
                   if (heroLoadingTimerRef.current) {
                     clearTimeout(heroLoadingTimerRef.current);
+                    heroLoadingTimerRef.current = null;
                   }
                 }}
               />
@@ -691,17 +757,26 @@ function CarDetailPage({ car, recommendedCars = [] }) {
               <h3 className="text-lg font-bold text-black mb-4 font-prompt">แชร์รถคันนี้</h3>
               <div className="flex flex-wrap gap-2 sm:gap-3">
                 <button
-                  onClick={() => {
+                  onClick={async () => {
                     // ใช้ URL จริงของ Shopify (ไม่แก้ไข) เพื่อป้องกัน 404
-                    const shareUrl = `https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`;
+                    const shareUrl = createShortShareUrl(safeGet(car, 'handle', '')) || canonicalUrl;
                     const shareText = createShareText(car);
+                    const copyText = `${shareText}\n${shareUrl}`;
 
                     if (navigator.share) {
-                      navigator.share({ title: shareText, url: shareUrl });
+                      try {
+                        await navigator.share({ title: shareText, url: shareUrl });
+                      } catch {
+                        // user cancelled / unsupported
+                      }
                     } else {
-                      navigator.clipboard
-                        .writeText(`${shareText}\n${shareUrl}`)
-                        .then(() => alert('✅ คัดลอกลิ้งค์แล้ว!'));
+                      const ok = await copyTextToClipboard(copyText);
+                      if (ok) {
+                        alert('✅ คัดลอกลิ้งค์แล้ว!');
+                      } else {
+                        // Last resort: allow manual copy without crashing
+                        window.prompt('คัดลอกลิ้งค์นี้ได้เลย:', copyText);
+                      }
                     }
                   }}
                   className="bg-white hover:bg-gray-50 text-black border border-gray-200 flex items-center gap-2 px-4 py-3 rounded-lg font-prompt transition-colors"
@@ -718,7 +793,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   แชร์รถคันนี้
                 </button>
                 <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonicalUrl)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-primary hover:bg-blue-700 text-white flex items-center gap-2 px-4 py-3 rounded-lg font-prompt transition-colors"
@@ -730,7 +805,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   แชร์ Facebook
                 </a>
                 <a
-                  href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(`https://www.chiangmaiusedcar.com/car/${safeGet(car, 'handle', '')}`)}`}
+                  href={`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(canonicalUrl)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-accent hover:bg-accent-700 text-white flex items-center gap-2 px-4 py-3 rounded-lg font-prompt transition-colors"
@@ -1175,6 +1250,8 @@ export async function getStaticProps({ params }) {
 
     const requestedRaw = params?.handle || '';
     const requested = decodeURIComponent(requestedRaw);
+    const requestedPrettyRaw = createPrettyUrl(requestedRaw);
+    const requestedPretty = createPrettyUrl(requested);
 
     // 1) ตรงตัว
     let car = safeCars.find(c => c?.handle === requestedRaw) || null;
@@ -1182,6 +1259,15 @@ export async function getStaticProps({ params }) {
     // 2) เทียบกับ decoded
     if (!car) {
       car = safeCars.find(c => c?.handle === requested) || null;
+    }
+
+    // 2.5) เทียบกับ pretty handle (ตัดคำไทยเช่น "ปี" ออกจาก slug)
+    if (!car) {
+      const target = requestedPrettyRaw || requestedPretty;
+      if (target) {
+        car =
+          safeCars.find(c => c?.handle && createPrettyUrl(c.handle) === target) || null;
+      }
     }
 
     // 3) เผื่อมีคำต่อท้าย เช่น -รุ่นท็อป ให้แมทช์แบบ prefix ที่ยาวสุด
@@ -1204,10 +1290,11 @@ export async function getStaticProps({ params }) {
     }
 
     // Redirect ไป canonical URL ถ้าไม่ตรง
-    if (requestedRaw !== car.handle) {
+    const canonicalPretty = createPrettyUrl(car.handle) || car.handle;
+    if ((requestedPrettyRaw || requestedPretty || requestedRaw) !== canonicalPretty) {
       return {
         redirect: {
-          destination: `/car/${car.handle}`,
+          destination: `/car/${canonicalPretty}`,
           permanent: true,
         },
       };

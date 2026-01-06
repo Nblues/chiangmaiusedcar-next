@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 const PWAInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -211,9 +212,11 @@ const PWAInstallPrompt = () => {
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0">
             <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center p-1">
-              <img
+              <Image
                 src="/favicon.webp"
                 alt="ครูหนึ่งรถสวย"
+                width={48}
+                height={48}
                 className="w-full h-full object-contain"
               />
             </div>
