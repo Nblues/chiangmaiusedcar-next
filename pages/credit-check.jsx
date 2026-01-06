@@ -339,20 +339,13 @@ export default function CreditCheck() {
           <div className="text-center text-white w-full max-w-5xl mx-auto bg-black/20 backdrop-blur-sm rounded-2xl p-6 sm:p-7 md:p-9 lg:p-10 border border-white/10">
             <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-4 md:mb-5 font-prompt drop-shadow-2xl leading-normal sm:leading-snug">
               <span className="text-white drop-shadow-2xl">
-                ประเมินคุณสมบัติเบื้องต้นเพื่อขอสินเชื่อรถมือสองเชียงใหม่
+                ประเมินคุณสมบัติเบื้องต้นเพื่อขอสินเชื่อ
               </span>
             </h1>
 
             <div className="space-y-3 sm:space-y-4 mb-5 md:mb-7">
               <p className="text-sm sm:text-base md:text-lg lg:text-xl font-prompt drop-shadow-2xl font-medium leading-relaxed">
-                <span className="block sm:inline">ทราบวงเงินและเงื่อนไขภายในไม่กี่นาที</span>
-                <span className="hidden sm:inline"> | </span>
-                <span className="block sm:inline">ไม่มีผลต่อเครดิตของคุณ</span>
-              </p>
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl font-prompt drop-shadow-2xl font-medium leading-relaxed">
-                <span className="block sm:inline">ประเมินฟรีและเป็นความลับ</span>
-                <span className="hidden sm:inline"> — </span>
-                <span className="block sm:inline">ไม่มีการผูกมัด</span>
+                ไม่มีผลต่อเครดิตของคุณ ประเมินฟรีไม่มีการผูกมัด
               </p>
             </div>
 
