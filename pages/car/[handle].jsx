@@ -23,6 +23,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const [isHeroLoading, setIsHeroLoading] = useState(true);
   const [showHeroLoading, setShowHeroLoading] = useState(false);
   const heroLoadingTimerRef = useRef(null);
+  const heroImageRef = useRef(null); // เก็บ ref ของรูปหลักเพื่อเช็ค complete
   // สถานะโหลดรูป thumbnails (ติดตามแต่ละรูป)
   const [thumbnailLoadingState, setThumbnailLoadingState] = useState({});
 
@@ -79,6 +80,28 @@ function CarDetailPage({ car, recommendedCars = [] }) {
       initialState[`mobile-${index}`] = true;
     });
     setThumbnailLoadingState(initialState);
+
+    // เช็ครูปที่โหลดเสร็จแล้วจาก cache หลัง render (ป้องกัน loading indicator ค้าง)
+    setTimeout(() => {
+      if (typeof document === 'undefined') return;
+      
+      const thumbnailImages = document.querySelectorAll('[alt*="รูปที่"]');
+      thumbnailImages.forEach((img) => {
+        if (img.complete && img.naturalWidth > 0) {
+          // หา index จาก alt text
+          const altText = img.alt;
+          const match = altText.match(/รูปที่ (\d+)/);
+          if (match) {
+            const idx = parseInt(match[1], 10) - 1;
+            setThumbnailLoadingState(prev => ({ 
+              ...prev, 
+              [idx]: false,
+              [`mobile-${idx}`]: false 
+            }));
+          }
+        }
+      });
+    }, 100);
   }, [car]);
 
   // ตั้งสถานะโหลดรูปหลักทุกครั้งที่สลับรูป (กันกรณี cache/production ทำให้ UX เพี้ยน)
@@ -99,6 +122,23 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     heroLoadingTimerRef.current = setTimeout(() => {
       setShowHeroLoading(true);
     }, 300);
+
+    // เช็ครูปหลักที่โหลดเสร็จแล้วจาก cache (ป้องกัน loading indicator ค้าง)
+    const checkImageLoaded = () => {
+      const imgElement = heroImageRef.current;
+      if (imgElement && imgElement.complete && imgElement.naturalWidth > 0) {
+        setIsHeroLoading(false);
+        setShowHeroLoading(false);
+        if (heroLoadingTimerRef.current) {
+          clearTimeout(heroLoadingTimerRef.current);
+          heroLoadingTimerRef.current = null;
+        }
+      }
+    };
+
+    // เช็คทันทีและหลังจาก render
+    checkImageLoaded();
+    setTimeout(checkImageLoaded, 50);
 
     return () => {
       if (heroLoadingTimerRef.current) {
@@ -178,6 +218,29 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     }
   }, [router, mounted]);
 
+  // Keyboard navigation for image gallery
+  useEffect(() => {
+    if (!mounted || !car) return;
+    const images = safeGet(car, 'images', []);
+    if (images.length < 2) return;
+
+    const handleKeyDown = (e) => {
+      // ถ้ากำลังพิมพ์ใน input/textarea ให้ข้าม
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+      if (e.key === 'ArrowLeft' || e.key === 'Left') {
+        e.preventDefault();
+        setSelectedImageIndex(prev => (prev === 0 ? images.length - 1 : prev - 1));
+      } else if (e.key === 'ArrowRight' || e.key === 'Right') {
+        e.preventDefault();
+        setSelectedImageIndex(prev => (prev === images.length - 1 ? 0 : prev + 1));
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedImageIndex, car, mounted]);
+
   // Preload next/prev images for instant switching with optimization
   useEffect(() => {
     if (!mounted || !car) return;
@@ -189,6 +252,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     if (selectedImageIndex < images.length - 1) preloadIndexes.push(selectedImageIndex + 1);
     if (selectedImageIndex > 0) preloadIndexes.push(selectedImageIndex - 1);
 
+    const preloadedImages = [];
     preloadIndexes.forEach(idx => {
       const img = new window.Image();
       const originalUrl = safeGet(images[idx], 'url', '');
@@ -196,7 +260,15 @@ function CarDetailPage({ car, recommendedCars = [] }) {
       img.src = optimizeShopifyImage(originalUrl, 1920, 'webp');
       // ⭐ ตั้ง fetchpriority ให้ต่ำกว่ารูปปัจจุบัน
       img.fetchPriority = 'low';
+      preloadedImages.push(img);
     });
+
+    // Cleanup: ยกเลิก preload เมื่อเปลี่ยนรูป
+    return () => {
+      preloadedImages.forEach(img => {
+        img.src = ''; // ยกเลิกการโหลด
+      });
+    };
   }, [selectedImageIndex, car, mounted]);
 
   // Process and clean the car description into readable paragraphs and hashtags
@@ -458,6 +530,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
           <div className="mb-6 sm:mb-8">
             <div className="relative w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[600px] bg-white rounded-xl overflow-hidden border border-gray-200">
               <A11yImage
+                ref={heroImageRef}
                 key={safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp')}
                 src={safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp')}
                 alt={carAlt(car)}
@@ -588,7 +661,12 @@ function CarDetailPage({ car, recommendedCars = [] }) {
               )}
 
               {/* Image Counter Modern 2025 */}
-              <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-black text-white px-4 py-2 rounded-lg text-xs sm:text-sm font-medium font-prompt">
+              <div 
+                className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-black text-white px-4 py-2 rounded-lg text-xs sm:text-sm font-medium font-prompt"
+                role="status"
+                aria-live="polite"
+                aria-label={`กำลังดูรูปที่ ${selectedImageIndex + 1} จาก ${carImages.length} รูป`}
+              >
                 <span className="text-white">{selectedImageIndex + 1}</span>
                 <span className="text-gray-300 mx-1">/</span>
                 <span className="text-gray-300">{carImages.length}</span>
@@ -596,8 +674,15 @@ function CarDetailPage({ car, recommendedCars = [] }) {
               </div>
 
               {/* Keyboard hint */}
-              <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-black text-white px-3 py-1 rounded-lg text-xs font-prompt hidden sm:block">
-                ใช้ ← → เพื่อเลื่อนรูป
+              <div 
+                className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-black/60 text-white px-3 py-1 rounded-lg text-xs font-prompt hidden sm:block"
+                aria-hidden="true"
+              >
+                <span className="flex items-center gap-1.5">
+                  <kbd className="bg-white/20 px-1.5 py-0.5 rounded text-xs">←</kbd>
+                  <kbd className="bg-white/20 px-1.5 py-0.5 rounded text-xs">→</kbd>
+                  <span className="ml-1">เลื่อนรูป</span>
+                </span>
               </div>
             </div>
 
@@ -633,10 +718,15 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                         className="object-cover"
                         imageType="thumbnail" // ⭐ ระบุเป็น thumbnail (400px)
                         loading="lazy"
-                        onLoad={() => {
+                        onLoad={(e) => {
                           setThumbnailLoadingState(prev => ({ ...prev, [index]: false }));
+                          // ถ้ารูปโหลดจาก cache (complete = true ทันที) ให้ซ่อน loading
+                          if (e?.target?.complete) {
+                            setThumbnailLoadingState(prev => ({ ...prev, [index]: false }));
+                          }
                         }}
                         onError={() => {
+                          // ถ้าโหลดผิดพลาด ให้ซ่อน loading indicator
                           setThumbnailLoadingState(prev => ({ ...prev, [index]: false }));
                         }}
                       />
@@ -716,10 +806,15 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                         className="object-cover"
                         sizes="64px"
                         loading="lazy"
-                        onLoad={() => {
+                        onLoad={(e) => {
                           setThumbnailLoadingState(prev => ({ ...prev, [`mobile-${index}`]: false }));
+                          // ถ้ารูปโหลดจาก cache (complete = true ทันที) ให้ซ่อน loading
+                          if (e?.target?.complete) {
+                            setThumbnailLoadingState(prev => ({ ...prev, [`mobile-${index}`]: false }));
+                          }
                         }}
                         onError={() => {
+                          // ถ้าโหลดผิดพลาด ให้ซ่อน loading indicator
                           setThumbnailLoadingState(prev => ({ ...prev, [`mobile-${index}`]: false }));
                         }}
                       />

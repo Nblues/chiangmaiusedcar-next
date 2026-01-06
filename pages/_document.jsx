@@ -57,75 +57,45 @@ export default function Document() {
         <meta name="etag" content={`"${buildTime}"`} />
 
         {/* Favicon Settings - 2025 Standards optimized for performance */}
-        {/* Primary: logo_favicon.webp - custom logo */}
-        <link rel="icon" type="image/webp" href={`/logo/logo_favicon.webp?${cacheVersion}`} />
-        {/* Fallback: PNG for better compatibility */}
-        <link rel="icon" type="image/png" href={`/favicon.png?${cacheVersion}`} />
-        {/* Legacy fallback: ICO for very old browsers */}
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" sizes="any" href="/favicon.ico" />
+        {/* ⭐ ลำดับสำคัญ: ICO ก่อน (รองรับทุก browser) แล้วค่อย PNG/WebP */}
+        
+        {/* 1. Primary: ICO สำหรับ compatibility สูงสุด */}
+        <link rel="icon" href="/favicon.ico" />
         <link rel="shortcut icon" href="/favicon.ico" />
+        
+        {/* 2. Multi-size PNG icons (ไม่ใส่ cache bust เพื่อให้ browser cache ได้) */}
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+        
+        {/* 3. Apple Touch Icons (ไม่ซ้ำซ้อน) */}
+        <link rel="apple-touch-icon" sizes="180x180" href="/favicon-192.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="/favicon-192.png" />
+        <link rel="apple-touch-icon" sizes="144x144" href="/favicon-144.png" />
+        <link rel="apple-touch-icon" sizes="120x120" href="/favicon-192.png" />
+        <link rel="apple-touch-icon" sizes="114x114" href="/favicon-192.png" />
+        <link rel="apple-touch-icon" sizes="76x76" href="/favicon-96.png" />
+        <link rel="apple-touch-icon" sizes="72x72" href="/favicon-96.png" />
+        <link rel="apple-touch-icon" sizes="60x60" href="/favicon-96.png" />
+        <link rel="apple-touch-icon" sizes="57x57" href="/favicon-96.png" />
+        <link rel="apple-touch-icon" href="/favicon-192.png" />
 
-        {/* Multi-size PNG icons for better SEO - use favicon-XxX.png variants */}
-        <link rel="icon" type="image/png" sizes="16x16" href={`/favicon-16.png?${cacheVersion}`} />
-        <link rel="icon" type="image/png" sizes="32x32" href={`/favicon-32.png?${cacheVersion}`} />
-        <link rel="icon" type="image/png" sizes="48x48" href={`/favicon-48.png?${cacheVersion}`} />
-        <link rel="icon" type="image/png" sizes="96x96" href={`/favicon-96.png?${cacheVersion}`} />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="192x192"
-          href={`/favicon-192.png?${cacheVersion}`}
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="256x256"
-          href={`/favicon-256.png?${cacheVersion}`}
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="384x384"
-          href={`/favicon-384.png?${cacheVersion}`}
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="512x512"
-          href={`/favicon-512.png?${cacheVersion}`}
-        />
-
-        {/* Apple Touch Icons - use favicon-XxX.png for better performance */}
-        <link rel="apple-touch-icon" href={`/favicon-192.png?${cacheVersion}`} />
-        <link rel="apple-touch-icon" sizes="57x57" href={`/favicon-48.png?${cacheVersion}`} />
-        <link rel="apple-touch-icon" sizes="60x60" href={`/favicon-48.png?${cacheVersion}`} />
-        <link rel="apple-touch-icon" sizes="72x72" href={`/favicon-96.png?${cacheVersion}`} />
-        <link rel="apple-touch-icon" sizes="76x76" href={`/favicon-96.png?${cacheVersion}`} />
-        <link rel="apple-touch-icon" sizes="114x114" href={`/favicon-96.png?${cacheVersion}`} />
-        <link rel="apple-touch-icon" sizes="120x120" href={`/favicon-192.png?${cacheVersion}`} />
-        <link rel="apple-touch-icon" sizes="144x144" href={`/favicon-192.png?${cacheVersion}`} />
-        <link rel="apple-touch-icon" sizes="152x152" href={`/favicon-192.png?${cacheVersion}`} />
-        <link rel="apple-touch-icon" sizes="180x180" href={`/favicon-192.png?${cacheVersion}`} />
-
-        {/* Android/Chrome Icons - 2025 PWA Standards */}
-        <link rel="icon" sizes="192x192" href={`/logo/logo_favicon.webp?${cacheVersion}`} />
-        <link rel="icon" sizes="512x512" href={`/logo/logo_favicon.webp?${cacheVersion}`} />
-
-        {/* Microsoft Tiles - 2025 Edge Standards */}
-        <meta name="msapplication-TileImage" content={`/logo/logo_favicon.webp?${cacheVersion}`} />
+        {/* Microsoft Tiles - Windows Start Menu */}
+        <meta name="msapplication-TileImage" content="/favicon-192.png" />
         <meta name="msapplication-TileColor" content="#1a237e" />
         <meta name="msapplication-config" content="/browserconfig.xml" />
 
         {/* 2025 Search Engine Favicon Optimization */}
-        <meta name="msapplication-square70x70logo" content="/favicon.webp" />
-        <meta name="msapplication-square150x150logo" content="/favicon.webp" />
-        <meta name="msapplication-wide310x150logo" content="/favicon.webp" />
-        <meta name="msapplication-square310x310logo" content="/favicon.webp" />
+        <meta name="msapplication-square70x70logo" content="/favicon-96.png" />
+        <meta name="msapplication-square150x150logo" content="/favicon-192.png" />
+        <meta name="msapplication-wide310x150logo" content="/favicon-192.png" />
+        <meta name="msapplication-square310x310logo" content="/favicon-512.png" />
 
-        {/* PWA Manifest with cache busting - 2025 Standards */}
-        <link rel="manifest" href={`/manifest.json?${cacheVersion}`} />
-        <link rel="manifest" href={`/site.webmanifest?${cacheVersion}`} />
+        {/* PWA Manifest - ไม่ใส่ cache bust เพื่อให้ browser cache ได้ */}
+        <link rel="manifest" href="/manifest.json" />
 
         {/* PWA Meta Tags - 2025 Standards */}
         <meta name="mobile-web-app-capable" content="yes" />

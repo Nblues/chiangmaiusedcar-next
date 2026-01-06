@@ -483,44 +483,7 @@ export default function SEO({
       <meta name="rating" content="general" />
       <meta name="revisit-after" content="1 day" />
 
-      {/* Enhanced Favicon with cache busting - 2025 Standards */}
-      <link rel="icon" href={`/logo/logo_favicon.webp?v=${buildTime}`} type="image/webp" />
-      <link rel="icon" href={`/favicon.svg?v=${buildTime}`} type="image/svg+xml" />
-      <link rel="icon" href={`/favicon.ico?v=${buildTime}`} type="image/x-icon" />
-      <link rel="apple-touch-icon" href={`/logo/logo_favicon.webp?v=${buildTime}`} />
-      <link rel="shortcut icon" href={`/logo/logo_favicon.webp?v=${buildTime}`} />
-
-      {/* Additional favicon sizes for better search engine recognition */}
-      <link
-        rel="icon"
-        type="image/webp"
-        sizes="16x16"
-        href={`/logo/logo_favicon.webp?v=${buildTime}`}
-      />
-      <link
-        rel="icon"
-        type="image/webp"
-        sizes="32x32"
-        href={`/logo/logo_favicon.webp?v=${buildTime}`}
-      />
-      <link
-        rel="icon"
-        type="image/webp"
-        sizes="96x96"
-        href={`/logo/logo_favicon.webp?v=${buildTime}`}
-      />
-      <link
-        rel="icon"
-        type="image/webp"
-        sizes="192x192"
-        href={`/logo/logo_favicon.webp?v=${buildTime}`}
-      />
-      <link
-        rel="icon"
-        type="image/webp"
-        sizes="512x512"
-        href={`/logo/logo_favicon.webp?v=${buildTime}`}
-      />
+      {/* ⚠️ Favicon ถูกจัดการใน _document.jsx แล้ว - ไม่ควรใส่ซ้ำที่นี่ */}
 
       {/* Schema.org JSON-LD - Organization (Single Source of Truth) */}
       <script

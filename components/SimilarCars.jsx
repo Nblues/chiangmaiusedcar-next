@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import A11yImage from './A11yImage';
 import { carAlt } from '../utils/a11y';
 
 // คอมโพเนนต์แนะนำรถที่คล้ายกัน
@@ -140,7 +140,7 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
           >
             <Link href={`/car/${car.handle}`} className="flex flex-col h-full">
               <figure className="relative w-full h-32 md:h-40 bg-gray-50 overflow-hidden">
-                <Image
+                <A11yImage
                   src={
                     Array.isArray(car.images) && car.images.length > 0
                       ? car.images[0]?.url
@@ -148,17 +148,16 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
                   }
                   alt={carAlt(car)}
                   fill
-                  className="object-cover transition-transform duration-200 group-hover:scale-105"
+                  className="object-cover transition-transform duration-300 group-hover:scale-110"
                   loading="lazy"
-                  quality={80}
+                  imageType="card"
                   sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 25vw"
                 />
 
                 {/* Badge ยี่ห้อเดียวกัน */}
                 {(car.vendor || car.brand) === (currentCar.vendor || currentCar.brand) && (
-                  <div className="absolute top-1 left-1 md:top-2 md:left-2 bg-accent text-white text-xs px-1 py-0.5 md:px-2 md:py-1 rounded-md font-bold font-prompt">
-                    <span className="hidden md:inline">ยี่ห้อเดียวกัน</span>
-                    <span className="md:hidden">ยี่ห้อเดียวกัน</span>
+                  <div className="absolute top-1 left-1 md:top-2 md:left-2 bg-accent text-white text-[10px] md:text-xs px-1.5 py-0.5 md:px-2 md:py-1 rounded font-bold font-prompt">
+                    ยี่ห้อเดียวกัน
                   </div>
                 )}
 
@@ -166,9 +165,8 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
                 {currentCar.price?.amount &&
                   Math.abs(Number(car.price.amount) - Number(currentCar.price.amount)) <=
                     Number(currentCar.price.amount) * 0.15 && (
-                    <div className="absolute top-1 right-1 md:top-2 md:right-2 bg-primary text-white text-xs px-1 py-0.5 md:px-2 md:py-1 rounded-md font-bold font-prompt">
-                      <span className="hidden md:inline">ราคาใกล้เคียง</span>
-                      <span className="md:hidden">ใกล้เคียง</span>
+                    <div className="absolute top-1 right-1 md:top-2 md:right-2 bg-primary text-white text-[10px] md:text-xs px-1.5 py-0.5 md:px-2 md:py-1 rounded font-bold font-prompt">
+                      ราคาใกล้เคียง
                     </div>
                   )}
               </figure>
@@ -218,8 +216,7 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
 
                 <div className="mt-2 md:mt-3">
                   <span className="block text-center bg-accent hover:bg-accent-700 text-white text-xs py-1.5 md:py-2 px-2 md:px-3 rounded-lg transition-colors font-prompt font-bold">
-                    <span className="hidden md:inline">ดูรายละเอียด →</span>
-                    <span className="md:hidden">ดูเพิ่ม</span>
+                    ดูรายละเอียด →
                   </span>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { optimizeShopifyImage, generateSrcSet, generateSizes } from '../utils/imageOptimizer';
 
 interface A11yImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
@@ -15,7 +15,7 @@ interface A11yImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   optimizeImage?: boolean; // ⭐ เปิด/ปิด optimization (default: true)
 }
 
-export default function A11yImage({
+const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(({
   fallbackAlt,
   alt,
   priority,
@@ -31,7 +31,7 @@ export default function A11yImage({
   src,
   srcSet: customSrcSet, // ยอมรับ srcSet แบบกำหนดเอง
   ...props
-}: A11yImageProps) {
+}, ref) => {
   const finalAlt = alt && alt.trim().length > 0 ? alt : (fallbackAlt ?? 'รูปภาพประกอบ');
 
   // ⭐ Optimize Shopify images automatically
@@ -140,5 +140,9 @@ export default function A11yImage({
   }
 
   // eslint-disable-next-line jsx-a11y/alt-text
-  return <img {...imgAttributes} />;
-}
+  return <img ref={ref} {...imgAttributes} />;
+});
+
+A11yImage.displayName = 'A11yImage';
+
+export default A11yImage;
