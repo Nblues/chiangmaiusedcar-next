@@ -636,6 +636,9 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                         onLoad={() => {
                           setThumbnailLoadingState(prev => ({ ...prev, [index]: false }));
                         }}
+                        onError={() => {
+                          setThumbnailLoadingState(prev => ({ ...prev, [index]: false }));
+                        }}
                       />
                       {/* Loading indicator for thumbnail */}
                       {thumbnailLoadingState[index] && (
@@ -714,6 +717,9 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                         sizes="64px"
                         loading="lazy"
                         onLoad={() => {
+                          setThumbnailLoadingState(prev => ({ ...prev, [`mobile-${index}`]: false }));
+                        }}
+                        onError={() => {
                           setThumbnailLoadingState(prev => ({ ...prev, [`mobile-${index}`]: false }));
                         }}
                       />

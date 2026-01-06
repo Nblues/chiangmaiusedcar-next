@@ -131,6 +131,14 @@ export default function A11yImage({
     imgAttributes['fetchpriority'] = fetchPriorityAttr;
   }
 
+  // Add onLoad and onError handlers from props
+  if (props.onLoad) {
+    imgAttributes.onLoad = props.onLoad;
+  }
+  if (props.onError) {
+    imgAttributes.onError = props.onError;
+  }
+
   // eslint-disable-next-line jsx-a11y/alt-text
   return <img {...imgAttributes} />;
 }
