@@ -77,7 +77,7 @@ export default function Footer() {
 
             {/* Contact Info */}
             <div className="space-y-4">
-              <div className="flex items-center space-x-3">
+              <div className="flex items-start space-x-3">
                 <div className="w-10 h-10 bg-accent-500 rounded-full flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path
@@ -89,13 +89,10 @@ export default function Footer() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-white font-medium mb-1">ที่อยู่ร้าน</p>
-                  <p className="text-gray-300 text-sm leading-relaxed">
-                    <span className="block sm:inline">เลขที่ 324 หมู่ 2</span>{' '}
-                    <span className="block sm:inline">ถนน สมโภชเชียงใหม่ 700 ปี</span>
+                  <p className="text-gray-300 text-sm leading-relaxed break-words">
+                    เลขที่ 324 หมู่ 2 ถนน สมโภชเชียงใหม่ 700 ปี
                     <br />
-                    <span className="block sm:inline">ตำบล สันพระเนตร</span>{' '}
-                    <span className="block sm:inline">อำเภอสันทราย</span>{' '}
-                    <span className="block sm:inline">เชียงใหม่ 50210</span>
+                    ตำบล สันพระเนตร อำเภอสันทราย เชียงใหม่ 50210
                   </p>
                 </div>
               </div>
