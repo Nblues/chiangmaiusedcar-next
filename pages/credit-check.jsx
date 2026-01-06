@@ -345,10 +345,14 @@ export default function CreditCheck() {
 
             <div className="space-y-3 sm:space-y-4 mb-5 md:mb-7">
               <p className="text-sm sm:text-base md:text-lg lg:text-xl font-prompt drop-shadow-2xl font-medium leading-relaxed">
-                ทราบวงเงินและเงื่อนไขภายในไม่กี่นาที | ไม่มีผลต่อเครดิตของคุณ
+                <span className="block sm:inline">ทราบวงเงินและเงื่อนไขภายในไม่กี่นาที</span>
+                <span className="hidden sm:inline"> | </span>
+                <span className="block sm:inline">ไม่มีผลต่อเครดิตของคุณ</span>
               </p>
               <p className="text-sm sm:text-base md:text-lg lg:text-xl font-prompt drop-shadow-2xl font-medium leading-relaxed">
-                ประเมินฟรีและเป็นความลับ — ไม่มีการผูกมัด
+                <span className="block sm:inline">ประเมินฟรีและเป็นความลับ</span>
+                <span className="hidden sm:inline"> — </span>
+                <span className="block sm:inline">ไม่มีการผูกมัด</span>
               </p>
             </div>
 
