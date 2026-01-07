@@ -26,17 +26,7 @@
       {
         "name": "next"
       }
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"],
-      "@/components/*": ["components/*"],
-      "@/lib/*": ["lib/*"],
-      "@/styles/*": ["styles/*"],
-      "@/pages/*": ["pages/*"],
-      "@/public/*": ["public/*"],
-      "@/content/*": ["content/*"]
-    }
+    ]
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts", ".next/types/**/*.ts"],
   "exclude": ["node_modules", ".next", "out", "dist"]
