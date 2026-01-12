@@ -375,7 +375,7 @@ export default function Home({ cars, brandCounts }) {
               height="467"
               className="w-full h-auto object-contain"
               loading="eager"
-              fetchPriority="high"
+              {...{ fetchpriority: 'high' }}
               decoding="async"
             />
           </picture>

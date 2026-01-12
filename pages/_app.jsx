@@ -243,9 +243,6 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        {/* Favicon - ซ้ำจาก _document เพื่อให้มั่นใจว่าทุกหน้าแสดง */}
-        <link rel="icon" href="/favicon.ico" />
-
         {/* DNS Prefetch for performance */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />
@@ -257,9 +254,6 @@ export default function MyApp({ Component, pageProps }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
-
-        {/* Web App Manifest for PWA support - 2025 Standards */}
-        <link rel="manifest" href="/manifest.json" />
 
         {/* Font optimization: Using @fontsource/prompt instead of preload */}
       </Head>

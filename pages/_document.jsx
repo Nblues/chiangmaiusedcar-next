@@ -39,7 +39,7 @@ export default class MyDocument extends Document {
             as="image"
             href="/herobanner/cnxcar-1024w.webp"
             type="image/webp"
-            fetchPriority="high"
+            {...{ fetchpriority: 'high' }}
             imageSrcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
             imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
           />
@@ -70,6 +70,9 @@ export default class MyDocument extends Document {
           <link rel="icon" href="/favicon.ico" />
           <link rel="shortcut icon" href="/favicon.ico" />
 
+          {/* Vector favicon (modern browsers) */}
+          <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
           {/* 2. Multi-size PNG icons (ไม่ใส่ cache bust เพื่อให้ browser cache ได้) */}
           <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
           <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
@@ -78,28 +81,22 @@ export default class MyDocument extends Document {
           <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
           <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
 
-          {/* 3. Apple Touch Icons (ไม่ซ้ำซ้อน) */}
-          <link rel="apple-touch-icon" sizes="180x180" href="/favicon-192.png" />
-          <link rel="apple-touch-icon" sizes="152x152" href="/favicon-192.png" />
-          <link rel="apple-touch-icon" sizes="144x144" href="/favicon-144.png" />
-          <link rel="apple-touch-icon" sizes="120x120" href="/favicon-192.png" />
-          <link rel="apple-touch-icon" sizes="114x114" href="/favicon-192.png" />
-          <link rel="apple-touch-icon" sizes="76x76" href="/favicon-96.png" />
-          <link rel="apple-touch-icon" sizes="72x72" href="/favicon-96.png" />
-          <link rel="apple-touch-icon" sizes="60x60" href="/favicon-96.png" />
-          <link rel="apple-touch-icon" sizes="57x57" href="/favicon-96.png" />
-          <link rel="apple-touch-icon" href="/favicon-192.png" />
+          {/* 3. Apple Touch Icon (standard filename) */}
+          <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+          {/* Safari pinned tab (best-effort using existing SVG) */}
+          <link rel="mask-icon" href="/favicon.svg" color="#1a237e" />
 
           {/* Microsoft Tiles - Windows Start Menu */}
-          <meta name="msapplication-TileImage" content="/favicon-192.png" />
+          <meta name="msapplication-TileImage" content="/mstile-150x150.png" />
           <meta name="msapplication-TileColor" content="#1a237e" />
           <meta name="msapplication-config" content="/browserconfig.xml" />
 
           {/* 2025 Search Engine Favicon Optimization */}
-          <meta name="msapplication-square70x70logo" content="/favicon-96.png" />
-          <meta name="msapplication-square150x150logo" content="/favicon-192.png" />
-          <meta name="msapplication-wide310x150logo" content="/favicon-192.png" />
-          <meta name="msapplication-square310x310logo" content="/favicon-512.png" />
+          <meta name="msapplication-square70x70logo" content="/mstile-70x70.png" />
+          <meta name="msapplication-square150x150logo" content="/mstile-150x150.png" />
+          <meta name="msapplication-wide310x150logo" content="/mstile-310x150.png" />
+          <meta name="msapplication-square310x310logo" content="/mstile-310x310.png" />
 
           {/* PWA Manifest - ไม่ใส่ cache bust เพื่อให้ browser cache ได้ */}
           <link rel="manifest" href="/manifest.json" />
@@ -111,9 +108,9 @@ export default class MyDocument extends Document {
           <meta name="apple-mobile-web-app-title" content="ครูหนึ่งรถสวย" />
 
           {/* PWA Theme */}
-          <meta name="theme-color" content="#ff5252" />
-          <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ff5252" />
-          <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#ff5252" />
+          <meta name="theme-color" content="#1a237e" />
+          <meta name="theme-color" media="(prefers-color-scheme: light)" content="#1a237e" />
+          <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a237e" />
 
           {/* Enhanced Google Search Console & SEO */}
           <meta

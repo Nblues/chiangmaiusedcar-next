@@ -61,7 +61,8 @@
     "docs": "typedoc",
     "docs:watch": "typedoc --watch",
     "sentry:sourcemaps": "sentry-cli sourcemaps inject ./out && sentry-cli sourcemaps upload --org ครูหนึ่งรถสวย --project nextjs ./out",
-    "optimize:images": "node -e \"console.log('Image optimization requires sharp package. Please resize images manually using online tools like squoosh.app')\""
+    "optimize:images": "node -e \"console.log('Image optimization requires sharp package. Please resize images manually using online tools like squoosh.app')\"",
+    "favicons:generate": "node scripts/generate-favicons.cjs --src public/logo/logo_favicon.webp"
   },
   "dependencies": {
     "@fontsource/prompt": "^5.2.6",
