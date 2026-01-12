@@ -140,6 +140,12 @@ check-product-schema.mjs
 .lighthouse/
 lighthouse-report.html
 
+# Local Lighthouse outputs (generated in repo root)
+lighthouse-*.json
+lighthouse-*.txt
+lighthouse-summary*.json
+lighthouse-summary*.txt
+
 # ========================
 # 🔐 Security & Auth
 # ========================

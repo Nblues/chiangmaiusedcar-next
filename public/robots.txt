@@ -3,7 +3,7 @@
 User-agent: *
 Allow: /
 Disallow: /api*
-Disallow: /_next*
+Disallow: /_next/data/*
 Disallow: /secret*
 Disallow: /private*
 Disallow: /drafts*
@@ -16,6 +16,7 @@ Disallow: /license
 User-agent: Googlebot
 Allow: /
 Disallow: /api*
+Disallow: /_next/data/*
 Disallow: /admin*
 Disallow: /keyword-audit
 Disallow: /api-dashboard

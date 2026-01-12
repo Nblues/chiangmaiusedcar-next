@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import SEO from '../components/SEO.jsx';
 import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
@@ -363,19 +362,23 @@ export default function Home({ cars, brandCounts }) {
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-[1400px] mx-auto">
           {/* LCP Optimized: Native img instead of A11yImage for critical hero banner */}
-          <Image
-            src="/herobanner/cnxcar.webp"
-            alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-            width={1400}
-            height={467}
-            priority
-            fetchPriority="high"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
-            quality={90}
-            className="w-full h-auto object-contain"
-            style={{ maxHeight: '60vh' }}
-            loading="eager"
-          />
+          <picture>
+            <source
+              type="image/webp"
+              srcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
+            />
+            <img
+              src="/herobanner/cnxcar-1400w.webp"
+              alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
+              width="1400"
+              height="467"
+              className="w-full h-auto object-contain"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
+          </picture>
         </div>
       </header>
 
@@ -385,13 +388,13 @@ export default function Home({ cars, brandCounts }) {
       <section id="hero" className="relative">
         <div className="hero-card max-w-6xl w-[95%] mx-auto my-6 flex flex-col md:flex-row items-center gap-6 px-8 py-8 rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
           <div className="flex-1">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2 font-prompt">
               รถยนต์มือสองเชียงใหม่
             </h1>
-            <h2 className="text-xl md:text-2xl font-bold text-orange-700 mb-4">
+            <h2 className="text-xl md:text-2xl font-bold text-orange-700 mb-4 font-prompt">
               คุณภาพระดับพรีเมียม
             </h2>
-            <p className="text-base leading-relaxed text-gray-900">
+            <p className="text-base leading-relaxed text-gray-900 font-prompt">
               ครูหนึ่งรถสวย แพลตฟอร์มออนไลน์ศูนย์รวมรถบ้านคุณภาพดีในล้านนา ตรวจสภาพครบถ้วน
               ตรวจสอบประวัติรถ ฟรีดาวน์ ผ่อนถูก รับประกันหลังการขาย 1 ปี จัดส่งฟรีทั่วประเทศ
             </p>

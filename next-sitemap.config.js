@@ -17,7 +17,7 @@ module.exports = {
         allow: '/',
         disallow: [
           '/api*',
-          '/_next*',
+          '/_next/data/*',
           '/secret*',
           '/private*',
           '/drafts*',
@@ -30,7 +30,14 @@ module.exports = {
       {
         userAgent: 'Googlebot',
         allow: '/',
-        disallow: ['/api*', '/admin*', '/keyword-audit', '/api-dashboard', '/license'],
+        disallow: [
+          '/api*',
+          '/_next/data/*',
+          '/admin*',
+          '/keyword-audit',
+          '/api-dashboard',
+          '/license',
+        ],
       },
       {
         userAgent: 'Googlebot-Image',
@@ -77,9 +84,7 @@ module.exports = {
         crawlDelay: 3,
       },
     ],
-    additionalSitemaps: [
-      'https://www.chiangmaiusedcar.com/sitemap-images.xml',
-    ],
+    additionalSitemaps: ['https://www.chiangmaiusedcar.com/sitemap-images.xml'],
     // Add host directive for consistency
     host: 'https://www.chiangmaiusedcar.com',
     // 2025 enhancement: crawl delay for different bots
@@ -117,6 +122,10 @@ module.exports = {
     '/_error',
     '/payment-calculator-new',
     '/admin*',
+    '/keyword-audit',
+    '/test-social-images',
+    '/api-dashboard',
+    '/license',
   ],
 
   // Dynamic paths generation including cars

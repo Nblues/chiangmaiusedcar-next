@@ -32,7 +32,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center space-x-3">
             <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-gold shadow-lg">
               <picture>
-                <source srcSet="/logo/logo_main.webp" type="image/webp" />
+                <source srcSet="/logo/logo_main_optimized.webp" type="image/webp" />
                 <img
                   src="/logo/logo_main.png"
                   alt="ครูหนึ่งรถสวย โลโก้"

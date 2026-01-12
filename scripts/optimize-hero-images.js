@@ -3,6 +3,8 @@
  * รันด้วย: node scripts/optimize-hero-images.js
  */
 
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
@@ -49,7 +51,10 @@ async function optimizeHeroImage(inputPath, outputDir) {
     }
 
     // สร้างไฟล์ต้นฉบับที่ optimize แล้ว (ไม่เปลี่ยนชื่อ)
+    // Note: Sharp cannot read+write the same file path. Write to temp then replace.
     const originalOutput = path.join(outputDir, `${filename}.webp`);
+    const tempOutput = path.join(outputDir, `${filename}.tmp.webp`);
+
     await image
       .clone()
       .resize(1400, null, {
@@ -58,7 +63,10 @@ async function optimizeHeroImage(inputPath, outputDir) {
         withoutEnlargement: true,
       })
       .webp({ quality: 85, effort: 6 })
-      .toFile(originalOutput);
+      .toFile(tempOutput);
+
+    fs.copyFileSync(tempOutput, originalOutput);
+    fs.unlinkSync(tempOutput);
 
     const stats = fs.statSync(originalOutput);
     console.log(`   ✅ Optimized original: (${(stats.size / 1024).toFixed(2)} KB)`);

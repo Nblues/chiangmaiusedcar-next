@@ -32,13 +32,16 @@ export default class MyDocument extends Document {
           <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
           <link rel="preconnect" href="https://files.myshopify.com" crossOrigin="anonymous" />
 
-          {/* 🚀 LCP Optimization: Preload critical hero image for faster LCP */}
+          {/* 🚀 LCP Optimization: Preload hero image using responsive candidates */}
+          {/* Use imagesrcset/imagesizes so the browser preloads the same file it will actually render */}
           <link
             rel="preload"
             as="image"
-            href="/herobanner/cnxcar.webp"
+            href="/herobanner/cnxcar-1024w.webp"
             type="image/webp"
             fetchPriority="high"
+            imageSrcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
+            imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
           />
 
           {/* Essential HTML5 Meta Tags for SEO 100/100 */}

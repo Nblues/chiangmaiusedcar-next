@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable @typescript-eslint/no-require-imports */
+
 /**
  * SEO Verification Script 2025
  * ตรวจสอบความถูกต้องของ SEO สำหรับการจัดทำดัชนี Google
@@ -35,7 +37,7 @@ class SEOVerifier {
           results.push(filePath);
         }
       });
-    } catch (err) {
+    } catch {
       // Directory doesn't exist or permission denied
     }
     return results;
@@ -73,19 +75,34 @@ class SEOVerifier {
 
     const content = fs.readFileSync(robotsPath, 'utf8');
 
-    // Check for Allow directives
-    const requiredAllows = ['/_next/static/', '/_next/image/', '*.js', '*.css', '*.webp'];
+    // Check for Allow directives (only required if robots.txt blocks those paths)
+    const disallowNextLines = content
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => /^Disallow:\s*\/_next/i.test(line));
+    const blocksNextAssets = disallowNextLines.some(
+      line => !/^Disallow:\s*\/_next\/data\b/i.test(line)
+    );
+    const blocksStaticAssetsByExt = /\bDisallow:\s*\*\.(js|css|webp)\b/i.test(content);
 
-    requiredAllows.forEach(allow => {
-      if (content.includes(`Allow: ${allow}`)) {
-        this.log(`✅ robots.txt allows ${allow}`, 'success');
-      } else {
-        this.log(`❌ robots.txt missing Allow: ${allow}`, 'error');
-      }
-    });
+    if (blocksNextAssets || blocksStaticAssetsByExt) {
+      const requiredAllows = ['/_next/static/', '/_next/image/', '*.js', '*.css', '*.webp'];
+      requiredAllows.forEach(allow => {
+        if (content.includes(`Allow: ${allow}`)) {
+          this.log(`✅ robots.txt allows ${allow}`, 'success');
+        } else {
+          this.log(`❌ robots.txt missing Allow: ${allow}`, 'error');
+        }
+      });
+    } else {
+      this.log(
+        '✅ robots.txt does not block static/Next.js assets (explicit Allow directives not required)',
+        'success'
+      );
+    }
 
     // Check for blocking _next/data
-    if (content.includes('Disallow: /_next/data/')) {
+    if (content.includes('Disallow: /_next/data/') || content.includes('Disallow: /_next/data/*')) {
       this.log('✅ robots.txt correctly blocks /_next/data/', 'success');
     } else {
       this.log('⚠️ robots.txt should block /_next/data/', 'warning');
@@ -122,12 +139,12 @@ class SEOVerifier {
 
       const content = fs.readFileSync(sitemapPath, 'utf8');
 
+      const locUrls = Array.from(content.matchAll(/<loc>(.*?)<\/loc>/g)).map(m => m[1]);
+
       // Check for consistent URLs
-      const urlMatches = content.match(/<loc>(.*?)<\/loc>/g) || [];
       let inconsistentUrls = 0;
 
-      urlMatches.forEach(match => {
-        const url = match.replace(/<\/?loc>/g, '');
+      locUrls.forEach(url => {
         if (url.includes('chiangmaiusedcar.com') && !url.includes('www.chiangmaiusedcar.com')) {
           inconsistentUrls++;
         }
@@ -139,12 +156,23 @@ class SEOVerifier {
         this.log(`✅ ${filename} URLs are consistent`, 'success');
       }
 
-      // Check for 404 URLs (basic check for known bad URLs)
-      const badUrls = ['/payment-calculator-new', '/payment-calculator-old', '/test', '/draft'];
+      // Check for 404 URLs (basic check for known bad URLs) based on parsed pathname,
+      // to avoid false positives from substring matches (e.g. /test-social-images).
+      const badPaths = new Set([
+        '/payment-calculator-new',
+        '/payment-calculator-old',
+        '/test',
+        '/draft',
+      ]);
 
-      badUrls.forEach(badUrl => {
-        if (content.includes(badUrl)) {
-          this.log(`❌ ${filename} contains potential 404 URL: ${badUrl}`, 'error');
+      locUrls.forEach(loc => {
+        try {
+          const u = new URL(loc);
+          if (badPaths.has(u.pathname)) {
+            this.log(`❌ ${filename} contains potential 404 URL: ${u.pathname}`, 'error');
+          }
+        } catch {
+          // Ignore invalid/relative <loc> values
         }
       });
     });
@@ -258,12 +286,24 @@ class SEOVerifier {
       file => !file.includes('_app') && !file.includes('_document') && !file.includes('api/')
     );
 
+    const intentionallyNoindexPatterns = [
+      `${path.sep}pages${path.sep}admin${path.sep}`,
+      `${path.sep}pages${path.sep}api-dashboard.jsx`,
+      `${path.sep}pages${path.sep}keyword-audit.jsx`,
+      `${path.sep}pages${path.sep}license.jsx`,
+      `${path.sep}pages${path.sep}test-social-images.jsx`,
+      `${path.sep}pages${path.sep}_error.jsx`,
+    ];
+
     for (const file of filteredFiles) {
       const content = fs.readFileSync(file, 'utf8');
 
       // Check for noindex/nofollow in production
       if (content.includes('noindex') || content.includes('nofollow')) {
-        if (!content.includes('development') && !content.includes('NODE_ENV')) {
+        const isIntentional = intentionallyNoindexPatterns.some(p => file.includes(p));
+        if (isIntentional) {
+          this.log(`✅ ${file} is intentionally noindex/nofollow`, 'success');
+        } else if (!content.includes('development') && !content.includes('NODE_ENV')) {
           this.log(`❌ ${file} may have noindex/nofollow in production`, 'error');
         }
       }

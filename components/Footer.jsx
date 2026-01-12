@@ -50,7 +50,7 @@ export default function Footer() {
               <div className="relative">
                 <div className="w-16 h-16 rounded-full border-2 border-gold shadow-lg overflow-hidden">
                   <picture>
-                    <source srcSet="/logo/logo_main.webp" type="image/webp" />
+                    <source srcSet="/logo/logo_main_optimized.webp" type="image/webp" />
                     <img
                       src="/logo/logo_main.png"
                       alt="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่"
