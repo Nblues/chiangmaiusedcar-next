@@ -13,6 +13,15 @@ function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState('');
 
+  const seo = (
+    <SEO
+      title="Admin Dashboard"
+      description="ระบบจัดการหลังบ้านสำหรับเว็บไซต์ครูหนึ่งรถสวย"
+      url="/admin/dashboard"
+      noindex={true}
+    />
+  );
+
   // Check authentication on mount
   useEffect(() => {
     const checkAuth = async () => {
@@ -55,26 +64,25 @@ function AdminDashboard() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-          <p className="mt-4 text-gray-600">กำลังโหลด...</p>
+      <>
+        {seo}
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <p className="mt-4 text-gray-600">กำลังโหลด...</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (!isAuthenticated) {
-    return null;
+    return <>{seo}</>;
   }
 
   return (
     <>
-      <SEO
-        title="Admin Dashboard | ครูหนึ่งรถสวย"
-        description="ระบบจัดการหลังบ้านสำหรับเว็บไซต์ครูหนึ่งรถสวย"
-        robots="noindex, nofollow"
-      />
+      {seo}
 
       <div className="min-h-screen bg-gray-100">
         {/* Modern Header */}

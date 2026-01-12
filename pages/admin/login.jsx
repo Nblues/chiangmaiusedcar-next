@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import SEO from '../../components/SEO';
 
 // Add displayName for admin layout detection
 function AdminLogin() {
@@ -84,15 +84,13 @@ function AdminLogin() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-white to-accent/10 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <Head>
-        <title>เข้าสู่ระบบผู้ดูแลระบบ | ครูหนึ่งรถสวย</title>
-        <meta name="robots" content="noindex, nofollow" />
-        {/* Prevent caching on sensitive auth page */}
-        <meta httpEquiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Expires" content="0" />
-        <meta name="referrer" content="no-referrer" />
-      </Head>
+      <SEO
+        title="เข้าสู่ระบบผู้ดูแลระบบ"
+        description="เข้าสู่ระบบผู้ดูแลระบบหลังบ้าน ครูหนึ่งรถสวย"
+        url="/admin/login"
+        pageType="default"
+        noindex={true}
+      />
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">

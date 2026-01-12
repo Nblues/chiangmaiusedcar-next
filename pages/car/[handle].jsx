@@ -69,10 +69,10 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   // ตั้งค่า initial loading state สำหรับ thumbnails
   useEffect(() => {
     if (!car) return;
-    
+
     const images = safeGet(car, 'images', []);
     if (images.length === 0) return;
-    
+
     // ตั้งค่าทุกรูปเป็น loading ตอนแรก
     const initialState = {};
     images.forEach((_, index) => {
@@ -84,19 +84,19 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     // เช็ครูปที่โหลดเสร็จแล้วจาก cache หลัง render (ป้องกัน loading indicator ค้าง)
     setTimeout(() => {
       if (typeof document === 'undefined') return;
-      
+
       const thumbnailImages = document.querySelectorAll('[alt*="รูปที่"]');
-      thumbnailImages.forEach((img) => {
+      thumbnailImages.forEach(img => {
         if (img.complete && img.naturalWidth > 0) {
           // หา index จาก alt text
           const altText = img.alt;
           const match = altText.match(/รูปที่ (\d+)/);
           if (match) {
             const idx = parseInt(match[1], 10) - 1;
-            setThumbnailLoadingState(prev => ({ 
-              ...prev, 
+            setThumbnailLoadingState(prev => ({
+              ...prev,
               [idx]: false,
-              [`mobile-${idx}`]: false 
+              [`mobile-${idx}`]: false,
             }));
           }
         }
@@ -224,7 +224,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     const images = safeGet(car, 'images', []);
     if (images.length < 2) return;
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = e => {
       // ถ้ากำลังพิมพ์ใน input/textarea ให้ข้าม
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
@@ -416,7 +416,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const rawHandle = safeGet(car, 'handle', '');
   const prettyHandle = createPrettyUrl(rawHandle) || rawHandle;
   const canonicalUrl = `https://www.chiangmaiusedcar.com/car/${prettyHandle}`;
-  
+
   // ⭐ ใช้รูปแรกจาก Shopify โดยตรง (ไม่ผ่าน optimization)
   let ogImage = safeGet(firstCarImage, 'url', '');
   if (ogImage && ogImage.startsWith('/')) {
@@ -658,7 +658,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
               )}
 
               {/* Image Counter Modern 2025 */}
-              <div 
+              <div
                 className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-black text-white px-4 py-2 rounded-lg text-xs sm:text-sm font-medium font-prompt"
                 role="status"
                 aria-live="polite"
@@ -671,7 +671,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
               </div>
 
               {/* Keyboard hint */}
-              <div 
+              <div
                 className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-black/60 text-white px-3 py-1 rounded-lg text-xs font-prompt hidden sm:block"
                 aria-hidden="true"
               >
@@ -715,7 +715,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                         className="object-cover"
                         imageType="thumbnail" // ⭐ ระบุเป็น thumbnail (400px)
                         loading="lazy"
-                        onLoad={(e) => {
+                        onLoad={e => {
                           setThumbnailLoadingState(prev => ({ ...prev, [index]: false }));
                           // ถ้ารูปโหลดจาก cache (complete = true ทันที) ให้ซ่อน loading
                           if (e?.target?.complete) {
@@ -803,16 +803,25 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                         className="object-cover"
                         sizes="64px"
                         loading="lazy"
-                        onLoad={(e) => {
-                          setThumbnailLoadingState(prev => ({ ...prev, [`mobile-${index}`]: false }));
+                        onLoad={e => {
+                          setThumbnailLoadingState(prev => ({
+                            ...prev,
+                            [`mobile-${index}`]: false,
+                          }));
                           // ถ้ารูปโหลดจาก cache (complete = true ทันที) ให้ซ่อน loading
                           if (e?.target?.complete) {
-                            setThumbnailLoadingState(prev => ({ ...prev, [`mobile-${index}`]: false }));
+                            setThumbnailLoadingState(prev => ({
+                              ...prev,
+                              [`mobile-${index}`]: false,
+                            }));
                           }
                         }}
                         onError={() => {
                           // ถ้าโหลดผิดพลาด ให้ซ่อน loading indicator
-                          setThumbnailLoadingState(prev => ({ ...prev, [`mobile-${index}`]: false }));
+                          setThumbnailLoadingState(prev => ({
+                            ...prev,
+                            [`mobile-${index}`]: false,
+                          }));
                         }}
                       />
                       {/* Loading indicator for mobile thumbnail */}
@@ -857,7 +866,8 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                 <button
                   onClick={async () => {
                     // ใช้ URL จริงของ Shopify (ไม่แก้ไข) เพื่อป้องกัน 404
-                    const shareUrl = createShortShareUrl(safeGet(car, 'handle', '')) || canonicalUrl;
+                    const shareUrl =
+                      createShortShareUrl(safeGet(car, 'handle', '')) || canonicalUrl;
                     const shareText = createShareText(car);
                     const copyText = `${shareText}\n${shareUrl}`;
 
@@ -1363,8 +1373,7 @@ export async function getStaticProps({ params }) {
     if (!car) {
       const target = requestedPrettyRaw || requestedPretty;
       if (target) {
-        car =
-          safeCars.find(c => c?.handle && createPrettyUrl(c.handle) === target) || null;
+        car = safeCars.find(c => c?.handle && createPrettyUrl(c.handle) === target) || null;
       }
     }
 

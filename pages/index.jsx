@@ -154,9 +154,10 @@ export default function Home({ cars, brandCounts }) {
         const qs = new URLSearchParams({ ids: ids.join(',') });
         const resp = await fetch(`/api/public/car-status?${qs.toString()}`, {
           cache: 'no-store',
-        });
-        if (!resp.ok) return;
-        const data = await resp.json();
+        }).catch(() => null);
+
+        if (!resp || !resp.ok) return;
+        const data = await resp.json().catch(() => null);
         if (data?.ok) {
           const statuses = data.statuses || {};
           setCachedStatuses(statuses);
@@ -185,9 +186,10 @@ export default function Home({ cars, brandCounts }) {
           const qs = new URLSearchParams({ ids: ids.join(',') });
           const resp = await fetch(`/api/public/car-status?${qs.toString()}`, {
             cache: 'no-store',
-          });
-          if (!resp.ok) return;
-          const data = await resp.json();
+          }).catch(() => null);
+
+          if (!resp || !resp.ok) return;
+          const data = await resp.json().catch(() => null);
           if (data?.ok) {
             const statuses = data.statuses || {};
             setCachedStatuses(statuses);
@@ -306,39 +308,50 @@ export default function Home({ cars, brandCounts }) {
           name: 'รถมือสองแนะนำ',
           description: 'รถมือสองคุณภาพดีจากครูหนึ่งรถสวย',
           numberOfItems: safeCars.length,
-          itemListElement: carsWithLive.slice(0, 10).map((car, index) => ({
-            '@type': 'ListItem',
-            position: index + 1,
-            item: {
-              '@type': 'Product',
-              '@id': `https://www.chiangmaiusedcar.com/car/${car.handle}`,
-              name: car.title,
-              description: `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} ราคา ${Number(car.price?.amount || 0).toLocaleString()} บาท`,
-              brand: {
-                '@type': 'Brand',
-                name: car.vendor || car.brand || car.title?.split(' ')[0] || 'รถยนต์',
-              },
-              model: car.model || car.title,
-              sku: car.id || car.handle,
-              category: 'รถยนต์มือสอง',
-              image: car.images?.[0]?.url || '/herobanner/cnxcar.webp',
-              // aggregateRating removed to avoid duplicate/conflicting ratings in Search Console
+          itemListElement: carsWithLive.slice(0, 10).map((car, index) => {
+            const priceInfo = getPriceInfo(car.price?.amount || 0);
+            const carUrl = `https://www.chiangmaiusedcar.com/car/${car.handle}`;
+            const imageUrl = car.images?.[0]?.url
+              ? car.images[0].url.startsWith('http')
+                ? car.images[0].url
+                : `https://www.chiangmaiusedcar.com${car.images[0].url}`
+              : 'https://www.chiangmaiusedcar.com/herobanner/cnxcar.webp';
 
-              offers: {
-                '@type': 'Offer',
-                price: car.price?.amount || '0',
-                priceCurrency: 'THB',
-                itemCondition: 'https://schema.org/UsedCondition',
-                availability: car.availableForSale
-                  ? 'https://schema.org/InStock'
-                  : 'https://schema.org/OutOfStock',
-                seller: {
-                  '@type': 'AutoDealer',
-                  name: 'ครูหนึ่งรถสวย',
+            return {
+              '@type': 'ListItem',
+              position: index + 1,
+              item: {
+                '@type': 'Product',
+                '@id': carUrl,
+                name: car.title,
+                description:
+                  `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} ราคา ${priceInfo.display} บาท`.trim(),
+                brand: {
+                  '@type': 'Brand',
+                  name: car.vendor || car.brand || car.title?.split(' ')[0] || 'รถยนต์',
+                },
+                model: car.model || car.title,
+                sku: car.id || car.handle,
+                category: 'รถยนต์มือสอง',
+                image: imageUrl,
+                url: carUrl,
+                offers: {
+                  '@type': 'Offer',
+                  price: priceInfo.numeric || '0',
+                  priceCurrency: 'THB',
+                  url: carUrl,
+                  itemCondition: 'https://schema.org/UsedCondition',
+                  availability: car.availableForSale
+                    ? 'https://schema.org/InStock'
+                    : 'https://schema.org/OutOfStock',
+                  seller: {
+                    '@type': 'AutoDealer',
+                    name: 'ครูหนึ่งรถสวย',
+                  },
                 },
               },
-            },
-          })),
+            };
+          }),
         }}
       />
 

@@ -1,15 +1,19 @@
 import React from 'react';
 import SEO from '../components/SEO';
-import Head from 'next/head';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import A11yImage from '../components/A11yImage';
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 // Organization JSON-LD is injected centrally by <SEO /> to avoid duplicates
 
 export default function SellCar() {
+  const router = useRouter();
+  const activeLocale = router?.locale || 'th';
+
   const seoSellCar = SEO_KEYWORD_MAP.sellCar;
   const baseUrl = 'https://www.chiangmaiusedcar.com';
-  const pageUrl = `${baseUrl}/sell-car`;
+  const pagePath = activeLocale === 'en' ? '/en/sell-car' : '/sell-car';
+  const pageUrl = `${baseUrl}${pagePath}`;
   const pageImage = `${baseUrl}/herobanner/chiangmaiusedcars.webp`;
 
   return (
@@ -19,28 +23,20 @@ export default function SellCar() {
         description={seoSellCar.description}
         url="/sell-car"
         image={pageImage}
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          name: seoSellCar.title,
+          description: seoSellCar.description,
+          url: pageUrl,
+          provider: {
+            '@type': 'AutoDealer',
+            name: 'ครูหนึ่งรถสวย',
+            url: baseUrl,
+          },
+        }}
         pageType="sell-car"
       />
-      <Head>
-        <link rel="canonical" href={pageUrl} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'WebPage',
-              name: seoSellCar.title,
-              description: seoSellCar.description,
-              url: pageUrl,
-              provider: {
-                '@type': 'AutoDealer',
-                name: 'ครูหนึ่งรถสวย',
-                url: 'https://www.chiangmaiusedcar.com',
-              },
-            }),
-          }}
-        />
-      </Head>
 
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-7xl mx-auto">

@@ -5,7 +5,7 @@ export default function CarActionButtons({ car }) {
     const url =
       typeof window !== 'undefined'
         ? window.location.origin + '/car/' + car.handle
-        : 'https://chiangmaiusedcar.com/car/' + car.handle;
+        : 'https://www.chiangmaiusedcar.com/car/' + car.handle;
 
     const shareData = {
       title: `${car.title} - ครูหนึ่งรถสวย`,

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
+import SEO from '../components/SEO';
 import { getHomepageCars } from '../lib/shopify.mjs';
 import { DEFAULT_SOCIAL_IMAGES } from '../lib/social-sharing';
 
@@ -11,7 +11,16 @@ export default function TestSocialImages({ cars }) {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null;
+  const seo = (
+    <SEO
+      title="ทดสอบรูปแชร์ลิงก์"
+      description="หน้าทดสอบรูปแชร์ลิงก์ (ภายใน)"
+      url="/test-social-images"
+      noindex={true}
+    />
+  );
+
+  if (!mounted) return <>{seo}</>;
 
   const testPages = [
     { type: 'home', path: '/', image: DEFAULT_SOCIAL_IMAGES.home },
@@ -30,10 +39,7 @@ export default function TestSocialImages({ cars }) {
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 font-prompt">
-      <Head>
-        <title>ทดสอบรูปแชร์ลิงก์ | ครูหนึ่งรถสวย</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Head>
+      {seo}
 
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-primary mb-4">ทดสอบระบบรูปภาพสำหรับแชร์ลิงก์</h1>

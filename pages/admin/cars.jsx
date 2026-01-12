@@ -13,6 +13,36 @@ function AdminCarsManagement() {
   const [filterStatus, setFilterStatus] = useState('all'); // all, available, reserved
   const [isUpdating, setIsUpdating] = useState({});
 
+  const seo = (
+    <SEO
+      title="จัดการรถยนต์ (Admin)"
+      description="ระบบจัดการรถยนต์หลังบ้าน ครูหนึ่งรถสวย"
+      url="/admin/cars"
+      noindex={true}
+    />
+  );
+
+  // Fetch all cars from Shopify
+  const fetchCars = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/admin/cars/list', {
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setCars(data.cars || []);
+        setFilteredCars(data.cars || []);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to fetch cars:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Check authentication
   useEffect(() => {
     const checkAuth = async () => {
@@ -42,27 +72,6 @@ function AdminCarsManagement() {
     checkAuth();
   }, [router]);
 
-  // Fetch all cars from Shopify
-  const fetchCars = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch('/api/admin/cars/list', {
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setCars(data.cars || []);
-        setFilteredCars(data.cars || []);
-      }
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error('Failed to fetch cars:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // Toggle car availability status
   const toggleCarStatus = async (carId, currentStatus) => {
     setIsUpdating(prev => ({ ...prev, [carId]: true }));
@@ -81,10 +90,8 @@ function AdminCarsManagement() {
       setIsUpdating(prev => ({ ...prev, [carId]: false }));
       return;
     }
-
     const doRequest = async () => {
       const newStatus = currentStatus === 'available' ? 'reserved' : 'available';
-      // console.log('📤 Sending request:', { carId, status: newStatus });
 
       const getCookie = name => {
         if (typeof document === 'undefined') return '';
@@ -233,28 +240,27 @@ function AdminCarsManagement() {
     setFilteredCars(filtered);
   }, [searchQuery, filterStatus, cars]);
 
-  if (isLoading && !isAuthenticated) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-          <p className="mt-4 text-gray-600">กำลังโหลด...</p>
+      <>
+        {seo}
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+            <p className="mt-4 text-gray-600">กำลังโหลด...</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (!isAuthenticated) {
-    return null;
+    return <>{seo}</>;
   }
 
   return (
     <>
-      <SEO
-        title="จัดการรถ | Admin Dashboard"
-        description="ระบบจัดการสถานะรถยนต์มือสอง"
-        robots="noindex, nofollow"
-      />
+      {seo}
 
       <div className="min-h-screen bg-gray-100">
         {/* Header */}

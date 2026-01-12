@@ -78,8 +78,6 @@ module.exports = {
       },
     ],
     additionalSitemaps: [
-      'https://www.chiangmaiusedcar.com/sitemap-0.xml',
-      'https://www.chiangmaiusedcar.com/sitemap-cars.xml',
       'https://www.chiangmaiusedcar.com/sitemap-images.xml',
     ],
     // Add host directive for consistency
@@ -109,6 +107,9 @@ module.exports = {
     '/secret*',
     '/private*',
     '/drafts*',
+    // i18n: Exclude locale-prefixed routes from sitemap entries.
+    // We publish the default-locale URL as <loc> and provide /en variants via hreflang alternates.
+    '/en*',
     '/404',
     '/500',
     '/_document',
@@ -179,12 +180,24 @@ module.exports = {
       // Removed: priority (ignored by Bing)
       alternateRefs: [
         {
-          href: `https://www.chiangmaiusedcar.com${path}`,
+          href: 'https://www.chiangmaiusedcar.com',
           hreflang: 'th',
         },
         {
-          href: `https://www.chiangmaiusedcar.com${path}`,
+          href: 'https://www.chiangmaiusedcar.com',
           hreflang: 'th-TH',
+        },
+        {
+          href: 'https://www.chiangmaiusedcar.com/en',
+          hreflang: 'en',
+        },
+        {
+          href: 'https://www.chiangmaiusedcar.com/en',
+          hreflang: 'en-US',
+        },
+        {
+          href: 'https://www.chiangmaiusedcar.com',
+          hreflang: 'x-default',
         },
       ],
       images: undefined, // Prevents undefined URLs

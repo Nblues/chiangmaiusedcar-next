@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getSiteLocation, createMapEmbedUrl, createMapOpenUrl } from '../utils/siteLocation';

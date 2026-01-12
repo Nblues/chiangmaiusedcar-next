@@ -1,6 +1,36 @@
 // Business Configuration
 // สามารถปรับเปลี่ยนข้อมูลธุรกิจได้ที่นี่
 
+const DEFAULT_BASE_URL = 'https://www.chiangmaiusedcar.com';
+
+const normalizeBusinessBaseUrl = input => {
+  let candidate = input || DEFAULT_BASE_URL;
+  if (!/^https?:\/\//i.test(candidate)) {
+    candidate = `https://${candidate}`;
+  }
+
+  try {
+    const url = new URL(candidate);
+
+    // Force canonical host to www for this domain.
+    if (url.hostname === 'chiangmaiusedcar.com') {
+      url.hostname = 'www.chiangmaiusedcar.com';
+    }
+
+    // Prefer HTTPS for canonical URLs.
+    url.protocol = 'https:';
+
+    // Base URL should not include path/query/hash.
+    url.pathname = '';
+    url.search = '';
+    url.hash = '';
+
+    return url.toString().replace(/\/$/, '');
+  } catch {
+    return DEFAULT_BASE_URL;
+  }
+};
+
 export const BUSINESS_INFO = {
   // ข้อมูลพื้นฐาน
   name: 'ครูหนึ่งรถสวย',
@@ -13,7 +43,7 @@ export const BUSINESS_INFO = {
 
   // ข้อมูลเว็บไซต์
   domain: process.env.NEXT_PUBLIC_DOMAIN || 'chiangmaiusedcar.com',
-  baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://chiangmaiusedcar.com',
+  baseUrl: normalizeBusinessBaseUrl(process.env.NEXT_PUBLIC_BASE_URL),
 
   // ข้อมูลที่ตั้ง (อัปเดตตาม Google Maps - 2026-01-06)
   address: {

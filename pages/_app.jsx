@@ -245,7 +245,7 @@ export default function MyApp({ Component, pageProps }) {
       <Head>
         {/* Favicon - ซ้ำจาก _document เพื่อให้มั่นใจว่าทุกหน้าแสดง */}
         <link rel="icon" href="/favicon.ico" />
-        
+
         {/* DNS Prefetch for performance */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//fonts.gstatic.com" />

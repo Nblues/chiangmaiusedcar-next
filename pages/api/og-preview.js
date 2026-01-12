@@ -23,8 +23,8 @@ export default async function handler(req, res) {
       title: 'ครูหนึ่งรถสวย - รถมือสองเชียงใหม่',
       description:
         'ศูนย์รวมรถมือสองคุณภาพดี รถบ้านแท้ 100% ฟรีดาวน์ 0% ผ่อนถูก รับประกัน 1 ปี ส่งฟรีทั่วไทย',
-      image: 'https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp',
-      url: 'https://chiangmaiusedcar.com',
+      image: 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp',
+      url: 'https://www.chiangmaiusedcar.com',
       site_name: 'ครูหนึ่งรถสวย',
       locale: 'th_TH',
       type: 'website',
@@ -39,8 +39,8 @@ export default async function handler(req, res) {
           preview = {
             title: `รถมือสอง ${handle} ฟรีดาวน์ ผ่อนถูก | ครูหนึ่งรถสวย`,
             description: `รถมือสองคุณภาพดี ${handle} รถบ้านแท้ รับประกัน 1 ปี ฟรีดาวน์ 0% ผ่อนถูกสุด ส่งฟรีทั่วไทย โทร 094-064-9018`,
-            image: 'https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp',
-            url: `https://chiangmaiusedcar.com/car/${handle}`,
+            image: 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp',
+            url: `https://www.chiangmaiusedcar.com/car/${handle}`,
             type: 'product',
             product: {
               price: '0',
@@ -57,8 +57,8 @@ export default async function handler(req, res) {
           title: 'รถมือสองทั้งหมด - รถบ้านแท้ ฟรีดาวน์ ผ่อนถูก | ครูหนึ่งรถสวย',
           description:
             'รถมือสองคุณภาพดีมากมาย รถบ้านแท้ 100% ฟรีดาวน์ 0% ผ่อนถูกสุด รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda และอื่นๆ โทร 094-064-9018',
-          image: 'https://chiangmaiusedcar.com/herobanner/allusedcars.webp',
-          url: 'https://chiangmaiusedcar.com/all-cars',
+          image: 'https://www.chiangmaiusedcar.com/herobanner/allusedcars.webp',
+          url: 'https://www.chiangmaiusedcar.com/all-cars',
           type: 'website',
         };
       } else if (url.includes('/about')) {
@@ -67,8 +67,8 @@ export default async function handler(req, res) {
           title: 'เกี่ยวกับครูหนึ่งรถสวย - จากครูดนตรีสู่ผู้เชี่ยวชาญรถมือสอง 10+ ปี',
           description:
             'เรื่องราวครูหนึ่งรถสวย จากอาจารย์สอนดนตรีสู่ผู้เชี่ยวชาญรถมือสองเชียงใหม่ Facebook 1M+ TikTok 150K+ YouTube 40K+ ติดตาม รับประกัน 1 ปี ส่งฟรีทั่วประเทศ',
-          image: 'https://chiangmaiusedcar.com/herobanner/team.webp',
-          url: 'https://chiangmaiusedcar.com/about',
+          image: 'https://www.chiangmaiusedcar.com/herobanner/team.webp',
+          url: 'https://www.chiangmaiusedcar.com/about',
           type: 'profile',
         };
       } else if (url.includes('/contact')) {
@@ -77,8 +77,8 @@ export default async function handler(req, res) {
           title: 'ติดต่อครูหนึ่งรถสวย - รถมือสองเชียงใหม่ โทร 094-064-9018',
           description:
             'ติดต่อครูหนึ่งรถสวย รถมือสองเชียงใหม่ โทร 094-064-9018 LINE: krunung1 ที่อยู่: 1/4 หมู่ 4 ตำบลหนองจ๊อม อำเภอสันทราย จังหวัดเชียงใหม่ 50210',
-          image: 'https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp',
-          url: 'https://chiangmaiusedcar.com/contact',
+          image: 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp',
+          url: 'https://www.chiangmaiusedcar.com/contact',
           type: 'website',
         };
       } else if (url.includes('/promotion')) {
@@ -87,8 +87,8 @@ export default async function handler(req, res) {
           title: 'โปรโมชั่นสุดพิเศษ - ฟรีดาวน์ 0% ผ่อนนาน | ครูหนึ่งรถสวย',
           description:
             'โปรโมชั่นสุดพิเศษ ฟรีดาวน์ 0% ผ่อนนาน 72 เดือน อัตราดอกเบี้ยพิเศษ รับประกัน 1 ปี ส่งฟรีทั่วไทย รถมือสองคุณภาพดี โทร 094-064-9018',
-          image: 'https://chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp',
-          url: 'https://chiangmaiusedcar.com/promotion',
+          image: 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp',
+          url: 'https://www.chiangmaiusedcar.com/promotion',
           type: 'website',
         };
       }

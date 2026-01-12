@@ -1,171 +1,176 @@
-import { Html, Head, Main, NextScript } from 'next/document';
+import Document, { Html, Head, Main, NextScript } from 'next/document';
 
-export default function Document() {
-  // Cache busting timestamp for 2025 standards
-  const buildTime = process.env.CUSTOM_BUILD_TIME || new Date().toISOString();
-  const cacheVersion = `v=${encodeURIComponent(buildTime)}`;
+export default class MyDocument extends Document {
+  render() {
+    // Cache busting timestamp (used in meta tags)
+    const buildTime = process.env.CUSTOM_BUILD_TIME || new Date().toISOString();
 
-  return (
-    <Html lang="th">
-      <Head>
-        {/* Critical CSS for Hero Section - Inline to prevent render blocking */}
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-              .hero-header{position:relative;width:100%;height:auto;display:flex;align-items:center;justify-content:center;background:linear-gradient(to right,#fed7aa,#bfdbfe)}
-              .hero-container{position:relative;width:100%;max-width:1400px;margin:0 auto}
-              .hero-image{width:100%;height:auto;object-fit:contain;max-height:60vh}
-            `,
-          }}
-        />
+    // Use Next.js i18n locale to set correct <html lang> (affects SSR output like en.html)
+    const locale = this.props?.__NEXT_DATA__?.locale || 'th';
+    const htmlLang = locale === 'en' ? 'en' : 'th';
 
-        {/* DNS Prefetch & Preconnect for Performance */}
-        <link rel="dns-prefetch" href="https://cdn.shopify.com" />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://vercel.com" />
-        <link rel="dns-prefetch" href="https://analytics.vercel.com" />
-        <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://files.myshopify.com" crossOrigin="anonymous" />
-
-        {/* 🚀 LCP Optimization: Preload critical hero image for faster LCP */}
-        <link
-          rel="preload"
-          as="image"
-          href="/herobanner/cnxcar.webp"
-          type="image/webp"
-          fetchPriority="high"
-        />
-
-        {/* Essential HTML5 Meta Tags for SEO 100/100 */}
-        <meta charSet="utf-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-
-        {/* Facebook In-App Browser Compatibility */}
-        <meta httpEquiv="Accept-CH" content="DPR, Viewport-Width, Width" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-
-        {/* 2025 Cache Control Meta Tags - Relaxed for Cloudflare */}
-        <meta httpEquiv="Cache-Control" content="public, max-age=3600" />
-        <meta httpEquiv="Pragma" content="public" />
-        <meta name="cache-bust" content={buildTime} />
-
-        {/* Force browser refresh on updates */}
-        <meta name="last-modified" content={buildTime} />
-        <meta name="etag" content={`"${buildTime}"`} />
-
-        {/* Favicon Settings - 2025 Standards optimized for performance */}
-        {/* ⭐ ลำดับสำคัญ: ICO ก่อน (รองรับทุก browser) แล้วค่อย PNG/WebP */}
-        
-        {/* 1. Primary: ICO สำหรับ compatibility สูงสุด */}
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        
-        {/* 2. Multi-size PNG icons (ไม่ใส่ cache bust เพื่อให้ browser cache ได้) */}
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-        <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
-        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
-        <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
-        
-        {/* 3. Apple Touch Icons (ไม่ซ้ำซ้อน) */}
-        <link rel="apple-touch-icon" sizes="180x180" href="/favicon-192.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/favicon-192.png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="/favicon-144.png" />
-        <link rel="apple-touch-icon" sizes="120x120" href="/favicon-192.png" />
-        <link rel="apple-touch-icon" sizes="114x114" href="/favicon-192.png" />
-        <link rel="apple-touch-icon" sizes="76x76" href="/favicon-96.png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="/favicon-96.png" />
-        <link rel="apple-touch-icon" sizes="60x60" href="/favicon-96.png" />
-        <link rel="apple-touch-icon" sizes="57x57" href="/favicon-96.png" />
-        <link rel="apple-touch-icon" href="/favicon-192.png" />
-
-        {/* Microsoft Tiles - Windows Start Menu */}
-        <meta name="msapplication-TileImage" content="/favicon-192.png" />
-        <meta name="msapplication-TileColor" content="#1a237e" />
-        <meta name="msapplication-config" content="/browserconfig.xml" />
-
-        {/* 2025 Search Engine Favicon Optimization */}
-        <meta name="msapplication-square70x70logo" content="/favicon-96.png" />
-        <meta name="msapplication-square150x150logo" content="/favicon-192.png" />
-        <meta name="msapplication-wide310x150logo" content="/favicon-192.png" />
-        <meta name="msapplication-square310x310logo" content="/favicon-512.png" />
-
-        {/* PWA Manifest - ไม่ใส่ cache bust เพื่อให้ browser cache ได้ */}
-        <link rel="manifest" href="/manifest.json" />
-
-        {/* PWA Meta Tags - 2025 Standards */}
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="ครูหนึ่งรถสวย" />
-
-        {/* PWA Theme */}
-        <meta name="theme-color" content="#ff5252" />
-        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ff5252" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#ff5252" />
-
-        {/* Enhanced Google Search Console & SEO */}
-        <meta
-          name="robots"
-          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
-        />
-        <meta
-          name="googlebot"
-          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-        />
-        <meta name="bingbot" content="index, follow" />
-
-        {/* Site Verification */}
-        {process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && (
-          <meta
-            name="google-site-verification"
-            content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION}
+    return (
+      <Html lang={htmlLang}>
+        <Head>
+          {/* Critical CSS for Hero Section - Inline to prevent render blocking */}
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+                .hero-header{position:relative;width:100%;height:auto;display:flex;align-items:center;justify-content:center;background:linear-gradient(to right,#fed7aa,#bfdbfe)}
+                .hero-container{position:relative;width:100%;max-width:1400px;margin:0 auto}
+                .hero-image{width:100%;height:auto;object-fit:contain;max-height:60vh}
+              `,
+            }}
           />
-        )}
 
-        {/* Critical CSS for LCP - Inline to avoid render blocking */}
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-          /* Hero banner styles - Critical for LCP */
-          header.relative { position: relative; width: 100%; height: auto; display: flex; align-items: center; justify-content: center; }
-          .bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
-          .from-orange-100 { --tw-gradient-from: #ffedd5; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 237, 213, 0)); }
-          .to-blue-100 { --tw-gradient-to: #dbeafe; }
-          .aspect-video { aspect-ratio: 16 / 9; }
-          .object-contain { object-fit: contain; }
-          .w-full { width: 100%; }
-          .h-auto { height: auto; }
-          .max-w-\\[1400px\\] { max-width: 1400px; }
-          .mx-auto { margin-left: auto; margin-right: auto; }
-        `,
-          }}
-        />
+          {/* DNS Prefetch & Preconnect for Performance */}
+          <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+          <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+          <link rel="dns-prefetch" href="https://vercel.com" />
+          <link rel="dns-prefetch" href="https://analytics.vercel.com" />
+          <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+          <link rel="preconnect" href="https://files.myshopify.com" crossOrigin="anonymous" />
 
-        {/* Note: Prompt font is loaded via @fontsource/prompt in globals.css */}
-        {/* Font preload is handled automatically by Next.js for @fontsource packages */}
-        {/* LCP preload has been moved to the top for better browser hint processing */}
+          {/* 🚀 LCP Optimization: Preload critical hero image for faster LCP */}
+          <link
+            rel="preload"
+            as="image"
+            href="/herobanner/cnxcar.webp"
+            type="image/webp"
+            fetchPriority="high"
+          />
 
-        {/* Browser compatibility script - detects FB in-app browser and sets compatibility flags */}
-        <script src="/browser-compat.js" defer></script>
+          {/* Essential HTML5 Meta Tags for SEO 100/100 */}
+          <meta charSet="utf-8" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
-        {/* Facebook Pixel - Lazy loaded via component in _app.jsx for better performance */}
-      </Head>
-      <body>
-        {/* Skip link for accessibility */}
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-2 focus:bg-white focus:text-primary focus:shadow-lg focus:border focus:border-primary focus:rounded"
-        >
-          ข้ามไปยังเนื้อหา
-        </a>
-        <Main />
-        <NextScript />
-      </body>
-    </Html>
-  );
+          {/* Facebook In-App Browser Compatibility */}
+          <meta httpEquiv="Accept-CH" content="DPR, Viewport-Width, Width" />
+          <meta name="format-detection" content="telephone=no" />
+          <meta name="mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+
+          {/* 2025 Cache Control Meta Tags - Relaxed for Cloudflare */}
+          <meta httpEquiv="Cache-Control" content="public, max-age=3600" />
+          <meta httpEquiv="Pragma" content="public" />
+          <meta name="cache-bust" content={buildTime} />
+
+          {/* Force browser refresh on updates */}
+          <meta name="last-modified" content={buildTime} />
+          <meta name="etag" content={`"${buildTime}"`} />
+
+          {/* Favicon Settings - 2025 Standards optimized for performance */}
+          {/* ⭐ ลำดับสำคัญ: ICO ก่อน (รองรับทุก browser) แล้วค่อย PNG/WebP */}
+
+          {/* 1. Primary: ICO สำหรับ compatibility สูงสุด */}
+          <link rel="icon" href="/favicon.ico" />
+          <link rel="shortcut icon" href="/favicon.ico" />
+
+          {/* 2. Multi-size PNG icons (ไม่ใส่ cache bust เพื่อให้ browser cache ได้) */}
+          <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+          <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+          <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+          <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png" />
+          <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+          <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+
+          {/* 3. Apple Touch Icons (ไม่ซ้ำซ้อน) */}
+          <link rel="apple-touch-icon" sizes="180x180" href="/favicon-192.png" />
+          <link rel="apple-touch-icon" sizes="152x152" href="/favicon-192.png" />
+          <link rel="apple-touch-icon" sizes="144x144" href="/favicon-144.png" />
+          <link rel="apple-touch-icon" sizes="120x120" href="/favicon-192.png" />
+          <link rel="apple-touch-icon" sizes="114x114" href="/favicon-192.png" />
+          <link rel="apple-touch-icon" sizes="76x76" href="/favicon-96.png" />
+          <link rel="apple-touch-icon" sizes="72x72" href="/favicon-96.png" />
+          <link rel="apple-touch-icon" sizes="60x60" href="/favicon-96.png" />
+          <link rel="apple-touch-icon" sizes="57x57" href="/favicon-96.png" />
+          <link rel="apple-touch-icon" href="/favicon-192.png" />
+
+          {/* Microsoft Tiles - Windows Start Menu */}
+          <meta name="msapplication-TileImage" content="/favicon-192.png" />
+          <meta name="msapplication-TileColor" content="#1a237e" />
+          <meta name="msapplication-config" content="/browserconfig.xml" />
+
+          {/* 2025 Search Engine Favicon Optimization */}
+          <meta name="msapplication-square70x70logo" content="/favicon-96.png" />
+          <meta name="msapplication-square150x150logo" content="/favicon-192.png" />
+          <meta name="msapplication-wide310x150logo" content="/favicon-192.png" />
+          <meta name="msapplication-square310x310logo" content="/favicon-512.png" />
+
+          {/* PWA Manifest - ไม่ใส่ cache bust เพื่อให้ browser cache ได้ */}
+          <link rel="manifest" href="/manifest.json" />
+
+          {/* PWA Meta Tags - 2025 Standards */}
+          <meta name="mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+          <meta name="apple-mobile-web-app-title" content="ครูหนึ่งรถสวย" />
+
+          {/* PWA Theme */}
+          <meta name="theme-color" content="#ff5252" />
+          <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ff5252" />
+          <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#ff5252" />
+
+          {/* Enhanced Google Search Console & SEO */}
+          <meta
+            name="robots"
+            content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+          />
+          <meta
+            name="googlebot"
+            content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+          />
+          <meta name="bingbot" content="index, follow" />
+
+          {/* Site Verification */}
+          {process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && (
+            <meta
+              name="google-site-verification"
+              content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION}
+            />
+          )}
+
+          {/* Critical CSS for LCP - Inline to avoid render blocking */}
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+            /* Hero banner styles - Critical for LCP */
+            header.relative { position: relative; width: 100%; height: auto; display: flex; align-items: center; justify-content: center; }
+            .bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
+            .from-orange-100 { --tw-gradient-from: #ffedd5; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 237, 213, 0)); }
+            .to-blue-100 { --tw-gradient-to: #dbeafe; }
+            .aspect-video { aspect-ratio: 16 / 9; }
+            .object-contain { object-fit: contain; }
+            .w-full { width: 100%; }
+            .h-auto { height: auto; }
+            .max-w-\\[1400px\\] { max-width: 1400px; }
+            .mx-auto { margin-left: auto; margin-right: auto; }
+          `,
+            }}
+          />
+
+          {/* Note: Prompt font is loaded via @fontsource/prompt in globals.css */}
+          {/* Font preload is handled automatically by Next.js for @fontsource packages */}
+          {/* LCP preload has been moved to the top for better browser hint processing */}
+
+          {/* Browser compatibility script - detects FB in-app browser and sets compatibility flags */}
+          <script src="/browser-compat.js" defer></script>
+
+          {/* Facebook Pixel - Lazy loaded via component in _app.jsx for better performance */}
+        </Head>
+        <body>
+          {/* Skip link for accessibility */}
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 focus:z-50 focus:p-2 focus:bg-white focus:text-primary focus:shadow-lg focus:border focus:border-primary focus:rounded"
+          >
+            ข้ามไปยังเนื้อหา
+          </a>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
+  }
 }

@@ -22,7 +22,17 @@ export default async function handler(req, res) {
             .filter(Boolean)
         : null;
 
-    const statuses = wantIds ? await readCarStatusesByIds(wantIds) : await readCarStatuses();
+    let statuses = {};
+    try {
+      statuses = wantIds ? await readCarStatusesByIds(wantIds) : await readCarStatuses();
+    } catch (kvError) {
+      // Fallback: return empty statuses if KV fails (dev mode without KV)
+      if (process.env.NODE_ENV !== 'production') {
+        // eslint-disable-next-line no-console
+        console.warn('KV unavailable, returning empty statuses:', kvError.message);
+      }
+      statuses = {};
+    }
 
     const filtered = wantIds
       ? Object.fromEntries(wantIds.map(id => [id, statuses[id] || undefined]))

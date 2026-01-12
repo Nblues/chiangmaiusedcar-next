@@ -6,6 +6,8 @@
  */
 
 'use client';
+/* eslint-disable @next/next/no-img-element */
+
 import { useEffect } from 'react';
 
 export default function FacebookPixel() {

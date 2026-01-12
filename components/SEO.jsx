@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { buildCarJsonLd, buildLocalBusinessJsonLd } from '../lib/seo/jsonld.js';
 import { getSiteLocation } from '../utils/siteLocation';
 import {
@@ -22,6 +23,100 @@ export default function SEO({
   breadcrumbs = null, // เพิ่ม breadcrumbs สำหรับ BreadcrumbList Schema (SEO 2025)
   keywords = null, // ใส่ keywords ลง structured data (แทน meta keywords)
 }) {
+  const router = useRouter();
+  const activeLocale = router?.locale || 'th';
+  const defaultLocale = router?.defaultLocale || 'th';
+
+  const localeMeta = useMemo(() => {
+    const isEnglish = activeLocale === 'en';
+    return {
+      htmlLang: isEnglish ? 'en' : 'th',
+      contentLanguage: isEnglish ? 'en-US' : 'th-TH',
+      ogLocale: isEnglish ? 'en_US' : 'th_TH',
+      ogAlternateLocale: isEnglish ? 'th_TH' : 'en_US',
+      allCarsPath: isEnglish ? '/en/all-cars' : '/all-cars',
+    };
+  }, [activeLocale]);
+
+  const localizedUrls = useMemo(() => {
+    const site = 'https://www.chiangmaiusedcar.com';
+
+    const splitSuffix = (input = '/') => {
+      const s = input || '/';
+      const hashIndex = s.indexOf('#');
+      const queryIndex = s.indexOf('?');
+      const cutIndex =
+        hashIndex === -1
+          ? queryIndex
+          : queryIndex === -1
+            ? hashIndex
+            : Math.min(hashIndex, queryIndex);
+      if (cutIndex === -1) return { pathname: s, suffix: '' };
+      return { pathname: s.slice(0, cutIndex), suffix: s.slice(cutIndex) };
+    };
+
+    const ensureLeadingSlash = p => {
+      if (!p) return '/';
+      if (p.startsWith('/')) return p;
+      return `/${p}`;
+    };
+
+    const normalizeInputToPath = raw => {
+      if (!raw) return '/';
+      if (raw.startsWith('http')) {
+        try {
+          const u = new URL(raw);
+          return `${u.pathname}${u.search}${u.hash}`;
+        } catch {
+          return '/';
+        }
+      }
+      return raw;
+    };
+
+    const localizePath = (pathWithSuffix, locale, defaultLoc) => {
+      const { pathname, suffix } = splitSuffix(pathWithSuffix);
+      let pathnameOnly = ensureLeadingSlash(pathname);
+
+      // Strip explicit default-locale prefix from canonical paths.
+      if (defaultLoc && locale === defaultLoc) {
+        if (pathnameOnly === `/${defaultLoc}`) pathnameOnly = '/';
+        else if (pathnameOnly.startsWith(`/${defaultLoc}/`)) {
+          pathnameOnly = pathnameOnly.slice(defaultLoc.length + 1);
+        }
+      }
+
+      if (locale && defaultLoc && locale !== defaultLoc) {
+        if (pathnameOnly === '/') return `/${locale}${suffix}`;
+        if (pathnameOnly === `/${locale}` || pathnameOnly.startsWith(`/${locale}/`)) {
+          return `${pathnameOnly}${suffix}`;
+        }
+        return `/${locale}${pathnameOnly}${suffix}`;
+      }
+
+      return `${pathnameOnly}${suffix}`;
+    };
+
+    const basePath = normalizeInputToPath(url || '/');
+
+    const canonicalPath = localizePath(basePath, activeLocale, defaultLocale);
+    const thPath = localizePath(basePath, 'th', defaultLocale);
+    const enPath = localizePath(basePath, 'en', defaultLocale);
+
+    const canonicalUrl = canonicalPath.startsWith('http')
+      ? canonicalPath
+      : `${site}${canonicalPath}`;
+    const thUrl = `${site}${thPath}`;
+    const enUrl = `${site}${enPath}`;
+
+    return {
+      canonicalUrl,
+      thUrl,
+      enUrl,
+      xDefaultUrl: `${site}${localizePath(basePath, defaultLocale, defaultLocale)}`,
+    };
+  }, [url, activeLocale, defaultLocale]);
+
   // Memoize static values to prevent unnecessary re-renders
   const staticValues = useMemo(() => {
     const site = 'https://www.chiangmaiusedcar.com';
@@ -106,9 +201,8 @@ export default function SEO({
     const { site, siteName, defaultDescription, buildTime } = staticValues;
     const siteLocation = getSiteLocation();
 
-    // Fix canonical URL duplication - check if url already contains full domain
-    // Use current page URL for canonical - more accurate for SEO 2025
-    const fullUrl = url ? (url.startsWith('http') ? url : `${site}${url}`) : site;
+    // Locale-aware canonical URL (i18n): ensures /en prefix for English locale.
+    const fullUrl = localizedUrls.canonicalUrl;
     // ป้องกันชื่อธุรกิจซ้อนกันใน title
     let metaTitle = siteName;
     if (title) {
@@ -156,7 +250,7 @@ export default function SEO({
       defaultImage,
       siteLocation,
     };
-  }, [title, description, url, staticValues, image, pageType]);
+  }, [title, description, staticValues, image, pageType, localizedUrls]);
 
   const normalizedKeywords = useMemo(() => {
     if (!keywords) return null;
@@ -237,10 +331,10 @@ export default function SEO({
   const siteKeywords = normalizedKeywords || aiOptimizedKeywords;
 
   // Get platform-specific images for enhanced 2025 social sharing
-  const twitterImage = getPlatformImage(pageType, 'twitter_large');
-  const lineImage = getPlatformImage(pageType, 'line');
-  const whatsappImage = getPlatformImage(pageType, 'whatsapp');
-  const telegramImage = getPlatformImage(pageType, 'telegram');
+  const twitterImage = getPlatformImage(pageType, 'twitter_large', site);
+  const lineImage = getPlatformImage(pageType, 'line', site);
+  const whatsappImage = getPlatformImage(pageType, 'whatsapp', site);
+  const telegramImage = getPlatformImage(pageType, 'telegram', site);
 
   return (
     <Head>
@@ -261,8 +355,8 @@ export default function SEO({
       <meta property="article:modified_time" content={buildTime} />
 
       {/* Enhanced Language and Locale Settings - Unified th-TH */}
-      <meta httpEquiv="Content-Language" content="th-TH" />
-      <meta name="language" content="th-TH" />
+      <meta httpEquiv="Content-Language" content={localeMeta.contentLanguage} />
+      <meta name="language" content={localeMeta.contentLanguage} />
       <meta name="country" content="TH" />
       <meta name="geo.region" content="TH-50" />
       <meta name="geo.placename" content="เชียงใหม่, ประเทศไทย" />
@@ -318,20 +412,22 @@ export default function SEO({
 
       <meta name="color-scheme" content="light" />
       <meta name="format-detection" content="telephone=yes" />
-      <link rel="canonical" href={fullUrl} />
-      {/* Hreflang alternates for Thai and default */}
-      <link rel="alternate" hrefLang="th" href={fullUrl} />
-      <link rel="alternate" hrefLang="th-TH" href={fullUrl} />
-      <link rel="alternate" hrefLang="x-default" href={fullUrl} />
+      <link rel="canonical" href={localizedUrls.canonicalUrl} />
+      {/* Hreflang alternates for i18n locales */}
+      <link rel="alternate" hrefLang="th" href={localizedUrls.thUrl} />
+      <link rel="alternate" hrefLang="th-TH" href={localizedUrls.thUrl} />
+      <link rel="alternate" hrefLang="en" href={localizedUrls.enUrl} />
+      <link rel="alternate" hrefLang="en-US" href={localizedUrls.enUrl} />
+      <link rel="alternate" hrefLang="x-default" href={localizedUrls.xDefaultUrl} />
 
       {/* Enhanced Open Graph Meta Tags for Better Link Sharing */}
       <meta property="og:type" content={type} />
       <meta property="og:title" content={enhancedTitle} />
       <meta property="og:description" content={enhancedDesc} />
-      <meta property="og:url" content={fullUrl} />
+      <meta property="og:url" content={localizedUrls.canonicalUrl} />
       <meta property="og:site_name" content="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่" />
-      <meta property="og:locale" content="th_TH" />
-      <meta property="og:locale:alternate" content="en_US" />
+      <meta property="og:locale" content={localeMeta.ogLocale} />
+      <meta property="og:locale:alternate" content={localeMeta.ogAlternateLocale} />
 
       {/* Primary Open Graph Image - MUST be specified explicitly */}
       <meta property="og:image" content={absoluteImage} />
@@ -361,7 +457,7 @@ export default function SEO({
 
       {/* Additional Open Graph tags for better social sharing */}
       <meta property="og:updated_time" content={buildTime} />
-      <meta property="og:see_also" content={`${site}/all-cars`} />
+      <meta property="og:see_also" content={`${site}${localeMeta.allCarsPath}`} />
       <meta property="article:publisher" content="https://www.facebook.com/KN2car" />
       <meta property="article:author" content="ครูหนึ่งรถสวย" />
       <meta property="article:section" content="รถยนต์" />
@@ -549,11 +645,11 @@ export default function SEO({
               '@type': 'SearchAction',
               target: {
                 '@type': 'EntryPoint',
-                urlTemplate: `${site}/all-cars?search={search_term_string}`,
+                urlTemplate: `${site}${localeMeta.allCarsPath}?search={search_term_string}`,
               },
               'query-input': 'required name=search_term_string',
             },
-            inLanguage: 'th-TH',
+            inLanguage: localeMeta.contentLanguage,
           }),
         }}
       />

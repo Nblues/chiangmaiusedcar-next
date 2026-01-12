@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import SEO from '../components/SEO';
 
@@ -9,6 +8,16 @@ const Footer = dynamic(() => import('../components/Footer'), { ssr: false });
 export default function KeywordAudit() {
   const [auditResults, setAuditResults] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const seo = (
+    <SEO
+      title="รายงานตรวจสอบคีย์เวิร์ด SEO 2025"
+      description="รายงานการตรวจสอบความถูกต้องของคีย์เวิร์ด SEO ตามมาตรฐานสากล 2025 ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
+      url="/keyword-audit"
+      image="/herobanner/seo-audit.webp"
+      noindex={true}
+    />
+  );
 
   useEffect(() => {
     // จำลองการตรวจสอบคีย์เวิร์ดแบบ Real-time
@@ -75,9 +84,7 @@ export default function KeywordAudit() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Head>
-          <title>กำลังตรวจสอบคีย์เวิร์ด - ครูหนึ่งรถสวย</title>
-        </Head>
+        {seo}
         <h1 className="absolute -left-[9999px] w-[1px] h-[1px] overflow-hidden">
           ตรวจสอบคีย์เวิร์ด SEO - Keyword Audit Tool
         </h1>
@@ -98,17 +105,7 @@ export default function KeywordAudit() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <SEO
-        title="รายงานตรวจสอบคีย์เวิร์ด SEO 2025"
-        description="รายงานการตรวจสอบความถูกต้องของคีย์เวิร์ด SEO ตามมาตรฐานสากล 2025 ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-        url="/keyword-audit"
-        image="/herobanner/seo-audit.webp"
-        noindex={true}
-      />
-      <Head>
-        <meta name="robots" content="noindex, nofollow" />
-        <meta name="googlebot" content="noindex, nofollow" />
-      </Head>
+      {seo}
 
       <Navbar />
 

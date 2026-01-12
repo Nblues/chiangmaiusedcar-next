@@ -1,4 +1,5 @@
 /* eslint-disable */
+const path = require('path');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
   openAnalyzer: false,
@@ -47,7 +48,8 @@ const nextConfig = {
   // Enhanced TypeScript configuration
   typescript: {
     ignoreBuildErrors: false,
-    tsconfigPath: './tsconfig.json',
+    // Use absolute Windows-native path to avoid TS path assertion (C:/... vs C:\\...)
+    tsconfigPath: path.join(__dirname, 'tsconfig.json'),
   },
 
   // Enhanced ESLint configuration

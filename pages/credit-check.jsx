@@ -338,9 +338,7 @@ export default function CreditCheck() {
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 px-4 sm:px-6 py-10 sm:py-12">
           <div className="text-center text-white w-full max-w-5xl mx-auto bg-black/20 backdrop-blur-sm rounded-2xl p-6 sm:p-7 md:p-9 lg:p-10 border border-white/10">
             <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold mb-4 md:mb-5 font-prompt drop-shadow-2xl leading-normal sm:leading-snug">
-              <span className="text-white drop-shadow-2xl">
-                ประเมินคุณสมบัติเบื้องต้น
-              </span>
+              <span className="text-white drop-shadow-2xl">ประเมินคุณสมบัติเบื้องต้น</span>
             </h1>
 
             <div className="space-y-3 sm:space-y-4 mb-5 md:mb-7">

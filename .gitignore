@@ -118,6 +118,22 @@ project\ dave.*
 .trace
 trace.json
 
+# Generated local audit/debug outputs
+*-output.txt
+*-output.json
+lint-output*.txt
+lint-output*.json
+type-check-output*.txt
+build-output*.txt
+pnpm-version.txt
+lint-help.txt
+
+# Generated local audit reports
+dev/reports/label-audit.md
+
+# One-off local debug scripts (keep out of git)
+check-product-schema.mjs
+
 # ========================
 # 📊 Performance & Monitoring
 # ========================
