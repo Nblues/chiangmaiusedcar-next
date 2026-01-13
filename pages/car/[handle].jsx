@@ -427,7 +427,21 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const defaultOgImage = 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
 
   // ⭐ OG image for social (guaranteed 1200x630): generate server-side via /api/og
-  const ogSource = toAbsoluteUrl(safeGet(firstCarImage, 'url', '')) || defaultOgImage;
+  // Clean Shopify URL params (width, height, etc.) to let /api/og handle resizing
+  let ogSource = toAbsoluteUrl(safeGet(firstCarImage, 'url', '')) || defaultOgImage;
+  if (ogSource && ogSource.includes('cdn.shopify.com')) {
+    try {
+      const cleanUrl = new URL(ogSource);
+      // Remove Shopify's width/height params so /api/og can fetch original
+      cleanUrl.searchParams.delete('width');
+      cleanUrl.searchParams.delete('height');
+      cleanUrl.searchParams.delete('crop');
+      ogSource = cleanUrl.toString();
+    } catch {
+      // Keep original if URL parse fails
+    }
+  }
+
   let ogImage = `https://www.chiangmaiusedcar.com/api/og?src=${encodeURIComponent(ogSource)}&w=1200&h=630`;
   // Add stable cache buster for LINE/Facebook when using Shopify CDN
   if (ogSource && ogSource.includes('cdn.shopify.com')) {
