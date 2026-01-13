@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Prompt } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import ClientOnly from '../components/ClientOnly';
 import '../styles/globals.css';
 import '../styles/interactive-editor.css';
@@ -209,6 +210,7 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
       {getLayout(<Component {...pageProps} />)}
       <Analytics />
+      <SpeedInsights />
       {!isAdminRoute && <FacebookPixel />}
     </>
   );
