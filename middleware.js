@@ -3,6 +3,13 @@
 import { NextResponse } from 'next/server';
 
 export function middleware(request) {
+  // Never touch Next.js HMR WebSocket / upgrade requests.
+  // If middleware runs on these, dev HMR can break in subtle ways.
+  const isWebSocketUpgrade = request.headers.get('upgrade')?.toLowerCase() === 'websocket';
+  if (isWebSocketUpgrade || request.nextUrl.pathname === '/_next/webpack-hmr') {
+    return NextResponse.next();
+  }
+
   const response = NextResponse.next();
 
   // Homepage: disable browser cache, keep CDN cache for fast TTFB
@@ -55,8 +62,9 @@ export const config = {
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
+     * - _next/webpack-hmr (dev HMR websocket)
      * - favicon.ico (favicon file)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|_next/webpack-hmr|favicon.ico).*)',
   ],
 };

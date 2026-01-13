@@ -93,7 +93,8 @@ export default function Footer() {
                   <p className="text-white font-medium mb-1">ที่อยู่ร้าน</p>
                   <p className="text-gray-300 text-sm leading-relaxed break-words">
                     324 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี
-                    <br />
+                    <br className="md:hidden" />
+                    <span className="hidden md:inline"> </span>
                     ตำบลสันพระเนตร อำเภอสันทราย เชียงใหม่ 50210
                   </p>
                 </div>

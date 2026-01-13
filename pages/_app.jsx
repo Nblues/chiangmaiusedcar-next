@@ -10,7 +10,8 @@ import '../styles/interactive-editor.css';
 
 const prompt = Prompt({
   subsets: ['thai', 'latin'],
-  weight: ['400', '700'],
+  // Match Tailwind font weights used across the site (e.g. font-medium=500, font-semibold=600, font-extrabold=800)
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
   variable: '--font-prompt',
 });
@@ -204,7 +205,7 @@ export default function MyApp({ Component, pageProps }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
 
-        {/* Font optimization: Using @fontsource/prompt instead of preload */}
+        {/* Font optimization: using next/font (Prompt) with swap */}
       </Head>
       {getLayout(<Component {...pageProps} />)}
       <Analytics />

@@ -376,40 +376,46 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     .join(' • ')
     .substring(0, 150);
 
+  const toAbsoluteUrl = input => {
+    let u = String(input || '');
+    if (!u) return '';
+    if (u.startsWith('/')) return `https://www.chiangmaiusedcar.com${u}`;
+    if (!u.startsWith('http')) return `https://www.chiangmaiusedcar.com/${u}`;
+    // Ensure absolute URL with www for better compatibility
+    return u.replace('https://chiangmaiusedcar.com', 'https://www.chiangmaiusedcar.com');
+  };
+
+  const withShopifySocialParams = (input, { width = 1200, height = 630 } = {}) => {
+    const u = String(input || '');
+    if (!u || !u.includes('cdn.shopify.com')) return u;
+    try {
+      const parsed = new URL(u);
+      if (width) parsed.searchParams.set('width', String(width));
+      if (height) {
+        parsed.searchParams.set('height', String(height));
+        if (!parsed.searchParams.has('crop')) parsed.searchParams.set('crop', 'center');
+      }
+      return parsed.toString();
+    } catch {
+      // Best-effort fallback if URL parsing fails.
+      return u
+        .replace(/([?&])width=\d+/i, `$1width=${width}`)
+        .replace(/([?&])height=\d+/i, `$1height=${height}`);
+    }
+  };
+
   // Enhanced image for social sharing - ALWAYS use first image (not current selected)
   // This ensures consistent sharing preview regardless of which image user is viewing
   const firstCarImage = carImages[0] || currentImage;
-  let socialImage = safeGet(firstCarImage, 'url', '');
-
-  // Handle relative URLs - MUST be absolute for Facebook/LINE
-  if (socialImage.startsWith('/')) {
-    socialImage = `https://www.chiangmaiusedcar.com${socialImage}`;
-  } else if (!socialImage.startsWith('http')) {
-    socialImage = `https://www.chiangmaiusedcar.com/${socialImage}`;
-  }
+  let socialImage = toAbsoluteUrl(safeGet(firstCarImage, 'url', ''));
 
   // Fallback to default high-quality image if no car image
   if (!socialImage || socialImage === 'https://www.chiangmaiusedcar.com' || socialImage === '') {
     socialImage = 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
   }
 
-  // Ensure absolute URL with www for better Facebook compatibility
-  if (!socialImage.includes('www.')) {
-    socialImage = socialImage.replace(
-      'https://chiangmaiusedcar.com',
-      'https://www.chiangmaiusedcar.com'
-    );
-  }
-
-  // ⭐ สำหรับ Shopify CDN: เพิ่มขนาดรูปที่เหมาะกับ LINE/Facebook (1200x630)
-  // ไม่ใช้ cache busting เพื่อให้ LINE cache ได้ถูกต้อง
-  if (socialImage.includes('cdn.shopify.com')) {
-    const separator = socialImage.includes('?') ? '&' : '?';
-    // เพิ่มขนาดเฉพาะถ้ายังไม่มี
-    if (!socialImage.includes('width=') && !socialImage.includes('&width=')) {
-      socialImage = `${socialImage}${separator}width=1200&height=630`;
-    }
-  }
+  // ⭐ Shopify CDN: บังคับขนาดรูปสำหรับ social preview ให้คงที่ (ไม่แก้ UI image)
+  socialImage = withShopifySocialParams(socialImage, { width: 1200, height: 630 });
 
   // Server-rendered Open Graph essentials (SSR-safe, no client-only logic)
   // Build canonical URL and primary OG image directly from props to guarantee tags on first HTML
@@ -418,32 +424,34 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const canonicalUrl = `https://www.chiangmaiusedcar.com/car/${prettyHandle}`;
 
   // ⭐ ใช้รูปแรกจาก Shopify โดยตรง (ไม่ผ่าน optimization)
-  let ogImage = safeGet(firstCarImage, 'url', '');
-  if (ogImage && ogImage.startsWith('/')) {
-    ogImage = `https://www.chiangmaiusedcar.com${ogImage}`;
-  }
-  if (ogImage && !ogImage.startsWith('http')) {
-    ogImage = `https://www.chiangmaiusedcar.com/${ogImage}`;
-  }
-  // Ensure Shopify image has proper dimensions for social preview with cache busting
+  let ogImage = toAbsoluteUrl(safeGet(firstCarImage, 'url', ''));
+  ogImage = withShopifySocialParams(ogImage, { width: 1200, height: 630 });
+  // Add stable cache buster for LINE/Facebook when using Shopify CDN
   if (ogImage && ogImage.includes('cdn.shopify.com')) {
-    const sep = ogImage.includes('?') ? '&' : '?';
     const carHandle = safeGet(car, 'handle', '');
     const dateStamp = new Date().toISOString().split('T')[0].replace(/-/g, ''); // YYYYMMDD
-
-    // Only add width if not already present
-    if (!/[?&]width=\d+/.test(ogImage)) {
-      ogImage = `${ogImage}${sep}width=1200&height=630`;
-    }
-
-    // Add unique cache buster for LINE
-    if (!ogImage.includes('&v=')) {
-      ogImage = `${ogImage}&car=${encodeURIComponent(carHandle)}&v=${dateStamp}`;
+    try {
+      const parsed = new URL(ogImage);
+      if (!parsed.searchParams.has('v')) {
+        parsed.searchParams.set('car', carHandle);
+        parsed.searchParams.set('v', dateStamp);
+      }
+      ogImage = parsed.toString();
+    } catch {
+      // ignore
     }
   }
   // Final fallback to guaranteed local hero image
   const defaultOgImage = 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
   const ogImageFinal = ogImage || socialImage || defaultOgImage;
+
+  // High-res image URLs for JSON-LD (does not affect UI rendering)
+  const seoImages = carImages
+    .map(img => ({
+      ...img,
+      url: withShopifySocialParams(toAbsoluteUrl(safeGet(img, 'url', '')), { width: 1200, height: 630 }),
+    }))
+    .filter(img => img.url);
 
   return (
     <>
@@ -476,12 +484,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
           brand: safeGet(car, 'vendor') || safeGet(car, 'brand', 'รถมือสอง'),
           model: safeGet(car, 'model', ''),
           year: safeGet(car, 'year', ''),
-          images: carImages.map(img => ({
-            ...img,
-            url: safeGet(img, 'url', '').startsWith('/')
-              ? `https://www.chiangmaiusedcar.com${safeGet(img, 'url', '')}`
-              : safeGet(img, 'url', ''),
-          })),
+          images: seoImages,
           // Ensure structured data has required fields for Google Rich Results
           price: {
             amount: safeGet(car, 'price.amount', 0),

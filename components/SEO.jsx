@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { buildCarJsonLd, buildLocalBusinessJsonLd } from '../lib/seo/jsonld.js';
+import { buildCarJsonLd, buildLocalBusinessJsonLd, buildProductJsonLd } from '../lib/seo/jsonld.js';
 import { getSiteLocation } from '../utils/siteLocation';
 import {
   getSocialImageUrl,
   getPlatformImage,
+  SOCIAL_IMAGE_SIZES,
   SOCIAL_PLATFORMS_CONFIG,
 } from '../lib/social-sharing';
 
@@ -331,10 +332,33 @@ export default function SEO({
   const siteKeywords = normalizedKeywords || aiOptimizedKeywords;
 
   // Get platform-specific images for enhanced 2025 social sharing
-  const twitterImage = getPlatformImage(pageType, 'twitter_large', site);
-  const lineImage = getPlatformImage(pageType, 'line', site);
-  const whatsappImage = getPlatformImage(pageType, 'whatsapp', site);
-  const telegramImage = getPlatformImage(pageType, 'telegram', site);
+  const buildPlatformImage = platform => {
+    const size = SOCIAL_IMAGE_SIZES[platform] || SOCIAL_IMAGE_SIZES.og_primary;
+    return {
+      url: absoluteImage,
+      width: size.width,
+      height: size.height,
+      type: 'image/webp',
+      alt: `${enhancedTitle} - รถมือสองเชียงใหม่ ครูหนึ่งรถสวย`,
+    };
+  };
+
+  const twitterImage =
+    pageType === 'car' && absoluteImage
+      ? buildPlatformImage('twitter_large')
+      : getPlatformImage(pageType, 'twitter_large', site);
+  const lineImage =
+    pageType === 'car' && absoluteImage
+      ? buildPlatformImage('line')
+      : getPlatformImage(pageType, 'line', site);
+  const whatsappImage =
+    pageType === 'car' && absoluteImage
+      ? buildPlatformImage('whatsapp')
+      : getPlatformImage(pageType, 'whatsapp', site);
+  const telegramImage =
+    pageType === 'car' && absoluteImage
+      ? buildPlatformImage('telegram')
+      : getPlatformImage(pageType, 'telegram', site);
 
   return (
     <Head>
@@ -621,6 +645,31 @@ export default function SEO({
                   review: carData.review, // เพิ่ม review support
                 }
               )
+            ),
+          }}
+        />
+      )}
+
+      {/* Product Schema (Google Rich Results friendly) - ใช้ร่วมกับ Car schema */}
+      {carData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(
+              buildProductJsonLd({
+                url: fullUrl,
+                name: carData.title,
+                description: carData.description || metaDesc,
+                images: carData.images?.map(img => img.url) || [absoluteImage],
+                brand: carData.brand,
+                sku: carData.sku || carData.id,
+                mpn: carData.mpn,
+                price: carData.price?.amount,
+                currency: carData.price?.currencyCode || 'THB',
+                inStock: carData.availableForSale !== false,
+                sellerName: 'ครูหนึ่งรถสวย',
+                review: carData.review,
+              })
             ),
           }}
         />
