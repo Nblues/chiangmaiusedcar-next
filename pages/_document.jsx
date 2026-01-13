@@ -12,6 +12,14 @@ export default class MyDocument extends Document {
     return (
       <Html lang={htmlLang}>
         <Head>
+          {/* User Timing: mark earliest possible app start (for hydration measurements) */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html:
+                ";(function(){try{if(window.performance&&performance.mark){performance.mark('app:start');}}catch(e){}})();",
+            }}
+          />
+
           {/* Critical CSS for Hero Section - Inline to prevent render blocking */}
           <style
             dangerouslySetInnerHTML={{

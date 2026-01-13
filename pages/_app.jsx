@@ -1,21 +1,76 @@
-import React, { useEffect, lazy, Suspense } from 'react';
+import React, { useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Analytics } from '@vercel/analytics/react';
 import ClientOnly from '../components/ClientOnly';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import FacebookPixel from '../components/FacebookPixel';
 import '../styles/globals.css';
 import '../styles/interactive-editor.css';
 
-// Lazy load non-critical components to reduce initial bundle size
-const CookieConsent = lazy(() => import('../components/CookieConsent'));
+// Dynamic imports keep heavy UI out of the initial bundle and avoid hydration mismatches
+const Navbar = dynamic(() => import('../components/Navbar'), { ssr: false, loading: () => null });
+const Footer = dynamic(() => import('../components/Footer'), { ssr: false, loading: () => null });
+const CookieConsent = dynamic(() => import('../components/CookieConsent'), {
+  ssr: false,
+  loading: () => null,
+});
+const FacebookPixel = dynamic(() => import('../components/FacebookPixel'), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const path = router?.asPath || router?.pathname || '';
   const isAdminRoute = path.startsWith('/admin');
+
+  // User Timing: measure app start -> hydrated (shows up under "User Timings" in Lighthouse)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      if (window.performance?.mark) {
+        window.performance.mark('app:hydrated');
+        if (window.performance.measure) {
+          window.performance.measure('app:before-hydration', 'app:start', 'app:hydrated');
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  // User Timing: measure route transitions (helps correlate long tasks with navigation)
+  useEffect(() => {
+    if (!router?.events || typeof window === 'undefined') return;
+
+    const markStart = url => {
+      try {
+        window.performance?.mark?.('route:start');
+        window.performance?.mark?.(`route:start:${url}`);
+      } catch {
+        // ignore
+      }
+    };
+
+    const markDone = url => {
+      try {
+        window.performance?.mark?.('route:complete');
+        window.performance?.mark?.(`route:complete:${url}`);
+        window.performance?.measure?.('route:duration', 'route:start', 'route:complete');
+      } catch {
+        // ignore
+      }
+    };
+
+    router.events.on('routeChangeStart', markStart);
+    router.events.on('routeChangeComplete', markDone);
+    router.events.on('routeChangeError', markDone);
+    return () => {
+      router.events.off('routeChangeStart', markStart);
+      router.events.off('routeChangeComplete', markDone);
+      router.events.off('routeChangeError', markDone);
+    };
+  }, [router]);
   // Initialize performance monitoring (Web Vitals + custom observers) without blocking main bundle
   useEffect(() => {
     // Dynamic import to avoid increasing initial bundle size
@@ -30,183 +85,66 @@ export default function MyApp({ Component, pageProps }) {
       });
   }, []);
 
-  // Enhanced error handling for Facebook In-App Browser and Vercel issues
+  // Defer non-critical client-only runtime guards to an async chunk
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Detect Facebook In-App Browser
-      const userAgent = navigator.userAgent || '';
-      const isFacebookApp =
-        userAgent.includes('FBAN') || userAgent.includes('FBAV') || userAgent.includes('FB_IAB');
-      const isMessenger =
-        userAgent.includes('MessengerForiOS') || userAgent.includes('MessengerLiteForiOS');
-      const isInAppBrowser = isFacebookApp || isMessenger || userAgent.includes('Instagram');
+    if (typeof window === 'undefined') return;
 
-      // Handle uncaught errors from third-party scripts and browsers
-      const handleError = event => {
-        // Ignore errors from third-party scripts that don't affect our app
-        if (
-          event.error &&
-          (event.error.message?.includes('semalt') ||
-            event.error.message?.includes('Object.keys') ||
-            event.error.message?.includes('cloudflare') ||
-            event.error.message?.includes('Code 705') ||
-            event.error.message?.includes('Script error') ||
-            event.error.message?.includes('Non-Error promise rejection') ||
-            event.filename?.includes('content.js') ||
-            event.filename?.includes('cloudflare') ||
-            event.filename?.includes('facebook') ||
-            event.filename?.includes('vercel-scripts') ||
-            event.filename?.includes('vercel-analytics'))
-        ) {
-          event.preventDefault();
-          return true;
-        }
-
-        // Suppress network errors from analytics scripts (408, 503, etc.)
-        if (
-          event.target?.src?.includes('vercel-scripts') ||
-          event.target?.src?.includes('vercel-analytics')
-        ) {
-          event.preventDefault();
-          return true;
-        }
-      };
-
-      const handleUnhandledRejection = event => {
-        // Handle unhandled promise rejections
-        if (
-          event.reason?.message?.includes('semalt') ||
-          event.reason?.message?.includes('cloudflare') ||
-          event.reason?.message?.includes('Code 705') ||
-          event.reason?.message?.includes('facebook') ||
-          event.reason?.message?.includes('Script error')
-        ) {
-          event.preventDefault();
-          return true;
-        }
-      };
-
-      // Enhanced Cloudflare and Vercel challenge completion handler
-      const handleVerificationChallenge = () => {
-        // Handle Cloudflare challenges
-        if (window.location.search.includes('cf_chl_jschl_tk')) {
-          setTimeout(() => {
-            if (window.location.search.includes('cf_chl_jschl_tk')) {
-              window.location.reload();
-            }
-          }, 3000);
-        }
-
-        // Handle Vercel protection redirects
-        if (window.location.search.includes('_vercel_protection')) {
-          setTimeout(() => {
-            const cleanUrl = window.location.href.split('?')[0];
-            window.history.replaceState({}, '', cleanUrl);
-          }, 1000);
-        }
-      };
-
-      // Facebook In-App Browser specific handling
-      const handleFacebookBrowser = () => {
-        if (isInAppBrowser) {
-          // Add compatibility markers for Facebook browsers
-          document.documentElement.setAttribute('data-fb-browser', 'true');
-
-          // Force enable features that FB browser might restrict
-          try {
-            // Test and enable localStorage
-            localStorage.setItem('fb_test', '1');
-            localStorage.removeItem('fb_test');
-          } catch {
-            // Fallback for storage restrictions - silent fail
+    let cleanup;
+    const run = () => {
+      import('../lib/clientRuntime')
+        .then(mod => {
+          if (typeof mod.initClientRuntime === 'function') {
+            cleanup = mod.initClientRuntime();
           }
+        })
+        .catch(() => {
+          // silent fail - compatibility guards are non-critical
+        });
+    };
 
-          // Add external browser suggestion for complex pages
-          if (
-            window.location.pathname.includes('/all-cars') ||
-            window.location.pathname.includes('/car/') ||
-            window.location.pathname.includes('/contact')
-          ) {
-            setTimeout(() => {
-              if (!sessionStorage.getItem('fb_notice_shown')) {
-                sessionStorage.setItem('fb_notice_shown', '1');
-                // Notice will be added by cloudflare-compat.js
-              }
-            }, 2000);
-          }
-        }
-      };
-
-      window.addEventListener('error', handleError);
-      window.addEventListener('unhandledrejection', handleUnhandledRejection);
-      window.addEventListener('load', handleVerificationChallenge);
-
-      // Run Facebook browser handling immediately
-      handleFacebookBrowser();
-
-      // Enhanced user agent compatibility for various browsers
-      if (
-        navigator.userAgent.includes('Chrome') ||
-        navigator.userAgent.includes('Safari') ||
-        isFacebookApp ||
-        isMessenger
-      ) {
-        document.documentElement.style.setProperty('--webkit-appearance', 'none');
-      }
-
-      // Add viewport meta tag fix for mobile browsers
-      const viewport = document.querySelector('meta[name="viewport"]');
-      if (viewport && (isFacebookApp || isMessenger)) {
-        viewport.setAttribute(
-          'content',
-          'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
-        );
-      }
-
-      return () => {
-        window.removeEventListener('error', handleError);
-        window.removeEventListener('unhandledrejection', handleUnhandledRejection);
-        window.removeEventListener('load', handleVerificationChallenge);
-      };
+    let idleId;
+    let timeoutId;
+    if ('requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(run, { timeout: 1500 });
+    } else {
+      timeoutId = window.setTimeout(run, 0);
     }
+
+    return () => {
+      if (cleanup) cleanup();
+      if (idleId && window.cancelIdleCallback) window.cancelIdleCallback(idleId);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
   }, []);
 
-  // Service worker registration with fixed variables
+  // Defer service worker registration so it doesn't compete with hydration
   useEffect(() => {
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      // Choose appropriate service worker for environment
-      const swFile = process.env.NODE_ENV === 'production' ? '/sw.js' : '/sw-dev.js';
+    if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
 
-      navigator.serviceWorker
-        .register(swFile, {
-          scope: '/',
-        })
-        .then(registration => {
-          if (process.env.NODE_ENV === 'development') {
-            // eslint-disable-next-line no-console
-            console.log('✅ Service Worker registered successfully:', registration.scope);
+    const run = () => {
+      import('../lib/clientRuntime')
+        .then(mod => {
+          if (typeof mod.registerServiceWorker === 'function') {
+            mod.registerServiceWorker();
           }
-
-          // Listen for updates
-          registration.addEventListener('updatefound', () => {
-            const newWorker = registration.installing;
-            if (newWorker) {
-              newWorker.addEventListener('statechange', () => {
-                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                  if (process.env.NODE_ENV === 'development') {
-                    // eslint-disable-next-line no-console
-                    console.log('🔄 New service worker content available');
-                  }
-                }
-              });
-            }
-          });
         })
-        .catch(error => {
-          // eslint-disable-next-line no-console
-          console.warn('⚠️ SW registration failed:', error);
+        .catch(() => {
+          // silent fail
         });
+    };
+
+    let idleId;
+    let timeoutId;
+    if ('requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(run, { timeout: 3000 });
+    } else {
+      timeoutId = window.setTimeout(run, 1000);
     }
+
+    return () => {
+      if (idleId && window.cancelIdleCallback) window.cancelIdleCallback(idleId);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
   }, []);
 
   // Check if page has a custom layout
@@ -231,9 +169,7 @@ export default function MyApp({ Component, pageProps }) {
           </ClientOnly>
           {!isAdminRoute && (
             <ClientOnly>
-              <Suspense fallback={<div className="skeleton animate-pulse bg-gray-200 h-12"></div>}>
-                <CookieConsent />
-              </Suspense>
+              <CookieConsent />
             </ClientOnly>
           )}
         </>
@@ -259,7 +195,7 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
       {getLayout(<Component {...pageProps} />)}
       <Analytics />
-      <FacebookPixel />
+      {!isAdminRoute && <FacebookPixel />}
     </>
   );
 }

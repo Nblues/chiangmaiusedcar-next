@@ -172,3 +172,6 @@ expo-env.d.ts
 .env*.local
 
 .vercel
+
+.vercel
+.env*.local

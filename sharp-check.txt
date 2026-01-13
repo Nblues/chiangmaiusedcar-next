@@ -1,0 +1,20 @@
+﻿node : [eval]:1
+At line:1 char:62
++ ... car-setup'; node -e 'try{require(sharp); console.log(sharp ok)}catch( ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([eval]:1:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+try{require(sharp); console.log(sharp ok)}catch(e){console.error(sharp missing:,e && 
+e.stack || e); process.exit(1)}
+                                ^^^^^
+
+SyntaxError: missing ) after argument list
+    at makeContextifyScript (node:internal/vm:185:14)
+    at node:internal/process/execution:107:22
+    at [eval]-wrapper:6:24
+    at runScript (node:internal/process/execution:101:62)
+    at evalScript (node:internal/process/execution:133:3)
+    at node:internal/main/eval_string:51:3
+
+Node.js v20.18.0
