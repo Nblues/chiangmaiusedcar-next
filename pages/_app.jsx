@@ -2,10 +2,18 @@ import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import { Prompt } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import ClientOnly from '../components/ClientOnly';
 import '../styles/globals.css';
 import '../styles/interactive-editor.css';
+
+const prompt = Prompt({
+  subsets: ['thai', 'latin'],
+  weight: ['400', '700'],
+  display: 'swap',
+  variable: '--font-prompt',
+});
 
 // Dynamic imports keep heavy UI out of the initial bundle and avoid hydration mismatches
 const Navbar = dynamic(() => import('../components/Navbar'), { ssr: false, loading: () => null });
@@ -153,7 +161,7 @@ export default function MyApp({ Component, pageProps }) {
     (page => {
       // Default layout for public pages
       return (
-        <>
+        <div className={`${prompt.variable} font-prompt`}>
           <ClientOnly
             fallback={
               <nav className="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-orange-500 h-16"></nav>
@@ -172,7 +180,7 @@ export default function MyApp({ Component, pageProps }) {
               <CookieConsent />
             </ClientOnly>
           )}
-        </>
+        </div>
       );
     });
 

@@ -34,7 +34,7 @@
     "security-check": "echo 'Checking admin security...' && grep -q 'Disallow: /admin' public/robots.txt && echo 'Admin protection verified' || echo 'WARNING: Admin not protected in robots.txt'",
     "deploy:secure": "npm run security-check && npm run build && echo 'Ready for deployment with admin protection'",
     "resolve:map": "node dev/scripts/fetch-coords.js",
-    "postinstall": "npm run resolve:map || true",
+    "postinstall": "node scripts/postinstall.cjs",
     "postbuild": "next-sitemap; node scripts/generate-image-sitemap.js || true; node scripts/generate-pagination-sitemap.js || true",
     "generate-sitemap": "node scripts/generate-image-sitemap.js && node scripts/generate-pagination-sitemap.js",
     "seo:verify": "node scripts/seo-verify.js",

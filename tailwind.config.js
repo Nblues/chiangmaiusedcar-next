@@ -25,7 +25,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        prompt: ['Prompt', 'Kanit', 'Sarabun', 'system-ui', 'sans-serif'],
+        prompt: ['var(--font-prompt)', 'Prompt', 'Kanit', 'Sarabun', 'system-ui', 'sans-serif'],
       },
       screens: {
         xs: '475px',
