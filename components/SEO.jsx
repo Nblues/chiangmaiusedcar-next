@@ -288,16 +288,38 @@ export default function SEO({
     return imgUrl;
   }, [staticValues, computedValues]);
 
+  const ogMimeType = useMemo(() => {
+    const u = String(absoluteImage || '').toLowerCase();
+    if (u.includes('/api/og')) return 'image/jpeg';
+    if (u.includes('.png')) return 'image/png';
+    if (u.includes('.webp')) return 'image/webp';
+    if (u.includes('.jpg') || u.includes('.jpeg')) return 'image/jpeg';
+    return 'image/jpeg';
+  }, [absoluteImage]);
+
   // Memoize OG images array with 2025 social sharing standards
   const ogImages = useMemo(() => {
+    const withOgSize = (inputUrl, width, height) => {
+      const u = String(inputUrl || '');
+      if (!u || !u.includes('/api/og')) return u;
+      try {
+        const parsed = new URL(u);
+        parsed.searchParams.set('w', String(width));
+        parsed.searchParams.set('h', String(height));
+        return parsed.toString();
+      } catch {
+        return u;
+      }
+    };
+
     // Return primary formats for Open Graph with enhanced 2025 compatibility
     return [
-      { url: absoluteImage, width: 1200, height: 630, type: 'image/webp' },
-      { url: absoluteImage, width: 1200, height: 675, type: 'image/webp' },
-      { url: absoluteImage, width: 800, height: 600, type: 'image/webp' },
-      { url: absoluteImage, width: 600, height: 315, type: 'image/webp' },
+      { url: withOgSize(absoluteImage, 1200, 630), width: 1200, height: 630, type: ogMimeType },
+      { url: withOgSize(absoluteImage, 1200, 675), width: 1200, height: 675, type: ogMimeType },
+      { url: withOgSize(absoluteImage, 800, 600), width: 800, height: 600, type: ogMimeType },
+      { url: withOgSize(absoluteImage, 600, 315), width: 600, height: 315, type: ogMimeType },
     ];
-  }, [absoluteImage]);
+  }, [absoluteImage, ogMimeType]);
 
   // Simplified debug - only log once per unique component props (disabled in production)
   const debugKey = useMemo(
@@ -456,7 +478,7 @@ export default function SEO({
       {/* Primary Open Graph Image - MUST be specified explicitly */}
       <meta property="og:image" content={absoluteImage} />
       <meta property="og:image:secure_url" content={absoluteImage} />
-      <meta property="og:image:type" content="image/webp" />
+      <meta property="og:image:type" content={ogMimeType} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta

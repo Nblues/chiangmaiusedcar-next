@@ -423,11 +423,14 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const prettyHandle = createPrettyUrl(rawHandle) || rawHandle;
   const canonicalUrl = `https://www.chiangmaiusedcar.com/car/${prettyHandle}`;
 
-  // ⭐ ใช้รูปแรกจาก Shopify โดยตรง (ไม่ผ่าน optimization)
-  let ogImage = toAbsoluteUrl(safeGet(firstCarImage, 'url', ''));
-  ogImage = withShopifySocialParams(ogImage, { width: 1200, height: 630 });
+  // Final fallback to guaranteed local hero image
+  const defaultOgImage = 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
+
+  // ⭐ OG image for social (guaranteed 1200x630): generate server-side via /api/og
+  const ogSource = toAbsoluteUrl(safeGet(firstCarImage, 'url', '')) || defaultOgImage;
+  let ogImage = `https://www.chiangmaiusedcar.com/api/og?src=${encodeURIComponent(ogSource)}&w=1200&h=630`;
   // Add stable cache buster for LINE/Facebook when using Shopify CDN
-  if (ogImage && ogImage.includes('cdn.shopify.com')) {
+  if (ogSource && ogSource.includes('cdn.shopify.com')) {
     const carHandle = safeGet(car, 'handle', '');
     const dateStamp = new Date().toISOString().split('T')[0].replace(/-/g, ''); // YYYYMMDD
     try {
@@ -441,15 +444,16 @@ function CarDetailPage({ car, recommendedCars = [] }) {
       // ignore
     }
   }
-  // Final fallback to guaranteed local hero image
-  const defaultOgImage = 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
   const ogImageFinal = ogImage || socialImage || defaultOgImage;
 
   // High-res image URLs for JSON-LD (does not affect UI rendering)
   const seoImages = carImages
     .map(img => ({
       ...img,
-      url: withShopifySocialParams(toAbsoluteUrl(safeGet(img, 'url', '')), { width: 1200, height: 630 }),
+      url: withShopifySocialParams(toAbsoluteUrl(safeGet(img, 'url', '')), {
+        width: 1200,
+        height: 630,
+      }),
     }))
     .filter(img => img.url);
 

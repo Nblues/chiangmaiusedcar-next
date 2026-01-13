@@ -295,7 +295,9 @@ export default function Home({ cars, brandCounts }) {
   // Daily cache busting for LINE sharing
   const currentDate = new Date();
   const dateStamp = currentDate.toISOString().split('T')[0].replace(/-/g, '');
-  const homeOgImage = `https://www.chiangmaiusedcar.com/herobanner/cnxcar.webp?v=${dateStamp}&w=1200&h=630&fit=cover`;
+  const homeOgImage = `https://www.chiangmaiusedcar.com/api/og?src=${encodeURIComponent(
+    '/herobanner/cnxcar.webp'
+  )}&w=1200&h=630&v=${dateStamp}`;
 
   return (
     <div>

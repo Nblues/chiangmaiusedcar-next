@@ -239,7 +239,9 @@ export default function AllCars({ cars }) {
         title={`${seoAllCars.titleBase}${totalPages > 1 && currentPage > 1 ? ` หน้า ${currentPage}` : ''} | ครูหนึ่งรถสวย`}
         description={`ดูรถยนต์มือสองคุณภาพดีทั้งหมด ${filteredCars.length} คัน ในเชียงใหม่และภาคเหนือ คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda นัดหมายดูรถโทร 094-064-9018`}
         url={seoPath}
-        image="https://www.chiangmaiusedcar.com/herobanner/cnxallcar.webp"
+        image={`https://www.chiangmaiusedcar.com/api/og?src=${encodeURIComponent(
+          '/herobanner/cnxallcar.webp'
+        )}&w=1200&h=630`}
         type="website"
         pageType="all-cars"
         noindex={isFiltered}
