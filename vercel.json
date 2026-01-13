@@ -3,10 +3,11 @@
   "framework": "nextjs",
   "buildCommand": "pnpm build",
   "devCommand": "pnpm dev",
-  "installCommand": "pnpm install",
+  "installCommand": "pnpm install --no-frozen-lockfile",
   "functions": {
     "pages/api/*.js": {
-      "maxDuration": 10
+      "maxDuration": 10,
+      "memory": 1024
     }
   },
   "crons": [
