@@ -164,7 +164,12 @@ export default function MyApp({ Component, pageProps }) {
         <div className={`${prompt.variable} font-prompt`}>
           <ClientOnly
             fallback={
-              <nav className="bg-white shadow-lg sticky top-0 z-50 border-b-2 border-orange-500 h-16"></nav>
+              <nav
+                className="bg-white shadow-lg sticky top-0 z-60 border-b-2 border-accent pt-[env(safe-area-inset-top)]"
+                aria-label="เมนูหลัก"
+              >
+                <div className="h-16" />
+              </nav>
             }
           >
             <Navbar />
