@@ -404,8 +404,8 @@ export default function Home({ cars, brandCounts }) {
             <img
               src="/herobanner/cnxcar-828w.webp"
               alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-              width="1400"
-              height="467"
+              width="828"
+              height="280"
               className="w-full h-auto object-contain"
               loading="eager"
               {...{ fetchpriority: 'high' }}
