@@ -395,7 +395,10 @@ export default function Home({ cars, brandCounts }) {
       </section>
 
       {/* Why Choose Us Section - SEO Content */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16 bg-white">
+      <section
+        className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16 bg-white"
+        style={{ contentVisibility: 'auto', containIntrinsicSize: '1200px' }}
+      >
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-6 sm:mb-8 text-center font-prompt">
             ทำไมต้องเลือกครูหนึ่งรถสวย?
@@ -862,7 +865,10 @@ export default function Home({ cars, brandCounts }) {
           </Link>
         </div>
       </main>
-      <section className="bg-white py-6 sm:py-8 mt-6 rounded-2xl max-w-6xl mx-auto border border-gray-200">
+      <section
+        className="bg-white py-6 sm:py-8 mt-6 rounded-2xl max-w-6xl mx-auto border border-gray-200"
+        style={{ contentVisibility: 'auto', containIntrinsicSize: '600px' }}
+      >
         <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-primary font-prompt px-4 sm:px-6">
           คำถามที่พบบ่อย
         </h2>
@@ -945,7 +951,10 @@ export default function Home({ cars, brandCounts }) {
       {showFbReviews && <FacebookReviewsSection />}
 
       {/* Why Choose Us Section - 2025 Modern Design */}
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 py-16 mt-8 rounded-3xl max-w-[1400px] mx-auto border border-primary/10 shadow-xl">
+      <section
+        className="bg-gradient-to-br from-primary/5 via-white to-accent/5 py-16 mt-8 rounded-3xl max-w-[1400px] mx-auto border border-primary/10 shadow-xl"
+        style={{ contentVisibility: 'auto', containIntrinsicSize: '2000px' }}
+      >
         <div className="px-6 md:px-10">
           {/* Header */}
           <div className="text-center mb-12">

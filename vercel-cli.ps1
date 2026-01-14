@@ -42,6 +42,29 @@ if ($VercelArgs -and $VercelArgs.Length -gt 0) {
 }
 Write-Host ""
 
+# If we're targeting production, prefer a fresh CLI (global installs can be stale).
+$isProdDeploy = $false
+if ($VercelArgs -and $VercelArgs.Length -gt 0) {
+    $joinedArgs = ($VercelArgs -join ' ')
+    if ($joinedArgs -match '(?i)(^|\s)--prod(\s|$)' -or $joinedArgs -match '(?i)--target\s+production') {
+        $isProdDeploy = $true
+    }
+}
+
+if ($isProdDeploy) {
+    $npxPathCandidates = @(
+        "$env:ProgramFiles\nodejs\npx.cmd",
+        "$env:ProgramFiles(x86)\nodejs\npx.cmd",
+        "C:\\nvm4w\\nodejs\\npx.cmd",
+        (Get-Command npx -ErrorAction SilentlyContinue).Path
+    )
+    foreach ($npx in $npxPathCandidates) {
+        if (-not [string]::IsNullOrWhiteSpace($npx) -and (Test-Path $npx)) {
+            if (Invoke-Tool -ToolPath $npx -Args (@('vercel@latest') + $VercelArgs)) { exit 0 }
+        }
+    }
+}
+
 # 1) Local portable binary (optional manual placement)
 $localExe = Join-Path (Get-Location) 'vercel.exe'
 if (Test-Path $localExe) {
