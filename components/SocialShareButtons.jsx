@@ -5,6 +5,7 @@
  */
 
 import React, { useState } from 'react';
+import { cleanShareUrl } from '../utils/urlHelper';
 
 const SocialShareButtons = ({
   url,
@@ -14,8 +15,12 @@ const SocialShareButtons = ({
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const resolvedUrl = cleanShareUrl(
+    url || (typeof window !== 'undefined' ? window.location.href : '')
+  );
+
   // Encode URLs for sharing
-  const encodedUrl = encodeURIComponent(url || window?.location?.href || '');
+  const encodedUrl = encodeURIComponent(resolvedUrl || '');
   const encodedText = encodeURIComponent(`${title} - ${description}`);
 
   // Social sharing URLs
@@ -25,7 +30,7 @@ const SocialShareButtons = ({
     twitter: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedText}`,
     whatsapp: `https://wa.me/?text=${encodedText}%20${encodedUrl}`,
     telegram: `https://t.me/share/url?url=${encodedUrl}&text=${encodedText}`,
-    copy: url || (typeof window !== 'undefined' ? window.location.href : ''),
+    copy: resolvedUrl,
   };
 
   // Handle copy to clipboard

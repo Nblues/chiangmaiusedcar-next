@@ -15,9 +15,19 @@
 export function createPrettyUrl(handle) {
   if (!handle) return '';
 
+  const safeDecode = value => {
+    try {
+      return decodeURIComponent(String(value));
+    } catch {
+      return String(value);
+    }
+  };
+
+  // Decode percent-encoded handles (Shopify handles sometimes contain encoded Thai)
+  let cleanHandle = safeDecode(handle);
+
   // ลบคำภาษาไทยที่ไม่จำเป็นออก (เช่น "ปี")
   const thaiWords = ['ปี', 'รุ่น', 'ปีนี้', 'ปีนั้น'];
-  let cleanHandle = handle;
 
   thaiWords.forEach(word => {
     // ลบทั้งแบบ encoded และแบบไม่ encoded
@@ -25,13 +35,22 @@ export function createPrettyUrl(handle) {
     cleanHandle = cleanHandle.replace(new RegExp(`-${encodeURIComponent(word)}-`, 'gi'), '-');
   });
 
+  // Remove remaining Thai characters (helps avoid long %E0%B8.. sequences in shared URLs)
+  cleanHandle = cleanHandle.replace(/[\u0E00-\u0E7F]+/g, '');
+
+  // Normalize separators and remove any non URL-safe characters
+  // Keep only letters/numbers/dashes to ensure clean, short, shareable URLs.
+  cleanHandle = cleanHandle
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^a-zA-Z0-9-]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '');
+
   // ลบ dash ซ้ำซ้อน
-  cleanHandle = cleanHandle.replace(/-+/g, '-');
+  // (kept above; left here for backward-compat readability)
 
-  // ลบ dash ที่ท้าย
-  cleanHandle = cleanHandle.replace(/-$/, '');
-
-  return cleanHandle;
+  return cleanHandle || safeDecode(handle);
 }
 
 /**
@@ -45,6 +64,48 @@ export function createPrettyUrl(handle) {
 export function createShortShareUrl(handle) {
   const prettyHandle = createPrettyUrl(handle);
   return `https://www.chiangmaiusedcar.com/car/${prettyHandle}`;
+}
+
+/**
+ * Clean a URL for sharing/copying:
+ * - strips hash
+ * - removes common tracking params (fbclid/utm/etc.)
+ * - preserves origin + pathname (and any essential query params if present)
+ */
+export function cleanShareUrl(inputUrl) {
+  const raw = String(inputUrl || '').trim();
+  if (!raw) return '';
+
+  try {
+    const parsed = new URL(raw);
+    parsed.hash = '';
+    const removeKeys = [
+      'fbclid',
+      'gclid',
+      'dclid',
+      'wbraid',
+      'gbraid',
+      'msclkid',
+      'igshid',
+      'mc_cid',
+      'mc_eid',
+    ];
+
+    for (const key of removeKeys) {
+      parsed.searchParams.delete(key);
+    }
+    // Remove all utm_* params
+    for (const key of Array.from(parsed.searchParams.keys())) {
+      if (/^utm_/i.test(key)) parsed.searchParams.delete(key);
+    }
+
+    // Avoid trailing '?' when params removed
+    const search = parsed.searchParams.toString();
+    return `${parsed.origin}${parsed.pathname}${search ? `?${search}` : ''}`;
+  } catch {
+    // Not a full URL; best-effort remove hash/tracking-ish query
+    return raw.split('#')[0];
+  }
 }
 
 /**
@@ -84,5 +145,5 @@ function formatPrice(amount) {
  */
 export function hasThaiInUrl(handle) {
   // Check for Thai Unicode range or encoded Thai
-  return /[\u0E00-\u0E7F]/.test(handle) || /%E0%B8/.test(handle);
+  return /[\u0E00-\u0E7F]/.test(handle) || /%E0%B8/i.test(handle);
 }

@@ -14,11 +14,11 @@ Admin authentication ไม่ทำงานบน Production (Vercel) เน�
 
 ### Environment Variables ที่ต้องเพิ่มบน Vercel
 
-| Variable Name    | Value                                                              | Purpose                                          |
-| ---------------- | ------------------------------------------------------------------ | ------------------------------------------------ |
-| `ADMIN_USERNAME` | `kngoodcar`                                                        | ชื่อผู้ใช้สำหรับเข้าระบบ admin                   |
-| `ADMIN_PASSWORD` | `Kn-goodcar**5277`                                                 | รหัสผ่านสำหรับเข้าระบบ admin                     |
-| `SESSION_SECRET` | `f84a65d8b96928512fc7938a14c15c72d5a23689354a2fbc8312c102d1d10f33` | Secret key สำหรับ session encryption (32+ chars) |
+| Variable Name    | Value                   | Purpose                                          |
+| ---------------- | ----------------------- | ------------------------------------------------ |
+| `ADMIN_USERNAME` | `kngoodcar`             | ชื่อผู้ใช้สำหรับเข้าระบบ admin                   |
+| `ADMIN_PASSWORD` | `<YOUR_ADMIN_PASSWORD>` | รหัสผ่านสำหรับเข้าระบบ admin                     |
+| `SESSION_SECRET` | `<YOUR_SESSION_SECRET>` | Secret key สำหรับ session encryption (32+ chars) |
 
 ### ขั้นตอนการตั้งค่า
 
@@ -68,7 +68,7 @@ powershell -ExecutionPolicy Bypass -File scripts\check-vercel-env.ps1
 หลังจากตั้งค่าและ redeploy แล้ว:
 
 - ✅ เข้าหน้า <https://www.chiangmaiusedcar.com/admin/login> ได้
-- ✅ Login ด้วย username: `kngoodcar`, password: `Kn-goodcar**5277` สำเร็จ
+- ✅ Login ด้วย username: `kngoodcar`, password: `<YOUR_ADMIN_PASSWORD>` สำเร็จ
 - ✅ Redirect ไปหน้า admin dashboard อัตโนมัติ
 - ✅ Session cookie ถูก set ถูกต้อง
 - ✅ Authentication middleware ทำงานปกติ
@@ -172,7 +172,7 @@ vercel --prod
 # Test admin API locally
 curl -X POST http://localhost:3000/api/admin/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"kngoodcar","password":"Kn-goodcar**5277"}' \
+  -d '{"username":"kngoodcar","password":"<YOUR_ADMIN_PASSWORD>"}' \
   -c cookies.txt
 
 curl http://localhost:3000/api/admin/verify \

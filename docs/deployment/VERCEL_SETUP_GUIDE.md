@@ -42,7 +42,7 @@
 
    ```
    Key: ADMIN_PASSWORD
-   Value: Kn-goodcar**5277
+   Value: <YOUR_ADMIN_PASSWORD>
    Environment: Production ✓ Preview ✓
    ```
 
@@ -50,7 +50,7 @@
 
    ```
    Key: SESSION_SECRET
-   Value: KrooNeung_ChiangMai_UsedCar_Development_Session_Secret_2025_Secure_Random_Key
+   Value: <YOUR_SESSION_SECRET>
    Environment: Production ✓ Preview ✓
    ```
 
@@ -67,7 +67,7 @@
 8. **ทดสอบล็อกอิน**
    - ไปที่: https://chiangmaiusedcar.com/admin/login
    - ใช้ username: `kngoodcar`
-   - ใช้ password: `Kn-goodcar**5277`
+   - ใช้ password: `<YOUR_ADMIN_PASSWORD>`
 
 ---
 
@@ -101,12 +101,12 @@
 
    # Password
    vercel env add ADMIN_PASSWORD production
-   # พิมพ์: Kn-goodcar**5277
+   # พิมพ์: <YOUR_ADMIN_PASSWORD>
    # กด Enter
 
    # Session Secret
    vercel env add SESSION_SECRET production
-   # พิมพ์: KrooNeung_ChiangMai_UsedCar_Development_Session_Secret_2025_Secure_Random_Key
+   # พิมพ์: <YOUR_SESSION_SECRET>
    # กด Enter
    ```
 
@@ -192,7 +192,7 @@
 
 - **URL**: https://chiangmaiusedcar.com/admin/login
 - **Username**: `kngoodcar`
-- **Password**: `Kn-goodcar**5277`
+- **Password**: `<YOUR_ADMIN_PASSWORD>`
 
 ---
 

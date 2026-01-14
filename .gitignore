@@ -32,6 +32,9 @@ coverage/
 test-results.xml
 *.log
 
+# ESLint JSON output (generated)
+lint-output.json
+
 # ========================
 # 🛑 Sensitive/Private Files
 # ========================
@@ -47,11 +50,24 @@ test-results.xml
 *.crt
 
 # Temporary credentials (added 2025-10-19)
+!.env.example
+!.env*.example
+!.env.sample
+!.env*.sample
 .tmp_*.txt
 api_key.txt
 *_password*.txt
 *_session*.txt
 *_username*.txt
+
+# ========================
+# 🧪 Local Perf Artifacts
+# ========================
+lighthouse-prod-latest/
+
+# Local image experiments (do not commit)
+public/images/kn1.webp
+public/images/kn2.webp
 
 # ========================
 # 🧪 Firebase (Local)
@@ -153,12 +169,6 @@ lighthouse-summary*.txt
 # ========================
 .auth/
 auth.json
-
-# ========================
-# 🐶 Husky Generated Files
-# ========================
-.husky/pre-commit.js
-.husky/_/
 
 # ========================
 # 📱 Mobile & PWA

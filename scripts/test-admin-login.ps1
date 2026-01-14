@@ -3,10 +3,20 @@
 
 param(
     [string]$Domain = "https://www.chiangmaiusedcar.com",
-    [string]$Username = "kngoodcar",
-    [string]$Password = "Kn-goodcar**5277",
+    [string]$Username = $env:ADMIN_USERNAME,
+    [string]$Password = $env:ADMIN_PASSWORD,
     [string]$BypassToken
 )
+
+if ([string]::IsNullOrWhiteSpace($Username)) {
+    $Username = Read-Host -Prompt 'ADMIN_USERNAME'
+}
+if ([string]::IsNullOrWhiteSpace($Password)) {
+    $secure = Read-Host -Prompt 'ADMIN_PASSWORD' -AsSecureString
+    $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+    try { $Password = [Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr) }
+    finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
+}
 
 Write-Host "`n=== Admin Login Test ===" -ForegroundColor Cyan
 Write-Host "Testing admin authentication flow...`n" -ForegroundColor Gray

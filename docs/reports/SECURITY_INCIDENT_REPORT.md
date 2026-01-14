@@ -19,7 +19,7 @@ sensitive information to unauthorized access.
 
 ```
 File: vercel.json
-Token: bb70cb008199a94b83c98df0e45ada67
+Token: <SHOPIFY_STOREFRONT_TOKEN>
 Domain: kn-goodcar.com
 Risk: HIGH - Can access product data, inventory, customer orders
 ```
@@ -127,7 +127,7 @@ vercel.json (DO NOT IGNORE - just don't put secrets in it)
 ```json
 {
   "env": {
-    "SHOPIFY_STOREFRONT_TOKEN": "bb70cb008199a94b83c98df0e45ada67"
+    "SHOPIFY_STOREFRONT_TOKEN": "<SHOPIFY_STOREFRONT_TOKEN>"
   }
 }
 ```

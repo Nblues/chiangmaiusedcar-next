@@ -33,7 +33,7 @@
 ---
 
 **Key:** `SHOPIFY_STOREFRONT_TOKEN`  
-**Value:** `bb70cb008199a94b83c98df0e45ada67`  
+**Value:** `<SHOPIFY_STOREFRONT_TOKEN>`  
 **Environment:** Production  
 คลิก **Add**
 
@@ -49,7 +49,7 @@
 ---
 
 **Key:** `ADMIN_PASSWORD`  
-**Value:** `Kn-goodcar**5277`  
+**Value:** `<YOUR_ADMIN_PASSWORD>`  
 **Environment:** Production  
 คลิก **Add**
 

@@ -45,11 +45,11 @@ export default class MyDocument extends Document {
           <link
             rel="preload"
             as="image"
-            href="/herobanner/cnxcar-1024w.webp"
+            href="/herobanner/cnxcar-640w.webp"
             type="image/webp"
             {...{ fetchpriority: 'high' }}
-            imageSrcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
-            imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
+            imageSrcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
+            imageSizes="(max-width: 640px) 640px, (max-width: 1024px) 828px, 1400px"
           />
 
           {/* Essential HTML5 Meta Tags for SEO 100/100 */}
@@ -162,8 +162,13 @@ export default class MyDocument extends Document {
           {/* Font preload is handled automatically by Next.js for @fontsource packages */}
           {/* LCP preload has been moved to the top for better browser hint processing */}
 
-          {/* Browser compatibility script - detects FB in-app browser and sets compatibility flags */}
-          <script src="/browser-compat.js" defer></script>
+          {/* Browser compatibility script: only needed inside in-app browsers (FB/IG/Line/Messenger).
+              Avoid running it on normal browsers to reduce long main-thread tasks. */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(){try{var ua=navigator.userAgent||'';if(!/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line/i.test(ua))return;var load=function(){try{var s=document.createElement('script');s.src='/browser-compat.js';s.async=true;document.head.appendChild(s);}catch(e){}};if('requestIdleCallback'in window){window.requestIdleCallback(load,{timeout:2000});}else if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(load,0);},{once:true});}else{setTimeout(load,0);}}catch(e){}})();`,
+            }}
+          />
 
           {/* Facebook Pixel - Lazy loaded via component in _app.jsx for better performance */}
         </Head>

@@ -2,8 +2,13 @@
 // Usage: node dev/scripts/probe-login.mjs [baseUrl]
 
 const baseUrl = process.argv[2] || 'https://www.chiangmaiusedcar.com';
-const username = 'kngoodcar';
-const password = 'Kn-goodcar**5277';
+const username = process.env.ADMIN_USERNAME;
+const password = process.env.ADMIN_PASSWORD;
+
+if (!username || !password) {
+  console.error('Missing ADMIN_USERNAME/ADMIN_PASSWORD. Set them as environment variables before running this script.');
+  process.exit(1);
+}
 
 async function postJson(url, body) {
   const res = await fetch(url, {

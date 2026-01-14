@@ -38,7 +38,7 @@ kngoodcar
 
 ```env
 ADMIN_PASSWORD
-Kn-goodcar**5277
+<YOUR_ADMIN_PASSWORD>
 ```
 
 ```env
@@ -57,12 +57,12 @@ cron-backup-secret-key-2025-production
 
 ```env
 SHOPIFY_DOMAIN
-kn-goodcar.myshopify.com
+kn-goodcar.com
 ```
 
 ```env
 SHOPIFY_STOREFRONT_TOKEN
-bb70cb008199a94b83c98df0e45ada67
+<SHOPIFY_STOREFRONT_TOKEN>
 ```
 
 ```env
@@ -203,7 +203,7 @@ https://www.chiangmaiusedcar.com/admin/login
 
 ```
 Username: kngoodcar
-Password: Kn-goodcar**5277
+Password: <YOUR_ADMIN_PASSWORD>
 ```
 
 ---
@@ -273,7 +273,7 @@ Settings > Environment Variables
 - [ ] รอ deployment เสร็จ (2-3 นาที)
 - [ ] ทดสอบ login ที่ www.chiangmaiusedcar.com/admin/login
 - [ ] ใช้ username: kngoodcar
-- [ ] ใช้ password: Kn-goodcar\*\*5277
+- [ ] ใช้ password: <YOUR_ADMIN_PASSWORD>
 
 ---
 

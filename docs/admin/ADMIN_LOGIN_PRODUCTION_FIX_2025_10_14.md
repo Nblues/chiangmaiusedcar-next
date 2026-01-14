@@ -34,7 +34,7 @@ vercel ls --prod
 ```bash
 curl -X POST https://www.chiangmaiusedcar.com/api/admin/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"kngoodcar","password":"Kn-goodcar**5277"}'
+  -d '{"username":"kngoodcar","password":"<YOUR_ADMIN_PASSWORD>"}'
 ```
 
 **ผลลัพธ์**: ❌ **500 Internal Server Error**
@@ -77,7 +77,7 @@ vercel --prod --force
 # 3. ทดสอบ
 curl -X POST https://www.chiangmaiusedcar.com/api/admin/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"kngoodcar","password":"Kn-goodcar**5277"}'
+  -d '{"username":"kngoodcar","password":"<YOUR_ADMIN_PASSWORD>"}'
 ```
 
 ### Option 2: Redeploy ผ่าน Git
@@ -143,7 +143,7 @@ curl https://www.chiangmaiusedcar.com/api/test-env
 ```bash
 curl -X POST https://www.chiangmaiusedcar.com/api/admin/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"kngoodcar","password":"Kn-goodcar**5277"}' \
+  -d '{"username":"kngoodcar","password":"<YOUR_ADMIN_PASSWORD>"}' \
   -i
 ```
 
@@ -162,7 +162,9 @@ Set-Cookie: csrfToken=...
 1. เปิด <https://www.chiangmaiusedcar.com/admin/login>
 2. กรอก:
    - Username: `kngoodcar`
-   - Password: `Kn-goodcar**5277`
+
+- Password: `<YOUR_ADMIN_PASSWORD>`
+
 3. คลิก "เข้าสู่ระบบ"
 4. ควร redirect ไป `/admin/dashboard`
 
@@ -222,7 +224,7 @@ curl https://www.chiangmaiusedcar.com/api/test-env
 # ทดสอบ login
 curl -X POST https://www.chiangmaiusedcar.com/api/admin/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"kngoodcar","password":"Kn-goodcar**5277"}'
+  -d '{"username":"kngoodcar","password":"<YOUR_ADMIN_PASSWORD>"}'
 ```
 
 ---
@@ -289,11 +291,11 @@ curl https://www.chiangmaiusedcar.com/api/test-env
 # 4. ทดสอบ login
 curl -X POST https://www.chiangmaiusedcar.com/api/admin/login \
   -H "Content-Type: application/json" \
-  -d '{"username":"kngoodcar","password":"Kn-goodcar**5277"}'
+  -d '{"username":"kngoodcar","password":"<YOUR_ADMIN_PASSWORD>"}'
 
 # 5. เปิด browser
 # https://www.chiangmaiusedcar.com/admin/login
-# Login: kngoodcar / Kn-goodcar**5277
+# Login: kngoodcar / <YOUR_ADMIN_PASSWORD>
 ```
 
 ---

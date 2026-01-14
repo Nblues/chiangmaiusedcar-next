@@ -3,6 +3,28 @@
 
 Write-Host "`n=== Adding All Environment Variables ===" -ForegroundColor Cyan
 
+function Get-OrPrompt([string]$Name, [string]$Prompt) {
+    $val = [Environment]::GetEnvironmentVariable($Name)
+    if (-not [string]::IsNullOrWhiteSpace($val)) { return $val }
+    return (Read-Host -Prompt $Prompt)
+}
+
+function Get-OrPromptSecret([string]$Name, [string]$Prompt) {
+    $val = [Environment]::GetEnvironmentVariable($Name)
+    if (-not [string]::IsNullOrWhiteSpace($val)) { return $val }
+    $secure = Read-Host -Prompt $Prompt -AsSecureString
+    $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+    try { return [Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr) }
+    finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
+}
+
+$adminUser = Get-OrPrompt -Name 'ADMIN_USERNAME' -Prompt 'ADMIN_USERNAME (non-sensitive)'
+$adminPass = Get-OrPromptSecret -Name 'ADMIN_PASSWORD' -Prompt 'ADMIN_PASSWORD (sensitive)'
+$sessionSecret = $env:SESSION_SECRET
+if ([string]::IsNullOrWhiteSpace($sessionSecret)) {
+    $sessionSecret = Get-OrPromptSecret -Name 'SESSION_SECRET' -Prompt 'SESSION_SECRET (sensitive, random 32+ chars)'
+}
+
 # Clean slate - remove all first
 Write-Host "`nStep 1: Removing old variables (if any)..." -ForegroundColor Yellow
 Write-Output "y" | vercel env rm ADMIN_USERNAME production 2>&1 | Out-Null
@@ -17,7 +39,7 @@ Write-Host "Step 2: Adding new variables (clean, no line endings)..." -Foregroun
 # ADMIN_USERNAME
 Write-Host "  Adding ADMIN_USERNAME..." -ForegroundColor Gray
 $tempUser = [System.IO.Path]::GetTempFileName()
-[System.IO.File]::WriteAllText($tempUser, "kngoodcar", [System.Text.UTF8Encoding]::new($false))
+[System.IO.File]::WriteAllText($tempUser, $adminUser, [System.Text.UTF8Encoding]::new($false))
 Get-Content $tempUser -Raw | vercel env add ADMIN_USERNAME production 2>&1 | Out-Null
 Remove-Item $tempUser -Force
 Write-Host "  [OK] ADMIN_USERNAME added" -ForegroundColor Green
@@ -25,15 +47,15 @@ Write-Host "  [OK] ADMIN_USERNAME added" -ForegroundColor Green
 # ADMIN_PASSWORD  
 Write-Host "  Adding ADMIN_PASSWORD..." -ForegroundColor Gray
 $tempPass = [System.IO.Path]::GetTempFileName()
-[System.IO.File]::WriteAllText($tempPass, "Kn-goodcar**5277", [System.Text.UTF8Encoding]::new($false))
+[System.IO.File]::WriteAllText($tempPass, $adminPass, [System.Text.UTF8Encoding]::new($false))
 Get-Content $tempPass -Raw | vercel env add ADMIN_PASSWORD production 2>&1 | Out-Null
 Remove-Item $tempPass -Force
 Write-Host "  [OK] ADMIN_PASSWORD added" -ForegroundColor Green
 
-# SESSION_SECRET (64-char hex)
+# SESSION_SECRET
 Write-Host "  Adding SESSION_SECRET..." -ForegroundColor Gray
 $tempSecret = [System.IO.Path]::GetTempFileName()
-[System.IO.File]::WriteAllText($tempSecret, "f3a7b8c2e4d5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2", [System.Text.UTF8Encoding]::new($false))
+[System.IO.File]::WriteAllText($tempSecret, $sessionSecret, [System.Text.UTF8Encoding]::new($false))
 Get-Content $tempSecret -Raw | vercel env add SESSION_SECRET production 2>&1 | Out-Null
 Remove-Item $tempSecret -Force
 Write-Host "  [OK] SESSION_SECRET added`n" -ForegroundColor Green

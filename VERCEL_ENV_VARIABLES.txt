@@ -6,7 +6,7 @@
 
 # 🛒 Shopify Configuration
 SHOPIFY_DOMAIN=kn-goodcar.com
-SHOPIFY_STOREFRONT_TOKEN=bb70cb008199a94b83c98df0e45ada67
+SHOPIFY_STOREFRONT_TOKEN=
 
 #  EmailJS Configuration
 NEXT_PUBLIC_EMAILJS_SERVICE_ID=service_qlcksif
@@ -18,7 +18,20 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=
 RECAPTCHA_SECRET_KEY=
 
 # 🌐 Site Configuration
-SITE_URL=https://chiangmaiusedcar.com
+SITE_URL=https://www.chiangmaiusedcar.com
+NEXT_PUBLIC_SITE_URL=https://www.chiangmaiusedcar.com
+
+# 🔐 Admin (Required for /admin)
+ADMIN_USERNAME=
+ADMIN_PASSWORD=
+SESSION_SECRET=
+
+# 🧰 Vercel KV / Upstash (Optional)
+ENABLE_KV_IN_DEV=0
+KV_STATUS_MAP_CACHE_TTL_MS=30000
+# KV_REST_API_URL=
+# KV_REST_API_TOKEN=
+# KV_URL=
 
 # ===================================================
 # 📋 DEPLOYMENT CHECKLIST

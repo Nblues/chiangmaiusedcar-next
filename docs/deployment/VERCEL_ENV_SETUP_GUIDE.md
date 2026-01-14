@@ -29,7 +29,7 @@ URL: https://vercel.com/dashboard
 
 ```
 Key: ADMIN_USERNAME
-Value: kngoodcar
+Value: <YOUR_ADMIN_USERNAME>
 Environment: Production, Preview, Development (เลือกทั้ง 3)
 ```
 
@@ -37,7 +37,7 @@ Environment: Production, Preview, Development (เลือกทั้ง 3)
 
 ```
 Key: ADMIN_PASSWORD
-Value: Kn-goodcar**5277
+Value: <YOUR_ADMIN_PASSWORD>
 Environment: Production, Preview, Development (เลือกทั้ง 3)
 ```
 
@@ -45,7 +45,7 @@ Environment: Production, Preview, Development (เลือกทั้ง 3)
 
 ```
 Key: SESSION_SECRET
-Value: f84a65d8b96928512fc7938a14c15c72d5a23689354a2fbc8312c102d1d10f33
+Value: <RANDOM_32+_CHARS>
 Environment: Production, Preview, Development (เลือกทั้ง 3)
 ```
 
@@ -82,7 +82,7 @@ Cars: https://www.chiangmaiusedcar.com/admin/cars
 
 ```
 Username: kngoodcar
-Password: Kn-goodcar**5277
+Password: <YOUR_ADMIN_PASSWORD>
 ```
 
 ---
@@ -153,8 +153,8 @@ fetch('https://www.chiangmaiusedcar.com/api/admin/verify', {
 ```env
 # Admin Authentication
 ADMIN_USERNAME=kngoodcar
-ADMIN_PASSWORD=Kn-goodcar**5277
-SESSION_SECRET=your-secret-key-here-please-change-in-production
+ADMIN_PASSWORD=<YOUR_ADMIN_PASSWORD>
+SESSION_SECRET=<YOUR_SESSION_SECRET>
 
 # Shopify
 SHOPIFY_DOMAIN=kn-goodcar.myshopify.com
@@ -176,14 +176,14 @@ RECAPTCHA_SECRET_KEY=xxx
 
 - [ ] เข้า Vercel Dashboard
 - [ ] เพิ่ม ADMIN_USERNAME = kngoodcar
-- [ ] เพิ่ม ADMIN_PASSWORD = Kn-goodcar\*\*5277
+- [ ] เพิ่ม ADMIN_PASSWORD = <YOUR_ADMIN_PASSWORD>
 - [ ] เพิ่ม SESSION_SECRET (ใช้ค่าที่สร้างไว้)
 - [ ] เลือก Environment = Production, Preview, Development ทั้ง 3 ตัว
 - [ ] บันทึก (Save)
 - [ ] Redeploy production
 - [ ] รอ 2-3 นาที
 - [ ] ทดสอบเข้า https://www.chiangmaiusedcar.com/admin/login
-- [ ] Login ด้วย kngoodcar / Kn-goodcar\*\*5277
+- [ ] Login ด้วย kngoodcar / <YOUR_ADMIN_PASSWORD>
 - [ ] ตรวจสอบว่าเข้า Dashboard ได้
 
 ---

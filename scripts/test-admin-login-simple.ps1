@@ -8,8 +8,18 @@ param(
 $ErrorActionPreference = "Stop"
 
 # Credentials
-$username = "kngoodcar"
-$password = "Kn-goodcar**5277"
+$username = $env:ADMIN_USERNAME
+$password = $env:ADMIN_PASSWORD
+
+if ([string]::IsNullOrWhiteSpace($username)) {
+    $username = Read-Host -Prompt 'ADMIN_USERNAME'
+}
+if ([string]::IsNullOrWhiteSpace($password)) {
+    $secure = Read-Host -Prompt 'ADMIN_PASSWORD' -AsSecureString
+    $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+    try { $password = [Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr) }
+    finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
+}
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan

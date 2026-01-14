@@ -1,32 +1,36 @@
 # 🚨 VERCEL ENV VARIABLES - ต้องตั้งค่าก่อน Deploy
 
-## ❌ ปัญหา
+## ✅ แนวทางมาตรฐานสากล (Security)
 
-Admin login ไม่ทำงานบน production เพราะยังไม่มี environment variables
+- ห้ามใส่รหัสผ่าน/โทเคนจริงลงในไฟล์ใน repo
+- ตั้งค่า env ผ่าน Vercel Dashboard หรือสคริปต์ที่ prompt รับค่า (ซ่อนไว้)
+- ถ้าเคยแชร์/commit secret ไปแล้ว ให้ rotate ค่าทันที
 
-## ✅ แก้ไข (5 นาที)
+## ✅ ตั้งค่าที่ Vercel (5 นาที)
 
-### 1. เข้า Vercel
+### 1) เข้า Vercel
+https://vercel.com/dashboard → Project → Settings → Environment Variables
 
-<https://vercel.com/dashboard> → โปรเจค → Settings → Environment Variables
-
-### 2. เพิ่ม 3 ตัวนี้
+### 2) เพิ่มตัวแปรขั้นต่ำสำหรับ admin
 
 | Name | Value | Environments |
 |------|-------|--------------|
-| `ADMIN_USERNAME` | `kngoodcar` | ✅ All (Prod+Preview+Dev) |
-| `ADMIN_PASSWORD` | `Kn-goodcar**5277` | ✅ All (Prod+Preview+Dev) |
-| `SESSION_SECRET` | `f84a65d8b96928512fc7938a14c15c72d5a23689354a2fbc8312c102d1d10f33` | ✅ All (Prod+Preview+Dev) |
+| `ADMIN_USERNAME` | (your username) | ✅ All (Prod+Preview+Dev) |
+| `ADMIN_PASSWORD` | (strong password) | ✅ All (Prod+Preview+Dev) |
+| `SESSION_SECRET` | (random 32+ chars) | ✅ All (Prod+Preview+Dev) |
 
-### 3. Redeploy
+แนะนำสร้าง `SESSION_SECRET` ด้วย OpenSSL:
+- `openssl rand -hex 32`
+
+### 3) Redeploy
 
 Deployments → latest → ⋮ → Redeploy (ไม่ใช้ cache)
 
-### 4. Test
+### 4) Test
 
-<https://www.chiangmaiusedcar.com/admin/login>
+https://www.chiangmaiusedcar.com/admin/login
 
 ---
 
-📖 **Full guide**: `VERCEL_ENV_QUICK_SETUP.md`  
-🔍 **Check status**: `node scripts/check-vercel-env.mjs`
+📄 ตัวอย่างค่าที่ใช้ในเครื่อง local ดูได้ที่ `.env.example`
+🔍 Check status: `node scripts/check-vercel-env.mjs`

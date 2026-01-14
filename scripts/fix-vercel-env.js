@@ -17,10 +17,17 @@ const envVars = [
   },
   {
     key: 'SHOPIFY_STOREFRONT_TOKEN',
-    value: 'bb70cb008199a94b83c98df0e45ada67',
+    value: process.env.SHOPIFY_STOREFRONT_TOKEN,
     description: 'Shopify Storefront API access token',
   },
 ];
+
+if (!process.env.SHOPIFY_STOREFRONT_TOKEN) {
+  console.error(
+    'Missing SHOPIFY_STOREFRONT_TOKEN. Set it as an environment variable before running this script.'
+  );
+  process.exit(1);
+}
 
 try {
   // Process environment variables
@@ -37,7 +44,7 @@ try {
     try {
       // Note: This requires manual input in terminal
       // ...existing code...
-    } catch (error) {
+    } catch {
       // ...existing code...
     }
   }

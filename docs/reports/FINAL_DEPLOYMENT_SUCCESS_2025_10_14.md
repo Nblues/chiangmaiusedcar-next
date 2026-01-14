@@ -9,11 +9,11 @@
 
 ### 1. ✅ ตั้งค่า Environment Variables บน Vercel
 
-| Variable         | Value                                 | Status                 |
-| ---------------- | ------------------------------------- | ---------------------- |
-| `ADMIN_USERNAME` | `kngoodcar`                           | ✅ ทั้ง 3 environments |
-| `ADMIN_PASSWORD` | `Kn-goodcar**5277`                    | ✅ ทั้ง 3 environments |
-| `SESSION_SECRET` | `f84a65d8b96928512fc7938a14c15c72...` | ✅ 64 chars (secure)   |
+| Variable         | Value                   | Status                 |
+| ---------------- | ----------------------- | ---------------------- |
+| `ADMIN_USERNAME` | `kngoodcar`             | ✅ ทั้ง 3 environments |
+| `ADMIN_PASSWORD` | `<YOUR_ADMIN_PASSWORD>` | ✅ ทั้ง 3 environments |
+| `SESSION_SECRET` | `<YOUR_SESSION_SECRET>` | ✅ 64 chars (secure)   |
 
 **วิธีการ**: รันสคริปต์ `setup-vercel-env.bat` สำเร็จ
 
@@ -91,7 +91,7 @@
 
 ```text
 Username: kngoodcar
-Password: Kn-goodcar**5277
+Password: <YOUR_ADMIN_PASSWORD>
 ```
 
 **คาดหวัง**: Redirect ไป `/admin/dashboard` อัตโนมัติ

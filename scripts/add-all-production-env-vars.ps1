@@ -28,13 +28,37 @@ Write-Host "Project: chiangmaiusedcar-next" -ForegroundColor Gray
 Write-Host "Project ID: $ProjectId" -ForegroundColor Gray
 Write-Host ""
 
+function Get-OrPrompt([string]$Name, [string]$Prompt) {
+    $val = [Environment]::GetEnvironmentVariable($Name)
+    if (-not [string]::IsNullOrWhiteSpace($val)) { return $val }
+    return (Read-Host -Prompt $Prompt)
+}
+
+function Get-OrPromptSecret([string]$Name, [string]$Prompt) {
+    $val = [Environment]::GetEnvironmentVariable($Name)
+    if (-not [string]::IsNullOrWhiteSpace($val)) { return $val }
+    $secure = Read-Host -Prompt $Prompt -AsSecureString
+    $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+    try { return [Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr) }
+    finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
+}
+
+$shopifyStorefrontToken = Get-OrPromptSecret -Name 'SHOPIFY_STOREFRONT_TOKEN' -Prompt 'SHOPIFY_STOREFRONT_TOKEN (sensitive)'
+$adminUsername = Get-OrPrompt -Name 'ADMIN_USERNAME' -Prompt 'ADMIN_USERNAME (non-sensitive)'
+$adminPassword = Get-OrPromptSecret -Name 'ADMIN_PASSWORD' -Prompt 'ADMIN_PASSWORD (sensitive)'
+
+$sessionSecret = $env:SESSION_SECRET
+if ([string]::IsNullOrWhiteSpace($sessionSecret)) {
+    $sessionSecret = "production-secret-$(Get-Random)-$(Get-Date -Format 'yyyyMMddHHmmss')-chiangmai-usedcar"
+}
+
 # Environment variables to add
 $envVars = @(
     @{ Key = "SHOPIFY_DOMAIN"; Value = "kn-goodcar.com" },
-    @{ Key = "SHOPIFY_STOREFRONT_TOKEN"; Value = "bb70cb008199a94b83c98df0e45ada67" },
-    @{ Key = "ADMIN_USERNAME"; Value = "kngoodcar" },
-    @{ Key = "ADMIN_PASSWORD"; Value = "Kn-goodcar**5277" },
-    @{ Key = "SESSION_SECRET"; Value = "production-secret-$(Get-Random)-$(Get-Date -Format 'yyyyMMddHHmmss')-chiangmai-usedcar" },
+    @{ Key = "SHOPIFY_STOREFRONT_TOKEN"; Value = $shopifyStorefrontToken },
+    @{ Key = "ADMIN_USERNAME"; Value = $adminUsername },
+    @{ Key = "ADMIN_PASSWORD"; Value = $adminPassword },
+    @{ Key = "SESSION_SECRET"; Value = $sessionSecret },
     @{ Key = "SITE_URL"; Value = "https://www.chiangmaiusedcar.com" },
     @{ Key = "NEXT_PUBLIC_SITE_URL"; Value = "https://www.chiangmaiusedcar.com" },
     @{ Key = "NEXT_PUBLIC_EMAILJS_SERVICE_ID"; Value = "service_qlcksif" },

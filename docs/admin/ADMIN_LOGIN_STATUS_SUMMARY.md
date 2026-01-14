@@ -7,7 +7,7 @@
 ### 1. Environment Variables (100% เสร็จ)
 
 - ✅ เพิ่ม `ADMIN_USERNAME` = `kngoodcar`
-- ✅ เพิ่ม `ADMIN_PASSWORD` = `Kn-goodcar**5277`
+- ✅ เพิ่ม `ADMIN_PASSWORD` = `<YOUR_ADMIN_PASSWORD>`
 - ✅ เพิ่ม `SESSION_SECRET` (64-character hex)
 - ✅ แก้ไขปัญหา `\r\n` line endings (ใช้สคริปต์ PowerShell แบบ UTF8 no BOM)
 - ✅ ตรวจสอบแล้วว่าไม่มี line endings เพิ่ม (verified)
@@ -124,7 +124,7 @@ Deployment Protection: DISABLED (correct)
 1. เปิด: https://www.chiangmaiusedcar.com/admin/login
 2. กรอก:
    - Username: `kngoodcar`
-   - Password: `Kn-goodcar**5277`
+   - Password: `<YOUR_ADMIN_PASSWORD>`
 3. กด Login
 4. ควรเข้าสู่หน้า Admin Dashboard
 

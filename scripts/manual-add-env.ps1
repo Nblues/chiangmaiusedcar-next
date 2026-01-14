@@ -4,10 +4,26 @@
 Write-Host "`n=== Manual Vercel Environment Variable Setup ===" -ForegroundColor Cyan
 Write-Host "Using temp files to avoid line ending issues`n" -ForegroundColor Yellow
 
-# Values (trim any whitespace)
-$username = "kngoodcar"
-$password = "Kn-goodcar**5277"  
-$secret = "f84a65d8b96928512fc7938a14c15c72d5a23689354a2fbc8312c102d1d10f33"
+# Values (read from env or prompt; avoid hardcoding secrets)
+$username = $env:ADMIN_USERNAME
+$password = $env:ADMIN_PASSWORD
+$secret = $env:SESSION_SECRET
+
+if ([string]::IsNullOrWhiteSpace($username)) {
+	$username = Read-Host -Prompt 'ADMIN_USERNAME (non-sensitive)'
+}
+if ([string]::IsNullOrWhiteSpace($password)) {
+	$secure = Read-Host -Prompt 'ADMIN_PASSWORD (sensitive)' -AsSecureString
+	$bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+	try { $password = [Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr) }
+	finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
+}
+if ([string]::IsNullOrWhiteSpace($secret)) {
+	$secure = Read-Host -Prompt 'SESSION_SECRET (sensitive, random 32+ chars)' -AsSecureString
+	$bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+	try { $secret = [Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr) }
+	finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
+}
 
 # Create temp files with UTF8 no BOM
 $tempDir = $env:TEMP

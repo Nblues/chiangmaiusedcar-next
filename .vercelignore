@@ -1,28 +1,29 @@
 # Development tools - ไม่ deploy
-
-/dev-tools
+dev-tools/
 
 # Documentation files
-
-\*.md
+*.md
 !README.md
 
 # Test files
+**/*.test.*
+**/*.spec.*
 
-**/_.test._
-**/_.spec._
+# Local environment (never deploy)
+.env*
 
-# Local environment
-
-.env.local
-.env\*.local
+# Logs
+*.log
 
 # IDE
-
-.vscode
-.idea
+.vscode/
+.idea/
 
 # Git
-
-.git
+.git/
 .gitignore
+.gitattributes
+
+# Local performance artifacts
+lighthouse-prod-latest/
+lighthouse-*.json

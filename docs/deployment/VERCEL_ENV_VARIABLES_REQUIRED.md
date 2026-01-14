@@ -29,7 +29,7 @@
 
 ```text
 Name:        ADMIN_USERNAME
-Value:       kngoodcar
+Value:       <YOUR_ADMIN_USERNAME>
 Environment: ✅ Production  ✅ Preview  ✅ Development (เลือกทั้ง 3)
 ```
 
@@ -37,7 +37,7 @@ Environment: ✅ Production  ✅ Preview  ✅ Development (เลือกทั
 
 ```text
 Name:        ADMIN_PASSWORD
-Value:       Kn-goodcar**5277
+Value:       <YOUR_ADMIN_PASSWORD>
 Environment: ✅ Production  ✅ Preview  ✅ Development (เลือกทั้ง 3)
 ```
 
@@ -45,7 +45,7 @@ Environment: ✅ Production  ✅ Preview  ✅ Development (เลือกทั
 
 ```text
 Name:        SESSION_SECRET
-Value:       f84a65d8b96928512fc7938a14c15c72d5a23689354a2fbc8312c102d1d10f33
+Value:       <RANDOM_32+_CHARS>
 Environment: ✅ Production  ✅ Preview  ✅ Development (เลือกทั้ง 3)
 ```
 
@@ -92,8 +92,8 @@ Articles:  https://www.chiangmaiusedcar.com/admin/articles
 ### ข้อมูลเข้าสู่ระบบ
 
 ```text
-👤 Username: kngoodcar
-🔑 Password: Kn-goodcar**5277
+👤 Username: <YOUR_ADMIN_USERNAME>
+🔑 Password: <YOUR_ADMIN_PASSWORD>
 ```
 
 ---
@@ -106,8 +106,8 @@ Articles:  https://www.chiangmaiusedcar.com/admin/articles
 
 ```text
 ✅ ADMIN_USERNAME        = kngoodcar
-✅ ADMIN_PASSWORD        = Kn-goodcar**5277
-✅ SESSION_SECRET        = f84a65d8b96928512fc7938a14c15c72...
+✅ ADMIN_PASSWORD        = <YOUR_ADMIN_PASSWORD>
+✅ SESSION_SECRET        = <RANDOM_32+_CHARS>
 ```
 
 ### 2. ตรวจสอบ Deployment Status
@@ -183,14 +183,14 @@ fetch('https://www.chiangmaiusedcar.com/api/admin/verify', {
 
 - [ ] 1. เข้า Vercel Dashboard → Settings → Environment Variables
 - [ ] 2. เพิ่ม `ADMIN_USERNAME` = `kngoodcar`
-- [ ] 3. เพิ่ม `ADMIN_PASSWORD` = `Kn-goodcar**5277`
-- [ ] 4. เพิ่ม `SESSION_SECRET` = `f84a65d8b96928512fc7938a14c15c72d5a23689354a2fbc8312c102d1d10f33`
+- [ ] 3. เพิ่ม `ADMIN_PASSWORD` = `<YOUR_ADMIN_PASSWORD>`
+- [ ] 4. เพิ่ม `SESSION_SECRET` = `<YOUR_SESSION_SECRET>`
 - [ ] 5. เลือก Environment = Production, Preview, Development ทั้ง 3 ตัว
 - [ ] 6. คลิก Save เพื่อบันทึก
 - [ ] 7. Redeploy production (ไม่ใช้ cache)
 - [ ] 8. รอ deployment เสร็จ (2-3 นาที)
 - [ ] 9. เข้า <https://www.chiangmaiusedcar.com/admin/login>
-- [ ] 10. Login ด้วย kngoodcar / Kn-goodcar\*\*5277
+- [ ] 10. Login ด้วย kngoodcar / <YOUR_ADMIN_PASSWORD>
 - [ ] 11. ตรวจสอบว่าเข้า Dashboard ได้และแสดงข้อมูลถูกต้อง
 
 ---

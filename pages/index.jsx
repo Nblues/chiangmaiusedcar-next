@@ -38,7 +38,8 @@ function getPriceInfo(amount) {
     return {
       valid,
       numeric: valid ? String(num) : undefined,
-      display: valid ? num.toLocaleString() : 'ติดต่อสอบถาม',
+      // Specify locale to keep SSR/CSR consistent and avoid hydration churn
+      display: valid ? num.toLocaleString('th-TH') : 'ติดต่อสอบถาม',
     };
   } catch {
     return {
@@ -78,7 +79,6 @@ export default function Home({ cars, brandCounts }) {
   );
   // Facebook reviews: render only client
   const [showFbReviews, setShowFbReviews] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [liveStatuses, setLiveStatuses] = useState(null);
 
   // Search state
@@ -127,8 +127,6 @@ export default function Home({ cars, brandCounts }) {
 
   // Optimize heavy functions with useCallback
   const handleSearch = useCallback(() => {
-    if (!mounted) return;
-
     const params = new URLSearchParams();
     const term = (searchTerm || '').trim().slice(0, 120);
     if (term) params.set('search', term);
@@ -138,14 +136,11 @@ export default function Home({ cars, brandCounts }) {
     const queryString = params.toString();
     const url = queryString ? `/all-cars?${queryString}` : '/all-cars';
     router.push(url);
-  }, [mounted, searchTerm, priceRange, brandFilter, router]);
+  }, [searchTerm, priceRange, brandFilter, router]);
 
   // Optimize useEffect - reduce blocking time with caching
   useEffect(() => {
-    setMounted(true);
-
-    // Fetch live statuses after mount (and when IDs change) to reflect toggles immediately
-    (async () => {
+    const fetchStatuses = async () => {
       try {
         if (!ids || ids.length === 0) return;
 
@@ -171,7 +166,7 @@ export default function Home({ cars, brandCounts }) {
       } catch {
         // ignore
       }
-    })();
+    };
 
     // Re-fetch when returning to the tab to keep status fresh (debounced)
     let removeVis;
@@ -211,33 +206,63 @@ export default function Home({ cars, brandCounts }) {
       removeVis = () => document.removeEventListener('visibilitychange', debouncedFetch);
     }
 
-    // Use requestIdleCallback for non-critical tasks
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      const idleCallback = window.requestIdleCallback(
-        () => {
-          setShowFbReviews(true);
-        },
-        { timeout: 2000 }
-      );
+    // Defer live status fetch until *after* initial render/LCP window.
+    // This helps reduce Lighthouse TBT variance while keeping UI/SEO unchanged.
+    let timer;
+    let idleCallback;
+    if (typeof window !== 'undefined') {
+      timer = window.setTimeout(() => {
+        if ('requestIdleCallback' in window) {
+          idleCallback = window.requestIdleCallback(() => {
+            fetchStatuses();
+          });
+        } else {
+          fetchStatuses();
+        }
+      }, 5500);
+    }
 
-      return () => {
-        if (removeVis) removeVis();
-        if (window.cancelIdleCallback) {
+    return () => {
+      if (removeVis) removeVis();
+      if (typeof window !== 'undefined') {
+        if (timer) window.clearTimeout(timer);
+        if (idleCallback && 'cancelIdleCallback' in window) {
           window.cancelIdleCallback(idleCallback);
         }
-      };
-    } else {
-      // Fallback for browsers without requestIdleCallback
-      const timer = setTimeout(() => {
-        setShowFbReviews(true);
-      }, 2000);
-
-      return () => {
-        if (removeVis) removeVis();
-        clearTimeout(timer);
-      };
-    }
+      }
+    };
   }, [ids]);
+
+  // Load Facebook reviews only when the user is near that section.
+  // This avoids loading a heavy client-only chunk during the initial render (helps LCP).
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (showFbReviews) return;
+
+    const anchor = document.getElementById('fb-reviews-anchor');
+    if (!anchor) {
+      const t = window.setTimeout(() => setShowFbReviews(true), 8000);
+      return () => window.clearTimeout(t);
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      setShowFbReviews(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries.some(e => e.isIntersecting)) {
+          setShowFbReviews(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px 0px' }
+    );
+
+    observer.observe(anchor);
+    return () => observer.disconnect();
+  }, [showFbReviews]);
 
   // Memoize heavy JSON-LD to prevent re-creation on every render
 
@@ -373,8 +398,8 @@ export default function Home({ cars, brandCounts }) {
           <picture>
             <source
               type="image/webp"
-              srcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
+              srcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
+              sizes="(max-width: 640px) 640px, (max-width: 1024px) 828px, 1400px"
             />
             <img
               src="/herobanner/cnxcar-1400w.webp"
@@ -418,6 +443,7 @@ export default function Home({ cars, brandCounts }) {
             </a>
             <Link
               href="/all-cars"
+              prefetch={false}
               className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
             >
               ดูรถทั้งหมด
@@ -457,30 +483,35 @@ export default function Home({ cars, brandCounts }) {
                 <strong className="text-gray-900">เรามีรถยี่ห้อดังให้เลือกมากมาย</strong>{' '}
                 <Link
                   href="/all-cars?brand=toyota"
+                  prefetch={false}
                   className="text-primary hover:underline font-medium"
                 >
                   Toyota
                 </Link>{' '}
                 <Link
                   href="/all-cars?brand=honda"
+                  prefetch={false}
                   className="text-primary hover:underline font-medium"
                 >
                   Honda
                 </Link>{' '}
                 <Link
                   href="/all-cars?brand=nissan"
+                  prefetch={false}
                   className="text-primary hover:underline font-medium"
                 >
                   Nissan
                 </Link>{' '}
                 <Link
                   href="/all-cars?brand=mazda"
+                  prefetch={false}
                   className="text-primary hover:underline font-medium"
                 >
                   Mazda
                 </Link>{' '}
                 <Link
                   href="/all-cars?brand=isuzu"
+                  prefetch={false}
                   className="text-primary hover:underline font-medium"
                 >
                   Isuzu
@@ -488,17 +519,23 @@ export default function Home({ cars, brandCounts }) {
                 ทั้ง
                 <Link
                   href="/all-cars?type=เก๋ง"
+                  prefetch={false}
                   className="text-accent hover:underline font-medium"
                 >
                   รถเก๋ง
                 </Link>{' '}
                 <Link
                   href="/all-cars?type=กระบะ"
+                  prefetch={false}
                   className="text-accent hover:underline font-medium"
                 >
                   รถกระบะ
                 </Link>{' '}
-                <Link href="/all-cars?type=SUV" className="text-accent hover:underline font-medium">
+                <Link
+                  href="/all-cars?type=SUV"
+                  prefetch={false}
+                  className="text-accent hover:underline font-medium"
+                >
                   รถ SUV
                 </Link>{' '}
                 และรถครอบครัว 7 ที่นั่ง พร้อม
@@ -632,6 +669,7 @@ export default function Home({ cars, brandCounts }) {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
                 <Link
                   href="/all-cars?price=0-100000"
+                  prefetch={false}
                   className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   <div className="font-bold text-sm text-primary group-hover:text-white">
@@ -643,6 +681,7 @@ export default function Home({ cars, brandCounts }) {
                 </Link>
                 <Link
                   href="/all-cars?price=100000-200000"
+                  prefetch={false}
                   className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   <div className="font-bold text-sm text-primary group-hover:text-white">
@@ -654,6 +693,7 @@ export default function Home({ cars, brandCounts }) {
                 </Link>
                 <Link
                   href="/all-cars?price=200000-300000"
+                  prefetch={false}
                   className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   <div className="font-bold text-sm text-primary group-hover:text-white">
@@ -665,6 +705,7 @@ export default function Home({ cars, brandCounts }) {
                 </Link>
                 <Link
                   href="/all-cars?price=400000-500000"
+                  prefetch={false}
                   className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   <div className="font-bold text-sm text-primary group-hover:text-white">
@@ -676,6 +717,7 @@ export default function Home({ cars, brandCounts }) {
                 </Link>
                 <Link
                   href="/all-cars?price=600000-700000"
+                  prefetch={false}
                   className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   <div className="font-bold text-sm text-primary group-hover:text-white">
@@ -687,6 +729,7 @@ export default function Home({ cars, brandCounts }) {
                 </Link>
                 <Link
                   href="/all-cars?price=700000"
+                  prefetch={false}
                   className="group text-center p-3 bg-white border-2 border-accent rounded-xl hover:bg-accent hover:border-accent transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   <div className="font-bold text-sm text-orange-700 group-hover:text-white">
@@ -715,30 +758,9 @@ export default function Home({ cars, brandCounts }) {
         <section
           aria-label="รถเข้าใหม่แนะนำวันนี้"
           className="grid gap-2 md:gap-6 grid-cols-2 md:grid-cols-4"
+          style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 1200px' }}
         >
-          {!mounted ? (
-            // Loading state ระหว่างรอ hydration - Skeleton Cards
-            Array.from({ length: 8 }).map((_, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl md:rounded-3xl shadow-lg overflow-hidden border-2 border-gray-200 animate-pulse"
-              >
-                <div className="w-full h-28 md:h-48 bg-gray-200"></div>
-                <div className="p-2 md:p-4">
-                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                  <div className="h-6 bg-gray-200 rounded w-1/2 mb-2"></div>
-                  <div className="space-y-1 mb-2">
-                    <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-                    <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                  </div>
-                  <div className="flex">
-                    <div className="w-full h-8 md:h-10 bg-gray-200 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : carsWithLive.length === 0 ? (
+          {carsWithLive.length === 0 ? (
             // Empty state when no cars available
             <div className="col-span-full text-center py-12">
               <div className="text-6xl mb-4">🚗</div>
@@ -771,6 +793,7 @@ export default function Home({ cars, brandCounts }) {
                       ? `/car/${encodeURIComponent(car.handle)}`
                       : '/all-cars'
                   }
+                  prefetch={false}
                   className="block focus:outline-none flex-1"
                   onClick={() => {
                     try {
@@ -857,6 +880,7 @@ export default function Home({ cars, brandCounts }) {
                         ? `/car/${encodeURIComponent(safeGet(car, 'handle'))}`
                         : '/all-cars'
                     }
+                    prefetch={false}
                     className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-2xl min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-prompt"
                     aria-label={`ดูรายละเอียด ${safeGet(car, 'title', 'รถยนต์')}`}
                     onClick={() => {
@@ -882,6 +906,7 @@ export default function Home({ cars, brandCounts }) {
         <div className="text-center mt-12">
           <Link
             href="/all-cars"
+            prefetch={false}
             className="inline-flex items-center bg-gray-900 hover:bg-accent text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
             aria-label="ดูรถทั้งหมด ครูหนึ่งรถสวย"
           >
@@ -896,10 +921,6 @@ export default function Home({ cars, brandCounts }) {
           </Link>
         </div>
       </main>
-
-      {/* รีวิว Facebook 9 รีวิวจริง */}
-      {showFbReviews && <FacebookReviewsSection />}
-
       <section className="bg-white py-6 sm:py-8 mt-6 rounded-2xl max-w-6xl mx-auto border border-gray-200">
         <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-primary font-prompt px-4 sm:px-6">
           คำถามที่พบบ่อย
@@ -977,6 +998,10 @@ export default function Home({ cars, brandCounts }) {
           </details>
         </div>
       </section>
+
+      {/* รีวิว Facebook 9 รีวิวจริง (โหลดเมื่อใกล้ viewport) */}
+      <div id="fb-reviews-anchor" className="h-px w-full" aria-hidden="true" />
+      {showFbReviews && <FacebookReviewsSection />}
 
       {/* Why Choose Us Section - 2025 Modern Design */}
       <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 py-16 mt-8 rounded-3xl max-w-[1400px] mx-auto border border-primary/10 shadow-xl">
@@ -1464,14 +1489,12 @@ export default function Home({ cars, brandCounts }) {
       </section>
 
       {/* Social Share Buttons - Fixed Position */}
-      {mounted && (
-        <SocialShareButtons
-          url={typeof window !== 'undefined' ? window.location.href : ''}
-          title="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่คุณภาพดี"
-          description="รถมือสองเชียงใหม่คุณภาพดี คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย"
-          position="fixed"
-        />
-      )}
+      <SocialShareButtons
+        url={typeof window !== 'undefined' ? window.location.href : ''}
+        title="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่คุณภาพดี"
+        description="รถมือสองเชียงใหม่คุณภาพดี คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย"
+        position="fixed"
+      />
     </div>
   );
 }

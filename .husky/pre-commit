@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-node "$(dirname "$0")/pre-commit.js"
+node "$(dirname "$0")/pre-commit.cjs"

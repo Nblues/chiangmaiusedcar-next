@@ -308,7 +308,7 @@ For business inquiries or support:
 ### ระบบ Admin
 
 - จัดการบทความ (CRUD)
-- ระบบ Authentication (admin/admin123)
+- ระบบ Authentication (อ่านจาก env vars)
 - API Dashboard
 - ตรวจสอบสถานะระบบ
 
@@ -323,9 +323,9 @@ For business inquiries or support:
 ข้อมูล credentials จะถูกอ่านจาก `.env.local`:
 
 ```env
-ADMIN_USERNAME=kngoodcar
-ADMIN_PASSWORD=Kn-goodcar**5277
-SESSION_SECRET=your-secret-key-here
+ADMIN_USERNAME=<YOUR_ADMIN_USERNAME>
+ADMIN_PASSWORD=<YOUR_ADMIN_PASSWORD>
+SESSION_SECRET=<RANDOM_32+_CHARS>
 ```
 
 ### Production (Vercel)

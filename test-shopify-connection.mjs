@@ -3,7 +3,10 @@ import { fetchShopify, getAllCars, getBrandCounts, getHomepageCars } from './lib
 
 // Set environment variables manually
 process.env.SHOPIFY_DOMAIN = 'kn-goodcar.com';
-process.env.SHOPIFY_STOREFRONT_TOKEN = 'bb70cb008199a94b83c98df0e45ada67';
+if (!process.env.SHOPIFY_STOREFRONT_TOKEN) {
+  console.error('Missing SHOPIFY_STOREFRONT_TOKEN. Set it in your environment before running this script.');
+  process.exit(1);
+}
 
 async function testShopifyConnection() {
   console.log('🔍 Testing Shopify API Connection...\n');

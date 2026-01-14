@@ -200,7 +200,7 @@ _app.jsx
 
 ```
 Username: admin
-Password: changeme123
+Password: <YOUR_ADMIN_PASSWORD>
 ```
 
 ### Environment Variables (Optional)
@@ -208,7 +208,7 @@ Password: changeme123
 ```bash
 # In .env.local (customize if needed)
 ADMIN_USERNAME=admin
-ADMIN_PASSWORD=changeme123
+ADMIN_PASSWORD=<YOUR_ADMIN_PASSWORD>
 SESSION_SECRET=your-secret-key-here
 
 # Optional IP Whitelist (production only)

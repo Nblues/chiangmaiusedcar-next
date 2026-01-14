@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "username": "kngoodcar",
-  "password": "Kn-goodcar**5277"
+  "password": "<YOUR_ADMIN_PASSWORD>"
 }
 
 ### Test Admin Login API (Production Deployment URL)
@@ -13,7 +13,7 @@ Content-Type: application/json
 
 {
   "username": "kngoodcar",
-  "password": "Kn-goodcar**5277"
+  "password": "<YOUR_ADMIN_PASSWORD>"
 }
 
 ### Test with Debug Endpoint (if deployed)
@@ -22,7 +22,7 @@ Content-Type: application/json
 
 {
   "username": "kngoodcar",
-  "password": "Kn-goodcar**5277"
+  "password": "<YOUR_ADMIN_PASSWORD>"
 }
 
 ### Check Environment Variables

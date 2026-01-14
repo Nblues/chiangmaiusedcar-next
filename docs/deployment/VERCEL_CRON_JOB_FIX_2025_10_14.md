@@ -199,7 +199,7 @@ vercel cron remove <cron-id>
 
    ```text
    Username: kngoodcar
-   Password: Kn-goodcar**5277
+   Password: <YOUR_ADMIN_PASSWORD>
    ```
 
 4. **ตรวจสอบฟังก์ชันต่างๆ** ว่าทำงานปกติ

@@ -16,11 +16,11 @@ Admin authentication บน production ไม่ทำงานเพราะ�
 
 คลิก **Add New** แล้วเพิ่มทีละตัว (เลือก Production + Preview + Development ทั้งหมด):
 
-| Name             | Value                                                              |
-| ---------------- | ------------------------------------------------------------------ |
-| `ADMIN_USERNAME` | `kngoodcar`                                                        |
-| `ADMIN_PASSWORD` | `Kn-goodcar**5277`                                                 |
-| `SESSION_SECRET` | `f84a65d8b96928512fc7938a14c15c72d5a23689354a2fbc8312c102d1d10f33` |
+| Name             | Value                   |
+| ---------------- | ----------------------- |
+| `ADMIN_USERNAME` | `<YOUR_ADMIN_USERNAME>` |
+| `ADMIN_PASSWORD` | `<YOUR_ADMIN_PASSWORD>` |
+| `SESSION_SECRET` | `<RANDOM_32+_CHARS>`    |
 
 ### 3. Redeploy
 
@@ -32,8 +32,8 @@ Vercel Dashboard → **Deployments** → คลิก deployment ล่าสุ
 
 ```bash
 URL:      https://www.chiangmaiusedcar.com/admin/login
-Username: kngoodcar
-Password: Kn-goodcar**5277
+Username: <YOUR_ADMIN_USERNAME>
+Password: <YOUR_ADMIN_PASSWORD>
 ```
 
 ---

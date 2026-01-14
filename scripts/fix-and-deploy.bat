@@ -1,4 +1,5 @@
 @echo off
+setlocal EnableExtensions
 title Fix Shopify API and Deploy - ChiangMaiUsedCar
 
 echo =========================================
@@ -8,7 +9,7 @@ echo.
 
 echo 📋 Current Shopify Configuration:
 echo SHOPIFY_DOMAIN=kn-goodcar.com
-echo SHOPIFY_STOREFRONT_TOKEN=bb70cb008199a94b83c98df0e45ada67
+echo SHOPIFY_STOREFRONT_TOKEN=^(set in environment / Vercel dashboard^)
 echo.
 
 echo 🚀 Starting production build with correct environment...
@@ -16,7 +17,19 @@ echo.
 
 REM Set environment variables locally to override Vercel
 set SHOPIFY_DOMAIN=kn-goodcar.com
-set SHOPIFY_STOREFRONT_TOKEN=bb70cb008199a94b83c98df0e45ada67
+if "%SHOPIFY_STOREFRONT_TOKEN%"=="" (
+    for /f "usebackq delims=" %%A in (`powershell -NoProfile -Command "$p=Read-Host 'SHOPIFY_STOREFRONT_TOKEN (sensitive)' -AsSecureString; [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($p))"`) do (
+        set "SHOPIFY_STOREFRONT_TOKEN=%%A"
+    )
+)
+if "%SHOPIFY_STOREFRONT_TOKEN%"=="" (
+    echo.
+    echo ❌ Missing SHOPIFY_STOREFRONT_TOKEN
+    echo Set it as an environment variable or add it in Vercel dashboard.
+    echo.
+    pause
+    exit /b 1
+)
 set NODE_ENV=production
 
 echo ✅ Environment variables set locally
@@ -30,7 +43,7 @@ if %errorlevel% equ 0 (
     echo ✅ Build successful!
     echo.
     echo 🌐 Deploying to Vercel with fixed configuration...
-    call vercel --prod --env SHOPIFY_DOMAIN=kn-goodcar.com --env SHOPIFY_STOREFRONT_TOKEN=bb70cb008199a94b83c98df0e45ada67
+    call vercel --prod
     
     if %errorlevel% equ 0 (
         echo.

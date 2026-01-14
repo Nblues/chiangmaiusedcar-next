@@ -68,11 +68,11 @@
 
 บน **Vercel Dashboard** → Settings → Environment Variables:
 
-| Variable         | Value                                                              | Description                       |
-| ---------------- | ------------------------------------------------------------------ | --------------------------------- |
-| `ADMIN_USERNAME` | `kngoodcar`                                                        | Admin login username              |
-| `ADMIN_PASSWORD` | `Kn-goodcar**5277`                                                 | Admin login password              |
-| `SESSION_SECRET` | `f84a65d8b96928512fc7938a14c15c72d5a23689354a2fbc8312c102d1d10f33` | Session encryption key (64 chars) |
+| Variable         | Value                   | Description                       |
+| ---------------- | ----------------------- | --------------------------------- |
+| `ADMIN_USERNAME` | `kngoodcar`             | Admin login username              |
+| `ADMIN_PASSWORD` | `<YOUR_ADMIN_PASSWORD>` | Admin login password              |
+| `SESSION_SECRET` | `<YOUR_SESSION_SECRET>` | Session encryption key (64 chars) |
 
 **สำคัญ**: เลือก Environment ทั้ง 3 แบบ (Production + Preview + Development)
 
@@ -87,8 +87,8 @@
 3. Settings → Environment Variables
 4. คลิก "Add New" เพิ่มทีละตัว:
    - `ADMIN_USERNAME` = `kngoodcar`
-   - `ADMIN_PASSWORD` = `Kn-goodcar**5277`
-   - `SESSION_SECRET` = `f84a65d8b96928512fc7938a14c15c72d5a23689354a2fbc8312c102d1d10f33`
+   - `ADMIN_PASSWORD` = `<YOUR_ADMIN_PASSWORD>`
+   - `SESSION_SECRET` = `<YOUR_SESSION_SECRET>`
 5. เลือก All environments (Production + Preview + Development)
 6. Save
 7. Deployments → latest → ⋮ → Redeploy (ไม่ใช้ cache)
@@ -110,11 +110,11 @@ vercel env add ADMIN_USERNAME
 # เลือก: Production, Preview, Development
 
 vercel env add ADMIN_PASSWORD
-# พิมพ์: Kn-goodcar**5277
+# พิมพ์: <YOUR_ADMIN_PASSWORD>
 # เลือก: Production, Preview, Development
 
 vercel env add SESSION_SECRET
-# พิมพ์: f84a65d8b96928512fc7938a14c15c72d5a23689354a2fbc8312c102d1d10f33
+# พิมพ์: <YOUR_SESSION_SECRET>
 # เลือก: Production, Preview, Development
 
 # Redeploy
@@ -140,7 +140,7 @@ powershell -ExecutionPolicy Bypass -File scripts\check-vercel-env.ps1
 1. เปิด <https://www.chiangmaiusedcar.com/admin/login>
 2. กรอก:
    - Username: `kngoodcar`
-   - Password: `Kn-goodcar**5277`
+   - Password: `<YOUR_ADMIN_PASSWORD>`
 3. คลิก "เข้าสู่ระบบ"
 4. ควร redirect ไป `/admin/dashboard` อัตโนมัติ
 

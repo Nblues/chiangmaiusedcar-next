@@ -1,11 +1,10 @@
 // components/CarActionButtons.js
 
+import { createShortShareUrl } from '../utils/urlHelper';
+
 export default function CarActionButtons({ car }) {
   const shareCar = async () => {
-    const url =
-      typeof window !== 'undefined'
-        ? window.location.origin + '/car/' + car.handle
-        : 'https://www.chiangmaiusedcar.com/car/' + car.handle;
+    const url = createShortShareUrl(car?.handle);
 
     const shareData = {
       title: `${car.title} - ครูหนึ่งรถสวย`,

@@ -7,13 +7,14 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import ClientOnly from '../components/ClientOnly';
 import '../styles/globals.css';
-import '../styles/interactive-editor.css';
 
 const prompt = Prompt({
   subsets: ['thai', 'latin'],
   // Match Tailwind font weights used across the site (e.g. font-medium=500, font-semibold=600, font-extrabold=800)
   weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
+  adjustFontFallback: true,
+  preload: true,
   variable: '--font-prompt',
 });
 

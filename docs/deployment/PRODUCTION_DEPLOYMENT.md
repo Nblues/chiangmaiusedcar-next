@@ -60,7 +60,7 @@ Copy these to Vercel Dashboard (Settings > Environment Variables):
 
 ```
 SHOPIFY_DOMAIN=kn-goodcar.com
-SHOPIFY_STOREFRONT_TOKEN=bb70cb008199a94b83c98df0e45ada67
+SHOPIFY_STOREFRONT_TOKEN=<SHOPIFY_STOREFRONT_TOKEN>
 ```
 
 ### 📧 EmailJS Configuration

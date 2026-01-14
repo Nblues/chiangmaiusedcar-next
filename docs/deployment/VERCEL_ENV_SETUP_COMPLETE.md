@@ -9,11 +9,11 @@
 
 ### ✅ Environment Variables ที่เพิ่มบน Vercel แล้ว
 
-| Variable         | Value                                 | Status                                |
-| ---------------- | ------------------------------------- | ------------------------------------- |
-| `ADMIN_USERNAME` | `kngoodcar`                           | ✅ Production + Preview + Development |
-| `ADMIN_PASSWORD` | `Kn-goodcar**5277`                    | ✅ Production + Preview + Development |
-| `SESSION_SECRET` | `f84a65d8b96928512fc7938a14c15c72...` | ✅ Production + Preview + Development |
+| Variable         | Value                   | Status                                |
+| ---------------- | ----------------------- | ------------------------------------- |
+| `ADMIN_USERNAME` | `kngoodcar`             | ✅ Production + Preview + Development |
+| `ADMIN_PASSWORD` | `<YOUR_ADMIN_PASSWORD>` | ✅ Production + Preview + Development |
+| `SESSION_SECRET` | `<YOUR_SESSION_SECRET>` | ✅ Production + Preview + Development |
 
 ### ✅ Deployment Status
 
@@ -37,7 +37,7 @@
 
    ```text
    Username: kngoodcar
-   Password: Kn-goodcar**5277
+   Password: <YOUR_ADMIN_PASSWORD>
    ```
 
 3. **คลิก "เข้าสู่ระบบ"**
@@ -124,7 +124,7 @@ powershell -ExecutionPolicy Bypass -File scripts\check-vercel-env.ps1
 เมื่อเห็นสถานะ **Ready** (สีเขียว):
 
 1. เปิด <https://www.chiangmaiusedcar.com/admin/login>
-2. Login ด้วย kngoodcar / Kn-goodcar\*\*5277
+2. Login ด้วย kngoodcar / <YOUR_ADMIN_PASSWORD>
 3. ตรวจสอบว่าเข้า Dashboard ได้
 
 ### 3. Verify Functionality

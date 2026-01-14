@@ -8,9 +8,10 @@ export default async function handler(req, res) {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
 
-  // Ensure no caching at browser or CDN for this API
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-  res.setHeader('Pragma', 'no-cache');
+  // Reduce KV request quota usage by allowing short-lived CDN caching.
+  // - Browser: effectively no cache (max-age=0)
+  // - CDN (Vercel): cache briefly and serve stale while revalidating
+  res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=30, stale-while-revalidate=300');
 
   try {
     const idsParam = Array.isArray(req.query.ids) ? req.query.ids[0] : req.query.ids;
@@ -20,6 +21,8 @@ export default async function handler(req, res) {
             .split(',')
             .map(s => s.trim())
             .filter(Boolean)
+            .filter((v, i, arr) => arr.indexOf(v) === i)
+            .sort()
         : null;
 
     let statuses = {};

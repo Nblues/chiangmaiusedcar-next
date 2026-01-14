@@ -28,10 +28,23 @@ function Post-Json {
 
 Write-Host ("Base URL: $BaseUrl") -ForegroundColor Cyan
 
+$username = $env:ADMIN_USERNAME
+$password = $env:ADMIN_PASSWORD
+
+if ([string]::IsNullOrWhiteSpace($username)) {
+  $username = Read-Host -Prompt 'ADMIN_USERNAME'
+}
+if ([string]::IsNullOrWhiteSpace($password)) {
+  $secure = Read-Host -Prompt 'ADMIN_PASSWORD' -AsSecureString
+  $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+  try { $password = [Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr) }
+  finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
+}
+
 Write-Host "--- DEBUG-LOGIN ---" -ForegroundColor Yellow
-$d = Post-Json -Url ("$BaseUrl/api/admin/debug-login") -Body @{ username='kngoodcar'; password='Kn-goodcar**5277' }
+$d = Post-Json -Url ("$BaseUrl/api/admin/debug-login") -Body @{ username=$username; password=$password }
 $d | Format-List
 
 Write-Host "`n--- LOGIN ---" -ForegroundColor Yellow
-$l = Post-Json -Url ("$BaseUrl/api/admin/login") -Body @{ username='kngoodcar'; password='Kn-goodcar**5277' }
+$l = Post-Json -Url ("$BaseUrl/api/admin/login") -Body @{ username=$username; password=$password }
 $l | Format-List

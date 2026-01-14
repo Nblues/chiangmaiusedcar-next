@@ -147,7 +147,7 @@ vercel project ls
 คุณจะสามารถ:
 
 - ✅ เข้า <https://www.chiangmaiusedcar.com/admin/login>
-- ✅ Login ด้วย username: `kngoodcar` / password: `Kn-goodcar**5277`
+- ✅ Login ด้วย username: `kngoodcar` / password: `<YOUR_ADMIN_PASSWORD>`
 - ✅ เข้าใช้งาน Admin Dashboard
 - ✅ เรียก API endpoints ต่างๆ ได้ปกติ
 
