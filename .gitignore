@@ -164,6 +164,9 @@ lighthouse-*.txt
 lighthouse-summary*.json
 lighthouse-summary*.txt
 
+# Timestamped Lighthouse runs
+lighthouse-prod-*/
+
 # ========================
 # 🔐 Security & Auth
 # ========================

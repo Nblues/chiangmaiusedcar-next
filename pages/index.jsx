@@ -399,10 +399,10 @@ export default function Home({ cars, brandCounts }) {
             <source
               type="image/webp"
               srcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
-              sizes="(max-width: 640px) 640px, (max-width: 1024px) 828px, 1400px"
+              sizes="100vw"
             />
             <img
-              src="/herobanner/cnxcar-1400w.webp"
+              src="/herobanner/cnxcar-828w.webp"
               alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
               width="1400"
               height="467"

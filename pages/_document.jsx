@@ -49,7 +49,7 @@ export default class MyDocument extends Document {
             type="image/webp"
             {...{ fetchpriority: 'high' }}
             imageSrcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
-            imageSizes="(max-width: 640px) 640px, (max-width: 1024px) 828px, 1400px"
+            imageSizes="100vw"
           />
 
           {/* Essential HTML5 Meta Tags for SEO 100/100 */}
