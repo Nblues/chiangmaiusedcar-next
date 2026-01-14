@@ -721,7 +721,7 @@ export default function Home({ cars, brandCounts }) {
               </a>
             </div>
           ) : (
-            carsWithLive.slice(0, 8).map((car, index) => (
+            carsWithLive.slice(0, 8).map(car => (
               <article
                 key={car.id}
                 className="group bg-white rounded-xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
@@ -760,7 +760,7 @@ export default function Home({ cars, brandCounts }) {
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                       itemProp="image"
-                      loading={index < 2 ? 'eager' : 'lazy'}
+                      loading="lazy"
                       quality={75}
                       sizes="(max-width: 414px) 180px, (max-width: 768px) 320px, (max-width: 1024px) 256px, 320px"
                     />
