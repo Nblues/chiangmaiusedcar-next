@@ -45,9 +45,9 @@ export default class MyDocument extends Document {
           <link
             rel="preload"
             as="image"
-            href="/herobanner/cnxcar-640w.webp"
+            href="/herobanner/cnxcar-828w.webp"
             type="image/webp"
-            {...{ fetchpriority: 'high' }}
+            fetchPriority="high"
             imageSrcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
             imageSizes="100vw"
           />

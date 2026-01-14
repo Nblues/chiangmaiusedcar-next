@@ -264,59 +264,6 @@ export default function Home({ cars, brandCounts }) {
     return () => observer.disconnect();
   }, [showFbReviews]);
 
-  // Memoize heavy JSON-LD to prevent re-creation on every render
-
-  // Memoize FAQ Schema to reduce computation
-  const faqJsonLd = useMemo(
-    () => ({
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'ฟรีดาวน์ 0% ซื้อรถยนต์มือสองเชียงใหม่ จริงไหม?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'จริง! ครูหนึ่งรถสวยให้ลูกค้าออกรถฟรีดาวน์ 0% ตามโปรโมชันและไฟแนนซ์ที่อนุมัติ รถ ECO Car ประหยัดน้ำมันและรธธรรมดาก็มี',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'จัดสินเชื่อซื้อรถมือสองในเชียงใหม่ยากไหม?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'ไม่ยากครับ! ครูหนึ่งรถสวยมีไฟแนนซ์หลากหลายแบบ อนุมัติง่าย สอบถามข้อมูลได้ทาง LINE หรือโทร 094-064-9018',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'รถมือสองเชียงใหม่ ครูหนึ่งรถสวย มีรับประกันไหม?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'ครูหนึ่งรถสวยให้รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม รถ ECO Car ก็มีรับประกัน พร้อมบริการหลังการขายครบครัน',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'รถ ECO Car ประหยัดน้ำมันมือสองเชียงใหม่ มีไหม?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'มี! ครูหนึ่งรถสวยมีรถ ECO Car ประหยัดน้ำมันหลากหลายรุ่น Toyota Vios, Honda City, Nissan Almera พร้อมส่ง ประหยัดน้ำมันสุดๆ',
-          },
-        },
-        {
-          '@type': 'Question',
-          name: 'ส่งรถฟรีทั่วไทย ซื้อรถจากศูนย์รถมือสองภาคเหนือ จริงไหม?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'จริง! ครูหนึ่งรถสวยส่งฟรีทั่วไทย มีขนส่งเฉพาะและประกันภัยระหว่างขนส่ง ลูกค้ากรุงเทพ ภูเก็ต หาดใหญ่ สั่งได้เลย',
-          },
-        },
-      ],
-    }),
-    []
-  );
-
   // Daily cache busting for LINE sharing
   const currentDate = new Date();
   const dateStamp = currentDate.toISOString().split('T')[0].replace(/-/g, '');
@@ -387,11 +334,6 @@ export default function Home({ cars, brandCounts }) {
         }}
       />
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-[1400px] mx-auto">
           {/* LCP Optimized: Native img instead of A11yImage for critical hero banner */}
@@ -408,7 +350,7 @@ export default function Home({ cars, brandCounts }) {
               height="280"
               className="w-full h-auto object-contain"
               loading="eager"
-              {...{ fetchpriority: 'high' }}
+              fetchPriority="high"
               decoding="async"
             />
           </picture>
@@ -758,7 +700,6 @@ export default function Home({ cars, brandCounts }) {
         <section
           aria-label="รถเข้าใหม่แนะนำวันนี้"
           className="grid gap-2 md:gap-6 grid-cols-2 md:grid-cols-4"
-          style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 1200px' }}
         >
           {carsWithLive.length === 0 ? (
             // Empty state when no cars available
@@ -780,7 +721,7 @@ export default function Home({ cars, brandCounts }) {
               </a>
             </div>
           ) : (
-            carsWithLive.slice(0, 8).map(car => (
+            carsWithLive.slice(0, 8).map((car, index) => (
               <article
                 key={car.id}
                 className="group bg-white rounded-xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
@@ -819,7 +760,7 @@ export default function Home({ cars, brandCounts }) {
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                       itemProp="image"
-                      loading="lazy"
+                      loading={index < 2 ? 'eager' : 'lazy'}
                       quality={75}
                       sizes="(max-width: 414px) 180px, (max-width: 768px) 320px, (max-width: 1024px) 256px, 320px"
                     />
