@@ -1041,11 +1041,11 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
               </svg>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-prompt">
-              ทำไมต้องเลือกครูหนึ่งรถสวย
+              ลูกค้าทั่วประเทศไว้วางใจเพราะ?
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto font-prompt leading-relaxed">
-              <span className="text-primary font-semibold">รถบ้านแท้ 90% มือเดียว</span>{' '}
-              คัดสรรคุณภาพทุกคันไม่มีรถประมูล ทั่วประเทศใว้วางใจ{' '}
+              <span className="text-primary font-semibold">ประสบการณ์ 10 ปี+</span> เฟซบุ๊กผู้ติดตาม
+              1 ล้านคนทั่วประเทศ{' '}
               <span className="text-orange-700 font-semibold">ลูกค้า 90% เชื่อมั่น</span>{' '}
               ไม่ต้องมาดูรถ
             </p>
@@ -1073,8 +1073,9 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">รถบ้านแท้ 100%</h3>
               <p className="text-gray-600 leading-relaxed font-prompt text-sm">
-                <span className="text-primary font-semibold">90% รถมือเดียว</span> จากเจ้าของโดยตรง
-                ไม่มีรถน้ำท่วม ไม่มีรถอุบัติเหตุ ตรวจเอกสารขอดูเล่มทะเบียนได้ทุกหน้า
+                <span className="text-primary font-semibold">คัดเฉพาะรถมือเดียว</span>{' '}
+                จากเจ้าของโดยตรง ไม่มีรถน้ำท่วม ไม่มีรถอุบัติเหตุ
+                ตรวจเอกสารขอดูเล่มทะเบียนได้ทุกหน้า
               </p>
             </div>
 
@@ -1123,8 +1124,8 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
               <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">รับประกัน 1 ปี</h3>
               <p className="text-gray-600 leading-relaxed font-prompt text-sm">
                 รับประกันเครื่องยนต์และเกียร์{' '}
-                <span className="text-primary font-semibold">1 ปีเต็ม ไม่จำกัดกิโลเมตร</span> พร้อม
-                <span className="text-orange-700 font-semibold">บริการหลังการขาย 24/7</span>
+                <span className="text-primary font-semibold">1 ปีเต็ม ไม่จำกัดกิโลเมตร</span> พร้อม{' '}
+                <span className="text-orange-700 font-semibold">บริการหลังการขาย</span>
               </p>
             </div>
 
@@ -1167,7 +1168,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                 ศูนย์รวมแบรนด์ดังครบครัน
               </h3>
               <p className="text-gray-700 font-prompt text-sm md:text-lg leading-relaxed max-w-2xl mx-auto px-2">
-                รถมือสองคุณภาพจากทุกแบรนด์ชั้นนำ ผ่านการคัดสรรอย่างเข้มงวด
+                รถมือสองคุณภาพจากทุกแบรนด์ชั้นนำ ตามมาตรฐาน ครูหนึ่งรถสวย
               </p>
             </div>
 
