@@ -131,7 +131,7 @@ function buildHomeItemListJsonLd(inputCars) {
 
 export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonLd }) {
   const seoHome = SEO_KEYWORD_MAP.home;
-  
+
   // Helper function to get brand count with fallback to sample data
   const getBrandCount = useCallback(
     brandName => {
@@ -157,7 +157,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
     },
     [brandCounts]
   );
-  
+
   // Facebook reviews: render only client
   const [showFbReviews, setShowFbReviews] = useState(false);
   const [liveStatuses, setLiveStatuses] = useState(null);
@@ -241,7 +241,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         const qs = new URLSearchParams({ ids: ids.join(',') });
         const resp = await fetch(`/api/public/car-status?${qs.toString()}`, {
           cache: 'no-store',
-        }).catch((err) => {
+        }).catch(err => {
           // Silently log and return null
           if (process.env.NODE_ENV !== 'production') {
             console.warn('Failed to fetch car statuses:', err.message);
@@ -284,7 +284,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           const qs = new URLSearchParams({ ids: ids.join(',') });
           const resp = await fetch(`/api/public/car-status?${qs.toString()}`, {
             cache: 'no-store',
-          }).catch((err) => {
+          }).catch(err => {
             // Silently log and return null
             if (process.env.NODE_ENV !== 'production') {
               console.warn('Failed to fetch car statuses on visibility:', err.message);

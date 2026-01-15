@@ -70,25 +70,6 @@ export default function Footer() {
                   รถมือสองเชียงใหม่ คุณภาพระดับพรีเมียม
                 </p>
               </div>
-              <li>
-                <Link
-                  href="/terms"
-                  className="text-gray-300 hover:text-accent-400 transition-colors flex items-center group"
-                >
-                  <svg
-                    className="w-4 h-4 mr-2 text-accent-500 group-hover:text-accent-400 transition-colors"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5 3a2 2 0 012-2h6a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V3zm3 2a1 1 0 100 2h4a1 1 0 100-2H8zm0 4a1 1 0 100 2h4a1 1 0 100-2H8zm0 4a1 1 0 100 2h4a1 1 0 100-2H8z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  ข้อกำหนดการใช้งาน
-                </Link>
-              </li>
             </div>
 
             <p className="text-gray-300 mb-6 leading-relaxed">
