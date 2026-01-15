@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import SEO from '../../components/SEO';
+import { isAuthenticated } from '../../middleware/adminAuth';
 
 function AdminCarsManagement() {
   const router = useRouter();
@@ -535,3 +536,16 @@ function AdminCarsManagement() {
 }
 
 export default AdminCarsManagement;
+
+export async function getServerSideProps({ req }) {
+  if (!isAuthenticated(req)) {
+    return {
+      redirect: {
+        destination: '/admin/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
+}

@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { Prompt } from 'next/font/google';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import ClientOnly from '../components/ClientOnly';
 import '../styles/globals.css';
 
@@ -34,6 +32,9 @@ export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const path = router?.asPath || router?.pathname || '';
   const isAdminRoute = path.startsWith('/admin');
+
+  // Defer Vercel analytics tooling so it doesn't compete with hydration/bootup.
+  const [VercelTools, setVercelTools] = useState(null);
 
   // User Timing: measure app start -> hydrated (shows up under "User Timings" in Lighthouse)
   useEffect(() => {
@@ -82,19 +83,83 @@ export default function MyApp({ Component, pageProps }) {
       router.events.off('routeChangeError', markDone);
     };
   }, [router]);
-  // Initialize performance monitoring (Web Vitals + custom observers) without blocking main bundle
+
+  // Initialize performance monitoring (Web Vitals + custom observers) without competing with hydration.
   useEffect(() => {
-    // Dynamic import to avoid increasing initial bundle size
-    import('../lib/performance')
-      .then(mod => {
-        if (typeof mod.initPerformanceObserver === 'function') {
-          mod.initPerformanceObserver();
-        }
-      })
-      .catch(() => {
-        // silent fail - performance monitoring is non-critical
-      });
+    if (typeof window === 'undefined') return;
+
+    const run = () => {
+      import('../lib/performance')
+        .then(mod => {
+          if (typeof mod.initPerformanceObserver === 'function') {
+            mod.initPerformanceObserver();
+          }
+        })
+        .catch(() => {
+          // silent fail - performance monitoring is non-critical
+        });
+    };
+
+    let idleId;
+    let timeoutId;
+    if ('requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(run, { timeout: 2500 });
+    } else {
+      timeoutId = window.setTimeout(run, 0);
+    }
+
+    return () => {
+      if (idleId && window.cancelIdleCallback) window.cancelIdleCallback(idleId);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
   }, []);
+
+  // Defer Vercel Analytics + Speed Insights into an idle-loaded async chunk.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (process.env.NODE_ENV !== 'production') return;
+    if (isAdminRoute) return;
+
+    let cancelled = false;
+
+    const run = () => {
+      Promise.all([import('@vercel/analytics/react'), import('@vercel/speed-insights/next')])
+        .then(([analyticsMod, speedMod]) => {
+          if (cancelled) return;
+          const Analytics = analyticsMod?.Analytics;
+          const SpeedInsights = speedMod?.SpeedInsights;
+          if (!Analytics && !SpeedInsights) return;
+
+          setVercelTools(() => {
+            return function VercelToolsLoaded() {
+              return (
+                <>
+                  {Analytics ? <Analytics /> : null}
+                  {SpeedInsights ? <SpeedInsights /> : null}
+                </>
+              );
+            };
+          });
+        })
+        .catch(() => {
+          // silent fail
+        });
+    };
+
+    let idleId;
+    let timeoutId;
+    if ('requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(run, { timeout: 4000 });
+    } else {
+      timeoutId = window.setTimeout(run, 1500);
+    }
+
+    return () => {
+      cancelled = true;
+      if (idleId && window.cancelIdleCallback) window.cancelIdleCallback(idleId);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, [isAdminRoute]);
 
   // Defer non-critical client-only runtime guards to an async chunk
   useEffect(() => {
@@ -210,8 +275,7 @@ export default function MyApp({ Component, pageProps }) {
         {/* Font optimization: using next/font (Prompt) with swap */}
       </Head>
       {getLayout(<Component {...pageProps} />)}
-      <Analytics />
-      <SpeedInsights />
+      {VercelTools ? <VercelTools /> : null}
       {!isAdminRoute && <FacebookPixel />}
     </>
   );

@@ -19,6 +19,22 @@ html {
   will-change: auto;
 }
 
+/* Render defer (Chrome/Edge): reduce main-thread render cost below the fold */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 600px;
+}
+
+.cv-auto-md {
+  content-visibility: auto;
+  contain-intrinsic-size: 1200px;
+}
+
+.cv-auto-lg {
+  content-visibility: auto;
+  contain-intrinsic-size: 2000px;
+}
+
 /* Pagination Container - Universal All Screen Responsive */
 .pagination-stable {
   min-height: 80px;
@@ -445,22 +461,20 @@ body {
   50% {
     opacity: 1;
     transform: scale(1);
-    box-shadow: 0 4px 6px -1px rgba(251, 146, 60, 0.3);
   }
   25% {
     opacity: 0.7;
     transform: scale(1.05);
-    box-shadow: 0 8px 15px -3px rgba(251, 146, 60, 0.5);
   }
   75% {
     opacity: 1;
     transform: scale(0.98);
-    box-shadow: 0 2px 4px -1px rgba(251, 146, 60, 0.2);
   }
 }
 
 .animate-blink-promotion {
   animation: blink-promotion 2s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 /* Loading Animation */
@@ -469,13 +483,11 @@ body {
   @apply animate-spin rounded-full h-8 w-8 border-b-2 border-accent;
 }
 
-/* Smooth Transitions */
-* {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow,
-    transform, filter, backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
+/*
+  NOTE: Avoid universal transitions.
+  They override Tailwind's per-element transition utilities and can create non-composited animations
+  (e.g. box-shadow/filter/backdrop-filter), increasing paint work and potentially CLS.
+*/
 
 /* Line Clamp Utilities - รองรับ browser ใหม่ */
 .line-clamp-1 {
@@ -500,49 +512,4 @@ body {
   line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-/* Prose styling for article content */
-.prose {
-  @apply max-w-none;
-}
-
-.prose h2 {
-  @apply text-2xl font-bold text-gray-900 mt-8 mb-4 font-prompt;
-}
-
-.prose h3 {
-  @apply text-xl font-bold text-gray-900 mt-6 mb-3 font-prompt;
-}
-
-.prose p {
-  @apply text-gray-800 mb-4 leading-relaxed font-prompt;
-}
-
-.prose ul {
-  @apply list-disc list-inside mb-4 space-y-2;
-}
-
-.prose li {
-  @apply text-gray-800 font-prompt;
-}
-
-.prose strong {
-  @apply font-bold text-gray-900;
-}
-
-.prose table {
-  @apply w-full border-collapse border border-gray-300 my-6;
-}
-
-.prose th {
-  @apply border border-gray-300 bg-gray-100 px-4 py-2 font-bold text-left font-prompt;
-}
-
-.prose td {
-  @apply border border-gray-300 px-4 py-2 font-prompt;
-}
-
-.prose blockquote {
-  @apply border-l-4 border-accent pl-4 my-6 text-gray-600 italic;
 }

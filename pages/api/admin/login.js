@@ -8,34 +8,15 @@ import {
   createSessionCookie,
   createCsrfCookie,
   getClientIp,
+  hasSecureAdminConfig,
 } from '../../../middleware/adminAuth';
+import { rateLimit } from '../../../lib/rateLimit';
 
 // Ensure Node.js runtime and JSON body parsing
 export const config = { runtime: 'nodejs', api: { bodyParser: true, externalResolver: true } };
 
-// Simple in-memory rate limiter per IP
-const attempts = new Map();
-const WINDOW_MS = 10 * 60 * 1000; // 10 minutes
-const MAX_ATTEMPTS = 5; // per window
-function isRateLimited(ip) {
-  const now = Date.now();
-  const rec = attempts.get(ip) || { count: 0, first: now };
-  if (now - rec.first > WINDOW_MS) {
-    // reset window
-    attempts.set(ip, { count: 0, first: now });
-    return false;
-  }
-  return rec.count >= MAX_ATTEMPTS;
-}
-function incr(ip) {
-  const now = Date.now();
-  const rec = attempts.get(ip) || { count: 0, first: now };
-  if (now - rec.first > WINDOW_MS) {
-    attempts.set(ip, { count: 1, first: now });
-  } else {
-    attempts.set(ip, { count: rec.count + 1, first: rec.first });
-  }
-}
+const LOGIN_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+const LOGIN_LIMIT = 5;
 
 export default async function handler(req, res) {
   let stage = 'start';
@@ -57,12 +38,26 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Enforce secure admin credentials in production
+    if (!hasSecureAdminConfig()) {
+      return res.status(500).json({
+        success: false,
+        error: 'Admin credentials not configured for production',
+      });
+    }
+
     stage = 'rate-limit-check';
     const ip = getClientIp(req);
-    if (isRateLimited(ip)) {
-      return res
-        .status(429)
-        .json({ success: false, error: 'Too many attempts. Please try again later.' });
+    const limiter = await rateLimit(`admin:login:${ip}`, {
+      windowMs: LOGIN_WINDOW_MS,
+      limit: LOGIN_LIMIT,
+    });
+    if (!limiter.ok) {
+      return res.status(429).json({
+        success: false,
+        error: 'Too many attempts. Please try again later.',
+        retryAfterSec: Math.ceil((limiter.resetAt - Date.now()) / 1000),
+      });
     }
 
     // Parse body safely (avoid destructuring undefined)
@@ -81,7 +76,6 @@ export default async function handler(req, res) {
     // Validate input
     stage = 'validate-input';
     if (!username || !password) {
-      incr(ip);
       return res.status(400).json({
         success: false,
         error: 'Username and password required',
@@ -95,8 +89,6 @@ export default async function handler(req, res) {
     if (!token) {
       // Add delay to prevent brute force
       await new Promise(resolve => setTimeout(resolve, 1000));
-      incr(ip);
-
       return res.status(401).json({
         success: false,
         error: 'Invalid credentials',

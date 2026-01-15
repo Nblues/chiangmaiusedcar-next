@@ -1,4 +1,5 @@
 import SEO from '../components/SEO';
+import proseStyles from '../styles/prose.module.css';
 
 export default function PrivacyPolicy() {
   return (
@@ -16,7 +17,7 @@ export default function PrivacyPolicy() {
               นโยบายความเป็นส่วนตัว
             </h1>
 
-            <div className="prose prose-lg max-w-none">
+            <div className={`prose prose-lg max-w-none ${proseStyles.prose}`}>
               <div className="text-gray-600 mb-6">
                 <strong>วันที่มีผลบังคับใช้:</strong> 4 สิงหาคม 2567
               </div>

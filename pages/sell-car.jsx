@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import A11yImage from '../components/A11yImage';
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
+import proseStyles from '../styles/prose.module.css';
 // Organization JSON-LD is injected centrally by <SEO /> to avoid duplicates
 
 export default function SellCar() {
@@ -97,7 +98,7 @@ export default function SellCar() {
                 ขายรถยนต์มือสอง ราคายุติธรรม ขายเร็ว ไว้ใจได้
               </h2>
 
-              <div className="prose prose-lg max-w-none">
+              <div className={`prose prose-lg max-w-none ${proseStyles.prose}`}>
                 <p className="text-gray-700 leading-relaxed mb-6">
                   การขายรถบ้านในภาคเหนือต้องเลือกศูนย์ที่เชื่อถือได้
                   ครูหนึ่งรถสวยเป็นแพลตฟอร์มซื้อขายรถยนต์คุณภาพดี มีประสบการณ์มากกว่า 10

@@ -50,7 +50,86 @@ function getPriceInfo(amount) {
   }
 }
 
-export default function Home({ cars, brandCounts }) {
+function buildHomeItemListJsonLd(inputCars) {
+  const site = 'https://www.chiangmaiusedcar.com';
+  const cars = Array.isArray(inputCars) ? inputCars : [];
+  const itemListElement = cars.slice(0, 10).map((car, index) => {
+    const priceInfo = getPriceInfo(car?.price?.amount || 0);
+    const handle = car?.handle;
+    const carUrl = handle ? `${site}/car/${handle}` : site;
+
+    const rawImage = car?.images?.[0]?.url;
+    const imageUrl = rawImage
+      ? rawImage.startsWith('http')
+        ? rawImage
+        : `${site}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
+      : `${site}/herobanner/cnxcar.webp`;
+
+    const vendorOrBrand = car?.vendor || car?.brand || car?.title?.split(' ')?.[0] || 'รถยนต์';
+    const model = car?.model || car?.title || '';
+    const year = car?.year || '';
+    const title = car?.title || `${vendorOrBrand} ${model}`.trim();
+    const normalizedStatus = typeof car?.status === 'string' ? car.status.trim() : '';
+    const inStock =
+      normalizedStatus.toLowerCase() === 'reserved'
+        ? false
+        : typeof car?.availableForSale === 'boolean'
+          ? car.availableForSale
+          : true;
+    const availabilityValue = inStock ? 'InStock' : 'OutOfStock';
+
+    return {
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Car',
+        '@id': carUrl,
+        name: title,
+        description: `${vendorOrBrand} ${model} ${year} ราคา ${priceInfo.display} บาท`.trim(),
+        brand: {
+          '@type': 'Brand',
+          name: vendorOrBrand,
+        },
+        model,
+        vehicleModelDate: year,
+        sku: car?.id || handle,
+        category: 'รถยนต์มือสอง',
+        image: imageUrl,
+        url: carUrl,
+        offers: {
+          '@type': 'Offer',
+          price: priceInfo.numeric || '0',
+          priceCurrency: 'THB',
+          url: carUrl,
+          itemCondition: 'https://schema.org/UsedCondition',
+          availability: `https://schema.org/${availabilityValue}`,
+          inventoryLevel: {
+            '@type': 'QuantitativeValue',
+            value: inStock ? 1 : 0,
+            unitCode: 'EA',
+          },
+          seller: {
+            '@type': 'AutoDealer',
+            '@id': `${site}/#organization`,
+            name: 'ครูหนึ่งรถสวย',
+            url: site,
+          },
+        },
+      },
+    };
+  });
+
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'รถมือสองแนะนำ',
+    description: 'รถมือสองคุณภาพดีจากครูหนึ่งรถสวย',
+    numberOfItems: cars.length,
+    itemListElement,
+  });
+}
+
+export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonLd }) {
   const seoHome = SEO_KEYWORD_MAP.home;
   // Helper function to get brand count with fallback to sample data
   const getBrandCount = useCallback(
@@ -80,6 +159,10 @@ export default function Home({ cars, brandCounts }) {
   // Facebook reviews: render only client
   const [showFbReviews, setShowFbReviews] = useState(false);
   const [liveStatuses, setLiveStatuses] = useState(null);
+
+  // Defer non-critical share widget to reduce long tasks during hydration
+  const [showSocialShare, setShowSocialShare] = useState(false);
+  const [socialShareUrl, setSocialShareUrl] = useState('');
 
   // Search state
   const [searchTerm, setSearchTerm] = useState('');
@@ -264,12 +347,57 @@ export default function Home({ cars, brandCounts }) {
     return () => observer.disconnect();
   }, [showFbReviews]);
 
-  // Daily cache busting for LINE sharing
-  const currentDate = new Date();
-  const dateStamp = currentDate.toISOString().split('T')[0].replace(/-/g, '');
-  const homeOgImage = `https://www.chiangmaiusedcar.com/api/og?src=${encodeURIComponent(
-    '/herobanner/cnxcar.webp'
-  )}&w=1200&h=630&v=${dateStamp}`;
+  // Load SocialShareButtons after the page is idle or when user interacts.
+  // This prevents downloading/executing its chunk during the critical render/hydration window.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (showSocialShare) return;
+
+    let done = false;
+    let idleId;
+    let timeoutId;
+
+    const enable = () => {
+      if (done) return;
+      done = true;
+      try {
+        setSocialShareUrl(window.location.href);
+      } catch {
+        setSocialShareUrl('');
+      }
+      setShowSocialShare(true);
+      cleanupListeners();
+    };
+
+    const onInteraction = () => enable();
+    const events = ['scroll', 'click', 'touchstart', 'keydown'];
+
+    const cleanupListeners = () => {
+      for (const ev of events) {
+        window.removeEventListener(ev, onInteraction);
+      }
+    };
+
+    for (const ev of events) {
+      window.addEventListener(ev, onInteraction, { passive: true, once: true });
+    }
+
+    if ('requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(enable, { timeout: 3500 });
+    } else {
+      timeoutId = window.setTimeout(enable, 2000);
+    }
+
+    // Fallback safety net: always show within 8s even if idle callback doesn't fire.
+    const hardTimeoutId = window.setTimeout(enable, 8000);
+
+    return () => {
+      cleanupListeners();
+      if (idleId && 'cancelIdleCallback' in window) window.cancelIdleCallback(idleId);
+      if (timeoutId) window.clearTimeout(timeoutId);
+      window.clearTimeout(hardTimeoutId);
+    };
+  }, [showSocialShare]);
 
   return (
     <div>
@@ -281,57 +409,6 @@ export default function Home({ cars, brandCounts }) {
         type="website"
         pageType="home"
         breadcrumbs={[{ name: 'หน้าแรก', url: '/' }]}
-        structuredData={{
-          '@context': 'https://schema.org',
-          '@type': 'ItemList',
-          name: 'รถมือสองแนะนำ',
-          description: 'รถมือสองคุณภาพดีจากครูหนึ่งรถสวย',
-          numberOfItems: safeCars.length,
-          itemListElement: carsWithLive.slice(0, 10).map((car, index) => {
-            const priceInfo = getPriceInfo(car.price?.amount || 0);
-            const carUrl = `https://www.chiangmaiusedcar.com/car/${car.handle}`;
-            const imageUrl = car.images?.[0]?.url
-              ? car.images[0].url.startsWith('http')
-                ? car.images[0].url
-                : `https://www.chiangmaiusedcar.com${car.images[0].url}`
-              : 'https://www.chiangmaiusedcar.com/herobanner/cnxcar.webp';
-
-            return {
-              '@type': 'ListItem',
-              position: index + 1,
-              item: {
-                '@type': 'Product',
-                '@id': carUrl,
-                name: car.title,
-                description:
-                  `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} ราคา ${priceInfo.display} บาท`.trim(),
-                brand: {
-                  '@type': 'Brand',
-                  name: car.vendor || car.brand || car.title?.split(' ')[0] || 'รถยนต์',
-                },
-                model: car.model || car.title,
-                sku: car.id || car.handle,
-                category: 'รถยนต์มือสอง',
-                image: imageUrl,
-                url: carUrl,
-                offers: {
-                  '@type': 'Offer',
-                  price: priceInfo.numeric || '0',
-                  priceCurrency: 'THB',
-                  url: carUrl,
-                  itemCondition: 'https://schema.org/UsedCondition',
-                  availability: car.availableForSale
-                    ? 'https://schema.org/InStock'
-                    : 'https://schema.org/OutOfStock',
-                  seller: {
-                    '@type': 'AutoDealer',
-                    name: 'ครูหนึ่งรถสวย',
-                  },
-                },
-              },
-            };
-          }),
-        }}
       />
 
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
@@ -350,7 +427,6 @@ export default function Home({ cars, brandCounts }) {
               height="280"
               className="w-full h-auto object-contain"
               loading="eager"
-              fetchPriority="high"
               decoding="async"
             />
           </picture>
@@ -370,8 +446,8 @@ export default function Home({ cars, brandCounts }) {
               คุณภาพระดับพรีเมียม
             </h2>
             <p className="text-base leading-relaxed text-gray-900 font-prompt">
-              ครูหนึ่งรถสวย แพลตฟอร์มออนไลน์ศูนย์รวมรถบ้านคุณภาพดีในล้านนา ตรวจสภาพครบถ้วน
-              ตรวจสอบประวัติรถ ฟรีดาวน์ ผ่อนถูก รับประกันหลังการขาย 1 ปี จัดส่งฟรีทั่วประเทศ
+              ครูหนึ่งรถสวย แพลตฟอร์มออนไลน์ศูนย์รวมรถบ้านคุณภาพดีในภาคเหนือ คัดเฉพาะรถมือเดียว
+              ตรวจสอบประวัติทุกคัน ฟรีดาวน์ ผ่อนถูก รับประกันหลังการขาย 1 ปี จัดส่งฟรีทั่วประเทศ
             </p>
           </div>
           <div className="flex flex-col gap-4 w-full md:w-auto md:min-w-[200px]">
@@ -395,10 +471,7 @@ export default function Home({ cars, brandCounts }) {
       </section>
 
       {/* Why Choose Us Section - SEO Content */}
-      <section
-        className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16 bg-white"
-        style={{ contentVisibility: 'auto', containIntrinsicSize: '1200px' }}
-      >
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16 bg-white cv-auto-md">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-6 sm:mb-8 text-center font-prompt">
             ทำไมต้องเลือกครูหนึ่งรถสวย?
@@ -418,7 +491,7 @@ export default function Home({ cars, brandCounts }) {
                   {' '}
                   อนุมัติง่าย
                 </strong> ด้วยระบบสินเชื่อที่หลากหลาย{' '}
-                <strong className="text-gray-900">ผ่อนถูก ผ่อนนาน</strong>
+                <strong className="text-gray-900">ผ่อนถูก ผ่อนสบาย</strong>
               </p>
             </div>
 
@@ -492,12 +565,20 @@ export default function Home({ cars, brandCounts }) {
             <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-5 sm:p-6 md:p-8">
               <p className="text-sm sm:text-base md:text-lg mb-4">
                 <strong className="text-gray-900">มีปัญหาเรื่องสินเชื่อ?</strong>{' '}
-                <Link href="/credit-check" className="text-accent hover:underline font-semibold">
+                <Link
+                  href="/credit-check"
+                  prefetch={false}
+                  className="text-accent hover:underline font-semibold"
+                >
                   ปรึกษาไฟแนนซ์ฟรี
                 </Link>{' '}
                 เรามีทีมงานมืออาชีพคอยให้คำปรึกษา{' '}
                 <strong className="text-gray-900">และอยากขายรถ?</strong>{' '}
-                <Link href="/sell-car" className="text-primary hover:underline font-semibold">
+                <Link
+                  href="/sell-car"
+                  prefetch={false}
+                  className="text-primary hover:underline font-semibold"
+                >
                   ประเมินราคาฟรี รับซื้อทันที
                 </Link>{' '}
                 ราคายุติธรรม
@@ -529,12 +610,12 @@ export default function Home({ cars, brandCounts }) {
       </section>
 
       <main
-        className="max-w-[1400px] mx-auto px-6 md:px-8 lg:px-12 py-16 bg-white font-prompt"
+        className="max-w-[1400px] mx-auto px-6 md:px-8 lg:px-12 py-16 bg-white font-prompt cv-auto-md"
         id="recommended-cars"
       >
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-prompt">
-            ค้นหารถที่คุณต้องการ
+            ค้นหารถที่คุณต้องการที่นี่
           </h2>
 
           {/* Search Bar - 2025 Modern Design */}
@@ -695,14 +776,14 @@ export default function Home({ cars, brandCounts }) {
             รถแนะนำเข้าใหม่วันนี้
           </h2>
           <p className="text-base text-gray-700 font-prompt leading-relaxed max-w-3xl mx-auto">
-            รถคุณภาพดี ตรวจสภาพครบถ้วน ตรวจสอบประวัติรถ{' '}
+            รถเก๋ง รถกระบะ รถครอบครัว รถอีโค่คาร์ SUV โฟร์วีล{' '}
             <span className="font-bold text-primary">คัดเฉพาะรถมือเดียว ประวัติใส 100%</span>{' '}
             คัดสรรมาเพื่อคุณโดยเฉพาะ ผ่านการตรวจสอบอย่างละเอียด เพื่อให้คุณมั่นใจในทุกการเดินทาง
           </p>
         </div>
         <section
           aria-label="รถเข้าใหม่แนะนำวันนี้"
-          className="grid gap-2 md:gap-6 grid-cols-2 md:grid-cols-4"
+          className="grid gap-2 md:gap-6 grid-cols-2 md:grid-cols-4 cv-auto"
         >
           {carsWithLive.length === 0 ? (
             // Empty state when no cars available
@@ -865,10 +946,7 @@ export default function Home({ cars, brandCounts }) {
           </Link>
         </div>
       </main>
-      <section
-        className="bg-white py-6 sm:py-8 mt-6 rounded-2xl max-w-6xl mx-auto border border-gray-200"
-        style={{ contentVisibility: 'auto', containIntrinsicSize: '600px' }}
-      >
+      <section className="bg-white py-6 sm:py-8 mt-6 rounded-2xl max-w-6xl mx-auto border border-gray-200 cv-auto">
         <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-primary font-prompt px-4 sm:px-6">
           คำถามที่พบบ่อย
         </h2>
@@ -951,10 +1029,7 @@ export default function Home({ cars, brandCounts }) {
       {showFbReviews && <FacebookReviewsSection />}
 
       {/* Why Choose Us Section - 2025 Modern Design */}
-      <section
-        className="bg-gradient-to-br from-primary/5 via-white to-accent/5 py-16 mt-8 rounded-3xl max-w-[1400px] mx-auto border border-primary/10 shadow-xl"
-        style={{ contentVisibility: 'auto', containIntrinsicSize: '2000px' }}
-      >
+      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 py-16 mt-8 rounded-3xl max-w-[1400px] mx-auto border border-primary/10 shadow-xl cv-auto-lg">
         <div className="px-6 md:px-10">
           {/* Header */}
           <div className="text-center mb-12">
@@ -974,11 +1049,11 @@ export default function Home({ cars, brandCounts }) {
               </svg>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-prompt">
-              ความเป็นเลิศของครูหนึ่งรถสวย
+              ทำไมต้องเลือกครูหนึ่งรถสวย
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto font-prompt leading-relaxed">
               <span className="text-primary font-semibold">รถบ้านแท้ 90% มือเดียว</span>{' '}
-              ไม่มีรถประมูล ตรวจสภาพครบถ้วนก่อนส่งมอบ{' '}
+              คัดสรรคุณภาพทุกคันไม่มีรถประมูล ทั่วประเทศใว้วางใจ{' '}
               <span className="text-orange-700 font-semibold">ลูกค้า 90% เชื่อมั่น</span>{' '}
               ไม่ต้องมาดูรถ
             </p>
@@ -1007,7 +1082,7 @@ export default function Home({ cars, brandCounts }) {
               <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">รถบ้านแท้ 100%</h3>
               <p className="text-gray-600 leading-relaxed font-prompt text-sm">
                 <span className="text-primary font-semibold">90% รถมือเดียว</span> จากเจ้าของโดยตรง
-                ไม่มีรถประมูล ไม่มีรถอุบัติเหตุ ตรวจเล่มได้ทุกหน้า
+                ไม่มีรถน้ำท่วม ไม่มีรถอุบัติเหตุ ตรวจเอกสารขอดูเล่มทะเบียนได้ทุกหน้า
               </p>
             </div>
 
@@ -1357,6 +1432,7 @@ export default function Home({ cars, brandCounts }) {
               </Link>
               <Link
                 href="/credit-check"
+                prefetch={false}
                 className="group relative backdrop-blur-xl bg-white/85 hover:bg-white/90 text-primary font-semibold text-xs md:text-sm py-3 md:py-5 px-2 md:px-4 rounded-xl md:rounded-3xl text-center transition-all duration-700 hover:scale-[1.02] active:scale-95 overflow-hidden font-prompt shadow-[4px_4px_8px_rgba(163,177,198,0.3),-2px_-2px_6px_rgba(255,255,255,0.7)] hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4),-3px_-3px_8px_rgba(255,255,255,0.8),inset_1px_1px_2px_rgba(26,35,126,0.08)] border border-white/60"
                 aria-label="ตรวจสอบสถานะสินเชื่อ"
               >
@@ -1409,6 +1485,7 @@ export default function Home({ cars, brandCounts }) {
               </Link>
               <Link
                 href="/sell-car"
+                prefetch={false}
                 className="group relative backdrop-blur-xl bg-white/85 hover:bg-white/90 text-primary font-semibold text-xs md:text-sm py-3 md:py-5 px-2 md:px-4 rounded-xl md:rounded-3xl text-center transition-all duration-700 hover:scale-[1.02] active:scale-95 overflow-hidden font-prompt shadow-[4px_4px_8px_rgba(163,177,198,0.3),-2px_-2px_6px_rgba(255,255,255,0.7)] hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4),-3px_-3px_8px_rgba(255,255,255,0.8),inset_1px_1px_2px_rgba(26,35,126,0.08)] border border-white/60"
                 aria-label="ขายรถกับครูหนึ่งรถสวย"
               >
@@ -1439,12 +1516,23 @@ export default function Home({ cars, brandCounts }) {
       </section>
 
       {/* Social Share Buttons - Fixed Position */}
-      <SocialShareButtons
-        url={typeof window !== 'undefined' ? window.location.href : ''}
-        title="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่คุณภาพดี"
-        description="รถมือสองเชียงใหม่คุณภาพดี คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย"
-        position="fixed"
-      />
+      {showSocialShare && (
+        <SocialShareButtons
+          url={socialShareUrl}
+          title="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่คุณภาพดี"
+          description="รถมือสองเชียงใหม่คุณภาพดี คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย"
+          position="fixed"
+        />
+      )}
+
+      {/* Defer large JSON-LD parsing until after above-the-fold content */}
+      {homeItemListJsonLd ? (
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: homeItemListJsonLd }}
+        />
+      ) : null}
     </div>
   );
 }
@@ -1453,6 +1541,8 @@ export default function Home({ cars, brandCounts }) {
 export async function getStaticProps() {
   let cars = [];
   let brandCounts = {};
+  let homeOgImage = null;
+  let homeItemListJsonLd = null;
 
   try {
     const result = await getHomepageCars(8);
@@ -1469,6 +1559,22 @@ export async function getStaticProps() {
     cars = [];
   }
 
+  // Cache-busting for OG image (stable for a given ISR regeneration)
+  try {
+    const dateStamp = new Date().toISOString().split('T')[0].replace(/-/g, '');
+    const src = encodeURIComponent('/herobanner/cnxcar.webp');
+    homeOgImage = `https://www.chiangmaiusedcar.com/api/og?src=${src}&w=1200&h=630&v=${dateStamp}`;
+  } catch {
+    homeOgImage =
+      'https://www.chiangmaiusedcar.com/api/og?src=%2Fherobanner%2Fcnxcar.webp&w=1200&h=630';
+  }
+
+  try {
+    homeItemListJsonLd = buildHomeItemListJsonLd(cars);
+  } catch {
+    homeItemListJsonLd = null;
+  }
+
   try {
     const counts = await getBrandCounts();
     brandCounts = counts || {};
@@ -1478,7 +1584,7 @@ export async function getStaticProps() {
   }
 
   return {
-    props: { cars, brandCounts },
+    props: { cars, brandCounts, homeOgImage, homeItemListJsonLd },
     revalidate: 600, // 10 minutes - Reduce regeneration frequency for better TTFB
   };
 }

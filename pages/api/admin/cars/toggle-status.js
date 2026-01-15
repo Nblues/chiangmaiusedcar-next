@@ -1,6 +1,7 @@
-import { isAuthenticated, verifyCsrf } from '../../../../middleware/adminAuth';
+import { isAuthenticated, verifyCsrf, getClientIp } from '../../../../middleware/adminAuth';
 import { verifyApiAuth } from '../../../../lib/apiAuth';
 import { updateCarStatus } from '../../../../lib/carStatusStore.js';
+import { rateLimit } from '../../../../lib/rateLimit';
 
 // Ensure Node.js runtime and JSON body parsing
 export const config = {
@@ -22,6 +23,19 @@ export default async function handler(req, res) {
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ success: false, error: 'Method not allowed' });
+  }
+
+  const ip = getClientIp(req);
+  const limiter = await rateLimit(`admin:toggle:${ip}`, {
+    windowMs: 10 * 60 * 1000,
+    limit: 60,
+  });
+  if (!limiter.ok) {
+    return res.status(429).json({
+      success: false,
+      error: 'Too many requests. Please try again later.',
+      retryAfterSec: Math.ceil((limiter.resetAt - Date.now()) / 1000),
+    });
   }
 
   // Check authentication: allow admin session OR API auth

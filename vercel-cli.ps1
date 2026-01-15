@@ -22,6 +22,34 @@ param(
 
 $ErrorActionPreference = 'SilentlyContinue'
 
+function Normalize-VercelArgs {
+    param([string[]]$InputArgs)
+
+    $normalized = @()
+    if ($InputArgs) { $normalized += $InputArgs }
+
+    # Do not inject flags for purely informational commands.
+    foreach ($a in $normalized) {
+        if ($a -match '^(--version|-v|--help|-h)$') {
+            return $normalized
+        }
+    }
+
+    # Ensure non-interactive deploys don't hang on prompts.
+    # Vercel CLI supports --yes to skip confirmation prompts.
+    $hasYes = $false
+    foreach ($a in $normalized) {
+        if ($a -match '^(--yes|-y)$') { $hasYes = $true; break }
+    }
+
+    if (-not $hasYes) {
+        # Only inject --yes for commands that can prompt.
+        $normalized = @('--yes') + $normalized
+    }
+
+    return $normalized
+}
+
 function Invoke-Tool {
     param(
         [string]$ToolPath,
@@ -42,6 +70,14 @@ if ($VercelArgs -and $VercelArgs.Length -gt 0) {
 }
 Write-Host ""
 
+$VercelArgsNormalized = Normalize-VercelArgs -InputArgs $VercelArgs
+if ($VercelArgsNormalized -and $VercelArgsNormalized.Length -gt 0) {
+    Write-Host ("Auto flags: " + ($VercelArgsNormalized -join ' ')) -ForegroundColor DarkGray
+    Write-Host "If this looks stuck, it is usually waiting for login or a browser confirmation." -ForegroundColor DarkYellow
+    Write-Host "Try running: pnpm run vercel -- login" -ForegroundColor DarkYellow
+    Write-Host ""
+}
+
 # If we're targeting production, prefer a fresh CLI (global installs can be stale).
 $isProdDeploy = $false
 if ($VercelArgs -and $VercelArgs.Length -gt 0) {
@@ -60,7 +96,7 @@ if ($isProdDeploy) {
     )
     foreach ($npx in $npxPathCandidates) {
         if (-not [string]::IsNullOrWhiteSpace($npx) -and (Test-Path $npx)) {
-            if (Invoke-Tool -ToolPath $npx -Args (@('vercel@latest') + $VercelArgs)) { exit 0 }
+            if (Invoke-Tool -ToolPath $npx -Args (@('vercel@latest') + $VercelArgsNormalized)) { exit 0 }
         }
     }
 }
@@ -68,13 +104,13 @@ if ($isProdDeploy) {
 # 1) Local portable binary (optional manual placement)
 $localExe = Join-Path (Get-Location) 'vercel.exe'
 if (Test-Path $localExe) {
-    if (Invoke-Tool -ToolPath $localExe -Args $VercelArgs) { exit 0 }
+    if (Invoke-Tool -ToolPath $localExe -Args $VercelArgsNormalized) { exit 0 }
 }
 
 # 2) Global vercel in PATH
 $vercelCmd = (& { (Get-Command vercel -ErrorAction SilentlyContinue).Path })
 if ($vercelCmd) {
-    if (Invoke-Tool -ToolPath $vercelCmd -Args $VercelArgs) { exit 0 }
+    if (Invoke-Tool -ToolPath $vercelCmd -Args $VercelArgsNormalized) { exit 0 }
 }
 
 # 3) npx vercel
@@ -86,21 +122,21 @@ $npxPathCandidates = @(
 )
 foreach ($npx in $npxPathCandidates) {
     if (-not [string]::IsNullOrWhiteSpace($npx) -and (Test-Path $npx)) {
-        if (Invoke-Tool -ToolPath $npx -Args (@('vercel@latest') + $VercelArgs)) { exit 0 }
+        if (Invoke-Tool -ToolPath $npx -Args (@('vercel@latest') + $VercelArgsNormalized)) { exit 0 }
     }
 }
 
 # 4) npm exec vercel
 $npmCmd = (& { (Get-Command npm -ErrorAction SilentlyContinue).Path })
 if ($npmCmd) {
-    if (Invoke-Tool -ToolPath $npmCmd -Args (@('exec','-y','vercel@latest','--') + $VercelArgs)) { exit 0 }
+    if (Invoke-Tool -ToolPath $npmCmd -Args (@('exec','-y','vercel@latest','--') + $VercelArgsNormalized)) { exit 0 }
 }
 
 # 5) pnpm dlx vercel
 $pnpmCmd = (& { (Get-Command pnpm -ErrorAction SilentlyContinue).Path })
 if (-not $pnpmCmd) { $pnpmCmd = "C:\\nvm4w\\nodejs\\pnpm.CMD" }
 if (Test-Path $pnpmCmd) {
-    if (Invoke-Tool -ToolPath $pnpmCmd -Args (@('dlx','vercel@latest') + $VercelArgs)) { exit 0 }
+    if (Invoke-Tool -ToolPath $pnpmCmd -Args (@('dlx','vercel@latest') + $VercelArgsNormalized)) { exit 0 }
 }
 
 # Fallback: Guidance (ASCII only to avoid encoding parse issues)

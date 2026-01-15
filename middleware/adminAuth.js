@@ -24,6 +24,18 @@ const SESSION_SECRET = sanitizeEnv(
   'default-secret-change-in-production'
 );
 
+const DEFAULT_ADMIN_USERNAME = 'admin';
+const DEFAULT_ADMIN_PASSWORD = 'changeme123';
+const DEFAULT_SESSION_SECRET = 'default-secret-change-in-production';
+
+function isSecureConfig() {
+  if (process.env.NODE_ENV !== 'production') return true;
+  const secureUsername = ADMIN_USERNAME !== DEFAULT_ADMIN_USERNAME;
+  const securePassword = ADMIN_PASSWORD !== DEFAULT_ADMIN_PASSWORD;
+  const secureSecret = SESSION_SECRET !== DEFAULT_SESSION_SECRET;
+  return secureUsername && securePassword && secureSecret;
+}
+
 // Light telemetry if sanitation occurred (no secrets printed)
 try {
   const rawU = process.env.ADMIN_USERNAME || '';
@@ -88,6 +100,7 @@ function verifySessionToken(token) {
 }
 
 export function isAuthenticated(req) {
+  if (!isSecureConfig()) return false;
   const cookies = parse(req.headers.cookie || '');
   // Support both legacy and __Host- prefixed cookie names
   const sessionToken = cookies['__Host-admin_session'] || cookies.admin_session;
@@ -98,10 +111,15 @@ export function isAuthenticated(req) {
 }
 
 export function authenticate(username, password) {
+  if (!isSecureConfig()) return null;
   if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
     return generateSessionToken(username);
   }
   return null;
+}
+
+export function hasSecureAdminConfig() {
+  return isSecureConfig();
 }
 
 export function requireAuth(handler) {

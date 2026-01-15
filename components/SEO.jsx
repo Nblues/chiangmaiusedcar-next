@@ -297,6 +297,16 @@ export default function SEO({
     return 'image/jpeg';
   }, [absoluteImage]);
 
+  const structuredDataJson = useMemo(() => {
+    if (!structuredData) return null;
+    if (typeof structuredData === 'string') return structuredData;
+    try {
+      return JSON.stringify(structuredData);
+    } catch {
+      return null;
+    }
+  }, [structuredData]);
+
   // Memoize OG images array with 2025 social sharing standards
   const ogImages = useMemo(() => {
     const withOgSize = (inputUrl, width, height) => {
@@ -664,6 +674,8 @@ export default function SEO({
                   price: carData.price?.amount,
                   currency: carData.price?.currencyCode || 'THB',
                   inStock: carData.availableForSale !== false,
+                  status: carData.status,
+                  availability: carData.status === 'reserved' ? 'OutOfStock' : 'InStock',
                   review: carData.review, // เพิ่ม review support
                 }
               )
@@ -689,6 +701,8 @@ export default function SEO({
                 price: carData.price?.amount,
                 currency: carData.price?.currencyCode || 'THB',
                 inStock: carData.availableForSale !== false,
+                status: carData.status,
+                availability: carData.status === 'reserved' ? 'OutOfStock' : 'InStock',
                 sellerName: 'ครูหนึ่งรถสวย',
                 review: carData.review,
               })
@@ -745,10 +759,10 @@ export default function SEO({
       )}
 
       {/* Extra structured data (page specific) */}
-      {structuredData && (
+      {structuredDataJson && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          dangerouslySetInnerHTML={{ __html: structuredDataJson }}
         />
       )}
     </Head>

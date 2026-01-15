@@ -5,9 +5,8 @@
   "devCommand": "pnpm dev",
   "installCommand": "pnpm install --no-frozen-lockfile",
   "functions": {
-    "pages/api/*.js": {
-      "maxDuration": 10,
-      "memory": 1024
+    "pages/api/**/*.js": {
+      "maxDuration": 10
     }
   },
   "crons": [

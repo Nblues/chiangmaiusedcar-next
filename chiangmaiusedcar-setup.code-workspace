@@ -1,0 +1,39 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    // Override extension-specific settings
+    "typescript.tsserver.pluginPaths": [],
+    "typescript.tsserver.enableTracing": false,
+    "typescript.surveys.enabled": false,
+    
+    // IntelliCode - disable for TypeScript/JavaScript to prevent crashes
+    "vsintellicode.typescript.completionsEnabled": false,
+    "vsintellicode.javascript.completionsEnabled": false,
+    
+    // GitHub Copilot - optimize to reduce memory usage
+    "github.copilot.enable": {
+      "*": true,
+      "yaml": false,
+      "plaintext": false,
+      "markdown": false
+    },
+    
+    // Postman - disable features that might interfere
+    "postman.disableTelemetry": true,
+    "postman.followRedirects": true
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "bradlc.vscode-tailwindcss"
+    ],
+    "unwantedRecommendations": [
+      "webhint.vscode-webhint"
+    ]
+  }
+}

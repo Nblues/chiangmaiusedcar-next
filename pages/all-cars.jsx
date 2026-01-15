@@ -265,6 +265,14 @@ export default function AllCars({ cars }) {
               const carDescription =
                 car.description ||
                 `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} มือสองเชียงใหม่ สภาพสวย ราคาดี`.trim();
+              const normalizedStatus = typeof car?.status === 'string' ? car.status.trim() : '';
+              const inStock =
+                normalizedStatus.toLowerCase() === 'reserved'
+                  ? false
+                  : typeof car?.availableForSale === 'boolean'
+                    ? car.availableForSale
+                    : true;
+              const availabilityValue = inStock ? 'InStock' : 'OutOfStock';
 
               return {
                 '@type': 'ListItem',
@@ -291,14 +299,18 @@ export default function AllCars({ cars }) {
                     price: sanitizedPrice,
                     priceCurrency: 'THB',
                     itemCondition: 'https://schema.org/UsedCondition',
-                    availability:
-                      car.availableForSale !== false
-                        ? 'https://schema.org/InStock'
-                        : 'https://schema.org/OutOfStock',
+                    availability: `https://schema.org/${availabilityValue}`,
+                    inventoryLevel: {
+                      '@type': 'QuantitativeValue',
+                      value: inStock ? 1 : 0,
+                      unitCode: 'EA',
+                    },
                     priceValidUntil: sanitizedPrice ? priceValidUntil : undefined,
                     seller: {
                       '@type': 'AutoDealer',
+                      '@id': 'https://www.chiangmaiusedcar.com/#organization',
                       name: 'ครูหนึ่งรถสวย',
+                      url: 'https://www.chiangmaiusedcar.com',
                       telephone: '+66940649018',
                       address: {
                         '@type': 'PostalAddress',
@@ -314,7 +326,7 @@ export default function AllCars({ cars }) {
                     hasMerchantReturnPolicy: {
                       '@type': 'MerchantReturnPolicy',
                       applicableCountry: 'TH',
-                      returnPolicyCategory: 'http://schema.org/MerchantReturnUnlimitedWindow',
+                      returnPolicyCategory: 'https://schema.org/MerchantReturnUnlimitedWindow',
                       merchantReturnDays: 7,
                       returnFees: 'http://schema.org/FreeReturn',
                     },

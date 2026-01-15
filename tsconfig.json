@@ -22,34 +22,14 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "types": ["node"],
+    "maxNodeModuleJsDepth": 0,
+    "disableReferencedProjectLoad": true,
     "plugins": [
       {
         "name": "next"
       }
     ]
   },
-  "include": [
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "middleware.*",
-    "pages/**/*",
-    "components/**/*",
-    "lib/**/*",
-    "utils/**/*",
-    "types/**/*",
-    "config/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    ".next",
-    "out",
-    "dist",
-    "deployment_source",
-    "backups",
-    "backup_project_2025_09_11",
-    "dev",
-    "dev-tools",
-    "docs",
-    "logs"
-  ]
+  "include": ["next-env.d.ts", ".next/types/**/*.ts", "middleware.*", "pages/**/*", "components/**/*", "lib/**/*", "utils/**/*", "types/**/*", "config/**/*"],
+  "exclude": ["node_modules", ".next", "out", "dist", "deployment_source", "backups", "backup_project_2025_09_11", "dev", "dev-tools", "docs", "logs"]
 }

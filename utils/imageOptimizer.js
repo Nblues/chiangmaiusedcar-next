@@ -67,8 +67,8 @@ export function generateSizes(type = 'default') {
     // รูปใหญ่เต็มหน้าจอ (หน้ารายละเอียดรถ)
     hero: '(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px',
 
-    // การ์ดรถ (หน้ารายการรถ)
-    card: '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
+    // การ์ดรถ (หน้ารายการรถ) - ปรับให้เหมาะกับกริด 2 คอลัมน์บนมือถือ
+    card: '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw',
 
     // Thumbnail เล็กๆ (gallery) - ⭐ ลดขนาดลงเพื่อโหลดเร็วขึ้น
     thumbnail: '(max-width: 640px) 80px, (max-width: 1024px) 96px, 120px',

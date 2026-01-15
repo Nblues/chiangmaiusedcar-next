@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
 import SEO from '../../components/SEO';
+import { isAuthenticated } from '../../middleware/adminAuth';
 
 // Add displayName for admin layout detection
 function AdminLogin() {
@@ -191,3 +192,16 @@ AdminLogin.getLayout = function getLayout(page) {
 };
 
 export default AdminLogin;
+
+export async function getServerSideProps({ req }) {
+  if (isAuthenticated(req)) {
+    return {
+      redirect: {
+        destination: '/admin/dashboard',
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
+}

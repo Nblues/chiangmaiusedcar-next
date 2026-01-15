@@ -1,0 +1,47 @@
+/* Prose styling split from globals.css to avoid shipping on pages that don't use it.
+   Use by adding `proseStyles.prose` to the wrapper className. */
+
+.prose {
+  /* Keep original intent: do not constrain width */
+  @apply max-w-none;
+}
+
+.prose h2 {
+  @apply text-2xl font-bold text-gray-900 mt-8 mb-4 font-prompt;
+}
+
+.prose h3 {
+  @apply text-xl font-bold text-gray-900 mt-6 mb-3 font-prompt;
+}
+
+.prose p {
+  @apply text-gray-800 mb-4 leading-relaxed font-prompt;
+}
+
+.prose ul {
+  @apply list-disc list-inside mb-4 space-y-2;
+}
+
+.prose li {
+  @apply text-gray-800 font-prompt;
+}
+
+.prose strong {
+  @apply font-bold text-gray-900;
+}
+
+.prose table {
+  @apply w-full border-collapse border border-gray-300 my-6;
+}
+
+.prose th {
+  @apply border border-gray-300 bg-gray-100 px-4 py-2 font-bold text-left font-prompt;
+}
+
+.prose td {
+  @apply border border-gray-300 px-4 py-2 font-prompt;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-accent pl-4 my-6 text-gray-600 italic;
+}

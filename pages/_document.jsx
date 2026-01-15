@@ -12,22 +12,27 @@ export default class MyDocument extends Document {
     return (
       <Html lang={htmlLang}>
         <Head>
+          {/* Essential HTML5 Meta Tags for SEO 100/100 */}
+          <meta charSet="utf-8" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+
+          {/* 🚀 LCP Optimization: Preload hero image using responsive candidates */}
+          {/* Use imagesrcset/imagesizes so the browser preloads the same file it will actually render */}
+          {/* eslint-disable-next-line react/no-unknown-property */}
+          <link
+            rel="preload"
+            as="image"
+            href="/herobanner/cnxcar-828w.webp"
+            type="image/webp"
+            imageSrcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
+            imageSizes="100vw"
+          />
+
           {/* User Timing: mark earliest possible app start (for hydration measurements) */}
           <script
             dangerouslySetInnerHTML={{
               __html:
                 ";(function(){try{if(window.performance&&performance.mark){performance.mark('app:start');}}catch(e){}})();",
-            }}
-          />
-
-          {/* Critical CSS for Hero Section - Inline to prevent render blocking */}
-          <style
-            dangerouslySetInnerHTML={{
-              __html: `
-                .hero-header{position:relative;width:100%;height:auto;display:flex;align-items:center;justify-content:center;background:linear-gradient(to right,#fed7aa,#bfdbfe)}
-                .hero-container{position:relative;width:100%;max-width:1400px;margin:0 auto}
-                .hero-image{width:100%;height:auto;object-fit:contain;max-height:60vh}
-              `,
             }}
           />
 
@@ -39,22 +44,6 @@ export default class MyDocument extends Document {
           <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
           <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
           <link rel="preconnect" href="https://files.myshopify.com" crossOrigin="anonymous" />
-
-          {/* 🚀 LCP Optimization: Preload hero image using responsive candidates */}
-          {/* Use imagesrcset/imagesizes so the browser preloads the same file it will actually render */}
-          <link
-            rel="preload"
-            as="image"
-            href="/herobanner/cnxcar-828w.webp"
-            type="image/webp"
-            fetchPriority="high"
-            imageSrcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
-            imageSizes="100vw"
-          />
-
-          {/* Essential HTML5 Meta Tags for SEO 100/100 */}
-          <meta charSet="utf-8" />
-          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
           {/* Facebook In-App Browser Compatibility */}
           <meta httpEquiv="Accept-CH" content="DPR, Viewport-Width, Width" />
@@ -162,14 +151,6 @@ export default class MyDocument extends Document {
           {/* Font preload is handled automatically by Next.js for @fontsource packages */}
           {/* LCP preload has been moved to the top for better browser hint processing */}
 
-          {/* Browser compatibility script: only needed inside in-app browsers (FB/IG/Line/Messenger).
-              Avoid running it on normal browsers to reduce long main-thread tasks. */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `(function(){try{var ua=navigator.userAgent||'';if(!/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line/i.test(ua))return;var load=function(){try{var s=document.createElement('script');s.src='/browser-compat.js';s.async=true;document.head.appendChild(s);}catch(e){}};if('requestIdleCallback'in window){window.requestIdleCallback(load,{timeout:2000});}else if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(load,0);},{once:true});}else{setTimeout(load,0);}}catch(e){}})();`,
-            }}
-          />
-
           {/* Facebook Pixel - Lazy loaded via component in _app.jsx for better performance */}
         </Head>
         <body>
@@ -182,6 +163,14 @@ export default class MyDocument extends Document {
           </a>
           <Main />
           <NextScript />
+
+          {/* Browser compatibility script: only needed inside in-app browsers (FB/IG/Line/Messenger).
+              Keep it out of <Head> so it doesn't delay first paint / LCP discovery. */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(){try{var ua=navigator.userAgent||'';if(!/FBAN|FBAV|FB_IAB|Messenger|Instagram|Line/i.test(ua))return;var load=function(){try{var s=document.createElement('script');s.src='/browser-compat.js';s.async=true;document.head.appendChild(s);}catch(e){}};if('requestIdleCallback'in window){window.requestIdleCallback(load,{timeout:2000});}else if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(load,0);},{once:true});}else{setTimeout(load,0);}}catch(e){}})();`,
+            }}
+          />
         </body>
       </Html>
     );

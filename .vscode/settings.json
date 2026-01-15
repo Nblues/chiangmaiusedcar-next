@@ -1,10 +1,26 @@
 {
-  // TypeScript/JavaScript performance
+  // TypeScript/JavaScript performance - Enhanced to prevent crashes
+  "typescript.tsserver.maxTsServerMemory": 8192,
+  "typescript.tsserver.watchOptions": {
+    "excludeDirectories": [
+      "**/node_modules",
+      "**/.next",
+      "**/out",
+      "**/dist",
+      "**/build",
+      "**/logs",
+      "**/backups"
+    ]
+  },
   "typescript.preferences.includePackageJsonAutoImports": "off",
   "typescript.suggest.autoImports": false,
   "typescript.disableAutomaticTypeAcquisition": false,
   "typescript.preferences.includeCompletionsWithSnippetText": false,
   "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.tsserver.useSyntaxServer": "auto",
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
 
   // File associations for JSX in .js files
   "files.associations": {
@@ -57,13 +73,16 @@
   // Memory optimization - เพิ่ม RAM เต็มที่ (12GB RAM system)
   "extensions.autoUpdate": false,
   "extensions.autoCheckUpdates": false,
-  "typescript.tsserver.maxTsServerMemory": 8192,
   "javascript.suggest.enabled": true,
   "typescript.suggest.enabled": true,
   "editor.minimap.enabled": false,
   "editor.codeLens": false,
   "problems.decorations.enabled": true,
-  "typescript.tsserver.useSyntaxServer": "auto",
+  
+  // Disable problematic extensions features that may cause crashes
+  "github.copilot.advanced": {},
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+  "postman.disableInlayHints": true,
 
   // Terminal settings
   "terminal.integrated.enablePersistentSessions": false,
@@ -75,8 +94,6 @@
   "git.autorefresh": true,
   "git.autofetch": false,
   "git.statusLimit": 20000,
-false,
-  "git.autofetch": falsel": "off",
 
   // Format and lint
   "editor.formatOnSave": true,
@@ -98,5 +115,26 @@ false,
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  
+  // Disable webhint to prevent crashes
+  "webhint.enable": false,
+  
+  // Tailwind CSS IntelliSense configuration
+  "tailwindCSS.experimental.classRegex": [
+    ["class[n]?Name[s]?\\s*[:=]\\s*['\"]([^'\"]*)['\"]", "([^'\"]*)"],
+    ["tw`([^`]*)", "([^`]*)"]
+  ],
+  "tailwindCSS.includeLanguages": {
+    "typescript": "javascript",
+    "typescriptreact": "javascript",
+    "javascript": "javascript",
+    "javascriptreact": "javascript"
+  },
+  "tailwindCSS.validate": true,
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.colorDecorators": true,
+  "tailwindCSS.showPixelEquivalents": true,
+  "tailwindCSS.rootFontSize": 16,
+  
   "CodeGPT.apiKey": "OpenAI"
 }

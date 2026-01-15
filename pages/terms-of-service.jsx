@@ -1,4 +1,5 @@
 import SEO from '../components/SEO';
+import proseStyles from '../styles/prose.module.css';
 
 export default function TermsOfService() {
   return (
@@ -14,7 +15,7 @@ export default function TermsOfService() {
           <div className="bg-white rounded-lg shadow-lg p-8">
             <h1 className="text-3xl font-bold text-primary mb-8 text-center">ข้อกำหนดการใช้งาน</h1>
 
-            <div className="prose prose-lg max-w-none">
+            <div className={`prose prose-lg max-w-none ${proseStyles.prose}`}>
               <div className="text-gray-600 mb-6">
                 <strong>วันที่มีผลบังคับใช้:</strong> 4 สิงหาคม 2567
               </div>

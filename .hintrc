@@ -1,0 +1,6 @@
+{
+  "extends": ["@hint/configuration-web-recommended"],
+  "connector": {
+    "name": "local",
+  },
+}

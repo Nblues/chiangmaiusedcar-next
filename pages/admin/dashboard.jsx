@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import SEO from '../../components/SEO';
+import { isAuthenticated } from '../../middleware/adminAuth';
 
 // Lazy load admin components
 const ToolsPanel = dynamic(() => import('../../components/admin/ToolsPanel'), { ssr: false });
@@ -233,3 +234,16 @@ AdminDashboard.getLayout = function getLayout(page) {
 };
 
 export default AdminDashboard;
+
+export async function getServerSideProps({ req }) {
+  if (!isAuthenticated(req)) {
+    return {
+      redirect: {
+        destination: '/admin/login',
+        permanent: false,
+      },
+    };
+  }
+
+  return { props: {} };
+}

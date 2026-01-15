@@ -3,6 +3,12 @@
 import { NextResponse } from 'next/server';
 
 export function middleware(request) {
+  // In development, skip middleware entirely to avoid breaking HMR/WebSocket
+  // and to keep debugging predictable.
+  if (process.env.NODE_ENV !== 'production') {
+    return NextResponse.next();
+  }
+
   // Never touch Next.js HMR WebSocket / upgrade requests.
   // If middleware runs on these, dev HMR can break in subtle ways.
   const isWebSocketUpgrade = request.headers.get('upgrade')?.toLowerCase() === 'websocket';
@@ -57,14 +63,7 @@ export function middleware(request) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - _next/webpack-hmr (dev HMR websocket)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!api|_next/static|_next/image|_next/webpack-hmr|favicon.ico).*)',
+    // Exclude Next.js internals and common static files
+    '/((?!api|_next/static|_next/image|_next/webpack-hmr|favicon.ico|robots.txt|sitemap.xml).*)',
   ],
 };

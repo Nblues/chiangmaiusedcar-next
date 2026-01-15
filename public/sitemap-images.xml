@@ -2,35 +2,1495 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://www.chiangmaiusedcar.com/</loc>
+    <loc>https://www.chiangmaiusedcar.com</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
     <image:image>
       <image:loc>https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp</image:loc>
-      <image:title>ครูหนึ่งรถสวย - รถมือสองเชียงใหม่</image:title>
       <image:caption>ครูหนึ่งรถสวย - รถมือสองเชียงใหม่</image:caption>
+      <image:title>หน้าแรกครูหนึ่งรถสวย</image:title>
+      <image:license>https://www.chiangmaiusedcar.com/terms</image:license>
     </image:image>
-  </url>
-  <url>
-    <loc>https://www.chiangmaiusedcar.com/</loc>
     <image:image>
-      <image:loc>https://www.chiangmaiusedcar.com/herobanner/team.webp</image:loc>
-      <image:title>ทีมงานครูหนึ่งรถสวย</image:title>
+      <image:loc>https://www.chiangmaiusedcar.com/herobanner/team.png</image:loc>
       <image:caption>ทีมงานครูหนึ่งรถสวย</image:caption>
+      <image:title>เกี่ยวกับครูหนึ่งรถสวย</image:title>
+      <image:license>https://www.chiangmaiusedcar.com/terms</image:license>
     </image:image>
-  </url>
-  <url>
-    <loc>https://www.chiangmaiusedcar.com/</loc>
     <image:image>
-      <image:loc>https://www.chiangmaiusedcar.com/herobanner/allusedcars.webp</image:loc>
-      <image:title>รถมือสองทั้งหมด</image:title>
-      <image:caption>รถมือสองทั้งหมด</image:caption>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://www.chiangmaiusedcar.com/</loc>
-    <image:image>
-      <image:loc>https://www.chiangmaiusedcar.com/favicon.webp</image:loc>
-      <image:title>โลโก้ครูหนึ่งรถสวย</image:title>
+      <image:loc>https://www.chiangmaiusedcar.com/logo/logo_main.png</image:loc>
       <image:caption>โลโก้ครูหนึ่งรถสวย</image:caption>
+      <image:title>ครูหนึ่งรถสวย Logo</image:title>
+      <image:license>https://www.chiangmaiusedcar.com/terms</image:license>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/about</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.chiangmaiusedcar.com/herobanner/team.png</image:loc>
+      <image:caption>ทีมงานครูหนึ่งรถสวย - ประสบการณ์ 10+ ปี</image:caption>
+      <image:title>เกี่ยวกับครูหนึ่งรถสวย</image:title>
+      <image:license>https://www.chiangmaiusedcar.com/terms</image:license>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/toyota-corolla-altis-2-0v-%E0%B8%AD%E0%B8%AD%E0%B9%82%E0%B8%95%E0%B9%89-%E0%B8%9B%E0%B8%B5-2009</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_646901d2-12c6-4877-b3a3-37693cb6fe83.jpg?v=1768123232</image:loc>
+      <image:caption>TOYOTA COROLLA ALTIS 2.0V ออโต้ ปี 2009</image:caption>
+      <image:title>TOYOTA COROLLA ALTIS 2.0V ออโต้ ปี 2009</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_6eb62cad-f916-4003-a764-5a36f060af79.jpg?v=1768123232</image:loc>
+      <image:caption>TOYOTA COROLLA ALTIS 2.0V ออโต้ ปี 2009</image:caption>
+      <image:title>TOYOTA COROLLA ALTIS 2.0V ออโต้ ปี 2009</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_38696169-114b-46c1-afb7-f3ab2ee8b7a7.jpg?v=1768123231</image:loc>
+      <image:caption>TOYOTA COROLLA ALTIS 2.0V ออโต้ ปี 2009</image:caption>
+      <image:title>TOYOTA COROLLA ALTIS 2.0V ออโต้ ปี 2009</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_33b8e138-cabe-43ea-9ef2-4890f3659363.jpg?v=1768123232</image:loc>
+      <image:caption>TOYOTA COROLLA ALTIS 2.0V ออโต้ ปี 2009</image:caption>
+      <image:title>TOYOTA COROLLA ALTIS 2.0V ออโต้ ปี 2009</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_45398a3a-6304-4d6d-98c8-56a0c75d2d73.jpg?v=1768123231</image:loc>
+      <image:caption>TOYOTA COROLLA ALTIS 2.0V ออโต้ ปี 2009</image:caption>
+      <image:title>TOYOTA COROLLA ALTIS 2.0V ออโต้ ปี 2009</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/mitsubishi-pajero-sport-2-5-gt-2wd-2011</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_221108a4-4d7b-48c5-a0e4-f6320e9a8420.jpg?v=1768122833</image:loc>
+      <image:caption>Mitsubishi Pajero Sport 2.5 GT 2WD 2011</image:caption>
+      <image:title>Mitsubishi Pajero Sport 2.5 GT 2WD 2011</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_00e42287-7e08-49b9-a4d8-c1f67e6b6615.jpg?v=1768122834</image:loc>
+      <image:caption>Mitsubishi Pajero Sport 2.5 GT 2WD 2011</image:caption>
+      <image:title>Mitsubishi Pajero Sport 2.5 GT 2WD 2011</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_c90d52e6-d37e-4440-9104-079eac718c8c.jpg?v=1768122833</image:loc>
+      <image:caption>Mitsubishi Pajero Sport 2.5 GT 2WD 2011</image:caption>
+      <image:title>Mitsubishi Pajero Sport 2.5 GT 2WD 2011</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_d9730e43-388a-4ee8-9df2-bcf0318f6fa4.jpg?v=1768122833</image:loc>
+      <image:caption>Mitsubishi Pajero Sport 2.5 GT 2WD 2011</image:caption>
+      <image:title>Mitsubishi Pajero Sport 2.5 GT 2WD 2011</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_b4a4e38f-609d-4b32-bec8-a346a2ca8156.jpg?v=1768122834</image:loc>
+      <image:caption>Mitsubishi Pajero Sport 2.5 GT 2WD 2011</image:caption>
+      <image:title>Mitsubishi Pajero Sport 2.5 GT 2WD 2011</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/suzuki-swift-1-2-glx-top-auto-%E0%B8%9B%E0%B8%B5-2018-2562-%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%99%E0%B8%97%E0%B9%87%E0%B8%AD%E0%B8%9B</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_b8088918-a8f9-4832-becb-084dfdd7131e.jpg?v=1768018396</image:loc>
+      <image:caption>Suzuki Swift 1.2 GLX TOP Auto ปี 2018 / 2562 (รุ่นท็อป)</image:caption>
+      <image:title>Suzuki Swift 1.2 GLX TOP Auto ปี 2018 / 2562 (รุ่นท็อป)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_20dd926d-2d16-42d2-86d4-b0cdd8c41b1e.jpg?v=1768018396</image:loc>
+      <image:caption>Suzuki Swift 1.2 GLX TOP Auto ปี 2018 / 2562 (รุ่นท็อป)</image:caption>
+      <image:title>Suzuki Swift 1.2 GLX TOP Auto ปี 2018 / 2562 (รุ่นท็อป)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_6054f489-7118-45e3-a0fd-8f4c33691b58.jpg?v=1768018396</image:loc>
+      <image:caption>Suzuki Swift 1.2 GLX TOP Auto ปี 2018 / 2562 (รุ่นท็อป)</image:caption>
+      <image:title>Suzuki Swift 1.2 GLX TOP Auto ปี 2018 / 2562 (รุ่นท็อป)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_85a1bad9-88a4-40bd-85c5-4f3114b0f6df.jpg?v=1768018396</image:loc>
+      <image:caption>Suzuki Swift 1.2 GLX TOP Auto ปี 2018 / 2562 (รุ่นท็อป)</image:caption>
+      <image:title>Suzuki Swift 1.2 GLX TOP Auto ปี 2018 / 2562 (รุ่นท็อป)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_2ef01864-bb74-481d-853b-748f7cb40fd3.jpg?v=1768018396</image:loc>
+      <image:caption>Suzuki Swift 1.2 GLX TOP Auto ปี 2018 / 2562 (รุ่นท็อป)</image:caption>
+      <image:title>Suzuki Swift 1.2 GLX TOP Auto ปี 2018 / 2562 (รุ่นท็อป)</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-jazz-1-5-s-auto-%E0%B8%9B%E0%B8%B5-2014-2557</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_67027db9-ea3f-4006-995d-508ca1931aa5.jpg?v=1767963104</image:loc>
+      <image:caption>Honda Jazz 1.5 S Auto ปี 2014 / 2557</image:caption>
+      <image:title>Honda Jazz 1.5 S Auto ปี 2014 / 2557</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_4a9d1c38-8059-430e-b865-51103dc82083.jpg?v=1767963104</image:loc>
+      <image:caption>Honda Jazz 1.5 S Auto ปี 2014 / 2557</image:caption>
+      <image:title>Honda Jazz 1.5 S Auto ปี 2014 / 2557</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_bd9c01d8-5b87-4e85-889e-724113976129.jpg?v=1767963104</image:loc>
+      <image:caption>Honda Jazz 1.5 S Auto ปี 2014 / 2557</image:caption>
+      <image:title>Honda Jazz 1.5 S Auto ปี 2014 / 2557</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_b45c731c-c567-4df5-ad81-02a122bc5277.jpg?v=1767963104</image:loc>
+      <image:caption>Honda Jazz 1.5 S Auto ปี 2014 / 2557</image:caption>
+      <image:title>Honda Jazz 1.5 S Auto ปี 2014 / 2557</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_037dc936-1eb7-4edf-86a4-423b40c8e8a7.jpg?v=1767963104</image:loc>
+      <image:caption>Honda Jazz 1.5 S Auto ปี 2014 / 2557</image:caption>
+      <image:title>Honda Jazz 1.5 S Auto ปี 2014 / 2557</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/mazda-cx-5-2-0-sp-auto-%E0%B8%9B%E0%B8%B5-2018</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_0e5b4407-0d44-46ee-bdaf-90e6ccd16e6b.jpg?v=1767663599</image:loc>
+      <image:caption>Mazda CX-5 2.0 SP Auto ปี 2018</image:caption>
+      <image:title>Mazda CX-5 2.0 SP Auto ปี 2018</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_641f4622-0414-47da-acd9-4ee0926a0b7e.jpg?v=1767663599</image:loc>
+      <image:caption>Mazda CX-5 2.0 SP Auto ปี 2018</image:caption>
+      <image:title>Mazda CX-5 2.0 SP Auto ปี 2018</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_04dd20c1-3449-4425-b1c7-0bf4bc865a31.jpg?v=1767663599</image:loc>
+      <image:caption>Mazda CX-5 2.0 SP Auto ปี 2018</image:caption>
+      <image:title>Mazda CX-5 2.0 SP Auto ปี 2018</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_e01243f0-4128-4bd7-9c1c-11801edc02ee.jpg?v=1767663599</image:loc>
+      <image:caption>Mazda CX-5 2.0 SP Auto ปี 2018</image:caption>
+      <image:title>Mazda CX-5 2.0 SP Auto ปี 2018</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_8e9bb568-495c-44ce-b613-de756baa5e50.jpg?v=1767663599</image:loc>
+      <image:caption>Mazda CX-5 2.0 SP Auto ปี 2018</image:caption>
+      <image:title>Mazda CX-5 2.0 SP Auto ปี 2018</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-city-turbo-sv-hatchback</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_0df7e5b3-c4f9-42f6-bad3-bb7b441a5d30.jpg?v=1767497732</image:loc>
+      <image:caption>Honda City Turbo SV Hatchback</image:caption>
+      <image:title>Honda City Turbo SV Hatchback</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_fed548e4-9cd7-4c58-a451-60a0f9c4b368.jpg?v=1767497732</image:loc>
+      <image:caption>Honda City Turbo SV Hatchback</image:caption>
+      <image:title>Honda City Turbo SV Hatchback</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_24cdb1b7-06ba-4e2b-8687-132d2a20e741.jpg?v=1767497732</image:loc>
+      <image:caption>Honda City Turbo SV Hatchback</image:caption>
+      <image:title>Honda City Turbo SV Hatchback</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_6aef6ad2-734e-4b78-84cd-3a442651cf64.jpg?v=1767497732</image:loc>
+      <image:caption>Honda City Turbo SV Hatchback</image:caption>
+      <image:title>Honda City Turbo SV Hatchback</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_4aa3a7f7-f30c-4d0f-abd7-14e2149353f5.jpg?v=1767497732</image:loc>
+      <image:caption>Honda City Turbo SV Hatchback</image:caption>
+      <image:title>Honda City Turbo SV Hatchback</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/toyota-vios-1-5-g-auto-%E0%B8%9B%E0%B8%B5-2017</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_e957c1b1-6211-4496-bfa0-1794f1b20404.jpg?v=1767435308</image:loc>
+      <image:caption>Toyota Vios 1.5 G Auto ปี 2017</image:caption>
+      <image:title>Toyota Vios 1.5 G Auto ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a7a38995-47c3-49a1-9983-631547dce885.jpg?v=1767435308</image:loc>
+      <image:caption>Toyota Vios 1.5 G Auto ปี 2017</image:caption>
+      <image:title>Toyota Vios 1.5 G Auto ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_08643185-c8d6-4427-8bf0-e7442d1c1684.jpg?v=1767435308</image:loc>
+      <image:caption>Toyota Vios 1.5 G Auto ปี 2017</image:caption>
+      <image:title>Toyota Vios 1.5 G Auto ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_1f7b758a-7bea-4b20-a560-ae31792d2e2f.jpg?v=1767435308</image:loc>
+      <image:caption>Toyota Vios 1.5 G Auto ปี 2017</image:caption>
+      <image:title>Toyota Vios 1.5 G Auto ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_4d79ea7d-8191-4838-befb-390eb62e80ce.jpg?v=1767435308</image:loc>
+      <image:caption>Toyota Vios 1.5 G Auto ปี 2017</image:caption>
+      <image:title>Toyota Vios 1.5 G Auto ปี 2017</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/toyota-yaris-ative-smart</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f4a58e80-bfa9-4e05-9eef-cd225203d723.jpg?v=1767434526</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE SMART</image:caption>
+      <image:title>TOYOTA YARIS ATIVE SMART</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_3abc1484-3b9d-48bc-9fe6-ba8bbafcaa5c.jpg?v=1767434526</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE SMART</image:caption>
+      <image:title>TOYOTA YARIS ATIVE SMART</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_d714f79c-c9ec-482b-b515-dd8fd308bb3d.jpg?v=1767434526</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE SMART</image:caption>
+      <image:title>TOYOTA YARIS ATIVE SMART</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_aed275da-7136-4a73-b532-63b26b0af17f.jpg?v=1767434526</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE SMART</image:caption>
+      <image:title>TOYOTA YARIS ATIVE SMART</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_60b2be48-c8ef-44c6-915d-d18d63914c41.jpg?v=1767434526</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE SMART</image:caption>
+      <image:title>TOYOTA YARIS ATIVE SMART</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-hrv-ev-rs-auto-top-%F0%9F%9A%97-%E0%B8%9B%E0%B8%B5-2022-2565-%E0%B8%AA%E0%B8%B5-%E0%B8%82%E0%B8%B2%E0%B8%A7%E0%B8%A1%E0%B8%B8%E0%B8%81-rs-%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%97%E0%B9%87%E0%B8%AD%E0%B8%9B%E0%B8%AA%E0%B8%B8%E0%B8%94</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_d5b5772e-a9e0-480b-84e3-b1d5db8f5755.jpg?v=1767424741</image:loc>
+      <image:caption>Honda HRV EV RS Auto Top
+🚗 ปี 2022 (2565) สี ขาวมุก RS ตัวท็อปสุด</image:caption>
+      <image:title>Honda HRV EV RS Auto Top
+🚗 ปี 2022 (2565) สี ขาวมุก RS ตัวท็อปสุด</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_ef531211-c93e-4d34-a240-cbbf42557cd3.jpg?v=1767424740</image:loc>
+      <image:caption>Honda HRV EV RS Auto Top
+🚗 ปี 2022 (2565) สี ขาวมุก RS ตัวท็อปสุด</image:caption>
+      <image:title>Honda HRV EV RS Auto Top
+🚗 ปี 2022 (2565) สี ขาวมุก RS ตัวท็อปสุด</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f8a0853b-bb13-4c93-af3e-1a812d37af03.jpg?v=1767424740</image:loc>
+      <image:caption>Honda HRV EV RS Auto Top
+🚗 ปี 2022 (2565) สี ขาวมุก RS ตัวท็อปสุด</image:caption>
+      <image:title>Honda HRV EV RS Auto Top
+🚗 ปี 2022 (2565) สี ขาวมุก RS ตัวท็อปสุด</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_ec8ac99e-16f9-40e4-9968-519e1767638c.jpg?v=1767424740</image:loc>
+      <image:caption>Honda HRV EV RS Auto Top
+🚗 ปี 2022 (2565) สี ขาวมุก RS ตัวท็อปสุด</image:caption>
+      <image:title>Honda HRV EV RS Auto Top
+🚗 ปี 2022 (2565) สี ขาวมุก RS ตัวท็อปสุด</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_18ccc4dd-8a9d-4a00-900d-4ffba1f4abba.jpg?v=1767424740</image:loc>
+      <image:caption>Honda HRV EV RS Auto Top
+🚗 ปี 2022 (2565) สี ขาวมุก RS ตัวท็อปสุด</image:caption>
+      <image:title>Honda HRV EV RS Auto Top
+🚗 ปี 2022 (2565) สี ขาวมุก RS ตัวท็อปสุด</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/all-new-isuzu-d-max-double-cab-3-0-z-prestige-ddi-vgs-navigator</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_9a2d9c6b-abc4-4b93-8e69-0ceae97a8eb2.jpg?v=1767414138</image:loc>
+      <image:caption>All New Isuzu D-Max Double Cab 3.0 Z-Prestige DDi-VGS Navigator</image:caption>
+      <image:title>All New Isuzu D-Max Double Cab 3.0 Z-Prestige DDi-VGS Navigator</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_eb5a6fbe-06e8-4e23-a135-41ed939d4c42.jpg?v=1767414138</image:loc>
+      <image:caption>All New Isuzu D-Max Double Cab 3.0 Z-Prestige DDi-VGS Navigator</image:caption>
+      <image:title>All New Isuzu D-Max Double Cab 3.0 Z-Prestige DDi-VGS Navigator</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_b5f38002-b1d3-48c6-93b2-29750ef3ac74.jpg?v=1767414138</image:loc>
+      <image:caption>All New Isuzu D-Max Double Cab 3.0 Z-Prestige DDi-VGS Navigator</image:caption>
+      <image:title>All New Isuzu D-Max Double Cab 3.0 Z-Prestige DDi-VGS Navigator</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_0a587b8f-7128-4d24-a818-7b9c602e8208.jpg?v=1767414138</image:loc>
+      <image:caption>All New Isuzu D-Max Double Cab 3.0 Z-Prestige DDi-VGS Navigator</image:caption>
+      <image:title>All New Isuzu D-Max Double Cab 3.0 Z-Prestige DDi-VGS Navigator</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_ed10916c-c400-4932-b337-d57dbb268abd.jpg?v=1767414138</image:loc>
+      <image:caption>All New Isuzu D-Max Double Cab 3.0 Z-Prestige DDi-VGS Navigator</image:caption>
+      <image:title>All New Isuzu D-Max Double Cab 3.0 Z-Prestige DDi-VGS Navigator</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-crv-2-0-e-4wd-%E0%B8%A3%E0%B8%B8%E0%B9%88%E0%B8%99%E0%B8%97%E0%B9%87%E0%B8%AD%E0%B8%9B%E0%B8%AA%E0%B8%B8%E0%B8%94-%E0%B8%9B%E0%B8%B5-2013</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f427daa0-ffc1-4f71-9a81-4a485a7d6660.jpg?v=1767096667</image:loc>
+      <image:caption>Honda CRV 2.0 E 4WD รุ่นท็อปสุด ปี 2013</image:caption>
+      <image:title>Honda CRV 2.0 E 4WD รุ่นท็อปสุด ปี 2013</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_578a6074-2203-40d8-9a7c-f1562d926c8c.jpg?v=1767096667</image:loc>
+      <image:caption>Honda CRV 2.0 E 4WD รุ่นท็อปสุด ปี 2013</image:caption>
+      <image:title>Honda CRV 2.0 E 4WD รุ่นท็อปสุด ปี 2013</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_89ecf6af-095e-4104-89f6-d97166f82e8d.jpg?v=1767096667</image:loc>
+      <image:caption>Honda CRV 2.0 E 4WD รุ่นท็อปสุด ปี 2013</image:caption>
+      <image:title>Honda CRV 2.0 E 4WD รุ่นท็อปสุด ปี 2013</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_c38ece2f-2497-49c8-aa3d-0a3633e11616.jpg?v=1767096667</image:loc>
+      <image:caption>Honda CRV 2.0 E 4WD รุ่นท็อปสุด ปี 2013</image:caption>
+      <image:title>Honda CRV 2.0 E 4WD รุ่นท็อปสุด ปี 2013</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_2b137698-6ae9-4550-8f6c-d91c431613a1.jpg?v=1767096667</image:loc>
+      <image:caption>Honda CRV 2.0 E 4WD รุ่นท็อปสุด ปี 2013</image:caption>
+      <image:title>Honda CRV 2.0 E 4WD รุ่นท็อปสุด ปี 2013</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/new-yaris-ative-2022</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f2c5f127-d6cc-4b21-95cd-c8eaa2ad1d14.jpg?v=1767094530</image:loc>
+      <image:caption>New Yaris Ative 2022</image:caption>
+      <image:title>New Yaris Ative 2022</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_d8da485a-9967-4c87-b855-ad42e96f1a51.jpg?v=1767094530</image:loc>
+      <image:caption>New Yaris Ative 2022</image:caption>
+      <image:title>New Yaris Ative 2022</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_2493dc45-1773-4a4b-addc-58e2e5e4fc73.jpg?v=1767094530</image:loc>
+      <image:caption>New Yaris Ative 2022</image:caption>
+      <image:title>New Yaris Ative 2022</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_9a2bf4a3-e418-44a3-8383-696ccb1aafb0.jpg?v=1767094530</image:loc>
+      <image:caption>New Yaris Ative 2022</image:caption>
+      <image:title>New Yaris Ative 2022</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_e2efbd08-cc95-4968-8938-b01583873303.jpg?v=1767094530</image:loc>
+      <image:caption>New Yaris Ative 2022</image:caption>
+      <image:title>New Yaris Ative 2022</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-hr-v-1-8-e-limited-auto-%E0%B8%9B%E0%B8%B5-2017-2561</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f4c5afe3-a5ed-4596-9095-9f1ce6ef2bb2.jpg?v=1767094080</image:loc>
+      <image:caption>HONDA HR-V 1.8 E Limited AUTO ปี (2017/2561)</image:caption>
+      <image:title>HONDA HR-V 1.8 E Limited AUTO ปี (2017/2561)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a2c23281-4169-428d-bb74-ab440a555544.jpg?v=1767094081</image:loc>
+      <image:caption>HONDA HR-V 1.8 E Limited AUTO ปี (2017/2561)</image:caption>
+      <image:title>HONDA HR-V 1.8 E Limited AUTO ปี (2017/2561)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_c8aa5e43-c09b-4233-a660-0168670f0391.jpg?v=1767094080</image:loc>
+      <image:caption>HONDA HR-V 1.8 E Limited AUTO ปี (2017/2561)</image:caption>
+      <image:title>HONDA HR-V 1.8 E Limited AUTO ปี (2017/2561)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f8e2d3c5-e8e6-485f-9ac3-9b8ae3f9cc16.jpg?v=1767094081</image:loc>
+      <image:caption>HONDA HR-V 1.8 E Limited AUTO ปี (2017/2561)</image:caption>
+      <image:title>HONDA HR-V 1.8 E Limited AUTO ปี (2017/2561)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_bcdba3b5-3f0f-4bbf-a0cd-f2a190ab365a.jpg?v=1767094080</image:loc>
+      <image:caption>HONDA HR-V 1.8 E Limited AUTO ปี (2017/2561)</image:caption>
+      <image:title>HONDA HR-V 1.8 E Limited AUTO ปี (2017/2561)</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-cr-v-2-4-es-awd-%E0%B8%9B%E0%B8%B5-2019-2563</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a07d3d81-bb02-45db-ab09-43ad397b712c.jpg?v=1767093501</image:loc>
+      <image:caption>Honda CR-V 2.4 ES AWD ปี 2019/2563</image:caption>
+      <image:title>Honda CR-V 2.4 ES AWD ปี 2019/2563</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_5f3fdf18-db08-48bc-9666-4a3ceab28a8d.jpg?v=1767093501</image:loc>
+      <image:caption>Honda CR-V 2.4 ES AWD ปี 2019/2563</image:caption>
+      <image:title>Honda CR-V 2.4 ES AWD ปี 2019/2563</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_914907f7-0f21-43fd-9490-a5b77dea6ea6.jpg?v=1767093501</image:loc>
+      <image:caption>Honda CR-V 2.4 ES AWD ปี 2019/2563</image:caption>
+      <image:title>Honda CR-V 2.4 ES AWD ปี 2019/2563</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_d8b5b96f-0d81-41f1-8453-4252cc9bfde4.jpg?v=1767093501</image:loc>
+      <image:caption>Honda CR-V 2.4 ES AWD ปี 2019/2563</image:caption>
+      <image:title>Honda CR-V 2.4 ES AWD ปี 2019/2563</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_e3d2be9f-be44-4102-a541-becc64758297.jpg?v=1767093501</image:loc>
+      <image:caption>Honda CR-V 2.4 ES AWD ปี 2019/2563</image:caption>
+      <image:title>Honda CR-V 2.4 ES AWD ปี 2019/2563</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-jazz-1-5-sv-top-%E0%B8%AD%E0%B8%AD%E0%B9%82%E0%B8%95%E0%B9%89-%E0%B8%9B%E0%B8%B5-2015-2559</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a4f629c4-8705-43d1-b904-24d6a6a61e04.jpg?v=1766995597</image:loc>
+      <image:caption>Honda Jazz 1.5 SV Top ออโต้ ปี 2015/2559</image:caption>
+      <image:title>Honda Jazz 1.5 SV Top ออโต้ ปี 2015/2559</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_99a88c2e-a5d0-4395-8311-3ae60cb6b0dd.jpg?v=1766995597</image:loc>
+      <image:caption>Honda Jazz 1.5 SV Top ออโต้ ปี 2015/2559</image:caption>
+      <image:title>Honda Jazz 1.5 SV Top ออโต้ ปี 2015/2559</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_c92a9d6e-837f-4253-a5c6-f176a58feab2.jpg?v=1766995597</image:loc>
+      <image:caption>Honda Jazz 1.5 SV Top ออโต้ ปี 2015/2559</image:caption>
+      <image:title>Honda Jazz 1.5 SV Top ออโต้ ปี 2015/2559</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_fce865d9-589c-4d29-a324-f34642d4e78a.jpg?v=1766995597</image:loc>
+      <image:caption>Honda Jazz 1.5 SV Top ออโต้ ปี 2015/2559</image:caption>
+      <image:title>Honda Jazz 1.5 SV Top ออโต้ ปี 2015/2559</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f44b854c-bca5-4727-bfa0-20a6e0481a21.jpg?v=1766995597</image:loc>
+      <image:caption>Honda Jazz 1.5 SV Top ออโต้ ปี 2015/2559</image:caption>
+      <image:title>Honda Jazz 1.5 SV Top ออโต้ ปี 2015/2559</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/isuzu-d-max-cab4-hi-lander-2-5-i-teq-%E0%B8%9B%E0%B8%B5-2006</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_5c3ea1a7-24ad-470d-8599-cf668b60de6f.jpg?v=1766670689</image:loc>
+      <image:caption>ISUZU D-MAX CAB4 HI-LANDER 2.5 i-TEQ ปี 2006</image:caption>
+      <image:title>ISUZU D-MAX CAB4 HI-LANDER 2.5 i-TEQ ปี 2006</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_b04cef77-004f-4860-8e81-5d1f53979b94.jpg?v=1766670689</image:loc>
+      <image:caption>ISUZU D-MAX CAB4 HI-LANDER 2.5 i-TEQ ปี 2006</image:caption>
+      <image:title>ISUZU D-MAX CAB4 HI-LANDER 2.5 i-TEQ ปี 2006</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_c4cf7255-3a07-4ced-a9b4-bf30f9328251.jpg?v=1766670689</image:loc>
+      <image:caption>ISUZU D-MAX CAB4 HI-LANDER 2.5 i-TEQ ปี 2006</image:caption>
+      <image:title>ISUZU D-MAX CAB4 HI-LANDER 2.5 i-TEQ ปี 2006</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_3cf12e37-d8e0-4ef1-b2bd-19f1a07a837c.jpg?v=1766670689</image:loc>
+      <image:caption>ISUZU D-MAX CAB4 HI-LANDER 2.5 i-TEQ ปี 2006</image:caption>
+      <image:title>ISUZU D-MAX CAB4 HI-LANDER 2.5 i-TEQ ปี 2006</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_305df261-96b7-46d7-bf6e-4d952efae4d0.jpg?v=1766670689</image:loc>
+      <image:caption>ISUZU D-MAX CAB4 HI-LANDER 2.5 i-TEQ ปี 2006</image:caption>
+      <image:title>ISUZU D-MAX CAB4 HI-LANDER 2.5 i-TEQ ปี 2006</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/mitsubishi-pajero-sport-2-5-gls-vg-turbo-a-t-%E0%B8%9B%E0%B8%B5-2012</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_bfec5780-de60-4464-bcc3-6ca1e1290c19.jpg?v=1766582901</image:loc>
+      <image:caption>Mitsubishi Pajero Sport 2.5 GLS VG Turbo A/T ปี 2012</image:caption>
+      <image:title>Mitsubishi Pajero Sport 2.5 GLS VG Turbo A/T ปี 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_18c2bcbb-78e7-449c-b710-d7420a9f62a2.jpg?v=1766582900</image:loc>
+      <image:caption>Mitsubishi Pajero Sport 2.5 GLS VG Turbo A/T ปี 2012</image:caption>
+      <image:title>Mitsubishi Pajero Sport 2.5 GLS VG Turbo A/T ปี 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_efa634f5-d8da-4c25-8758-7c48f9596703.jpg?v=1766582901</image:loc>
+      <image:caption>Mitsubishi Pajero Sport 2.5 GLS VG Turbo A/T ปี 2012</image:caption>
+      <image:title>Mitsubishi Pajero Sport 2.5 GLS VG Turbo A/T ปี 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_4b83f9a1-7195-417a-ac9a-9f02f50ad203.jpg?v=1766582900</image:loc>
+      <image:caption>Mitsubishi Pajero Sport 2.5 GLS VG Turbo A/T ปี 2012</image:caption>
+      <image:title>Mitsubishi Pajero Sport 2.5 GLS VG Turbo A/T ปี 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_d7f07574-e6e1-4d7a-9ed4-c49c133d059d.jpg?v=1766582900</image:loc>
+      <image:caption>Mitsubishi Pajero Sport 2.5 GLS VG Turbo A/T ปี 2012</image:caption>
+      <image:title>Mitsubishi Pajero Sport 2.5 GLS VG Turbo A/T ปี 2012</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/all-new-dmax-cab-2-5-z-prestige-ddi-vgs-%E0%B9%80%E0%B8%81%E0%B8%B5%E0%B8%A2%E0%B8%A3%E0%B9%8C%E0%B8%AD%E0%B8%AD%E0%B9%82%E0%B8%95%E0%B9%89-2012</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_d9572050-2e02-40b6-bf33-0687166eaf05.jpg?v=1766499183</image:loc>
+      <image:caption>All new Dmax cab 2.5 Z-prestige DDI-VGS เกียร์ออโต้ 2012</image:caption>
+      <image:title>All new Dmax cab 2.5 Z-prestige DDI-VGS เกียร์ออโต้ 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_997b09ea-6ff8-423f-8b8d-d3f7f86021fe.jpg?v=1766499184</image:loc>
+      <image:caption>All new Dmax cab 2.5 Z-prestige DDI-VGS เกียร์ออโต้ 2012</image:caption>
+      <image:title>All new Dmax cab 2.5 Z-prestige DDI-VGS เกียร์ออโต้ 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_ac18f03c-65b9-4d02-9d1e-eca9591b1dd7.jpg?v=1766499183</image:loc>
+      <image:caption>All new Dmax cab 2.5 Z-prestige DDI-VGS เกียร์ออโต้ 2012</image:caption>
+      <image:title>All new Dmax cab 2.5 Z-prestige DDI-VGS เกียร์ออโต้ 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a2f0ffb0-9bd4-4ceb-b7b6-94fd3e7f1332.jpg?v=1766499183</image:loc>
+      <image:caption>All new Dmax cab 2.5 Z-prestige DDI-VGS เกียร์ออโต้ 2012</image:caption>
+      <image:title>All new Dmax cab 2.5 Z-prestige DDI-VGS เกียร์ออโต้ 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_905cf3ed-1dc8-43be-9068-3bd8e4e1bd21.jpg?v=1766499183</image:loc>
+      <image:caption>All new Dmax cab 2.5 Z-prestige DDI-VGS เกียร์ออโต้ 2012</image:caption>
+      <image:title>All new Dmax cab 2.5 Z-prestige DDI-VGS เกียร์ออโต้ 2012</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-civic-fb-1-8-s-%E0%B9%80%E0%B8%81%E0%B8%B5%E0%B8%A2%E0%B8%A3%E0%B9%8C%E0%B8%AD%E0%B8%AD%E0%B9%82%E0%B8%95%E0%B9%89-%E0%B8%9B%E0%B8%B5-2012</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_51d3badc-35d9-4000-baa5-7375a79a857a.jpg?v=1766304622</image:loc>
+      <image:caption>Honda Civic FB 1.8 S 2012</image:caption>
+      <image:title>Honda Civic FB 1.8 S 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_55cf02dc-dcf9-4288-b61b-15b82c79e339.jpg?v=1766304622</image:loc>
+      <image:caption>Honda Civic FB 1.8 S 2012</image:caption>
+      <image:title>Honda Civic FB 1.8 S 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_0e4c9f6f-227c-4ec5-a175-5b3e51528016.jpg?v=1766304621</image:loc>
+      <image:caption>Honda Civic FB 1.8 S 2012</image:caption>
+      <image:title>Honda Civic FB 1.8 S 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_526f972a-826e-4cb3-85a3-3a5e4745d4d8.jpg?v=1766304622</image:loc>
+      <image:caption>Honda Civic FB 1.8 S 2012</image:caption>
+      <image:title>Honda Civic FB 1.8 S 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_0ba7b4dd-2063-4c97-beaf-c5d6b46b5fa6.jpg?v=1766304621</image:loc>
+      <image:caption>Honda Civic FB 1.8 S 2012</image:caption>
+      <image:title>Honda Civic FB 1.8 S 2012</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-jazz-1-5v-%E0%B8%AD%E0%B8%AD%E0%B9%82%E0%B8%95%E0%B9%89-%E0%B8%9B%E0%B8%B5-2012</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_5c93f319-d97d-4e65-9866-62477edb1bb4.jpg?v=1766303928</image:loc>
+      <image:caption>HONDA Jazz 1.5V ออโต้ ปี 2012</image:caption>
+      <image:title>HONDA Jazz 1.5V ออโต้ ปี 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_fe4dfc75-9d65-4653-9ee2-b4033d8fb0e1.jpg?v=1766303928</image:loc>
+      <image:caption>HONDA Jazz 1.5V ออโต้ ปี 2012</image:caption>
+      <image:title>HONDA Jazz 1.5V ออโต้ ปี 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_9fffe5e4-eebe-44f9-8fb7-63ed6fefc1c2.jpg?v=1766303928</image:loc>
+      <image:caption>HONDA Jazz 1.5V ออโต้ ปี 2012</image:caption>
+      <image:title>HONDA Jazz 1.5V ออโต้ ปี 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_9a37bc08-e79a-44d9-9795-2e1abdc39491.jpg?v=1766303928</image:loc>
+      <image:caption>HONDA Jazz 1.5V ออโต้ ปี 2012</image:caption>
+      <image:title>HONDA Jazz 1.5V ออโต้ ปี 2012</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_ea9ca409-9b91-4e4f-ac69-25275fcc27c5.jpg?v=1766303928</image:loc>
+      <image:caption>HONDA Jazz 1.5V ออโต้ ปี 2012</image:caption>
+      <image:title>HONDA Jazz 1.5V ออโต้ ปี 2012</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/nissan-almera-1-0-vl-turbo-%E0%B8%9B%E0%B8%B5-2020</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_9c628152-0153-4817-a17f-15d4d8c53c65.jpg?v=1766301764</image:loc>
+      <image:caption>Nissan Almera 1.0 VL Turbo ปี 2020</image:caption>
+      <image:title>Nissan Almera 1.0 VL Turbo ปี 2020</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_02ec4e6a-4173-435a-bbe9-9ee7276ecf0f.jpg?v=1766301764</image:loc>
+      <image:caption>Nissan Almera 1.0 VL Turbo ปี 2020</image:caption>
+      <image:title>Nissan Almera 1.0 VL Turbo ปี 2020</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_0b4c8fdb-26c5-4ace-a7f8-3b2077448b0e.jpg?v=1766301764</image:loc>
+      <image:caption>Nissan Almera 1.0 VL Turbo ปี 2020</image:caption>
+      <image:title>Nissan Almera 1.0 VL Turbo ปี 2020</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_965c537c-6ca0-42d1-ba2d-b589521d3b3f.jpg?v=1766301764</image:loc>
+      <image:caption>Nissan Almera 1.0 VL Turbo ปี 2020</image:caption>
+      <image:title>Nissan Almera 1.0 VL Turbo ปี 2020</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_77e9cf78-3ca9-4d26-97b1-3556aeebbbc5.jpg?v=1766301764</image:loc>
+      <image:caption>Nissan Almera 1.0 VL Turbo ปี 2020</image:caption>
+      <image:title>Nissan Almera 1.0 VL Turbo ปี 2020</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-city-1-5-v-i-vtec-%E0%B8%9B%E0%B8%B5-2009-2552-%E0%B8%AD%E0%B8%AD%E0%B9%82%E0%B8%95%E0%B9%89</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_03289165-fd24-481e-846a-99940a40e939.jpg?v=1766301423</image:loc>
+      <image:caption>HONDA CITY 1.5 V i-VTEC ปี 2009 / 2552 ออโต้</image:caption>
+      <image:title>HONDA CITY 1.5 V i-VTEC ปี 2009 / 2552 ออโต้</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_cba3e0ab-098b-47cb-ae0e-2b0fa09f206a.jpg?v=1766301423</image:loc>
+      <image:caption>HONDA CITY 1.5 V i-VTEC ปี 2009 / 2552 ออโต้</image:caption>
+      <image:title>HONDA CITY 1.5 V i-VTEC ปี 2009 / 2552 ออโต้</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_d60a0ded-f887-4bd9-a121-15990e7382c9.jpg?v=1766301422</image:loc>
+      <image:caption>HONDA CITY 1.5 V i-VTEC ปี 2009 / 2552 ออโต้</image:caption>
+      <image:title>HONDA CITY 1.5 V i-VTEC ปี 2009 / 2552 ออโต้</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_0f4d8279-3439-4068-ba74-a02075be94de.jpg?v=1766301423</image:loc>
+      <image:caption>HONDA CITY 1.5 V i-VTEC ปี 2009 / 2552 ออโต้</image:caption>
+      <image:title>HONDA CITY 1.5 V i-VTEC ปี 2009 / 2552 ออโต้</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_8a8ebb5f-0676-40c1-9780-46158ee53ff0.jpg?v=1766301422</image:loc>
+      <image:caption>HONDA CITY 1.5 V i-VTEC ปี 2009 / 2552 ออโต้</image:caption>
+      <image:title>HONDA CITY 1.5 V i-VTEC ปี 2009 / 2552 ออโต้</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-hrv-e-auto-%E0%B8%9B%E0%B8%B5-2559</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_21c4ae6d-6016-4dc1-850e-6d130bbb3478.jpg?v=1766301038</image:loc>
+      <image:caption>Honda HRV E AUTO ปี 2559</image:caption>
+      <image:title>Honda HRV E AUTO ปี 2559</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_4d7c03de-beab-41e6-8268-7a2849aa8e95.jpg?v=1766301038</image:loc>
+      <image:caption>Honda HRV E AUTO ปี 2559</image:caption>
+      <image:title>Honda HRV E AUTO ปี 2559</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_d09705b2-bf17-4b41-b9d7-a32e854a0181.jpg?v=1766301038</image:loc>
+      <image:caption>Honda HRV E AUTO ปี 2559</image:caption>
+      <image:title>Honda HRV E AUTO ปี 2559</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_56ff970c-9b68-4d47-975a-f716b5e29269.jpg?v=1766301038</image:loc>
+      <image:caption>Honda HRV E AUTO ปี 2559</image:caption>
+      <image:title>Honda HRV E AUTO ปี 2559</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_81b91679-cf65-4894-8a0f-a3644e142ae1.jpg?v=1766301038</image:loc>
+      <image:caption>Honda HRV E AUTO ปี 2559</image:caption>
+      <image:title>Honda HRV E AUTO ปี 2559</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/toyota-yaris-ative-premium-%E0%B8%9B%E0%B8%B5-2023</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_ca28dbfa-22be-4727-8632-2edd6a2490ca.jpg?v=1766300244</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE PREMIUM ปี 2023</image:caption>
+      <image:title>TOYOTA YARIS ATIVE PREMIUM ปี 2023</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_2343c4dd-27e3-4c42-89dd-75e970077774.jpg?v=1766300245</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE PREMIUM ปี 2023</image:caption>
+      <image:title>TOYOTA YARIS ATIVE PREMIUM ปี 2023</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_b0ddd111-5908-4afe-ac41-5a2ff9913de9.jpg?v=1766300244</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE PREMIUM ปี 2023</image:caption>
+      <image:title>TOYOTA YARIS ATIVE PREMIUM ปี 2023</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_1248ca3e-a7e7-42ab-bf56-10eda69c18c2.jpg?v=1766300245</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE PREMIUM ปี 2023</image:caption>
+      <image:title>TOYOTA YARIS ATIVE PREMIUM ปี 2023</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_77547b98-842f-45c1-a98f-404a88dc44b1.jpg?v=1766300245</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE PREMIUM ปี 2023</image:caption>
+      <image:title>TOYOTA YARIS ATIVE PREMIUM ปี 2023</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-city-turbo-sv-hatchback-%F0%9F%9A%97-%E0%B8%9B%E0%B8%B5-2022</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_afe24a2b-2b5c-43e6-8d6f-813565b00580.jpg?v=1766299802</image:loc>
+      <image:caption>Honda City Turbo SV Hatchback 
+
+🚗 ปี 2022</image:caption>
+      <image:title>Honda City Turbo SV Hatchback 
+
+🚗 ปี 2022</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_06e8cd65-dfa7-45a7-aeee-4cb390e9ec96.jpg?v=1766299802</image:loc>
+      <image:caption>Honda City Turbo SV Hatchback 
+
+🚗 ปี 2022</image:caption>
+      <image:title>Honda City Turbo SV Hatchback 
+
+🚗 ปี 2022</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_75ab5ef2-5830-47d1-b5d8-0a671c1c5826.jpg?v=1766299801</image:loc>
+      <image:caption>Honda City Turbo SV Hatchback 
+
+🚗 ปี 2022</image:caption>
+      <image:title>Honda City Turbo SV Hatchback 
+
+🚗 ปี 2022</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_73c7dd4f-305c-4500-873a-4ce5ccbf005d.jpg?v=1766299803</image:loc>
+      <image:caption>Honda City Turbo SV Hatchback 
+
+🚗 ปี 2022</image:caption>
+      <image:title>Honda City Turbo SV Hatchback 
+
+🚗 ปี 2022</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_01819c05-d067-4e68-a704-1be7471c7b36.jpg?v=1766299801</image:loc>
+      <image:caption>Honda City Turbo SV Hatchback 
+
+🚗 ปี 2022</image:caption>
+      <image:title>Honda City Turbo SV Hatchback 
+
+🚗 ปี 2022</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/toyota-yaris-ative-s-top</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_763adc2d-89b9-4c48-b063-328a41aaa0f1.jpg?v=1766299462</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE S TOP</image:caption>
+      <image:title>TOYOTA YARIS ATIVE S TOP</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_df667b50-3fa6-4211-97c4-a5b67d069621.jpg?v=1766299462</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE S TOP</image:caption>
+      <image:title>TOYOTA YARIS ATIVE S TOP</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a87767fe-2593-4940-b0f0-f5f56f95bb32.jpg?v=1766299462</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE S TOP</image:caption>
+      <image:title>TOYOTA YARIS ATIVE S TOP</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_443a86da-404a-4524-a9dc-f86339e0ba33.jpg?v=1766299462</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE S TOP</image:caption>
+      <image:title>TOYOTA YARIS ATIVE S TOP</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_b3eb9e54-23cb-414a-b65f-f89c44b41f36.jpg?v=1766299462</image:loc>
+      <image:caption>TOYOTA YARIS ATIVE S TOP</image:caption>
+      <image:title>TOYOTA YARIS ATIVE S TOP</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/isuzu-d-max-hi-lander-blue-power-cab-4-1-9-z-ddi-mnca-t-2017-2560</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_e11b579c-6bc0-464c-9225-5edfc9f5162c.jpg?v=1766297655</image:loc>
+      <image:caption>ISUZU D-MAX Hi-LANDER Blue power CAB-4 1.9 Z-Ddi (MNC)A/T 2017 / 2560</image:caption>
+      <image:title>ISUZU D-MAX Hi-LANDER Blue power CAB-4 1.9 Z-Ddi (MNC)A/T 2017 / 2560</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_eebd46a3-22e1-4e4a-a16a-906bf6aa2bf4.jpg?v=1766297655</image:loc>
+      <image:caption>ISUZU D-MAX Hi-LANDER Blue power CAB-4 1.9 Z-Ddi (MNC)A/T 2017 / 2560</image:caption>
+      <image:title>ISUZU D-MAX Hi-LANDER Blue power CAB-4 1.9 Z-Ddi (MNC)A/T 2017 / 2560</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_30dd2429-17da-4a65-8f52-30efecf79624.jpg?v=1766297655</image:loc>
+      <image:caption>ISUZU D-MAX Hi-LANDER Blue power CAB-4 1.9 Z-Ddi (MNC)A/T 2017 / 2560</image:caption>
+      <image:title>ISUZU D-MAX Hi-LANDER Blue power CAB-4 1.9 Z-Ddi (MNC)A/T 2017 / 2560</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_585701ee-3400-4f55-99d9-715cf3450009.jpg?v=1766297655</image:loc>
+      <image:caption>ISUZU D-MAX Hi-LANDER Blue power CAB-4 1.9 Z-Ddi (MNC)A/T 2017 / 2560</image:caption>
+      <image:title>ISUZU D-MAX Hi-LANDER Blue power CAB-4 1.9 Z-Ddi (MNC)A/T 2017 / 2560</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_cb3ea62a-e4f9-4033-9e58-520caebe5890.jpg?v=1766297655</image:loc>
+      <image:caption>ISUZU D-MAX Hi-LANDER Blue power CAB-4 1.9 Z-Ddi (MNC)A/T 2017 / 2560</image:caption>
+      <image:title>ISUZU D-MAX Hi-LANDER Blue power CAB-4 1.9 Z-Ddi (MNC)A/T 2017 / 2560</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/mitsubishi-mirage-1-2-glx-auto-%E0%B8%9B%E0%B8%B5-2013-%E0%B8%88%E0%B8%94%E0%B8%97%E0%B8%B0%E0%B9%80%E0%B8%9A%E0%B8%B5%E0%B8%A2%E0%B8%99-2557</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_5d4e2884-d949-40cb-a35e-4f823c3f6b7d.jpg?v=1766031061</image:loc>
+      <image:caption>Mitsubishi Mirage 1.2 GLX AUTO ปี 2013 / จดทะเบียน 2557</image:caption>
+      <image:title>Mitsubishi Mirage 1.2 GLX AUTO ปี 2013 / จดทะเบียน 2557</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a090fe9a-c550-4cbb-a696-4c2064bf679e.jpg?v=1766031061</image:loc>
+      <image:caption>Mitsubishi Mirage 1.2 GLX AUTO ปี 2013 / จดทะเบียน 2557</image:caption>
+      <image:title>Mitsubishi Mirage 1.2 GLX AUTO ปี 2013 / จดทะเบียน 2557</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_8b4a981b-ecbb-427b-b6dc-084210e80d3b.jpg?v=1766031061</image:loc>
+      <image:caption>Mitsubishi Mirage 1.2 GLX AUTO ปี 2013 / จดทะเบียน 2557</image:caption>
+      <image:title>Mitsubishi Mirage 1.2 GLX AUTO ปี 2013 / จดทะเบียน 2557</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_dced2a8f-a8fc-4baa-9c9b-f3fe9dbdebe0.jpg?v=1766031061</image:loc>
+      <image:caption>Mitsubishi Mirage 1.2 GLX AUTO ปี 2013 / จดทะเบียน 2557</image:caption>
+      <image:title>Mitsubishi Mirage 1.2 GLX AUTO ปี 2013 / จดทะเบียน 2557</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_115e5f64-961b-4152-b077-872acf397739.jpg?v=1766031061</image:loc>
+      <image:caption>Mitsubishi Mirage 1.2 GLX AUTO ปี 2013 / จดทะเบียน 2557</image:caption>
+      <image:title>Mitsubishi Mirage 1.2 GLX AUTO ปี 2013 / จดทะเบียน 2557</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/hondajazz-sv-top</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a8bab4cb-08eb-47bb-80f6-2ac0be72d638.jpg?v=1766028745</image:loc>
+      <image:caption>HONDAJAZZ SV TOP</image:caption>
+      <image:title>HONDAJAZZ SV TOP</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_83475767-b800-4620-b376-4da9f9644f0d.jpg?v=1766028745</image:loc>
+      <image:caption>HONDAJAZZ SV TOP</image:caption>
+      <image:title>HONDAJAZZ SV TOP</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_14f72472-0cc0-4b80-a817-ca7aa14e2c9f.jpg?v=1766028745</image:loc>
+      <image:caption>HONDAJAZZ SV TOP</image:caption>
+      <image:title>HONDAJAZZ SV TOP</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_6801ae07-553f-49cb-b997-61eac15a0446.jpg?v=1766028745</image:loc>
+      <image:caption>HONDAJAZZ SV TOP</image:caption>
+      <image:title>HONDAJAZZ SV TOP</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_e5a66cf7-ea31-4722-83c9-7b199bb1ac80.jpg?v=1766028745</image:loc>
+      <image:caption>HONDAJAZZ SV TOP</image:caption>
+      <image:title>HONDAJAZZ SV TOP</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/nissan-note-1-2-vl-turbo-2018-%E0%B8%88%E0%B8%94%E0%B8%97%E0%B8%B0%E0%B9%80%E0%B8%9A%E0%B8%B5%E0%B8%A2%E0%B8%99-2019</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f02810bb-1405-420f-9fff-3ff581cca4c3.jpg?v=1763980516</image:loc>
+      <image:caption>Nissan NOTE 1.2 VL Turbo 2018 จดทะเบียน 2019</image:caption>
+      <image:title>Nissan NOTE 1.2 VL Turbo 2018 จดทะเบียน 2019</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_c48dbcc0-71a9-4922-8f9c-43d13f8bc844.jpg?v=1763980516</image:loc>
+      <image:caption>Nissan NOTE 1.2 VL Turbo 2018 จดทะเบียน 2019</image:caption>
+      <image:title>Nissan NOTE 1.2 VL Turbo 2018 จดทะเบียน 2019</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_e9d2f05e-4d6a-4eff-add7-2e9287318076.jpg?v=1763980516</image:loc>
+      <image:caption>Nissan NOTE 1.2 VL Turbo 2018 จดทะเบียน 2019</image:caption>
+      <image:title>Nissan NOTE 1.2 VL Turbo 2018 จดทะเบียน 2019</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_bd8727bb-e3c9-4972-afe1-c3d925d3d45c.jpg?v=1763980516</image:loc>
+      <image:caption>Nissan NOTE 1.2 VL Turbo 2018 จดทะเบียน 2019</image:caption>
+      <image:title>Nissan NOTE 1.2 VL Turbo 2018 จดทะเบียน 2019</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_ff16128c-c5c7-4da8-8e5f-cd9b1e8c668e.jpg?v=1763980516</image:loc>
+      <image:caption>Nissan NOTE 1.2 VL Turbo 2018 จดทะเบียน 2019</image:caption>
+      <image:title>Nissan NOTE 1.2 VL Turbo 2018 จดทะเบียน 2019</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-city-1-5-s-auto-mnc-my17-%E0%B8%9B%E0%B8%B5-2017</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f3b83ffa-1a60-4769-ac28-02a870a9f4ed.jpg?v=1762065101</image:loc>
+      <image:caption>Honda City 1.5 S Auto MNC (MY17) ปี 2017</image:caption>
+      <image:title>Honda City 1.5 S Auto MNC (MY17) ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_3a653b29-52f1-4fb1-8b88-068796d9c61c.jpg?v=1762065101</image:loc>
+      <image:caption>Honda City 1.5 S Auto MNC (MY17) ปี 2017</image:caption>
+      <image:title>Honda City 1.5 S Auto MNC (MY17) ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_e073599f-fd31-42c5-af67-1de0f1c721c8.jpg?v=1762065101</image:loc>
+      <image:caption>Honda City 1.5 S Auto MNC (MY17) ปี 2017</image:caption>
+      <image:title>Honda City 1.5 S Auto MNC (MY17) ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_995096fc-f27f-4bfb-b2fb-9f195f34956c.jpg?v=1762065101</image:loc>
+      <image:caption>Honda City 1.5 S Auto MNC (MY17) ปี 2017</image:caption>
+      <image:title>Honda City 1.5 S Auto MNC (MY17) ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_bf0e301d-1f93-4d3d-a5a8-d6bb07f92751.jpg?v=1762065101</image:loc>
+      <image:caption>Honda City 1.5 S Auto MNC (MY17) ปี 2017</image:caption>
+      <image:title>Honda City 1.5 S Auto MNC (MY17) ปี 2017</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/isuzu-d-max-v-cross-3-0-ddi-vgs-turbo-4x4-mt-%E0%B8%9B%E0%B8%B5-2014</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_05a1ed10-580d-4662-bc4d-dd5897a71a12.jpg?v=1759837165</image:loc>
+      <image:caption>ISUZU D-MAX V-CROSS 3.0 Ddi VGS TURBO 4x4 MT ปี 2014</image:caption>
+      <image:title>ISUZU D-MAX V-CROSS 3.0 Ddi VGS TURBO 4x4 MT ปี 2014</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_001e7600-6e00-4d54-8f14-877c56d10d09.jpg?v=1759837165</image:loc>
+      <image:caption>ISUZU D-MAX V-CROSS 3.0 Ddi VGS TURBO 4x4 MT ปี 2014</image:caption>
+      <image:title>ISUZU D-MAX V-CROSS 3.0 Ddi VGS TURBO 4x4 MT ปี 2014</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_de42158e-6b20-4e9f-a053-32f684663231.jpg?v=1759837165</image:loc>
+      <image:caption>ISUZU D-MAX V-CROSS 3.0 Ddi VGS TURBO 4x4 MT ปี 2014</image:caption>
+      <image:title>ISUZU D-MAX V-CROSS 3.0 Ddi VGS TURBO 4x4 MT ปี 2014</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_9ab621fe-6710-4f1c-9ba3-01b3e8c381d3.jpg?v=1759837165</image:loc>
+      <image:caption>ISUZU D-MAX V-CROSS 3.0 Ddi VGS TURBO 4x4 MT ปี 2014</image:caption>
+      <image:title>ISUZU D-MAX V-CROSS 3.0 Ddi VGS TURBO 4x4 MT ปี 2014</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_34e99517-1de2-4034-9941-6270994545d1.jpg?v=1759837165</image:loc>
+      <image:caption>ISUZU D-MAX V-CROSS 3.0 Ddi VGS TURBO 4x4 MT ปี 2014</image:caption>
+      <image:title>ISUZU D-MAX V-CROSS 3.0 Ddi VGS TURBO 4x4 MT ปี 2014</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/toyota-sienta-1-5v-at-%E0%B8%9B%E0%B8%B5-2017</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_e368fb2b-782e-491b-8a00-22ce9ca9e82c.jpg?v=1759728581</image:loc>
+      <image:caption>TOYOTA SIENTA 1.5V AT ปี 2017</image:caption>
+      <image:title>TOYOTA SIENTA 1.5V AT ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_77c0c838-21ee-4206-b91f-6292beb6077f.jpg?v=1759728581</image:loc>
+      <image:caption>TOYOTA SIENTA 1.5V AT ปี 2017</image:caption>
+      <image:title>TOYOTA SIENTA 1.5V AT ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_65723a65-e58a-4d7b-b24d-8465f86c587b.jpg?v=1759728581</image:loc>
+      <image:caption>TOYOTA SIENTA 1.5V AT ปี 2017</image:caption>
+      <image:title>TOYOTA SIENTA 1.5V AT ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_d531651d-17b3-42a7-a072-180534829e59.jpg?v=1759728580</image:loc>
+      <image:caption>TOYOTA SIENTA 1.5V AT ปี 2017</image:caption>
+      <image:title>TOYOTA SIENTA 1.5V AT ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_425399f1-b30e-413c-97f1-9d7ed4f5f9d0.jpg?v=1759728580</image:loc>
+      <image:caption>TOYOTA SIENTA 1.5V AT ปี 2017</image:caption>
+      <image:title>TOYOTA SIENTA 1.5V AT ปี 2017</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-city-1-5-v-%E0%B8%AD%E0%B8%AD%E0%B9%82%E0%B8%95%E0%B9%89-%E0%B8%9B%E0%B8%B5-2016-2559</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_7dfe0a38-fbf0-4f0a-bf5a-e2e1015f0b27.jpg?v=1759506905</image:loc>
+      <image:caption>HONDA CITY 1.5 V+ ออโต้ ปี 2016/2559</image:caption>
+      <image:title>HONDA CITY 1.5 V+ ออโต้ ปี 2016/2559</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_5cad50b7-e954-4491-bb34-880b0d33552a.jpg?v=1759506904</image:loc>
+      <image:caption>HONDA CITY 1.5 V+ ออโต้ ปี 2016/2559</image:caption>
+      <image:title>HONDA CITY 1.5 V+ ออโต้ ปี 2016/2559</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_1e536303-0e74-4a95-8f4f-83462e0adaaa.jpg?v=1759506904</image:loc>
+      <image:caption>HONDA CITY 1.5 V+ ออโต้ ปี 2016/2559</image:caption>
+      <image:title>HONDA CITY 1.5 V+ ออโต้ ปี 2016/2559</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_e741e894-e9c7-4100-ac36-550f4f8f7f61.jpg?v=1759506904</image:loc>
+      <image:caption>HONDA CITY 1.5 V+ ออโต้ ปี 2016/2559</image:caption>
+      <image:title>HONDA CITY 1.5 V+ ออโต้ ปี 2016/2559</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_c81207a2-5a4e-4a1a-9b3c-20b15bba71d0.jpg?v=1759506904</image:loc>
+      <image:caption>HONDA CITY 1.5 V+ ออโต้ ปี 2016/2559</image:caption>
+      <image:title>HONDA CITY 1.5 V+ ออโต้ ปี 2016/2559</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/ford-ranger-4dr-dcab-xlt-m-t-6sp-2wd-2-2dct</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_20b79c89-e76c-402c-a21a-bb96d2733bd6.jpg?v=1757688603</image:loc>
+      <image:caption>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT</image:caption>
+      <image:title>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_4094b809-e175-468d-9340-f5671fbdba0c.jpg?v=1757688603</image:loc>
+      <image:caption>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT</image:caption>
+      <image:title>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_27119e50-5d42-48c2-af84-d142ee51abc6.jpg?v=1757688603</image:loc>
+      <image:caption>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT</image:caption>
+      <image:title>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_7e235aaa-16a9-41e3-8ef9-3f6e3bc8c805.jpg?v=1757688603</image:loc>
+      <image:caption>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT</image:caption>
+      <image:title>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_11d2b35f-356e-4f7b-8579-aa46449f8f09.jpg?v=1757688604</image:loc>
+      <image:caption>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT</image:caption>
+      <image:title>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/%E0%B8%B6honda-city-1-5-s-2017-2560-%E0%B9%80%E0%B8%81%E0%B8%B5%E0%B8%A2%E0%B8%A3%E0%B9%8C%E0%B8%AD%E0%B8%AD%E0%B9%82%E0%B8%95%E0%B9%89</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f73292f8-7e05-426f-8855-08765c8fa1ab.jpg?v=1757651778</image:loc>
+      <image:caption>ึHonda City 1.5 S 2017/2560 เกียร์ออโต้</image:caption>
+      <image:title>ึHonda City 1.5 S 2017/2560 เกียร์ออโต้</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_61d83ff5-46ea-400f-a1a8-cba00d07324b.jpg?v=1757651777</image:loc>
+      <image:caption>ึHonda City 1.5 S 2017/2560 เกียร์ออโต้</image:caption>
+      <image:title>ึHonda City 1.5 S 2017/2560 เกียร์ออโต้</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_b4506037-b255-4ee6-9a06-e5d40e85e9a5.jpg?v=1757651778</image:loc>
+      <image:caption>ึHonda City 1.5 S 2017/2560 เกียร์ออโต้</image:caption>
+      <image:title>ึHonda City 1.5 S 2017/2560 เกียร์ออโต้</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_28834ad6-1b2e-4354-a06c-147a843d84bc.jpg?v=1757651778</image:loc>
+      <image:caption>ึHonda City 1.5 S 2017/2560 เกียร์ออโต้</image:caption>
+      <image:title>ึHonda City 1.5 S 2017/2560 เกียร์ออโต้</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a39d6618-2ef1-4733-88a6-29eab4d11b06.jpg?v=1757651777</image:loc>
+      <image:caption>ึHonda City 1.5 S 2017/2560 เกียร์ออโต้</image:caption>
+      <image:title>ึHonda City 1.5 S 2017/2560 เกียร์ออโต้</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/mazda-bt-50-pro-thunder-freestyle-cab-2-2-hi-racer-%E0%B9%80%E0%B8%81%E0%B8%B5%E0%B8%A2%E0%B8%A3%E0%B9%8C%E0%B8%98%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%94%E0%B8%B2-%E0%B8%9B%E0%B8%B5-2019-%E0%B8%88%E0%B8%94-2020</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_ffc8911c-66e0-446b-a222-8a509dd51fb8.jpg?v=1757511850</image:loc>
+      <image:caption>Mazda Bt-50 Pro Thunder Freestyle Cab 2.2 Hi-Racer เกียร์ธรรมดา ปี 2019 จด 2020</image:caption>
+      <image:title>Mazda Bt-50 Pro Thunder Freestyle Cab 2.2 Hi-Racer เกียร์ธรรมดา ปี 2019 จด 2020</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_dca5e2f9-de1f-46e3-9685-5161491b3864.jpg?v=1757511849</image:loc>
+      <image:caption>Mazda Bt-50 Pro Thunder Freestyle Cab 2.2 Hi-Racer เกียร์ธรรมดา ปี 2019 จด 2020</image:caption>
+      <image:title>Mazda Bt-50 Pro Thunder Freestyle Cab 2.2 Hi-Racer เกียร์ธรรมดา ปี 2019 จด 2020</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_57feb4ba-faa3-4fb1-926f-093ca2675b27.jpg?v=1757511849</image:loc>
+      <image:caption>Mazda Bt-50 Pro Thunder Freestyle Cab 2.2 Hi-Racer เกียร์ธรรมดา ปี 2019 จด 2020</image:caption>
+      <image:title>Mazda Bt-50 Pro Thunder Freestyle Cab 2.2 Hi-Racer เกียร์ธรรมดา ปี 2019 จด 2020</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_0d9e230c-17f1-418b-bfe9-c25611c0cfd9.jpg?v=1757511849</image:loc>
+      <image:caption>Mazda Bt-50 Pro Thunder Freestyle Cab 2.2 Hi-Racer เกียร์ธรรมดา ปี 2019 จด 2020</image:caption>
+      <image:title>Mazda Bt-50 Pro Thunder Freestyle Cab 2.2 Hi-Racer เกียร์ธรรมดา ปี 2019 จด 2020</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_9512f9a5-0444-4d94-b79a-dc82673c2f4f.jpg?v=1757511849</image:loc>
+      <image:caption>Mazda Bt-50 Pro Thunder Freestyle Cab 2.2 Hi-Racer เกียร์ธรรมดา ปี 2019 จด 2020</image:caption>
+      <image:title>Mazda Bt-50 Pro Thunder Freestyle Cab 2.2 Hi-Racer เกียร์ธรรมดา ปี 2019 จด 2020</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/mercedes-benz-coupe-amg-dynamic-%E0%B8%9B%E0%B8%B5-2018-%E0%B8%AA%E0%B8%9B%E0%B8%AD%E0%B8%A3%E0%B9%8C%E0%B8%95-2-%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%95%E0%B8%B9</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_33be85de-afd0-4d99-816c-6bbcd29d6c25.jpg?v=1757422400</image:loc>
+      <image:caption>Mercedes-Benz Coupé AMG Dynamic ปี 2018 สปอร์ต 2 ประตู</image:caption>
+      <image:title>Mercedes-Benz Coupé AMG Dynamic ปี 2018 สปอร์ต 2 ประตู</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f51596c3-ec46-4b68-bdc4-2f5ccad6b8ba.jpg?v=1757422400</image:loc>
+      <image:caption>Mercedes-Benz Coupé AMG Dynamic ปี 2018 สปอร์ต 2 ประตู</image:caption>
+      <image:title>Mercedes-Benz Coupé AMG Dynamic ปี 2018 สปอร์ต 2 ประตู</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_577af119-1d1d-4b9c-930e-7b5dfc5f894e.jpg?v=1757422400</image:loc>
+      <image:caption>Mercedes-Benz Coupé AMG Dynamic ปี 2018 สปอร์ต 2 ประตู</image:caption>
+      <image:title>Mercedes-Benz Coupé AMG Dynamic ปี 2018 สปอร์ต 2 ประตู</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a841fe10-fa6b-430e-ab3a-e6ba2966b27f.jpg?v=1757422400</image:loc>
+      <image:caption>Mercedes-Benz Coupé AMG Dynamic ปี 2018 สปอร์ต 2 ประตู</image:caption>
+      <image:title>Mercedes-Benz Coupé AMG Dynamic ปี 2018 สปอร์ต 2 ประตู</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a66ac47b-b023-4ddd-88e9-fe337f1877cb.jpg?v=1757422400</image:loc>
+      <image:caption>Mercedes-Benz Coupé AMG Dynamic ปี 2018 สปอร์ต 2 ประตู</image:caption>
+      <image:title>Mercedes-Benz Coupé AMG Dynamic ปี 2018 สปอร์ต 2 ประตู</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/toyota-hiace-commuter-3-0-m-t-%E0%B8%9B%E0%B8%B52016-2561</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_de26c6b9-8021-49bd-b722-13d5ec7e7862.jpg?v=1756652442</image:loc>
+      <image:caption>TOYOTA HIACE COMMUTER 3.0 M/T ปี(2016/ 2561 )</image:caption>
+      <image:title>TOYOTA HIACE COMMUTER 3.0 M/T ปี(2016/ 2561 )</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_8c241829-45b9-438f-9806-42961033e478.jpg?v=1756652442</image:loc>
+      <image:caption>TOYOTA HIACE COMMUTER 3.0 M/T ปี(2016/ 2561 )</image:caption>
+      <image:title>TOYOTA HIACE COMMUTER 3.0 M/T ปี(2016/ 2561 )</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_1735662b-176d-4061-8e0e-943e2ff642fa.jpg?v=1756652442</image:loc>
+      <image:caption>TOYOTA HIACE COMMUTER 3.0 M/T ปี(2016/ 2561 )</image:caption>
+      <image:title>TOYOTA HIACE COMMUTER 3.0 M/T ปี(2016/ 2561 )</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_4b506e1b-2464-4a62-8de8-26bd22d56ffa.jpg?v=1756652442</image:loc>
+      <image:caption>TOYOTA HIACE COMMUTER 3.0 M/T ปี(2016/ 2561 )</image:caption>
+      <image:title>TOYOTA HIACE COMMUTER 3.0 M/T ปี(2016/ 2561 )</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_7c0332f5-21ec-453e-b63e-5d46567c25e1.jpg?v=1756652442</image:loc>
+      <image:caption>TOYOTA HIACE COMMUTER 3.0 M/T ปี(2016/ 2561 )</image:caption>
+      <image:title>TOYOTA HIACE COMMUTER 3.0 M/T ปี(2016/ 2561 )</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/ford-ranger-wildtrak-double-cab-2-0-auto</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_13a4d3db-5dce-4769-8992-104a04bed82a.jpg?v=1755277727</image:loc>
+      <image:caption>FORD RANGER WILDTRAK DOUBLE CAB 2.0 AUTO</image:caption>
+      <image:title>FORD RANGER WILDTRAK DOUBLE CAB 2.0 AUTO</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_44c55f72-9ae0-4c63-b552-d752c9a78df0.jpg?v=1755277728</image:loc>
+      <image:caption>FORD RANGER WILDTRAK DOUBLE CAB 2.0 AUTO</image:caption>
+      <image:title>FORD RANGER WILDTRAK DOUBLE CAB 2.0 AUTO</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_da3dd7bb-b356-4e1b-8375-da006af51c6d.jpg?v=1755277727</image:loc>
+      <image:caption>FORD RANGER WILDTRAK DOUBLE CAB 2.0 AUTO</image:caption>
+      <image:title>FORD RANGER WILDTRAK DOUBLE CAB 2.0 AUTO</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_28f1e15d-1515-49fd-9755-b60928d8b782.jpg?v=1755277728</image:loc>
+      <image:caption>FORD RANGER WILDTRAK DOUBLE CAB 2.0 AUTO</image:caption>
+      <image:title>FORD RANGER WILDTRAK DOUBLE CAB 2.0 AUTO</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_cd0ae85c-f93f-4112-9a5c-c2375e76c8e1.jpg?v=1755277727</image:loc>
+      <image:caption>FORD RANGER WILDTRAK DOUBLE CAB 2.0 AUTO</image:caption>
+      <image:title>FORD RANGER WILDTRAK DOUBLE CAB 2.0 AUTO</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-city-zx-1-5sv-v-tec-airbag-abs-a-t%E0%B9%80%E0%B8%81%E0%B8%B5%E0%B8%A2%E0%B8%A3%E0%B9%8C%E0%B8%AD%E0%B8%AD%E0%B9%82%E0%B8%95%E0%B9%89-%E0%B8%9B%E0%B8%B5-2006-2550</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_c5e0b3d5-7892-4444-858b-c34f24f29dcc.jpg?v=1754421708</image:loc>
+      <image:caption>HONDA CITY ZX 1.5SV V-TEC AIRBAG ABS A/T(เกียร์ออโต้) ปี 2006/2550</image:caption>
+      <image:title>HONDA CITY ZX 1.5SV V-TEC AIRBAG ABS A/T(เกียร์ออโต้) ปี 2006/2550</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_9cc9c650-8fee-4280-a015-4722d20cc43f.jpg?v=1754421708</image:loc>
+      <image:caption>HONDA CITY ZX 1.5SV V-TEC AIRBAG ABS A/T(เกียร์ออโต้) ปี 2006/2550</image:caption>
+      <image:title>HONDA CITY ZX 1.5SV V-TEC AIRBAG ABS A/T(เกียร์ออโต้) ปี 2006/2550</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_e240b5c5-d1da-40d1-8cf3-9425d9f0c46d.jpg?v=1754421708</image:loc>
+      <image:caption>HONDA CITY ZX 1.5SV V-TEC AIRBAG ABS A/T(เกียร์ออโต้) ปี 2006/2550</image:caption>
+      <image:title>HONDA CITY ZX 1.5SV V-TEC AIRBAG ABS A/T(เกียร์ออโต้) ปี 2006/2550</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f90db831-4480-498e-a328-8a3efb1ec340.jpg?v=1754421708</image:loc>
+      <image:caption>HONDA CITY ZX 1.5SV V-TEC AIRBAG ABS A/T(เกียร์ออโต้) ปี 2006/2550</image:caption>
+      <image:title>HONDA CITY ZX 1.5SV V-TEC AIRBAG ABS A/T(เกียร์ออโต้) ปี 2006/2550</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_43d75eeb-082e-4f17-9ec6-7d2f2dc3c9c4.jpg?v=1754421708</image:loc>
+      <image:caption>HONDA CITY ZX 1.5SV V-TEC AIRBAG ABS A/T(เกียร์ออโต้) ปี 2006/2550</image:caption>
+      <image:title>HONDA CITY ZX 1.5SV V-TEC AIRBAG ABS A/T(เกียร์ออโต้) ปี 2006/2550</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/hyundai-h1-2-5-a2-dluxe-a-t-%E0%B8%9B%E0%B8%B5-2012-2556</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a328b0de-3106-402b-af51-555f616d9924.jpg?v=1752140004</image:loc>
+      <image:caption>Hyundai H1 2.5 A2 DLUXE A/T ปี 2012/2556</image:caption>
+      <image:title>Hyundai H1 2.5 A2 DLUXE A/T ปี 2012/2556</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_05e61d6f-6803-4624-8ff9-a8110935fe84.jpg?v=1752140004</image:loc>
+      <image:caption>Hyundai H1 2.5 A2 DLUXE A/T ปี 2012/2556</image:caption>
+      <image:title>Hyundai H1 2.5 A2 DLUXE A/T ปี 2012/2556</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_13242cf0-d8cc-41b8-84ff-bdb10aebe1d3.jpg?v=1752140004</image:loc>
+      <image:caption>Hyundai H1 2.5 A2 DLUXE A/T ปี 2012/2556</image:caption>
+      <image:title>Hyundai H1 2.5 A2 DLUXE A/T ปี 2012/2556</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_ba638323-105d-43e5-8c2a-6648c8d69c85.jpg?v=1752140004</image:loc>
+      <image:caption>Hyundai H1 2.5 A2 DLUXE A/T ปี 2012/2556</image:caption>
+      <image:title>Hyundai H1 2.5 A2 DLUXE A/T ปี 2012/2556</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_5348b413-1421-416e-8bb7-a8334eeb70e7.jpg?v=1752140004</image:loc>
+      <image:caption>Hyundai H1 2.5 A2 DLUXE A/T ปี 2012/2556</image:caption>
+      <image:title>Hyundai H1 2.5 A2 DLUXE A/T ปี 2012/2556</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/toyota-alphard-2-5-s-c-package-%E0%B8%9B%E0%B8%B5-2020-%E0%B8%88%E0%B8%94%E0%B8%9B%E0%B8%B5-2563-%E0%B8%AA%E0%B8%B5%E0%B8%82%E0%B8%B2%E0%B8%A7</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f50ac7a4-ab5f-43f7-98c0-c29d8eedbbd2.jpg?v=1751159454</image:loc>
+      <image:caption>TOYOTA ALPHARD 2.5 S C-Package ปี 2020 (จดปี 2563) สีขาว</image:caption>
+      <image:title>TOYOTA ALPHARD 2.5 S C-Package ปี 2020 (จดปี 2563) สีขาว</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_43bc2764-ebea-4ef1-a1da-4a5625fd90b2.jpg?v=1751159454</image:loc>
+      <image:caption>TOYOTA ALPHARD 2.5 S C-Package ปี 2020 (จดปี 2563) สีขาว</image:caption>
+      <image:title>TOYOTA ALPHARD 2.5 S C-Package ปี 2020 (จดปี 2563) สีขาว</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_45e6bc50-9e87-4187-b7c0-2a3189a74b27.jpg?v=1751159454</image:loc>
+      <image:caption>TOYOTA ALPHARD 2.5 S C-Package ปี 2020 (จดปี 2563) สีขาว</image:caption>
+      <image:title>TOYOTA ALPHARD 2.5 S C-Package ปี 2020 (จดปี 2563) สีขาว</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_1bdbae01-43ed-4ae8-a19e-246aaab17e6e.jpg?v=1751159454</image:loc>
+      <image:caption>TOYOTA ALPHARD 2.5 S C-Package ปี 2020 (จดปี 2563) สีขาว</image:caption>
+      <image:title>TOYOTA ALPHARD 2.5 S C-Package ปี 2020 (จดปี 2563) สีขาว</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_88fd14eb-8ec6-4f89-ba08-15ef8f3c245a.jpg?v=1751159454</image:loc>
+      <image:caption>TOYOTA ALPHARD 2.5 S C-Package ปี 2020 (จดปี 2563) สีขาว</image:caption>
+      <image:title>TOYOTA ALPHARD 2.5 S C-Package ปี 2020 (จดปี 2563) สีขาว</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/ford-ranger-4dr-dcab-wildtrak-2-2-vg-turbo-minorchange-%E0%B9%80%E0%B8%81%E0%B8%B5%E0%B8%A2%E0%B8%A3%E0%B9%8C%E0%B8%AD%E0%B8%AD%E0%B9%82%E0%B8%95%E0%B9%89-%E0%B8%94%E0%B8%B5%E0%B9%80%E0%B8%8B%E0%B8%A5-2-2l-2wd-%E0%B8%9B%E0%B8%B5-2018-2561</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_2ded8252-2432-49a8-9ec5-c202ac8fd90b.jpg?v=1750868640</image:loc>
+      <image:caption>FORD RANGER 4dr DCab WildTrak 2.2 VG Turbo Minorchange เกียร์ออโต้ | ดีเซล 2.2L | 2WD | ปี 2018 (2561)</image:caption>
+      <image:title>FORD RANGER 4dr DCab WildTrak 2.2 VG Turbo Minorchange เกียร์ออโต้ | ดีเซล 2.2L | 2WD | ปี 2018 (2561)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_5d5a27fe-0d5d-4819-bb8c-1e1761c5275a.jpg?v=1750868640</image:loc>
+      <image:caption>FORD RANGER 4dr DCab WildTrak 2.2 VG Turbo Minorchange เกียร์ออโต้ | ดีเซล 2.2L | 2WD | ปี 2018 (2561)</image:caption>
+      <image:title>FORD RANGER 4dr DCab WildTrak 2.2 VG Turbo Minorchange เกียร์ออโต้ | ดีเซล 2.2L | 2WD | ปี 2018 (2561)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_bc469f93-aa98-4442-82de-64683d33a54c.jpg?v=1750868640</image:loc>
+      <image:caption>FORD RANGER 4dr DCab WildTrak 2.2 VG Turbo Minorchange เกียร์ออโต้ | ดีเซล 2.2L | 2WD | ปี 2018 (2561)</image:caption>
+      <image:title>FORD RANGER 4dr DCab WildTrak 2.2 VG Turbo Minorchange เกียร์ออโต้ | ดีเซล 2.2L | 2WD | ปี 2018 (2561)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_ad7a89b9-f7bb-4748-80a0-c3164e75ad4d.jpg?v=1750868640</image:loc>
+      <image:caption>FORD RANGER 4dr DCab WildTrak 2.2 VG Turbo Minorchange เกียร์ออโต้ | ดีเซล 2.2L | 2WD | ปี 2018 (2561)</image:caption>
+      <image:title>FORD RANGER 4dr DCab WildTrak 2.2 VG Turbo Minorchange เกียร์ออโต้ | ดีเซล 2.2L | 2WD | ปี 2018 (2561)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_8bcd7703-dd8c-4549-be35-5f6daf765db1.jpg?v=1750868640</image:loc>
+      <image:caption>FORD RANGER 4dr DCab WildTrak 2.2 VG Turbo Minorchange เกียร์ออโต้ | ดีเซล 2.2L | 2WD | ปี 2018 (2561)</image:caption>
+      <image:title>FORD RANGER 4dr DCab WildTrak 2.2 VG Turbo Minorchange เกียร์ออโต้ | ดีเซล 2.2L | 2WD | ปี 2018 (2561)</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/mazda2-skyactiv-1-3-sports-standard</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_84dd9d50-bd1c-4729-a576-612a6100115a.jpg?v=1748519646</image:loc>
+      <image:caption>Mazda2 Skyactiv 1.3 Sports Standard</image:caption>
+      <image:title>Mazda2 Skyactiv 1.3 Sports Standard</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_9514835c-0ae2-44ab-89c6-b2f282a6ad5b.jpg?v=1748519646</image:loc>
+      <image:caption>Mazda2 Skyactiv 1.3 Sports Standard</image:caption>
+      <image:title>Mazda2 Skyactiv 1.3 Sports Standard</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_6d9aa0b0-7c11-4306-932b-c831a0d7d9b9.jpg?v=1748519646</image:loc>
+      <image:caption>Mazda2 Skyactiv 1.3 Sports Standard</image:caption>
+      <image:title>Mazda2 Skyactiv 1.3 Sports Standard</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_27af7fb7-2836-491d-b3b3-c9468a6a4b6c.jpg?v=1748519646</image:loc>
+      <image:caption>Mazda2 Skyactiv 1.3 Sports Standard</image:caption>
+      <image:title>Mazda2 Skyactiv 1.3 Sports Standard</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a563e116-79ac-4710-a835-b2f7e66211e2.jpg?v=1748519646</image:loc>
+      <image:caption>Mazda2 Skyactiv 1.3 Sports Standard</image:caption>
+      <image:title>Mazda2 Skyactiv 1.3 Sports Standard</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/toyota-camry-2-0g-extremo-d-4smnc-%E0%B8%9B%E0%B8%B5-2015-2558</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_7ea11f1d-2d7c-4f37-a756-333e1cffd995.jpg?v=1748245144</image:loc>
+      <image:caption>Toyota Camry 2.0G Extremo (D-4S)(MNC)  ปี 2015 (2558)</image:caption>
+      <image:title>Toyota Camry 2.0G Extremo (D-4S)(MNC)  ปี 2015 (2558)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_b79de276-be14-4797-8fc0-2a4c480154af.jpg?v=1748245144</image:loc>
+      <image:caption>Toyota Camry 2.0G Extremo (D-4S)(MNC)  ปี 2015 (2558)</image:caption>
+      <image:title>Toyota Camry 2.0G Extremo (D-4S)(MNC)  ปี 2015 (2558)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_09cb90e8-d999-4c54-9821-d91c24c2a198.jpg?v=1748245144</image:loc>
+      <image:caption>Toyota Camry 2.0G Extremo (D-4S)(MNC)  ปี 2015 (2558)</image:caption>
+      <image:title>Toyota Camry 2.0G Extremo (D-4S)(MNC)  ปี 2015 (2558)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_a918e696-ef7c-478f-9e86-8cd5e34fe368.jpg?v=1748245144</image:loc>
+      <image:caption>Toyota Camry 2.0G Extremo (D-4S)(MNC)  ปี 2015 (2558)</image:caption>
+      <image:title>Toyota Camry 2.0G Extremo (D-4S)(MNC)  ปี 2015 (2558)</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_721a44c7-0b4c-4dfe-b4d2-ffc6f11197df.jpg?v=1748245144</image:loc>
+      <image:caption>Toyota Camry 2.0G Extremo (D-4S)(MNC)  ปี 2015 (2558)</image:caption>
+      <image:title>Toyota Camry 2.0G Extremo (D-4S)(MNC)  ปี 2015 (2558)</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/ford-everets-2-0-turbo-titanium-2wd-%E0%B8%9B%E0%B8%B5-2018-2562</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_36ec3ebd-210c-45bc-916a-b90e00f52521.jpg?v=1748065093</image:loc>
+      <image:caption>Ford Everets 2.0 Turbo Titanium 2WD ปี 2018/2562</image:caption>
+      <image:title>Ford Everets 2.0 Turbo Titanium 2WD ปี 2018/2562</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_7d93448b-e4a1-4e2d-916e-e894223f4cb7.jpg?v=1748065093</image:loc>
+      <image:caption>Ford Everets 2.0 Turbo Titanium 2WD ปี 2018/2562</image:caption>
+      <image:title>Ford Everets 2.0 Turbo Titanium 2WD ปี 2018/2562</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_144027b1-5b50-4485-8bcf-2f54c1c9d449.jpg?v=1748065093</image:loc>
+      <image:caption>Ford Everets 2.0 Turbo Titanium 2WD ปี 2018/2562</image:caption>
+      <image:title>Ford Everets 2.0 Turbo Titanium 2WD ปี 2018/2562</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_8e125267-0904-4158-bf08-88c333c73df9.jpg?v=1748065093</image:loc>
+      <image:caption>Ford Everets 2.0 Turbo Titanium 2WD ปี 2018/2562</image:caption>
+      <image:title>Ford Everets 2.0 Turbo Titanium 2WD ปี 2018/2562</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_ab34df0c-8cb8-4b78-9456-00e80094508f.jpg?v=1748065093</image:loc>
+      <image:caption>Ford Everets 2.0 Turbo Titanium 2WD ปี 2018/2562</image:caption>
+      <image:title>Ford Everets 2.0 Turbo Titanium 2WD ปี 2018/2562</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/honda-city-1-5-s-at-%E0%B8%9B%E0%B8%B5-2017</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_27ce182a-eb57-4697-98ce-51c83a21338a.jpg?v=1747372535</image:loc>
+      <image:caption>HONDA CITY 1.5 S AT ปี 2017</image:caption>
+      <image:title>HONDA CITY 1.5 S AT ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_63fe4fc2-5f0f-41dd-bc6c-b3f37718b219.jpg?v=1747372535</image:loc>
+      <image:caption>HONDA CITY 1.5 S AT ปี 2017</image:caption>
+      <image:title>HONDA CITY 1.5 S AT ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_d2349fc7-4e51-49bd-9f69-1dd2d42e5464.jpg?v=1747372535</image:loc>
+      <image:caption>HONDA CITY 1.5 S AT ปี 2017</image:caption>
+      <image:title>HONDA CITY 1.5 S AT ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_96a5bf17-dfbc-4b85-bb05-19f97dba757e.jpg?v=1747372535</image:loc>
+      <image:caption>HONDA CITY 1.5 S AT ปี 2017</image:caption>
+      <image:title>HONDA CITY 1.5 S AT ปี 2017</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_d7efd196-3f1e-437e-8a04-0dc7338c56cd.jpg?v=1747372535</image:loc>
+      <image:caption>HONDA CITY 1.5 S AT ปี 2017</image:caption>
+      <image:title>HONDA CITY 1.5 S AT ปี 2017</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/ford-everest-2-5-ltd-limited-%E0%B8%AD%E0%B8%AD%E0%B9%82%E0%B8%95%E0%B9%89-2wd-%E0%B8%9B%E0%B8%B5-2557</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_27405576-ed46-4ae5-9a73-2c70a046a683.jpg?v=1746611610</image:loc>
+      <image:caption>Ford Everest 2.5 LTD LIMITED ออโต้ 2WD ปี 2557</image:caption>
+      <image:title>Ford Everest 2.5 LTD LIMITED ออโต้ 2WD ปี 2557</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_512299e2-1c01-4e31-af8c-68a6825e9484.jpg?v=1746611610</image:loc>
+      <image:caption>Ford Everest 2.5 LTD LIMITED ออโต้ 2WD ปี 2557</image:caption>
+      <image:title>Ford Everest 2.5 LTD LIMITED ออโต้ 2WD ปี 2557</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_955d6c5e-d4ce-409c-8e4e-5c800794aaaa.jpg?v=1746611610</image:loc>
+      <image:caption>Ford Everest 2.5 LTD LIMITED ออโต้ 2WD ปี 2557</image:caption>
+      <image:title>Ford Everest 2.5 LTD LIMITED ออโต้ 2WD ปี 2557</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_1396b338-5972-47db-ab70-458a13ebb6ba.jpg?v=1746611610</image:loc>
+      <image:caption>Ford Everest 2.5 LTD LIMITED ออโต้ 2WD ปี 2557</image:caption>
+      <image:title>Ford Everest 2.5 LTD LIMITED ออโต้ 2WD ปี 2557</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_986169c6-9035-4d8e-8034-e37b370e7ce5.jpg?v=1746611610</image:loc>
+      <image:caption>Ford Everest 2.5 LTD LIMITED ออโต้ 2WD ปี 2557</image:caption>
+      <image:title>Ford Everest 2.5 LTD LIMITED ออโต้ 2WD ปี 2557</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/kia-grand-carnilal-2-9-ceo-ex-lx-diesel-%E0%B8%AD%E0%B8%AD%E0%B9%82%E0%B8%95%E0%B9%89-%E0%B8%9B%E0%B8%B5-2012-2558</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_07608e8c-8a6e-48d1-a471-4e684255aa94.jpg?v=1745516798</image:loc>
+      <image:caption>KIA GRAND CARNILAL 2.9 CEO/EX/LX (diesel) ออโต้ ปี 2012/2558</image:caption>
+      <image:title>KIA GRAND CARNILAL 2.9 CEO/EX/LX (diesel) ออโต้ ปี 2012/2558</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_ecff85ab-7857-4487-89e5-08fe02011885.jpg?v=1745516798</image:loc>
+      <image:caption>KIA GRAND CARNILAL 2.9 CEO/EX/LX (diesel) ออโต้ ปี 2012/2558</image:caption>
+      <image:title>KIA GRAND CARNILAL 2.9 CEO/EX/LX (diesel) ออโต้ ปี 2012/2558</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_81f6ece6-324c-4b0c-bd16-632c340af7fc.jpg?v=1745516798</image:loc>
+      <image:caption>KIA GRAND CARNILAL 2.9 CEO/EX/LX (diesel) ออโต้ ปี 2012/2558</image:caption>
+      <image:title>KIA GRAND CARNILAL 2.9 CEO/EX/LX (diesel) ออโต้ ปี 2012/2558</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_04ad0185-5e16-41c4-b671-d054a16fe6b3.jpg?v=1745516800</image:loc>
+      <image:caption>KIA GRAND CARNILAL 2.9 CEO/EX/LX (diesel) ออโต้ ปี 2012/2558</image:caption>
+      <image:title>KIA GRAND CARNILAL 2.9 CEO/EX/LX (diesel) ออโต้ ปี 2012/2558</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_3372d5d3-dc64-422b-b13a-ddc45190ad59.jpg?v=1745516800</image:loc>
+      <image:caption>KIA GRAND CARNILAL 2.9 CEO/EX/LX (diesel) ออโต้ ปี 2012/2558</image:caption>
+      <image:title>KIA GRAND CARNILAL 2.9 CEO/EX/LX (diesel) ออโต้ ปี 2012/2558</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.chiangmaiusedcar.com/car/ford-ranger-4dr-dcab-xlt-m-t-6sp-2wd-2-2dct-%E0%B9%80%E0%B8%81%E0%B8%B5%E0%B8%A2%E0%B8%A3%E0%B9%8C%E0%B8%98%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%94%E0%B8%B2</loc>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_0cc9bf61-5a06-4507-9ef0-1faf428c9e19.jpg?v=1742060658</image:loc>
+      <image:caption>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT เกียร์ธรรมดา</image:caption>
+      <image:title>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT เกียร์ธรรมดา</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_e06841cd-5c12-403e-b463-90431e6a4f27.jpg?v=1742060658</image:loc>
+      <image:caption>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT เกียร์ธรรมดา</image:caption>
+      <image:title>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT เกียร์ธรรมดา</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_21c086c5-5ac9-4982-99d0-768aed706ad1.jpg?v=1742060658</image:loc>
+      <image:caption>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT เกียร์ธรรมดา</image:caption>
+      <image:title>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT เกียร์ธรรมดา</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_f547a02b-2192-4bf7-bbf5-d7b2afe12786.jpg?v=1742060658</image:loc>
+      <image:caption>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT เกียร์ธรรมดา</image:caption>
+      <image:title>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT เกียร์ธรรมดา</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://cdn.shopify.com/s/files/1/0718/1441/4580/files/rn-image_picker_lib_temp_0b49605d-546b-4eb8-9058-8f4a83b7b42f.jpg?v=1742060658</image:loc>
+      <image:caption>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT เกียร์ธรรมดา</image:caption>
+      <image:title>FORD RANGER 4dr DCab XLT M/T 6sp 2WD 2.2DCT เกียร์ธรรมดา</image:title>
     </image:image>
   </url>
 </urlset>

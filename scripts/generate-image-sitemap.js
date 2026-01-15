@@ -1,6 +1,7 @@
 // scripts/generate-image-sitemap.js
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { pathToFileURL } from 'url';
 
 async function generateImageSitemap() {
   const siteUrl = 'https://www.chiangmaiusedcar.com';
@@ -66,6 +67,42 @@ async function generateImageSitemap() {
     </image:image>
   </url>
 `;
+
+  // เพิ่มหน้ารถพร้อมรูปภาพจาก Shopify (ถ้า env พร้อม)
+  try {
+    const shopifyModuleUrl = pathToFileURL(path.join(process.cwd(), 'lib', 'shopify.mjs')).href;
+    const { getAllCars } = await import(shopifyModuleUrl);
+    const cars = await getAllCars();
+
+    const maxImagesPerCar = 5;
+    for (const car of cars) {
+      if (!car?.handle) continue;
+      const carUrl = `${siteUrl}/car/${encodeURIComponent(car.handle)}`;
+      const images = Array.isArray(car.images) ? car.images.slice(0, maxImagesPerCar) : [];
+      if (images.length === 0) continue;
+
+      xml += `  <url>
+    <loc>${carUrl}</loc>
+`;
+
+      images.forEach(img => {
+        const imageUrl = img.originalUrl || img.url;
+        if (!imageUrl) return;
+        const caption = img.alt || car.title || 'รถมือสองเชียงใหม่';
+        xml += `    <image:image>
+      <image:loc>${imageUrl}</image:loc>
+      <image:caption>${caption}</image:caption>
+      <image:title>${caption}</image:title>
+    </image:image>
+`;
+      });
+
+      xml += `  </url>
+`;
+    }
+  } catch (error) {
+    console.warn('⚠️ Could not load car images for image sitemap:', error?.message || error);
+  }
 
   xml += `</urlset>`;
 
