@@ -127,7 +127,9 @@ class SEOVerifier {
   async checkSitemaps() {
     this.log('🗺️ Checking sitemaps...', 'info');
 
-    const sitemapFiles = ['sitemap.xml', 'sitemap-0.xml', 'sitemap-cars.xml', 'sitemap-images.xml'];
+    // sitemap-cars.xml was deprecated to avoid duplicate/conflicting sitemap signals.
+    // Car URLs are included in next-sitemap output (e.g. sitemap-0.xml).
+    const sitemapFiles = ['sitemap.xml', 'sitemap-0.xml', 'sitemap-images.xml'];
 
     sitemapFiles.forEach(filename => {
       const sitemapPath = path.join(process.cwd(), 'public', filename);

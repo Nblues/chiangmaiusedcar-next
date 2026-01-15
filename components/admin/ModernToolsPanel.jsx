@@ -471,7 +471,7 @@ export default function ModernToolsPanel() {
           {[
             { name: 'Sitemap', url: '/sitemap.xml' },
             { name: 'Robots.txt', url: '/robots.txt' },
-            { name: 'Cars Sitemap', url: '/sitemap-cars.xml' },
+            { name: 'URLs Sitemap', url: '/sitemap-0.xml' },
             { name: 'Images Sitemap', url: '/sitemap-images.xml' },
           ].map(link => (
             <a

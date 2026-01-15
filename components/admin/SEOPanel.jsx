@@ -119,13 +119,13 @@ export default function SEOPanel() {
                 <p className="text-sm text-gray-600">/sitemap.xml</p>
               </a>
               <a
-                href="/sitemap-cars.xml"
+                href="/sitemap-0.xml"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block p-4 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors"
               >
-                <p className="font-semibold text-gray-800">Cars Sitemap</p>
-                <p className="text-sm text-gray-600">/sitemap-cars.xml</p>
+                <p className="font-semibold text-gray-800">URLs Sitemap</p>
+                <p className="text-sm text-gray-600">/sitemap-0.xml</p>
               </a>
               <a
                 href="/sitemap-images.xml"

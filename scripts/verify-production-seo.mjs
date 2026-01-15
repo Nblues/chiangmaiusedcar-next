@@ -262,10 +262,16 @@ async function main() {
   const hasCar = types.includes('Car');
   const hasProduct = types.includes('Product');
 
-  console.log(JSON.stringify({ jsonLdTypes: types, hasCar, hasProduct }));
+  // Product schema is expected on a car detail page, but not required for
+  // collection/list pages (home, /all-cars) where ItemList/CollectionPage is typical.
+  const requiresProduct = /\/car\//i.test(page.url || targetUrl);
 
-  const ok = ogImageOk && hasCar && hasProduct;
-  console.log(JSON.stringify({ result: ok ? 'PASS' : 'FAIL', ogImageOk, hasCar, hasProduct }));
+  console.log(JSON.stringify({ jsonLdTypes: types, hasCar, hasProduct, requiresProduct }));
+
+  const ok = ogImageOk && hasCar && (requiresProduct ? hasProduct : true);
+  console.log(
+    JSON.stringify({ result: ok ? 'PASS' : 'FAIL', ogImageOk, hasCar, hasProduct, requiresProduct })
+  );
 
   if (!ok) process.exitCode = 1;
 }
