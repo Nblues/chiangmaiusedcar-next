@@ -5,6 +5,11 @@
  */
 
 export default function handler(req, res) {
+  // Never expose environment inspection endpoints in production
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(404).json({ error: 'Not found' });
+  }
+
   const hasAdmin = !!process.env.ADMIN_USERNAME;
   const hasPassword = !!process.env.ADMIN_PASSWORD;
   const hasSecret = !!process.env.SESSION_SECRET;

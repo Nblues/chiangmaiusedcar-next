@@ -5,10 +5,38 @@
 
 import fs from 'fs';
 import path from 'path';
+import { isAuthenticated, verifyCsrf } from '../../../middleware/adminAuth';
+import { verifyApiAuth } from '../../../lib/apiAuth';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // Prevent caching of security scan output
+  res.setHeader('Cache-Control', 'no-store');
+
+  // Require authentication in all environments
+  // - Admin session for dashboard usage
+  // - API auth (optionally signed) for automation
+  let authedBy = 'session';
+  if (!isAuthenticated(req)) {
+    const apiAuth = verifyApiAuth(req);
+    if (!apiAuth.ok) {
+      res.setHeader(
+        'WWW-Authenticate',
+        'APIKey realm="chiangmaiusedcar", headers="X-API-Key, X-Timestamp, X-Signature"'
+      );
+      return res
+        .status(401)
+        .json({ success: false, error: 'Unauthorized', reason: apiAuth.reason });
+    }
+    authedBy = 'api';
+  }
+
+  // If using session auth, enforce CSRF for POST
+  if (authedBy === 'session' && !verifyCsrf(req)) {
+    return res.status(403).json({ success: false, error: 'Invalid CSRF token' });
   }
 
   try {
@@ -107,6 +135,7 @@ export default async function handler(req, res) {
     res.status(200).json({
       success: true,
       scan: scanResults,
+      authedBy,
       message: 'Security scan completed successfully',
     });
   } catch (error) {

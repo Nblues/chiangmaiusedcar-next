@@ -1,4 +1,9 @@
 export default function handler(req, res) {
+  // Never expose debug endpoints in production
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(404).json({ error: 'Not found' });
+  }
+
   try {
     const debug = {
       method: req.method,

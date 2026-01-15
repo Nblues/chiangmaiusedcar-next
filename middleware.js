@@ -64,6 +64,6 @@ export function middleware(request) {
 export const config = {
   matcher: [
     // Exclude Next.js internals and common static files
-    '/((?!api|_next/static|_next/image|_next/webpack-hmr|favicon.ico|robots.txt|sitemap.xml).*)',
+    '/((?!api|_next/static|_next/image|_next/webpack-hmr|favicon.ico|robots.txt|sitemap.xml|sitemap-0.xml|sitemap-images.xml|manifest.json|site.webmanifest|browserconfig.xml|offline.html|sw.js|sw-dev.js|sw-advanced.js|sw-images.js).*)',
   ],
 };

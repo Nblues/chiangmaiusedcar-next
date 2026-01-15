@@ -1,5 +1,10 @@
 // Test EmailJS configuration
 export default async function handler(req, res) {
+  // Never expose diagnostic endpoints in production
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(404).json({ error: 'Not found' });
+  }
+
   // Allow both GET and POST methods
   if (req.method !== 'GET' && req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });

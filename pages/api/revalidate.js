@@ -23,10 +23,14 @@ export default async function handler(req, res) {
   try {
     // ตรวจสอบ secret token หรือ authentication
     const { secret, paths, force } = req.method === 'POST' ? req.body : req.query;
-    const expectedSecret = process.env.REVALIDATE_SECRET || 'dev-secret';
+    const expectedSecretRaw = process.env.REVALIDATE_SECRET;
+    const expectedSecret = typeof expectedSecretRaw === 'string' ? expectedSecretRaw.trim() : '';
+    const hasSecretConfigured = Boolean(expectedSecret);
 
     // Allow with correct secret OR admin authentication
-    const hasValidSecret = process.env.NODE_ENV === 'development' || secret === expectedSecret;
+    // IMPORTANT: In production, do NOT fall back to a default secret.
+    const isDev = process.env.NODE_ENV === 'development';
+    const hasValidSecret = isDev ? true : hasSecretConfigured && secret === expectedSecret;
     const isAdmin = isAuthenticated(req);
     const apiAuth = verifyApiAuth(req);
 

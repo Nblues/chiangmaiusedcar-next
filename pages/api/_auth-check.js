@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   const result = verifyApiAuth(req, { requireHmac: true });
   if (!result.ok) {
-    const debug = req.headers['x-debug'] === '1';
+    const debug = req.headers['x-debug'] === '1' && process.env.NODE_ENV !== 'production';
     if (debug) {
       const body =
         typeof req.body === 'string' ? req.body : req.body ? JSON.stringify(req.body) : '';

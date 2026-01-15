@@ -5,6 +5,9 @@ export default function handler(req, res) {
     if (req.method !== 'GET') {
       return res.status(405).json({ ok: false, error: 'Method not allowed' });
     }
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(200).json({ ok: true, ts: Date.now() });
+    }
     return res.status(200).json({ ok: true, ts: Date.now(), node: process.version });
   } catch (err) {
     // Log explicit error to help diagnose FUNCTION_INVOCATION_FAILED
