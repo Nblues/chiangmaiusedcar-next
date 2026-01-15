@@ -365,7 +365,7 @@ textarea:focus-visible {
 
 /* ตัวอย่าง: ปุ่มหลัก */
 .btn-primary {
-  @apply inline-flex items-center justify-center px-6 py-3 bg-accent hover:bg-accent-600 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl font-prompt;
+  @apply inline-flex items-center justify-center px-6 py-3 bg-accent-800 hover:bg-accent-900 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl font-prompt;
 }
 
 .btn-secondary {
