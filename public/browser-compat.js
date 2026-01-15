@@ -69,18 +69,6 @@
       }
     };
 
-    var schedule = function () {
-      runWhenIdle(function () {
-        window.setTimeout(showNotice, 2500);
-      }, 3000);
-    };
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', schedule, { once: true });
-    } else {
-      schedule();
-    }
-
     var events = ['scroll', 'click', 'touchstart'];
     var handler = function () {
       showNotice();

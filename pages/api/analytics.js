@@ -155,9 +155,19 @@ async function sendToAnalyticsService(metrics) {
 
   // For now, just log in production (you can remove this when you have real analytics)
   if (process.env.NODE_ENV === 'production') {
+    const isWebVitalWarning = metrics && metrics.type === 'web-vital-warning';
+    const isCls = isWebVitalWarning && metrics.name === 'CLS';
+
     // eslint-disable-next-line no-console
     console.log('📊 Performance metrics logged:', {
       type: metrics.type,
+      name: isWebVitalWarning ? metrics.name : undefined,
+      value: isWebVitalWarning ? metrics.value : undefined,
+      rating: isWebVitalWarning ? metrics.rating : undefined,
+      threshold: isWebVitalWarning ? metrics.threshold : undefined,
+      exceeded: isWebVitalWarning ? metrics.exceeded : undefined,
+      clsLargestShiftTarget: isCls ? metrics.attribution?.largestShiftTarget : undefined,
+      clsLargestShiftValue: isCls ? metrics.attribution?.largestShiftValue : undefined,
       timestamp: metrics.serverTimestamp,
       url: metrics.url,
     });
