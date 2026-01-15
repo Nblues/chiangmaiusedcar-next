@@ -35,16 +35,37 @@ function Normalize-VercelArgs {
         }
     }
 
-    # Ensure non-interactive deploys don't hang on prompts.
-    # Vercel CLI supports --yes to skip confirmation prompts.
-    $hasYes = $false
-    foreach ($a in $normalized) {
-        if ($a -match '^(--yes|-y)$') { $hasYes = $true; break }
+    # Only inject --yes for deploy-like commands.
+    # Injecting --yes for other subcommands (e.g. `whoami`) can make Vercel treat
+    # the remaining arg as a deploy path.
+    $isDeployLike = $false
+
+    if (-not $normalized -or $normalized.Length -eq 0) {
+        $isDeployLike = $true
+    } else {
+        $joined = ($normalized -join ' ')
+        if ($joined -match '(?i)(^|\s)--prod(\s|$)' -or $joined -match '(?i)--target\s+production') {
+            $isDeployLike = $true
+        } else {
+            # If the first non-flag token is `deploy`, treat it as deploy.
+            $firstNonFlag = $null
+            foreach ($a in $normalized) {
+                if ($a -and -not ($a -like '-*')) { $firstNonFlag = $a; break }
+            }
+            if ($firstNonFlag -and $firstNonFlag -ieq 'deploy') {
+                $isDeployLike = $true
+            }
+        }
     }
 
-    if (-not $hasYes) {
-        # Only inject --yes for commands that can prompt.
-        $normalized = @('--yes') + $normalized
+    if ($isDeployLike) {
+        $hasYes = $false
+        foreach ($a in $normalized) {
+            if ($a -match '^(--yes|-y)$') { $hasYes = $true; break }
+        }
+        if (-not $hasYes) {
+            $normalized = @('--yes') + $normalized
+        }
     }
 
     return $normalized
@@ -53,12 +74,12 @@ function Normalize-VercelArgs {
 function Invoke-Tool {
     param(
         [string]$ToolPath,
-        [string[]]$Args
+        [string[]]$ToolArgs
     )
     if ([string]::IsNullOrWhiteSpace($ToolPath)) { return $false }
     if (-not (Test-Path $ToolPath)) { return $false }
-    Write-Host "→ $ToolPath $($Args -join ' ')" -ForegroundColor DarkGray
-    & $ToolPath @Args
+    Write-Host "→ $ToolPath $($ToolArgs -join ' ')" -ForegroundColor DarkGray
+    & $ToolPath @ToolArgs
     $code = $LASTEXITCODE
     if ($code -eq $null) { $code = 0 }
     if ($code -eq 0) { return $true } else { return $false }
@@ -96,7 +117,7 @@ if ($isProdDeploy) {
     )
     foreach ($npx in $npxPathCandidates) {
         if (-not [string]::IsNullOrWhiteSpace($npx) -and (Test-Path $npx)) {
-            if (Invoke-Tool -ToolPath $npx -Args (@('vercel@latest') + $VercelArgsNormalized)) { exit 0 }
+            if (Invoke-Tool -ToolPath $npx -ToolArgs (@('vercel@latest') + $VercelArgsNormalized)) { exit 0 }
         }
     }
 }
@@ -104,13 +125,13 @@ if ($isProdDeploy) {
 # 1) Local portable binary (optional manual placement)
 $localExe = Join-Path (Get-Location) 'vercel.exe'
 if (Test-Path $localExe) {
-    if (Invoke-Tool -ToolPath $localExe -Args $VercelArgsNormalized) { exit 0 }
+    if (Invoke-Tool -ToolPath $localExe -ToolArgs $VercelArgsNormalized) { exit 0 }
 }
 
 # 2) Global vercel in PATH
 $vercelCmd = (& { (Get-Command vercel -ErrorAction SilentlyContinue).Path })
 if ($vercelCmd) {
-    if (Invoke-Tool -ToolPath $vercelCmd -Args $VercelArgsNormalized) { exit 0 }
+    if (Invoke-Tool -ToolPath $vercelCmd -ToolArgs $VercelArgsNormalized) { exit 0 }
 }
 
 # 3) npx vercel
@@ -122,21 +143,21 @@ $npxPathCandidates = @(
 )
 foreach ($npx in $npxPathCandidates) {
     if (-not [string]::IsNullOrWhiteSpace($npx) -and (Test-Path $npx)) {
-        if (Invoke-Tool -ToolPath $npx -Args (@('vercel@latest') + $VercelArgsNormalized)) { exit 0 }
+        if (Invoke-Tool -ToolPath $npx -ToolArgs (@('vercel@latest') + $VercelArgsNormalized)) { exit 0 }
     }
 }
 
 # 4) npm exec vercel
 $npmCmd = (& { (Get-Command npm -ErrorAction SilentlyContinue).Path })
 if ($npmCmd) {
-    if (Invoke-Tool -ToolPath $npmCmd -Args (@('exec','-y','vercel@latest','--') + $VercelArgsNormalized)) { exit 0 }
+    if (Invoke-Tool -ToolPath $npmCmd -ToolArgs (@('exec','-y','vercel@latest','--') + $VercelArgsNormalized)) { exit 0 }
 }
 
 # 5) pnpm dlx vercel
 $pnpmCmd = (& { (Get-Command pnpm -ErrorAction SilentlyContinue).Path })
 if (-not $pnpmCmd) { $pnpmCmd = "C:\\nvm4w\\nodejs\\pnpm.CMD" }
 if (Test-Path $pnpmCmd) {
-    if (Invoke-Tool -ToolPath $pnpmCmd -Args (@('dlx','vercel@latest') + $VercelArgsNormalized)) { exit 0 }
+    if (Invoke-Tool -ToolPath $pnpmCmd -ToolArgs (@('dlx','vercel@latest') + $VercelArgsNormalized)) { exit 0 }
 }
 
 # Fallback: Guidance (ASCII only to avoid encoding parse issues)
