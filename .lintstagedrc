@@ -1,4 +1,8 @@
 {
-  "*.{js,jsx,ts,tsx}": ["eslint --fix --max-warnings=0", "prettier --write"],
+  "{pages,components,lib,utils,config}/**/*.{js,jsx,ts,tsx}": [
+    "eslint --fix --max-warnings=0",
+    "prettier --write"
+  ],
+  "public/**/*.{js,css,html,json,webmanifest}": ["prettier --write"],
   "*.{json,md,yml,yaml}": ["prettier --write"]
 }

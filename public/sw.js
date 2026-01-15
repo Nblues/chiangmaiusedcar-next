@@ -1,7 +1,7 @@
 // Service Worker สำหรับการจัดการแคชตามมาตรฐานสากล 2025
 // Cache Strategy: Stale-While-Revalidate + Network First สำหรับเนื้อหาล่าสุด
 
-const CACHE_VERSION = 'v2026-1.0.2';
+const CACHE_VERSION = 'v2026-1.0.3';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
@@ -14,7 +14,6 @@ const ALLOWED_DOMAINS = [
 
 // กำหนดรายการไฟล์ที่ต้อง cache
 const STATIC_ASSETS = [
-  '/',
   '/offline.html',
   '/manifest.json',
   '/favicon.webp',
@@ -118,7 +117,7 @@ self.addEventListener('fetch', e => {
   }
 
   // Check if request matches our cache routes
-  const shouldCache = CACHE_ROUTES.some(pattern => pattern.test(e.request.url));
+  const shouldCache = CACHE_ROUTES.some(pattern => pattern.test(url.pathname));
 
   e.respondWith(
     (async () => {

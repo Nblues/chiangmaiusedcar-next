@@ -269,6 +269,41 @@ const nextConfig = {
         source: '/(.*)',
         headers: securityHeaders,
       },
+      // Service Worker - must update immediately (avoid stale UI from old SW caches)
+      {
+        source: '/sw.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+          {
+            key: 'Service-Worker-Allowed',
+            value: '/',
+          },
+          {
+            key: 'Vary',
+            value: 'Accept-Encoding',
+          },
+        ],
+      },
+      {
+        source: '/sw-dev.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+          {
+            key: 'Service-Worker-Allowed',
+            value: '/',
+          },
+          {
+            key: 'Vary',
+            value: 'Accept-Encoding',
+          },
+        ],
+      },
       // Static assets - long-term caching
       {
         source: '/_next/static/(.*)',
@@ -312,7 +347,8 @@ const nextConfig = {
       },
       // Public assets - medium-term caching
       {
-        source: '/(.*\\.(?:js|css|woff2|woff|ttf|svg|png|jpg|jpeg|gif|webp|ico))$',
+        source:
+          '/(?!sw\\.js$)(?!sw-dev\\.js$)(.*\\.(?:js|css|woff2|woff|ttf|svg|png|jpg|jpeg|gif|webp|ico))$',
         headers: [
           {
             key: 'Cache-Control',
@@ -326,7 +362,7 @@ const nextConfig = {
       },
       // HTML pages - Aggressive edge caching for better TTFB
       {
-        source: '/((?!api|_next/static).*)',
+        source: '/((?!api|_next/static|sw\\.js|sw-dev\\.js).*)',
         headers: [
           {
             key: 'Cache-Control',
