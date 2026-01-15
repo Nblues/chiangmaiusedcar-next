@@ -131,6 +131,33 @@ function buildHomeItemListJsonLd(inputCars) {
 
 export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonLd }) {
   const seoHome = SEO_KEYWORD_MAP.home;
+  
+  // Helper function to get brand count with fallback to sample data
+  const getBrandCount = useCallback(
+    brandName => {
+      const normalizedBrand = brandName.toLowerCase();
+
+      // Use real data if available, otherwise use sample data
+      if (brandCounts && Object.keys(brandCounts).length > 0) {
+        const count = brandCounts[normalizedBrand] || 0;
+        return count > 0 ? `${count} คัน` : '0 คัน';
+      }
+
+      // Fallback sample data
+      const sampleCounts = {
+        toyota: '50+ คัน',
+        honda: '30+ คัน',
+        nissan: '20+ คัน',
+        mazda: '15+ คัน',
+        mitsubishi: '10+ คัน',
+        ford: '8+ คัน',
+      };
+
+      return sampleCounts[normalizedBrand] || '0 คัน';
+    },
+    [brandCounts]
+  );
+  
   // Facebook reviews: render only client
   const [showFbReviews, setShowFbReviews] = useState(false);
   const [liveStatuses, setLiveStatuses] = useState(null);
