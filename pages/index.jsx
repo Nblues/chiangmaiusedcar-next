@@ -477,7 +477,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           <div className="flex flex-col gap-4 w-full md:w-auto md:min-w-[200px]">
             <a
               href="https://lin.ee/8ugfzstD"
-              className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base bg-accent text-white hover:bg-accent/90 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base bg-accent-800 text-white hover:bg-accent-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -510,7 +510,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                 ในตลาดรถยนต์มือสองภาคเหนือ{' '}
                 <strong className="text-gray-900">คัดสรรคุณภาพทุกคัน</strong> ตรวจสอบโดยผู้เชี่ยวชาญ{' '}
                 พร้อม<strong className="text-green-700">รับประกัน 1 ปีเต็ม</strong> เรามี
-                <strong className="text-accent"> ฟรีดาวน์ 0%</strong> อัตราดอกเบี้ยพิเศษ และ
+                <strong className="text-accent-800"> ฟรีดาวน์ 0%</strong> อัตราดอกเบี้ยพิเศษ และ
                 <strong className="text-primary">
                   {' '}
                   อนุมัติง่าย
@@ -562,21 +562,21 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                 <Link
                   href="/all-cars?type=เก๋ง"
                   prefetch={false}
-                  className="text-accent hover:underline font-medium"
+                  className="text-accent-800 hover:text-accent-900 hover:underline font-medium"
                 >
                   รถเก๋ง
                 </Link>{' '}
                 <Link
                   href="/all-cars?type=กระบะ"
                   prefetch={false}
-                  className="text-accent hover:underline font-medium"
+                  className="text-accent-800 hover:text-accent-900 hover:underline font-medium"
                 >
                   รถกระบะ
                 </Link>{' '}
                 <Link
                   href="/all-cars?type=SUV"
                   prefetch={false}
-                  className="text-accent hover:underline font-medium"
+                  className="text-accent-800 hover:text-accent-900 hover:underline font-medium"
                 >
                   รถ SUV
                 </Link>{' '}
@@ -592,7 +592,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                 <Link
                   href="/credit-check"
                   prefetch={false}
-                  className="text-accent hover:underline font-semibold"
+                  className="text-accent-800 hover:text-accent-900 hover:underline font-semibold"
                 >
                   ปรึกษาไฟแนนซ์ฟรี
                 </Link>{' '}
@@ -609,25 +609,23 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
               </p>
 
               {/* Contact CTA */}
-              <div className="mt-6 pt-6 border-t border-orange-200 text-center">
-                <p className="text-sm sm:text-base mb-3 text-gray-700">
-                  <strong className="text-gray-900">นัดหมายดูรถ</strong>
-                </p>
-                <a
-                  href="tel:0940649018"
-                  className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-xl transition-all duration-300 hover:shadow-lg text-base sm:text-lg"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
-                  </svg>
-                  <span>094-064-9018</span>
-                </a>
-              </div>
+              <p className="mt-6 pt-6 border-t border-orange-200 text-center text-sm sm:text-base mb-3 text-gray-700">
+                <strong className="text-gray-900">นัดหมายดูรถ</strong>
+              </p>
+              <a
+                href="tel:0940649018"
+                className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-xl transition-all duration-300 hover:shadow-lg text-base sm:text-lg"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1  1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
+                </svg>
+                <span>094-064-9018</span>
+              </a>
             </div>
           </div>
         </div>
@@ -708,7 +706,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                   <button
                     type="button"
                     onClick={handleSearch}
-                    className="w-full bg-accent hover:bg-accent-700 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 font-prompt shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="w-full bg-accent-800 hover:bg-accent-900 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 font-prompt shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
                     ค้นหา
                   </button>
@@ -720,74 +718,44 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                 <Link
                   href="/all-cars?price=0-100000"
                   prefetch={false}
-                  className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
-                  <div className="font-bold text-sm text-primary group-hover:text-white">
-                    ต่ำกว่า 1 แสน
-                  </div>
-                  <div className="text-xs font-bold text-orange-700 group-hover:text-white">
-                    {'< 100K'}
-                  </div>
+                  ต่ำกว่า 1 แสน ({'< 100K'})
                 </Link>
                 <Link
                   href="/all-cars?price=100000-200000"
                   prefetch={false}
-                  className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
-                  <div className="font-bold text-sm text-primary group-hover:text-white">
-                    1-2 แสน
-                  </div>
-                  <div className="text-xs font-bold text-orange-700 group-hover:text-white">
-                    100K-200K
-                  </div>
+                  1-2 แสน (100K-200K)
                 </Link>
                 <Link
                   href="/all-cars?price=200000-300000"
                   prefetch={false}
-                  className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
-                  <div className="font-bold text-sm text-primary group-hover:text-white">
-                    2-3 แสน
-                  </div>
-                  <div className="text-xs font-bold text-orange-700 group-hover:text-white">
-                    200K-300K
-                  </div>
+                  2-3 แสน (200K-300K)
                 </Link>
                 <Link
                   href="/all-cars?price=400000-500000"
                   prefetch={false}
-                  className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
-                  <div className="font-bold text-sm text-primary group-hover:text-white">
-                    4-5 แสน
-                  </div>
-                  <div className="text-xs font-bold text-orange-700 group-hover:text-white">
-                    400K-500K
-                  </div>
+                  4-5 แสน (400K-500K)
                 </Link>
                 <Link
                   href="/all-cars?price=600000-700000"
                   prefetch={false}
-                  className="group text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
-                  <div className="font-bold text-sm text-primary group-hover:text-white">
-                    6-7 แสน
-                  </div>
-                  <div className="text-xs font-bold text-orange-700 group-hover:text-white">
-                    600K-700K
-                  </div>
+                  6-7 แสน (600K-700K)
                 </Link>
                 <Link
                   href="/all-cars?price=700000"
                   prefetch={false}
-                  className="group text-center p-3 bg-white border-2 border-accent rounded-xl hover:bg-accent hover:border-accent transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="text-center p-3 bg-white border-2 border-accent rounded-xl hover:bg-accent-800 hover:border-accent-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-accent-800 hover:text-white"
                 >
-                  <div className="font-bold text-sm text-orange-700 group-hover:text-white">
-                    7 แสนขึ้นไป
-                  </div>
-                  <div className="text-xs font-bold text-primary group-hover:text-white">
-                    {'> 700K'}
-                  </div>
+                  7 แสนขึ้นไป ({'> 700K'})
                 </Link>
               </div>
             </div>
@@ -823,7 +791,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                 href="https://lin.ee/8ugfzstD"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center bg-accent hover:bg-accent-600 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+                className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
               >
                 <span>ติดต่อสอบถาม</span>
               </a>
@@ -875,7 +843,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                     {/* Reserved Badge */}
                     {(safeGet(car, 'status') === 'reserved' ||
                       safeGet(car, 'tags', []).includes('reserved')) && (
-                      <div className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-xs md:text-sm font-bold shadow-lg font-prompt">
+                      <div className="absolute top-2 right-2 bg-red-700 text-white px-3 py-1 rounded-full text-xs md:text-sm font-bold shadow-lg font-prompt">
                         จองแล้ว
                       </div>
                     )}
@@ -956,7 +924,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           <Link
             href="/all-cars"
             prefetch={false}
-            className="inline-flex items-center bg-gray-900 hover:bg-accent text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
+            className="inline-flex items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
             aria-label="ดูรถทั้งหมด ครูหนึ่งรถสวย"
           >
             <span>ดูรถทั้งหมด</span>
@@ -1114,7 +1082,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-accent/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
               <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-xl mb-4 group-hover:bg-accent/20 transition-colors">
                 <svg
-                  className="w-6 h-6 text-accent"
+                  className="w-6 h-6 text-accent-800"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -1164,7 +1132,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-accent/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
               <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-xl mb-4 group-hover:bg-accent/20 transition-colors">
                 <svg
-                  className="w-6 h-6 text-accent"
+                  className="w-6 h-6 text-accent-800"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
