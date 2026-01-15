@@ -426,6 +426,17 @@ const nextConfig = {
   // Redirects for SEO and domain consistency
   async redirects() {
     return [
+      // Legacy terms route -> canonical terms-of-service
+      {
+        source: '/terms',
+        destination: '/terms-of-service',
+        permanent: true,
+      },
+      {
+        source: '/en/terms',
+        destination: '/en/terms-of-service',
+        permanent: true,
+      },
       // Exclude static files from redirect
       {
         source: '/robots.txt',

@@ -12,19 +12,19 @@ async function generateImageSitemap() {
       url: `${siteUrl}/herobanner/chiangmaiusedcar.webp`,
       caption: 'ครูหนึ่งรถสวย - รถมือสองเชียงใหม่',
       title: 'หน้าแรกครูหนึ่งรถสวย',
-      license: `${siteUrl}/terms`,
+      license: `${siteUrl}/terms-of-service`,
     },
     {
       url: `${siteUrl}/herobanner/team.png`,
       caption: 'ทีมงานครูหนึ่งรถสวย',
       title: 'เกี่ยวกับครูหนึ่งรถสวย',
-      license: `${siteUrl}/terms`,
+      license: `${siteUrl}/terms-of-service`,
     },
     {
       url: `${siteUrl}/logo/logo_main.png`,
       caption: 'โลโก้ครูหนึ่งรถสวย',
       title: 'ครูหนึ่งรถสวย Logo',
-      license: `${siteUrl}/terms`,
+      license: `${siteUrl}/terms-of-service`,
     },
   ];
 
@@ -63,7 +63,7 @@ async function generateImageSitemap() {
       <image:loc>${siteUrl}/herobanner/team.png</image:loc>
       <image:caption>ทีมงานครูหนึ่งรถสวย - ประสบการณ์ 10+ ปี</image:caption>
       <image:title>เกี่ยวกับครูหนึ่งรถสวย</image:title>
-      <image:license>${siteUrl}/terms</image:license>
+      <image:license>${siteUrl}/terms-of-service</image:license>
     </image:image>
   </url>
 `;

@@ -121,6 +121,7 @@ module.exports = {
     '/_app',
     '/_error',
     '/payment-calculator-new',
+    '/terms',
     '/admin*',
     '/keyword-audit',
     '/test-social-images',
@@ -141,7 +142,7 @@ module.exports = {
       { path: '/promotion', lastmod: new Date().toISOString() }, // Frequently updated
       { path: '/credit-check', lastmod: '2025-10-02T00:00:00+00:00' }, // Static content
       { path: '/payment-calculator', lastmod: '2025-10-02T00:00:00+00:00' }, // Static content
-      { path: '/terms', lastmod: new Date().toISOString() }, // Terms & image license
+      { path: '/terms-of-service', lastmod: new Date().toISOString() }, // Terms & image license
     ];
 
     // Add static pages

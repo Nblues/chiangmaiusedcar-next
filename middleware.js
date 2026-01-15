@@ -22,10 +22,10 @@ export function middleware(request) {
   if (request.nextUrl.pathname === '/') {
     response.headers.set(
       'Cache-Control',
-      'public, max-age=0, must-revalidate, s-maxage=600, stale-while-revalidate=86400'
+      'public, max-age=0, must-revalidate, s-maxage=300, stale-while-revalidate=1800'
     );
-    response.headers.set('CDN-Cache-Control', 'public, s-maxage=600, stale-while-revalidate=86400');
-    response.headers.set('Vercel-CDN-Cache-Control', 's-maxage=600, stale-while-revalidate=86400');
+    response.headers.set('CDN-Cache-Control', 'public, s-maxage=300, stale-while-revalidate=1800');
+    response.headers.set('Vercel-CDN-Cache-Control', 's-maxage=300, stale-while-revalidate=1800');
   }
 
   // Car detail pages: disable browser cache, keep longer CDN cache
