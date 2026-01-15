@@ -131,31 +131,6 @@ function buildHomeItemListJsonLd(inputCars) {
 
 export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonLd }) {
   const seoHome = SEO_KEYWORD_MAP.home;
-  // Helper function to get brand count with fallback to sample data
-  const getBrandCount = useCallback(
-    brandName => {
-      const normalizedBrand = brandName.toLowerCase();
-
-      // Use real data if available, otherwise use sample data
-      if (brandCounts && Object.keys(brandCounts).length > 0) {
-        const count = brandCounts[normalizedBrand] || 0;
-        return count > 0 ? `${count} คัน` : '0 คัน';
-      }
-
-      // Fallback sample data
-      const sampleCounts = {
-        toyota: '50+ คัน',
-        honda: '30+ คัน',
-        nissan: '20+ คัน',
-        mazda: '15+ คัน',
-        mitsubishi: '10+ คัน',
-        ford: '8+ คัน',
-      };
-
-      return sampleCounts[normalizedBrand] || '0 คัน';
-    },
-    [brandCounts]
-  );
   // Facebook reviews: render only client
   const [showFbReviews, setShowFbReviews] = useState(false);
   const [liveStatuses, setLiveStatuses] = useState(null);
@@ -225,6 +200,8 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   useEffect(() => {
     const fetchStatuses = async () => {
       try {
+        // Only run in browser environment
+        if (typeof window === 'undefined') return;
         if (!ids || ids.length === 0) return;
 
         // Check cache first
@@ -237,7 +214,13 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         const qs = new URLSearchParams({ ids: ids.join(',') });
         const resp = await fetch(`/api/public/car-status?${qs.toString()}`, {
           cache: 'no-store',
-        }).catch(() => null);
+        }).catch((err) => {
+          // Silently log and return null
+          if (process.env.NODE_ENV !== 'production') {
+            console.warn('Failed to fetch car statuses:', err.message);
+          }
+          return null;
+        });
 
         if (!resp || !resp.ok) return;
         const data = await resp.json().catch(() => null);
@@ -246,8 +229,11 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           setCachedStatuses(statuses);
           setLiveStatuses(statuses);
         }
-      } catch {
-        // ignore
+      } catch (err) {
+        // Silently handle any remaining errors
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn('Error in fetchStatuses:', err.message);
+        }
       }
     };
 
@@ -256,6 +242,8 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
     if (typeof document !== 'undefined') {
       const fetchStatuses = async () => {
         try {
+          // Only fetch when tab is visible and we're in browser
+          if (typeof window === 'undefined') return;
           if (document.visibilityState !== 'visible') return;
           if (!ids || ids.length === 0) return;
 
@@ -269,7 +257,13 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           const qs = new URLSearchParams({ ids: ids.join(',') });
           const resp = await fetch(`/api/public/car-status?${qs.toString()}`, {
             cache: 'no-store',
-          }).catch(() => null);
+          }).catch((err) => {
+            // Silently log and return null
+            if (process.env.NODE_ENV !== 'production') {
+              console.warn('Failed to fetch car statuses on visibility:', err.message);
+            }
+            return null;
+          });
 
           if (!resp || !resp.ok) return;
           const data = await resp.json().catch(() => null);
@@ -278,8 +272,11 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             setCachedStatuses(statuses);
             setLiveStatuses(statuses);
           }
-        } catch {
-          // ignore
+        } catch (err) {
+          // Silently handle any remaining errors
+          if (process.env.NODE_ENV !== 'production') {
+            console.warn('Error in visibility fetchStatuses:', err.message);
+          }
         }
       };
 
@@ -615,7 +612,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       >
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-prompt">
-            ค้นหารถที่คุณต้องการที่นี่
+            ค้นหารถที่คุณต้องการ
           </h2>
 
           {/* Search Bar - 2025 Modern Design */}

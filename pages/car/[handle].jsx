@@ -9,8 +9,6 @@ import { safeGet, safeFormatPrice } from '../../lib/safeFetch';
 import Link from 'next/link';
 import A11yImage from '../../components/A11yImage';
 import { carAlt } from '../../utils/a11y';
-import { optimizeShopifyImage } from '../../utils/imageOptimizer';
-import { createPrettyUrl, createShareText, createShortShareUrl } from '../../utils/urlHelper';
 import { readCarStatuses } from '../../lib/carStatusStore.js';
 
 function CarDetailPage({ car, recommendedCars = [] }) {
