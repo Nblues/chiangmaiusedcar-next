@@ -145,6 +145,11 @@ pnpm-version.txt
 lint-help.txt
 lint-run.out.txt
 
+# Local one-off artifacts (do not commit)
+build-error-log.txt
+lint-current.txt
+webhint-example.json
+
 # Generated local audit reports
 dev/reports/label-audit.md
 
