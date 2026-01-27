@@ -1,4 +1,7 @@
 module.exports = {
+  // When building on Windows we emit Next build artifacts to a different distDir
+  // for stability; next-sitemap must read manifests from the same directory.
+  sourceDir: process.platform === 'win32' ? '.next-win' : '.next',
   // Sanitize siteUrl to avoid trailing spaces/slashes causing invalid URLs in sitemaps
   siteUrl: String(process.env.SITE_URL || 'https://www.chiangmaiusedcar.com')
     .trim()
@@ -54,19 +57,43 @@ module.exports = {
       // AI Crawlers 2025
       {
         userAgent: 'ChatGPT-User',
-        allow: ['/', '/all-cars', '/car/*', '/about', '/contact'],
+        allow: [
+          '/',
+          '/all-cars',
+          '/car/*',
+          '/used-cars-chiang-mai',
+          '/used-cars-chiang-mai-brand/*',
+          '/about',
+          '/contact',
+        ],
         disallow: ['/api*', '/admin*', '/keyword-audit', '/api-dashboard', '/license'],
         crawlDelay: 1,
       },
       {
         userAgent: 'Claude-Web',
-        allow: ['/', '/all-cars', '/car/*', '/about', '/contact'],
+        allow: [
+          '/',
+          '/all-cars',
+          '/car/*',
+          '/used-cars-chiang-mai',
+          '/used-cars-chiang-mai-brand/*',
+          '/about',
+          '/contact',
+        ],
         disallow: ['/api*', '/admin*', '/keyword-audit', '/api-dashboard', '/license'],
         crawlDelay: 1,
       },
       {
         userAgent: 'Bard',
-        allow: ['/', '/all-cars', '/car/*', '/about', '/contact'],
+        allow: [
+          '/',
+          '/all-cars',
+          '/car/*',
+          '/used-cars-chiang-mai',
+          '/used-cars-chiang-mai-brand/*',
+          '/about',
+          '/contact',
+        ],
         disallow: ['/api*', '/admin*', '/keyword-audit', '/api-dashboard', '/license'],
         crawlDelay: 1,
       },
@@ -86,7 +113,7 @@ module.exports = {
     ],
     additionalSitemaps: ['https://www.chiangmaiusedcar.com/sitemap-images.xml'],
     // Add host directive for consistency
-    host: 'https://www.chiangmaiusedcar.com',
+    host: 'www.chiangmaiusedcar.com',
     // 2025 enhancement: crawl delay for different bots
     transformRobotsTxt: async (config, robotsTxt) => {
       // Fix broken sitemap URLs and add comments
@@ -136,7 +163,14 @@ module.exports = {
     // Static pages - Bing 2025: only lastmod matters, not priority/changefreq
     const staticPages = [
       { path: '/', lastmod: new Date().toISOString() }, // Always fresh
-      { path: '/all-cars', lastmod: new Date().toISOString() }, // Daily car updates
+      { path: '/used-cars-chiang-mai', lastmod: new Date().toISOString() }, // Primary organic landing
+      { path: '/used-cars-chiang-mai-brand/toyota', lastmod: new Date().toISOString() },
+      { path: '/used-cars-chiang-mai-brand/honda', lastmod: new Date().toISOString() },
+      { path: '/used-cars-chiang-mai-brand/isuzu', lastmod: new Date().toISOString() },
+      { path: '/used-cars-chiang-mai-brand/nissan', lastmod: new Date().toISOString() },
+      { path: '/used-cars-chiang-mai-brand/mazda', lastmod: new Date().toISOString() },
+      { path: '/used-cars-chiang-mai-brand/mitsubishi', lastmod: new Date().toISOString() },
+      { path: '/used-cars-chiang-mai-brand/ford', lastmod: new Date().toISOString() },
       { path: '/contact', lastmod: '2025-10-02T00:00:00+00:00' }, // Static content
       { path: '/about', lastmod: '2025-10-02T00:00:00+00:00' }, // Static content
       { path: '/promotion', lastmod: new Date().toISOString() }, // Frequently updated
@@ -156,6 +190,93 @@ module.exports = {
       const { getAllCars } = await import('./lib/shopify.mjs');
       const cars = await getAllCars();
 
+      const carsPerPage = 8; // Must match pages/all-cars.jsx
+      const totalPages = Math.ceil((cars?.length || 0) / carsPerPage);
+      const lastModifiedAllCars = (() => {
+        try {
+          let latestTs = 0;
+          for (const car of cars || []) {
+            const ts = car?.updatedAt ? new Date(car.updatedAt).getTime() : 0;
+            if (Number.isFinite(ts) && ts > latestTs) latestTs = ts;
+          }
+          return latestTs > 0 ? new Date(latestTs).toISOString() : new Date().toISOString();
+        } catch {
+          return new Date().toISOString();
+        }
+      })();
+
+      // Brand landing pagination pages (page 2..N)
+      // NOTE: We keep page=1 as static entries above; this only adds deeper pages for discovery.
+      const brandConfigs = [
+        { slug: 'toyota', tokens: ['toyota'] },
+        { slug: 'honda', tokens: ['honda'] },
+        { slug: 'isuzu', tokens: ['isuzu'] },
+        { slug: 'nissan', tokens: ['nissan'] },
+        { slug: 'mazda', tokens: ['mazda'] },
+        { slug: 'mitsubishi', tokens: ['mitsubishi'] },
+        { slug: 'ford', tokens: ['ford'] },
+      ];
+      const brandPerPage = 24; // Must match pages/used-cars-chiang-mai-brand/[brand].jsx
+      const maxBrandPagesInSitemap = 100;
+
+      for (const brand of brandConfigs) {
+        const tokens = brand.tokens || [];
+        const brandCars = (cars || []).filter(car => {
+          const hay = `${car?.vendor || ''} ${car?.brand || ''} ${car?.title || ''}`.toLowerCase();
+          return tokens.some(t => hay.includes(t));
+        });
+
+        const brandTotalPages = Math.ceil((brandCars.length || 0) / brandPerPage);
+        const cappedBrandTotalPages = Math.min(brandTotalPages, maxBrandPagesInSitemap);
+        if (cappedBrandTotalPages <= 1) continue;
+
+        const brandLastmod = (() => {
+          try {
+            let latestTs = 0;
+            for (const car of brandCars) {
+              const ts = car?.updatedAt ? new Date(car.updatedAt).getTime() : 0;
+              if (Number.isFinite(ts) && ts > latestTs) latestTs = ts;
+            }
+            return latestTs > 0 ? new Date(latestTs).toISOString() : lastModifiedAllCars;
+          } catch {
+            return lastModifiedAllCars;
+          }
+        })();
+
+        for (let page = 2; page <= cappedBrandTotalPages; page += 1) {
+          paths.push(
+            await config.transform(
+              config,
+              `/used-cars-chiang-mai-brand/${brand.slug}?page=${page}`,
+              {
+                lastmod: brandLastmod,
+              }
+            )
+          );
+        }
+      }
+
+      // Catalog page + pagination pages (page 2..N)
+      paths.push(
+        await config.transform(config, '/all-cars', {
+          lastmod: lastModifiedAllCars,
+        })
+      );
+
+      // NOTE: Sitemap can include query URLs, but avoid generating an excessive number.
+      const maxCatalogPagesInSitemap = 500;
+      const cappedTotalPages = Math.min(totalPages, maxCatalogPagesInSitemap);
+
+      if (cappedTotalPages > 1) {
+        for (let page = 2; page <= cappedTotalPages; page += 1) {
+          paths.push(
+            await config.transform(config, `/all-cars?page=${page}`, {
+              lastmod: lastModifiedAllCars,
+            })
+          );
+        }
+      }
+
       for (const car of cars) {
         if (car.handle) {
           // Bing 2025: Use real updatedAt from Shopify for accurate freshness signals
@@ -172,6 +293,11 @@ module.exports = {
         // eslint-disable-next-line no-console
         console.warn('Warning: Could not load cars for sitemap generation:', error?.message);
       }
+
+      // Fallback: ensure catalog page exists even if Shopify fetch fails
+      paths.push(
+        await config.transform(config, '/all-cars', { lastmod: new Date().toISOString() })
+      );
     }
 
     return paths;
@@ -184,11 +310,23 @@ module.exports = {
     // Ensure ISO 8601 format with timezone (Bing recommendation)
     const formattedLastmod = new Date(lastmod).toISOString();
 
+    // Percent-encode non-ASCII characters (Thai/emoji) for sitemap URL validity.
+    // encodeURI preserves URL path separators while encoding characters like spaces/emoji.
+    const encodedPath = (() => {
+      try {
+        return encodeURI(path);
+      } catch {
+        return path;
+      }
+    })();
+
     return {
-      loc: path,
+      loc: encodedPath,
       lastmod: formattedLastmod, // Only field that matters for Bing 2025
       // Removed: changefreq (ignored by Bing)
       // Removed: priority (ignored by Bing)
+      // NOTE: next-sitemap treats alternateRefs.href as a base URL and appends the loc/path.
+      // Keep these as bases to avoid duplicated paths (e.g. /all-cars/all-cars).
       alternateRefs: [
         {
           href: 'https://www.chiangmaiusedcar.com',

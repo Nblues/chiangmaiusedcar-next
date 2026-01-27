@@ -1,7 +1,24 @@
-// scripts/generate-image-sitemap.js
+// scripts/generate-image-sitemap.mjs
 import fs from 'fs';
 import path from 'path';
 import { pathToFileURL } from 'url';
+
+function hasShopifyStorefrontEnv() {
+  const domain =
+    process.env.SHOPIFY_DOMAIN ||
+    process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN ||
+    process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
+
+  const token =
+    process.env.Storefront_API ||
+    process.env.SHOPIFY_STOREFRONT_TOKEN ||
+    process.env.STOREFRONT_API ||
+    process.env.API_shopify ||
+    process.env.API_SHOPIFY ||
+    process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+
+  return Boolean(domain && domain !== 'undefined' && token && token !== 'undefined');
+}
 
 async function generateImageSitemap() {
   const siteUrl = 'https://www.chiangmaiusedcar.com';
@@ -68,40 +85,44 @@ async function generateImageSitemap() {
   </url>
 `;
 
-  // เพิ่มหน้ารถพร้อมรูปภาพจาก Shopify (ถ้า env พร้อม)
-  try {
-    const shopifyModuleUrl = pathToFileURL(path.join(process.cwd(), 'lib', 'shopify.mjs')).href;
-    const { getAllCars } = await import(shopifyModuleUrl);
-    const cars = await getAllCars();
+  // เพิ่มหน้ารถพร้อมรูปภาพจาก Shopify (เฉพาะเมื่อ env พร้อม)
+  if (!hasShopifyStorefrontEnv()) {
+    console.log('ℹ️  Skipping Shopify car images for sitemap-images.xml (missing Shopify Storefront env)');
+  } else {
+    try {
+      const shopifyModuleUrl = pathToFileURL(path.join(process.cwd(), 'lib', 'shopify.mjs')).href;
+      const { getAllCars } = await import(shopifyModuleUrl);
+      const cars = await getAllCars();
 
-    const maxImagesPerCar = 5;
-    for (const car of cars) {
-      if (!car?.handle) continue;
-      const carUrl = `${siteUrl}/car/${encodeURIComponent(car.handle)}`;
-      const images = Array.isArray(car.images) ? car.images.slice(0, maxImagesPerCar) : [];
-      if (images.length === 0) continue;
+      const maxImagesPerCar = 5;
+      for (const car of cars) {
+        if (!car?.handle) continue;
+        const carUrl = `${siteUrl}/car/${encodeURIComponent(car.handle)}`;
+        const images = Array.isArray(car.images) ? car.images.slice(0, maxImagesPerCar) : [];
+        if (images.length === 0) continue;
 
-      xml += `  <url>
+        xml += `  <url>
     <loc>${carUrl}</loc>
 `;
 
-      images.forEach(img => {
-        const imageUrl = img.originalUrl || img.url;
-        if (!imageUrl) return;
-        const caption = img.alt || car.title || 'รถมือสองเชียงใหม่';
-        xml += `    <image:image>
+        images.forEach(img => {
+          const imageUrl = img.originalUrl || img.url;
+          if (!imageUrl) return;
+          const caption = img.alt || car.title || 'รถมือสองเชียงใหม่';
+          xml += `    <image:image>
       <image:loc>${imageUrl}</image:loc>
       <image:caption>${caption}</image:caption>
       <image:title>${caption}</image:title>
     </image:image>
 `;
-      });
+        });
 
-      xml += `  </url>
+        xml += `  </url>
 `;
+      }
+    } catch (error) {
+      console.warn('⚠️ Could not load car images for image sitemap:', error?.message || error);
     }
-  } catch (error) {
-    console.warn('⚠️ Could not load car images for image sitemap:', error?.message || error);
   }
 
   xml += `</urlset>`;

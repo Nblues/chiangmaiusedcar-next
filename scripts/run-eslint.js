@@ -130,6 +130,15 @@ function main() {
     process.stdout.write(`(Full JSON report: ${path.basename(outputFile)})\n`);
   }
 
+  // If ESLint wrote a valid report, trust it.
+  // Some Windows shells/task runners may surface a nonzero process status even when ESLint
+  // succeeded and produced zero issues.
+  if (typeof result.status === 'number' && result.status !== 0 && errorCount === 0) {
+    process.stdout.write(
+      `ESLint: note: underlying exit status was ${result.status}, using report results\n`
+    );
+  }
+
   // ESLint on Windows can occasionally crash (e.g. with a nonzero/AccessViolation-like
   // exit status) even though it successfully wrote the JSON report.
   // Gate on actual lint errors from the report to keep CI/deploy stable.

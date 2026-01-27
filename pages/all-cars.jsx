@@ -1,112 +1,199 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
-import A11yImage from '../components/A11yImage';
+import CarCard from '../components/CarCard';
 import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
 import { getAllCars } from '../lib/shopify.mjs';
 import { sanitizePrice } from '../lib/seo/jsonld';
-import { safeGet, safeFormatPrice } from '../lib/safeFetch';
-import { carAlt } from '../utils/a11y';
+import { COMMON_OFFER_EXTENSIONS } from '../config/business';
+import { safeGet } from '../utils/safe';
 import { readCarStatuses } from '../lib/carStatusStore.js';
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import { getCachedStatuses, setCachedStatuses } from '../lib/carStatusCache';
+import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
+import { ALL_CARS_FAQS, buildFaqPageJsonLd } from '../lib/seo/faq.js';
 
-export default function AllCars({ cars }) {
+async function safeFetchJson(url, fetchOptions = {}, timeoutMs = 8000) {
+  let timeoutId;
+  const controller = new AbortController();
+  try {
+    timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+    const resp = await fetch(url, {
+      ...fetchOptions,
+      signal: controller.signal,
+    });
+
+    let data;
+    try {
+      data = await resp.json();
+    } catch {
+      data = null;
+    }
+
+    return { ok: resp.ok, status: resp.status, data };
+  } catch (error) {
+    return { ok: false, status: 0, data: null, error };
+  } finally {
+    if (timeoutId) clearTimeout(timeoutId);
+  }
+}
+
+function normalizeQueryString(input, maxLen) {
+  return String(input || '')
+    .trim()
+    .slice(0, maxLen);
+}
+
+function normalizePriceRange(input) {
+  const value = String(input || 'all');
+  if (value === 'all') return 'all';
+  // allow forms like 100000-200000 or 700000
+  if (/^\d+(?:-\d+)?$/.test(value)) return value;
+  return 'all';
+}
+
+function normalizeBrand(input) {
+  const value = normalizeQueryString(input, 40);
+  return value ? value : 'all';
+}
+
+function normalizePageNumber(input) {
+  const pg = parseInt(String(input || '1'), 10);
+  return Number.isFinite(pg) && pg > 0 ? pg : 1;
+}
+
+const scheduleIdle = (cb, { timeout = 2500, fallbackDelayMs = 1200 } = {}) => {
+  if (typeof window === 'undefined') return () => {};
+  if (typeof window.requestIdleCallback === 'function') {
+    const id = window.requestIdleCallback(cb, { timeout });
+    return () => window.cancelIdleCallback?.(id);
+  }
+  const id = window.setTimeout(cb, fallbackDelayMs);
+  return () => window.clearTimeout(id);
+};
+
+const scheduleAfterLoadThenIdle = (cb, idleOptions) => {
+  if (typeof window === 'undefined') return () => {};
+  if (document?.readyState === 'complete') {
+    return scheduleIdle(cb, idleOptions);
+  }
+
+  let cancelled = false;
+  const onLoad = () => {
+    if (cancelled) return;
+    cleanup = scheduleIdle(cb, idleOptions);
+  };
+
+  // eslint-disable-next-line no-use-before-define
+  let cleanup = () => {};
+  window.addEventListener('load', onLoad, { once: true });
+  return () => {
+    cancelled = true;
+    window.removeEventListener('load', onLoad);
+    cleanup();
+  };
+};
+
+export default function AllCars({
+  cars,
+  totalCount,
+  totalPages,
+  initialSearchTerm,
+  initialPriceRange,
+  initialBrandFilter,
+  initialPage,
+}) {
   const seoAllCars = SEO_KEYWORD_MAP.allCars;
   const router = useRouter();
-  const [filteredCars, setFilteredCars] = useState(cars);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [priceRange, setPriceRange] = useState('all');
-  const [brandFilter, setBrandFilter] = useState('all');
-  const [mounted, setMounted] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+  const [priceRange, setPriceRange] = useState(initialPriceRange);
+  const [brandFilter, setBrandFilter] = useState(initialBrandFilter);
+  const [currentPage, setCurrentPage] = useState(initialPage);
   const [liveStatuses, setLiveStatuses] = useState(null);
+  const [specByHandle, setSpecByHandle] = useState({});
+  const requestedSpecHandlesRef = useRef(new Set());
+  const specFetchAttemptsRef = useRef(new Map());
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (process.env.NODE_ENV !== 'development') return;
+
+    const onUnhandled = event => {
+      const reason = event?.reason;
+      const message =
+        typeof reason === 'string'
+          ? reason
+          : typeof reason?.message === 'string'
+            ? reason.message
+            : '';
+
+      if (
+        message.includes('Failed to fetch') ||
+        message.includes('NetworkError when attempting to fetch resource')
+      ) {
+        event.preventDefault();
+      }
+    };
+
+    window.addEventListener('unhandledrejection', onUnhandled);
+    return () => window.removeEventListener('unhandledrejection', onUnhandled);
+  }, []);
+
+  const mergeSpecs = (car, extra) => {
+    const next = { ...car };
+
+    const has = v => v != null && String(v).trim() !== '';
+    const carFuel = car?.fuelType || car?.fuel_type || car?.['fuel-type'];
+    const extraFuel = extra?.fuelType || extra?.fuel_type || extra?.['fuel-type'];
+
+    // Normalize fuel keys so all cards behave the same
+    if (has(carFuel)) {
+      if (!has(next.fuelType)) next.fuelType = carFuel;
+      if (!has(next.fuel_type)) next.fuel_type = carFuel;
+    }
+
+    if (!extra) return next;
+
+    if (!has(next.year) && has(extra.year)) next.year = extra.year;
+    if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
+    if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
+    if (!has(carFuel) && has(extraFuel)) {
+      next.fuelType = extra.fuelType || extraFuel;
+      next.fuel_type = extra.fuel_type || extraFuel;
+    }
+    if (!has(next.installment) && has(extra.installment)) next.installment = extra.installment;
+
+    if (!has(next.category) && has(extra.category)) next.category = extra.category;
+    if (!has(next.body_type) && has(extra.body_type)) next.body_type = extra.body_type;
+
+    return next;
+  };
 
   // จำนวนรถต่อหน้า: 8 คัน (มือถือ: 2x4 แถว, เดสก์ท็อป: 4x2 แถว)
   const carsPerPage = 8;
 
+  // Keep state in sync when user lands via router navigation (client-side) to a URL with params
   useEffect(() => {
-    setMounted(true);
+    if (!router?.isReady) return;
+    const q = router.query || {};
+    const nextSearch = q.search ? normalizeQueryString(q.search, 120) : '';
+    const nextPrice = q.price ? normalizePriceRange(q.price) : 'all';
+    const nextBrand = q.brand ? normalizeBrand(q.brand) : 'all';
+    const nextPage = q.page ? normalizePageNumber(q.page) : 1;
 
-    // อ่านพารามิเตอร์จาก URL
-    const { query } = router;
-    if (query.search) setSearchTerm(String(query.search).trim().slice(0, 120));
-    if (query.price) {
-      const p = String(query.price);
-      // allow forms like 100000-200000 or 700000
-      if (/^\d+(?:-\d+)?$/.test(p)) setPriceRange(p);
-    }
-    if (query.brand) setBrandFilter(String(query.brand).trim().slice(0, 40));
-    if (query.page) {
-      const pg = parseInt(query.page, 10);
-      setCurrentPage(Number.isFinite(pg) && pg > 0 ? pg : 1);
-    }
-  }, [router]);
+    setSearchTerm(prev => (prev === nextSearch ? prev : nextSearch));
+    setPriceRange(prev => (prev === nextPrice ? prev : nextPrice));
+    setBrandFilter(prev => (prev === nextBrand ? prev : nextBrand));
+    setCurrentPage(prev => (prev === nextPage ? prev : nextPage));
+  }, [router?.isReady, router?.query]);
 
-  useEffect(() => {
-    let filtered = cars;
-
-    // Search filter - ปรับปรุงให้ค้นหาในหลายฟิลด์
-    if (searchTerm) {
-      const term = String(searchTerm).toLowerCase();
-      filtered = filtered.filter(
-        car =>
-          safeGet(car, 'title', '').toLowerCase().includes(term) ||
-          safeGet(car, 'vendor', '').toLowerCase().includes(term) ||
-          safeGet(car, 'tags', []).some(tag => String(tag).toLowerCase().includes(term))
-      );
-    }
-
-    // Price filter
-    if (priceRange !== 'all') {
-      const [minRaw, maxRaw] = String(priceRange).split('-');
-      const min = Number(minRaw);
-      const hasMax = typeof maxRaw !== 'undefined';
-      const max = hasMax ? Number(maxRaw) : undefined;
-      const validMin = Number.isFinite(min) && min >= 0;
-      const validMax = !hasMax || (Number.isFinite(max) && max >= min);
-      if (validMin && validMax) {
-        filtered = filtered.filter(car => {
-          const price = Number(safeGet(car, 'price.amount', 0));
-          if (!Number.isFinite(price)) return false;
-          return hasMax ? price >= min && price <= max : price >= min;
-        });
-      }
-    }
-
-    // Brand filter - ปรับปรุงให้แม่นยำขึ้น
-    if (brandFilter !== 'all') {
-      const bf = String(brandFilter).toLowerCase();
-      filtered = filtered.filter(
-        car =>
-          safeGet(car, 'title', '').toLowerCase().includes(bf) ||
-          safeGet(car, 'vendor', '').toLowerCase().includes(bf)
-      );
-    }
-
-    setFilteredCars(filtered);
-    setCurrentPage(1); // รีเซ็ตหน้าเมื่อมีการกรอง
-  }, [searchTerm, priceRange, brandFilter, cars]);
-
-  const brands = ['all', 'toyota', 'honda', 'nissan', 'mazda', 'mitsubishi', 'isuzu', 'ford'];
-  const priceRanges = [
-    { value: 'all', label: 'ทุกช่วงราคา' },
-    { value: '0-100000', label: 'ต่ำกว่า 1 แสน' },
-    { value: '100000-200000', label: '1-2 แสน' },
-    { value: '200000-300000', label: '2-3 แสน' },
-    { value: '300000-400000', label: '3-4 แสน' },
-    { value: '400000-500000', label: '4-5 แสน' },
-    { value: '500000-600000', label: '5-6 แสน' },
-    { value: '600000-700000', label: '6-7 แสน' },
-    { value: '700000', label: '7 แสนขึ้นไป' },
-  ];
-
-  // คำนวณการแบ่งหน้า
-  const totalPages = Math.ceil(filteredCars.length / carsPerPage);
-  const startIndex = (currentPage - 1) * carsPerPage;
-  const endIndex = startIndex + carsPerPage;
-  const currentCars = filteredCars.slice(startIndex, endIndex);
+  // SSR already provides only current page cars + totalCount/totalPages.
+  // Keep client work minimal to reduce hydration cost (TBT).
+  const safeTotalPages = Number.isFinite(totalPages) && totalPages > 0 ? totalPages : 1;
+  const safePage = Math.min(Math.max(1, currentPage), safeTotalPages);
+  const startIndex = (safePage - 1) * carsPerPage;
+  const currentCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
   const currentIds = useMemo(() => currentCars.map(c => c.id).filter(Boolean), [currentCars]);
   const currentCarsWithLive = useMemo(() => {
     if (!liveStatuses) return currentCars;
@@ -122,35 +209,53 @@ export default function AllCars({ cars }) {
 
   // Fetch latest statuses for current page cars on mount and page/filter change (with cache)
   useEffect(() => {
-    if (!mounted || !currentIds || currentIds.length === 0) return;
+    if (typeof window === 'undefined') return;
+    if (!currentIds || currentIds.length === 0) return;
+
+    let cancelled = false;
+
+    // Defer non-critical fetch to reduce main-thread contention during initial render.
+    let cleanup = () => {};
+
+    // Apply cached statuses immediately (no network / minimal work)
+    try {
+      const cached = getCachedStatuses(currentIds);
+      if (cached) {
+        if (!cancelled) setLiveStatuses(cached);
+      }
+    } catch {
+      // ignore
+    }
 
     const fetchStatuses = async () => {
       try {
         // Check cache first
         const cached = getCachedStatuses(currentIds);
-        if (cached) {
-          setLiveStatuses(cached);
-          return;
-        }
+        if (cached) return;
 
         const qs = new URLSearchParams({ ids: currentIds.join(',') });
-        const resp = await fetch(`/api/public/car-status?${qs.toString()}`, {
-          cache: 'no-store',
-          headers: {
-            'Content-Type': 'application/json',
+        const result = await safeFetchJson(
+          `/api/public/car-status?${qs.toString()}`,
+          {
+            cache: 'no-store',
+            credentials: 'same-origin',
           },
-        });
+          6000
+        );
 
-        if (!resp.ok) {
+        if (!result.ok) {
           if (process.env.NODE_ENV === 'development') {
             // eslint-disable-next-line no-console
-            console.warn(`car-status API returned ${resp.status}`);
+            console.warn(
+              `car-status fetch failed (status=${result.status || 'n/a'})`,
+              result?.error?.message || ''
+            );
           }
           return;
         }
 
-        const data = await resp.json();
-        if (data?.ok && data.statuses) {
+        const data = result.data;
+        if (!cancelled && data?.ok && data.statuses) {
           setCachedStatuses(data.statuses);
           setLiveStatuses(data.statuses);
         }
@@ -163,8 +268,154 @@ export default function AllCars({ cars }) {
       }
     };
 
-    fetchStatuses();
-  }, [mounted, currentIds]);
+    // Only run network fetch after the page load event and when the browser is idle.
+    // This reduces TBT and avoids Lighthouse observing in-flight API calls during page load.
+    cleanup = scheduleAfterLoadThenIdle(
+      () => {
+        fetchStatuses().catch(() => {});
+      },
+      { timeout: 5000, fallbackDelayMs: 3500 }
+    );
+
+    return () => {
+      cancelled = true;
+      cleanup();
+    };
+  }, [currentIds]);
+
+  // Enrich specs for current page cards by calling the same API as the car detail page.
+  // For stability on paginated pages (2+), allow limited retries when a handle returns
+  // empty/incomplete specs (e.g. transient Admin fallback failures).
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const list = Array.isArray(currentCarsWithLive) ? currentCarsWithLive : [];
+    if (list.length === 0) return;
+
+    // Defer this enrichment work: it improves completeness but is not critical for LCP.
+    // Helps reduce TBT on mobile.
+    let cleanup = () => {};
+
+    const needs = [];
+    for (const car of list) {
+      const handle = car?.handle;
+      if (!handle) continue;
+      if (requestedSpecHandlesRef.current.has(handle)) continue;
+
+      const attempts = Number(specFetchAttemptsRef.current.get(handle) || 0);
+      if (attempts >= 2) continue;
+
+      const extra = specByHandle?.[handle];
+      const merged = mergeSpecs(car, extra);
+
+      const hasYear = merged?.year != null && String(merged.year).trim() !== '';
+      const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
+      const hasTransmission =
+        merged?.transmission != null && String(merged.transmission).trim() !== '';
+      const fuel = merged?.fuelType || merged?.fuel_type;
+      const hasFuel = fuel != null && String(fuel).trim() !== '';
+
+      const categoryRaw =
+        merged?.category ??
+        safeGet(merged, 'metafields.spec.category') ??
+        safeGet(merged, 'metafields.spec.vehicle_category') ??
+        safeGet(merged, 'metafields.spec.car_category') ??
+        safeGet(merged, 'metafields.spec.vehicle_type') ??
+        safeGet(merged, 'metafields.spec.car_type') ??
+        safeGet(merged, 'metafields.spec.carType') ??
+        safeGet(merged, 'metafields.spec.type') ??
+        safeGet(merged, 'metafields.spec.ประเภทรถ') ??
+        safeGet(merged, 'metafields.spec.หมวดหมู่') ??
+        safeGet(merged, 'metafields.spec.ประเภท') ??
+        safeGet(merged, 'metafields.spec.หมวดหมู่รถ') ??
+        safeGet(merged, 'metafields.spec.ประเภทยานพาหนะ');
+
+      const bodyTypeRaw =
+        merged?.body_type ??
+        safeGet(merged, 'metafields.spec.body_type') ??
+        safeGet(merged, 'metafields.spec.bodyType') ??
+        safeGet(merged, 'metafields.spec.ประเภทตัวถัง');
+
+      const hasCategoryOrBodyType =
+        (categoryRaw != null && String(categoryRaw).trim() !== '') ||
+        (bodyTypeRaw != null && String(bodyTypeRaw).trim() !== '');
+
+      // Also include category/body type (often stored as metaobject references).
+      // Without this, some pages (2+) can look "complete" for the 4 quick specs,
+      // so enrichment never runs and the metaobject-backed label stays blank.
+      if (!(hasYear && hasMileage && hasTransmission && hasFuel && hasCategoryOrBodyType)) {
+        needs.push(handle);
+      }
+    }
+
+    if (needs.length === 0) return;
+    needs.forEach(h => {
+      requestedSpecHandlesRef.current.add(h);
+      specFetchAttemptsRef.current.set(h, Number(specFetchAttemptsRef.current.get(h) || 0) + 1);
+    });
+
+    const chunk = (arr, size) => {
+      const out = [];
+      for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+      return out;
+    };
+
+    const fetchSpecs = async () => {
+      try {
+        const batches = chunk(needs, 40);
+        for (const batch of batches) {
+          const params = new URLSearchParams({ handles: batch.join(',') });
+          const result = await safeFetchJson(
+            `/api/public/car-specs?${params.toString()}`,
+            {
+              cache: 'no-store',
+              credentials: 'same-origin',
+            },
+            8000
+          );
+
+          if (!result.ok) {
+            batch.forEach(h => requestedSpecHandlesRef.current.delete(h));
+            continue;
+          }
+          const data = result.data;
+          if (!data?.ok || !data?.specs) {
+            batch.forEach(h => requestedSpecHandlesRef.current.delete(h));
+            continue;
+          }
+
+          setSpecByHandle(prev => ({
+            ...(prev || {}),
+            ...data.specs,
+          }));
+
+          // Treat requestedSpecHandlesRef as in-flight only.
+          batch.forEach(h => requestedSpecHandlesRef.current.delete(h));
+        }
+      } catch (error) {
+        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+        if (process.env.NODE_ENV === 'development') {
+          // eslint-disable-next-line no-console
+          console.warn('Failed to fetch car specs:', error?.message);
+        }
+      }
+    };
+
+    cleanup = scheduleAfterLoadThenIdle(
+      () => {
+        fetchSpecs().catch(error => {
+          if (process.env.NODE_ENV === 'development') {
+            // eslint-disable-next-line no-console
+            console.warn('Failed to fetch car specs (unhandled):', error?.message);
+          }
+        });
+      },
+      { timeout: 7000, fallbackDelayMs: 4500 }
+    );
+
+    return () => {
+      cleanup();
+    };
+  }, [currentCarsWithLive, specByHandle]);
 
   // Determine if current view is filtered (query params affecting list)
   const isFiltered = useMemo(() => {
@@ -176,9 +427,10 @@ export default function AllCars({ cars }) {
 
   // Canonical URL for SEO component
   const seoPath = useMemo(() => {
+    // filtered pages are intentionally non-indexed and canonicalized to the base catalog
     if (isFiltered) return '/all-cars';
-    return currentPage > 1 ? `/all-cars?page=${currentPage}` : '/all-cars';
-  }, [isFiltered, currentPage]);
+    return safePage > 1 ? `/all-cars?page=${safePage}` : '/all-cars';
+  }, [isFiltered, safePage]);
 
   // ฟังก์ชันสำหรับสร้างลิงก์ SEO-friendly
   const getPageUrl = page => {
@@ -198,14 +450,14 @@ export default function AllCars({ cars }) {
   // ฟังก์ชันสำหรับเปลี่ยนหน้าแบบ smooth navigation
   const handlePageChange = (page, event) => {
     event.preventDefault();
-    if (!Number.isFinite(page) || page < 1 || page > totalPages) return;
+    if (!Number.isFinite(page) || page < 1 || page > safeTotalPages) return;
 
     setCurrentPage(page);
     try {
       const newUrl = getPageUrl(page);
       // ใช้ shallow routing และไม่ scroll เหมือนปุ่มรีวิว
       router.push(newUrl, undefined, {
-        shallow: true,
+        shallow: false,
         scroll: false,
       });
     } catch {
@@ -217,7 +469,7 @@ export default function AllCars({ cars }) {
     const pages = [];
     const maxVisiblePages = 5; // แสดงหน้าสูงสุด 5 หน้า
 
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let startPage = Math.max(1, safePage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
     // ปรับให้แสดงครบ 5 หน้าถ้าเป็นไปได้
@@ -233,11 +485,108 @@ export default function AllCars({ cars }) {
   };
 
   // เริ่มการเรนเดอร์หน้า
+  const allCarsFaqs = ALL_CARS_FAQS;
+
+  const allCarsCollectionSchema = {
+    '@type': 'CollectionPage',
+    name: `รถมือสองทั้งหมด${safeTotalPages > 1 ? ` - หน้า ${safePage}` : ''}`,
+    description: `รถมือสองคุณภาพดี ${Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ`,
+    url: `https://www.chiangmaiusedcar.com/all-cars${safePage > 1 ? `?page=${safePage}` : ''}`,
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'รายการรถมือสอง',
+      numberOfItems: currentCars.length,
+      itemListElement: currentCars.map((car, index) => {
+        const sanitizedPrice = sanitizePrice(car.price?.amount);
+        const priceValidUntil = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString();
+        const carDescription =
+          car.description ||
+          `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} มือสองเชียงใหม่ สภาพสวย ราคาดี`.trim();
+        const availabilityValue = computeSchemaAvailability({
+          status: car?.status,
+          availableForSale: car?.availableForSale,
+        });
+        const inStock = availabilityValue === 'InStock';
+
+        const carUrl = car.handle
+          ? `https://www.chiangmaiusedcar.com/car/${car.handle}`
+          : 'https://www.chiangmaiusedcar.com/all-cars';
+
+        const imageUrl = car.images?.[0]?.url
+          ? car.images[0].url.startsWith('/')
+            ? `https://www.chiangmaiusedcar.com${car.images[0].url}`
+            : car.images[0].url
+          : 'https://www.chiangmaiusedcar.com/herobanner/allusedcars.webp';
+
+        return {
+          '@type': 'ListItem',
+          position: startIndex + index + 1,
+          item: {
+            // Google Rich Results: Product is the supported type.
+            // Keep vehicle context via additionalType.
+            '@type': 'Product',
+            additionalType: 'https://schema.org/Car',
+            '@id': carUrl,
+            url: carUrl,
+            name: car.title,
+            description: carDescription,
+            brand: {
+              '@type': 'Brand',
+              name: car.vendor || car.brand || car.title?.split(' ')[0] || 'รถยนต์',
+            },
+            model: car.model || car.title,
+            sku: car.id || car.handle,
+            category: 'รถยนต์มือสอง',
+            image: [imageUrl],
+            offers: {
+              '@type': 'Offer',
+              url: carUrl,
+              price: sanitizedPrice,
+              priceCurrency: 'THB',
+              itemCondition: 'https://schema.org/UsedCondition',
+              availability: `https://schema.org/${availabilityValue}`,
+              inventoryLevel: {
+                '@type': 'QuantitativeValue',
+                value: inStock ? 1 : 0,
+                unitCode: 'EA',
+              },
+              priceValidUntil: sanitizedPrice ? priceValidUntil : undefined,
+              seller: COMMON_OFFER_EXTENSIONS.seller,
+              warranty: {
+                '@type': 'WarrantyPromise',
+                durationOfWarranty: 'P1Y',
+                warrantyScope: 'เครื่องยนต์และเกียร์',
+              },
+              hasMerchantReturnPolicy: COMMON_OFFER_EXTENSIONS.hasMerchantReturnPolicy,
+              shippingDetails: COMMON_OFFER_EXTENSIONS.shippingDetails,
+            },
+          },
+        };
+      }),
+    },
+    publisher: {
+      '@type': 'AutoDealer',
+      name: 'ครูหนึ่งรถสวย',
+      url: 'https://www.chiangmaiusedcar.com',
+    },
+  };
+
+  const allCarsFaqSchema = (() => {
+    const faq = buildFaqPageJsonLd({
+      url: seoPath,
+      faqs: allCarsFaqs,
+    });
+    // Convert to @graph node (strip @context)
+    const { ['@context']: ctx, ...rest } = faq;
+    void ctx;
+    return rest;
+  })();
+
   return (
     <div className="min-h-screen">
       <SEO
-        title={`${seoAllCars.titleBase}${totalPages > 1 && currentPage > 1 ? ` หน้า ${currentPage}` : ''} | ครูหนึ่งรถสวย`}
-        description={`ดูรถยนต์มือสองคุณภาพดีทั้งหมด ${filteredCars.length} คัน ในเชียงใหม่และภาคเหนือ คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda นัดหมายดูรถโทร 094-064-9018`}
+        title={`${seoAllCars.titleBase}${safeTotalPages > 1 && safePage > 1 ? ` หน้า ${safePage}` : ''} | ครูหนึ่งรถสวย`}
+        description={`ดูรถยนต์มือสองคุณภาพดีทั้งหมด ${Number.isFinite(totalCount) ? totalCount : 0} คัน ในเชียงใหม่และภาคเหนือ คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda นัดหมายดูรถโทร 094-064-9018`}
         url={seoPath}
         image={`https://www.chiangmaiusedcar.com/api/og?src=${encodeURIComponent(
           '/herobanner/cnxallcar.webp'
@@ -251,143 +600,49 @@ export default function AllCars({ cars }) {
         ]}
         structuredData={{
           '@context': 'https://schema.org',
-          '@type': 'CollectionPage',
-          name: `รถมือสองทั้งหมด${totalPages > 1 ? ` - หน้า ${currentPage}` : ''}`,
-          description: `รถมือสองคุณภาพดี ${filteredCars.length} คัน พร้อมส่งมอบ`,
-          url: `https://www.chiangmaiusedcar.com/all-cars${currentPage > 1 ? `?page=${currentPage}` : ''}`,
-          mainEntity: {
-            '@type': 'ItemList',
-            name: 'รายการรถมือสอง',
-            numberOfItems: currentCars.length,
-            itemListElement: currentCars.map((car, index) => {
-              const sanitizedPrice = sanitizePrice(car.price?.amount);
-              const priceValidUntil = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString();
-              const carDescription =
-                car.description ||
-                `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} มือสองเชียงใหม่ สภาพสวย ราคาดี`.trim();
-              const normalizedStatus = typeof car?.status === 'string' ? car.status.trim() : '';
-              const inStock =
-                normalizedStatus.toLowerCase() === 'reserved'
-                  ? false
-                  : typeof car?.availableForSale === 'boolean'
-                    ? car.availableForSale
-                    : true;
-              const availabilityValue = inStock ? 'InStock' : 'OutOfStock';
-
-              return {
-                '@type': 'ListItem',
-                position: startIndex + index + 1,
-                item: {
-                  '@type': 'Car', // เปลี่ยนจาก Product เป็น Car
-                  '@id': `https://www.chiangmaiusedcar.com/car/${car.handle}`,
-                  name: car.title,
-                  description: carDescription,
-                  brand: {
-                    '@type': 'Brand',
-                    name: car.vendor || car.brand || car.title?.split(' ')[0] || 'รถยนต์',
-                  },
-                  model: car.model || car.title,
-                  sku: car.id || car.handle,
-                  category: 'รถยนต์มือสอง',
-                  image: car.images?.[0]?.url
-                    ? car.images[0].url.startsWith('/')
-                      ? `https://www.chiangmaiusedcar.com${car.images[0].url}`
-                      : car.images[0].url
-                    : 'https://www.chiangmaiusedcar.com/herobanner/allusedcars.webp',
-                  offers: {
-                    '@type': 'Offer',
-                    price: sanitizedPrice,
-                    priceCurrency: 'THB',
-                    itemCondition: 'https://schema.org/UsedCondition',
-                    availability: `https://schema.org/${availabilityValue}`,
-                    inventoryLevel: {
-                      '@type': 'QuantitativeValue',
-                      value: inStock ? 1 : 0,
-                      unitCode: 'EA',
-                    },
-                    priceValidUntil: sanitizedPrice ? priceValidUntil : undefined,
-                    seller: {
-                      '@type': 'AutoDealer',
-                      '@id': 'https://www.chiangmaiusedcar.com/#organization',
-                      name: 'ครูหนึ่งรถสวย',
-                      url: 'https://www.chiangmaiusedcar.com',
-                      telephone: '+66940649018',
-                      address: {
-                        '@type': 'PostalAddress',
-                        addressLocality: 'เชียงใหม่',
-                        addressCountry: 'TH',
-                      },
-                    },
-                    warranty: {
-                      '@type': 'WarrantyPromise',
-                      durationOfWarranty: 'P1Y',
-                      warrantyScope: 'เครื่องยนต์และเกียร์',
-                    },
-                    hasMerchantReturnPolicy: {
-                      '@type': 'MerchantReturnPolicy',
-                      applicableCountry: 'TH',
-                      returnPolicyCategory: 'https://schema.org/MerchantReturnUnlimitedWindow',
-                      merchantReturnDays: 7,
-                      returnFees: 'http://schema.org/FreeReturn',
-                    },
-                    shippingDetails: {
-                      '@type': 'OfferShippingDetails',
-                      shippingDestination: {
-                        '@type': 'DefinedRegion',
-                        addressCountry: 'TH',
-                      },
-                      shippingRate: {
-                        '@type': 'MonetaryAmount',
-                        value: 0,
-                        currency: 'THB',
-                      },
-                    },
-                  },
-                },
-              };
-            }),
-          },
-          publisher: {
-            '@type': 'AutoDealer',
-            name: 'ครูหนึ่งรถสวย',
-            url: 'https://www.chiangmaiusedcar.com',
-          },
+          '@graph': [allCarsCollectionSchema, allCarsFaqSchema],
         }}
       />
 
+      <Head>
+        <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="//cdn.shopify.com" />
+      </Head>
+
       {/* Pagination Link Tags for SEO */}
-      {mounted && totalPages > 1 && !isFiltered && (
+      {totalPages > 1 && !isFiltered && (
         <Head>
-          {currentPage > 1 && (
-            <link
-              rel="prev"
-              href={`https://www.chiangmaiusedcar.com${getPageUrl(currentPage - 1)}`}
-            />
+          {safePage > 1 && (
+            <link rel="prev" href={`https://www.chiangmaiusedcar.com${getPageUrl(safePage - 1)}`} />
           )}
-          {currentPage < totalPages && (
-            <link
-              rel="next"
-              href={`https://www.chiangmaiusedcar.com${getPageUrl(currentPage + 1)}`}
-            />
+          {safePage < totalPages && (
+            <link rel="next" href={`https://www.chiangmaiusedcar.com${getPageUrl(safePage + 1)}`} />
           )}
         </Head>
       )}
 
       {/* Hero Banner - 2025 Modern Design */}
-      <section className="relative w-full h-[150px] sm:h-[200px] md:h-[250px] lg:h-[300px] overflow-hidden bg-white">
-        <A11yImage
-          src="/herobanner/cnxallcar.webp"
-          alt="รถมือสองทั้งหมด - ครูหนึ่งรถสวย"
-          fill
-          className="object-cover object-top"
-          priority
-          imageType="hero" // ⭐ ระบุเป็นรูปหลัก
-          quality={85}
-          optimizeImage={false} // ⭐ ปิด optimization สำหรับรูป static local
-        />
+      <section
+        className="relative w-full h-[150px] sm:h-[200px] md:h-[250px] lg:h-[300px] overflow-hidden bg-gradient-to-r from-primary to-accent"
+        aria-label="รถมือสองทั้งหมด - ครูหนึ่งรถสวย"
+      >
+        {/* Hero image (mobile + desktop) */}
+        <div className="absolute inset-0" aria-hidden="true">
+          <picture>
+            {/* TODO: If we add a smaller mobile-specific asset, swap srcSet here */}
+            <source media="(max-width: 767px)" srcSet="/herobanner/cnxallcar.webp" />
+            <source media="(min-width: 768px)" srcSet="/herobanner/cnxallcar.webp" />
+            <img
+              src="/herobanner/cnxallcar.webp"
+              alt=""
+              className="w-full h-full object-cover object-top"
+              decoding="async"
+            />
+          </picture>
+        </div>
 
         {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-black/40 hidden md:block"></div>
 
         {/* Content over banner */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -412,9 +667,9 @@ export default function AllCars({ cars }) {
                     '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
                 }}
               >
-                รถคุณภาพดี {mounted ? filteredCars.length : '...'} คัน พร้อมส่งมอบ
+                รถคุณภาพดี {Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ
               </p>
-              {mounted && totalPages > 1 && (
+              {safeTotalPages > 1 && (
                 <p
                   className="text-xs sm:text-xs md:text-sm lg:text-base font-prompt text-white font-semibold"
                   style={{
@@ -422,7 +677,7 @@ export default function AllCars({ cars }) {
                       '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
                   }}
                 >
-                  หน้า {currentPage}/{totalPages}
+                  หน้า {safePage}/{safeTotalPages}
                 </p>
               )}
             </div>
@@ -440,73 +695,51 @@ export default function AllCars({ cars }) {
             <span>/</span>
             <span className="text-primary font-medium">รถทั้งหมด</span>
           </nav>
-        </div>
-      </section>
 
-      {/* Filters */}
-      <section className="bg-white py-4 md:py-6 shadow-lg border-b-2 border-gray-200">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            {/* Search */}
-            <div>
-              <input
-                type="text"
-                placeholder="ค้นหารถ..."
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 placeholder-gray-500 bg-white transition-all duration-300"
-              />
+          <div className="mt-4 rounded-2xl border border-orange-500 bg-white px-4 py-3">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+              <div className="text-sm text-gray-950 font-semibold font-prompt">
+                รายการลงประกาศรถทั้งหมดของทางร้าน พร้อมข้อมูลติดต่อ
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href="/used-cars-chiang-mai"
+                  prefetch={false}
+                  className="inline-flex items-center justify-center rounded-xl bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-700 transition-colors"
+                >
+                  ซื้อ-ขาย/ฝากขายรถ เชียงใหม่-ลำพูน
+                </Link>
+                <Link
+                  href="/contact"
+                  prefetch={false}
+                  className="inline-flex items-center justify-center rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white transition-colors"
+                >
+                  นัดดูรถ / ติดต่อ
+                </Link>
+              </div>
             </div>
 
-            {/* Price Range */}
-            <div>
-              <select
-                value={priceRange}
-                onChange={e => setPriceRange(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 bg-white transition-all duration-300"
-              >
-                {priceRanges.map(range => (
-                  <option key={range.value} value={range.value}>
-                    {range.label}
-                  </option>
+            <div className="mt-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+              <div className="text-xs text-gray-700 font-prompt">หรือเลือกดูตามยี่ห้อรถ:</div>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  { slug: 'toyota', label: 'Toyota' },
+                  { slug: 'honda', label: 'Honda' },
+                  { slug: 'isuzu', label: 'Isuzu' },
+                  { slug: 'nissan', label: 'Nissan' },
+                  { slug: 'mazda', label: 'Mazda' },
+                  { slug: 'mitsubishi', label: 'Mitsubishi' },
+                ].map(item => (
+                  <Link
+                    key={item.slug}
+                    href={`/used-cars-chiang-mai-brand/${item.slug}`}
+                    prefetch={false}
+                    className="inline-flex items-center justify-center rounded-full border border-orange-400 bg-white px-3 py-1.5 text-xs font-semibold text-gray-800 hover:bg-orange-50 hover:border-orange-600 transition-colors"
+                  >
+                    {item.label}
+                  </Link>
                 ))}
-              </select>
-            </div>
-
-            {/* Brand Filter */}
-            <div>
-              <select
-                value={brandFilter}
-                onChange={e => setBrandFilter(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-gray-300 rounded-2xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 bg-white transition-all duration-300"
-              >
-                <option value="all">ทุกยี่ห้อ</option>
-                {brands.slice(1).map(brand => (
-                  <option key={brand} value={brand}>
-                    {brand.charAt(0).toUpperCase() + brand.slice(1)}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Reset */}
-            <div>
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchTerm('');
-                  setPriceRange('all');
-                  setBrandFilter('all');
-                  setCurrentPage(1);
-                  // อัพเดต URL เมื่อรีเซ็ต
-                  if (mounted) {
-                    router.push('/all-cars', undefined, { shallow: true });
-                  }
-                }}
-                className="w-full bg-accent hover:bg-accent-700 text-white font-semibold py-3 px-4 rounded-2xl transition-all duration-300 font-prompt shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
-              >
-                รีเซ็ต
-              </button>
+              </div>
             </div>
           </div>
         </div>
@@ -515,31 +748,7 @@ export default function AllCars({ cars }) {
       {/* Cars Grid */}
       <section className="py-8 md:py-12 bg-white border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-3 md:px-6">
-          {!mounted ? (
-            // Loading state ระหว่างรอ hydration - Skeleton Cards
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
-              {Array.from({ length: 8 }).map((_, index) => (
-                <div
-                  key={`skeleton-${index}`}
-                  className="bg-white rounded-2xl md:rounded-3xl shadow-lg overflow-hidden border-2 border-gray-200 animate-pulse"
-                >
-                  <div className="w-full h-28 md:h-48 bg-gray-200"></div>
-                  <div className="p-2 md:p-4">
-                    <div className="h-3 md:h-4 bg-gray-200 rounded mb-1 md:mb-2"></div>
-                    <div className="h-3 md:h-4 bg-gray-200 rounded w-3/4 mb-1 md:mb-2"></div>
-                    <div className="h-4 md:h-6 bg-gray-200 rounded w-1/2 mb-1 md:mb-2"></div>
-                    <div className="space-y-0.5 md:space-y-1 mb-1 md:mb-2">
-                      <div className="h-2 md:h-3 bg-gray-200 rounded w-2/3"></div>
-                      <div className="h-2 md:h-3 bg-gray-200 rounded w-1/2"></div>
-                    </div>
-                    <div className="flex">
-                      <div className="w-full h-8 md:h-10 bg-gray-200 rounded-full"></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : filteredCars.length === 0 ? (
+          {!Number.isFinite(totalCount) || totalCount === 0 ? (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">🔍</div>
               <h2 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">
@@ -551,118 +760,20 @@ export default function AllCars({ cars }) {
             </div>
           ) : (
             <>
-              {/* Cards Grid - 2025 Modern Layout */}
+              {/* Cards Grid - standardized layout */}
               <div className="car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
-                {currentCarsWithLive.map((car, idx) => (
-                  <article
-                    key={car.id}
-                    className="car-card group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border-2 border-gray-200 hover:border-primary flex flex-col h-full relative font-prompt transform hover:scale-[1.02]"
-                  >
-                    {/* Main Car Link - คลิกได้ทั้งส่วนรูปและข้อมูล */}
-                    <Link
-                      href={
-                        typeof safeGet(car, 'handle') === 'string' &&
-                        safeGet(car, 'handle', '').length > 0
-                          ? `/car/${encodeURIComponent(safeGet(car, 'handle'))}`
-                          : '/all-cars'
-                      }
-                      className="block focus:outline-none flex-1"
-                      prefetch={false}
-                      onClick={() => {
-                        try {
-                          if (typeof window !== 'undefined') {
-                            sessionStorage.setItem(
-                              'lastListUrl',
-                              window.location.pathname +
-                                window.location.search +
-                                window.location.hash
-                            );
-                          }
-                        } catch {
-                          // ignore
-                        }
-                      }}
-                    >
-                      <figure className="thumb relative w-full h-28 md:h-48 overflow-hidden bg-gray-100">
-                        <A11yImage
-                          src={
-                            Array.isArray(car.images) && car.images.length > 0
-                              ? safeGet(car, 'images.0.url', '/cover.jpg')
-                              : '/cover.jpg'
-                          }
-                          alt={carAlt(car)}
-                          fallbackAlt={`${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} - ราคา ${safeFormatPrice(safeGet(car, 'price.amount')).display} บาท`}
-                          fill
-                          className="object-cover transition-transform duration-300 group-hover:scale-105"
-                          imageType="card" // ⭐ ระบุเป็นการ์ด (1024px)
-                          loading={idx === 0 && currentPage === 1 ? 'eager' : 'lazy'}
-                          priority={idx === 0 && currentPage === 1}
-                        />
-                        {/* Reserved Badge */}
-                        {(safeGet(car, 'status') === 'reserved' ||
-                          safeGet(car, 'tags', []).includes('reserved')) && (
-                          <div className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-xs md:text-sm font-bold shadow-lg animate-pulse font-prompt">
-                            จองแล้ว
-                          </div>
-                        )}
-                      </figure>
-                      <div className="p-2 md:p-3 flex flex-col">
-                        <h3 className="card-title font-extrabold text-sm md:text-lg text-gray-900 mb-1 md:mb-2 group-hover:text-primary transition-colors line-clamp-2 font-prompt">
-                          {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
-                        </h3>
-                        <div className="flex items-center justify-between mb-1 md:mb-3">
-                          <p className="price text-base md:text-xl font-bold text-accent font-prompt">
-                            ฿{safeFormatPrice(safeGet(car, 'price.amount')).display}
-                          </p>
-                        </div>
-                        <ul className="text-xs md:text-sm text-gray-800 mb-1 md:mb-3 space-y-0.5 md:space-y-1 font-prompt font-medium">
-                          {safeGet(car, 'tags', []).includes('ฟรีดาวน์') && (
-                            <li className="text-primary">✓ ฟรีดาวน์</li>
-                          )}
-                          {safeGet(car, 'tags', []).includes('ผ่อนถูก') && (
-                            <li className="text-primary">✓ ผ่อนถูก</li>
-                          )}
-                          <li className="text-gray-900">✓ รับประกัน 1 ปี</li>
-                        </ul>
-                      </div>
-                    </Link>
-
-                    {/* Action Button - เหมือนหน้าแรก */}
-                    <div className="flex p-2 pt-0 md:p-4 md:pt-0">
-                      <Link
-                        href={
-                          typeof safeGet(car, 'handle') === 'string' &&
-                          safeGet(car, 'handle', '').length > 0
-                            ? `/car/${encodeURIComponent(safeGet(car, 'handle'))}`
-                            : '/all-cars'
-                        }
-                        className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-2xl min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-prompt"
-                        aria-label={`ดูรายละเอียด ${safeGet(car, 'title', 'รถยนต์')}`}
-                        prefetch={false}
-                        onClick={() => {
-                          try {
-                            if (typeof window !== 'undefined') {
-                              sessionStorage.setItem(
-                                'lastListUrl',
-                                window.location.pathname +
-                                  window.location.search +
-                                  window.location.hash
-                              );
-                            }
-                          } catch {
-                            // ignore
-                          }
-                        }}
-                      >
-                        ดูรายละเอียด
-                      </Link>
-                    </div>
-                  </article>
-                ))}
+                {currentCarsWithLive.map((car, idx) => {
+                  const handle = car?.handle;
+                  const extra = handle ? specByHandle?.[handle] : null;
+                  const mergedCar = mergeSpecs(car, extra);
+                  return (
+                    <CarCard key={car.id} car={mergedCar} priority={safePage === 1 && idx < 4} />
+                  );
+                })}
               </div>
 
               {/* Pagination - Production Style (เหมือนเว็บไซต์จริง) */}
-              {totalPages > 1 && (
+              {safeTotalPages > 1 && (
                 <div className="mt-8 md:mt-12 flex flex-col items-center">
                   <nav className="flex items-center justify-center space-x-2">
                     {/* Previous Button */}
@@ -704,11 +815,11 @@ export default function AllCars({ cars }) {
                     <button
                       type="button"
                       onClick={e =>
-                        currentPage < totalPages ? handlePageChange(currentPage + 1, e) : null
+                        currentPage < safeTotalPages ? handlePageChange(currentPage + 1, e) : null
                       }
-                      disabled={currentPage >= totalPages}
+                      disabled={currentPage >= safeTotalPages}
                       className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                        currentPage < totalPages
+                        currentPage < safeTotalPages
                           ? 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
                           : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
                       }`}
@@ -722,10 +833,46 @@ export default function AllCars({ cars }) {
                   <div className="mt-4 text-center">
                     <p className="text-sm text-gray-600">
                       หน้า <span className="font-medium text-primary">{currentPage}</span> จาก{' '}
-                      <span className="font-medium text-primary">{totalPages}</span>
+                      <span className="font-medium text-primary">{safeTotalPages}</span>
                     </p>
                   </div>
                 </div>
+              )}
+
+              {/* FAQ (AEO) - visible content to match FAQPage schema */}
+              {!isFiltered && allCarsFaqs?.length > 0 && (
+                <section className="mt-10 md:mt-14" aria-labelledby="faq-allcars-heading">
+                  <div className="rounded-3xl border border-gray-200 bg-gray-50 p-4 sm:p-6">
+                    <h2
+                      id="faq-allcars-heading"
+                      className="text-lg sm:text-xl font-bold text-gray-900 font-prompt"
+                    >
+                      คำถามที่พบบ่อย (FAQ)
+                    </h2>
+                    <p className="mt-1 text-sm text-gray-600 font-prompt">
+                      คำตอบสั้นๆ ก่อนตัดสินใจดูรถและนัดหมาย
+                    </p>
+
+                    <div className="mt-4 space-y-3">
+                      {allCarsFaqs.map(item => (
+                        <details
+                          key={item.q}
+                          className="group rounded-2xl border border-gray-200 bg-white px-4 py-3"
+                        >
+                          <summary className="cursor-pointer list-none font-semibold text-gray-900 font-prompt flex items-start justify-between gap-3">
+                            <span>{item.q}</span>
+                            <span className="text-gray-400 group-open:rotate-180 transition-transform">
+                              ▾
+                            </span>
+                          </summary>
+                          <div className="mt-2 text-sm text-gray-700 font-prompt leading-relaxed">
+                            {item.a}
+                          </div>
+                        </details>
+                      ))}
+                    </div>
+                  </div>
+                </section>
               )}
             </>
           )}
@@ -735,9 +882,9 @@ export default function AllCars({ cars }) {
   );
 }
 
-// Keep SSR for all-cars due to pagination and search functionality
-// ISR for better performance - cars listing changes frequently
-export async function getStaticProps() {
+// SSR for all-cars to ensure Google sees correct catalog HTML for query params
+// (pagination/filter/noindex/canonical) without relying on client-side JS.
+export async function getServerSideProps(context) {
   let cars = [];
   try {
     const result = await getAllCars();
@@ -754,6 +901,13 @@ export async function getStaticProps() {
       vendor: car.vendor,
       tags: car.tags,
       price: car.price,
+      // Keep quick specs for CarCard (ปี/ไมล์/เกียร์/เชื้อเพลิง)
+      year: car.year,
+      mileage: car.mileage,
+      transmission: car.transmission,
+      installment: car.installment,
+      fuelType: car.fuelType || car.fuel_type,
+      fuel_type: car.fuel_type || car.fuelType,
       images: car.images?.slice(0, 1) || [], // เก็บแค่รูปแรกสำหรับ listing
       availableForSale: car.availableForSale,
       status: carStatuses[car.id]?.status || 'available', // Add status from file
@@ -765,8 +919,79 @@ export async function getStaticProps() {
     cars = [];
   }
 
+  const q = context?.query || {};
+  const initialSearchTerm = q.search ? normalizeQueryString(q.search, 120) : '';
+  const initialPriceRange = q.price ? normalizePriceRange(q.price) : 'all';
+  const initialBrandFilter = q.brand ? normalizeBrand(q.brand) : 'all';
+  const initialPage = q.page ? normalizePageNumber(q.page) : 1;
+
+  // Apply filtering/pagination on the server to reduce client hydration cost (TBT)
+  const carsPerPage = 8;
+  let filtered = Array.isArray(cars) ? cars : [];
+
+  if (initialSearchTerm) {
+    const term = String(initialSearchTerm).toLowerCase();
+    filtered = filtered.filter(car => {
+      const title = String(car?.title || '').toLowerCase();
+      const vendor = String(car?.vendor || '').toLowerCase();
+      const tags = Array.isArray(car?.tags) ? car.tags : [];
+      return (
+        title.includes(term) ||
+        vendor.includes(term) ||
+        tags.some(tag => {
+          return String(tag || '')
+            .toLowerCase()
+            .includes(term);
+        })
+      );
+    });
+  }
+
+  if (initialPriceRange !== 'all') {
+    const [minRaw, maxRaw] = String(initialPriceRange).split('-');
+    const min = Number(minRaw);
+    const hasMax = typeof maxRaw !== 'undefined';
+    const max = hasMax ? Number(maxRaw) : undefined;
+    const validMin = Number.isFinite(min) && min >= 0;
+    const validMax = !hasMax || (Number.isFinite(max) && max >= min);
+    if (validMin && validMax) {
+      filtered = filtered.filter(car => {
+        const price = Number(car?.price?.amount ?? 0);
+        if (!Number.isFinite(price)) return false;
+        return hasMax ? price >= min && price <= max : price >= min;
+      });
+    }
+  }
+
+  if (initialBrandFilter !== 'all') {
+    const bf = String(initialBrandFilter).toLowerCase();
+    filtered = filtered.filter(car => {
+      const title = String(car?.title || '').toLowerCase();
+      const vendor = String(car?.vendor || '').toLowerCase();
+      return title.includes(bf) || vendor.includes(bf);
+    });
+  }
+
+  const totalCount = filtered.length;
+  const totalPages = totalCount > 0 ? Math.ceil(totalCount / carsPerPage) : 1;
+  const safePage = Math.min(Math.max(1, initialPage), totalPages);
+  const startIndex = (safePage - 1) * carsPerPage;
+  const pageCars = filtered.slice(startIndex, startIndex + carsPerPage);
+
+  // Cache hints: allow CDN to cache briefly while keeping inventory reasonably fresh
+  if (context?.res?.setHeader) {
+    context.res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+  }
+
   return {
-    props: { cars },
-    revalidate: 300, // 5 minutes - cars listing updates frequently
+    props: {
+      cars: pageCars,
+      totalCount,
+      totalPages,
+      initialSearchTerm,
+      initialPriceRange,
+      initialBrandFilter,
+      initialPage: safePage,
+    },
   };
 }

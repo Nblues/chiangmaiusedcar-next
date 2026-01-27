@@ -1,10 +1,48 @@
 // Test script for Shopify API connection
 import { fetchShopify, getAllCars, getBrandCounts, getHomepageCars } from './lib/shopify.mjs';
 
+import fs from 'node:fs';
+import path from 'node:path';
+
+function loadEnvFromFile(filePath) {
+  try {
+    const content = fs.readFileSync(filePath, 'utf8');
+    for (const rawLine of content.split(/\r?\n/)) {
+      const line = rawLine.trim();
+      if (!line || line.startsWith('#')) continue;
+      const eq = line.indexOf('=');
+      if (eq <= 0) continue;
+
+      const key = line.slice(0, eq).trim();
+      let value = line.slice(eq + 1).trim();
+
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
+        value = value.slice(1, -1);
+      }
+
+      if (!process.env[key] && value !== undefined) {
+        process.env[key] = value;
+      }
+    }
+  } catch {
+    // ignore missing files
+  }
+}
+
+const root = process.cwd();
+loadEnvFromFile(path.join(root, '.env.local'));
+loadEnvFromFile(path.join(root, '.env.production.local'));
+loadEnvFromFile(path.join(root, '.env'));
+
 // Set environment variables manually
 process.env.SHOPIFY_DOMAIN = 'kn-goodcar.com';
 if (!process.env.SHOPIFY_STOREFRONT_TOKEN) {
-  console.error('Missing SHOPIFY_STOREFRONT_TOKEN. Set it in your environment before running this script.');
+  console.error(
+    'Missing SHOPIFY_STOREFRONT_TOKEN. Set it in your environment before running this script.'
+  );
   process.exit(1);
 }
 

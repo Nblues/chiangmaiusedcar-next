@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import A11yImage from './A11yImage';
-import { carAlt } from '../utils/a11y';
+import CarCard from './CarCard';
 
 // คอมโพเนนต์แนะนำรถที่คล้ายกัน
 function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
@@ -132,96 +131,9 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+      <div className="car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
         {similarCars.map(car => (
-          <article
-            key={car.id}
-            className="group bg-white rounded-lg border border-gray-200 hover:border-primary transition-all duration-200 overflow-hidden flex flex-col h-full"
-          >
-            <Link href={`/car/${car.handle}`} className="flex flex-col h-full">
-              <figure className="relative w-full h-32 md:h-40 bg-gray-50 overflow-hidden">
-                <A11yImage
-                  src={
-                    Array.isArray(car.images) && car.images.length > 0
-                      ? car.images[0]?.url
-                      : '/herobanner/chiangmaiusedcar.webp'
-                  }
-                  alt={carAlt(car)}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-110"
-                  loading="lazy"
-                  imageType="card"
-                  sizes="(max-width: 768px) 50vw, (max-width: 1200px) 50vw, 25vw"
-                />
-
-                {/* Badge ยี่ห้อเดียวกัน */}
-                {(car.vendor || car.brand) === (currentCar.vendor || currentCar.brand) && (
-                  <div className="absolute top-1 left-1 md:top-2 md:left-2 bg-accent text-white text-[10px] md:text-xs px-1.5 py-0.5 md:px-2 md:py-1 rounded font-bold font-prompt">
-                    ยี่ห้อเดียวกัน
-                  </div>
-                )}
-
-                {/* Badge ราคาใกล้เคียง */}
-                {currentCar.price?.amount &&
-                  Math.abs(Number(car.price.amount) - Number(currentCar.price.amount)) <=
-                    Number(currentCar.price.amount) * 0.15 && (
-                    <div className="absolute top-1 right-1 md:top-2 md:right-2 bg-primary text-white text-[10px] md:text-xs px-1.5 py-0.5 md:px-2 md:py-1 rounded font-bold font-prompt">
-                      ราคาใกล้เคียง
-                    </div>
-                  )}
-              </figure>
-
-              <div className="p-2 md:p-4 flex flex-col flex-grow">
-                <h3 className="font-bold text-xs md:text-sm text-black mb-1 md:mb-2 group-hover:text-primary transition-colors line-clamp-2 font-prompt leading-tight">
-                  {car.title}
-                </h3>
-
-                <div className="flex items-center justify-between mb-2 md:mb-3">
-                  <p className="text-sm md:text-lg font-bold text-primary font-prompt">
-                    ฿{Number(car.price.amount).toLocaleString()}
-                  </p>
-
-                  {/* ราคาต่างจากรถปัจจุบัน - ซ่อนในมือถือ */}
-                  {currentCar.price?.amount && (
-                    <div className="hidden md:block text-xs text-gray-500 font-prompt">
-                      {Number(car.price.amount) > Number(currentCar.price.amount) ? '↗' : '↘'}฿
-                      {Math.abs(
-                        Number(car.price.amount) - Number(currentCar.price.amount)
-                      ).toLocaleString()}
-                    </div>
-                  )}
-                </div>
-
-                <div className="text-xs text-gray-600 space-y-1 flex-grow font-prompt">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
-                    {car.vendor && (
-                      <div className="truncate">
-                        <span className="font-medium">{car.vendor}</span>
-                      </div>
-                    )}
-                    {car.year && (
-                      <div className="truncate md:text-right">
-                        ปี <span className="font-medium">{car.year}</span>
-                      </div>
-                    )}
-                  </div>
-                  {car.mileage && (
-                    <div className="truncate">
-                      วิ่ง{' '}
-                      <span className="font-medium">{Number(car.mileage).toLocaleString()}</span>{' '}
-                      กม.
-                    </div>
-                  )}
-                </div>
-
-                <div className="mt-2 md:mt-3">
-                  <span className="block text-center bg-accent hover:bg-accent-700 text-white text-xs py-1.5 md:py-2 px-2 md:px-3 rounded-lg transition-colors font-prompt font-bold">
-                    ดูรายละเอียด →
-                  </span>
-                </div>
-              </div>
-            </Link>
-          </article>
+          <CarCard key={car.id} car={car} />
         ))}
       </div>
 

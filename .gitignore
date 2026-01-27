@@ -144,11 +144,27 @@ build-output*.txt
 pnpm-version.txt
 lint-help.txt
 lint-run.out.txt
+lint-*.txt
+type-check-*.txt
+tsc.out.txt
+
+# Local debug dumps (do not commit)
+*.out.txt
+*.out.json
+
+# Local notebooks / scratch
+Untitled-*.ipynb
+
+# Local dev server pid
+.next-dev.pid
 
 # Local one-off artifacts (do not commit)
 build-error-log.txt
 lint-current.txt
 webhint-example.json
+
+# Local reports/logs folder
+logs/
 
 # Generated local audit reports
 dev/reports/label-audit.md
@@ -171,6 +187,15 @@ lighthouse-summary*.txt
 
 # Timestamped Lighthouse runs
 lighthouse-prod-*/
+
+# Local Lighthouse runs (generated)
+lighthouse-local-*/
+
+# Lighthouse CI output (generated)
+lighthouse-ci/
+
+# Archived Lighthouse artifacts (do not commit)
+lighthouse-archive/
 
 # ========================
 # 🔐 Security & Auth

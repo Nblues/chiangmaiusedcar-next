@@ -22,7 +22,7 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
       fallbackAlt,
       alt,
       priority,
-      // quality, // Reserved for future use
+      quality,
       fill,
       sizes: customSizes, // เปลี่ยนชื่อเพื่อไม่ชนกับ generated sizes
       fetchpriority,
@@ -37,7 +37,8 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
     },
     ref
   ) => {
-    const finalAlt = alt && alt.trim().length > 0 ? alt : (fallbackAlt ?? 'รูปภาพประกอบ');
+    const finalAlt =
+      alt === '' ? '' : alt && alt.trim().length > 0 ? alt : (fallbackAlt ?? 'รูปภาพประกอบ');
 
     // ⭐ Optimize Shopify images automatically
     let optimizedSrc = src;
@@ -48,26 +49,47 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
       // กำหนดขนาดตาม imageType
       const widthMap = {
         hero: 1920,
-        card: 1024,
+        // การ์ดบนมือถือส่วนใหญ่แสดง ~50vw; 640px เพียงพอสำหรับ DPR 2-3 และช่วยลด bytes
+        card: 576,
         thumbnail: 240, // ⭐ ลดจาก 400 → 240 เพื่อโหลดเร็วขึ้น (thumbnail เล็ก)
         gallery: 800,
         default: 1200,
       };
       const targetWidth = widthMap[imageType] || widthMap.default;
 
+      // Shopify รองรับ quality parameter (1-100). ตั้งค่า default ให้เหมาะกับแต่ละประเภท
+      const qualityMap: Record<NonNullable<A11yImageProps['imageType']>, number> = {
+        hero: 75,
+        card: 65,
+        thumbnail: 60,
+        gallery: 70,
+        default: 70,
+      };
+      const resolvedQuality =
+        typeof quality === 'number' && Number.isFinite(quality)
+          ? Math.max(1, Math.min(100, quality))
+          : (qualityMap[imageType] ?? qualityMap.default);
+
       // ปรับขนาดรูป
-      optimizedSrc = optimizeShopifyImage(src, targetWidth, 'webp');
+      optimizedSrc = optimizeShopifyImage(src, targetWidth, 'webp', resolvedQuality);
 
       // สร้าง srcSet ถ้ายังไม่มี
       if (!customSrcSet) {
         const srcSetWidths = {
           hero: [640, 1024, 1920],
-          card: [320, 640, 1024],
+          // Add 576w to better match ~2-column mobile grids at DPR 3
+          // (reduces waste vs jumping straight to 640w).
+          card: [240, 360, 480, 576],
           thumbnail: [120, 240], // ⭐ ลดขนาด srcSet สำหรับ thumbnail
           gallery: [400, 800, 1200],
           default: [640, 1024, 1920],
         };
-        generatedSrcSet = generateSrcSet(src, srcSetWidths[imageType] || srcSetWidths.default);
+        generatedSrcSet = generateSrcSet(
+          src,
+          srcSetWidths[imageType] || srcSetWidths.default,
+          'webp',
+          resolvedQuality
+        );
       }
 
       // สร้าง sizes ถ้ายังไม่มี

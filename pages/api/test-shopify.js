@@ -1,5 +1,5 @@
-// Test Shopify API connection
-import { getAllCars } from '../../lib/shopify';
+// Test Shopify API connection (Storefront API)
+import { getAllCars } from '../../lib/shopify.mjs';
 
 export default async function handler(req, res) {
   // Never expose diagnostic endpoints in production
@@ -49,7 +49,7 @@ export default async function handler(req, res) {
       cars: limitedCars,
       metadata: {
         domain: process.env.SHOPIFY_DOMAIN,
-        apiVersion: process.env.SHOPIFY_API_VERSION || '2024-10',
+        apiVersion: process.env.SHOPIFY_API_VERSION || '2023-04',
         hasToken: !!process.env.SHOPIFY_STOREFRONT_TOKEN,
       },
     });

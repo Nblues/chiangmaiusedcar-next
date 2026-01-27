@@ -1,5 +1,17 @@
 /* eslint-disable */
 const path = require('path');
+
+const isWindows = process.platform === 'win32';
+
+// Turbopack warning prevention: when running `next dev --turbo`, Next.js warns if a
+// webpack config is present. Keep webpack config for production builds, but omit it
+// in Turbopack dev.
+const isTurbopackDev =
+  process.env.TURBOPACK === '1' ||
+  process.env.NEXT_TURBOPACK === '1' ||
+  (typeof process.env.npm_lifecycle_script === 'string' &&
+    process.env.npm_lifecycle_script.includes('next dev') &&
+    process.env.npm_lifecycle_script.includes('--turbo'));
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
   openAnalyzer: false,
@@ -15,19 +27,18 @@ const nextConfig = {
   // Performance & SEO optimizations
   poweredByHeader: false,
   reactStrictMode: true,
+  // On some Windows setups, Next's internal tracing can intermittently fail when writing
+  // to `.next\\trace` (EPERM). Using a distinct distDir on win32 avoids that collision.
+  // Vercel/Linux keeps the default `.next` output directory.
+  distDir: isWindows ? '.next-win' : '.next',
   compress: false, // Let Vercel handle compression (Brotli + Gzip)
   generateEtags: true,
-  swcMinify: true,
-
-  // Modern JavaScript - Aggressive optimization for modern browsers
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production' ? { exclude: ['error', 'warn'] } : false,
-  },
+  swcMinify: process.env.NEXT_DISABLE_SWC === '1' ? false : true,
 
   // SWC Transform - Target modern browsers (ES2020+) to reduce polyfills
   // This removes unnecessary polyfills for Array.at, Array.flat, Object.fromEntries, etc.
   experimental: {
-    esmExternals: 'loose',
+    esmExternals: true,
     scrollRestoration: true,
     serverComponentsExternalPackages: ['shopify-api-node'],
     // Prevent Jest worker errors in development
@@ -59,63 +70,67 @@ const nextConfig = {
   },
 
   // Webpack configuration for bundle optimization and HMR
-  webpack: (config, { dev, isServer }) => {
-    // Memory optimization - เพิ่ม cache และลด memory footprint
-    if (dev) {
-      config.cache = {
-        type: 'filesystem',
-        maxMemoryGenerations: 1, // ลดเหลือ 1 เพื่อประหยัด memory
-        buildDependencies: {
-          config: [__filename],
+  ...(isTurbopackDev
+    ? {}
+    : {
+        webpack: (config, { dev, isServer }) => {
+          // Memory optimization - เพิ่ม cache และลด memory footprint
+          if (dev) {
+            config.cache = {
+              type: 'filesystem',
+              maxMemoryGenerations: 1, // ลดเหลือ 1 เพื่อประหยัด memory
+              buildDependencies: {
+                config: [__filename],
+              },
+            };
+
+            // ลด memory usage ใน dev mode
+            config.optimization = {
+              ...config.optimization,
+              minimize: false,
+              runtimeChunk: false,
+              splitChunks: false,
+              removeAvailableModules: false,
+              removeEmptyChunks: false,
+              mergeDuplicateChunks: false,
+            };
+
+            // ลด parallelism เพื่อประหยัด memory
+            config.parallelism = 1;
+          }
+
+          // Production CSS optimization - Remove unused CSS
+          if (!dev && !isServer) {
+            config.optimization = {
+              ...config.optimization,
+              usedExports: true,
+              sideEffects: false,
+              minimize: true,
+            };
+          }
+
+          // Existing webpack configuration
+          if (!isServer) {
+            config.resolve.fallback = {
+              ...config.resolve.fallback,
+              fs: false,
+              path: false,
+              os: false,
+            };
+          }
+
+          // Optimize file watching for Windows dev server
+          if (dev && !isServer) {
+            config.watchOptions = {
+              poll: 1000, // ลด polling frequency
+              aggregateTimeout: 300,
+              ignored: ['**/node_modules/**', '**/.git/**', '**/.next/**', '**/public/**'],
+            };
+          }
+
+          return config;
         },
-      };
-
-      // ลด memory usage ใน dev mode
-      config.optimization = {
-        ...config.optimization,
-        minimize: false,
-        runtimeChunk: false,
-        splitChunks: false,
-        removeAvailableModules: false,
-        removeEmptyChunks: false,
-        mergeDuplicateChunks: false,
-      };
-
-      // ลด parallelism เพื่อประหยัด memory
-      config.parallelism = 1;
-    }
-
-    // Production CSS optimization - Remove unused CSS
-    if (!dev && !isServer) {
-      config.optimization = {
-        ...config.optimization,
-        usedExports: true,
-        sideEffects: false,
-        minimize: true,
-      };
-    }
-
-    // Existing webpack configuration
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        path: false,
-        os: false,
-      };
-    }
-
-    // Optimize file watching for Windows dev server
-    if (dev && !isServer) {
-      config.watchOptions = {
-        poll: 1000, // ลด polling frequency
-        aggregateTimeout: 300,
-        ignored: ['**/node_modules/**', '**/.git/**', '**/.next/**', '**/public/**'],
-      };
-    }
-
-    return config;
-  },
+      }),
 
   // Dev server configuration for stable WebSocket connection
 

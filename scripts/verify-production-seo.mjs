@@ -261,16 +261,54 @@ async function main() {
 
   const hasCar = types.includes('Car');
   const hasProduct = types.includes('Product');
+  const hasItemList = types.includes('ItemList');
+  const hasCollectionPage = types.includes('CollectionPage');
+  const hasBreadcrumbList = types.includes('BreadcrumbList');
+  const hasWebSite = types.includes('WebSite');
+  const hasLocalBusiness = types.includes('LocalBusiness') || types.includes('AutoDealer');
+  const hasFaqPage = types.includes('FAQPage');
 
-  // Product schema is expected on a car detail page, but not required for
-  // collection/list pages (home, /all-cars) where ItemList/CollectionPage is typical.
-  const requiresProduct = /\/car\//i.test(page.url || targetUrl);
+  const isCarPage = /\/car\//i.test(page.url || targetUrl);
+  const hasSomeSchema = jsonLdBlocks.length > 0 && parseErrors.length === 0;
 
-  console.log(JSON.stringify({ jsonLdTypes: types, hasCar, hasProduct, requiresProduct }));
+  // Expectations:
+  // - Car detail pages should have Product + Car.
+  // - Landing/list pages don't need Product/Car, but should have at least some meaningful schema.
+  const meetsPageSchemaExpectations = isCarPage
+    ? hasCar && hasProduct
+    : hasItemList ||
+      hasCollectionPage ||
+      hasBreadcrumbList ||
+      hasWebSite ||
+      hasLocalBusiness ||
+      hasFaqPage;
 
-  const ok = ogImageOk && hasCar && (requiresProduct ? hasProduct : true);
   console.log(
-    JSON.stringify({ result: ok ? 'PASS' : 'FAIL', ogImageOk, hasCar, hasProduct, requiresProduct })
+    JSON.stringify({
+      jsonLdTypes: types,
+      hasCar,
+      hasProduct,
+      isCarPage,
+      hasItemList,
+      hasCollectionPage,
+      hasBreadcrumbList,
+      hasWebSite,
+      hasLocalBusiness,
+      hasFaqPage,
+    })
+  );
+
+  const ok = ogImageOk && hasSomeSchema && meetsPageSchemaExpectations;
+  console.log(
+    JSON.stringify({
+      result: ok ? 'PASS' : 'FAIL',
+      ogImageOk,
+      hasSomeSchema,
+      meetsPageSchemaExpectations,
+      isCarPage,
+      hasCar,
+      hasProduct,
+    })
   );
 
   if (!ok) process.exitCode = 1;

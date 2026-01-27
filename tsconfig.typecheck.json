@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "incremental": false,
+    "plugins": []
+  },
+  "include": ["next-env.d.ts", "middleware.*", "pages/**/*", "components/**/*", "lib/**/*", "utils/**/*", "types/**/*", "config/**/*"],
+  "exclude": ["node_modules", ".next", "out", "dist", "deployment_source", "backups", "backup_project_2025_09_11", "dev", "dev-tools", "docs", "logs"]
+}

@@ -204,6 +204,8 @@ const ImageGallery = ({ articleId, onImageSelect, selectMode = false }) => {
               {uploading ? 'กำลังอัปโหลด...' : '+ เพิ่มรูปภาพ'}
               <input
                 type="file"
+                id="image-upload"
+                name="image-upload"
                 multiple
                 accept="image/*"
                 onChange={handleFileUpload}
@@ -672,6 +674,7 @@ const ImageOptionsForm = ({ onInsert, onCancel }) => {
         </label>
         <input
           id="image-caption"
+          name="image-caption"
           type="text"
           value={caption}
           onChange={e => setCaption(e.target.value)}

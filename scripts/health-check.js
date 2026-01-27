@@ -43,8 +43,9 @@ check('tsconfig.json exists', fs.existsSync('tsconfig.json'));
 check('.env.local exists', fs.existsSync('.env.local'));
 
 // 2. ตรวจสอบ Build artifacts
-check('Build directory exists', fs.existsSync('.next'));
-check('Build completed', fs.existsSync('.next/BUILD_ID'));
+const distDir = process.platform === 'win32' ? '.next-win' : '.next';
+check('Build directory exists', fs.existsSync(distDir));
+check('Build completed', fs.existsSync(path.join(distDir, 'BUILD_ID')));
 
 // 3. ตรวจสอบไฟล์ที่ไม่ควรมี
 check('No corrupted service-areas.jsx', !fs.existsSync('pages/cars/service-areas.jsx'));

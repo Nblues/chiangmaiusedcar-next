@@ -23,6 +23,31 @@ class SEOVerifier {
     this.passed = [];
   }
 
+  normalizePath(filePath) {
+    return String(filePath).replace(/\\/g, '/');
+  }
+
+  isApiRouteFile(filePath) {
+    const normalized = this.normalizePath(filePath);
+    return normalized.includes('/pages/api/');
+  }
+
+  isSpecialNonHtmlRouteFile(filePath) {
+    // Next.js Pages Router can use special routes like sitemap xml endpoints.
+    // These are not HTML pages and do not require canonical/meta tags.
+    return filePath.endsWith('.xml.js') || filePath.endsWith('.xml.jsx');
+  }
+
+  isRedirectOnlyPageSource(content) {
+    // Pages that only perform server-side redirects shouldn't require SEO component.
+    // Heuristic: getServerSideProps + redirect return.
+    return (
+      content.includes('getServerSideProps') &&
+      content.includes('redirect:') &&
+      (content.includes('permanent:') || content.includes('redirect'))
+    );
+  }
+
   findFiles(dir, regex) {
     let results = [];
     try {
@@ -184,12 +209,22 @@ class SEOVerifier {
     this.log('🔗 Checking canonical URLs in pages...', 'info');
 
     const pageFiles = this.findFiles(path.join(process.cwd(), 'pages'), /\.jsx?$/);
-    const filteredFiles = pageFiles.filter(
-      file => !file.includes('_app') && !file.includes('_document') && !file.includes('api/')
-    );
+    const filteredFiles = pageFiles.filter(file => {
+      const normalized = this.normalizePath(file);
+      return (
+        !normalized.includes('/pages/_app') &&
+        !normalized.includes('/pages/_document') &&
+        !this.isApiRouteFile(file) &&
+        !this.isSpecialNonHtmlRouteFile(file)
+      );
+    });
 
     for (const file of filteredFiles) {
       const content = fs.readFileSync(file, 'utf8');
+
+      if (this.isRedirectOnlyPageSource(content)) {
+        continue;
+      }
 
       // Check for canonical link
       if (content.includes('rel="canonical"') || content.includes("rel='canonical'")) {
@@ -284,9 +319,15 @@ class SEOVerifier {
     this.log('📝 Checking meta tags...', 'info');
 
     const pageFiles = this.findFiles(path.join(process.cwd(), 'pages'), /\.jsx?$/);
-    const filteredFiles = pageFiles.filter(
-      file => !file.includes('_app') && !file.includes('_document') && !file.includes('api/')
-    );
+    const filteredFiles = pageFiles.filter(file => {
+      const normalized = this.normalizePath(file);
+      return (
+        !normalized.includes('/pages/_app') &&
+        !normalized.includes('/pages/_document') &&
+        !this.isApiRouteFile(file) &&
+        !this.isSpecialNonHtmlRouteFile(file)
+      );
+    });
 
     const intentionallyNoindexPatterns = [
       `${path.sep}pages${path.sep}admin${path.sep}`,
@@ -299,6 +340,10 @@ class SEOVerifier {
 
     for (const file of filteredFiles) {
       const content = fs.readFileSync(file, 'utf8');
+
+      if (this.isRedirectOnlyPageSource(content)) {
+        continue;
+      }
 
       // Check for noindex/nofollow in production
       if (content.includes('noindex') || content.includes('nofollow')) {

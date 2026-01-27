@@ -1,6 +1,7 @@
 {
   // TypeScript/JavaScript performance - Enhanced to prevent crashes
-  "typescript.tsserver.maxTsServerMemory": 8192,
+  "typescript.tsserver.maxTsServerMemory": 4096,
+  "typescript.tsserver.useSeparateSyntaxServer": true,
   "typescript.tsserver.watchOptions": {
     "excludeDirectories": [
       "**/node_modules",
@@ -9,12 +10,15 @@
       "**/dist",
       "**/build",
       "**/logs",
-      "**/backups"
+      "**/backups",
+      "**/backup_project_*",
+      "**/lighthouse-prod-latest",
+      "**/deployment_source"
     ]
   },
   "typescript.preferences.includePackageJsonAutoImports": "off",
   "typescript.suggest.autoImports": false,
-  "typescript.disableAutomaticTypeAcquisition": false,
+  "typescript.disableAutomaticTypeAcquisition": true,
   "typescript.preferences.includeCompletionsWithSnippetText": false,
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.tsserver.useSyntaxServer": "auto",
@@ -37,6 +41,7 @@
 
   // Editor performance
   "editor.semanticHighlighting.enabled": false,
+  "editor.inlayHints.enabled": "off",
   "editor.suggest.snippetsPreventQuickSuggestions": false,
   "editor.acceptSuggestionOnCommitCharacter": false,
   "editor.quickSuggestions": {
@@ -52,7 +57,15 @@
     "**/out": true,
     "**/.git": true,
     "**/dist": true,
-    "**/build": true
+    "**/build": true,
+    "**/.vercel": true,
+    "**/.cache": true,
+    "**/.turbo": true,
+    "**/logs": true,
+    "**/backups": true,
+    "**/backup_project_*": true,
+    "**/lighthouse-prod-latest": true,
+    "**/deployment_source": true
   },
   "search.exclude": {
     "**/node_modules": true,
@@ -60,15 +73,34 @@
     "**/out": true,
     "**/dist": true,
     "**/build": true,
-    "**/coverage": true
+    "**/coverage": true,
+    "**/.vercel": true,
+    "**/.cache": true,
+    "**/.turbo": true,
+    "**/logs": true,
+    "**/backups": true,
+    "**/backup_project_*": true,
+    "**/lighthouse-prod-latest": true,
+    "**/deployment_source": true
   },
   "files.watcherExclude": {
     "**/node_modules/**": true,
     "**/.next/**": true,
     "**/out/**": true,
     "**/dist/**": true,
-    "**/build/**": true
+    "**/build/**": true,
+    "**/.vercel/**": true,
+    "**/.cache/**": true,
+    "**/.turbo/**": true,
+    "**/logs/**": true,
+    "**/backups/**": true,
+    "**/backup_project_*/**": true,
+    "**/lighthouse-prod-latest/**": true,
+    "**/deployment_source/**": true
   },
+
+  // Avoid pnpm symlink fan-out during search/indexing
+  "search.followSymlinks": false,
 
   // Memory optimization - เพิ่ม RAM เต็มที่ (12GB RAM system)
   "extensions.autoUpdate": false,
@@ -91,9 +123,10 @@
 
   // Git performance
   "git.enabled": true,
-  "git.autorefresh": true,
+  "git.autorefresh": false,
   "git.autofetch": false,
-  "git.statusLimit": 20000,
+  "git.statusLimit": 2000,
+  "git.decorations.enabled": false,
 
   // Format and lint
   "editor.formatOnSave": true,
@@ -132,9 +165,8 @@
   },
   "tailwindCSS.validate": true,
   "tailwindCSS.emmetCompletions": true,
-  "tailwindCSS.colorDecorators": true,
+  "tailwindCSS.colorDecorators": false,
   "tailwindCSS.showPixelEquivalents": true,
   "tailwindCSS.rootFontSize": 16,
-  
-  "CodeGPT.apiKey": "OpenAI"
+
 }

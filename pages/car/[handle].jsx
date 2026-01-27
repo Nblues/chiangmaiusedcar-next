@@ -5,13 +5,15 @@ import SEO from '../../components/SEO';
 import Breadcrumb from '../../components/Breadcrumb';
 import SimilarCars from '../../components/SimilarCars';
 import { getAllCars } from '../../lib/shopify.mjs';
-import { safeGet, safeFormatPrice } from '../../lib/safeFetch';
+import { safeGet, safeFormatPrice } from '../../utils/safe';
 import Link from 'next/link';
 import A11yImage from '../../components/A11yImage';
 import { carAlt } from '../../utils/a11y';
 import { createPrettyUrl, createShareText, createShortShareUrl } from '../../utils/urlHelper';
 import { optimizeShopifyImage } from '../../utils/imageOptimizer';
 import { readCarStatuses } from '../../lib/carStatusStore.js';
+import { isReservedCar, isSoldCar } from '../../lib/carStatusUtils.js';
+import { buildCarDetailFaqs, buildFaqPageJsonLd } from '../../lib/seo/faq.js';
 
 function CarDetailPage({ car, recommendedCars = [] }) {
   const router = useRouter();
@@ -471,6 +473,13 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     }))
     .filter(img => img.url);
 
+  const carFaqs = buildCarDetailFaqs({
+    title: enhancedTitle,
+    brand: safeGet(car, 'vendor') || safeGet(car, 'brand', ''),
+    model: safeGet(car, 'model', ''),
+  });
+  const carFaqStructuredData = buildFaqPageJsonLd({ url: canonicalUrl, faqs: carFaqs });
+
   return (
     <>
       {/* Minimal SSR OG block to guarantee Facebook/LINE can read meta without JS */}
@@ -490,6 +499,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
         url={canonicalUrl}
         type="product"
         pageType="car"
+        structuredData={carFaqStructuredData}
         breadcrumbs={[
           { name: 'หน้าแรก', url: '/' },
           { name: 'รถมือสองทั้งหมด', url: '/all-cars' },
@@ -579,23 +589,38 @@ function CarDetailPage({ car, recommendedCars = [] }) {
               />
 
               {/* Reserved Badge */}
-              {(safeGet(car, 'status') === 'reserved' ||
-                safeGet(car, 'tags', []).includes('reserved')) && (
-                <div className="absolute top-4 left-4 bg-red-600 text-white px-6 py-3 rounded-xl text-base sm:text-lg font-bold shadow-2xl animate-pulse font-prompt z-10 flex items-center gap-2">
-                  {/* White ban icon for high contrast */}
-                  <svg
-                    className="w-5 h-5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
+              {(() => {
+                const viewCar = {
+                  status: safeGet(car, 'status'),
+                  tags: safeGet(car, 'tags', []),
+                };
+                const reserved = isReservedCar(viewCar);
+                const sold = isSoldCar(viewCar);
+                if (!reserved && !sold) return null;
+
+                return (
+                  <div
+                    className={
+                      sold
+                        ? 'absolute top-4 left-4 bg-gray-900/90 text-white px-6 py-3 rounded-xl text-base sm:text-lg font-bold shadow-2xl font-prompt z-10 flex items-center gap-2'
+                        : 'absolute top-4 left-4 bg-red-600 text-white px-6 py-3 rounded-xl text-base sm:text-lg font-bold shadow-2xl animate-pulse font-prompt z-10 flex items-center gap-2'
+                    }
                   >
-                    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
-                    <line x1="5" y1="19" x2="19" y2="5" stroke="currentColor" strokeWidth="2" />
-                  </svg>
-                  <span>จองแล้ว</span>
-                </div>
-              )}
+                    {/* White ban icon for high contrast */}
+                    <svg
+                      className="w-5 h-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+                      <line x1="5" y1="19" x2="19" y2="5" stroke="currentColor" strokeWidth="2" />
+                    </svg>
+                    <span>{sold ? 'ขายแล้ว' : 'จองแล้ว'}</span>
+                  </div>
+                );
+              })()}
 
               {/* Loading hint for slow images (non-blocking) */}
               {isHeroLoading && showHeroLoading && (
@@ -1155,10 +1180,12 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                     </div>
                   </div>
                 )}
-                {car.fuel_type && (
+                {(car.fuel_type || car.fuelType) && (
                   <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
                     <div className="font-semibold text-gray-600 font-prompt">เชื้อเพลิง</div>
-                    <div className="text-lg font-bold text-black font-prompt">{car.fuel_type}</div>
+                    <div className="text-lg font-bold text-black font-prompt">
+                      {car.fuel_type || car.fuelType}
+                    </div>
                   </div>
                 )}
                 {car.engine && (
@@ -1276,6 +1303,33 @@ function CarDetailPage({ car, recommendedCars = [] }) {
 
           {/* Similar Cars Section */}
           <SimilarCars currentCar={car} recommendations={recommendedCars} />
+
+          {/* FAQ (AEO) - visible content to match FAQPage schema */}
+          {carFaqs?.length > 0 && (
+            <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
+              <h2 className="text-xl font-bold text-black mb-4 font-prompt">
+                คำถามที่พบบ่อย (FAQ)
+              </h2>
+              <div className="space-y-3">
+                {carFaqs.map(item => (
+                  <details
+                    key={item.q}
+                    className="group rounded-xl border border-gray-200 bg-gray-50 px-4 py-3"
+                  >
+                    <summary className="cursor-pointer list-none font-semibold text-gray-900 font-prompt flex items-start justify-between gap-3">
+                      <span>{item.q}</span>
+                      <span className="text-gray-400 group-open:rotate-180 transition-transform">
+                        ▾
+                      </span>
+                    </summary>
+                    <div className="mt-2 text-sm text-gray-700 font-prompt leading-relaxed">
+                      {item.a}
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* ขั้นตอนการซื้อรถ Modern 2025 */}
           <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
@@ -1484,12 +1538,18 @@ export async function getStaticProps({ params }) {
       // ส่งเฉพาะฟิลด์ที่จำเป็นไปยัง client เพื่อลด payload
       .map(c => ({
         id: c.id,
+        status: carStatuses?.[c.id]?.status || 'available',
+        tags: Array.isArray(c.tags) ? c.tags : [],
         handle: c.handle,
         title: c.title,
         vendor: c.vendor || c.brand,
         brand: c.brand,
         year: c.year,
         mileage: c.mileage,
+        transmission: c.transmission,
+        installment: c.installment,
+        fuelType: c.fuelType || c.fuel_type,
+        fuel_type: c.fuel_type || c.fuelType,
         price: { amount: Number(c.price.amount) },
         images: Array.isArray(c.images) && c.images.length > 0 ? [{ url: c.images[0].url }] : [],
       }));

@@ -4,6 +4,7 @@ import SEO from '../components/SEO';
 import A11yImage from '../components/A11yImage';
 import { createMapEmbedUrl, createMapOpenUrl, clearLocationCache } from '../utils/siteLocation';
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
+import { BUSINESS_INFO } from '../config/business';
 
 export default function Contact() {
   const seoContact = SEO_KEYWORD_MAP.contact;
@@ -207,7 +208,7 @@ export default function Contact() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
               {/* Facebook Page */}
               <a
-                href="https://www.facebook.com/KN2car"
+                href={BUSINESS_INFO.socialMedia.facebook.main}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-600 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
@@ -222,15 +223,19 @@ export default function Contact() {
                     <h3 className="font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
                       Facebook
                     </h3>
-                    <p className="text-xs text-gray-500">เพจหลัก</p>
+                    <p className="text-xs text-gray-500">
+                      {BUSINESS_INFO.socialFollowStats.facebook.main.label}
+                    </p>
                   </div>
                 </div>
-                <p className="text-sm font-semibold text-blue-600">1 ล้าน ติดตาม</p>
+                <p className="text-sm font-semibold text-blue-600">
+                  {BUSINESS_INFO.socialFollowStats.facebook.main.metricText}
+                </p>
               </a>
 
               {/* Facebook Personal */}
               <a
-                href="https://www.facebook.com/nuengblues"
+                href={BUSINESS_INFO.socialMedia.facebook.personal}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-500 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
@@ -245,15 +250,19 @@ export default function Contact() {
                     <h3 className="font-bold text-gray-800 group-hover:text-blue-500 transition-colors">
                       Facebook
                     </h3>
-                    <p className="text-xs text-gray-500">ส่วนตัว</p>
+                    <p className="text-xs text-gray-500">
+                      {BUSINESS_INFO.socialFollowStats.facebook.personal.label}
+                    </p>
                   </div>
                 </div>
-                <p className="text-sm font-semibold text-blue-500">1.6 แสน ติดตาม</p>
+                <p className="text-sm font-semibold text-blue-500">
+                  {BUSINESS_INFO.socialFollowStats.facebook.personal.metricText}
+                </p>
               </a>
 
               {/* Facebook Group */}
               <a
-                href="https://www.facebook.com/groups/kru.nueng.goodcar"
+                href={BUSINESS_INFO.socialMedia.facebook.fcGroup}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-700 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
@@ -268,15 +277,19 @@ export default function Contact() {
                     <h3 className="font-bold text-gray-800 group-hover:text-blue-700 transition-colors">
                       Facebook
                     </h3>
-                    <p className="text-xs text-gray-500">กลุ่ม FC</p>
+                    <p className="text-xs text-gray-500">
+                      {BUSINESS_INFO.socialFollowStats.facebook.fcGroup.label}
+                    </p>
                   </div>
                 </div>
-                <p className="text-sm font-semibold text-blue-700">7.3 หมื่น สมาชิก</p>
+                <p className="text-sm font-semibold text-blue-700">
+                  {BUSINESS_INFO.socialFollowStats.facebook.fcGroup.metricText}
+                </p>
               </a>
 
               {/* TikTok */}
               <a
-                href="https://www.tiktok.com/@krunueng_usedcar"
+                href={BUSINESS_INFO.socialMedia.tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-gray-900 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
@@ -291,15 +304,19 @@ export default function Contact() {
                     <h3 className="font-bold text-gray-800 group-hover:text-gray-900 transition-colors">
                       TikTok
                     </h3>
-                    <p className="text-xs text-gray-500">วิดีโอสั้น</p>
+                    <p className="text-xs text-gray-500">
+                      {BUSINESS_INFO.socialFollowStats.tiktok.label}
+                    </p>
                   </div>
                 </div>
-                <p className="text-sm font-semibold text-gray-900">1.6 แสน ติดตาม</p>
+                <p className="text-sm font-semibold text-gray-900">
+                  {BUSINESS_INFO.socialFollowStats.tiktok.metricText}
+                </p>
               </a>
 
               {/* YouTube */}
               <a
-                href="https://youtube.com/@chiangraiusedcar"
+                href={BUSINESS_INFO.socialMedia.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-red-600 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
@@ -314,15 +331,19 @@ export default function Contact() {
                     <h3 className="font-bold text-gray-800 group-hover:text-red-600 transition-colors">
                       YouTube
                     </h3>
-                    <p className="text-xs text-gray-500">วิดีโอรีวิว</p>
+                    <p className="text-xs text-gray-500">
+                      {BUSINESS_INFO.socialFollowStats.youtube.label}
+                    </p>
                   </div>
                 </div>
-                <p className="text-sm font-semibold text-red-600">4 หมื่น+ ติดตาม</p>
+                <p className="text-sm font-semibold text-red-600">
+                  {BUSINESS_INFO.socialFollowStats.youtube.metricText}
+                </p>
               </a>
 
               {/* Lemon8 */}
               <a
-                href="https://www.lemon8-app.com/@kn.goodcar?region=th"
+                href={BUSINESS_INFO.socialMedia.lemon8}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-yellow-500 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
@@ -337,15 +358,19 @@ export default function Contact() {
                     <h3 className="font-bold text-gray-800 group-hover:text-yellow-600 transition-colors">
                       Lemon8
                     </h3>
-                    <p className="text-xs text-gray-500">ไลฟ์สไตล์</p>
+                    <p className="text-xs text-gray-500">
+                      {BUSINESS_INFO.socialFollowStats.lemon8.label}
+                    </p>
                   </div>
                 </div>
-                <p className="text-sm font-semibold text-yellow-600">26k+ ติดตาม</p>
+                <p className="text-sm font-semibold text-yellow-600">
+                  {BUSINESS_INFO.socialFollowStats.lemon8.metricText}
+                </p>
               </a>
 
               {/* LINE */}
               <a
-                href="https://lin.ee/8ugfzstD"
+                href={BUSINESS_INFO.lineUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-green-500 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
@@ -360,10 +385,14 @@ export default function Contact() {
                     <h3 className="font-bold text-gray-800 group-hover:text-green-500 transition-colors">
                       LINE
                     </h3>
-                    <p className="text-xs text-gray-500">แชทสด</p>
+                    <p className="text-xs text-gray-500">
+                      {BUSINESS_INFO.socialFollowStats.line.label}
+                    </p>
                   </div>
                 </div>
-                <p className="text-sm font-semibold text-green-500">สอบถามเลย</p>
+                <p className="text-sm font-semibold text-green-500">
+                  {BUSINESS_INFO.socialFollowStats.line.metricText}
+                </p>
               </a>
             </div>
           </div>

@@ -1,6 +1,22 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 export default class MyDocument extends Document {
+  static async getInitialProps(ctx) {
+    const initialProps = await Document.getInitialProps(ctx);
+
+    const requestPath =
+      (typeof ctx?.req?.url === 'string' && ctx.req.url) ||
+      (typeof ctx?.asPath === 'string' && ctx.asPath) ||
+      (typeof ctx?.pathname === 'string' && ctx.pathname) ||
+      '';
+
+    return {
+      ...initialProps,
+      asPath: ctx?.asPath || '',
+      requestPath,
+    };
+  }
+
   render() {
     // Cache busting timestamp (used in meta tags)
     const buildTime = process.env.CUSTOM_BUILD_TIME || new Date().toISOString();
@@ -9,6 +25,13 @@ export default class MyDocument extends Document {
     const locale = this.props?.__NEXT_DATA__?.locale || 'th';
     const htmlLang = locale === 'en' ? 'en' : 'th';
 
+    // Only preload the hero image on the homepage where it is actually used as LCP.
+    // Preloading globally causes Chrome warnings (and wasted bandwidth) on other pages.
+    const requestPathRaw = this.props?.requestPath || this.props?.asPath || '';
+    const requestPath = String(requestPathRaw).split('?')[0] || '';
+    const shouldPreloadHero =
+      requestPath === '/' || requestPath === '/en' || requestPath === '/en/';
+
     return (
       <Html lang={htmlLang}>
         <Head>
@@ -16,17 +39,17 @@ export default class MyDocument extends Document {
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
-          {/* 🚀 LCP Optimization: Preload hero image using responsive candidates */}
-          {/* Use imagesrcset/imagesizes so the browser preloads the same file it will actually render */}
-          {/* eslint-disable-next-line react/no-unknown-property */}
-          <link
-            rel="preload"
-            as="image"
-            href="/herobanner/cnxcar-828w.webp"
-            type="image/webp"
-            imageSrcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
-            imageSizes="100vw"
-          />
+          {shouldPreloadHero && (
+            // eslint-disable-next-line react/no-unknown-property
+            <link
+              rel="preload"
+              as="image"
+              href="/herobanner/cnxcar-828w.webp"
+              type="image/webp"
+              imageSrcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
+              imageSizes="100vw"
+            />
+          )}
 
           {/* User Timing: mark earliest possible app start (for hydration measurements) */}
           <script

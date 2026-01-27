@@ -327,6 +327,7 @@ function AdminCarsManagement() {
                 <input
                   type="text"
                   id="searchCars"
+                  name="searchCars"
                   className="form-input w-full"
                   placeholder="ค้นหาจากยี่ห้อ รุ่น หรือชื่อ..."
                   value={searchQuery}
@@ -341,6 +342,7 @@ function AdminCarsManagement() {
                 </label>
                 <select
                   id="filterStatus"
+                  name="filterStatus"
                   className="form-select w-full"
                   value={filterStatus}
                   onChange={e => setFilterStatus(e.target.value)}

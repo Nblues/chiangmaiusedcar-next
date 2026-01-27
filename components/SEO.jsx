@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { buildCarJsonLd, buildLocalBusinessJsonLd, buildProductJsonLd } from '../lib/seo/jsonld.js';
 import { getSiteLocation } from '../utils/siteLocation';
+import { BUSINESS_INFO } from '../config/business';
 import {
   getSocialImageUrl,
   getPlatformImage,
@@ -120,70 +121,60 @@ export default function SEO({
 
   // Memoize static values to prevent unnecessary re-renders
   const staticValues = useMemo(() => {
-    const site = 'https://www.chiangmaiusedcar.com';
-    const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่';
-    const defaultDescription =
-      process.env.NEXT_PUBLIC_SITE_DESCRIPTION ||
-      'ศูนย์รวมรถยนต์มือสองคุณภาพดีในเชียงใหม่ ครูหนึ่งรถสวย ตรวจสภาพครบถ้วน ฟรีดาวน์ ดอกเบี้ยต่ำ รับประกัน 1 ปี ส่งฟรีทั่วไทย เช็คประวัติรถ โทร 094-064-9018';
+    const site = BUSINESS_INFO.baseUrl;
+    const siteName = BUSINESS_INFO.name;
+    const defaultDescription = BUSINESS_INFO.seo.description;
 
     // 2025 SEO: Keywords moved to structured data - keeping for compatibility
     const aiOptimizedKeywords = [
-      // Core Business (Brand + Location)
-      'รถมือสองเชียงใหม่',
-      'รถยนต์มือสองเชียงใหม่',
-      'ศูนย์รวมรถบ้านเชียงใหม่',
-      'ครูหนึ่งรถสวย',
-      'ตลาดรถมือสองล้านนา',
-      'ศูนย์รถมือสองภาคเหนือ',
+      BUSINESS_INFO.seo.keywords,
+      [
+        // Special Offers & Benefits
+        'ฟรีดาวน์ 0% เชียงใหม่',
+        'ดอกเบี้ยต่ำเริ่มต้น 2.99%',
+        'รับประกัน 1 ปีเต็ม',
+        'ส่งรถฟรีทั่วประเทศ',
+        'เครดิตไม่ผ่านก็มีทาง',
 
-      // Popular Brands + Stock Count (AK Car Style)
-      'Toyota มือสองเชียงใหม่ 50+ คัน',
-      'Honda มือสองเชียงใหม่ 30+ คัน',
-      'Nissan มือสองเชียงใหม่ 20+ คัน',
-      'Mazda มือสองเชียงใหม่ 15+ คัน',
+        // Vehicle Categories (Specific Types)
+        'รถ ECO Car มือสองเชียงใหม่',
+        'รถกระบะ Double Cab มือสอง',
+        'รถ SUV 4WD มือสองเชียงใหม่',
+        'รถครอบครัว 7 ที่นั่งมือสอง',
 
-      // Special Offers & Benefits
-      'ฟรีดาวน์ 0% เชียงใหม่',
-      'ดอกเบี้ยต่ำเริ่มต้น 2.99%',
-      'รับประกัน 1 ปีเต็ม',
-      'ส่งรถฟรีทั่วประเทศ',
-      'เครดิตไม่ผ่านก็มีทาง',
+        // AI/Voice Search Ready
+        'รถมือสองดีที่ไหนเชียงใหม่',
+        'ซื้อรถมือสองเชียงใหม่ที่ไหนดี',
+        'หารถมือสองเชียงใหม่ราคาถูก',
+        'เต็นท์รถมือสองเชียงใหม่ไหนดี',
 
-      // Vehicle Categories (Specific Types)
-      'รถ ECO Car มือสองเชียงใหม่',
-      'รถกระบะ Double Cab มือสอง',
-      'รถ SUV 4WD มือสองเชียงใหม่',
-      'รถครอบครัว 7 ที่นั่งมือสอง',
+        // Local Areas (Multi-Location)
+        'รถมือสองสันพระเนตร',
+        'รถยนต์มือสองสันทราย',
+        'ศูนย์รถมือสองหางดง',
+        'ตลาดรถมือสองแม่ริม',
+        'รถบ้านคุณภาพสันกำแพง',
 
-      // AI/Voice Search Ready
-      'รถมือสองดีที่ไหนเชียงใหม่',
-      'ซื้อรถมือสองเชียงใหม่ที่ไหนดี',
-      'หารถมือสองเชียงใหม่ราคาถูก',
-      'เต็นท์รถมือสองเชียงใหม่ไหนดี',
+        // Price Ranges (AK Car Approach)
+        'รถมือสอง 200,000 บาทเชียงใหม่',
+        'รถมือสอง 300,000 บาทเชียงใหม่',
+        'รถมือสอง 500,000 บาทเชียงใหม่',
+        'รถมือสองราคาดีเชียงใหม่',
 
-      // Local Areas (Multi-Location)
-      'รถมือสองสันพระเนตร',
-      'รถยนต์มือสองสันทราย',
-      'ศูนย์รถมือสองหางดง',
-      'ตลาดรถมือสองแม่ริม',
-      'รถบ้านคุณภาพสันกำแพง',
+        // E-A-T Keywords (Expertise)
+        'ผู้เชี่ยวชาญรถมือสองเชียงใหม่',
+        'รับรองคุณภาพรถมือสอง',
+        'ประเมินราคารถยุติธรรม',
 
-      // Price Ranges (AK Car Approach)
-      'รถมือสอง 200,000 บาทเชียงใหม่',
-      'รถมือสอง 300,000 บาทเชียงใหม่',
-      'รถมือสอง 500,000 บาทเชียงใหม่',
-      'รถมือสองราคาดีเชียงใหม่',
-
-      // E-A-T Keywords (Expertise)
-      'ผู้เชี่ยวชาญรถมือสองเชียงใหม่',
-      'รับรองคุณภาพรถมือสอง',
-      'ประเมินราคารถยุติธรรม',
-
-      // 2025 Trends
-      'รถมือสอง Hybrid เชียงใหม่',
-      'รถประหยัดน้ำมันเชียงใหม่',
-      'รถมือสองเทคโนโลยีใหม่',
-    ].join(', ');
+        // 2025 Trends
+        'รถมือสอง Hybrid เชียงใหม่',
+        'รถประหยัดน้ำมันเชียงใหม่',
+        'รถมือสองเทคโนโลยีใหม่',
+      ].join(', '),
+    ]
+      .map(v => (v == null ? '' : String(v).trim()))
+      .filter(Boolean)
+      .join(', ');
     const siteAuthor = author || process.env.NEXT_PUBLIC_SITE_AUTHOR || 'ครูหนึ่งรถสวย';
     const buildTime = process.env.CUSTOM_BUILD_TIME || new Date().toISOString();
 
@@ -285,7 +276,8 @@ export default function SEO({
       imgUrl = `${imgUrl}${separator}v=${timestamp}`;
     }
 
-    return imgUrl;
+    // normalize accidental double-slash after host
+    return imgUrl.replace(`${site}//`, `${site}/`);
   }, [staticValues, computedValues]);
 
   const ogMimeType = useMemo(() => {

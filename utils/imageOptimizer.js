@@ -11,7 +11,7 @@
  * @param {string} format - รูปแบบ (webp, jpg, png)
  * @returns {string} - URL ที่ปรับขนาดแล้ว
  */
-export function optimizeShopifyImage(url, width = 1200, format = 'webp') {
+export function optimizeShopifyImage(url, width = 1200, format = 'webp', quality) {
   // ตรวจสอบ URL
   if (!url || typeof url !== 'string') {
     return '/herobanner/chiangmaiusedcar.webp'; // Fallback
@@ -26,19 +26,24 @@ export function optimizeShopifyImage(url, width = 1200, format = 'webp') {
     // Parse URL เพื่อหลีกเลี่ยง width ซ้ำ
     const urlObj = new URL(url);
 
-    // ลบ width, format ที่มีอยู่ (จะเพิ่มใหม่)
+    // ลบ width, format, quality ที่มีอยู่ (จะเพิ่มใหม่)
     urlObj.searchParams.delete('width');
     urlObj.searchParams.delete('format');
+    urlObj.searchParams.delete('quality');
 
     // เพิ่ม width และ format ใหม่
     if (width) urlObj.searchParams.append('width', width);
     if (format) urlObj.searchParams.append('format', format);
+    if (typeof quality === 'number' && Number.isFinite(quality)) {
+      urlObj.searchParams.append('quality', String(Math.max(1, Math.min(100, quality))));
+    }
 
     return urlObj.toString();
   } catch {
     // Fallback: เพิ่มแบบเดิม (ถ้า URL parse ล้มเหลว)
     const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}width=${width}&format=${format}`;
+    const q = typeof quality === 'number' && Number.isFinite(quality) ? `&quality=${quality}` : '';
+    return `${url}${separator}width=${width}&format=${format}${q}`;
   }
 }
 
@@ -49,12 +54,14 @@ export function optimizeShopifyImage(url, width = 1200, format = 'webp') {
  * @param {string} format - รูปแบบ (webp, jpg, png)
  * @returns {string} - srcset attribute string
  */
-export function generateSrcSet(url, widths = [640, 1024, 1920], format = 'webp') {
+export function generateSrcSet(url, widths = [640, 1024, 1920], format = 'webp', quality) {
   if (!url || typeof url !== 'string') {
     return '';
   }
 
-  return widths.map(width => `${optimizeShopifyImage(url, width, format)} ${width}w`).join(', ');
+  return widths
+    .map(width => `${optimizeShopifyImage(url, width, format, quality)} ${width}w`)
+    .join(', ');
 }
 
 /**
@@ -67,8 +74,10 @@ export function generateSizes(type = 'default') {
     // รูปใหญ่เต็มหน้าจอ (หน้ารายละเอียดรถ)
     hero: '(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px',
 
-    // การ์ดรถ (หน้ารายการรถ) - ปรับให้เหมาะกับกริด 2 คอลัมน์บนมือถือ
-    card: '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw',
+    // การ์ดรถ (หน้ารายการรถ)
+    // - มือถือ: grid-cols-2 + padding/gap ทำให้ช่องจริง ~44-47vw → ใช้ 46vw เพื่อเลือก srcset ใกล้เคียง
+    // - เดสก์ท็อป: grid-cols-4 ช่องจริงมัก < 25vw → ใช้ 23vw เพื่อลด overserving
+    card: '(max-width: 767px) 46vw, 23vw',
 
     // Thumbnail เล็กๆ (gallery) - ⭐ ลดขนาดลงเพื่อโหลดเร็วขึ้น
     thumbnail: '(max-width: 640px) 80px, (max-width: 1024px) 96px, 120px',

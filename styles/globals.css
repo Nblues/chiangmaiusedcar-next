@@ -1,10 +1,10 @@
+@import './theme.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Fonts: Prompt for Thai is provided by next/font in pages/_app.jsx */
-
-@import './theme.css';
 
 /* ---- เพิ่ม custom css ได้ตรงนี้ ---- */
 
@@ -33,6 +33,16 @@ html {
 .cv-auto-lg {
   content-visibility: auto;
   contain-intrinsic-size: 2000px;
+}
+
+/* Mobile reliability: avoid content-visibility rendering gaps on some devices */
+@media (max-width: 639px) {
+  .cv-auto,
+  .cv-auto-md,
+  .cv-auto-lg {
+    content-visibility: visible;
+    contain-intrinsic-size: 0px;
+  }
 }
 
 /* Pagination Container - Universal All Screen Responsive */
@@ -365,11 +375,41 @@ textarea:focus-visible {
 
 /* ตัวอย่าง: ปุ่มหลัก */
 .btn-primary {
-  @apply inline-flex items-center justify-center px-6 py-3 bg-accent-800 hover:bg-accent-900 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl font-prompt;
+  @apply inline-flex items-center justify-center px-6 py-3 bg-primary hover:bg-primary-800 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl font-prompt;
 }
 
 .btn-secondary {
   @apply inline-flex items-center justify-center px-6 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold rounded-full transition-all duration-300 font-prompt;
+}
+
+/* ปุ่มสำหรับ Hero (บนพื้นหลังมืด/รูปภาพ) */
+.btn-hero-primary {
+  @apply inline-flex items-center justify-center px-6 py-3 bg-primary hover:bg-primary-800 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl font-prompt;
+}
+
+.btn-hero-secondary {
+  @apply inline-flex items-center justify-center px-6 py-3 border-2 border-white text-white hover:bg-white hover:text-primary font-semibold rounded-full transition-all duration-300 font-prompt;
+}
+
+/* Fallback for line-clamp utilities (in case Tailwind plugin is not enabled) */
+.line-clamp-1,
+.line-clamp-2,
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-1 {
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  -webkit-line-clamp: 3;
 }
 
 /* ฟอร์มและ Input Fields */

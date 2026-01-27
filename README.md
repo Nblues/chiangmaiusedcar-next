@@ -164,11 +164,19 @@
 
 ```bash
 pnpm dev          # Start development server (port 3000)
+pnpm dev:watch    # Dev server with auto-restart (recommended on unstable Windows dev)
 pnpm build        # Build for production
 pnpm start        # Start production server
 pnpm lint         # Run ESLint
 pnpm type-check   # Run TypeScript type checking
 pnpm format       # Format code with Prettier
+```
+
+Tip: choose a more stable dev mode when needed:
+
+```bash
+pnpm dev:watch -- --mode safe
+pnpm dev:watch -- --mode light
 ```
 
 ### Project Structure

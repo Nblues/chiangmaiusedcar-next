@@ -1,6 +1,18 @@
-$token = '6d4ulahzz0A261sGrPSIIfP1'
-$deploymentId = 'dpl_7K6tT6aLDHuuiJfKCgewU31kqNz8'  # Latest deployment
-$teamId = 'team_hwAaxdwJKzNxcJJWHj6zO50k'
+param(
+    [Parameter(Mandatory = $true)][string]$DeploymentId,
+    [Parameter(Mandatory = $false)][string]$TeamId,
+    [Parameter(Mandatory = $false)][string]$Token
+)
+
+$ErrorActionPreference = 'Stop'
+
+$token = $Token
+if (-not $token) { $token = $env:VERCEL_TOKEN }
+if (-not $token) { Write-Host "[ERROR] Missing Vercel token. Provide -Token or set VERCEL_TOKEN." -ForegroundColor Red; exit 1 }
+
+$deploymentId = $DeploymentId
+$teamId = $TeamId
+if (-not $teamId) { $teamId = $env:VERCEL_TEAM_ID }
 
 $headers = @{ Authorization = "Bearer $token" }
 
@@ -10,7 +22,8 @@ Write-Host "Deployment: $deploymentId" -ForegroundColor Gray
 Write-Host ""
 
 try {
-    $url = "https://api.vercel.com/v13/deployments/$deploymentId/redeploy?teamId=$teamId"
+    $url = "https://api.vercel.com/v13/deployments/$deploymentId/redeploy"
+    if ($teamId) { $url = $url + "?teamId=$teamId" }
     Write-Host "Attempting redeploy..." -ForegroundColor Yellow
     $response = Invoke-RestMethod -Uri $url -Headers $headers -Method Post
     Write-Host "SUCCESS! New deployment created." -ForegroundColor Green

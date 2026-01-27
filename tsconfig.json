@@ -20,7 +20,6 @@
     "exactOptionalPropertyTypes": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
     "types": ["node"],
     "maxNodeModuleJsDepth": 0,
     "disableReferencedProjectLoad": true,

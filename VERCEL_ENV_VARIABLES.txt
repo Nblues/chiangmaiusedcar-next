@@ -5,8 +5,15 @@
 # Settings > Environment Variables
 
 # 🛒 Shopify Configuration
-SHOPIFY_DOMAIN=kn-goodcar.com
+# NOTE: For Storefront GraphQL API, Shopify recommends using the myshopify.com domain.
+# Example: your-store.myshopify.com
+SHOPIFY_DOMAIN=kn-goodcar.myshopify.com
+
+# Storefront access token (secret). Set this in Vercel Dashboard or via CLI.
 SHOPIFY_STOREFRONT_TOKEN=
+
+# CLI helper (recommended):
+#   powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\setup-vercel-shopify-storefront-env.ps1
 
 #  EmailJS Configuration
 NEXT_PUBLIC_EMAILJS_SERVICE_ID=service_qlcksif

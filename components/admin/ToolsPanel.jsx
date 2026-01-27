@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 function KeywordCheckerTool({ tool, loading, result, runTool, textColor }) {
   const [keywords, setKeywords] = useState('');
 
+  const inputId = `keywords-${tool?.id || 'tool'}`;
+
   const handleRun = () => {
     const value = (keywords || '').trim();
     if (!value) return;
@@ -18,6 +20,8 @@ function KeywordCheckerTool({ tool, loading, result, runTool, textColor }) {
       <p className="text-xs text-gray-500 mt-1">{tool.name}</p>
       <p className="text-xs text-gray-400 mt-1 line-clamp-2">{tool.description}</p>
       <input
+        id={inputId}
+        name={inputId}
         type="text"
         className="form-input mt-2 w-full border-gray-300 focus:border-primary rounded"
         placeholder="คีย์เวิร์ด (คั่นด้วย , หรือ เว้นวรรค)"

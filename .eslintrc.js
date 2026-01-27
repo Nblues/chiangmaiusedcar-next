@@ -23,7 +23,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'react', 'jsx-a11y', 'prettier'],
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': ['error', { endOfLine: 'auto' }],
     'no-console': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'react/react-in-jsx-scope': 'off',

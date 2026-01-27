@@ -1,11 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const target = path.join(process.cwd(), '.next');
+const targets = [path.join(process.cwd(), '.next'), path.join(process.cwd(), '.next-win')];
 
 try {
-  fs.rmSync(target, { recursive: true, force: true });
-  process.stdout.write('Removed .next\n');
+  for (const target of targets) {
+    fs.rmSync(target, { recursive: true, force: true });
+  }
+  process.stdout.write('Removed .next/.next-win\n');
 } catch (err) {
-  process.stdout.write('No .next to remove\n');
+  process.stdout.write('No .next/.next-win to remove\n');
 }

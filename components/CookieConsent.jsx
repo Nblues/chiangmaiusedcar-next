@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { readCookieConsent, writeCookieConsent } from '../utils/cookieConsent';
 
 const CookieConsent = () => {
   const [showConsent, setShowConsent] = useState(false);
@@ -13,48 +14,24 @@ const CookieConsent = () => {
   useEffect(() => {
     if (!isClient) return;
 
-    // ตรวจสอบว่าผู้ใช้ได้ยอมรับคุกกี้แล้วหรือไม่
-    const consent = localStorage.getItem('cookie-consent');
-    const consentTimestamp = localStorage.getItem('cookie-consent-timestamp');
+    // 2026-style: versioned consent with long-lived storage.
+    // If consent exists (and matches current version), don't re-prompt.
+    const consent = readCookieConsent();
+    if (consent) return;
 
-    if (!consent) {
-      // แสดง popup หลังจาก 3 วินาที พร้อมอนิเมชั่นเลื่อนขึ้น
-      const timer = setTimeout(() => {
-        setShowConsent(true);
-        // ใช้ timeout เล็กน้อยเพื่อให้ DOM update ก่อน แล้วเริ่มอนิเมชั่น
-        setTimeout(() => {
-          setIsVisible(true);
-        }, 50);
-      }, 3000);
-      return () => clearTimeout(timer);
-    } else if (consent === 'accepted' && consentTimestamp) {
-      // ตรวจสอบว่าคุกกี้หมดอายุหรือไม่ (30 วัน)
-      const consentDate = new Date(parseInt(consentTimestamp));
-      const now = new Date();
-      const daysDiff = (now - consentDate) / (1000 * 60 * 60 * 24);
-
-      if (daysDiff >= 30) {
-        // คุกกี้หมดอายุแล้ว ลบและแสดงอีกครั้ง
-        localStorage.removeItem('cookie-consent');
-        localStorage.removeItem('cookie-consent-timestamp');
-
-        const timer = setTimeout(() => {
-          setShowConsent(true);
-          setTimeout(() => {
-            setIsVisible(true);
-          }, 50);
-        }, 3000);
-        return () => clearTimeout(timer);
-      }
-    }
+    // Show banner after a short delay (avoid competing with hydration)
+    const timer = setTimeout(() => {
+      setShowConsent(true);
+      setTimeout(() => setIsVisible(true), 50);
+    }, 1500);
+    return () => clearTimeout(timer);
   }, [isClient]);
 
-  const acceptCookies = () => {
+  const acceptAllCookies = () => {
     if (!isClient) return;
 
-    // บันทึกการยอมรับพร้อม timestamp
-    localStorage.setItem('cookie-consent', 'accepted');
-    localStorage.setItem('cookie-consent-timestamp', Date.now().toString());
+    // Consent for analytics + marketing cookies
+    writeCookieConsent({ analytics: true, marketing: true });
 
     // อนิเมชั่นเลื่อนลงก่อนซ่อน
     setIsVisible(false);
@@ -63,11 +40,11 @@ const CookieConsent = () => {
     }, 300);
   };
 
-  const rejectCookies = () => {
+  const acceptEssentialOnly = () => {
     if (!isClient) return;
 
-    // บันทึกการปฏิเสธ (ไม่ตั้ง timestamp เพื่อให้ถามอีกครั้งในเซสชั่นใหม่)
-    localStorage.setItem('cookie-consent', 'rejected');
+    // Essential-only: no analytics/marketing. Still remember choice to avoid re-prompting.
+    writeCookieConsent({ analytics: false, marketing: false });
 
     // อนิเมชั่นเลื่อนลงก่อนซ่อน
     setIsVisible(false);
@@ -98,26 +75,26 @@ const CookieConsent = () => {
               </div>
 
               <div className="flex-1">
-                <h3 className="font-bold text-gray-900 mb-2 text-lg">
+                <h3 className="font-extrabold text-gray-950 mb-2 text-lg sm:text-xl leading-snug">
                   เราใช้คุกกี้เพื่อปรับปรุงประสบการณ์ของคุณ
                 </h3>
-                <p className="text-gray-600 text-sm mb-3 leading-relaxed">
-                  เว็บไซต์ของเราใช้คุกกี้เพื่อช่วยในการวิเคราะห์การใช้งาน ปรับปรุงประสิทธิภาพ
-                  และให้บริการที่ดีขึ้น การใช้งานเว็บไซต์ต่อไปถือว่าท่านยอมรับการใช้คุกกี้
+                <p className="text-gray-900/90 text-[13px] sm:text-sm mb-3 leading-relaxed">
+                  เราใช้คุกกี้ที่จำเป็นต่อการทำงานของเว็บไซต์ และ (ถ้าท่านยินยอม) คุกกี้เพื่อ
+                  วิเคราะห์การใช้งาน/การตลาด เพื่อปรับปรุงบริการให้ดียิ่งขึ้น
                 </p>
 
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-700">
                   อ่านเพิ่มเติมได้ที่{' '}
                   <Link
                     href="/privacy-policy"
-                    className="text-primary hover:text-primary-600 underline"
+                    className="text-primary font-semibold underline decoration-2 underline-offset-2 hover:text-primary-600"
                   >
                     นโยบายความเป็นส่วนตัว
                   </Link>{' '}
                   และ{' '}
                   <Link
                     href="/terms-of-service"
-                    className="text-primary hover:text-primary-600 underline"
+                    className="text-primary font-semibold underline decoration-2 underline-offset-2 hover:text-primary-600"
                   >
                     เงื่อนไขการใช้งาน
                   </Link>
@@ -130,17 +107,17 @@ const CookieConsent = () => {
           <div className="flex-shrink-0 w-full md:w-auto">
             <div className="flex flex-col sm:flex-row gap-3">
               <button
-                onClick={acceptCookies}
+                onClick={acceptAllCookies}
                 className="w-full sm:w-auto px-6 py-3 bg-primary hover:bg-primary-600 text-white font-semibold rounded-lg transition-colors duration-200 text-sm"
               >
                 ยอมรับทั้งหมด
               </button>
 
               <button
-                onClick={rejectCookies}
+                onClick={acceptEssentialOnly}
                 className="w-full sm:w-auto px-6 py-3 border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 font-semibold rounded-lg transition-colors duration-200 text-sm"
               >
-                ปฏิเสธ
+                ยอมรับเฉพาะที่จำเป็น
               </button>
             </div>
           </div>

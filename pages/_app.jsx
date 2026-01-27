@@ -5,12 +5,13 @@ import Head from 'next/head';
 import { Prompt } from 'next/font/google';
 import ClientOnly from '../components/ClientOnly';
 import '../styles/globals.css';
+import { onCookieConsentChange, readCookieConsent } from '../utils/cookieConsent';
 
 const prompt = Prompt({
   subsets: ['thai', 'latin'],
   // Match Tailwind font weights used across the site (e.g. font-medium=500, font-semibold=600, font-extrabold=800)
   weight: ['400', '500', '600', '700', '800'],
-  display: 'swap',
+  display: 'optional',
   adjustFontFallback: true,
   preload: true,
   variable: '--font-prompt',
@@ -32,6 +33,8 @@ export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const path = router?.asPath || router?.pathname || '';
   const isAdminRoute = path.startsWith('/admin');
+
+  const [cookieConsent, setCookieConsent] = useState(null);
 
   // Defer Vercel analytics tooling so it doesn't compete with hydration/bootup.
   const [VercelTools, setVercelTools] = useState(null);
@@ -114,11 +117,19 @@ export default function MyApp({ Component, pageProps }) {
     };
   }, []);
 
+  // Read stored cookie consent + react to changes from the banner.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    setCookieConsent(readCookieConsent());
+    return onCookieConsentChange(next => setCookieConsent(next));
+  }, []);
+
   // Defer Vercel Analytics + Speed Insights into an idle-loaded async chunk.
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (process.env.NODE_ENV !== 'production') return;
     if (isAdminRoute) return;
+    if (!cookieConsent?.analytics) return;
 
     let cancelled = false;
 
@@ -159,7 +170,7 @@ export default function MyApp({ Component, pageProps }) {
       if (idleId && window.cancelIdleCallback) window.cancelIdleCallback(idleId);
       if (timeoutId) window.clearTimeout(timeoutId);
     };
-  }, [isAdminRoute]);
+  }, [isAdminRoute, cookieConsent?.analytics]);
 
   // Defer non-critical client-only runtime guards to an async chunk
   useEffect(() => {
@@ -276,7 +287,9 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
       {getLayout(<Component {...pageProps} />)}
       {VercelTools ? <VercelTools /> : null}
-      {!isAdminRoute && <FacebookPixel />}
+      {!isAdminRoute && process.env.NODE_ENV === 'production' && cookieConsent?.marketing ? (
+        <FacebookPixel />
+      ) : null}
     </>
   );
 }

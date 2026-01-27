@@ -1,7 +1,22 @@
+param(
+    [Parameter(Mandatory = $false)][string]$ProjectId,
+    [Parameter(Mandatory = $false)][string]$TeamId,
+    [Parameter(Mandatory = $false)][string]$Token
+)
+
+$ErrorActionPreference = 'Stop'
+
 # Debug Vercel API Call
-$token = '6d4ulahzz0A261sGrPSIIfP1'
-$projectId = 'prj_4DRhhC01Inrz1KwksneD9fnzbHdE'
-$teamId = 'team_hwAaxdwJKzNxcJJWHj6zO50k'
+$token = $Token
+if (-not $token) { $token = $env:VERCEL_TOKEN }
+if (-not $token) { Write-Host "[ERROR] Missing Vercel token. Provide -Token or set VERCEL_TOKEN." -ForegroundColor Red; exit 1 }
+
+$projectId = $ProjectId
+if (-not $projectId) { $projectId = $env:VERCEL_PROJECT_ID }
+if (-not $projectId) { Write-Host "[ERROR] Missing project id. Provide -ProjectId or set VERCEL_PROJECT_ID." -ForegroundColor Red; exit 1 }
+
+$teamId = $TeamId
+if (-not $teamId) { $teamId = $env:VERCEL_TEAM_ID }
 
 $headers = @{
     Authorization = "Bearer $token"
@@ -21,7 +36,8 @@ Write-Host "Team: $teamId" -ForegroundColor Gray
 Write-Host ""
 
 try {
-    $url = "https://api.vercel.com/v10/projects/$projectId/env?teamId=$teamId"
+    $url = "https://api.vercel.com/v10/projects/$projectId/env"
+    if ($teamId) { $url = $url + "?teamId=$teamId" }
     Write-Host "URL: $url" -ForegroundColor Gray
     $response = Invoke-RestMethod -Uri $url -Headers $headers -Method Post -Body $body -ErrorAction Stop
     Write-Host "SUCCESS!" -ForegroundColor Green

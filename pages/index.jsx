@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+/* eslint-disable @next/next/no-img-element */
+
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import SEO from '../components/SEO.jsx';
+import CarCard from '../components/CarCard';
 import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
 import { readCarStatuses } from '../lib/carStatusStore.js';
-import { safeGet } from '../lib/safeFetch';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { carAlt } from '../utils/a11y';
 import A11yImage from '../components/A11yImage'; // Static import for LCP
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import {
@@ -14,6 +15,24 @@ import {
   setCachedStatuses,
   debounceVisibilityRefetch,
 } from '../lib/carStatusCache';
+import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
+import { COMMON_OFFER_EXTENSIONS } from '../config/business';
+import { buildFaqPageJsonLd } from '../lib/seo/faq';
+
+const HOME_FAQS = [
+  {
+    q: 'ดาวน์ 0% จริงไหม?',
+    a: 'จริง! ลูกค้าสามารถออกรถฟรีดาวน์ตามโปรโมชัน ตรวจสภาพครบถ้วน และตรวจสอบประวัติรถก่อนส่งมอบ',
+  },
+  {
+    q: 'ติดเครดิตบูโรออกได้ไหม?',
+    a: 'ได้! เรามีไฟแนนซ์หลากหลายแบบ แนะนำให้ทัก LINE หรือโทร 094-064-9018 เพื่อประเมินเบื้องต้น',
+  },
+  {
+    q: 'มีรับประกันไหม?',
+    a: 'รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม ตรวจสภาพครบถ้วนก่อนส่งมอบ และมีบริการหลังการขาย',
+  },
+];
 
 // Lazy load non-critical components to reduce TBT
 const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
@@ -69,20 +88,20 @@ function buildHomeItemListJsonLd(inputCars) {
     const model = car?.model || car?.title || '';
     const year = car?.year || '';
     const title = car?.title || `${vendorOrBrand} ${model}`.trim();
-    const normalizedStatus = typeof car?.status === 'string' ? car.status.trim() : '';
-    const inStock =
-      normalizedStatus.toLowerCase() === 'reserved'
-        ? false
-        : typeof car?.availableForSale === 'boolean'
-          ? car.availableForSale
-          : true;
-    const availabilityValue = inStock ? 'InStock' : 'OutOfStock';
+    const availabilityValue = computeSchemaAvailability({
+      status: car?.status,
+      availableForSale: car?.availableForSale,
+    });
+    const inStock = availabilityValue === 'InStock';
 
     return {
       '@type': 'ListItem',
       position: index + 1,
       item: {
-        '@type': 'Car',
+        // Google Rich Results: Product is the supported type.
+        // Keep vehicle context via additionalType.
+        '@type': 'Product',
+        additionalType: 'https://schema.org/Car',
         '@id': carUrl,
         name: title,
         description: `${vendorOrBrand} ${model} ${year} ราคา ${priceInfo.display} บาท`.trim(),
@@ -90,10 +109,7 @@ function buildHomeItemListJsonLd(inputCars) {
           '@type': 'Brand',
           name: vendorOrBrand,
         },
-        model,
-        vehicleModelDate: year,
         sku: car?.id || handle,
-        category: 'รถยนต์มือสอง',
         image: imageUrl,
         url: carUrl,
         offers: {
@@ -108,12 +124,9 @@ function buildHomeItemListJsonLd(inputCars) {
             value: inStock ? 1 : 0,
             unitCode: 'EA',
           },
-          seller: {
-            '@type': 'AutoDealer',
-            '@id': `${site}/#organization`,
-            name: 'ครูหนึ่งรถสวย',
-            url: site,
-          },
+          seller: COMMON_OFFER_EXTENSIONS.seller,
+          hasMerchantReturnPolicy: COMMON_OFFER_EXTENSIONS.hasMerchantReturnPolicy,
+          shippingDetails: COMMON_OFFER_EXTENSIONS.shippingDetails,
         },
       },
     };
@@ -131,6 +144,7 @@ function buildHomeItemListJsonLd(inputCars) {
 
 export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonLd }) {
   const seoHome = SEO_KEYWORD_MAP.home;
+  const homeFaqSchema = useMemo(() => buildFaqPageJsonLd({ url: '/', faqs: HOME_FAQS }), []);
 
   // Helper function to get brand count with fallback to sample data
   const getBrandCount = useCallback(
@@ -161,6 +175,38 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   // Facebook reviews: render only client
   const [showFbReviews, setShowFbReviews] = useState(false);
   const [liveStatuses, setLiveStatuses] = useState(null);
+  const [specByHandle, setSpecByHandle] = useState({});
+  const requestedSpecHandlesRef = useRef(new Set());
+
+  const mergeSpecs = (car, extra) => {
+    const next = { ...car };
+
+    const has = v => v != null && String(v).trim() !== '';
+    const carFuel = car?.fuelType || car?.fuel_type || car?.['fuel-type'];
+    const extraFuel = extra?.fuelType || extra?.fuel_type || extra?.['fuel-type'];
+
+    // Normalize fuel keys so all cards behave the same
+    if (has(carFuel)) {
+      if (!has(next.fuelType)) next.fuelType = carFuel;
+      if (!has(next.fuel_type)) next.fuel_type = carFuel;
+    }
+
+    if (!extra) return next;
+
+    if (!has(next.year) && has(extra.year)) next.year = extra.year;
+    if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
+    if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
+    if (!has(carFuel) && has(extraFuel)) {
+      next.fuelType = extra.fuelType || extraFuel;
+      next.fuel_type = extra.fuel_type || extraFuel;
+    }
+    if (!has(next.installment) && has(extra.installment)) next.installment = extra.installment;
+
+    if (!has(next.category) && has(extra.category)) next.category = extra.category;
+    if (!has(next.body_type) && has(extra.body_type)) next.body_type = extra.body_type;
+
+    return next;
+  };
 
   // Defer non-critical share widget to reduce long tasks during hydration
   const [showSocialShare, setShowSocialShare] = useState(false);
@@ -189,6 +235,87 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   }, [safeCars, liveStatuses]);
   // Precompute IDs for fetching statuses
   const ids = useMemo(() => safeCars.map(c => c.id).filter(Boolean), [safeCars]);
+
+  // Enrich missing specs for the first 8 homepage cards (mileage/transmission/fuel/installment/category)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const list = Array.isArray(carsWithLive) ? carsWithLive.slice(0, 8) : [];
+    if (list.length === 0) return;
+
+    const needs = [];
+    for (const car of list) {
+      const handle = car?.handle;
+      if (!handle) continue;
+      if (requestedSpecHandlesRef.current.has(handle)) continue;
+
+      const extra = specByHandle?.[handle];
+      const merged = mergeSpecs(car, extra);
+
+      const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
+      const hasTransmission =
+        merged?.transmission != null && String(merged.transmission).trim() !== '';
+      const fuel = merged?.fuelType || merged?.fuel_type;
+      const hasFuel = fuel != null && String(fuel).trim() !== '';
+      const hasInstallment =
+        merged?.installment != null && String(merged.installment).trim() !== '';
+
+      const hasCategory = merged?.category != null && String(merged.category).trim() !== '';
+
+      if (!(hasMileage && hasTransmission && hasFuel && hasInstallment && hasCategory)) {
+        needs.push(handle);
+      }
+    }
+
+    if (needs.length === 0) return;
+    needs.forEach(h => requestedSpecHandlesRef.current.add(h));
+
+    const fetchSpecs = async () => {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        const params = new URLSearchParams({ handles: needs.join(',') });
+        const resp = await fetch(`/api/public/car-specs?${params.toString()}`, {
+          cache: 'no-store',
+          credentials: 'same-origin',
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (!resp.ok) {
+          needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+          return;
+        }
+        const data = await resp.json();
+        if (!data?.ok || !data?.specs) {
+          needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+          return;
+        }
+
+        // If a handle wasn't returned, don't permanently block retries.
+        const returned = new Set(Object.keys(data.specs || {}));
+        for (const h of needs) {
+          if (!returned.has(h)) requestedSpecHandlesRef.current.delete(h);
+        }
+
+        setSpecByHandle(prev => ({
+          ...(prev || {}),
+          ...data.specs,
+        }));
+      } catch (error) {
+        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+        if (process.env.NODE_ENV === 'development') {
+          // eslint-disable-next-line no-console
+          console.warn('Failed to fetch car specs:', error?.message);
+        }
+      }
+    };
+
+    fetchSpecs().catch(() => {});
+  }, [carsWithLive, specByHandle]);
+
+  // NOTE: Always attach a catch when invoking async helpers inside effects,
+  // timers, or event handlers to avoid "Unhandled Runtime Error" overlays
+  // if a browser extension or network stack throws unexpectedly.
 
   // Memoize static data to prevent re-creation
   const brands = useMemo(
@@ -264,10 +391,12 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       }
     };
 
+    const runFetchStatuses = () => fetchStatuses().catch(() => {});
+
     // Re-fetch when returning to the tab to keep status fresh (debounced)
     let removeVis;
     if (typeof document !== 'undefined') {
-      const fetchStatuses = async () => {
+      const fetchStatusesOnVisibility = async () => {
         try {
           // Only fetch when tab is visible and we're in browser
           if (typeof window === 'undefined') return;
@@ -308,7 +437,10 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       };
 
       // Debounce visibility refetch to 3 seconds
-      const debouncedFetch = debounceVisibilityRefetch(fetchStatuses, 3000);
+      const debouncedFetch = debounceVisibilityRefetch(
+        () => fetchStatusesOnVisibility().catch(() => {}),
+        3000
+      );
       document.addEventListener('visibilitychange', debouncedFetch);
       removeVis = () => document.removeEventListener('visibilitychange', debouncedFetch);
     }
@@ -321,10 +453,10 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       timer = window.setTimeout(() => {
         if ('requestIdleCallback' in window) {
           idleCallback = window.requestIdleCallback(() => {
-            fetchStatuses();
+            runFetchStatuses();
           });
         } else {
-          fetchStatuses();
+          runFetchStatuses();
         }
       }, 5500);
     }
@@ -433,27 +565,25 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         type="website"
         pageType="home"
         breadcrumbs={[{ name: 'หน้าแรก', url: '/' }]}
+        structuredData={homeFaqSchema}
       />
 
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-[1400px] mx-auto">
-          {/* LCP Optimized: Native img instead of A11yImage for critical hero banner */}
-          <picture>
-            <source
-              type="image/webp"
-              srcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
-              sizes="100vw"
-            />
-            <img
-              src="/herobanner/cnxcar-828w.webp"
-              alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-              width="828"
-              height="280"
-              className="w-full h-auto object-contain"
-              loading="eager"
-              decoding="async"
-            />
-          </picture>
+          {/* LCP Optimized: Native responsive img for critical hero banner */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <A11yImage
+            src="/herobanner/cnxcar-828w.webp"
+            srcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
+            sizes="(max-width: 1400px) 100vw, 1400px"
+            alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
+            width={1400}
+            height={467}
+            className="w-full h-auto object-contain"
+            priority
+            decoding="async"
+            optimizeImage={false}
+          />
         </div>
       </header>
 
@@ -484,6 +614,13 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
               สอบถามรถยนต์
             </a>
             <Link
+              href="/used-cars-chiang-mai"
+              prefetch={false}
+              className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base border-2 border-orange-600 text-orange-700 hover:bg-orange-600 hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+              ซื้อ-ขาย/ฝากขายรถ เชียงใหม่-ลำพูน
+            </Link>
+            <Link
               href="/all-cars"
               prefetch={false}
               className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
@@ -509,7 +646,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                 <strong className="text-primary">ศูนย์รวมรถบ้านคุณภาพดี</strong>{' '}
                 ในตลาดรถยนต์มือสองภาคเหนือ{' '}
                 <strong className="text-gray-900">คัดสรรคุณภาพทุกคัน</strong> ตรวจสอบโดยผู้เชี่ยวชาญ{' '}
-                พร้อม<strong className="text-green-700">รับประกัน 1 ปีเต็ม</strong> เรามี
+                พร้อม <strong className="text-green-700">รับประกัน 1 ปีเต็ม</strong> เรามี
                 <strong className="text-accent-800"> ฟรีดาวน์ 0%</strong> อัตราดอกเบี้ยพิเศษ และ
                 <strong className="text-primary">
                   {' '}
@@ -614,7 +751,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
               </p>
               <a
                 href="tel:0940649018"
-                className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-xl transition-all duration-300 hover:shadow-lg text-base sm:text-lg"
+                className="flex w-fit mx-auto items-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-xl transition-all duration-300 hover:shadow-lg text-base sm:text-lg"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -773,153 +910,42 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             คัดสรรมาเพื่อคุณโดยเฉพาะ ผ่านการตรวจสอบอย่างละเอียด เพื่อให้คุณมั่นใจในทุกการเดินทาง
           </p>
         </div>
-        <section
-          aria-label="รถเข้าใหม่แนะนำวันนี้"
-          className="grid gap-2 md:gap-6 grid-cols-2 md:grid-cols-4 cv-auto"
-        >
-          {carsWithLive.length === 0 ? (
-            // Empty state when no cars available
-            <div className="col-span-full text-center py-12">
-              <div className="text-6xl mb-4">🚗</div>
-              <h3 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">
-                ขออภัย ยังไม่มีรถให้แสดง
-              </h3>
-              <p className="text-gray-500 font-prompt mb-4">
-                เรากำลังอัปเดตรถใหม่ ติดตามได้ที่ Facebook หรือ LINE
-              </p>
-              <a
-                href="https://lin.ee/8ugfzstD"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
-              >
-                <span>ติดต่อสอบถาม</span>
-              </a>
-            </div>
-          ) : (
-            carsWithLive.slice(0, 8).map(car => (
-              <article
-                key={car.id}
-                className="group bg-white rounded-xl md:rounded-3xl shadow-lg hover:shadow-orange-600/50 transition-all duration-300 overflow-hidden border-2 border-orange-600/40 hover:border-primary flex flex-col h-full relative font-prompt"
-                itemScope
-                itemType="https://schema.org/Product"
-              >
-                <Link
-                  href={
-                    safeGet(car, 'handle') && typeof car.handle === 'string' && car.handle.length
-                      ? `/car/${encodeURIComponent(car.handle)}`
-                      : '/all-cars'
-                  }
-                  prefetch={false}
-                  className="block focus:outline-none flex-1"
-                  onClick={() => {
-                    try {
-                      if (typeof window !== 'undefined') {
-                        // จดจำ URL ปัจจุบัน (รวมพารามิเตอร์) ก่อนเข้าหน้ารถ
-                        sessionStorage.setItem(
-                          'lastListUrl',
-                          window.location.pathname + window.location.search + window.location.hash
-                        );
-                      }
-                    } catch {
-                      // ignore
-                    }
-                  }}
-                  tabIndex={0}
-                >
-                  <figure className="relative w-full h-28 md:h-48 overflow-hidden bg-orange-600/10">
-                    <A11yImage
-                      src={safeGet(car, 'images.0.url') || '/cover.jpg'}
-                      alt={carAlt(car)}
-                      fallbackAlt={`${safeGet(car, 'title', 'รถมือสองคุณภาพดี')} - ราคา ${getPriceInfo(safeGet(car, 'price.amount')).display} บาท`}
-                      imageType="card"
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                      itemProp="image"
-                      loading="lazy"
-                      quality={75}
-                      sizes="(max-width: 414px) 180px, (max-width: 768px) 320px, (max-width: 1024px) 256px, 320px"
-                    />
-                    {/* Reserved Badge */}
-                    {(safeGet(car, 'status') === 'reserved' ||
-                      safeGet(car, 'tags', []).includes('reserved')) && (
-                      <div className="absolute top-2 right-2 bg-red-700 text-white px-3 py-1 rounded-full text-xs md:text-sm font-bold shadow-lg font-prompt">
-                        จองแล้ว
-                      </div>
-                    )}
-                    {safeGet(car, 'tags', []).includes('ใหม่') && (
-                      <span className="absolute top-4 right-4 bg-primary text-white px-3 py-1 rounded-full text-xs font-semibold shadow-md">
-                        ใหม่
-                      </span>
-                    )}
-                  </figure>
-                  <div className="p-2 md:p-4 flex flex-col">
-                    <h3
-                      className="font-extrabold text-sm md:text-lg text-gray-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2 font-prompt"
-                      itemProp="name"
-                    >
-                      {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
-                    </h3>
-                    <div className="flex items-center justify-between mb-2 md:mb-3">
-                      {(() => {
-                        const price = getPriceInfo(safeGet(car, 'price.amount'));
-                        return (
-                          <p
-                            className="text-lg md:text-xl font-bold text-orange-700 font-prompt"
-                            itemProp="offers"
-                            itemScope
-                            itemType="https://schema.org/Offer"
-                          >
-                            {price.numeric && <meta itemProp="price" content={price.numeric} />}
-                            <meta itemProp="priceCurrency" content="THB" />
-                            <span>฿{price.display}</span>
-                          </p>
-                        );
-                      })()}
-                    </div>
-                    <ul className="text-xs md:text-sm text-gray-800 mb-2 md:mb-3 space-y-1 font-prompt font-medium">
-                      {safeGet(car, 'tags', []).includes('ฟรีดาวน์') && (
-                        <li className="text-blue-600">✓ ฟรีดาวน์</li>
-                      )}
-                      {safeGet(car, 'tags', []).includes('ผ่อนถูก') && (
-                        <li className="text-blue-600">✓ ผ่อนถูก</li>
-                      )}
-                      <li className="text-gray-900">✓ รับประกัน 1 ปี</li>
-                    </ul>
-                  </div>
-                </Link>
-                {/* Action Button - ปุ่มดูรายละเอียดเท่านั้น */}
-                <div className="flex p-2 pt-0 md:p-4 md:pt-0">
-                  <Link
-                    href={
-                      typeof safeGet(car, 'handle') === 'string' &&
-                      safeGet(car, 'handle', '').length
-                        ? `/car/${encodeURIComponent(safeGet(car, 'handle'))}`
-                        : '/all-cars'
-                    }
-                    prefetch={false}
-                    className="w-full flex items-center justify-center bg-primary hover:bg-primary/90 text-white rounded-2xl min-h-11 px-4 py-2 text-sm font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 font-prompt"
-                    aria-label={`ดูรายละเอียด ${safeGet(car, 'title', 'รถยนต์')}`}
-                    onClick={() => {
-                      try {
-                        if (typeof window !== 'undefined') {
-                          sessionStorage.setItem(
-                            'lastListUrl',
-                            window.location.pathname + window.location.search + window.location.hash
-                          );
-                        }
-                      } catch {
-                        // ignore
-                      }
-                    }}
+        {/* Cars grid (standardized layout across pages) */}
+        <div className="-mx-6 md:-mx-8 lg:-mx-12">
+          <div className="max-w-7xl mx-auto px-3 md:px-6">
+            <section aria-label="รถเข้าใหม่แนะนำวันนี้">
+              {carsWithLive.length === 0 ? (
+                // Empty state when no cars available
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">🚗</div>
+                  <h3 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">
+                    ขออภัย ยังไม่มีรถให้แสดง
+                  </h3>
+                  <p className="text-gray-500 font-prompt mb-4">
+                    เรากำลังอัปเดตรถใหม่ ติดตามได้ที่ Facebook หรือ LINE
+                  </p>
+                  <a
+                    href="https://lin.ee/8ugfzstD"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
                   >
-                    ดูรายละเอียด
-                  </Link>
+                    <span>ติดต่อสอบถาม</span>
+                  </a>
                 </div>
-              </article>
-            ))
-          )}
-        </section>
+              ) : (
+                <div className="car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
+                  {carsWithLive.slice(0, 8).map((car, index) => {
+                    const handle = car?.handle;
+                    const extra = handle ? specByHandle?.[handle] : null;
+                    const mergedCar = mergeSpecs(car, extra);
+                    return <CarCard key={car.id} car={mergedCar} priority={index < 2} />;
+                  })}
+                </div>
+              )}
+            </section>
+          </div>
+        </div>
         <div className="text-center mt-12">
           <Link
             href="/all-cars"
@@ -938,81 +964,86 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           </Link>
         </div>
       </main>
-      <section className="bg-white py-6 sm:py-8 mt-6 rounded-2xl max-w-6xl mx-auto border border-gray-200 cv-auto">
-        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-primary font-prompt px-4 sm:px-6">
-          คำถามที่พบบ่อย
-        </h2>
-        <div className="space-y-3 sm:space-y-4 px-4 sm:px-6">
-          <details className="bg-gray-50 rounded-lg border border-gray-200 p-4 sm:p-5 hover:bg-gray-100 transition-colors group">
-            <summary className="font-bold text-black cursor-pointer text-base sm:text-lg font-prompt flex items-center justify-between group-hover:text-primary transition-colors">
-              ดาวน์ 0% จริงไหม?
-              <svg
-                className="w-4 h-4 sm:w-5 sm:h-5 transform group-open:rotate-180 transition-transform text-primary"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </summary>
-            <div className="text-gray-700 pt-3 sm:pt-4 text-sm sm:text-base font-prompt leading-relaxed">
-              <span className="font-semibold text-orange-700">จริง!</span>{' '}
-              ลูกค้าสามารถออกรถฟรีดาวน์ตามโปรโมชัน ตรวจสภาพครบถ้วน ตรวจสอบประวัติรถก่อนส่งมอบ
-            </div>
-          </details>
-          <details className="bg-gray-50 rounded-lg border border-gray-200 p-4 sm:p-5 hover:bg-gray-100 transition-colors group">
-            <summary className="font-bold text-black cursor-pointer text-base sm:text-lg font-prompt flex items-center justify-between group-hover:text-primary transition-colors">
-              ติดเครดิตบูโรออกได้ไหม?
-              <svg
-                className="w-4 h-4 sm:w-5 sm:h-5 transform group-open:rotate-180 transition-transform text-primary"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </summary>
-            <div className="text-gray-700 pt-3 sm:pt-4 text-sm sm:text-base font-prompt leading-relaxed">
-              <span className="font-semibold text-orange-700">ได้!</span>{' '}
-              แพลตฟอร์มออนไลน์ของเรามีไฟแนนซ์หลากหลายแบบ สอบถามข้อมูลได้ทาง LINE หรือโทร
-              <a href="tel:0940649018" className="text-primary font-bold hover:underline ml-1">
-                094-064-9018
-              </a>
-            </div>
-          </details>
-          <details className="bg-gray-50 rounded-lg border border-gray-200 p-4 sm:p-5 hover:bg-gray-100 transition-colors group">
-            <summary className="font-bold text-black cursor-pointer text-base sm:text-lg font-prompt flex items-center justify-between group-hover:text-primary transition-colors">
-              มีรับประกันไหม?
-              <svg
-                className="w-4 h-4 sm:w-5 sm:h-5 transform group-open:rotate-180 transition-transform text-primary"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </summary>
-            <div className="text-gray-700 pt-3 sm:pt-4 text-sm sm:text-base font-prompt leading-relaxed">
-              <span className="font-semibold text-orange-700">รับประกัน</span>เครื่องยนต์และเกียร์{' '}
-              <span className="font-bold text-primary">1 ปีเต็ม</span> ตรวจสภาพครบถ้วนก่อนส่งมอบ
-              พร้อมบริการหลังการขายครบครัน
-            </div>
-          </details>
+      <section className="bg-white py-8 sm:py-10 mt-6 rounded-3xl max-w-6xl mx-auto border border-gray-200 shadow-sm cv-auto">
+        <div className="px-4 sm:px-6">
+          <div className="mb-5 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
+              คำถามที่พบบ่อย
+            </h2>
+            <p className="mt-1 text-sm sm:text-base text-gray-700 font-prompt">
+              รวมคำตอบเรื่องดาวน์ 0% เครดิตบูโร และรับประกัน
+            </p>
+          </div>
+
+          <div className="space-y-3 sm:space-y-4">
+            <details className="group rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
+              <summary className="cursor-pointer list-none font-prompt flex items-start justify-between gap-4 p-4 sm:p-5 [&::-webkit-details-marker]:hidden">
+                <span className="font-bold text-gray-900 text-base sm:text-lg leading-snug">
+                  ดาวน์ 0% จริงไหม?
+                </span>
+                <span className="text-sm sm:text-base font-semibold text-primary whitespace-nowrap group-open:hidden">
+                  ดูคำตอบ
+                </span>
+                <span className="text-sm sm:text-base font-semibold text-primary whitespace-nowrap hidden group-open:inline">
+                  ซ่อนคำตอบ
+                </span>
+              </summary>
+
+              <div className="px-4 sm:px-5 pb-4 sm:pb-5">
+                <div className="rounded-xl bg-white border border-gray-200 p-3 sm:p-4 text-sm sm:text-base font-prompt leading-relaxed text-gray-800">
+                  <span className="font-semibold text-accent-800">จริง!</span>{' '}
+                  ลูกค้าสามารถออกรถฟรีดาวน์ตามโปรโมชัน ตรวจสภาพครบถ้วน และตรวจสอบประวัติรถก่อนส่งมอบ
+                </div>
+              </div>
+            </details>
+
+            <details className="group rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
+              <summary className="cursor-pointer list-none font-prompt flex items-start justify-between gap-4 p-4 sm:p-5 [&::-webkit-details-marker]:hidden">
+                <span className="font-bold text-gray-900 text-base sm:text-lg leading-snug">
+                  ติดเครดิตบูโรออกได้ไหม?
+                </span>
+                <span className="text-sm sm:text-base font-semibold text-primary whitespace-nowrap group-open:hidden">
+                  ดูคำตอบ
+                </span>
+                <span className="text-sm sm:text-base font-semibold text-primary whitespace-nowrap hidden group-open:inline">
+                  ซ่อนคำตอบ
+                </span>
+              </summary>
+
+              <div className="px-4 sm:px-5 pb-4 sm:pb-5">
+                <div className="rounded-xl bg-white border border-gray-200 p-3 sm:p-4 text-sm sm:text-base font-prompt leading-relaxed text-gray-800">
+                  <span className="font-semibold text-primary">ได้!</span>
+                  เรามีไฟแนนซ์หลากหลายแบบ แนะนำให้ทัก LINE หรือโทร{' '}
+                  <a href="tel:0940649018" className="text-primary font-bold hover:underline ml-1">
+                    094-064-9018
+                  </a>{' '}
+                  เพื่อประเมินเบื้องต้น
+                </div>
+              </div>
+            </details>
+
+            <details className="group rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
+              <summary className="cursor-pointer list-none font-prompt flex items-start justify-between gap-4 p-4 sm:p-5 [&::-webkit-details-marker]:hidden">
+                <span className="font-bold text-gray-900 text-base sm:text-lg leading-snug">
+                  มีรับประกันไหม?
+                </span>
+                <span className="text-sm sm:text-base font-semibold text-primary whitespace-nowrap group-open:hidden">
+                  ดูคำตอบ
+                </span>
+                <span className="text-sm sm:text-base font-semibold text-primary whitespace-nowrap hidden group-open:inline">
+                  ซ่อนคำตอบ
+                </span>
+              </summary>
+
+              <div className="px-4 sm:px-5 pb-4 sm:pb-5">
+                <div className="rounded-xl bg-white border border-gray-200 p-3 sm:p-4 text-sm sm:text-base font-prompt leading-relaxed text-gray-800">
+                  <span className="font-semibold text-accent-800">รับประกัน</span>
+                  เครื่องยนต์และเกียร์ <span className="font-bold text-primary">1 ปีเต็ม</span>{' '}
+                  ตรวจสภาพครบถ้วนก่อนส่งมอบ และมีบริการหลังการขาย
+                </div>
+              </div>
+            </details>
+          </div>
         </div>
       </section>
 
@@ -1021,147 +1052,157 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       {showFbReviews && <FacebookReviewsSection />}
 
       {/* Why Choose Us Section - 2025 Modern Design */}
-      <section className="bg-gradient-to-br from-primary/5 via-white to-accent/5 py-16 mt-8 rounded-3xl max-w-[1400px] mx-auto border border-primary/10 shadow-xl cv-auto-lg">
+      <section className="py-16 mt-8 rounded-3xl max-w-[1400px] mx-auto shadow-xl overflow-hidden bg-white cv-auto-lg">
         <div className="px-6 md:px-10">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-6">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+          {/* Header Banner (kn9) */}
+          <div className="relative rounded-3xl overflow-hidden mb-12 lg:mb-4">
+            <div className="relative h-[220px] sm:h-[260px] md:h-[280px] lg:h-[340px]">
+              <A11yImage
+                src="/images/kn9.webp"
+                alt=""
+                aria-hidden="true"
+                fill
+                loading="lazy"
+                fetchpriority="low"
+                optimizeImage={false}
+                sizes="(max-width: 640px) 100vw, (max-width: 1400px) 1400px, 1400px"
+                className="absolute inset-0 w-full h-full object-cover object-[50%_36%] sm:object-[50%_62%] lg:object-[50%_56%]"
+              />
+              <div className="absolute inset-0 bg-black/55 sm:bg-black/40" aria-hidden="true" />
+
+              {/* Floating text above image */}
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-start text-center px-4 sm:px-8 pt-10 sm:pt-12">
+                <h2 className="text-[19px] sm:text-3xl md:text-4xl font-bold text-white mb-4 font-prompt whitespace-nowrap sm:whitespace-normal leading-tight tracking-tight drop-shadow-sm">
+                  ลูกค้าทั่วประเทศไว้วางใจเพราะ?
+                </h2>
+                <p className="text-base sm:text-lg lg:text-base text-white/90 max-w-2xl lg:max-w-none mx-auto font-prompt leading-relaxed lg:leading-tight whitespace-normal lg:whitespace-nowrap drop-shadow-sm">
+                  <span className="text-white font-semibold">ประสบการณ์ 10 ปี+</span>{' '}
+                  <span className="font-semibold text-white">
+                    เฟซบุ๊กผู้ติดตาม 1 ล้านคนทั่วประเทศ
+                  </span>{' '}
+                  <span className="text-white font-semibold">ลูกค้า 90% เชื่อมั่น</span>{' '}
+                  <span
+                    className="inline-block font-extrabold text-white tracking-tight text-lg sm:text-xl lg:text-lg px-2 py-0.5 rounded-lg bg-black/45"
+                    style={{
+                      textShadow:
+                        '-2px 0 rgba(0,0,0,0.9), 2px 0 rgba(0,0,0,0.9), 0 -2px rgba(0,0,0,0.9), 0 2px rgba(0,0,0,0.9), -2px -2px rgba(0,0,0,0.9), 2px -2px rgba(0,0,0,0.9), -2px 2px rgba(0,0,0,0.9), 2px 2px rgba(0,0,0,0.9), 0 3px 18px rgba(0,0,0,0.45)',
+                    }}
+                  >
+                    ไม่ต้องมาดูรถ
+                  </span>
+                </p>
+                <div className="w-32 h-1 bg-white/70 mx-auto rounded-full mt-6"></div>
+              </div>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-prompt">
-              ลูกค้าทั่วประเทศไว้วางใจเพราะ?
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto font-prompt leading-relaxed">
-              <span className="text-primary font-semibold">ประสบการณ์ 10 ปี+</span> เฟซบุ๊กผู้ติดตาม
-              1 ล้านคนทั่วประเทศ{' '}
-              <span className="text-orange-700 font-semibold">ลูกค้า 90% เชื่อมั่น</span>{' '}
-              ไม่ต้องมาดูรถ
-            </p>
-            <div className="w-32 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mt-6"></div>
           </div>
 
           {/* Features Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {/* Feature 1 */}
-            <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-              <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-4 group-hover:bg-primary/20 transition-colors">
-                <svg
-                  className="w-6 h-6 text-primary"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                  />
-                </svg>
+            <div className="group bg-white rounded-2xl p-5 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="relative flex items-center justify-center w-24 h-24 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-3 sm:mb-4 lg:mb-5 rounded-2xl overflow-hidden">
+                <A11yImage
+                  src="/images/kn2.webp"
+                  alt="ไอคอนรถบ้านแท้"
+                  width={128}
+                  height={128}
+                  loading="lazy"
+                  fetchpriority="low"
+                  optimizeImage={false}
+                  className="w-full h-full max-w-none object-contain"
+                />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">รถบ้านแท้ 100%</h3>
-              <p className="text-gray-600 leading-relaxed font-prompt text-sm">
-                <span className="text-primary font-semibold">คัดเฉพาะรถมือเดียว</span>{' '}
-                จากเจ้าของโดยตรง ไม่มีรถน้ำท่วม ไม่มีรถอุบัติเหตุ
-                ตรวจเอกสารขอดูเล่มทะเบียนได้ทุกหน้า
+              <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
+                <span className="block text-primary font-semibold">คัดเฉพาะรถมือเดียว</span>
+                <span className="block">
+                  <span className="text-primary font-semibold">จากเจ้าของโดยตรง</span>{' '}
+                  <span className="text-accent-800 font-semibold">
+                    ไม่มีรถน้ำท่วม ไม่มีรถอุบัติเหตุ
+                  </span>{' '}
+                  <span className="text-primary">ขอดูเล่มทะเบียนได้ทุกหน้า</span>
+                </span>
               </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-accent/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-              <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-xl mb-4 group-hover:bg-accent/20 transition-colors">
-                <svg
-                  className="w-6 h-6 text-accent-800"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                  />
-                </svg>
+            <div className="group bg-white rounded-2xl p-5 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="relative flex items-center justify-center w-24 h-24 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-3 sm:mb-4 lg:mb-5 rounded-2xl overflow-hidden">
+                <A11yImage
+                  src="/images/kn1.webp"
+                  alt="ไอคอนฟรีดาวน์ 0%"
+                  width={128}
+                  height={128}
+                  loading="lazy"
+                  fetchpriority="low"
+                  optimizeImage={false}
+                  className="w-full h-full max-w-none object-contain"
+                />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">ฟรีดาวน์ 0%</h3>
-              <p className="text-gray-600 leading-relaxed font-prompt text-sm">
-                <span className="text-orange-700 font-semibold">ออกรถไม่ต้องวางเงินดาวน์</span>{' '}
-                ตามเงื่อนไขไฟแนนซ์{' '}
-                <span className="text-primary font-semibold">อนุมัติง่าย ผ่อนสบาย</span>
+              <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
+                <span className="block text-orange-700 font-semibold">
+                  ออกรถไม่ต้องวางเงินดาวน์
+                </span>
+                <span className="block">
+                  ตามเงื่อนไขไฟแนนซ์{' '}
+                  <span className="text-primary font-semibold">อนุมัติง่าย ผ่อนสบาย</span>
+                </span>
               </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-              <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-4 group-hover:bg-primary/20 transition-colors">
-                <svg
-                  className="w-6 h-6 text-primary"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                  />
-                </svg>
+            <div className="group bg-white rounded-2xl p-5 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="relative flex items-center justify-center w-24 h-24 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-3 sm:mb-4 lg:mb-5 rounded-2xl overflow-hidden">
+                <A11yImage
+                  src="/images/kn6.webp"
+                  alt="ไอคอนรับประกัน"
+                  width={128}
+                  height={128}
+                  loading="lazy"
+                  fetchpriority="low"
+                  optimizeImage={false}
+                  className="w-full h-full max-w-none object-contain"
+                />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">รับประกัน 1 ปี</h3>
-              <p className="text-gray-600 leading-relaxed font-prompt text-sm">
-                รับประกันเครื่องยนต์และเกียร์{' '}
-                <span className="text-primary font-semibold">1 ปีเต็ม ไม่จำกัดกิโลเมตร</span> พร้อม{' '}
-                <span className="text-orange-700 font-semibold">บริการหลังการขาย</span>
+              <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
+                <span className="block">รับประกันเครื่องยนต์และเกียร์</span>
+                <span className="block">
+                  <span className="text-primary font-semibold">1 ปีเต็ม ไม่จำกัดกิโลเมตร</span>{' '}
+                  พร้อม <span className="text-orange-700 font-semibold">บริการหลังการขาย</span>
+                </span>
               </p>
             </div>
 
             {/* Feature 4 */}
-            <div className="group bg-white rounded-2xl p-6 border border-gray-100 hover:border-accent/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-              <div className="flex items-center justify-center w-12 h-12 bg-accent/10 rounded-xl mb-4 group-hover:bg-accent/20 transition-colors">
-                <svg
-                  className="w-6 h-6 text-accent-800"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                  />
-                </svg>
+            <div className="group bg-white rounded-2xl p-5 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="relative flex items-center justify-center w-24 h-24 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-3 sm:mb-4 lg:mb-5 rounded-2xl overflow-hidden">
+                <A11yImage
+                  src="/images/kn5.webp"
+                  alt="ไอคอนส่งฟรี"
+                  width={128}
+                  height={128}
+                  loading="lazy"
+                  fetchpriority="low"
+                  optimizeImage={false}
+                  className="w-full h-full max-w-none object-contain"
+                />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-prompt">ส่งฟรีทั่วไทย</h3>
-              <p className="text-gray-600 leading-relaxed font-prompt text-sm">
-                <span className="text-orange-700 font-semibold">จัดส่งฟรีทุกจังหวัด</span>{' '}
-                พร้อมประกันการขนส่ง{' '}
-                <span className="text-primary font-semibold">ลูกค้า 90% เชื่อมั่น</span>{' '}
-                ไม่ต้องมาดูรถ
+              <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
+                <span className="block text-orange-700 font-semibold">จัดส่งฟรีทุกจังหวัด</span>
+                <span className="block">
+                  พร้อมประกันการขนส่ง{' '}
+                  <span className="text-primary font-semibold">ลูกค้า 90% เชื่อมั่น</span>
+                </span>
+                <span className="block">ไม่ต้องมาดูรถ</span>
               </p>
             </div>
           </div>
 
           {/* Car Brands Section - Glass Effect */}
-          <div className="relative rounded-3xl p-4 md:p-8 border border-white/20 shadow-2xl overflow-hidden bg-transparent">
+          <div className="relative rounded-3xl p-4 md:p-8 border border-gray-200 shadow-2xl overflow-hidden bg-white">
             {/* Animated Background Elements */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(26,35,126,0.03),transparent_50%)]"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.02),transparent_50%)]"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_80%,rgba(37,99,235,0.02),transparent_50%)]"></div>
+            <div className="hidden absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(26,35,126,0.03),transparent_50%)]"></div>
+            <div className="hidden absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.02),transparent_50%)]"></div>
+            <div className="hidden absolute inset-0 bg-[radial-gradient(circle_at_40%_80%,rgba(37,99,235,0.02),transparent_50%)]"></div>
 
             <div className="relative z-10 text-center mb-6 md:mb-8">
               <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 md:mb-4 font-prompt leading-tight">

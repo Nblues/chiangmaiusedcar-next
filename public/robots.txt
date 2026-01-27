@@ -39,6 +39,8 @@ User-agent: ChatGPT-User
 Allow: /
 Allow: /all-cars
 Allow: /car/*
+Allow: /used-cars-chiang-mai
+Allow: /used-cars-chiang-mai-brand/*
 Allow: /about
 Allow: /contact
 Disallow: /api*
@@ -53,6 +55,8 @@ User-agent: Claude-Web
 Allow: /
 Allow: /all-cars
 Allow: /car/*
+Allow: /used-cars-chiang-mai
+Allow: /used-cars-chiang-mai-brand/*
 Allow: /about
 Allow: /contact
 Disallow: /api*
@@ -67,6 +71,8 @@ User-agent: Bard
 Allow: /
 Allow: /all-cars
 Allow: /car/*
+Allow: /used-cars-chiang-mai
+Allow: /used-cars-chiang-mai-brand/*
 Allow: /about
 Allow: /contact
 Disallow: /api*

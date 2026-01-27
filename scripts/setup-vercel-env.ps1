@@ -13,11 +13,17 @@ Write-Host ""
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
 Set-Location $repoRoot
 
-# Check if Vercel CLI is installed
-$vercelInstalled = Get-Command vercel -ErrorAction SilentlyContinue
-if (-not $vercelInstalled) {
-    Write-Host "❌ Vercel CLI not found. Installing..." -ForegroundColor Red
-    pnpm add -g vercel
+$vercelWrapper = Join-Path $repoRoot 'vercel-cli.ps1'
+if (-not (Test-Path $vercelWrapper)) {
+    Write-Host "❌ Missing vercel-cli.ps1 at repo root." -ForegroundColor Red
+    exit 1
+}
+
+function Invoke-Vercel([string[]]$Args) {
+    & $vercelWrapper @Args
+    $code = $LASTEXITCODE
+    if ($code -eq $null) { $code = 0 }
+    return $code
 }
 
 Write-Host "📝 Adding Environment Variables to Vercel..." -ForegroundColor Cyan
@@ -25,7 +31,7 @@ Write-Host ""
 
 # Ensure project is linked
 try {
-    vercel link --yes | Out-Null
+    Invoke-Vercel @('link','--yes') | Out-Null
 } catch {
     Write-Host "❌ Failed to link Vercel project. Run 'vercel link' manually." -ForegroundColor Red
     throw
@@ -52,7 +58,7 @@ function Set-VercelEnv([string]$Name, [string]$Value, [string]$Environment, [swi
     }
     $args = @('env', 'add', $Name, $Environment, '--force')
     if ($Sensitive) { $args += '--sensitive' }
-    $Value | & vercel @args | Out-Null
+    $Value | & $vercelWrapper @args | Out-Null
     Write-Host "  ✅ $Name ($Environment)" -ForegroundColor Green
 }
 
@@ -72,7 +78,7 @@ Write-Host ""
 Write-Host "✅ Environment variables added successfully!" -ForegroundColor Green
 Write-Host ""
 Write-Host "🔄 Now deploying to apply changes..." -ForegroundColor Yellow
-vercel --prod
+Invoke-Vercel @('--prod') | Out-Null
 
 Write-Host ""
 Write-Host "✨ Done! Your admin login should now work." -ForegroundColor Green

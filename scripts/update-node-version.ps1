@@ -1,8 +1,15 @@
 param(
-    [string]$Token = "6d4ulahzz0A261sGrPSIIfP1",
-    [string]$ProjectId = "prj_4DRhhC01Inrz1KwksneD9fnzbHdE",
+    [string]$Token,
+    [string]$ProjectId,
     [string]$NodeVersion = "20.x"
 )
+
+$ErrorActionPreference = 'Stop'
+
+if (-not $Token) { $Token = $env:VERCEL_TOKEN }
+if (-not $Token) { Write-Host "[ERROR] Missing Vercel token. Provide -Token or set VERCEL_TOKEN." -ForegroundColor Red; exit 1 }
+if (-not $ProjectId) { $ProjectId = $env:VERCEL_PROJECT_ID }
+if (-not $ProjectId) { Write-Host "[ERROR] Missing project id. Provide -ProjectId or set VERCEL_PROJECT_ID." -ForegroundColor Red; exit 1 }
 
 $headers = @{
     "Authorization" = "Bearer $Token"
@@ -31,6 +38,5 @@ try {
     Write-Host "Push any commit to trigger rebuild with Node.js 20.x"
     
 } catch {
-    Write-Host "❌ Error: $_" -ForegroundColor Red
-    Write-Host $_.Exception.Message
+    Write-Host ("❌ Error: " + $_.Exception.Message) -ForegroundColor Red
 }

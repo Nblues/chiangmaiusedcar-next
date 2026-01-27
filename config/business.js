@@ -75,11 +75,25 @@ export const BUSINESS_INFO = {
     facebook: {
       main: 'https://www.facebook.com/KN2car',
       personal: 'https://www.facebook.com/nuengblues',
+      fcGroup: 'https://www.facebook.com/groups/kru.nueng.goodcar',
     },
     tiktok: 'https://www.tiktok.com/@krunueng_usedcar',
     youtube: 'https://youtube.com/@chiangraiusedcar',
     lemon8: 'https://www.lemon8-app.com/@kn.goodcar?region=th',
     line: process.env.NEXT_PUBLIC_LINE_URL || 'https://lin.ee/8ugfzstD',
+  },
+
+  // Social proof (ตัวเลขผู้ติดตาม) - ปรับได้จากจุดเดียว
+  socialFollowStats: {
+    facebook: {
+      main: { label: 'เพจหลัก', metricText: '1 ล้าน ติดตาม' },
+      personal: { label: 'ส่วนตัว', metricText: '1.6 แสน ติดตาม' },
+      fcGroup: { label: 'กลุ่ม FC', metricText: '7.3 หมื่น สมาชิก' },
+    },
+    tiktok: { label: 'วิดีโอสั้น', metricText: '1.6 แสน ติดตาม' },
+    youtube: { label: 'วิดีโอรีวิว', metricText: '4 หมื่น+ ติดตาม' },
+    lemon8: { label: 'ไลฟ์สไตล์', metricText: '26k+ ติดตาม' },
+    line: { label: 'แชทสด', metricText: 'สอบถามเลย' },
   },
 
   // SEO และ Meta
@@ -117,4 +131,49 @@ export const createMapsLink = () => {
 export const createPlaceLink = () => {
   const placeId = BUSINESS_INFO.placeId;
   return `https://www.google.com/maps/place/?q=place_id:${placeId}`;
+};
+
+// --- SEO 2026 Centralized Configuration ---
+
+export const MERCHANT_RETURN_POLICY = {
+  '@type': 'MerchantReturnPolicy',
+  applicableCountry: 'TH',
+  returnPolicyCategory: 'https://schema.org/MerchantReturnUnlimitedWindow',
+  merchantReturnDays: 7,
+  returnFees: 'http://schema.org/FreeReturn',
+};
+
+export const SHIPPING_DETAILS = {
+  '@type': 'OfferShippingDetails',
+  shippingDestination: {
+    '@type': 'DefinedRegion',
+    addressCountry: 'TH',
+  },
+  shippingRate: {
+    '@type': 'MonetaryAmount',
+    value: 0,
+    currency: 'THB',
+  },
+};
+
+export const SELLER_INFO = {
+  '@type': 'AutoDealer',
+  '@id': `${BUSINESS_INFO.baseUrl}/#organization`,
+  name: BUSINESS_INFO.name,
+  url: BUSINESS_INFO.baseUrl,
+  telephone: '+66940649018', // E.164 format
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: BUSINESS_INFO.address.street,
+    addressLocality: BUSINESS_INFO.address.province,
+    addressRegion: BUSINESS_INFO.address.province,
+    postalCode: BUSINESS_INFO.address.postalCode,
+    addressCountry: BUSINESS_INFO.address.country || 'TH',
+  },
+};
+
+export const COMMON_OFFER_EXTENSIONS = {
+  hasMerchantReturnPolicy: MERCHANT_RETURN_POLICY,
+  shippingDetails: SHIPPING_DETAILS,
+  seller: SELLER_INFO,
 };

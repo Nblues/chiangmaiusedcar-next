@@ -1,8 +1,15 @@
 param(
-  [string]$Token = "6d4ulahzz0A261sGrPSIIfP1",
-  [string]$ProjectId = "prj_4DRhhC01Inrz1KwksneD9fnzbHdE",
+  [string]$Token,
+  [string]$ProjectId,
   [int]$Limit = 1
 )
+
+$ErrorActionPreference = 'Stop'
+
+if (-not $Token) { $Token = $env:VERCEL_TOKEN }
+if (-not $Token) { Write-Host "[ERROR] Missing Vercel token. Provide -Token or set VERCEL_TOKEN." -ForegroundColor Red; exit 1 }
+if (-not $ProjectId) { $ProjectId = $env:VERCEL_PROJECT_ID }
+if (-not $ProjectId) { Write-Host "[ERROR] Missing project id. Provide -ProjectId or set VERCEL_PROJECT_ID." -ForegroundColor Red; exit 1 }
 
 $headers = @{ Authorization = "Bearer $Token" }
 
@@ -25,7 +32,7 @@ try {
     }
   }
 } catch {
-  Write-Host "Failed to get events: $_" -ForegroundColor Red
+  Write-Host ("Failed to get events: " + $_.Exception.Message) -ForegroundColor Red
 }
 
 Write-Host "`n=== Attempt function logs (best-effort) ===" -ForegroundColor Cyan
@@ -44,5 +51,5 @@ try {
     Write-Host "No telemetry logs returned or endpoint unsupported for this project" -ForegroundColor DarkYellow
   }
 } catch {
-  Write-Host "Failed to get telemetry logs: $_" -ForegroundColor Red
+  Write-Host ("Failed to get telemetry logs: " + $_.Exception.Message) -ForegroundColor Red
 }
