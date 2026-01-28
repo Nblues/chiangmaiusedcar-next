@@ -16,49 +16,9 @@ export function middleware(request) {
     return NextResponse.next();
   }
 
-  const response = NextResponse.next();
-
-  // Homepage: disable browser cache, keep CDN cache for fast TTFB
-  if (request.nextUrl.pathname === '/') {
-    response.headers.set(
-      'Cache-Control',
-      'public, max-age=0, must-revalidate, s-maxage=300, stale-while-revalidate=1800'
-    );
-    response.headers.set('CDN-Cache-Control', 'public, s-maxage=300, stale-while-revalidate=1800');
-    response.headers.set('Vercel-CDN-Cache-Control', 's-maxage=300, stale-while-revalidate=1800');
-  }
-
-  // Car detail pages: disable browser cache, keep longer CDN cache
-  if (request.nextUrl.pathname.startsWith('/car/')) {
-    response.headers.set(
-      'Cache-Control',
-      'public, max-age=0, must-revalidate, s-maxage=3600, stale-while-revalidate=86400'
-    );
-    response.headers.set(
-      'CDN-Cache-Control',
-      'public, s-maxage=3600, stale-while-revalidate=86400'
-    );
-    response.headers.set('Vercel-CDN-Cache-Control', 's-maxage=3600, stale-while-revalidate=86400');
-  }
-
-  // Listing and static pages: disable browser cache, keep CDN cache
-  if (
-    request.nextUrl.pathname === '/all-cars' ||
-    request.nextUrl.pathname === '/promotion' ||
-    request.nextUrl.pathname === '/about'
-  ) {
-    response.headers.set(
-      'Cache-Control',
-      'public, max-age=0, must-revalidate, s-maxage=1800, stale-while-revalidate=86400'
-    );
-    response.headers.set(
-      'CDN-Cache-Control',
-      'public, s-maxage=1800, stale-while-revalidate=86400'
-    );
-    response.headers.set('Vercel-CDN-Cache-Control', 's-maxage=1800, stale-while-revalidate=86400');
-  }
-
-  return response;
+  // Do not override HTML caching here; let Next/Vercel determine caching semantics
+  // based on SSR/SSG/ISR and response headers configured in next.config.js.
+  return NextResponse.next();
 }
 
 export const config = {

@@ -14,6 +14,7 @@ interface A11yImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   onError?: () => void;
   imageType?: 'hero' | 'card' | 'thumbnail' | 'gallery' | 'default';
   optimizeImage?: boolean; // ⭐ เปิด/ปิด optimization (default: true)
+  aspectRatio?: string; // ⭐ ป้องกัน CLS ด้วย aspect-ratio (เช่น "16/9", "4/3")
 }
 
 const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
@@ -31,6 +32,7 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
       loading,
       imageType = 'default',
       optimizeImage = true, // ⭐ เปิด optimization ตามค่า default
+      aspectRatio, // ⭐ ป้องกัน CLS
       src,
       srcSet: customSrcSet, // ยอมรับ srcSet แบบกำหนดเอง
       ...props
@@ -128,7 +130,12 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
           height: '100%',
           objectFit: 'cover' as const,
         }
-      : style;
+      : aspectRatio
+        ? {
+            ...style,
+            aspectRatio: aspectRatio,
+          }
+        : style;
 
     const finalClassName = fill ? `${className || ''} absolute inset-0`.trim() : className;
 

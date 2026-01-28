@@ -52,6 +52,7 @@ export default function Promotion() {
             srcSet="/herobanner/cnxcontact-480w.webp 480w, /herobanner/cnxcontact-640w.webp 640w, /herobanner/cnxcontact-828w.webp 828w, /herobanner/cnxcontact-1024w.webp 1024w, /herobanner/cnxcontact-1400w.webp 1400w"
             alt="โปรโมชั่นพิเศษ รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย ฟรีดาวน์ 0% รถ ECO Car"
             fill
+            aspectRatio="16/9"
             className="object-cover object-center"
             priority
             quality={85}

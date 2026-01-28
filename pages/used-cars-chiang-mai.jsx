@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -24,9 +24,9 @@ const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
 
 const SITE = 'https://www.chiangmaiusedcar.com';
 
-// Performance: this page is primarily informational/SEO. Disable Next.js runtime JS to
-// avoid React hydration cost on mobile (improves LCP significantly in lab + real devices).
-export const config = { unstable_runtimeJS: false };
+// NOTE: This page must keep runtime JS enabled because the global Navbar/Footer are
+// client-only (dynamic + ssr:false). Disabling runtime JS makes the mobile menu
+// disappear after a full refresh.
 
 function getPriceInfo(amount) {
   try {
@@ -168,10 +168,16 @@ export async function getStaticProps() {
 
   // Keep lightweight: we only need a featured set for the landing page.
   let carsRaw = [];
+  let shopifyError = null;
   try {
     carsRaw = await getHomepageCars(12);
-  } catch {
+  } catch (error) {
     carsRaw = [];
+    if (process.env.NODE_ENV === 'development') {
+      shopifyError = error?.message || 'unknown error';
+      // eslint-disable-next-line no-console
+      console.error('getStaticProps(/used-cars-chiang-mai) error:', error);
+    }
   }
 
   let cars = Array.isArray(carsRaw) ? carsRaw : [];
@@ -222,15 +228,120 @@ export async function getStaticProps() {
       cars,
       homeOgImage,
       structuredData,
+      shopifyError,
     },
     // Refresh every 5 minutes
     revalidate: 300,
   };
 }
 
-export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData }) {
+export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, shopifyError }) {
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
   const featuredCars = useMemo(() => safeCars.slice(0, 8), [safeCars]);
+
+  const [specByHandle, setSpecByHandle] = useState({});
+  const requestedSpecHandlesRef = useRef(new Set());
+
+  const mergeSpecs = (car, extra) => {
+    const next = { ...car };
+    const has = v => v != null && String(v).trim() !== '';
+
+    const carFuel = car?.fuelType || car?.fuel_type || car?.['fuel-type'];
+    const extraFuel = extra?.fuelType || extra?.fuel_type || extra?.['fuel-type'];
+
+    if (has(carFuel)) {
+      if (!has(next.fuelType)) next.fuelType = carFuel;
+      if (!has(next.fuel_type)) next.fuel_type = carFuel;
+    }
+
+    if (!extra) return next;
+
+    if (!has(next.year) && has(extra.year)) next.year = extra.year;
+    if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
+    if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
+    if (!has(carFuel) && has(extraFuel)) {
+      next.fuelType = extra.fuelType || extraFuel;
+      next.fuel_type = extra.fuel_type || extraFuel;
+    }
+    if (!has(next.installment) && has(extra.installment)) next.installment = extra.installment;
+    if (!has(next.category) && has(extra.category)) next.category = extra.category;
+    if (!has(next.body_type) && has(extra.body_type)) next.body_type = extra.body_type;
+
+    return next;
+  };
+
+  // Enrich missing specs for featured cards (helps when metafields are not exposed to Storefront API).
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const list = Array.isArray(featuredCars) ? featuredCars : [];
+    if (list.length === 0) return;
+
+    const needs = [];
+    for (const car of list) {
+      const handle = car?.handle;
+      if (!handle) continue;
+      if (requestedSpecHandlesRef.current.has(handle)) continue;
+
+      const extra = specByHandle?.[handle];
+      const merged = mergeSpecs(car, extra);
+
+      const hasYear = merged?.year != null && String(merged.year).trim() !== '';
+      const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
+      const hasTransmission =
+        merged?.transmission != null && String(merged.transmission).trim() !== '';
+      const fuel = merged?.fuelType || merged?.fuel_type;
+      const hasFuel = fuel != null && String(fuel).trim() !== '';
+
+      if (!(hasYear && hasMileage && hasTransmission && hasFuel)) {
+        needs.push(handle);
+      }
+    }
+
+    if (needs.length === 0) return;
+    needs.forEach(h => requestedSpecHandlesRef.current.add(h));
+
+    const fetchSpecs = async () => {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        const params = new URLSearchParams({ handles: needs.join(',') });
+        const resp = await fetch(`/api/public/car-specs?${params.toString()}`, {
+          cache: 'no-store',
+          credentials: 'same-origin',
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (!resp.ok) {
+          needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+          return;
+        }
+        const data = await resp.json();
+        if (!data?.ok || !data?.specs) {
+          needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+          return;
+        }
+
+        const returned = new Set(Object.keys(data.specs || {}));
+        for (const h of needs) {
+          if (!returned.has(h)) requestedSpecHandlesRef.current.delete(h);
+        }
+
+        setSpecByHandle(prev => ({
+          ...(prev || {}),
+          ...data.specs,
+        }));
+      } catch (error) {
+        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+        if (process.env.NODE_ENV === 'development') {
+          // eslint-disable-next-line no-console
+          console.warn('Failed to fetch car specs:', error?.message);
+        }
+      }
+    };
+
+    fetchSpecs().catch(() => {});
+  }, [featuredCars, specByHandle]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -244,7 +355,6 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData })
           imageSrcSet="/herobanner/outdoorbanner-480w.webp 480w, /herobanner/outdoorbanner-640w.webp 640w, /herobanner/outdoorbanner-828w.webp 828w, /herobanner/outdoorbanner-1024w.webp 1024w, /herobanner/outdoorbanner-1280w.webp 1280w, /herobanner/outdoorbanner-1400w.webp 1400w"
           imageSizes="(max-width: 1024px) 100vw, 1400px"
           media="(max-width: 1024px)"
-          fetchPriority="high"
         />
       </Head>
       <SEO
@@ -270,24 +380,46 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData })
         structuredData={structuredData}
       />
 
+      {process.env.NODE_ENV === 'development' && shopifyError && featuredCars.length === 0 && (
+        <section
+          className="max-w-[1400px] mx-auto px-3 sm:px-4 mt-3"
+          aria-label="Dev Shopify error"
+        >
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-4 font-prompt">
+            <div className="font-bold text-red-900">Dev: ดึงรถแนะนำจาก Shopify ไม่สำเร็จ</div>
+            <div className="mt-1 text-sm text-red-800">
+              ตรวจสอบไฟล์ <span className="font-semibold">.env.local</span> ว่ามี{' '}
+              <span className="font-semibold">SHOPIFY_DOMAIN</span> และ{' '}
+              <span className="font-semibold">SHOPIFY_STOREFRONT_TOKEN</span> แล้วรันใหม่ด้วย{' '}
+              <span className="font-semibold">pnpm dev</span>
+            </div>
+            <div className="mt-1 text-xs text-red-700/80">รายละเอียด: {shopifyError}</div>
+          </div>
+        </section>
+      )}
+
       <header className="relative overflow-hidden bg-white">
         <div className="max-w-[1400px] mx-auto px-2 sm:px-4 py-3 sm:py-4">
           <div className="relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-200">
-            <div className="relative w-full" style={{ aspectRatio: '1920 / 800' }}>
+            {/* Make hero taller on small screens so overlay + CTAs never clip inside the rounded container */}
+            <div className="relative w-full aspect-[16/10] xs:aspect-[16/9] sm:aspect-[1920/800]">
               <A11yImage
                 src="/herobanner/outdoorbanner-1024w.webp"
                 srcSet="/herobanner/outdoorbanner-480w.webp 480w, /herobanner/outdoorbanner-640w.webp 640w, /herobanner/outdoorbanner-828w.webp 828w, /herobanner/outdoorbanner-1024w.webp 1024w, /herobanner/outdoorbanner-1280w.webp 1280w, /herobanner/outdoorbanner-1400w.webp 1400w"
                 sizes="(max-width: 1400px) 100vw, 1400px"
                 alt="รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย"
+                aspectRatio="1920/800"
                 priority
                 decoding="async"
                 imageType="hero"
                 optimizeImage={false}
-                className="block w-full h-full object-contain object-center"
+                className="block w-full h-full object-contain object-top"
               />
             </div>
 
-            <div className="absolute inset-0 flex items-end justify-center p-3 xs:p-4 sm:items-center sm:justify-center sm:p-6">
+            {/* On mobile: show CTA box below the image so nothing blocks the hero.
+                On sm+: keep it overlayed like the original design. */}
+            <div className="relative flex justify-center p-3 xs:p-4 sm:absolute sm:inset-0 sm:items-center sm:justify-center sm:p-6">
               <div className="w-full max-w-6xl mx-auto">
                 <div className="mx-auto w-full max-w-[22rem] xs:max-w-sm sm:w-auto sm:max-w-2xl rounded-2xl bg-black/65 sm:bg-black/70 sm:backdrop-blur-md ring-1 ring-white/30 px-3 xs:px-4 sm:px-6 py-3 xs:py-3.5 sm:py-5 shadow-2xl">
                   <h1
@@ -333,7 +465,7 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData })
 
       <Breadcrumb />
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-8">
         <nav
           aria-label="ไปยังส่วนต่างๆ ของหน้า"
           className="mb-6 rounded-2xl border border-gray-200 bg-white p-4 sm:p-5"
@@ -525,25 +657,28 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData })
           </div>
         </section>
 
-        <section
-          id="featured-cars"
-          className="mt-8 bg-white rounded-2xl border border-gray-200 p-5 sm:p-6"
-        >
-          <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
-            รถลงประกาศล่าสุด (แนะนำ)
-          </h2>
-          <p className="text-gray-700 mt-2 font-prompt">
-            คลิกที่คันที่สนใจเพื่อดูรูป/รายละเอียด/ราคา และสถานะรถ
-          </p>
+        <section id="featured-cars" className="mt-8">
+          {/* Keep the title in a card, but remove the big outer frame around the car grid */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
+              รถลงประกาศล่าสุด (แนะนำ)
+            </h2>
+            <p className="text-gray-700 mt-2 font-prompt">
+              คลิกที่คันที่สนใจเพื่อดูรูป/รายละเอียด/ราคา และสถานะรถ
+            </p>
+          </div>
 
           {safeCars.length > 0 ? (
-            <div className="mt-6 car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
-              {featuredCars.map((car, index) => (
-                <CarCard key={car?.id || index} car={car} priority={index < 2} />
-              ))}
+            <div className="mt-4 car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
+              {featuredCars.map((car, index) => {
+                const handle = car?.handle;
+                const extra = handle ? specByHandle?.[handle] : null;
+                const mergedCar = mergeSpecs(car, extra);
+                return <CarCard key={car?.id || index} car={mergedCar} priority={index < 2} />;
+              })}
             </div>
           ) : (
-            <div className="mt-5 rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700 font-prompt">
+            <div className="mt-4 rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700 font-prompt">
               ตอนนี้ยังไม่มีรถแนะนำให้แสดง (อาจเกิดจากการเชื่อมต่อข้อมูลชั่วคราว) — ไปที่{' '}
               <Link
                 href="/all-cars"

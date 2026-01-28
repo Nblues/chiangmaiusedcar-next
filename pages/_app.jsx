@@ -13,6 +13,7 @@ const prompt = Prompt({
   weight: ['400', '500', '600', '700', '800'],
   display: 'optional',
   adjustFontFallback: true,
+  fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
   preload: true,
   variable: '--font-prompt',
 });

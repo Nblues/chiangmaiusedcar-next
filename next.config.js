@@ -207,6 +207,53 @@ const nextConfig = {
       const raw = process.env.SITE_URL || 'https://www.chiangmaiusedcar.com';
       return typeof raw === 'string' ? raw.replace(/\r/g, '').replace(/\n/g, '').trim() : raw;
     })();
+
+    const baseSiteUrl = (() => {
+      const s = typeof cleanSiteUrl === 'string' ? cleanSiteUrl : 'https://www.chiangmaiusedcar.com';
+      return s.replace(/\/+$/g, '');
+    })();
+    const cspReportPath = '/api/csp-report';
+    const cspReportUrl = `${baseSiteUrl}${cspReportPath}`;
+    const reportGroup = 'csp';
+    const reportToValue = JSON.stringify({
+      group: reportGroup,
+      max_age: 10886400, // 18 weeks
+      endpoints: [{ url: cspReportUrl }],
+    });
+    const cspValue = [
+      "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https:",
+      "script-src 'self' 'unsafe-eval' 'unsafe-inline' *.googletagmanager.com *.google-analytics.com *.vercel-analytics.com va.vercel-scripts.com vercel.live *.vercel.live *.emailjs.com *.cloudflare.com challenges.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net *.shopify.com connect.facebook.net",
+      "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net *.cloudflare.com *.facebook.com *.shopify.com",
+      "font-src 'self' fonts.gstatic.com cdn.jsdelivr.net data:",
+      "img-src 'self' data: blob: *.shopify.com *.myshopify.com cdn.shopify.com files.myshopify.com images.unsplash.com *.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net",
+      "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com vercel.live *.vercel.live api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com *.googleapis.com *.gstatic.com *.cloudflare.com *.facebook.com *.facebook.net connect.facebook.net",
+      "frame-src 'self' *.facebook.com *.line.me *.google.com maps.google.com *.cloudflare.com challenges.cloudflare.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self' *.cloudflare.com *.facebook.com",
+      "frame-ancestors 'self' *.facebook.com",
+      "worker-src 'self' blob:",
+    ].join('; ');
+
+    // Report-Only: test a stricter policy safely (no user impact).
+    // Start by removing 'unsafe-eval' and collecting real-world violations.
+    const cspReportOnlyValue = [
+      "default-src 'self' 'unsafe-inline' data: https:",
+      "script-src 'self' 'unsafe-inline' *.googletagmanager.com *.google-analytics.com *.vercel-analytics.com va.vercel-scripts.com vercel.live *.vercel.live *.emailjs.com *.cloudflare.com challenges.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net *.shopify.com connect.facebook.net",
+      "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net *.cloudflare.com *.facebook.com *.shopify.com",
+      "font-src 'self' fonts.gstatic.com cdn.jsdelivr.net data:",
+      "img-src 'self' data: blob: *.shopify.com *.myshopify.com cdn.shopify.com files.myshopify.com images.unsplash.com *.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net",
+      "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com vercel.live *.vercel.live api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com *.googleapis.com *.gstatic.com *.cloudflare.com *.facebook.com *.facebook.net connect.facebook.net",
+      "frame-src 'self' *.facebook.com *.line.me *.google.com maps.google.com *.cloudflare.com challenges.cloudflare.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self' *.cloudflare.com *.facebook.com",
+      "frame-ancestors 'self' *.facebook.com",
+      "worker-src 'self' blob:",
+      `report-uri ${cspReportPath}`,
+      `report-to ${reportGroup}`,
+    ].join('; ');
+
     const securityHeaders = [
       {
         key: 'X-DNS-Prefetch-Control',
@@ -261,20 +308,20 @@ const nextConfig = {
       },
       {
         key: 'Content-Security-Policy',
-        value: [
-          "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https:",
-          "script-src 'self' 'unsafe-eval' 'unsafe-inline' *.googletagmanager.com *.google-analytics.com *.vercel-analytics.com va.vercel-scripts.com vercel.live *.vercel.live *.emailjs.com *.cloudflare.com challenges.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net *.shopify.com connect.facebook.net",
-          "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net *.cloudflare.com *.facebook.com *.shopify.com",
-          "font-src 'self' fonts.gstatic.com cdn.jsdelivr.net data:",
-          "img-src 'self' data: blob: *.shopify.com *.myshopify.com cdn.shopify.com files.myshopify.com images.unsplash.com *.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net",
-          "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com vercel.live *.vercel.live api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com *.googleapis.com *.gstatic.com *.cloudflare.com *.facebook.com *.facebook.net connect.facebook.net",
-          "frame-src 'self' *.facebook.com *.line.me *.google.com maps.google.com *.cloudflare.com challenges.cloudflare.com",
-          "object-src 'none'",
-          "base-uri 'self'",
-          "form-action 'self' *.cloudflare.com *.facebook.com",
-          "frame-ancestors 'self' *.facebook.com",
-          "worker-src 'self' blob:",
-        ].join('; '),
+        value: cspValue,
+      },
+      // CSP reporting (safe hardening path)
+      {
+        key: 'Reporting-Endpoints',
+        value: `${reportGroup}="${cspReportUrl}"`,
+      },
+      {
+        key: 'Report-To',
+        value: reportToValue,
+      },
+      {
+        key: 'Content-Security-Policy-Report-Only',
+        value: cspReportOnlyValue,
       },
     ];
 
@@ -375,64 +422,122 @@ const nextConfig = {
           },
         ],
       },
-      // HTML pages - Aggressive edge caching for better TTFB
+      // API routes - cache policy by sensitivity (2026 best practice)
+      // 1) Sensitive/admin/webhooks/revalidate: never cache
       {
-        source: '/((?!api|_next/static|sw\\.js|sw-dev\\.js).*)',
+        source: '/api/admin/(.*)',
         headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=300, s-maxage=600, stale-while-revalidate=86400',
-          },
-          {
-            key: 'CDN-Cache-Control',
-            value: 'public, max-age=600, stale-while-revalidate=86400',
-          },
-          {
-            key: 'Vercel-CDN-Cache-Control',
-            value: 'max-age=600, stale-while-revalidate=86400',
-          },
-          {
-            key: 'Vary',
-            value: 'Accept-Encoding, Accept',
-          },
-        ],
-      },
-      // API routes - no caching + CORS
-      {
-        source: '/api/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'no-cache, no-store, must-revalidate',
-          },
-          {
-            key: 'Pragma',
-            value: 'no-cache',
-          },
-          {
-            key: 'Expires',
-            value: '0',
-          },
+          { key: 'Cache-Control', value: 'no-store' },
+          { key: 'Pragma', value: 'no-cache' },
+          { key: 'Expires', value: '0' },
           {
             key: 'Access-Control-Allow-Origin',
             value: process.env.NODE_ENV === 'production' ? cleanSiteUrl : 'http://localhost:3000',
           },
-          {
-            key: 'Access-Control-Allow-Methods',
-            value: 'GET, POST, PUT, DELETE, OPTIONS',
-          },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, DELETE, OPTIONS' },
           {
             key: 'Access-Control-Allow-Headers',
             value: 'Content-Type, Authorization, X-CSRF-Token, X-Requested-With',
           },
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Max-Age', value: '86400' },
+        ],
+      },
+      {
+        source: '/api/webhooks/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store' },
+          { key: 'Pragma', value: 'no-cache' },
+          { key: 'Expires', value: '0' },
+        ],
+      },
+      {
+        source: '/api/revalidate',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store' },
+          { key: 'Pragma', value: 'no-cache' },
+          { key: 'Expires', value: '0' },
+        ],
+      },
+      {
+        source: '/api/og-preview',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store' },
+          { key: 'Pragma', value: 'no-cache' },
+          { key: 'Expires', value: '0' },
+        ],
+      },
+
+      // 2) Public GET endpoints: edge-cache with SWR (fast + resilient)
+      {
+        source: '/api/public/car-specs',
+        headers: [
           {
-            key: 'Access-Control-Allow-Credentials',
-            value: 'true',
+            key: 'Cache-Control',
+            value:
+              'public, max-age=0, s-maxage=600, stale-while-revalidate=86400, stale-if-error=86400',
           },
+          { key: 'Vary', value: 'Accept-Encoding' },
           {
-            key: 'Access-Control-Max-Age',
-            value: '86400',
+            key: 'Access-Control-Allow-Origin',
+            value: process.env.NODE_ENV === 'production' ? cleanSiteUrl : 'http://localhost:3000',
           },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, X-Requested-With' },
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Max-Age', value: '86400' },
+        ],
+      },
+      {
+        source: '/api/public/car-status',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value:
+              'public, max-age=0, s-maxage=600, stale-while-revalidate=86400, stale-if-error=86400',
+          },
+          { key: 'Vary', value: 'Accept-Encoding' },
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: process.env.NODE_ENV === 'production' ? cleanSiteUrl : 'http://localhost:3000',
+          },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, X-Requested-With' },
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Max-Age', value: '86400' },
+        ],
+      },
+
+      // 3) OG image endpoint: cacheable (usually versioned via query)
+      {
+        source: '/api/og',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800',
+          },
+          { key: 'Vary', value: 'Accept-Encoding' },
+        ],
+      },
+
+      // 4) Default API fallback: no-cache + CORS (safe)
+      {
+        source: '/api/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+          { key: 'Pragma', value: 'no-cache' },
+          { key: 'Expires', value: '0' },
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: process.env.NODE_ENV === 'production' ? cleanSiteUrl : 'http://localhost:3000',
+          },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, DELETE, OPTIONS' },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type, Authorization, X-CSRF-Token, X-Requested-With',
+          },
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
+          { key: 'Access-Control-Max-Age', value: '86400' },
         ],
       },
     ];
@@ -510,7 +615,6 @@ const nextConfig = {
 
   // Production optimization
   productionBrowserSourceMaps: false,
-  distDir: '.next',
 
   // Optimize for Vercel deployment
   trailingSlash: false,

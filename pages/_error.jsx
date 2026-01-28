@@ -1,18 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
-import SEO from '../components/SEO';
 
 function Error({ statusCode }) {
   return (
     <>
-      <SEO
-        title={`ข้อผิดพลาด ${statusCode || 'ไม่ทราบสาเหตุ'} - ครูหนึ่งรถสวย`}
-        description={`เกิดข้อผิดพลาด ${statusCode === 404 ? 'ไม่พบหน้าที่ต้องการ' : 'จากระบบ'} กรุณาลองใหม่อีกครั้ง หรือกลับไปหน้าแรก`}
-        url="/error"
-        image="/herobanner/error-page.webp"
-      />
       <Head>
+        <title>{`ข้อผิดพลาด ${statusCode || 'ไม่ทราบสาเหตุ'} - ครูหนึ่งรถสวย`}</title>
+        <meta
+          name="description"
+          content={`เกิดข้อผิดพลาด ${statusCode === 404 ? 'ไม่พบหน้าที่ต้องการ' : 'จากระบบ'} กรุณาลองใหม่อีกครั้ง หรือกลับไปหน้าแรก`}
+        />
         <meta name="robots" content="noindex, nofollow" />
       </Head>
       <div className="min-h-screen flex items-center justify-center bg-gray-50">

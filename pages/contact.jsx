@@ -116,6 +116,7 @@ export default function Contact() {
             srcSet="/herobanner/contact-480w.webp 480w, /herobanner/contact-640w.webp 640w, /herobanner/contact-828w.webp 828w, /herobanner/contact-1024w.webp 1024w, /herobanner/contact-1400w.webp 1400w"
             alt="ติดต่อเรา - ครูหนึ่งรถสวย"
             fill
+            aspectRatio="16/9"
             className="object-cover object-center"
             priority
             quality={85}

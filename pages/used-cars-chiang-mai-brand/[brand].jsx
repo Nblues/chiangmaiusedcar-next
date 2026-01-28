@@ -404,7 +404,7 @@ export default function UsedCarsChiangMaiBrand({
       />
 
       <header className="bg-gradient-to-r from-orange-100 to-blue-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-10">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-10">
           <h1 className="text-3xl md:text-4xl font-extrabold text-primary font-prompt">
             รถมือสอง {brandInfo.label} เชียงใหม่
           </h1>
@@ -429,8 +429,8 @@ export default function UsedCarsChiangMaiBrand({
 
       <Breadcrumb />
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-8">
-        <section className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-8">
+        <section className="mb-4">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
             <div>
               <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
@@ -458,26 +458,28 @@ export default function UsedCarsChiangMaiBrand({
               </Link>
             </div>
           </div>
+        </section>
 
-          {safeCars.length === 0 ? (
-            <div className="mt-6 rounded-xl border border-gray-200 bg-gray-50 p-5">
-              <div className="font-semibold text-gray-900 font-prompt">
-                ยังไม่มีรถยี่ห้อนี้ในสต็อกตอนนี้
-              </div>
-              <div className="mt-2 text-sm text-gray-700 font-prompt">
-                ลองดูหน้า “รถทั้งหมด” หรือหน้า “รถมือสองเชียงใหม่” เพื่อดูรถที่มีในสต็อกล่าสุด
-              </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Link href="/all-cars" prefetch={false} className="btn-primary">
-                  ดูรถทั้งหมด
-                </Link>
-                <Link href="/used-cars-chiang-mai" prefetch={false} className="btn-secondary">
-                  รถมือสองเชียงใหม่
-                </Link>
-              </div>
+        {safeCars.length === 0 ? (
+          <section className="mt-4 rounded-2xl border border-gray-200 bg-gray-50 p-5">
+            <div className="font-semibold text-gray-900 font-prompt">
+              ยังไม่มีรถยี่ห้อนี้ในสต็อกตอนนี้
             </div>
-          ) : (
-            <div className="mt-6 car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
+            <div className="mt-2 text-sm text-gray-700 font-prompt">
+              ลองดูหน้า “รถทั้งหมด” หรือหน้า “รถมือสองเชียงใหม่” เพื่อดูรถที่มีในสต็อกล่าสุด
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <Link href="/all-cars" prefetch={false} className="btn-primary">
+                ดูรถทั้งหมด
+              </Link>
+              <Link href="/used-cars-chiang-mai" prefetch={false} className="btn-secondary">
+                รถมือสองเชียงใหม่
+              </Link>
+            </div>
+          </section>
+        ) : (
+          <section className="mt-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
               {safeCars.map((car, index) => {
                 const handle = car?.handle;
                 const extra = handle ? specByHandle?.[handle] : null;
@@ -485,8 +487,8 @@ export default function UsedCarsChiangMaiBrand({
                 return <CarCard key={car?.id || index} car={mergedCar} priority={index < 6} />;
               })}
             </div>
-          )}
-        </section>
+          </section>
+        )}
 
         <section className="mt-8 bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
           <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">ยี่ห้ออื่น ๆ</h2>

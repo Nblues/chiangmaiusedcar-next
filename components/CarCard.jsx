@@ -346,6 +346,7 @@ export default function CarCard({ car, priority = false, className = '', variant
           priority={priority}
           decoding="async"
           fill
+          aspectRatio="4/3"
           imageType="card"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />

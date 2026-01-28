@@ -59,6 +59,7 @@ export default function SellCar() {
             alt="ขายรถยนต์มือสอง - ครูหนึ่งรถสวย ประเมินราคายุติธรรม แลกเทิร์นรถ"
             width={1920}
             height={640}
+            aspectRatio="3/1"
             className="w-full h-auto object-contain"
             priority
             quality={75}

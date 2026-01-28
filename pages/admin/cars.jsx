@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
+import A11yImage from '../../components/A11yImage';
 import SEO from '../../components/SEO';
 import { isAuthenticated } from '../../middleware/adminAuth';
 
@@ -410,11 +410,12 @@ function AdminCarsManagement() {
                   {/* Car Image */}
                   <div className="relative h-48 bg-gray-200">
                     {car.image ? (
-                      <Image
+                      <A11yImage
                         src={car.image}
                         alt={car.title}
                         fill
                         className="object-cover"
+                        imageType="card"
                         sizes="(max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                       />
                     ) : (

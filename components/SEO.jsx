@@ -391,10 +391,7 @@ export default function SEO({
       {/* Essential HTML5 Meta Tags for Viewport */}
       <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
-      {/* 2025 Cache Control for Fresh Content */}
-      <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0" />
-      <meta httpEquiv="Pragma" content="no-cache" />
-      <meta httpEquiv="Expires" content="0" />
+      {/* Cache policy is controlled via HTTP response headers (Vercel/Next). */}
       <meta name="last-modified" content={buildTime} />
       <meta name="cache-timestamp" content={timestamp.toString()} />
 

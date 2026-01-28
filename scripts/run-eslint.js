@@ -53,6 +53,13 @@ function main() {
     ...userFlags,
   ];
 
+  // Prevent stale results when ESLint crashes before rewriting the report.
+  try {
+    if (fs.existsSync(outputFile)) fs.unlinkSync(outputFile);
+  } catch {
+    // If deletion fails (e.g., file locked), we'll still attempt to run ESLint.
+  }
+
   const result = spawnSync('node', eslintArgs, {
     cwd: repoRoot,
     stdio: 'pipe',

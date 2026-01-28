@@ -700,6 +700,7 @@ export default function AllCars({
               sizes="100vw"
               alt=""
               className="w-full h-full object-cover object-top"
+              style={{ aspectRatio: '21/9' }}
               decoding="async"
               loading="eager"
             />

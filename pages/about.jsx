@@ -140,6 +140,7 @@ export default function About() {
                 style={{
                   objectPosition: 'center center',
                 }}
+                aspectRatio="16/9"
                 imageType="hero"
                 priority={true}
                 decoding="sync"

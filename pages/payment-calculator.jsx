@@ -250,6 +250,7 @@ export default function PaymentCalculator() {
           alt="ครูหนึ่งรถสวย - คำนวณค่างวดรถยนต์ เครื่องมือคำนวณเงินดาวน์และค่างวดรายเดือน"
           width={1920}
           height={400}
+          aspectRatio="21/9"
           priority
           className="absolute inset-0 w-full h-full object-cover object-center md:object-[center_20%]"
         />

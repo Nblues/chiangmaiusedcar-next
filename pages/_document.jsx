@@ -71,12 +71,8 @@ export default class MyDocument extends Document {
           {/* Facebook In-App Browser Compatibility */}
           <meta httpEquiv="Accept-CH" content="DPR, Viewport-Width, Width" />
           <meta name="format-detection" content="telephone=no" />
-          <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
 
-          {/* 2025 Cache Control Meta Tags - Relaxed for Cloudflare */}
-          <meta httpEquiv="Cache-Control" content="public, max-age=3600" />
-          <meta httpEquiv="Pragma" content="public" />
+          {/* Cache policy is controlled via HTTP response headers (Vercel/Next). */}
           <meta name="cache-bust" content={buildTime} />
 
           {/* Force browser refresh on updates */}
@@ -117,9 +113,6 @@ export default class MyDocument extends Document {
             sizes="512x512"
             href={`/android-chrome-512x512.png?v=${buildTime}`}
           />
-
-          {/* 3. Vector favicon (modern browsers) */}
-          <link rel="icon" type="image/svg+xml" href={`/favicon.svg?v=${buildTime}`} />
 
           {/* 3. Vector favicon (modern browsers) */}
           <link rel="icon" type="image/svg+xml" href={`/favicon.svg?v=${buildTime}`} />

@@ -605,27 +605,26 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             </p>
           </div>
           <div className="flex flex-col gap-4 w-full md:w-auto md:min-w-[200px]">
-            <a
-              href="https://lin.ee/8ugfzstD"
+            <Link
+              href="/all-cars"
+              prefetch={false}
               className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base bg-accent-800 text-white hover:bg-accent-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
-              target="_blank"
-              rel="noopener noreferrer"
             >
-              สอบถามรถยนต์
-            </a>
+              เลือกซื้อรถยนต์
+            </Link>
             <Link
               href="/used-cars-chiang-mai"
               prefetch={false}
               className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base border-2 border-orange-600 text-orange-700 hover:bg-orange-600 hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
             >
-              ซื้อ-ขาย/ฝากขายรถ เชียงใหม่-ลำพูน
+              ฝากขายได้ราคาดี
             </Link>
             <Link
-              href="/all-cars"
+              href="/sell-car"
               prefetch={false}
               className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
             >
-              ดูรถทั้งหมด
+              ขายด่วนรับเงินเลย!
             </Link>
           </div>
         </div>
