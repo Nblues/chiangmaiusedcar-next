@@ -1,17 +1,18 @@
 import React from 'react';
 import Link from 'next/link';
-import SEO from '../components/SEO';
+import Head from 'next/head';
 
 export default function Custom404() {
   return (
     <>
-      <SEO
-        title="ไม่พบหน้าที่ต้องการ - ครูหนึ่งรถสวย"
-        description="ขออภัย ไม่พบหน้าที่คุณต้องการ กรุณาเลือกดูรถมือสองเชียงใหม่คุณภาพดี หรือติดต่อสอบถาม ครูหนึ่งรถสวย"
-        url="/404"
-        image="/herobanner/404-page.webp"
-        pageType="default"
-      />
+      <Head>
+        <title>ไม่พบหน้าที่ต้องการ - ครูหนึ่งรถสวย</title>
+        <meta
+          name="description"
+          content="ขออภัย ไม่พบหน้าที่คุณต้องการ กรุณาเลือกดูรถมือสองเชียงใหม่คุณภาพดี หรือติดต่อสอบถาม ครูหนึ่งรถสวย"
+        />
+        <meta name="robots" content="noindex, follow" />
+      </Head>
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center p-8">
           <div className="mb-8">
@@ -27,24 +28,24 @@ export default function Custom404() {
           <div className="space-y-4">
             <Link
               href="/"
-              className="inline-block bg-primary hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors font-prompt"
+              className="btn-primary inline-block text-center px-6 py-3 rounded-lg font-prompt"
             >
-              🏠 กลับหน้าแรก
+              กลับหน้าแรก
             </Link>
 
             <Link
               href="/all-cars"
-              className="inline-block bg-secondary hover:bg-secondary-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors ml-4 font-prompt"
+              className="btn-secondary inline-block text-center px-6 py-3 rounded-lg ml-4 font-prompt"
             >
-              🚗 ดูรถทั้งหมด
+              ดูรถทั้งหมด
             </Link>
 
             <div>
               <Link
                 href="/contact"
-                className="inline-block bg-accent hover:bg-accent-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors ml-4 font-prompt"
+                className="btn-primary inline-block text-center px-6 py-3 rounded-lg ml-4 font-prompt"
               >
-                📞 ติดต่อเรา
+                ติดต่อเรา
               </Link>
             </div>
           </div>
