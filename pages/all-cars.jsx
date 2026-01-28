@@ -103,6 +103,7 @@ export default function AllCars({
   initialPriceRange,
   initialBrandFilter,
   initialPage,
+  shopifyError,
 }) {
   const seoAllCars = SEO_KEYWORD_MAP.allCars;
   const router = useRouter();
@@ -114,6 +115,26 @@ export default function AllCars({
   const [specByHandle, setSpecByHandle] = useState({});
   const requestedSpecHandlesRef = useRef(new Set());
   const specFetchAttemptsRef = useRef(new Map());
+  const heroImgRef = useRef(null);
+
+  useEffect(() => {
+    const img = heroImgRef.current;
+    if (!img) return;
+
+    // React/ESLint disagree on `fetchPriority` vs `fetchpriority`.
+    // Set it imperatively so browsers get the hint without React warnings.
+    try {
+      img.fetchPriority = 'high';
+    } catch {
+      // ignore
+    }
+
+    try {
+      img.setAttribute('fetchpriority', 'high');
+    } catch {
+      // ignore
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -607,7 +628,40 @@ export default function AllCars({
       <Head>
         <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="" />
         <link rel="dns-prefetch" href="//cdn.shopify.com" />
+
+        <link
+          rel="preload"
+          as="image"
+          media="(max-width: 767px)"
+          href="/herobanner/cnxallcar-640w.webp"
+          imageSrcSet="/herobanner/cnxallcar-480w.webp 480w, /herobanner/cnxallcar-640w.webp 640w, /herobanner/cnxallcar-828w.webp 828w"
+          imageSizes="100vw"
+        />
+
+        <link
+          rel="preload"
+          as="image"
+          media="(min-width: 768px)"
+          href="/herobanner/cnxallcar-1024w.webp"
+          imageSrcSet="/herobanner/cnxallcar-828w.webp 828w, /herobanner/cnxallcar-1024w.webp 1024w"
+          imageSizes="100vw"
+        />
       </Head>
+
+      {process.env.NODE_ENV === 'development' && shopifyError && currentCars.length === 0 && (
+        <section className="max-w-7xl mx-auto px-6 mt-4" aria-label="Dev Shopify error">
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-4 font-prompt">
+            <div className="font-bold text-red-900">Dev: ดึงข้อมูลรถจาก Shopify ไม่สำเร็จ</div>
+            <div className="mt-1 text-sm text-red-800">
+              ตรวจสอบไฟล์ <span className="font-semibold">.env.local</span> ว่ามี{' '}
+              <span className="font-semibold">SHOPIFY_DOMAIN</span> และ{' '}
+              <span className="font-semibold">SHOPIFY_STOREFRONT_TOKEN</span> แล้วรันใหม่ด้วย{' '}
+              <span className="font-semibold">pnpm dev</span>
+            </div>
+            <div className="mt-1 text-xs text-red-700/80">รายละเอียด: {shopifyError}</div>
+          </div>
+        </section>
+      )}
 
       {/* Pagination Link Tags for SEO */}
       {totalPages > 1 && !isFiltered && (
@@ -629,20 +683,31 @@ export default function AllCars({
         {/* Hero image (mobile + desktop) */}
         <div className="absolute inset-0" aria-hidden="true">
           <picture>
-            {/* TODO: If we add a smaller mobile-specific asset, swap srcSet here */}
-            <source media="(max-width: 767px)" srcSet="/herobanner/cnxallcar.webp" />
-            <source media="(min-width: 768px)" srcSet="/herobanner/cnxallcar.webp" />
+            <source
+              media="(max-width: 767px)"
+              srcSet="/herobanner/cnxallcar-480w.webp 480w, /herobanner/cnxallcar-640w.webp 640w, /herobanner/cnxallcar-828w.webp 828w"
+              sizes="100vw"
+            />
+            <source
+              media="(min-width: 768px)"
+              srcSet="/herobanner/cnxallcar-828w.webp 828w, /herobanner/cnxallcar-1024w.webp 1024w, /herobanner/cnxallcar-1400w.webp 1400w"
+              sizes="100vw"
+            />
             <img
-              src="/herobanner/cnxallcar.webp"
+              ref={heroImgRef}
+              src="/herobanner/cnxallcar-1024w.webp"
+              srcSet="/herobanner/cnxallcar-480w.webp 480w, /herobanner/cnxallcar-640w.webp 640w, /herobanner/cnxallcar-828w.webp 828w, /herobanner/cnxallcar-1024w.webp 1024w, /herobanner/cnxallcar-1400w.webp 1400w"
+              sizes="100vw"
               alt=""
               className="w-full h-full object-cover object-top"
               decoding="async"
+              loading="eager"
             />
           </picture>
         </div>
 
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/40 hidden md:block"></div>
+        {/* Dark overlay for better text readability (mobile + desktop) */}
+        <div className="absolute inset-0 bg-black/35 sm:bg-black/40"></div>
 
         {/* Content over banner */}
         <div className="absolute inset-0 flex items-center justify-center">
@@ -707,7 +772,7 @@ export default function AllCars({
                   prefetch={false}
                   className="inline-flex items-center justify-center rounded-xl bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-700 transition-colors"
                 >
-                  ซื้อ-ขาย/ฝากขายรถ เชียงใหม่-ลำพูน
+                  ฝากขายราคาดี
                 </Link>
                 <Link
                   href="/contact"
@@ -886,6 +951,7 @@ export default function AllCars({
 // (pagination/filter/noindex/canonical) without relying on client-side JS.
 export async function getServerSideProps(context) {
   let cars = [];
+  let shopifyError = null;
   try {
     const result = await getAllCars();
     cars = Array.isArray(result) ? result : [];
@@ -908,14 +974,23 @@ export async function getServerSideProps(context) {
       installment: car.installment,
       fuelType: car.fuelType || car.fuel_type,
       fuel_type: car.fuel_type || car.fuelType,
+      // Keep metaobject-backed display labels for cards (ประเภทรถ/ประเภทตัวถัง)
+      // so mobile Safari doesn't depend on deferred client enrichment to show them.
+      category: car.category,
+      body_type: car.body_type,
       images: car.images?.slice(0, 1) || [], // เก็บแค่รูปแรกสำหรับ listing
       availableForSale: car.availableForSale,
       status: carStatuses[car.id]?.status || 'available', // Add status from file
     }));
 
     // แสดงรถทั้งหมดที่มีจริง ไม่จำกัดจำนวน
-  } catch {
+  } catch (error) {
     // Silent error handling for production - ให้ UI แสดงข้อมูลว่างแทน
+    if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
+      console.error('getServerSideProps(/all-cars) error:', error);
+      shopifyError = error?.message || 'unknown error';
+    }
     cars = [];
   }
 
@@ -992,6 +1067,7 @@ export async function getServerSideProps(context) {
       initialPriceRange,
       initialBrandFilter,
       initialPage: safePage,
+      shopifyError,
     },
   };
 }
