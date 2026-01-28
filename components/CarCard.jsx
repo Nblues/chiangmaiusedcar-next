@@ -410,7 +410,7 @@ export default function CarCard({ car, priority = false, className = '', variant
           {car.title || 'รถมือสองเชียงใหม่'}
         </div>
 
-        <div className="mt-0.5 min-h-[1.25rem] text-xs sm:text-sm font-prompt font-semibold text-gray-700">
+        <div className="mt-0.5 min-h-[1.25rem] text-sm font-prompt font-semibold text-gray-700">
           {categoryLabel ? (
             categoryLabel
           ) : (
@@ -431,8 +431,8 @@ export default function CarCard({ car, priority = false, className = '', variant
                 aria-hidden={!spec}
                 className={
                   spec
-                    ? `min-w-0 flex items-center gap-1.5 px-0.5 py-0.5 text-xs sm:text-sm font-semibold font-prompt ${spec.isPlaceholder ? 'text-gray-400' : 'text-gray-800'}`
-                    : 'min-w-0 flex items-center gap-1.5 px-0.5 py-0.5 text-xs sm:text-sm font-semibold text-gray-400 font-prompt'
+                    ? `min-w-0 flex items-center gap-1.5 px-0.5 py-0.5 text-[13px] leading-tight sm:text-sm font-semibold font-prompt ${spec.isPlaceholder ? 'text-gray-400' : 'text-gray-900'}`
+                    : 'min-w-0 flex items-center gap-1.5 px-0.5 py-0.5 text-[13px] leading-tight sm:text-sm font-semibold text-gray-400 font-prompt'
                 }
                 title={spec && !spec.isPlaceholder ? spec.value : ''}
               >
