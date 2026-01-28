@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import SEO from '../components/SEO';
+import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
 import { createMapEmbedUrl, createMapOpenUrl, clearLocationCache } from '../utils/siteLocation';
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
@@ -90,17 +91,29 @@ export default function Contact() {
           { name: 'ติดต่อเรา', url: '/contact' },
         ]}
       />
-      {/* FAQ Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      <Head>
+        <link
+          rel="preload"
+          as="image"
+          href="/herobanner/contact-1024w.webp"
+          type="image/webp"
+          imageSrcSet="/herobanner/contact-480w.webp 480w, /herobanner/contact-640w.webp 640w, /herobanner/contact-828w.webp 828w, /herobanner/contact-1024w.webp 1024w, /herobanner/contact-1400w.webp 1400w"
+          imageSizes="100vw"
+        />
+
+        {/* FAQ Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      </Head>
 
       <main className="min-h-screen bg-white">
         {/* Hero Banner */}
         <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
           <A11yImage
-            src="/herobanner/contact.webp"
+            src="/herobanner/contact-1024w.webp"
+            srcSet="/herobanner/contact-480w.webp 480w, /herobanner/contact-640w.webp 640w, /herobanner/contact-828w.webp 828w, /herobanner/contact-1024w.webp 1024w, /herobanner/contact-1400w.webp 1400w"
             alt="ติดต่อเรา - ครูหนึ่งรถสวย"
             fill
             className="object-cover object-center"

@@ -1,5 +1,6 @@
 import React from 'react';
 import SEO from '../components/SEO';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import A11yImage from '../components/A11yImage';
@@ -39,10 +40,22 @@ export default function SellCar() {
         pageType="sell-car"
       />
 
+      <Head>
+        <link
+          rel="preload"
+          as="image"
+          href="/herobanner/chiangmaiusedcars-1200w.webp"
+          type="image/webp"
+          imageSrcSet="/herobanner/chiangmaiusedcars-640w.webp 640w, /herobanner/chiangmaiusedcars-828w.webp 828w, /herobanner/chiangmaiusedcars-1024w.webp 1024w, /herobanner/chiangmaiusedcars-1200w.webp 1200w, /herobanner/chiangmaiusedcars-1400w.webp 1400w, /herobanner/chiangmaiusedcars-1920w.webp 1920w"
+          imageSizes="(max-width: 414px) 414px, (max-width: 768px) 768px, (max-width: 1200px) 1200px, 1920px"
+        />
+      </Head>
+
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-7xl mx-auto">
           <A11yImage
-            src="/herobanner/chiangmaiusedcars.webp"
+            src="/herobanner/chiangmaiusedcars-1200w.webp"
+            srcSet="/herobanner/chiangmaiusedcars-640w.webp 640w, /herobanner/chiangmaiusedcars-828w.webp 828w, /herobanner/chiangmaiusedcars-1024w.webp 1024w, /herobanner/chiangmaiusedcars-1200w.webp 1200w, /herobanner/chiangmaiusedcars-1400w.webp 1400w, /herobanner/chiangmaiusedcars-1920w.webp 1920w"
             alt="ขายรถยนต์มือสอง - ครูหนึ่งรถสวย ประเมินราคายุติธรรม แลกเทิร์นรถ"
             width={1920}
             height={640}

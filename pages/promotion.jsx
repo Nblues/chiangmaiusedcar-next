@@ -22,6 +22,14 @@ export default function Promotion() {
         pageType="promotion"
       />
       <Head>
+        <link
+          rel="preload"
+          as="image"
+          href="/herobanner/cnxcontact-1024w.webp"
+          type="image/webp"
+          imageSrcSet="/herobanner/cnxcontact-480w.webp 480w, /herobanner/cnxcontact-640w.webp 640w, /herobanner/cnxcontact-828w.webp 828w, /herobanner/cnxcontact-1024w.webp 1024w, /herobanner/cnxcontact-1400w.webp 1400w"
+          imageSizes="100vw"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -40,7 +48,8 @@ export default function Promotion() {
         {/* Hero Banner */}
         <section className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden">
           <A11yImage
-            src="/herobanner/cnxcontact.webp"
+            src="/herobanner/cnxcontact-1024w.webp"
+            srcSet="/herobanner/cnxcontact-480w.webp 480w, /herobanner/cnxcontact-640w.webp 640w, /herobanner/cnxcontact-828w.webp 828w, /herobanner/cnxcontact-1024w.webp 1024w, /herobanner/cnxcontact-1400w.webp 1400w"
             alt="โปรโมชั่นพิเศษ รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย ฟรีดาวน์ 0% รถ ECO Car"
             fill
             className="object-cover object-center"

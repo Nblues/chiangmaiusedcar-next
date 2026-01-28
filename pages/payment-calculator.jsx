@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
+import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
 
 export default function PaymentCalculator() {
@@ -229,10 +230,23 @@ export default function PaymentCalculator() {
         pageType="payment-calculator"
       />
 
+      <Head>
+        <link
+          rel="preload"
+          as="image"
+          href="/herobanner/paymentcalculator-1024w.webp"
+          type="image/webp"
+          imageSrcSet="/herobanner/paymentcalculator-480w.webp 480w, /herobanner/paymentcalculator-640w.webp 640w, /herobanner/paymentcalculator-828w.webp 828w, /herobanner/paymentcalculator-1024w.webp 1024w, /herobanner/paymentcalculator-1400w.webp 1400w"
+          imageSizes="100vw"
+        />
+      </Head>
+
       {/* Hero Section */}
       <section className="relative bg-primary text-white py-8 md:py-16 border-t border-gray-200">
         <A11yImage
-          src="/herobanner/paymentcalculator.webp"
+          src="/herobanner/paymentcalculator-1024w.webp"
+          srcSet="/herobanner/paymentcalculator-480w.webp 480w, /herobanner/paymentcalculator-640w.webp 640w, /herobanner/paymentcalculator-828w.webp 828w, /herobanner/paymentcalculator-1024w.webp 1024w, /herobanner/paymentcalculator-1400w.webp 1400w"
+          sizes="100vw"
           alt="ครูหนึ่งรถสวย - คำนวณค่างวดรถยนต์ เครื่องมือคำนวณเงินดาวน์และค่างวดรายเดือน"
           width={1920}
           height={400}

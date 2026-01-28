@@ -12,6 +12,20 @@ function main() {
   const isCI = Boolean(process.env.CI) || isTruthy(process.env.CI);
   const isVercel = Boolean(process.env.VERCEL) || isTruthy(process.env.VERCEL);
 
+  // Generate responsive hero variants (no network writes; safe everywhere).
+  try {
+    const generateScript = path.join(__dirname, 'generate-hero-variants.cjs');
+    const result = spawnSync(process.execPath, [generateScript], { stdio: 'inherit' });
+
+    if (typeof result.status === 'number' && result.status !== 0) {
+      // eslint-disable-next-line no-console
+      console.warn(`[postinstall] generate-hero-variants exited with code ${result.status} (ignored)`);
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.warn('[postinstall] generate-hero-variants failed (ignored):', err);
+  }
+
   // Never do network writes during CI/Vercel builds.
   if (isCI || isVercel) {
     // eslint-disable-next-line no-console

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import A11yImage from '../components/A11yImage';
 import SEO from '../components/SEO';
+import Head from 'next/head';
 
 export default function About() {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -89,6 +90,17 @@ export default function About() {
         }}
       />
 
+      <Head>
+        <link
+          rel="preload"
+          as="image"
+          href="/herobanner/team-1024w.webp"
+          type="image/webp"
+          imageSrcSet="/herobanner/team-480w.webp 480w, /herobanner/team-640w.webp 640w, /herobanner/team-828w.webp 828w, /herobanner/team-1024w.webp 1024w, /herobanner/team-1400w.webp 1400w"
+          imageSizes="100vw"
+        />
+      </Head>
+
       {/* Hero Section with Image */}
       <section>
         {/* Text Section - ย้ายมาอยู่ด้านบน */}
@@ -119,7 +131,8 @@ export default function About() {
               )}
 
               <A11yImage
-                src="/herobanner/team.webp"
+                src="/herobanner/team-1024w.webp"
+                srcSet="/herobanner/team-480w.webp 480w, /herobanner/team-640w.webp 640w, /herobanner/team-828w.webp 828w, /herobanner/team-1024w.webp 1024w, /herobanner/team-1400w.webp 1400w"
                 alt="ทีมงานครูหนึ่งรถสวย"
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"

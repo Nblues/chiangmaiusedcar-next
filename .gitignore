@@ -9,6 +9,7 @@ node_modules/
 # 🚫 Build & Output
 # ========================
 .next/
+.next-win/
 out/
 build/
 .cache/
@@ -68,6 +69,14 @@ lighthouse-prod-latest/
 # Local image experiments (do not commit)
 public/images/kn1.webp
 public/images/kn2.webp
+
+# Generated hero banner responsive variants (generated during postinstall/prebuild)
+public/herobanner/cnxallcar-*.webp
+public/herobanner/cnxcontact-*.webp
+public/herobanner/contact-*.webp
+public/herobanner/team-*.webp
+public/herobanner/paymentcalculator-*.webp
+public/herobanner/chiangmaiusedcars-*.webp
 
 # ========================
 # 🧪 Firebase (Local)
