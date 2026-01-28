@@ -77,7 +77,7 @@ export default function About() {
             'https://www.facebook.com/KN2car',
             'https://www.facebook.com/nuengblues',
             'https://www.tiktok.com/@krunueng_usedcar',
-            'https://youtube.com/@chiangraiusedcar',
+            'https://www.youtube.com/@chiangmaiusedcar',
             'https://www.lemon8-app.com/@kn.goodcar?region=th',
             'https://lin.ee/8ugfzstD',
           ],
@@ -358,12 +358,12 @@ export default function About() {
                   YouTube Subscribers
                 </div>
                 <a
-                  href="https://youtube.com/@chiangraiusedcar"
+                  href="https://www.youtube.com/@chiangmaiusedcar"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs text-red-600 hover:text-red-800 font-medium font-prompt transition-colors"
                 >
-                  @chiangraiusedcar
+                  @chiangmaiusedcar
                 </a>
               </div>
 

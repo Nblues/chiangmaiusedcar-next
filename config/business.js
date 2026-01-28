@@ -78,7 +78,7 @@ export const BUSINESS_INFO = {
       fcGroup: 'https://www.facebook.com/groups/kru.nueng.goodcar',
     },
     tiktok: 'https://www.tiktok.com/@krunueng_usedcar',
-    youtube: 'https://youtube.com/@chiangraiusedcar',
+    youtube: 'https://www.youtube.com/@chiangmaiusedcar',
     lemon8: 'https://www.lemon8-app.com/@kn.goodcar?region=th',
     line: process.env.NEXT_PUBLIC_LINE_URL || 'https://lin.ee/8ugfzstD',
   },

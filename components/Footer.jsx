@@ -329,7 +329,7 @@ export default function Footer() {
               </a>
 
               <a
-                href="https://youtube.com/@chiangraiusedcar"
+                href="https://www.youtube.com/@chiangmaiusedcar"
                 target="_blank"
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-all duration-300 group"
                 rel="noreferrer"
