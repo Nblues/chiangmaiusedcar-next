@@ -177,6 +177,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   const [liveStatuses, setLiveStatuses] = useState(null);
   const [specByHandle, setSpecByHandle] = useState({});
   const requestedSpecHandlesRef = useRef(new Set());
+  const specFetchAttemptsRef = useRef(new Map());
 
   const mergeSpecs = (car, extra) => {
     const next = { ...car };
@@ -185,10 +186,31 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
     const carFuel = car?.fuelType || car?.fuel_type || car?.['fuel-type'];
     const extraFuel = extra?.fuelType || extra?.fuel_type || extra?.['fuel-type'];
 
+    const carDrive =
+      car?.drivetrain ||
+      car?.drive_type ||
+      car?.driveType ||
+      car?.['drive-type'] ||
+      car?.wheel_drive ||
+      car?.wheelDrive;
+    const extraDrive =
+      extra?.drivetrain ||
+      extra?.drive_type ||
+      extra?.driveType ||
+      extra?.['drive-type'] ||
+      extra?.wheel_drive ||
+      extra?.wheelDrive;
+
     // Normalize fuel keys so all cards behave the same
     if (has(carFuel)) {
       if (!has(next.fuelType)) next.fuelType = carFuel;
       if (!has(next.fuel_type)) next.fuel_type = carFuel;
+    }
+
+    // Normalize drivetrain keys so all cards behave the same
+    if (has(carDrive)) {
+      if (!has(next.drivetrain)) next.drivetrain = carDrive;
+      if (!has(next.drive_type)) next.drive_type = carDrive;
     }
 
     if (!extra) return next;
@@ -196,6 +218,10 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
     if (!has(next.year) && has(extra.year)) next.year = extra.year;
     if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
     if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
+    if (!has(carDrive) && has(extraDrive)) {
+      next.drivetrain = extra.drivetrain || extraDrive;
+      next.drive_type = extra.drive_type || extraDrive;
+    }
     if (!has(carFuel) && has(extraFuel)) {
       next.fuelType = extra.fuelType || extraFuel;
       next.fuel_type = extra.fuel_type || extraFuel;
@@ -236,7 +262,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   // Precompute IDs for fetching statuses
   const ids = useMemo(() => safeCars.map(c => c.id).filter(Boolean), [safeCars]);
 
-  // Enrich missing specs for the first 8 homepage cards (mileage/transmission/fuel/installment/category)
+  // Enrich missing specs for the first 6 homepage cards (mileage/transmission/fuel/installment/category)
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const list = Array.isArray(carsWithLive) ? carsWithLive.slice(0, 8) : [];
@@ -248,12 +274,23 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       if (!handle) continue;
       if (requestedSpecHandlesRef.current.has(handle)) continue;
 
+      const attempts = Number(specFetchAttemptsRef.current.get(handle) || 0);
+      if (attempts >= 2) continue;
+
       const extra = specByHandle?.[handle];
       const merged = mergeSpecs(car, extra);
 
       const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
       const hasTransmission =
         merged?.transmission != null && String(merged.transmission).trim() !== '';
+      const drive =
+        merged?.drivetrain ||
+        merged?.drive_type ||
+        merged?.driveType ||
+        merged?.['drive-type'] ||
+        merged?.wheel_drive ||
+        merged?.wheelDrive;
+      const hasDrivetrain = drive != null && String(drive).trim() !== '';
       const fuel = merged?.fuelType || merged?.fuel_type;
       const hasFuel = fuel != null && String(fuel).trim() !== '';
       const hasInstallment =
@@ -261,19 +298,32 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
 
       const hasCategory = merged?.category != null && String(merged.category).trim() !== '';
 
-      if (!(hasMileage && hasTransmission && hasFuel && hasInstallment && hasCategory)) {
+      if (
+        !(
+          hasMileage &&
+          hasTransmission &&
+          hasDrivetrain &&
+          hasFuel &&
+          hasInstallment &&
+          hasCategory
+        )
+      ) {
         needs.push(handle);
       }
     }
 
     if (needs.length === 0) return;
-    needs.forEach(h => requestedSpecHandlesRef.current.add(h));
+    needs.forEach(h => {
+      requestedSpecHandlesRef.current.add(h);
+      specFetchAttemptsRef.current.set(h, Number(specFetchAttemptsRef.current.get(h) || 0) + 1);
+    });
 
     const fetchSpecs = async () => {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000);
-        const params = new URLSearchParams({ handles: needs.join(',') });
+        const canonical = Array.from(new Set(needs.filter(Boolean))).sort();
+        const params = new URLSearchParams({ handles: canonical.join(',') });
         const resp = await fetch(`/api/public/car-specs?${params.toString()}`, {
           cache: 'no-store',
           credentials: 'same-origin',
@@ -301,6 +351,10 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           ...(prev || {}),
           ...data.specs,
         }));
+
+        // Treat requestedSpecHandlesRef as in-flight only.
+        // If specs are still incomplete (e.g. drivetrain missing), allow a limited retry.
+        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
       } catch (error) {
         needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
         if (process.env.NODE_ENV === 'development') {
@@ -368,6 +422,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         const qs = new URLSearchParams({ ids: ids.join(',') });
         const resp = await fetch(`/api/public/car-status?${qs.toString()}`, {
           cache: 'no-store',
+          credentials: 'same-origin',
         }).catch(err => {
           // Silently log and return null
           if (process.env.NODE_ENV !== 'production') {
@@ -413,6 +468,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           const qs = new URLSearchParams({ ids: ids.join(',') });
           const resp = await fetch(`/api/public/car-status?${qs.toString()}`, {
             cache: 'no-store',
+            credentials: 'same-origin',
           }).catch(err => {
             // Silently log and return null
             if (process.env.NODE_ENV !== 'production') {
@@ -445,20 +501,23 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       removeVis = () => document.removeEventListener('visibilitychange', debouncedFetch);
     }
 
-    // Defer live status fetch until *after* initial render/LCP window.
-    // This helps reduce Lighthouse TBT variance while keeping UI/SEO unchanged.
+    // Defer live status fetch slightly to avoid competing with LCP,
+    // but do not rely on an unbounded idle callback (iOS/Safari can delay it a lot).
     let timer;
     let idleCallback;
     if (typeof window !== 'undefined') {
       timer = window.setTimeout(() => {
         if ('requestIdleCallback' in window) {
-          idleCallback = window.requestIdleCallback(() => {
-            runFetchStatuses();
-          });
+          idleCallback = window.requestIdleCallback(
+            () => {
+              runFetchStatuses();
+            },
+            { timeout: 2500 }
+          );
         } else {
           runFetchStatuses();
         }
-      }, 5500);
+      }, 2500);
     }
 
     return () => {
@@ -911,7 +970,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         </div>
         {/* Cars grid (standardized layout across pages) */}
         <div className="-mx-6 md:-mx-8 lg:-mx-12">
-          <div className="max-w-7xl mx-auto px-3 md:px-6">
+          <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-5 ipadpro:px-3 lg:px-6">
             <section aria-label="รถเข้าใหม่แนะนำวันนี้">
               {carsWithLive.length === 0 ? (
                 // Empty state when no cars available
@@ -933,7 +992,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                   </a>
                 </div>
               ) : (
-                <div className="car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
+                <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
                   {carsWithLive.slice(0, 8).map((car, index) => {
                     const handle = car?.handle;
                     const extra = handle ? specByHandle?.[handle] : null;

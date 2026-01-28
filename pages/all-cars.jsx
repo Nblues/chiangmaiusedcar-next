@@ -168,10 +168,31 @@ export default function AllCars({
     const carFuel = car?.fuelType || car?.fuel_type || car?.['fuel-type'];
     const extraFuel = extra?.fuelType || extra?.fuel_type || extra?.['fuel-type'];
 
+    const carDrive =
+      car?.drivetrain ||
+      car?.drive_type ||
+      car?.driveType ||
+      car?.['drive-type'] ||
+      car?.wheel_drive ||
+      car?.wheelDrive;
+    const extraDrive =
+      extra?.drivetrain ||
+      extra?.drive_type ||
+      extra?.driveType ||
+      extra?.['drive-type'] ||
+      extra?.wheel_drive ||
+      extra?.wheelDrive;
+
     // Normalize fuel keys so all cards behave the same
     if (has(carFuel)) {
       if (!has(next.fuelType)) next.fuelType = carFuel;
       if (!has(next.fuel_type)) next.fuel_type = carFuel;
+    }
+
+    // Normalize drivetrain keys so all cards behave the same
+    if (has(carDrive)) {
+      if (!has(next.drivetrain)) next.drivetrain = carDrive;
+      if (!has(next.drive_type)) next.drive_type = carDrive;
     }
 
     if (!extra) return next;
@@ -179,6 +200,10 @@ export default function AllCars({
     if (!has(next.year) && has(extra.year)) next.year = extra.year;
     if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
     if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
+    if (!has(carDrive) && has(extraDrive)) {
+      next.drivetrain = extra.drivetrain || extraDrive;
+      next.drive_type = extra.drive_type || extraDrive;
+    }
     if (!has(carFuel) && has(extraFuel)) {
       next.fuelType = extra.fuelType || extraFuel;
       next.fuel_type = extra.fuel_type || extraFuel;
@@ -191,7 +216,7 @@ export default function AllCars({
     return next;
   };
 
-  // จำนวนรถต่อหน้า: 8 คัน (มือถือ: 2x4 แถว, เดสก์ท็อป: 4x2 แถว)
+  // จำนวนรถต่อหน้า: 8 คัน (iPad Pro: 4x2 แถว)
   const carsPerPage = 8;
 
   // Keep state in sync when user lands via router navigation (client-side) to a URL with params
@@ -312,8 +337,7 @@ export default function AllCars({
     const list = Array.isArray(currentCarsWithLive) ? currentCarsWithLive : [];
     if (list.length === 0) return;
 
-    // Defer this enrichment work: it improves completeness but is not critical for LCP.
-    // Helps reduce TBT on mobile.
+    let cancelled = false;
     let cleanup = () => {};
 
     const needs = [];
@@ -332,6 +356,14 @@ export default function AllCars({
       const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
       const hasTransmission =
         merged?.transmission != null && String(merged.transmission).trim() !== '';
+      const drive =
+        merged?.drivetrain ||
+        merged?.drive_type ||
+        merged?.driveType ||
+        merged?.['drive-type'] ||
+        merged?.wheel_drive ||
+        merged?.wheelDrive;
+      const hasDrivetrain = drive != null && String(drive).trim() !== '';
       const fuel = merged?.fuelType || merged?.fuel_type;
       const hasFuel = fuel != null && String(fuel).trim() !== '';
 
@@ -363,7 +395,16 @@ export default function AllCars({
       // Also include category/body type (often stored as metaobject references).
       // Without this, some pages (2+) can look "complete" for the 4 quick specs,
       // so enrichment never runs and the metaobject-backed label stays blank.
-      if (!(hasYear && hasMileage && hasTransmission && hasFuel && hasCategoryOrBodyType)) {
+      if (
+        !(
+          hasYear &&
+          hasMileage &&
+          hasTransmission &&
+          hasDrivetrain &&
+          hasFuel &&
+          hasCategoryOrBodyType
+        )
+      ) {
         needs.push(handle);
       }
     }
@@ -384,24 +425,33 @@ export default function AllCars({
       try {
         const batches = chunk(needs, 40);
         for (const batch of batches) {
-          const params = new URLSearchParams({ handles: batch.join(',') });
-          const result = await safeFetchJson(
-            `/api/public/car-specs?${params.toString()}`,
-            {
-              cache: 'no-store',
-              credentials: 'same-origin',
-            },
-            8000
-          );
+          if (cancelled) return;
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 8000);
+          const canonical = Array.from(new Set(batch.filter(Boolean))).sort();
+          const params = new URLSearchParams({ handles: canonical.join(',') });
+          const resp = await fetch(`/api/public/car-specs?${params.toString()}`, {
+            // Allow browser + CDN caching (server sets s-maxage) to keep pagination snappy.
+            cache: 'force-cache',
+            credentials: 'same-origin',
+            signal: controller.signal,
+          });
+          clearTimeout(timeoutId);
 
-          if (!result.ok) {
+          if (!resp.ok) {
             batch.forEach(h => requestedSpecHandlesRef.current.delete(h));
             continue;
           }
-          const data = result.data;
+          const data = await resp.json();
           if (!data?.ok || !data?.specs) {
             batch.forEach(h => requestedSpecHandlesRef.current.delete(h));
             continue;
+          }
+
+          // If a handle wasn't returned, don't permanently block retries.
+          const returned = new Set(Object.keys(data.specs || {}));
+          for (const h of batch) {
+            if (!returned.has(h)) requestedSpecHandlesRef.current.delete(h);
           }
 
           setSpecByHandle(prev => ({
@@ -410,6 +460,7 @@ export default function AllCars({
           }));
 
           // Treat requestedSpecHandlesRef as in-flight only.
+          // If specs are still incomplete (e.g. drivetrain missing), allow a limited retry.
           batch.forEach(h => requestedSpecHandlesRef.current.delete(h));
         }
       } catch (error) {
@@ -421,6 +472,7 @@ export default function AllCars({
       }
     };
 
+    // Defer non-critical fetch to reduce main-thread contention during pagination.
     cleanup = scheduleAfterLoadThenIdle(
       () => {
         fetchSpecs().catch(error => {
@@ -430,10 +482,11 @@ export default function AllCars({
           }
         });
       },
-      { timeout: 7000, fallbackDelayMs: 4500 }
+      { timeout: 5000, fallbackDelayMs: 3500 }
     );
 
     return () => {
+      cancelled = true;
       cleanup();
     };
   }, [currentCarsWithLive, specByHandle]);
@@ -813,7 +866,7 @@ export default function AllCars({
 
       {/* Cars Grid */}
       <section className="py-8 md:py-12 bg-white border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-3 md:px-6">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-5 ipadpro:px-3 lg:px-6">
           {!Number.isFinite(totalCount) || totalCount === 0 ? (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">🔍</div>
@@ -827,7 +880,7 @@ export default function AllCars({
           ) : (
             <>
               {/* Cards Grid - standardized layout */}
-              <div className="car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
+              <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
                 {currentCarsWithLive.map((car, idx) => {
                   const handle = car?.handle;
                   const extra = handle ? specByHandle?.[handle] : null;
@@ -1052,7 +1105,11 @@ export async function getServerSideProps(context) {
   const totalPages = totalCount > 0 ? Math.ceil(totalCount / carsPerPage) : 1;
   const safePage = Math.min(Math.max(1, initialPage), totalPages);
   const startIndex = (safePage - 1) * carsPerPage;
-  const pageCars = filtered.slice(startIndex, startIndex + carsPerPage);
+  let pageCars = filtered.slice(startIndex, startIndex + carsPerPage);
+
+  // Note: do not enrich specs during SSR.
+  // Extra Shopify calls here significantly slow down pagination (page 1..n).
+  // Client-side enrichment (deferred) fills any remaining spec gaps.
 
   // Cache hints: allow CDN to cache briefly while keeping inventory reasonably fresh
   if (context?.res?.setHeader) {

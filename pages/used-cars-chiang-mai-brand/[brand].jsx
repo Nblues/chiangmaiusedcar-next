@@ -269,6 +269,7 @@ export default function UsedCarsChiangMaiBrand({
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
   const [specByHandle, setSpecByHandle] = useState({});
   const requestedSpecHandlesRef = useRef(new Set());
+  const specFetchAttemptsRef = useRef(new Map());
 
   const brandFaqs = useMemo(() => buildBrandFaqEntries(brandInfo?.label), [brandInfo?.label]);
 
@@ -279,10 +280,31 @@ export default function UsedCarsChiangMaiBrand({
     const carFuel = car?.fuelType || car?.fuel_type || car?.['fuel-type'];
     const extraFuel = extra?.fuelType || extra?.fuel_type || extra?.['fuel-type'];
 
+    const carDrive =
+      car?.drivetrain ||
+      car?.drive_type ||
+      car?.driveType ||
+      car?.['drive-type'] ||
+      car?.wheel_drive ||
+      car?.wheelDrive;
+    const extraDrive =
+      extra?.drivetrain ||
+      extra?.drive_type ||
+      extra?.driveType ||
+      extra?.['drive-type'] ||
+      extra?.wheel_drive ||
+      extra?.wheelDrive;
+
     // Normalize fuel keys so all cards behave the same
     if (has(carFuel)) {
       if (!has(next.fuelType)) next.fuelType = carFuel;
       if (!has(next.fuel_type)) next.fuel_type = carFuel;
+    }
+
+    // Normalize drivetrain keys so all cards behave the same
+    if (has(carDrive)) {
+      if (!has(next.drivetrain)) next.drivetrain = carDrive;
+      if (!has(next.drive_type)) next.drive_type = carDrive;
     }
 
     if (!extra) return next;
@@ -290,6 +312,10 @@ export default function UsedCarsChiangMaiBrand({
     if (!has(next.year) && has(extra.year)) next.year = extra.year;
     if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
     if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
+    if (!has(carDrive) && has(extraDrive)) {
+      next.drivetrain = extra.drivetrain || extraDrive;
+      next.drive_type = extra.drive_type || extraDrive;
+    }
     if (!has(carFuel) && has(extraFuel)) {
       next.fuelType = extra.fuelType || extraFuel;
       next.fuel_type = extra.fuel_type || extraFuel;
@@ -312,12 +338,23 @@ export default function UsedCarsChiangMaiBrand({
       if (!handle) continue;
       if (requestedSpecHandlesRef.current.has(handle)) continue;
 
+      const attempts = Number(specFetchAttemptsRef.current.get(handle) || 0);
+      if (attempts >= 2) continue;
+
       const extra = specByHandle?.[handle];
       const merged = mergeSpecs(car, extra);
 
       const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
       const hasTransmission =
         merged?.transmission != null && String(merged.transmission).trim() !== '';
+      const drive =
+        merged?.drivetrain ||
+        merged?.drive_type ||
+        merged?.driveType ||
+        merged?.['drive-type'] ||
+        merged?.wheel_drive ||
+        merged?.wheelDrive;
+      const hasDrivetrain = drive != null && String(drive).trim() !== '';
       const fuel = merged?.fuelType || merged?.fuel_type;
       const hasFuel = fuel != null && String(fuel).trim() !== '';
       const hasInstallment =
@@ -325,19 +362,34 @@ export default function UsedCarsChiangMaiBrand({
 
       const hasCategory = merged?.category != null && String(merged.category).trim() !== '';
 
-      if (!(hasMileage && hasTransmission && hasFuel && hasInstallment && hasCategory)) {
+      if (
+        !(
+          hasMileage &&
+          hasTransmission &&
+          hasDrivetrain &&
+          hasFuel &&
+          hasInstallment &&
+          hasCategory
+        )
+      ) {
         needs.push(handle);
       }
     }
 
     if (needs.length === 0) return;
-    needs.forEach(h => requestedSpecHandlesRef.current.add(h));
+    needs.forEach(h => {
+      requestedSpecHandlesRef.current.add(h);
+      specFetchAttemptsRef.current.set(h, Number(specFetchAttemptsRef.current.get(h) || 0) + 1);
+    });
 
     const fetchSpecs = async () => {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000);
-        const params = new URLSearchParams({ handles: needs.slice(0, 50).join(',') });
+        const canonical = Array.from(new Set(needs.filter(Boolean)));
+        canonical.sort();
+        const limited = canonical.slice(0, 50);
+        const params = new URLSearchParams({ handles: limited.join(',') });
         const resp = await fetch(`/api/public/car-specs?${params.toString()}`, {
           cache: 'no-store',
           credentials: 'same-origin',
@@ -365,6 +417,10 @@ export default function UsedCarsChiangMaiBrand({
           ...(prev || {}),
           ...data.specs,
         }));
+
+        // Treat requestedSpecHandlesRef as in-flight only.
+        // If specs are still incomplete (e.g. drivetrain missing), allow a limited retry.
+        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
       } catch (error) {
         needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
         if (process.env.NODE_ENV === 'development') {
@@ -404,7 +460,7 @@ export default function UsedCarsChiangMaiBrand({
       />
 
       <header className="bg-gradient-to-r from-orange-100 to-blue-100">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-10">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 ipadpro:px-3 py-10">
           <h1 className="text-3xl md:text-4xl font-extrabold text-primary font-prompt">
             รถมือสอง {brandInfo.label} เชียงใหม่
           </h1>
@@ -429,7 +485,7 @@ export default function UsedCarsChiangMaiBrand({
 
       <Breadcrumb />
 
-      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 ipadpro:px-3 py-8">
         <section className="mb-4">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
             <div>
@@ -479,7 +535,7 @@ export default function UsedCarsChiangMaiBrand({
           </section>
         ) : (
           <section className="mt-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
               {safeCars.map((car, index) => {
                 const handle = car?.handle;
                 const extra = handle ? specByHandle?.[handle] : null;

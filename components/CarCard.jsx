@@ -88,6 +88,23 @@ function SpecIcon({ type, className = '' }) {
           />
         </svg>
       );
+    case 'drivetrain':
+      // Drivetrain / wheels
+      return (
+        <svg
+          viewBox="0 0 24 24"
+          className={baseClassName}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h10M7 17h10M9 7v10m6-10v10" />
+          <circle cx="6" cy="7" r="2" />
+          <circle cx="18" cy="7" r="2" />
+          <circle cx="6" cy="17" r="2" />
+          <circle cx="18" cy="17" r="2" />
+        </svg>
+      );
     default:
       return null;
   }
@@ -133,15 +150,19 @@ export default function CarCard({ car, priority = false, className = '', variant
   const yearRaw = safeGet(car, 'year') ?? safeGet(car, 'metafields.spec.year');
   const transmissionRaw =
     safeGet(car, 'transmission') ?? safeGet(car, 'metafields.spec.transmission');
-  const categoryRaw =
-    safeGet(car, 'category') ??
-    safeGet(car, 'metafields.spec.category') ??
-    safeGet(car, 'metafields.spec.vehicle_category') ??
-    safeGet(car, 'metafields.spec.car_category');
-  const bodyTypeRaw =
-    safeGet(car, 'body_type') ??
-    safeGet(car, 'metafields.spec.body_type') ??
-    safeGet(car, 'metafields.spec.bodyType');
+  const drivetrainRaw =
+    safeGet(car, 'drivetrain') ??
+    safeGet(car, 'drive') ??
+    safeGet(car, 'drive_type') ??
+    safeGet(car, 'wheel_drive') ??
+    safeGet(car, 'metafields.spec.drivetrain') ??
+    safeGet(car, 'metafields.spec.drive') ??
+    safeGet(car, 'metafields.spec.drive_type') ??
+    safeGet(car, 'metafields.spec.wheel_drive') ??
+    safeGet(car, 'metafields.custom.drivetrain') ??
+    safeGet(car, 'metafields.custom.drive') ??
+    safeGet(car, 'metafields.custom.drive_type') ??
+    safeGet(car, 'metafields.custom.wheel_drive');
   const fuelType =
     safeGet(car, 'fuelType') ??
     safeGet(car, 'fuel_type') ??
@@ -151,28 +172,6 @@ export default function CarCard({ car, priority = false, className = '', variant
     safeGet(car, 'metafields.spec.fuel_type') ??
     safeGet(car, 'metafields.spec.fuel') ??
     car?.metafields?.spec?.['fuel-type'];
-
-  const normalizeCategory = (categoryValue, bodyTypeValue) => {
-    const raw = String(categoryValue ?? '').trim();
-    const body = String(bodyTypeValue ?? '').trim();
-    const combined = `${raw} ${body}`.trim();
-    if (!combined) return null;
-
-    const lower = combined.toLowerCase();
-
-    // Prefer Thai labels for card display
-    if (lower.includes('suv') || body === 'SUV') return 'SUV';
-    if (lower.includes('pickup') || lower.includes('กระบะ') || body === 'Pickup') return 'รถกระบะ';
-    if (lower.includes('sedan') || lower.includes('เซดาน') || body === 'Sedan') return 'เซดาน';
-    if (lower.includes('hatchback') || lower.includes('แฮท') || body === 'Hatchback')
-      return 'แฮทช์แบ็ก';
-    if (lower.includes('van') || lower.includes('แวน') || body === 'Van') return 'แวน';
-
-    // Avoid showing generic categories that don't add value on the card
-    if (combined === 'รถยนต์มือสอง') return null;
-
-    return raw || body || null;
-  };
 
   const toPositiveNumber = value => {
     if (value == null) return null;
@@ -204,11 +203,30 @@ export default function CarCard({ car, priority = false, className = '', variant
     return s;
   };
 
+  const formatMaskedWithCommas = input => {
+    const s = String(input || '').trim();
+    if (!s) return null;
+    const parts = [];
+    for (let i = s.length; i > 0; i -= 3) {
+      parts.unshift(s.slice(Math.max(0, i - 3), i));
+    }
+    return parts.join(',');
+  };
+
   const formatMileage = value => {
     const approx = normalizeApproxNumber(value);
     if (approx) return `${approx} กม.`;
     const num = toPositiveNumber(value);
     if (!num) return null;
+
+    // If the mileage includes zeros, show a masked pattern like 15x,xxx (0 -> x)
+    const digits = String(Math.trunc(num));
+    if (digits.includes('0')) {
+      const masked = digits.replace(/0/g, 'x');
+      const formatted = formatMaskedWithCommas(masked);
+      return `${formatted || masked} กม.`;
+    }
+
     return `${num.toLocaleString('th-TH')} กม.`;
   };
 
@@ -227,11 +245,11 @@ export default function CarCard({ car, priority = false, className = '', variant
       raw.includes('ออโต้') ||
       raw.includes('อัตโนมัติ')
     ) {
-      return 'อัตโนมัติ';
+      return 'ออโต้';
     }
 
     // Standardize CVT under automatic for consistent display
-    if (upper.includes('CVT')) return 'อัตโนมัติ';
+    if (upper.includes('CVT')) return 'ออโต้';
 
     if (
       upper.includes('M/T') ||
@@ -264,10 +282,79 @@ export default function CarCard({ car, priority = false, className = '', variant
     return raw;
   };
 
+  const normalizeDrivetrain = (value, fallbackText, carTags) => {
+    const tags = Array.isArray(carTags) ? carTags : [];
+    const raw = String(value ?? '').trim();
+
+    const normalize = text => {
+      const lower = String(text || '')
+        .trim()
+        .toLowerCase();
+      if (!lower) return null;
+
+      // Prefer AWD over 4WD when explicitly present (e.g. CR-V AWD)
+      if (lower.includes('awd') || lower.includes('all wheel')) return 'AWD';
+
+      // 2WD / 4x2 (keep as 2WD when axle isn't specified)
+      if (
+        lower.includes('2wd') ||
+        lower.includes('2-wd') ||
+        lower.includes('4x2') ||
+        lower.includes('4×2') ||
+        lower.includes('2x4') ||
+        lower.includes('2×4') ||
+        lower.includes('two wheel') ||
+        lower.includes('ขับ2') ||
+        lower.includes('ขับ 2') ||
+        lower.includes('สองล้อ')
+      ) {
+        return '2WD';
+      }
+
+      // 4WD / 4x4
+      if (
+        lower.includes('4wd') ||
+        lower.includes('4-wd') ||
+        lower.includes('4x4') ||
+        lower.includes('4×4') ||
+        lower.includes('four wheel')
+      ) {
+        return '4WD';
+      }
+
+      if (lower.includes('fwd') || lower.includes('front wheel')) return 'FWD';
+      if (lower.includes('rwd') || lower.includes('rear wheel')) return 'RWD';
+
+      // Thai hints
+      if (lower.includes('ขับ4') || lower.includes('ขับ 4') || lower.includes('ขับเคลื่อน4'))
+        return '4WD';
+      if (lower.includes('สี่ล้อ') || lower.includes('4 ล้อ')) return '4WD';
+      if (lower.includes('ขับหน้า') || lower.includes('ล้อหน้า')) return 'FWD';
+      if (lower.includes('ขับหลัง') || lower.includes('ล้อหลัง')) return 'RWD';
+
+      return null;
+    };
+
+    // 1) Prefer explicit field value from Shopify/specs
+    const fromValue = normalize(raw);
+    if (fromValue) return fromValue;
+
+    // 2) If the field is missing, infer from title/handle (more reliable than tags)
+    const inferred = normalize(String(fallbackText || ''));
+    if (inferred) return inferred;
+
+    // 3) Fall back to tags only when the field is missing
+    const tagText = tags
+      .map(t => String(t == null ? '' : t))
+      .join(' ')
+      .trim();
+    return normalize(tagText);
+  };
+
   const mileageLabel = formatMileage(mileage);
   const transmission = normalizeTransmission(transmissionRaw);
   const fuelLabel = normalizeFuel(fuelType);
-  const categoryLabel = normalizeCategory(categoryRaw, bodyTypeRaw);
+  const drivetrainLabel = normalizeDrivetrain(drivetrainRaw, `${car?.title || ''} ${handle}`, tags);
 
   const normalizeYear = value => {
     if (value == null) return null;
@@ -293,9 +380,9 @@ export default function CarCard({ car, priority = false, className = '', variant
       isPlaceholder: !year,
     },
     {
-      key: 'mileage',
-      value: mileageLabel ? String(mileageLabel) : '-',
-      isPlaceholder: !mileageLabel,
+      key: 'drivetrain',
+      value: drivetrainLabel ? String(drivetrainLabel) : '-',
+      isPlaceholder: !drivetrainLabel,
     },
     {
       key: 'transmission',
@@ -411,8 +498,8 @@ export default function CarCard({ car, priority = false, className = '', variant
         </div>
 
         <div className="mt-0.5 min-h-[1.25rem] text-sm font-prompt font-semibold text-gray-700">
-          {categoryLabel ? (
-            categoryLabel
+          {mileageLabel ? (
+            <>เลขไมล์ {mileageLabel}</>
           ) : (
             <span aria-hidden="true" className="invisible">
               -
@@ -422,9 +509,7 @@ export default function CarCard({ car, priority = false, className = '', variant
 
         {/* Quick Specs (hide only in compact variant) */}
         {!isCompact && (
-          <div
-            className={`${categoryLabel ? 'mt-1' : 'mt-1'} grid grid-cols-2 grid-rows-2 gap-2 min-h-[3.25rem]`}
-          >
+          <div className="mt-1 grid grid-cols-2 grid-rows-2 gap-2 min-h-[3.25rem]">
             {quickSpecsFixed.map((spec, idx) => (
               <span
                 key={spec?.key || `placeholder-${idx}`}
@@ -448,13 +533,13 @@ export default function CarCard({ car, priority = false, className = '', variant
                     className={`inline-block animate-pulse rounded bg-gray-200/80 ${
                       spec.key === 'year'
                         ? 'h-3 w-10 sm:h-3.5 sm:w-12'
-                        : spec.key === 'mileage'
-                          ? 'h-3 w-16 sm:h-3.5 sm:w-20'
+                        : spec.key === 'drivetrain'
+                          ? 'h-3 w-12 sm:h-3.5 sm:w-16'
                           : 'h-3 w-12 sm:h-3.5 sm:w-16'
                     }`}
                   />
                 ) : (
-                  <span className="truncate">{spec?.value || '-'}</span>
+                  <span className="truncate flex-1 min-w-0">{spec?.value || '-'}</span>
                 )}
               </span>
             ))}

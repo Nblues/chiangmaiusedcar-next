@@ -18,19 +18,34 @@ export default async function handler(req, res) {
     const raw = req?.query?.handles;
     const handlesRaw = Array.isArray(raw) ? raw.join(',') : String(raw || '');
 
-    const handles = handlesRaw
+    const requestedHandles = handlesRaw
       .split(',')
       .map(h => normalizeHandle(h))
       .filter(Boolean)
       .slice(0, 50);
 
-    if (handles.length === 0) {
+    // Canonicalize for caching: unique + sorted handles.
+    // This reduces cache-misses when clients send the same set in different orders.
+    const canonicalHandles = Array.from(new Set(requestedHandles)).sort();
+
+    if (requestedHandles.length === 0) {
       res.status(400).json({ ok: false, error: 'missing_handles' });
       return;
     }
 
-    const rawSpecs = await getCarSpecsByHandles(handles);
-    const specs = handles.reduce((acc, h) => {
+    const requestedCsv = requestedHandles.join(',');
+    const canonicalCsv = canonicalHandles.join(',');
+
+    // Redirect GET requests to the canonical URL so the CDN caches one key.
+    if (req.method === 'GET' && canonicalCsv && canonicalCsv !== requestedCsv) {
+      const params = new URLSearchParams({ handles: canonicalCsv });
+      res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+      res.redirect(308, `/api/public/car-specs?${params.toString()}`);
+      return;
+    }
+
+    const rawSpecs = await getCarSpecsByHandles(canonicalHandles);
+    const specs = canonicalHandles.reduce((acc, h) => {
       acc[h] = (rawSpecs && rawSpecs[h]) || {};
       return acc;
     }, {});

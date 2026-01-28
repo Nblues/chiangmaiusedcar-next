@@ -29,6 +29,8 @@ module.exports = {
       },
       screens: {
         xs: '475px',
+        // iPad Pro 11" portrait is 834px wide; use this for iPad-specific spacing tweaks.
+        ipadpro: '834px',
         '3xl': '1600px',
       },
       zIndex: {

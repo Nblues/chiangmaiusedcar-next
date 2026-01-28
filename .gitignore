@@ -181,6 +181,11 @@ dev/reports/label-audit.md
 # One-off local debug scripts (keep out of git)
 check-product-schema.mjs
 scripts/debug-lint-og.mjs
+scripts/prod-*.ps1
+scripts/*-prod-*.ps1
+add-production-envs.ps1
+env-prod-*.txt
+env-prod-*.json
 
 # ========================
 # 📊 Performance & Monitoring

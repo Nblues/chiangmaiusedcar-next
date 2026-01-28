@@ -241,6 +241,7 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
 
   const [specByHandle, setSpecByHandle] = useState({});
   const requestedSpecHandlesRef = useRef(new Set());
+  const specFetchAttemptsRef = useRef(new Map());
 
   const mergeSpecs = (car, extra) => {
     const next = { ...car };
@@ -249,9 +250,29 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
     const carFuel = car?.fuelType || car?.fuel_type || car?.['fuel-type'];
     const extraFuel = extra?.fuelType || extra?.fuel_type || extra?.['fuel-type'];
 
+    const carDrive =
+      car?.drivetrain ||
+      car?.drive_type ||
+      car?.driveType ||
+      car?.['drive-type'] ||
+      car?.wheel_drive ||
+      car?.wheelDrive;
+    const extraDrive =
+      extra?.drivetrain ||
+      extra?.drive_type ||
+      extra?.driveType ||
+      extra?.['drive-type'] ||
+      extra?.wheel_drive ||
+      extra?.wheelDrive;
+
     if (has(carFuel)) {
       if (!has(next.fuelType)) next.fuelType = carFuel;
       if (!has(next.fuel_type)) next.fuel_type = carFuel;
+    }
+
+    if (has(carDrive)) {
+      if (!has(next.drivetrain)) next.drivetrain = carDrive;
+      if (!has(next.drive_type)) next.drive_type = carDrive;
     }
 
     if (!extra) return next;
@@ -259,6 +280,10 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
     if (!has(next.year) && has(extra.year)) next.year = extra.year;
     if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
     if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
+    if (!has(carDrive) && has(extraDrive)) {
+      next.drivetrain = extra.drivetrain || extraDrive;
+      next.drive_type = extra.drive_type || extraDrive;
+    }
     if (!has(carFuel) && has(extraFuel)) {
       next.fuelType = extra.fuelType || extraFuel;
       next.fuel_type = extra.fuel_type || extraFuel;
@@ -282,6 +307,9 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
       if (!handle) continue;
       if (requestedSpecHandlesRef.current.has(handle)) continue;
 
+      const attempts = Number(specFetchAttemptsRef.current.get(handle) || 0);
+      if (attempts >= 2) continue;
+
       const extra = specByHandle?.[handle];
       const merged = mergeSpecs(car, extra);
 
@@ -289,22 +317,34 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
       const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
       const hasTransmission =
         merged?.transmission != null && String(merged.transmission).trim() !== '';
+      const drive =
+        merged?.drivetrain ||
+        merged?.drive_type ||
+        merged?.driveType ||
+        merged?.['drive-type'] ||
+        merged?.wheel_drive ||
+        merged?.wheelDrive;
+      const hasDrivetrain = drive != null && String(drive).trim() !== '';
       const fuel = merged?.fuelType || merged?.fuel_type;
       const hasFuel = fuel != null && String(fuel).trim() !== '';
 
-      if (!(hasYear && hasMileage && hasTransmission && hasFuel)) {
+      if (!(hasYear && hasMileage && hasTransmission && hasDrivetrain && hasFuel)) {
         needs.push(handle);
       }
     }
 
     if (needs.length === 0) return;
-    needs.forEach(h => requestedSpecHandlesRef.current.add(h));
+    needs.forEach(h => {
+      requestedSpecHandlesRef.current.add(h);
+      specFetchAttemptsRef.current.set(h, Number(specFetchAttemptsRef.current.get(h) || 0) + 1);
+    });
 
     const fetchSpecs = async () => {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 8000);
-        const params = new URLSearchParams({ handles: needs.join(',') });
+        const canonical = Array.from(new Set(needs.filter(Boolean))).sort();
+        const params = new URLSearchParams({ handles: canonical.join(',') });
         const resp = await fetch(`/api/public/car-specs?${params.toString()}`, {
           cache: 'no-store',
           credentials: 'same-origin',
@@ -331,6 +371,10 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
           ...(prev || {}),
           ...data.specs,
         }));
+
+        // Treat requestedSpecHandlesRef as in-flight only.
+        // If specs are still incomplete (e.g. drivetrain missing), allow a limited retry.
+        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
       } catch (error) {
         needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
         if (process.env.NODE_ENV === 'development') {
@@ -465,7 +509,7 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
 
       <Breadcrumb />
 
-      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 py-8">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 ipadpro:px-3 py-8">
         <nav
           aria-label="ไปยังส่วนต่างๆ ของหน้า"
           className="mb-6 rounded-2xl border border-gray-200 bg-white p-4 sm:p-5"
@@ -669,7 +713,7 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
           </div>
 
           {safeCars.length > 0 ? (
-            <div className="mt-4 car-grid grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-6">
+            <div className="mt-4 car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
               {featuredCars.map((car, index) => {
                 const handle = car?.handle;
                 const extra = handle ? specByHandle?.[handle] : null;
