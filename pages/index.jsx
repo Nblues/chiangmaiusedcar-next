@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 
-import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import SEO from '../components/SEO.jsx';
 import CarCard from '../components/CarCard';
@@ -22,15 +22,27 @@ import { buildFaqPageJsonLd } from '../lib/seo/faq';
 const HOME_FAQS = [
   {
     q: 'ดาวน์ 0% จริงไหม?',
-    a: 'จริง! ลูกค้าสามารถออกรถฟรีดาวน์ตามโปรโมชัน ตรวจสภาพครบถ้วน และตรวจสอบประวัติรถก่อนส่งมอบ',
+    a: 'จริง! ครูหนึ่งรถสวยมีโปรโมชันฟรีดาวน์ 0% ลูกค้าสามารถออกรถโดยไม่ต้องวางเงินดาวน์ ตรวจสภาพครบถ้วน ตรวจสอบประวัติรถทุกคันก่อนส่งมอบ พร้อมเอกสารครบถ้วน',
   },
   {
     q: 'ติดเครดิตบูโรออกได้ไหม?',
-    a: 'ได้! เรามีไฟแนนซ์หลากหลายแบบ แนะนำให้ทัก LINE หรือโทร 094-064-9018 เพื่อประเมินเบื้องต้น',
+    a: 'ออกได้! เรามีไฟแนนซ์หลากหลายรายผู้ให้สินเชื่อ รองรับทุกอาชีพ แนะนำให้ทัก LINE @krunung.car หรือโทร 094-064-9018 เพื่อประเมินเบื้องต้น ทีมงานจะช่วยหาวิธีที่เหมาะสมที่สุด',
   },
   {
     q: 'มีรับประกันไหม?',
-    a: 'รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม ตรวจสภาพครบถ้วนก่อนส่งมอบ และมีบริการหลังการขาย',
+    a: 'รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม ตรวจสภาพครบถ้วนก่อนส่งมอบโดยช่างผู้เชี่ยวชาญ มีบริการหลังการขายและศูนย์บริการครบวงจร',
+  },
+  {
+    q: 'รถมือสองเชียงใหม่ที่ไหนดี?',
+    a: 'ครูหนึ่งรถสวย (www.chiangmaiusedcar.com) เป็นศูนย์รถมือสองออนไลน์ชั้นนำในเชียงใหม่ คัดสรรรถบ้านคุณภาพดี ฟรีดาวน์ ผ่อนถูก รับประกัน 1 ปี จัดส่งฟรีทั่วประเทศ',
+  },
+  {
+    q: 'มีรถยี่ห้ออะไรบ้าง?',
+    a: 'มีรถยี่ห้อชั้นนำทุกยี่ห้อ ได้แก่ Toyota, Honda, Nissan, Mazda, Mitsubishi, Isuzu, Ford ทั้งรถเก๋ง รถกระบะ รถ SUV และรถครอบครัว 7 ที่นั่ง ราคาตั้งแต่ 100,000 บาทขึ้นไป',
+  },
+  {
+    q: 'จัดส่งได้ไหม?',
+    a: 'จัดส่งฟรีทั่วประเทศ! มีบริการนำรถส่งถึงบ้านลูกค้า ตรวจสภาพก่อนส่งมอบทุกครั้ง',
   },
 ];
 
@@ -175,9 +187,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   // Facebook reviews: render only client
   const [showFbReviews, setShowFbReviews] = useState(false);
   const [liveStatuses, setLiveStatuses] = useState(null);
-  const [specByHandle, setSpecByHandle] = useState({});
-  const requestedSpecHandlesRef = useRef(new Set());
-  const specFetchAttemptsRef = useRef(new Map());
 
   const mergeSpecs = (car, extra) => {
     const next = { ...car };
@@ -261,111 +270,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   }, [safeCars, liveStatuses]);
   // Precompute IDs for fetching statuses
   const ids = useMemo(() => safeCars.map(c => c.id).filter(Boolean), [safeCars]);
-
-  // Enrich missing specs for the first 6 homepage cards (mileage/transmission/fuel/installment/category)
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const list = Array.isArray(carsWithLive) ? carsWithLive.slice(0, 8) : [];
-    if (list.length === 0) return;
-
-    const needs = [];
-    for (const car of list) {
-      const handle = car?.handle;
-      if (!handle) continue;
-      if (requestedSpecHandlesRef.current.has(handle)) continue;
-
-      const attempts = Number(specFetchAttemptsRef.current.get(handle) || 0);
-      if (attempts >= 2) continue;
-
-      const extra = specByHandle?.[handle];
-      const merged = mergeSpecs(car, extra);
-
-      const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
-      const hasTransmission =
-        merged?.transmission != null && String(merged.transmission).trim() !== '';
-      const drive =
-        merged?.drivetrain ||
-        merged?.drive_type ||
-        merged?.driveType ||
-        merged?.['drive-type'] ||
-        merged?.wheel_drive ||
-        merged?.wheelDrive;
-      const hasDrivetrain = drive != null && String(drive).trim() !== '';
-      const fuel = merged?.fuelType || merged?.fuel_type;
-      const hasFuel = fuel != null && String(fuel).trim() !== '';
-      const hasInstallment =
-        merged?.installment != null && String(merged.installment).trim() !== '';
-
-      const hasCategory = merged?.category != null && String(merged.category).trim() !== '';
-
-      if (
-        !(
-          hasMileage &&
-          hasTransmission &&
-          hasDrivetrain &&
-          hasFuel &&
-          hasInstallment &&
-          hasCategory
-        )
-      ) {
-        needs.push(handle);
-      }
-    }
-
-    if (needs.length === 0) return;
-    needs.forEach(h => {
-      requestedSpecHandlesRef.current.add(h);
-      specFetchAttemptsRef.current.set(h, Number(specFetchAttemptsRef.current.get(h) || 0) + 1);
-    });
-
-    const fetchSpecs = async () => {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-        const canonical = Array.from(new Set(needs.filter(Boolean))).sort();
-        const params = new URLSearchParams({ handles: canonical.join(',') });
-        const resp = await fetch(`/api/public/car-specs?${params.toString()}`, {
-          cache: 'no-store',
-          credentials: 'same-origin',
-          signal: controller.signal,
-        });
-        clearTimeout(timeoutId);
-
-        if (!resp.ok) {
-          needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
-          return;
-        }
-        const data = await resp.json();
-        if (!data?.ok || !data?.specs) {
-          needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
-          return;
-        }
-
-        // If a handle wasn't returned, don't permanently block retries.
-        const returned = new Set(Object.keys(data.specs || {}));
-        for (const h of needs) {
-          if (!returned.has(h)) requestedSpecHandlesRef.current.delete(h);
-        }
-
-        setSpecByHandle(prev => ({
-          ...(prev || {}),
-          ...data.specs,
-        }));
-
-        // Treat requestedSpecHandlesRef as in-flight only.
-        // If specs are still incomplete (e.g. drivetrain missing), allow a limited retry.
-        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
-      } catch (error) {
-        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
-        if (process.env.NODE_ENV === 'development') {
-          // eslint-disable-next-line no-console
-          console.warn('Failed to fetch car specs:', error?.message);
-        }
-      }
-    };
-
-    fetchSpecs().catch(() => {});
-  }, [carsWithLive, specByHandle]);
 
   // NOTE: Always attach a catch when invoking async helpers inside effects,
   // timers, or event handlers to avoid "Unhandled Runtime Error" overlays
@@ -994,9 +898,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
               ) : (
                 <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
                   {carsWithLive.slice(0, 8).map((car, index) => {
-                    const handle = car?.handle;
-                    const extra = handle ? specByHandle?.[handle] : null;
-                    const mergedCar = mergeSpecs(car, extra);
+                    const mergedCar = mergeSpecs(car, null);
                     return <CarCard key={car.id} car={mergedCar} priority={index < 2} />;
                   })}
                 </div>

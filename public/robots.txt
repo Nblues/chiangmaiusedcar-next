@@ -34,9 +34,10 @@ Allow: /
 User-agent: bingbot
 Allow: /
 
-# ChatGPT-User
+# ChatGPT-User (OpenAI)
 User-agent: ChatGPT-User
 Allow: /
+Allow: /.well-known/*
 Allow: /all-cars
 Allow: /car/*
 Allow: /used-cars-chiang-mai
@@ -50,9 +51,24 @@ Disallow: /api-dashboard
 Disallow: /license
 Crawl-delay: 1
 
-# Claude-Web
+# GPTBot (OpenAI Training)
+User-agent: GPTBot
+Allow: /
+Allow: /.well-known/*
+Allow: /all-cars
+Allow: /car/*
+Allow: /used-cars-chiang-mai
+Allow: /used-cars-chiang-mai-brand/*
+Allow: /about
+Allow: /contact
+Disallow: /api*
+Disallow: /admin*
+Crawl-delay: 1
+
+# Claude-Web (Anthropic)
 User-agent: Claude-Web
 Allow: /
+Allow: /.well-known/*
 Allow: /all-cars
 Allow: /car/*
 Allow: /used-cars-chiang-mai
@@ -66,9 +82,30 @@ Disallow: /api-dashboard
 Disallow: /license
 Crawl-delay: 1
 
-# Bard
+# anthropic-ai (Anthropic Training)
+User-agent: anthropic-ai
+Allow: /
+Allow: /.well-known/*
+Allow: /all-cars
+Allow: /car/*
+Crawl-delay: 1
+
+# Google-Extended (Gemini/Bard Training)
+User-agent: Google-Extended
+Allow: /
+Allow: /.well-known/*
+Allow: /all-cars
+Allow: /car/*
+Allow: /used-cars-chiang-mai
+Allow: /used-cars-chiang-mai-brand/*
+Allow: /about
+Allow: /contact
+Crawl-delay: 1
+
+# Bard (Google Gemini)
 User-agent: Bard
 Allow: /
+Allow: /.well-known/*
 Allow: /all-cars
 Allow: /car/*
 Allow: /used-cars-chiang-mai
@@ -80,6 +117,31 @@ Disallow: /admin*
 Disallow: /keyword-audit
 Disallow: /api-dashboard
 Disallow: /license
+Crawl-delay: 1
+
+# PerplexityBot (Perplexity AI)
+User-agent: PerplexityBot
+Allow: /
+Allow: /.well-known/*
+Allow: /all-cars
+Allow: /car/*
+Allow: /used-cars-chiang-mai
+Allow: /about
+Allow: /contact
+Crawl-delay: 1
+
+# Amazonbot (Amazon Alexa)
+User-agent: Amazonbot
+Allow: /
+Allow: /all-cars
+Allow: /car/*
+Crawl-delay: 2
+
+# Applebot (Apple Siri)
+User-agent: Applebot
+Allow: /
+Allow: /all-cars
+Allow: /car/*
 Crawl-delay: 1
 
 # Instagram

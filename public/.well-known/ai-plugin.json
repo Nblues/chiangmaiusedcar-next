@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "ครูหนึ่งรถสวย - รถมือสองเชียงใหม่",
+  "name_for_model": "chiangmai_used_cars",
+  "description_for_human": "ค้นหารถมือสองคุณภาพดีในเชียงใหม่ ฟรีดาวน์ ผ่อนถูก รับประกัน 1 ปี จัดส่งฟรีทั่วประเทศ",
+  "description_for_model": "Search and find quality used cars in Chiang Mai, Thailand. Provides information about available cars with zero down payment, low monthly installments, 1-year warranty, and free nationwide delivery. Specializes in Toyota, Honda, Nissan, Mazda, and other popular brands. Price range from 100,000 to 2,000,000+ THB. All cars are inspected and verified with complete documentation.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://www.chiangmaiusedcar.com/.well-known/openapi.json"
+  },
+  "logo_url": "https://www.chiangmaiusedcar.com/logo/logo.png",
+  "contact_email": "krunung.car@gmail.com",
+  "legal_info_url": "https://www.chiangmaiusedcar.com/terms-of-service"
+}

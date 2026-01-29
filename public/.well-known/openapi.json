@@ -1,0 +1,196 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Chiang Mai Used Car API",
+    "description": "API for searching and finding quality used cars in Chiang Mai, Thailand",
+    "version": "1.0.0",
+    "contact": {
+      "name": "ครูหนึ่งรถสวย",
+      "email": "krunung.car@gmail.com",
+      "url": "https://www.chiangmaiusedcar.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://www.chiangmaiusedcar.com",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/all-cars": {
+      "get": {
+        "summary": "Browse all available used cars",
+        "description": "Get a list of all available used cars with filtering options by brand, price range, and search keywords",
+        "operationId": "getAllCars",
+        "parameters": [
+          {
+            "name": "brand",
+            "in": "query",
+            "description": "Filter by car brand (toyota, honda, nissan, mazda, mitsubishi, isuzu, ford, etc.)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "price",
+            "in": "query",
+            "description": "Filter by price range (e.g., 100000-200000, 200000-300000, 700000+)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search by keywords (car model, year, features, etc.)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of available cars",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/car/{handle}": {
+      "get": {
+        "summary": "Get detailed information about a specific car",
+        "description": "View complete specifications, images, price, and warranty details of a specific used car",
+        "operationId": "getCarDetails",
+        "parameters": [
+          {
+            "name": "handle",
+            "in": "path",
+            "required": true,
+            "description": "Unique identifier for the car (URL slug)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Car details page",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/used-cars-chiang-mai": {
+      "get": {
+        "summary": "Chiang Mai used cars landing page",
+        "description": "Main landing page for used cars in Chiang Mai with featured vehicles, financing options, and contact information",
+        "operationId": "getChiangMaiLanding",
+        "responses": {
+          "200": {
+            "description": "Chiang Mai landing page",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/used-cars-chiang-mai-brand/{brand}": {
+      "get": {
+        "summary": "Browse cars by specific brand",
+        "description": "View all available cars from a specific brand (Toyota, Honda, Nissan, Mazda, etc.)",
+        "operationId": "getCarsByBrand",
+        "parameters": [
+          {
+            "name": "brand",
+            "in": "path",
+            "required": true,
+            "description": "Car brand name (lowercase)",
+            "schema": {
+              "type": "string",
+              "enum": ["toyota", "honda", "nissan", "mazda", "mitsubishi", "isuzu", "ford", "chevrolet", "mg", "suzuki"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Brand-specific car listings",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/about": {
+      "get": {
+        "summary": "About the dealership",
+        "description": "Information about ครูหนึ่งรถสวย dealership, services, location, and team",
+        "operationId": "getAbout",
+        "responses": {
+          "200": {
+            "description": "About page",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contact": {
+      "get": {
+        "summary": "Contact information",
+        "description": "Get contact details, location map, phone number (094-064-9018), LINE ID, and operating hours",
+        "operationId": "getContact",
+        "responses": {
+          "200": {
+            "description": "Contact page with phone, LINE, address, and map",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {}
+  }
+}
