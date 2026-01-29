@@ -29,7 +29,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* LOGO */}
-          <Link href="/" className="flex items-center space-x-3">
+          <Link href="/" prefetch={false} className="flex items-center space-x-3">
             <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-gold shadow-lg">
               <picture>
                 <source srcSet="/logo/logo_main_optimized.webp" type="image/webp" />
@@ -52,6 +52,7 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch={false}
                 className={`px-3 py-2 rounded-md text-sm font-medium font-prompt transition-colors duration-200 ${
                   isActive(item.href)
                     ? 'bg-primary text-white'
@@ -90,6 +91,7 @@ export default function Navbar() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  prefetch={false}
                   className={`block px-3 py-2 rounded-md font-prompt font-semibold text-base tracking-wide transition-colors duration-200 ${
                     isActive(item.href)
                       ? 'bg-primary text-white'

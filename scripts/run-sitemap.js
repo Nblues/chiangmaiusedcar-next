@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { spawnSync } = require('child_process');
+const { spawn } = require('child_process');
 
 function sanitizeOutput(text) {
   if (!text) return '';
@@ -25,22 +25,49 @@ function fileNonEmpty(filePath) {
   }
 }
 
-function runNode(repoRoot, scriptPath, args = []) {
-  const result = spawnSync(process.execPath, [scriptPath, ...args], {
-    cwd: repoRoot,
-    stdio: 'pipe',
-    windowsHide: true,
-    env: process.env,
+function runNode(repoRoot, scriptPath, args = [], { heartbeatLabel } = {}) {
+  return new Promise(resolve => {
+    const child = spawn(process.execPath, [scriptPath, ...args], {
+      cwd: repoRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      windowsHide: true,
+      env: process.env,
+    });
+
+    let heartbeatTimer = null;
+    if (heartbeatLabel) {
+      heartbeatTimer = setInterval(() => {
+        try {
+          process.stdout.write(`Sitemap: still running (${heartbeatLabel})...\n`);
+        } catch {
+          // ignore
+        }
+      }, 15000);
+    }
+
+    const onStdout = chunk => {
+      try {
+        process.stdout.write(sanitizeOutput(chunk.toString('utf8')));
+      } catch {
+        // ignore
+      }
+    };
+    const onStderr = chunk => {
+      try {
+        process.stderr.write(sanitizeOutput(chunk.toString('utf8')));
+      } catch {
+        // ignore
+      }
+    };
+
+    child.stdout.on('data', onStdout);
+    child.stderr.on('data', onStderr);
+
+    child.on('close', code => {
+      if (heartbeatTimer) clearInterval(heartbeatTimer);
+      resolve({ status: typeof code === 'number' ? code : 1 });
+    });
   });
-
-  if (result.stdout && result.stdout.length) {
-    process.stdout.write(sanitizeOutput(result.stdout.toString('utf8')));
-  }
-  if (result.stderr && result.stderr.length) {
-    process.stderr.write(sanitizeOutput(result.stderr.toString('utf8')));
-  }
-
-  return result;
 }
 
 function main() {
@@ -68,39 +95,49 @@ function main() {
   }
 
   process.stdout.write('Sitemap: generating sitemap.xml...\n');
-  const sitemapResult = runNode(repoRoot, nextSitemapBin);
+  return runNode(repoRoot, nextSitemapBin, [], { heartbeatLabel: 'next-sitemap' }).then(
+    sitemapResult => {
 
-  const sitemapOk = fileNonEmpty(sitemapIndex) && fileNonEmpty(sitemap0);
-  if (!sitemapOk) {
-    process.stderr.write(
-      'Sitemap: generation failed (missing or empty public/sitemap.xml or public/sitemap-0.xml)\n'
-    );
-    process.exitCode = typeof sitemapResult.status === 'number' ? sitemapResult.status : 1;
-    return;
-  }
+      const sitemapOk = fileNonEmpty(sitemapIndex) && fileNonEmpty(sitemap0);
+      if (!sitemapOk) {
+        process.stderr.write(
+          'Sitemap: generation failed (missing or empty public/sitemap.xml or public/sitemap-0.xml)\n'
+        );
+        process.exitCode = typeof sitemapResult.status === 'number' ? sitemapResult.status : 1;
+        return;
+      }
 
-  if (typeof sitemapResult.status === 'number' && sitemapResult.status !== 0) {
-    process.stdout.write(
-      `Sitemap: note: underlying exit status was ${sitemapResult.status}, using generated files\n`
-    );
-  }
+      if (typeof sitemapResult.status === 'number' && sitemapResult.status !== 0) {
+        process.stdout.write(
+          `Sitemap: note: underlying exit status was ${sitemapResult.status}, using generated files\n`
+        );
+      }
 
-  if (fs.existsSync(imageSitemapScript)) {
-    process.stdout.write('Sitemap: generating sitemap-images.xml...\n');
-    const imageResult = runNode(repoRoot, imageSitemapScript);
+      const runImages = () => {
+        if (!fs.existsSync(imageSitemapScript)) return Promise.resolve(null);
 
-    if (
-      typeof imageResult.status === 'number' &&
-      imageResult.status !== 0 &&
-      fileNonEmpty(sitemapImages)
-    ) {
-      process.stdout.write(
-        `Sitemap: note: image generator exit status was ${imageResult.status}, using generated file\n`
-      );
+        process.stdout.write('Sitemap: generating sitemap-images.xml...\n');
+        return runNode(repoRoot, imageSitemapScript, [], { heartbeatLabel: 'image-sitemap' }).then(
+          imageResult => {
+            if (
+              typeof imageResult.status === 'number' &&
+              imageResult.status !== 0 &&
+              fileNonEmpty(sitemapImages)
+            ) {
+              process.stdout.write(
+                `Sitemap: note: image generator exit status was ${imageResult.status}, using generated file\n`
+              );
+            }
+            return imageResult;
+          }
+        );
+      };
+
+      return runImages().then(() => {
+        process.exitCode = 0;
+      });
     }
-  }
-
-  process.exitCode = 0;
+  );
 }
 
 main();

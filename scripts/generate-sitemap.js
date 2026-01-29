@@ -17,6 +17,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const fs = require('fs');
 const path = require('path');
+const { pathToFileURL } = require('url');
 
 // Load configuration
 const sitemapConfig = require('../next-sitemap.config.js');
@@ -25,8 +26,10 @@ async function generateEnhancedSitemap() {
   console.log('🚀 Starting enhanced sitemap generation...');
 
   try {
-    // Import the Shopify library
-    const { getAllCars } = require('../lib/shopify');
+    // Import the Shopify library (real Storefront integration)
+    // Note: this file is CommonJS; `lib/shopify.mjs` is ESM.
+    const shopifyModuleUrl = pathToFileURL(path.join(__dirname, '../lib/shopify.mjs')).href;
+    const { getAllCars } = await import(shopifyModuleUrl);
 
     // Get all cars
     console.log('📡 Fetching cars data...');
