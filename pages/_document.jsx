@@ -41,6 +41,9 @@ export default class MyDocument extends Document {
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
+          {/* Mobile viewport: prevent in-app browsers (LINE/FB) from auto-scaling text/layout */}
+          <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
           {shouldPreloadHero && (
             // eslint-disable-next-line react/no-unknown-property
             <link

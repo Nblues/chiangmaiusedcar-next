@@ -255,6 +255,103 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   // Memoize expensive computations
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
 
+  // Enrich missing specs for featured cards (helps when metafields are not exposed to Storefront API).
+  const featuredCars = useMemo(() => safeCars.slice(0, 8), [safeCars]);
+  const [specByHandle, setSpecByHandle] = useState({});
+  const requestedSpecHandlesRef = React.useRef(new Set());
+  const specFetchAttemptsRef = React.useRef(new Map());
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const list = Array.isArray(featuredCars) ? featuredCars : [];
+    if (list.length === 0) return;
+
+    const needs = [];
+    for (const car of list) {
+      const handle = car?.handle;
+      if (!handle) continue;
+      if (requestedSpecHandlesRef.current.has(handle)) continue;
+
+      const attempts = Number(specFetchAttemptsRef.current.get(handle) || 0);
+      if (attempts >= 2) continue;
+
+      const extra = specByHandle?.[handle];
+      const merged = mergeSpecs(car, extra);
+
+      const hasYear = merged?.year != null && String(merged.year).trim() !== '';
+      const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
+      const hasTransmission =
+        merged?.transmission != null && String(merged.transmission).trim() !== '';
+      const drive =
+        merged?.drivetrain ||
+        merged?.drive_type ||
+        merged?.driveType ||
+        merged?.['drive-type'] ||
+        merged?.wheel_drive ||
+        merged?.wheelDrive;
+      const hasDrivetrain = drive != null && String(drive).trim() !== '';
+      const fuel = merged?.fuelType || merged?.fuel_type;
+      const hasFuel = fuel != null && String(fuel).trim() !== '';
+
+      if (!(hasYear && hasMileage && hasTransmission && hasDrivetrain && hasFuel)) {
+        needs.push(handle);
+      }
+    }
+
+    if (needs.length === 0) return;
+    needs.forEach(h => {
+      requestedSpecHandlesRef.current.add(h);
+      specFetchAttemptsRef.current.set(h, Number(specFetchAttemptsRef.current.get(h) || 0) + 1);
+    });
+
+    const fetchSpecs = async () => {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        const canonical = Array.from(new Set(needs.filter(Boolean))).sort();
+        const params = new URLSearchParams({ handles: canonical.join(',') });
+        const resp = await fetch(`/api/public/car-specs?${params.toString()}`, {
+          cache: 'no-store',
+          credentials: 'same-origin',
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (!resp.ok) {
+          needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+          return;
+        }
+        const data = await resp.json();
+        if (!data?.ok || !data?.specs) {
+          needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+          return;
+        }
+
+        const returned = new Set(Object.keys(data.specs || {}));
+        for (const h of needs) {
+          if (!returned.has(h)) requestedSpecHandlesRef.current.delete(h);
+        }
+
+        setSpecByHandle(prev => ({
+          ...(prev || {}),
+          ...data.specs,
+        }));
+
+        // Treat requestedSpecHandlesRef as in-flight only.
+        // If specs are still incomplete (e.g. drivetrain missing), allow a limited retry.
+        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+      } catch (error) {
+        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+        if (process.env.NODE_ENV === 'development') {
+          // eslint-disable-next-line no-console
+          console.warn('Failed to fetch car specs:', error?.message);
+        }
+      }
+    };
+
+    fetchSpecs().catch(() => {});
+  }, [featuredCars, specByHandle]);
+
   // NOTE: Always attach a catch when invoking async helpers inside effects,
   // timers, or event handlers to avoid "Unhandled Runtime Error" overlays
   // if a browser extension or network stack throws unexpectedly.
@@ -803,7 +900,9 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                   ) : (
                     <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
                       {safeCars.slice(0, 8).map((car, index) => {
-                        const mergedCar = mergeSpecs(car, null);
+                        const handle = car?.handle;
+                        const extra = handle ? specByHandle?.[handle] : null;
+                        const mergedCar = mergeSpecs(car, extra);
                         return <CarCard key={car.id} car={mergedCar} priority={index < 2} />;
                       })}
                     </div>
