@@ -32,6 +32,8 @@ export default class MyDocument extends Document {
     const shouldPreloadHero =
       requestPath === '/' || requestPath === '/en' || requestPath === '/en/';
 
+    const shouldPreloadAllCarsHero = requestPath === '/all-cars' || requestPath === '/all-cars/';
+
     return (
       <Html lang={htmlLang}>
         <Head>
@@ -47,7 +49,21 @@ export default class MyDocument extends Document {
               href="/herobanner/cnxcar-828w.webp"
               type="image/webp"
               imageSrcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
+              imageSizes="(max-width: 1400px) 100vw, 1400px"
+              fetchPriority="high"
+            />
+          )}
+
+          {shouldPreloadAllCarsHero && (
+            // eslint-disable-next-line react/no-unknown-property
+            <link
+              rel="preload"
+              as="image"
+              href="/herobanner/cnxallcar-828w.webp"
+              type="image/webp"
+              imageSrcSet="/herobanner/cnxallcar-480w.webp 480w, /herobanner/cnxallcar-640w.webp 640w, /herobanner/cnxallcar-828w.webp 828w, /herobanner/cnxallcar-1024w.webp 1024w, /herobanner/cnxallcar-1400w.webp 1400w"
               imageSizes="100vw"
+              fetchPriority="high"
             />
           )}
 
@@ -59,14 +75,8 @@ export default class MyDocument extends Document {
             }}
           />
 
-          {/* DNS Prefetch & Preconnect for Performance */}
-          <link rel="dns-prefetch" href="https://cdn.shopify.com" />
-          <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-          <link rel="dns-prefetch" href="https://vercel.com" />
-          <link rel="dns-prefetch" href="https://analytics.vercel.com" />
+          {/* Preconnect only to the most critical 3rd-party origin (Shopify image CDN). */}
           <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
-          <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-          <link rel="preconnect" href="https://files.myshopify.com" crossOrigin="anonymous" />
 
           {/* Facebook In-App Browser Compatibility */}
           <meta httpEquiv="Accept-CH" content="DPR, Viewport-Width, Width" />

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 import { Prompt } from 'next/font/google';
 import ClientOnly from '../components/ClientOnly';
+import Navbar from '../components/Navbar';
 import '../styles/globals.css';
 import { onCookieConsentChange, readCookieConsent } from '../utils/cookieConsent';
 
@@ -19,7 +19,6 @@ const prompt = Prompt({
 });
 
 // Dynamic imports keep heavy UI out of the initial bundle and avoid hydration mismatches
-const Navbar = dynamic(() => import('../components/Navbar'), { ssr: false, loading: () => null });
 const Footer = dynamic(() => import('../components/Footer'), { ssr: false, loading: () => null });
 const CookieConsent = dynamic(() => import('../components/CookieConsent'), {
   ssr: false,
@@ -242,18 +241,7 @@ export default function MyApp({ Component, pageProps }) {
       // Default layout for public pages
       return (
         <div className={`${prompt.variable} font-prompt`}>
-          <ClientOnly
-            fallback={
-              <nav
-                className="bg-white shadow-lg sticky top-0 z-60 border-b-2 border-accent pt-[env(safe-area-inset-top)]"
-                aria-label="เมนูหลัก"
-              >
-                <div className="h-16" />
-              </nav>
-            }
-          >
-            <Navbar />
-          </ClientOnly>
+          <Navbar />
           <main id="main" role="main">
             {page}
           </main>
@@ -271,21 +259,6 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <Head>
-        {/* DNS Prefetch for performance */}
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
-        <link rel="dns-prefetch" href="//cdn.shopify.com" />
-        <link rel="dns-prefetch" href="//kn-goodcar.com" />
-        <link rel="dns-prefetch" href="//vercel-analytics.com" />
-
-        {/* Preconnect for critical resources */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
-
-        {/* Font optimization: using next/font (Prompt) with swap */}
-      </Head>
       {getLayout(<Component {...pageProps} />)}
       {VercelTools ? <VercelTools /> : null}
       {!isAdminRoute && process.env.NODE_ENV === 'production' && cookieConsent?.marketing ? (

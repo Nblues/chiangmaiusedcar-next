@@ -5,9 +5,10 @@
   "packageManager": "pnpm@10.0.0",
   "scripts": {
     "prebuild": "node scripts/generate-hero-variants.cjs && node scripts/check-no-html-imports.cjs",
-    "dev": "cross-env NEXT_DISABLE_SWC=1 NEXT_DISABLE_SWC_BINARY=1 NEXT_TELEMETRY_DISABLED=1 UV_THREADPOOL_SIZE=4 NODE_OPTIONS=--max-old-space-size=4096 next dev -p 3000",
+    "dev": "cross-env LOW_MEMORY_DEV=true NEXT_DISABLE_SWC=1 NEXT_DISABLE_SWC_BINARY=1 NEXT_TELEMETRY_DISABLED=1 UV_THREADPOOL_SIZE=4 NODE_OPTIONS=--max-old-space-size=4096 next dev -p 3000",
     "devev": "npm run dev",
     "dev:light": "cross-env NEXT_DISABLE_SWC=1 NEXT_DISABLE_SWC_BINARY=1 NODE_OPTIONS=--max-old-space-size=4096 next dev -p 3000",
+    "dev:perf": "cross-env LOW_MEMORY_DEV=false NEXT_DISABLE_SWC=1 NEXT_DISABLE_SWC_BINARY=1 NEXT_TELEMETRY_DISABLED=1 UV_THREADPOOL_SIZE=4 NODE_OPTIONS=--max-old-space-size=4096 next dev -p 3000",
     "dev:turbo": "cross-env NODE_OPTIONS=\"--max-old-space-size=8192 --max-semi-space-size=256\" UV_THREADPOOL_SIZE=8 next dev --turbo -p 3000",
     "dev:full": "cross-env NEXT_DISABLE_SWC=1 NEXT_DISABLE_SWC_BINARY=1 NEXT_TELEMETRY_DISABLED=1 UV_THREADPOOL_SIZE=8 NODE_OPTIONS=--max-old-space-size=6144 next dev -p 3000",
     "dev:wasm": "cross-env NEXT_DISABLE_SWC=1 NEXT_DISABLE_SWC_BINARY=1 UV_THREADPOOL_SIZE=4 NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=4096 next dev -p 3000",

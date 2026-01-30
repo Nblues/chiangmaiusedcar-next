@@ -9,10 +9,28 @@ if (!reportPath) {
 }
 
 const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+const lcpElAudit = report?.audits?.['largest-contentful-paint-element'];
+const lcpElBreakdown = lcpElAudit?.details?.items?.[1]?.items;
+
+if (Array.isArray(lcpElBreakdown) && lcpElBreakdown.length) {
+  console.log('Report:', reportPath);
+  console.log('Final URL:', report?.finalUrl ?? 'n/a');
+  console.log('LCP phases (ms) from largest-contentful-paint-element:');
+  for (const row of lcpElBreakdown) {
+    const label = row?.phase ?? 'n/a';
+    const ms = row?.timing;
+    const pct = row?.percent;
+    if (typeof ms === 'number') {
+      console.log(`- ${label}${pct ? ` (${pct})` : ''}: ${ms}ms`);
+    }
+  }
+  process.exit(0);
+}
+
 const audit = report?.audits?.['lcp-breakdown-insight'];
 
 if (!audit) {
-  console.log('Missing audit: lcp-breakdown-insight');
+  console.log('Missing audit: largest-contentful-paint-element breakdown and lcp-breakdown-insight');
   process.exit(0);
 }
 
@@ -73,18 +91,38 @@ function prune(value, depth = 3) {
 }
 
 function findFirstPhases(obj) {
-  if (!obj || typeof obj !== 'object') return null;
-  if (
-    Array.isArray(obj.phases) &&
-    obj.phases.every(p => p && typeof p === 'object' && 'subpart' in p)
-  ) {
-    return obj.phases;
-  }
-  if (Array.isArray(obj.items)) {
-    for (const it of obj.items) {
+  if (!obj) return null;
+
+  // Lighthouse v12 can represent the breakdown as a table where the rows are:
+  // [{ subpart, label, duration }, ...]
+  if (Array.isArray(obj)) {
+    if (
+      obj.length &&
+      obj.every(
+        p =>
+          p &&
+          typeof p === 'object' &&
+          'subpart' in p &&
+          typeof p.duration === 'number'
+      )
+    ) {
+      return obj;
+    }
+    for (const it of obj) {
       const found = findFirstPhases(it);
       if (found) return found;
     }
+    return null;
+  }
+
+  if (typeof obj !== 'object') return null;
+
+  if (Array.isArray(obj.phases) && obj.phases.every(p => p && typeof p === 'object' && 'subpart' in p)) {
+    return obj.phases;
+  }
+  if (Array.isArray(obj.items)) {
+    const found = findFirstPhases(obj.items);
+    if (found) return found;
   }
   for (const v of Object.values(obj)) {
     if (v && typeof v === 'object') {

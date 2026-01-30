@@ -109,10 +109,12 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
     // - รูป priority=true → fetchpriority="high" (โหลดก่อนทรัพยากรอื่น)
     // - ถ้าเป็นรูปที่ไม่สำคัญ (thumbnail/gallery/card) ให้ default เป็น "low" เพื่อลดแย่งแบนด์วิดท์
     let fetchPriorityAttr: 'high' | 'low' | 'auto';
-    if (priority) {
-      fetchPriorityAttr = 'high';
-    } else if (fetchpriority) {
+    // Allow explicit fetchpriority to override priority (useful when we want eager loading
+    // but don't want to steal priority from the true LCP hero image).
+    if (fetchpriority) {
       fetchPriorityAttr = fetchpriority;
+    } else if (priority) {
+      fetchPriorityAttr = 'high';
     } else if (imageType === 'thumbnail' || imageType === 'gallery' || imageType === 'card') {
       fetchPriorityAttr = 'low';
     } else {

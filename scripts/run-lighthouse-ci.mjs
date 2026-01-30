@@ -34,26 +34,45 @@ async function preflight(url, { timeoutMs = 20000 } = {}) {
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
-    const res = await fetch(url, {
-      method: 'GET',
-      redirect: 'follow',
-      signal: controller.signal,
-      headers: {
-        // Lighthouse runs headless Chrome; use a browser-like UA for preflight too.
-        'user-agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36',
-        accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      },
-    });
+    const fetchOnce = async targetUrl => {
+      const res = await fetch(targetUrl, {
+        method: 'GET',
+        redirect: 'follow',
+        signal: controller.signal,
+        headers: {
+          // Lighthouse runs headless Chrome; use a browser-like UA for preflight too.
+          'user-agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36',
+          accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        },
+      });
 
-    // We don't need the body; close the stream ASAP.
+      // We don't need the body; close the stream ASAP.
+      try {
+        res.body?.cancel?.();
+      } catch {
+        // ignore
+      }
+
+      return { ok: res.status >= 200 && res.status < 300, status: res.status, finalUrl: res.url };
+    };
+
     try {
-      res.body?.cancel?.();
-    } catch {
-      // ignore
+      return await fetchOnce(url);
+    } catch (e) {
+      // On Windows, Node's fetch can fail against `localhost` when it resolves to IPv6
+      // (::1) but the server is only listening on IPv4. Retry with 127.0.0.1.
+      try {
+        const u = new URL(url);
+        if (u.hostname === 'localhost') {
+          u.hostname = '127.0.0.1';
+          return await fetchOnce(u.toString());
+        }
+      } catch {
+        // ignore
+      }
+      throw e;
     }
-
-    return { ok: res.status >= 200 && res.status < 300, status: res.status, finalUrl: res.url };
   } catch (e) {
     return { ok: false, status: 0, finalUrl: url, error: String(e?.message ?? e) };
   } finally {

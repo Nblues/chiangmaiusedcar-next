@@ -40,6 +40,8 @@ export default function Navbar() {
                   height="48"
                   className="w-full h-full object-cover scale-125"
                   loading="eager"
+                  fetchPriority="low"
+                  decoding="async"
                 />
               </picture>
             </div>

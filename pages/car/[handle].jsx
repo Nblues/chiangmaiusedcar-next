@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Head from 'next/head';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import SEO from '../../components/SEO';
 import Breadcrumb from '../../components/Breadcrumb';
 import SimilarCars from '../../components/SimilarCars';
-import { getAllCars } from '../../lib/shopify.mjs';
+import { getAllCars, getCarByHandle } from '../../lib/shopify.mjs';
 import { safeGet, safeFormatPrice } from '../../utils/safe';
 import Link from 'next/link';
 import A11yImage from '../../components/A11yImage';
@@ -28,6 +27,123 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const heroImageRef = useRef(null); // เก็บ ref ของรูปหลักเพื่อเช็ค complete
   // สถานะโหลดรูป thumbnails (ติดตามแต่ละรูป)
   const [thumbnailLoadingState, setThumbnailLoadingState] = useState({});
+  const desktopThumbStripRef = useRef(null);
+  const mobileThumbStripRef = useRef(null);
+  const prefetchedThumbKeysRef = useRef(new Set());
+  const preloadedHeroRef = useRef(new Map());
+
+  const thumbStateBatchRef = useRef({ rafId: null, pending: {} });
+  const queueThumbState = useCallback((key, value) => {
+    if (key == null) return;
+    const k = String(key);
+    thumbStateBatchRef.current.pending[k] = value;
+
+    if (thumbStateBatchRef.current.rafId != null) return;
+    if (typeof window === 'undefined') return;
+
+    thumbStateBatchRef.current.rafId = window.requestAnimationFrame(() => {
+      const pending = thumbStateBatchRef.current.pending;
+      thumbStateBatchRef.current.pending = {};
+      thumbStateBatchRef.current.rafId = null;
+
+      setThumbnailLoadingState(prev => {
+        let changed = false;
+        const next = { ...prev };
+        Object.keys(pending).forEach(pKey => {
+          if (next[pKey] !== pending[pKey]) {
+            next[pKey] = pending[pKey];
+            changed = true;
+          }
+        });
+        return changed ? next : prev;
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    const batch = thumbStateBatchRef.current;
+    return () => {
+      if (typeof window === 'undefined') return;
+      if (batch.rafId != null) {
+        try {
+          window.cancelAnimationFrame(batch.rafId);
+        } catch {
+          // ignore
+        }
+        batch.rafId = null;
+      }
+      batch.pending = {};
+    };
+  }, []);
+
+  const heroSwipeRef = useRef({
+    active: false,
+    canceled: false,
+    startX: 0,
+    startY: 0,
+    startTime: 0,
+    pointerId: null,
+  });
+
+  const preloadHeroCandidate = useCallback((originalUrl, width, quality) => {
+    if (typeof window === 'undefined') return;
+    if (!originalUrl) return;
+
+    const resolvedWidth = Number(width);
+    if (!Number.isFinite(resolvedWidth) || resolvedWidth <= 0) return;
+
+    const resolvedQuality =
+      typeof quality === 'number' && Number.isFinite(quality)
+        ? Math.max(1, Math.min(100, quality))
+        : undefined;
+
+    const optimizedUrl = optimizeShopifyImage(originalUrl, resolvedWidth, 'webp', resolvedQuality);
+    if (!optimizedUrl) return;
+    if (preloadedHeroRef.current.has(optimizedUrl)) return;
+
+    const img = new window.Image();
+    // Hint: keep these low-priority so they don't compete with the true LCP fetch.
+    img.fetchPriority = 'low';
+    img.decoding = 'async';
+    img.src = optimizedUrl;
+
+    preloadedHeroRef.current.set(optimizedUrl, img);
+
+    // Keep cache bounded to avoid memory growth on long browsing sessions.
+    const MAX = 18;
+    if (preloadedHeroRef.current.size > MAX) {
+      const firstKey = preloadedHeroRef.current.keys().next().value;
+      if (firstKey) {
+        try {
+          const firstImg = preloadedHeroRef.current.get(firstKey);
+          // Clearing src helps release memory on some browsers.
+          if (firstImg) firstImg.src = '';
+        } catch {
+          // ignore
+        }
+        preloadedHeroRef.current.delete(firstKey);
+      }
+    }
+
+    // Decode in idle time so swapping feels instant.
+    const decode = () => {
+      try {
+        img.decode?.().catch(() => {});
+      } catch {
+        // ignore
+      }
+    };
+
+    try {
+      if (typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(decode, { timeout: 1200 });
+      } else {
+        setTimeout(decode, 0);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const copyTextToClipboard = async text => {
     if (typeof window === 'undefined') return false;
@@ -95,16 +211,13 @@ function CarDetailPage({ car, recommendedCars = [] }) {
           const match = altText.match(/รูปที่ (\d+)/);
           if (match) {
             const idx = parseInt(match[1], 10) - 1;
-            setThumbnailLoadingState(prev => ({
-              ...prev,
-              [idx]: false,
-              [`mobile-${idx}`]: false,
-            }));
+            queueThumbState(idx, false);
+            queueThumbState(`mobile-${idx}`, false);
           }
         }
       });
     }, 100);
-  }, [car]);
+  }, [car, queueThumbState]);
 
   // ตั้งสถานะโหลดรูปหลักทุกครั้งที่สลับรูป (กันกรณี cache/production ทำให้ UX เพี้ยน)
   useEffect(() => {
@@ -246,32 +359,145 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   // Preload next/prev images for instant switching with optimization
   useEffect(() => {
     if (!mounted || !car) return;
+    // อย่าให้ preload รูปถัดไป/ก่อนหน้าแย่ง bandwidth ตอน hero กำลังโหลดอยู่
+    if (isHeroLoading) return;
+    const images = safeGet(car, 'images', []);
+    if (images.length < 2) return;
+    if (typeof window === 'undefined') return;
+
+    // Respect data saver / very slow networks.
+    const saveData = Boolean(navigator?.connection?.saveData);
+    const effectiveType = String(navigator?.connection?.effectiveType || '');
+    const verySlow = /2g/i.test(effectiveType);
+
+    // ⭐ Preload เฉพาะใกล้ๆ (ถัดไป/ก่อนหน้า) แต่ให้ตรงกับ hero srcset candidates
+    const preloadIndexes = [];
+    if (selectedImageIndex < images.length - 1) preloadIndexes.push(selectedImageIndex + 1);
+    if (selectedImageIndex + 2 < images.length) preloadIndexes.push(selectedImageIndex + 2);
+    if (selectedImageIndex > 0) preloadIndexes.push(selectedImageIndex - 1);
+
+    // Hero uses srcset [640, 1024, 1920] + sizes mapping in utils/imageOptimizer.
+    // Warm the likely candidates so switching doesn't wait on network/decode.
+    const widths = saveData || verySlow ? [640] : [640, 1024];
+    // On fast connections, also warm 1920 for large screens.
+    const shouldWarm1920 = !saveData && !verySlow && window.innerWidth >= 1024;
+    if (shouldWarm1920) widths.push(1920);
+
+    preloadIndexes.forEach(idx => {
+      const originalUrl = safeGet(images[idx], 'url', '');
+      widths.forEach(w => preloadHeroCandidate(originalUrl, w, 75));
+    });
+  }, [selectedImageIndex, car, mounted, isHeroLoading, preloadHeroCandidate]);
+
+  // Prefetch thumbnails เมื่อใกล้เข้ามาใน viewport (ช่วยตอนเลื่อนเร็ว ๆ แล้วรูปขึ้นทัน)
+  useEffect(() => {
+    if (!mounted || !car) return;
+    const images = safeGet(car, 'images', []);
+    if (images.length < 2) return;
+    if (typeof window === 'undefined') return;
+
+    const setupObserver = container => {
+      if (!container) return null;
+      if (typeof window.IntersectionObserver !== 'function') return null;
+
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            const key = el?.getAttribute?.('data-thumb-key');
+            if (!key) return;
+            if (prefetchedThumbKeysRef.current.has(key)) return;
+            prefetchedThumbKeysRef.current.add(key);
+
+            const idxStr = String(key).split('-')[1];
+            const idx = Number(idxStr);
+            if (!Number.isFinite(idx) || idx < 0 || idx >= images.length) return;
+
+            const originalUrl = safeGet(images[idx], 'url', '');
+            if (!originalUrl) return;
+
+            const thumbUrl = optimizeShopifyImage(originalUrl, 240, 'webp');
+            const img = new window.Image();
+            img.src = thumbUrl;
+            img.fetchPriority = 'low';
+          });
+        },
+        {
+          root: container,
+          // Prefetch ก่อนเข้าจอเล็กน้อย เพื่อให้เลื่อนเร็วแล้วยังทัน
+          rootMargin: '160px',
+          threshold: 0.01,
+        }
+      );
+
+      const targets = container.querySelectorAll('[data-thumb-key]');
+      targets.forEach(t => observer.observe(t));
+      return observer;
+    };
+
+    const desktopObserver = setupObserver(desktopThumbStripRef.current);
+    const mobileObserver = setupObserver(mobileThumbStripRef.current);
+
+    return () => {
+      try {
+        desktopObserver?.disconnect?.();
+      } catch {
+        // ignore
+      }
+      try {
+        mobileObserver?.disconnect?.();
+      } catch {
+        // ignore
+      }
+    };
+  }, [mounted, car]);
+
+  // Keep selected thumbnail visible without forcing page scroll
+  useEffect(() => {
+    if (!mounted || !car) return;
+    if (typeof window === 'undefined') return;
+
     const images = safeGet(car, 'images', []);
     if (images.length < 2) return;
 
-    // ⭐ Preload เฉพาะรูปถัดไปและรูปก่อนหน้า (ไม่โหลดทั้งหมด)
-    const preloadIndexes = [];
-    if (selectedImageIndex < images.length - 1) preloadIndexes.push(selectedImageIndex + 1);
-    if (selectedImageIndex > 0) preloadIndexes.push(selectedImageIndex - 1);
+    const isDesktop =
+      typeof window.matchMedia === 'function'
+        ? window.matchMedia('(min-width: 640px)').matches
+        : false;
 
-    const preloadedImages = [];
-    preloadIndexes.forEach(idx => {
-      const img = new window.Image();
-      const originalUrl = safeGet(images[idx], 'url', '');
-      // ⭐ ใช้ optimized URL ขนาด 1920px สำหรับรูปหลัก
-      img.src = optimizeShopifyImage(originalUrl, 1920, 'webp');
-      // ⭐ ตั้ง fetchpriority ให้ต่ำกว่ารูปปัจจุบัน
-      img.fetchPriority = 'low';
-      preloadedImages.push(img);
-    });
+    const container = isDesktop ? desktopThumbStripRef.current : mobileThumbStripRef.current;
+    if (!container) return;
 
-    // Cleanup: ยกเลิก preload เมื่อเปลี่ยนรูป
-    return () => {
-      preloadedImages.forEach(img => {
-        img.src = ''; // ยกเลิกการโหลด
+    const containerRect = container.getBoundingClientRect();
+    const containerVisibleVertically =
+      containerRect.bottom > 0 && containerRect.top < window.innerHeight;
+    if (!containerVisibleVertically) return;
+
+    const key = `${isDesktop ? 'd' : 'm'}-${selectedImageIndex}`;
+    const el = container.querySelector(`[data-thumb-key="${key}"]`);
+    if (!el) return;
+
+    // Only scroll the strip if the selected thumb is outside the strip viewport.
+    const elRect = el.getBoundingClientRect();
+    const inView = elRect.left >= containerRect.left && elRect.right <= containerRect.right;
+    if (inView) return;
+
+    const reduceMotion =
+      typeof window.matchMedia === 'function'
+        ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        : false;
+
+    try {
+      el.scrollIntoView({
+        block: 'nearest',
+        inline: 'center',
+        behavior: reduceMotion ? 'auto' : 'smooth',
       });
-    };
-  }, [selectedImageIndex, car, mounted]);
+    } catch {
+      // ignore
+    }
+  }, [mounted, car, selectedImageIndex]);
 
   // Process and clean the car description into readable paragraphs and hashtags
   useEffect(() => {
@@ -482,15 +708,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
 
   return (
     <>
-      {/* Minimal SSR OG block to guarantee Facebook/LINE can read meta without JS */}
-      <Head>
-        {/* ⭐ Preconnect to Shopify CDN for faster image loading */}
-        <link rel="preconnect" href="https://cdn.shopify.com" />
-        <link rel="dns-prefetch" href="https://cdn.shopify.com" />
-
-        {/* Image preload handled automatically by Next.js Image priority prop */}
-      </Head>
-
       {/* SEO component handles all meta tags including OG tags */}
       <SEO
         title={enhancedTitle}
@@ -556,18 +773,88 @@ function CarDetailPage({ car, recommendedCars = [] }) {
 
           {/* รูปรถ - Modern 2025 Style */}
           <div className="mb-6 sm:mb-8">
-            <div className="relative w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[600px] bg-white rounded-xl overflow-hidden border border-gray-200">
+            <div
+              className="relative w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[600px] bg-white rounded-xl overflow-hidden border border-gray-200 touch-pan-y select-none"
+              onPointerDown={e => {
+                if (carImages.length < 2) return;
+                // Left click / primary touch only
+                if (typeof e.button === 'number' && e.button !== 0) return;
+                // Don't treat button interactions as swipes
+                if (e.target?.closest?.('button')) return;
+
+                heroSwipeRef.current.active = true;
+                heroSwipeRef.current.canceled = false;
+                heroSwipeRef.current.startX = e.clientX;
+                heroSwipeRef.current.startY = e.clientY;
+                heroSwipeRef.current.startTime = Date.now();
+                heroSwipeRef.current.pointerId = e.pointerId;
+
+                try {
+                  e.currentTarget.setPointerCapture(e.pointerId);
+                } catch {
+                  // ignore
+                }
+              }}
+              onPointerMove={e => {
+                const s = heroSwipeRef.current;
+                if (!s.active) return;
+                if (s.pointerId != null && e.pointerId !== s.pointerId) return;
+
+                const dx = e.clientX - s.startX;
+                const dy = e.clientY - s.startY;
+
+                // If the user is mostly scrolling vertically, cancel swipe detection.
+                if (!s.canceled && Math.abs(dy) > Math.max(18, Math.abs(dx))) {
+                  s.canceled = true;
+                }
+              }}
+              onPointerUp={e => {
+                const s = heroSwipeRef.current;
+                if (!s.active) return;
+                if (s.pointerId != null && e.pointerId !== s.pointerId) return;
+
+                s.active = false;
+
+                try {
+                  e.currentTarget.releasePointerCapture(e.pointerId);
+                } catch {
+                  // ignore
+                }
+
+                if (s.canceled) return;
+
+                const dx = e.clientX - s.startX;
+                const dy = e.clientY - s.startY;
+                const dt = Date.now() - s.startTime;
+
+                // Horizontal swipe: quick enough, not too vertical.
+                if (Math.abs(dx) < 50) return;
+                if (Math.abs(dy) > 80) return;
+                if (dt > 900) return;
+
+                if (dx < 0) {
+                  setSelectedImageIndex(prev => (prev === carImages.length - 1 ? 0 : prev + 1));
+                } else {
+                  setSelectedImageIndex(prev => (prev === 0 ? carImages.length - 1 : prev - 1));
+                }
+              }}
+              onPointerCancel={() => {
+                heroSwipeRef.current.active = false;
+                heroSwipeRef.current.canceled = true;
+              }}
+            >
               <A11yImage
                 ref={heroImageRef}
-                key={safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp')}
                 src={safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp')}
                 alt={carAlt(car)}
                 fallbackAlt={safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
                 fill
                 className="object-cover"
-                priority={true} // ⭐ เพิ่ม priority สำหรับรูปหลัก Above-the-fold
+                priority={selectedImageIndex === 0} // ⭐ LCP มีแค่รูปแรกที่ render
                 imageType="hero" // ⭐ ระบุเป็นรูปหลัก (1920px)
                 quality={85}
+                loading="eager" // ⭐ รูปใหญ่ใน viewport: eager เพื่อให้ตอบสนองตอนสลับรูป
+                fetchpriority={selectedImageIndex === 0 ? 'high' : 'auto'}
                 decoding="async" // ⭐ Decode แบบ async ไม่บล็อก main thread
                 onLoad={() => {
                   setIsHeroLoading(false);
@@ -731,12 +1018,16 @@ function CarDetailPage({ car, recommendedCars = [] }) {
 
             {/* Thumbnails - Modern 2025 Style with Lazy Loading */}
             {carImages.length > 1 && (
-              <div className="hidden sm:flex gap-3 mt-4 overflow-x-auto pb-2 scrollbar-hide">
+              <div
+                ref={desktopThumbStripRef}
+                className="hidden sm:flex gap-3 mt-4 overflow-x-auto pb-2 scrollbar-hide snap-x snap-proximity overscroll-x-contain"
+              >
                 {carImages.map((img, index) => {
                   // ⭐ โหลด thumbnail ทั้งหมดแบบ lazy เพื่อลดการแย่ง bandwidth กับ hero
                   return (
                     <button
                       key={`${safeGet(img, 'url', 'thumb')}-${index}`}
+                      data-thumb-key={`d-${index}`}
                       onClick={() => setSelectedImageIndex(index)}
                       onKeyDown={e => {
                         if (e.key === 'Enter' || e.key === ' ') {
@@ -745,7 +1036,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                         }
                       }}
                       tabIndex={0}
-                      className={`relative flex-shrink-0 w-20 h-16 lg:w-24 lg:h-18 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
+                      className={`relative flex-shrink-0 w-20 h-16 lg:w-24 lg:h-18 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 snap-start ${
                         selectedImageIndex === index
                           ? 'border-primary ring-2 ring-primary/20'
                           : 'border-gray-200 hover:border-gray-300'
@@ -760,17 +1051,18 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                         fill
                         className="object-cover"
                         imageType="thumbnail" // ⭐ ระบุเป็น thumbnail (400px)
+                        fetchpriority="low"
                         loading="lazy"
                         onLoad={e => {
-                          setThumbnailLoadingState(prev => ({ ...prev, [index]: false }));
+                          queueThumbState(index, false);
                           // ถ้ารูปโหลดจาก cache (complete = true ทันที) ให้ซ่อน loading
                           if (e?.target?.complete) {
-                            setThumbnailLoadingState(prev => ({ ...prev, [index]: false }));
+                            queueThumbState(index, false);
                           }
                         }}
                         onError={() => {
                           // ถ้าโหลดผิดพลาด ให้ซ่อน loading indicator
-                          setThumbnailLoadingState(prev => ({ ...prev, [index]: false }));
+                          queueThumbState(index, false);
                         }}
                       />
                       {/* Loading indicator for thumbnail */}
@@ -828,12 +1120,16 @@ function CarDetailPage({ car, recommendedCars = [] }) {
             {/* Mobile Thumbnails */}
             {carImages.length > 1 && (
               <div className="sm:hidden">
-                <div className="flex gap-2 mt-2 overflow-x-auto pb-2 scrollbar-hide px-1">
+                <div
+                  ref={mobileThumbStripRef}
+                  className="flex gap-2 mt-2 overflow-x-auto pb-2 scrollbar-hide px-1 snap-x snap-proximity overscroll-x-contain"
+                >
                   {carImages.map((img, index) => (
                     <button
                       key={`mobile-${safeGet(img, 'url', 'thumb')}-${index}`}
+                      data-thumb-key={`m-${index}`}
                       onClick={() => setSelectedImageIndex(index)}
-                      className={`relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden border transition-all duration-200 ${
+                      className={`relative flex-shrink-0 w-16 h-12 rounded-md overflow-hidden border transition-all duration-200 snap-start ${
                         selectedImageIndex === index
                           ? 'border-primary ring-1 ring-primary/20'
                           : 'border-gray-200'
@@ -847,27 +1143,20 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                         fallbackAlt={`รูปที่ ${index + 1}`}
                         fill
                         className="object-cover"
+                        imageType="thumbnail"
+                        fetchpriority="low"
                         sizes="64px"
                         loading="lazy"
                         onLoad={e => {
-                          setThumbnailLoadingState(prev => ({
-                            ...prev,
-                            [`mobile-${index}`]: false,
-                          }));
+                          queueThumbState(`mobile-${index}`, false);
                           // ถ้ารูปโหลดจาก cache (complete = true ทันที) ให้ซ่อน loading
                           if (e?.target?.complete) {
-                            setThumbnailLoadingState(prev => ({
-                              ...prev,
-                              [`mobile-${index}`]: false,
-                            }));
+                            queueThumbState(`mobile-${index}`, false);
                           }
                         }}
                         onError={() => {
                           // ถ้าโหลดผิดพลาด ให้ซ่อน loading indicator
-                          setThumbnailLoadingState(prev => ({
-                            ...prev,
-                            [`mobile-${index}`]: false,
-                          }));
+                          queueThumbState(`mobile-${index}`, false);
                         }}
                       />
                       {/* Loading indicator for mobile thumbnail */}
@@ -1437,31 +1726,38 @@ export async function getStaticProps({ params }) {
     const requestedPretty = createPrettyUrl(requested);
 
     // 1) ตรงตัว
-    let car = safeCars.find(c => c?.handle === requestedRaw) || null;
+    let carMeta = safeCars.find(c => c?.handle === requestedRaw) || null;
 
     // 2) เทียบกับ decoded
-    if (!car) {
-      car = safeCars.find(c => c?.handle === requested) || null;
+    if (!carMeta) {
+      carMeta = safeCars.find(c => c?.handle === requested) || null;
     }
 
     // 2.5) เทียบกับ pretty handle (ตัดคำไทยเช่น "ปี" ออกจาก slug)
-    if (!car) {
+    if (!carMeta) {
       const target = requestedPrettyRaw || requestedPretty;
       if (target) {
-        car = safeCars.find(c => c?.handle && createPrettyUrl(c.handle) === target) || null;
+        carMeta = safeCars.find(c => c?.handle && createPrettyUrl(c.handle) === target) || null;
       }
     }
 
     // 3) เผื่อมีคำต่อท้าย เช่น -รุ่นท็อป ให้แมทช์แบบ prefix ที่ยาวสุด
-    if (!car) {
+    if (!carMeta) {
       const candidates = safeCars
         .filter(c => typeof c?.handle === 'string')
         .filter(c => requestedRaw.startsWith(c.handle) || requested.startsWith(c.handle))
         .sort((a, b) => b.handle.length - a.handle.length);
-      car = candidates[0] || null;
+      carMeta = candidates[0] || null;
     }
 
     // ไม่พบจริง ๆ
+    if (!carMeta) {
+      return { notFound: true };
+    }
+
+    // Fetch full car detail (including full image gallery) via per-handle query.
+    // getAllCars() is optimized for listings and may only include a single image.
+    const car = await getCarByHandle(carMeta.handle);
     if (!car) {
       return { notFound: true };
     }

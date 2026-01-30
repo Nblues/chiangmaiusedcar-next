@@ -124,6 +124,96 @@ function getPriceInfo(amount) {
   }
 }
 
+function toPositiveNumber(value) {
+  if (value == null) return null;
+  if (typeof value === 'number') {
+    return Number.isFinite(value) && value > 0 ? value : null;
+  }
+  const raw = String(value);
+  // Don't try to parse approximate values like "5,xxx" (would incorrectly become 5)
+  if (/[xX]/.test(raw)) return null;
+
+  const cleaned = raw.replace(/,/g, '');
+  const match = cleaned.match(/\d+(?:\.\d+)?/);
+  if (!match) return null;
+  const num = Number(match[0]);
+  return Number.isFinite(num) && num > 0 ? num : null;
+}
+
+function normalizeApproxNumber(value) {
+  if (value == null) return null;
+  const raw = String(value).trim();
+  if (!raw) return null;
+  if (!/[xX]/.test(raw)) return null;
+
+  let s = raw.replace(/\s+/g, '');
+  s = s.replace(/X/g, 'x');
+  s = s.replace(/x{2,}/g, 'xxx');
+  // Ensure common formatting: "65xxx" or "65,xxx" -> "65,xxx"
+  s = s.replace(/^(\d{1,3}),?xxx$/i, '$1,xxx');
+  return s;
+}
+
+function formatMaskedWithCommas(input) {
+  const s = String(input || '').trim();
+  if (!s) return null;
+  const parts = [];
+  for (let i = s.length; i > 0; i -= 3) {
+    parts.unshift(s.slice(Math.max(0, i - 3), i));
+  }
+  return parts.join(',');
+}
+
+function formatMileage(value) {
+  const approx = normalizeApproxNumber(value);
+  if (approx) return `${approx} กม.`;
+  const num = toPositiveNumber(value);
+  if (!num) return null;
+
+  // If the mileage includes zeros, show a masked pattern like 15x,xxx (0 -> x)
+  const digits = String(Math.trunc(num));
+  if (digits.includes('0')) {
+    const masked = digits.replace(/0/g, 'x');
+    const formatted = formatMaskedWithCommas(masked);
+    return `${formatted || masked} กม.`;
+  }
+
+  return `${num.toLocaleString('th-TH')} กม.`;
+}
+
+function normalizeTransmission(value) {
+  if (value == null) return null;
+  const raw = String(value).trim();
+  if (!raw) return null;
+  const upper = raw.toUpperCase();
+  const lower = raw.toLowerCase();
+
+  if (
+    upper.includes('A/T') ||
+    upper.includes('AT') ||
+    upper.includes('AUTO') ||
+    lower.includes('automatic') ||
+    raw.includes('ออโต้') ||
+    raw.includes('อัตโนมัติ')
+  ) {
+    return 'ออโต้';
+  }
+
+  // Standardize CVT under automatic for consistent display
+  if (upper.includes('CVT')) return 'ออโต้';
+
+  if (
+    upper.includes('M/T') ||
+    upper.includes('MT') ||
+    lower.includes('manual') ||
+    raw.includes('เกียร์ธรรมดา')
+  ) {
+    return 'ธรรมดา';
+  }
+
+  return raw;
+}
+
 export default function CarCard({ car, priority = false, className = '', variant = 'default' }) {
   if (!car) return null;
 
@@ -172,96 +262,6 @@ export default function CarCard({ car, priority = false, className = '', variant
     safeGet(car, 'metafields.spec.fuel_type') ??
     safeGet(car, 'metafields.spec.fuel') ??
     car?.metafields?.spec?.['fuel-type'];
-
-  const toPositiveNumber = value => {
-    if (value == null) return null;
-    if (typeof value === 'number') {
-      return Number.isFinite(value) && value > 0 ? value : null;
-    }
-    const raw = String(value);
-    // Don't try to parse approximate values like "5,xxx" (would incorrectly become 5)
-    if (/[xX]/.test(raw)) return null;
-
-    const cleaned = raw.replace(/,/g, '');
-    const match = cleaned.match(/\d+(?:\.\d+)?/);
-    if (!match) return null;
-    const num = Number(match[0]);
-    return Number.isFinite(num) && num > 0 ? num : null;
-  };
-
-  const normalizeApproxNumber = value => {
-    if (value == null) return null;
-    const raw = String(value).trim();
-    if (!raw) return null;
-    if (!/[xX]/.test(raw)) return null;
-
-    let s = raw.replace(/\s+/g, '');
-    s = s.replace(/X/g, 'x');
-    s = s.replace(/x{2,}/g, 'xxx');
-    // Ensure common formatting: "65xxx" or "65,xxx" -> "65,xxx"
-    s = s.replace(/^(\d{1,3}),?xxx$/i, '$1,xxx');
-    return s;
-  };
-
-  const formatMaskedWithCommas = input => {
-    const s = String(input || '').trim();
-    if (!s) return null;
-    const parts = [];
-    for (let i = s.length; i > 0; i -= 3) {
-      parts.unshift(s.slice(Math.max(0, i - 3), i));
-    }
-    return parts.join(',');
-  };
-
-  const formatMileage = value => {
-    const approx = normalizeApproxNumber(value);
-    if (approx) return `${approx} กม.`;
-    const num = toPositiveNumber(value);
-    if (!num) return null;
-
-    // If the mileage includes zeros, show a masked pattern like 15x,xxx (0 -> x)
-    const digits = String(Math.trunc(num));
-    if (digits.includes('0')) {
-      const masked = digits.replace(/0/g, 'x');
-      const formatted = formatMaskedWithCommas(masked);
-      return `${formatted || masked} กม.`;
-    }
-
-    return `${num.toLocaleString('th-TH')} กม.`;
-  };
-
-  const normalizeTransmission = value => {
-    if (value == null) return null;
-    const raw = String(value).trim();
-    if (!raw) return null;
-    const upper = raw.toUpperCase();
-    const lower = raw.toLowerCase();
-
-    if (
-      upper.includes('A/T') ||
-      upper.includes('AT') ||
-      upper.includes('AUTO') ||
-      lower.includes('automatic') ||
-      raw.includes('ออโต้') ||
-      raw.includes('อัตโนมัติ')
-    ) {
-      return 'ออโต้';
-    }
-
-    // Standardize CVT under automatic for consistent display
-    if (upper.includes('CVT')) return 'ออโต้';
-
-    if (
-      upper.includes('M/T') ||
-      upper.includes('MT') ||
-      lower.includes('manual') ||
-      raw.includes('เกียร์ธรรมดา')
-    ) {
-      return 'ธรรมดา';
-    }
-
-    return raw;
-  };
 
   const normalizeFuel = value => {
     if (value == null) return null;
@@ -431,6 +431,7 @@ export default function CarCard({ car, priority = false, className = '', variant
           width={imageWidth}
           height={imageHeight}
           priority={priority}
+          fetchpriority={priority ? 'auto' : undefined}
           decoding="async"
           fill
           aspectRatio="4/3"

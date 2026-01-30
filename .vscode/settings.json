@@ -168,5 +168,8 @@
   "tailwindCSS.colorDecorators": false,
   "tailwindCSS.showPixelEquivalents": true,
   "tailwindCSS.rootFontSize": 16,
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
 
 }

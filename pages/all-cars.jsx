@@ -5,13 +5,10 @@ import CarCard from '../components/CarCard';
 import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
 import { getAllCars } from '../lib/shopify.mjs';
-import { sanitizePrice } from '../lib/seo/jsonld';
-import { COMMON_OFFER_EXTENSIONS } from '../config/business';
 import { safeGet } from '../utils/safe';
 import { readCarStatuses } from '../lib/carStatusStore.js';
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import { getCachedStatuses, setCachedStatuses } from '../lib/carStatusCache';
-import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
 import { ALL_CARS_FAQS, buildFaqPageJsonLd } from '../lib/seo/faq.js';
 
 async function safeFetchJson(url, fetchOptions = {}, timeoutMs = 8000) {
@@ -103,6 +100,7 @@ export default function AllCars({
   initialPriceRange,
   initialBrandFilter,
   initialPage,
+  structuredDataJson,
   shopifyError,
 }) {
   const seoAllCars = SEO_KEYWORD_MAP.allCars;
@@ -216,9 +214,6 @@ export default function AllCars({
     return next;
   };
 
-  // จำนวนรถต่อหน้า: 8 คัน (iPad Pro: 4x2 แถว)
-  const carsPerPage = 8;
-
   // Keep state in sync when user lands via router navigation (client-side) to a URL with params
   useEffect(() => {
     if (!router?.isReady) return;
@@ -238,7 +233,6 @@ export default function AllCars({
   // Keep client work minimal to reduce hydration cost (TBT).
   const safeTotalPages = Number.isFinite(totalPages) && totalPages > 0 ? totalPages : 1;
   const safePage = Math.min(Math.max(1, currentPage), safeTotalPages);
-  const startIndex = (safePage - 1) * carsPerPage;
   const currentCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
   const currentIds = useMemo(() => currentCars.map(c => c.id).filter(Boolean), [currentCars]);
   const currentCarsWithLive = useMemo(() => {
@@ -561,101 +555,6 @@ export default function AllCars({
   // เริ่มการเรนเดอร์หน้า
   const allCarsFaqs = ALL_CARS_FAQS;
 
-  const allCarsCollectionSchema = {
-    '@type': 'CollectionPage',
-    name: `รถมือสองทั้งหมด${safeTotalPages > 1 ? ` - หน้า ${safePage}` : ''}`,
-    description: `รถมือสองคุณภาพดี ${Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ`,
-    url: `https://www.chiangmaiusedcar.com/all-cars${safePage > 1 ? `?page=${safePage}` : ''}`,
-    mainEntity: {
-      '@type': 'ItemList',
-      name: 'รายการรถมือสอง',
-      numberOfItems: currentCars.length,
-      itemListElement: currentCars.map((car, index) => {
-        const sanitizedPrice = sanitizePrice(car.price?.amount);
-        const priceValidUntil = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString();
-        const carDescription =
-          car.description ||
-          `${car.vendor || car.brand || ''} ${car.model || ''} ${car.year || ''} มือสองเชียงใหม่ สภาพสวย ราคาดี`.trim();
-        const availabilityValue = computeSchemaAvailability({
-          status: car?.status,
-          availableForSale: car?.availableForSale,
-        });
-        const inStock = availabilityValue === 'InStock';
-
-        const carUrl = car.handle
-          ? `https://www.chiangmaiusedcar.com/car/${car.handle}`
-          : 'https://www.chiangmaiusedcar.com/all-cars';
-
-        const imageUrl = car.images?.[0]?.url
-          ? car.images[0].url.startsWith('/')
-            ? `https://www.chiangmaiusedcar.com${car.images[0].url}`
-            : car.images[0].url
-          : 'https://www.chiangmaiusedcar.com/herobanner/allusedcars.webp';
-
-        return {
-          '@type': 'ListItem',
-          position: startIndex + index + 1,
-          item: {
-            // Google Rich Results: Product is the supported type.
-            // Keep vehicle context via additionalType.
-            '@type': 'Product',
-            additionalType: 'https://schema.org/Car',
-            '@id': carUrl,
-            url: carUrl,
-            name: car.title,
-            description: carDescription,
-            brand: {
-              '@type': 'Brand',
-              name: car.vendor || car.brand || car.title?.split(' ')[0] || 'รถยนต์',
-            },
-            model: car.model || car.title,
-            sku: car.id || car.handle,
-            category: 'รถยนต์มือสอง',
-            image: [imageUrl],
-            offers: {
-              '@type': 'Offer',
-              url: carUrl,
-              price: sanitizedPrice,
-              priceCurrency: 'THB',
-              itemCondition: 'https://schema.org/UsedCondition',
-              availability: `https://schema.org/${availabilityValue}`,
-              inventoryLevel: {
-                '@type': 'QuantitativeValue',
-                value: inStock ? 1 : 0,
-                unitCode: 'EA',
-              },
-              priceValidUntil: sanitizedPrice ? priceValidUntil : undefined,
-              seller: COMMON_OFFER_EXTENSIONS.seller,
-              warranty: {
-                '@type': 'WarrantyPromise',
-                durationOfWarranty: 'P1Y',
-                warrantyScope: 'เครื่องยนต์และเกียร์',
-              },
-              hasMerchantReturnPolicy: COMMON_OFFER_EXTENSIONS.hasMerchantReturnPolicy,
-              shippingDetails: COMMON_OFFER_EXTENSIONS.shippingDetails,
-            },
-          },
-        };
-      }),
-    },
-    publisher: {
-      '@type': 'AutoDealer',
-      name: 'ครูหนึ่งรถสวย',
-      url: 'https://www.chiangmaiusedcar.com',
-    },
-  };
-
-  const allCarsFaqSchema = (() => {
-    const faq = buildFaqPageJsonLd({
-      url: seoPath,
-      faqs: allCarsFaqs,
-    });
-    // Convert to @graph node (strip @context)
-    const { ['@context']: ctx, ...rest } = faq;
-    void ctx;
-    return rest;
-  })();
-
   return (
     <div className="min-h-screen">
       <SEO
@@ -672,10 +571,7 @@ export default function AllCars({
           { name: 'หน้าแรก', url: '/' },
           { name: 'รถมือสองทั้งหมด', url: '/all-cars' },
         ]}
-        structuredData={{
-          '@context': 'https://schema.org',
-          '@graph': [allCarsCollectionSchema, allCarsFaqSchema],
-        }}
+        structuredData={structuredDataJson || null}
       />
 
       <Head>
@@ -881,13 +777,11 @@ export default function AllCars({
             <>
               {/* Cards Grid - standardized layout */}
               <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
-                {currentCarsWithLive.map((car, idx) => {
+                {currentCarsWithLive.map(car => {
                   const handle = car?.handle;
                   const extra = handle ? specByHandle?.[handle] : null;
                   const mergedCar = mergeSpecs(car, extra);
-                  return (
-                    <CarCard key={car.id} car={mergedCar} priority={safePage === 1 && idx < 4} />
-                  );
+                  return <CarCard key={car.id} car={mergedCar} priority={false} />;
                 })}
               </div>
 
@@ -1004,14 +898,36 @@ export default function AllCars({
 // SSR for all-cars to ensure Google sees correct catalog HTML for query params
 // (pagination/filter/noindex/canonical) without relying on client-side JS.
 export async function getServerSideProps(context) {
+  const enableServerTiming =
+    process.env.NODE_ENV === 'development' || process.env.ENABLE_SERVER_TIMING === '1';
+
+  const marks = [];
+  const mark = name => {
+    if (!enableServerTiming) return;
+    marks.push({ name, at: Date.now() });
+  };
+  const duration = (start, end) => {
+    if (!enableServerTiming) return null;
+    const a = marks.find(m => m.name === start)?.at;
+    const b = marks.find(m => m.name === end)?.at;
+    if (!Number.isFinite(a) || !Number.isFinite(b)) return null;
+    const d = b - a;
+    return d >= 0 ? d : null;
+  };
+
+  mark('ssr:start');
   let cars = [];
   let shopifyError = null;
   try {
+    mark('getAllCars:start');
     const result = await getAllCars();
+    mark('getAllCars:end');
     cars = Array.isArray(result) ? result : [];
 
     // Load car statuses from file storage
+    mark('readCarStatuses:start');
     const carStatuses = await readCarStatuses();
+    mark('readCarStatuses:end');
 
     // ลดขนาดข้อมูลโดยเก็บเฉพาะฟิลด์ที่จำเป็น
     cars = cars.map(car => ({
@@ -1048,6 +964,8 @@ export async function getServerSideProps(context) {
     cars = [];
   }
 
+  mark('ssr:data:end');
+
   const q = context?.query || {};
   const initialSearchTerm = q.search ? normalizeQueryString(q.search, 120) : '';
   const initialPriceRange = q.price ? normalizePriceRange(q.price) : 'all';
@@ -1056,6 +974,7 @@ export async function getServerSideProps(context) {
 
   // Apply filtering/pagination on the server to reduce client hydration cost (TBT)
   const carsPerPage = 8;
+  mark('ssr:filtering:start');
   let filtered = Array.isArray(cars) ? cars : [];
 
   if (initialSearchTerm) {
@@ -1101,11 +1020,79 @@ export async function getServerSideProps(context) {
     });
   }
 
+  mark('ssr:filtering:end');
+
   const totalCount = filtered.length;
   const totalPages = totalCount > 0 ? Math.ceil(totalCount / carsPerPage) : 1;
   const safePage = Math.min(Math.max(1, initialPage), totalPages);
   const startIndex = (safePage - 1) * carsPerPage;
   let pageCars = filtered.slice(startIndex, startIndex + carsPerPage);
+
+  // Precompute JSON-LD for SEO on the server (lightweight) so the client doesn’t rebuild
+  // a large graph during hydration. Skip on filtered pages because they are noindex.
+  let structuredDataJson = null;
+  try {
+    const hasSearch = !!(initialSearchTerm && String(initialSearchTerm).trim());
+    const hasPrice = initialPriceRange !== 'all';
+    const hasBrand = initialBrandFilter !== 'all';
+    const isFiltered = hasSearch || hasPrice || hasBrand;
+
+    if (!isFiltered) {
+      const seoPath = safePage > 1 ? `/all-cars?page=${safePage}` : '/all-cars';
+
+      const collectionSchema = {
+        '@type': 'CollectionPage',
+        name: `รถมือสองทั้งหมด${totalPages > 1 ? ` - หน้า ${safePage}` : ''}`,
+        description: `รถมือสองคุณภาพดี ${Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ`,
+        url: `https://www.chiangmaiusedcar.com/all-cars${safePage > 1 ? `?page=${safePage}` : ''}`,
+        mainEntity: {
+          '@type': 'ItemList',
+          name: 'รายการรถมือสอง',
+          numberOfItems: pageCars.length,
+          itemListElement: pageCars.map((car, index) => {
+            const carUrl = car?.handle
+              ? `https://www.chiangmaiusedcar.com/car/${car.handle}`
+              : 'https://www.chiangmaiusedcar.com/all-cars';
+
+            const imageUrl = car?.images?.[0]?.url
+              ? car.images[0].url.startsWith('/')
+                ? `https://www.chiangmaiusedcar.com${car.images[0].url}`
+                : car.images[0].url
+              : 'https://www.chiangmaiusedcar.com/herobanner/allusedcars.webp';
+
+            return {
+              '@type': 'ListItem',
+              position: startIndex + index + 1,
+              url: carUrl,
+              name: car?.title || 'รถมือสอง',
+              image: imageUrl,
+            };
+          }),
+        },
+        publisher: {
+          '@type': 'AutoDealer',
+          name: 'ครูหนึ่งรถสวย',
+          url: 'https://www.chiangmaiusedcar.com',
+        },
+      };
+
+      const faq = buildFaqPageJsonLd({
+        url: seoPath,
+        faqs: ALL_CARS_FAQS,
+      });
+      const { ['@context']: ctx, ...faqNode } = faq;
+      void ctx;
+
+      structuredDataJson = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [collectionSchema, faqNode],
+      });
+    }
+  } catch {
+    structuredDataJson = null;
+  }
+
+  mark('ssr:end');
 
   // Note: do not enrich specs during SSR.
   // Extra Shopify calls here significantly slow down pagination (page 1..n).
@@ -1113,7 +1100,24 @@ export async function getServerSideProps(context) {
 
   // Cache hints: allow CDN to cache briefly while keeping inventory reasonably fresh
   if (context?.res?.setHeader) {
-    context.res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+    context.res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=3600');
+
+    if (enableServerTiming) {
+      const tGetAll = duration('getAllCars:start', 'getAllCars:end');
+      const tStatuses = duration('readCarStatuses:start', 'readCarStatuses:end');
+      const tFilter = duration('ssr:filtering:start', 'ssr:filtering:end');
+      const tTotal = duration('ssr:start', 'ssr:end');
+
+      const parts = [];
+      if (Number.isFinite(tTotal)) parts.push(`ssr;dur=${tTotal}`);
+      if (Number.isFinite(tGetAll)) parts.push(`shopify_allcars;dur=${tGetAll}`);
+      if (Number.isFinite(tStatuses)) parts.push(`car_statuses;dur=${tStatuses}`);
+      if (Number.isFinite(tFilter)) parts.push(`filtering;dur=${tFilter}`);
+
+      if (parts.length > 0) {
+        context.res.setHeader('Server-Timing', parts.join(', '));
+      }
+    }
   }
 
   return {
@@ -1125,6 +1129,7 @@ export async function getServerSideProps(context) {
       initialPriceRange,
       initialBrandFilter,
       initialPage: safePage,
+      structuredDataJson,
       shopifyError,
     },
   };

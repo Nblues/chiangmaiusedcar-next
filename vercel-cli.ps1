@@ -79,7 +79,27 @@ function Invoke-Tool {
     if ([string]::IsNullOrWhiteSpace($ToolPath)) { return $false }
     if (-not (Test-Path $ToolPath)) { return $false }
     Write-Host "→ $ToolPath $($ToolArgs -join ' ')" -ForegroundColor DarkGray
-    & $ToolPath @ToolArgs
+
+    # If the tool is a cmd/bat script (e.g. npx.cmd), invoke it through cmd.exe to avoid
+    # PowerShell stream/TTY quirks that can cause lost output or early exits.
+    $ext = [System.IO.Path]::GetExtension($ToolPath)
+    if ($ext -and ($ext -ieq '.cmd' -or $ext -ieq '.bat')) {
+        $escapedArgs = @()
+        foreach ($a in $ToolArgs) {
+            if ($null -eq $a) { continue }
+            $s = [string]$a
+            if ($s -match '[\s\^\&\|\<\>\(\)\"]') {
+                # cmd.exe escaping: double quotes inside a quoted token are doubled.
+                $escapedArgs += '"' + ($s -replace '"', '""') + '"'
+            } else {
+                $escapedArgs += $s
+            }
+        }
+        $cmdString = '""' + $ToolPath + '" ' + ($escapedArgs -join ' ') + '"'
+        & cmd.exe /d /s /c $cmdString
+    } else {
+        & $ToolPath @ToolArgs
+    }
     $code = $LASTEXITCODE
     if ($code -eq $null) { $code = 0 }
     if ($code -eq 0) { return $true } else { return $false }

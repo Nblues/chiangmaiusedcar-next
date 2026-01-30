@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import SEO from '../../components/SEO.jsx';
 import CarCard from '../../components/CarCard';
-import { getAllCars } from '../../lib/shopify.mjs';
+import { getAllCars, getCarSpecsByHandles } from '../../lib/shopify.mjs';
 import { readCarStatuses } from '../../lib/carStatusStore.js';
 import { computeSchemaAvailability } from '../../lib/carStatusUtils.js';
 import { COMMON_OFFER_EXTENSIONS } from '../../config/business';
@@ -211,9 +211,13 @@ export async function getServerSideProps(context) {
         year: car.year,
         mileage: car.mileage,
         transmission: car.transmission,
+        drivetrain: car.drivetrain || car.drive_type,
+        drive_type: car.drive_type || car.drivetrain,
         installment: car.installment,
         fuelType: car.fuelType || car.fuel_type,
         fuel_type: car.fuel_type || car.fuelType,
+        category: car.category,
+        body_type: car.body_type,
         images: Array.isArray(car.images) ? car.images.slice(0, 1) : [],
         availableForSale: car.availableForSale,
         status: carStatuses && car.id ? carStatuses[car.id]?.status || 'available' : 'available',
@@ -226,7 +230,67 @@ export async function getServerSideProps(context) {
   const totalPages = Math.max(1, Math.ceil(totalCars / perPage));
   const safePage = Math.min(page, totalPages);
   const start = (safePage - 1) * perPage;
-  const pageCars = cars.slice(start, start + perPage);
+  let pageCars = cars.slice(start, start + perPage);
+
+  // Bring sub-details together at SSR time for this brand page.
+  // This avoids client-side /api/public/car-specs calls while keeping the request bounded (<= 24 cars).
+  const has = v => v != null && String(v).trim() !== '';
+  const needsSpecs = car => {
+    const fuel = car?.fuelType || car?.fuel_type;
+    const drive = car?.drivetrain || car?.drive_type;
+    return !(
+      has(car?.mileage) &&
+      has(car?.transmission) &&
+      has(drive) &&
+      has(fuel) &&
+      has(car?.installment) &&
+      has(car?.category)
+    );
+  };
+
+  const mergeSpecsServer = (car, extra) => {
+    if (!extra) return car;
+    const next = { ...car };
+
+    const carFuel = next?.fuelType || next?.fuel_type;
+    const extraFuel = extra?.fuelType || extra?.fuel_type;
+    const carDrive = next?.drivetrain || next?.drive_type;
+    const extraDrive = extra?.drivetrain || extra?.drive_type;
+
+    if (!has(next.year) && has(extra.year)) next.year = extra.year;
+    if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
+    if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
+
+    if (!has(carFuel) && has(extraFuel)) {
+      next.fuelType = extraFuel;
+      next.fuel_type = extraFuel;
+    }
+
+    if (!has(carDrive) && has(extraDrive)) {
+      next.drivetrain = extraDrive;
+      next.drive_type = extraDrive;
+    }
+
+    if (!has(next.installment) && has(extra.installment)) next.installment = extra.installment;
+    if (!has(next.category) && has(extra.category)) next.category = extra.category;
+    if (!has(next.body_type) && has(extra.body_type)) next.body_type = extra.body_type;
+
+    return next;
+  };
+
+  try {
+    const handles = pageCars
+      .filter(needsSpecs)
+      .map(c => c?.handle)
+      .filter(Boolean);
+    const uniqueHandles = Array.from(new Set(handles)).slice(0, 50);
+    if (uniqueHandles.length > 0) {
+      const raw = await getCarSpecsByHandles(uniqueHandles);
+      pageCars = pageCars.map(c => mergeSpecsServer(c, raw?.[c?.handle]));
+    }
+  } catch {
+    // ignore: keep baseline payload
+  }
 
   if (context?.res?.setHeader) {
     context.res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
@@ -267,171 +331,8 @@ export default function UsedCarsChiangMaiBrand({
   structuredData,
 }) {
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
-  const [specByHandle, setSpecByHandle] = useState({});
-  const requestedSpecHandlesRef = useRef(new Set());
-  const specFetchAttemptsRef = useRef(new Map());
 
   const brandFaqs = useMemo(() => buildBrandFaqEntries(brandInfo?.label), [brandInfo?.label]);
-
-  const mergeSpecs = (car, extra) => {
-    const next = { ...car };
-
-    const has = v => v != null && String(v).trim() !== '';
-    const carFuel = car?.fuelType || car?.fuel_type || car?.['fuel-type'];
-    const extraFuel = extra?.fuelType || extra?.fuel_type || extra?.['fuel-type'];
-
-    const carDrive =
-      car?.drivetrain ||
-      car?.drive_type ||
-      car?.driveType ||
-      car?.['drive-type'] ||
-      car?.wheel_drive ||
-      car?.wheelDrive;
-    const extraDrive =
-      extra?.drivetrain ||
-      extra?.drive_type ||
-      extra?.driveType ||
-      extra?.['drive-type'] ||
-      extra?.wheel_drive ||
-      extra?.wheelDrive;
-
-    // Normalize fuel keys so all cards behave the same
-    if (has(carFuel)) {
-      if (!has(next.fuelType)) next.fuelType = carFuel;
-      if (!has(next.fuel_type)) next.fuel_type = carFuel;
-    }
-
-    // Normalize drivetrain keys so all cards behave the same
-    if (has(carDrive)) {
-      if (!has(next.drivetrain)) next.drivetrain = carDrive;
-      if (!has(next.drive_type)) next.drive_type = carDrive;
-    }
-
-    if (!extra) return next;
-
-    if (!has(next.year) && has(extra.year)) next.year = extra.year;
-    if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
-    if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
-    if (!has(carDrive) && has(extraDrive)) {
-      next.drivetrain = extra.drivetrain || extraDrive;
-      next.drive_type = extra.drive_type || extraDrive;
-    }
-    if (!has(carFuel) && has(extraFuel)) {
-      next.fuelType = extra.fuelType || extraFuel;
-      next.fuel_type = extra.fuel_type || extraFuel;
-    }
-    if (!has(next.installment) && has(extra.installment)) next.installment = extra.installment;
-
-    if (!has(next.category) && has(extra.category)) next.category = extra.category;
-    if (!has(next.body_type) && has(extra.body_type)) next.body_type = extra.body_type;
-
-    return next;
-  };
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (!safeCars || safeCars.length === 0) return;
-
-    const needs = [];
-    for (const car of safeCars) {
-      const handle = car?.handle;
-      if (!handle) continue;
-      if (requestedSpecHandlesRef.current.has(handle)) continue;
-
-      const attempts = Number(specFetchAttemptsRef.current.get(handle) || 0);
-      if (attempts >= 2) continue;
-
-      const extra = specByHandle?.[handle];
-      const merged = mergeSpecs(car, extra);
-
-      const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
-      const hasTransmission =
-        merged?.transmission != null && String(merged.transmission).trim() !== '';
-      const drive =
-        merged?.drivetrain ||
-        merged?.drive_type ||
-        merged?.driveType ||
-        merged?.['drive-type'] ||
-        merged?.wheel_drive ||
-        merged?.wheelDrive;
-      const hasDrivetrain = drive != null && String(drive).trim() !== '';
-      const fuel = merged?.fuelType || merged?.fuel_type;
-      const hasFuel = fuel != null && String(fuel).trim() !== '';
-      const hasInstallment =
-        merged?.installment != null && String(merged.installment).trim() !== '';
-
-      const hasCategory = merged?.category != null && String(merged.category).trim() !== '';
-
-      if (
-        !(
-          hasMileage &&
-          hasTransmission &&
-          hasDrivetrain &&
-          hasFuel &&
-          hasInstallment &&
-          hasCategory
-        )
-      ) {
-        needs.push(handle);
-      }
-    }
-
-    if (needs.length === 0) return;
-    needs.forEach(h => {
-      requestedSpecHandlesRef.current.add(h);
-      specFetchAttemptsRef.current.set(h, Number(specFetchAttemptsRef.current.get(h) || 0) + 1);
-    });
-
-    const fetchSpecs = async () => {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-        const canonical = Array.from(new Set(needs.filter(Boolean)));
-        canonical.sort();
-        const limited = canonical.slice(0, 50);
-        const params = new URLSearchParams({ handles: limited.join(',') });
-        const resp = await fetch(`/api/public/car-specs?${params.toString()}`, {
-          cache: 'no-store',
-          credentials: 'same-origin',
-          signal: controller.signal,
-        });
-        clearTimeout(timeoutId);
-
-        if (!resp.ok) {
-          needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
-          return;
-        }
-        const data = await resp.json();
-        if (!data?.ok || !data?.specs) {
-          needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
-          return;
-        }
-
-        // If a handle wasn't returned, don't permanently block retries.
-        const returned = new Set(Object.keys(data.specs || {}));
-        for (const h of needs) {
-          if (!returned.has(h)) requestedSpecHandlesRef.current.delete(h);
-        }
-
-        setSpecByHandle(prev => ({
-          ...(prev || {}),
-          ...data.specs,
-        }));
-
-        // Treat requestedSpecHandlesRef as in-flight only.
-        // If specs are still incomplete (e.g. drivetrain missing), allow a limited retry.
-        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
-      } catch (error) {
-        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
-        if (process.env.NODE_ENV === 'development') {
-          // eslint-disable-next-line no-console
-          console.warn('Failed to fetch car specs:', error?.message);
-        }
-      }
-    };
-
-    fetchSpecs();
-  }, [safeCars, specByHandle]);
 
   const isEmpty = !totalCars || totalCars <= 0;
   const url = `/used-cars-chiang-mai-brand/${brandInfo.slug}${
@@ -537,10 +438,7 @@ export default function UsedCarsChiangMaiBrand({
           <section className="mt-4">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
               {safeCars.map((car, index) => {
-                const handle = car?.handle;
-                const extra = handle ? specByHandle?.[handle] : null;
-                const mergedCar = mergeSpecs(car, extra);
-                return <CarCard key={car?.id || index} car={mergedCar} priority={index < 6} />;
+                return <CarCard key={car?.id || index} car={car} priority={index < 6} />;
               })}
             </div>
           </section>

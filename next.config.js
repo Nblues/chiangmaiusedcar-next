@@ -12,6 +12,11 @@ const isTurbopackDev =
   (typeof process.env.npm_lifecycle_script === 'string' &&
     process.env.npm_lifecycle_script.includes('next dev') &&
     process.env.npm_lifecycle_script.includes('--turbo'));
+
+const isLowMemoryDev =
+  process.env.LOW_MEMORY_DEV === 'true' ||
+  process.env.LOW_MEMORY_BUILD === 'true' ||
+  process.env.LOW_MEMORY === 'true';
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
   openAnalyzer: false,
@@ -31,7 +36,8 @@ const nextConfig = {
   // to `.next\\trace` (EPERM). Using a distinct distDir on win32 avoids that collision.
   // Vercel/Linux keeps the default `.next` output directory.
   distDir: isWindows ? '.next-win' : '.next',
-  compress: false, // Let Vercel handle compression (Brotli + Gzip)
+  // Enable compression for self-host/localhost. Vercel already compresses at the edge.
+  compress: process.env.VERCEL ? false : true,
   generateEtags: true,
   swcMinify: process.env.NEXT_DISABLE_SWC === '1' ? false : true,
 
@@ -84,19 +90,23 @@ const nextConfig = {
               },
             };
 
-            // ลด memory usage ใน dev mode
-            config.optimization = {
-              ...config.optimization,
-              minimize: false,
-              runtimeChunk: false,
-              splitChunks: false,
-              removeAvailableModules: false,
-              removeEmptyChunks: false,
-              mergeDuplicateChunks: false,
-            };
+            // Only apply aggressive dev bundling overrides when explicitly requested.
+            // Disabling splitChunks makes `main.js` huge and increases JS parse/eval time,
+            // which can distort Lighthouse/TBT in development.
+            if (isLowMemoryDev) {
+              config.optimization = {
+                ...config.optimization,
+                minimize: false,
+                runtimeChunk: false,
+                splitChunks: false,
+                removeAvailableModules: false,
+                removeEmptyChunks: false,
+                mergeDuplicateChunks: false,
+              };
 
-            // ลด parallelism เพื่อประหยัด memory
-            config.parallelism = 1;
+              // ลด parallelism เพื่อประหยัด memory
+              config.parallelism = 1;
+            }
           }
 
           // Production CSS optimization - Remove unused CSS
@@ -296,16 +306,6 @@ const nextConfig = {
         value: 'total;dur=0',
       },
       // Performance & CDN Hints
-      {
-        key: 'Link',
-        value: [
-          '<https://fonts.googleapis.com>; rel=preconnect; crossorigin',
-          '<https://fonts.gstatic.com>; rel=preconnect; crossorigin',
-          '<https://cdn.shopify.com>; rel=preconnect; crossorigin',
-          '<https://images.unsplash.com>; rel=preconnect; crossorigin',
-          '<https://va.vercel-scripts.com>; rel=preconnect; crossorigin',
-        ].join(', '),
-      },
       {
         key: 'Content-Security-Policy',
         value: cspValue,
@@ -614,7 +614,9 @@ const nextConfig = {
   },
 
   // Production optimization
-  productionBrowserSourceMaps: false,
+  // Enable production source maps so Lighthouse/devtools can provide better diagnostics.
+  // Note: this makes `.map` files publicly reachable in production.
+  productionBrowserSourceMaps: true,
 
   // Optimize for Vercel deployment
   trailingSlash: false,
