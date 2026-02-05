@@ -70,6 +70,9 @@ lighthouse-prod-latest/
 public/images/kn1.webp
 public/images/kn2.webp
 
+# Generated sitemaps (generated via next-sitemap in postbuild)
+public/sitemap*.xml
+
 # Generated hero banner responsive variants (generated during postinstall/prebuild)
 public/herobanner/cnxallcar-*.webp
 public/herobanner/cnxcontact-*.webp
@@ -88,6 +91,7 @@ firebase-debug.log
 # ⚙️ Vercel
 # ========================
 .vercel/
+.tmp-vercel-env/
 
 # ========================
 # 🌐 Next.js & TypeScript
