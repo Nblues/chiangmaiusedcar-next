@@ -42,20 +42,19 @@ export default class MyDocument extends Document {
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 
           {shouldPreloadHero && (
-            // eslint-disable-next-line react/no-unknown-property
             <link
               rel="preload"
               as="image"
-              href="/herobanner/cnxcar-828w.webp"
+              href="/herobanner/newherobanner-828w.webp"
               type="image/webp"
-              imageSrcSet="/herobanner/cnxcar-640w.webp 640w, /herobanner/cnxcar-828w.webp 828w, /herobanner/cnxcar-1024w.webp 1024w, /herobanner/cnxcar-1400w.webp 1400w"
-              imageSizes="(max-width: 1400px) 100vw, 1400px"
-              fetchPriority="high"
+              imageSrcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
+              imageSizes="(max-width: 414px) 414px, (max-width: 1400px) 100vw, 1400px"
+              // eslint-disable-next-line react/no-unknown-property
+              fetchpriority="high"
             />
           )}
 
           {shouldPreloadAllCarsHero && (
-            // eslint-disable-next-line react/no-unknown-property
             <link
               rel="preload"
               as="image"
@@ -63,7 +62,8 @@ export default class MyDocument extends Document {
               type="image/webp"
               imageSrcSet="/herobanner/cnxallcar-480w.webp 480w, /herobanner/cnxallcar-640w.webp 640w, /herobanner/cnxallcar-828w.webp 828w, /herobanner/cnxallcar-1024w.webp 1024w, /herobanner/cnxallcar-1400w.webp 1400w"
               imageSizes="100vw"
-              fetchPriority="high"
+              // eslint-disable-next-line react/no-unknown-property
+              fetchpriority="high"
             />
           )}
 

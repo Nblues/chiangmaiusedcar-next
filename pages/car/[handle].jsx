@@ -578,9 +578,19 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const currentImage = carImages[selectedImageIndex] || carImages[0];
 
   // Enhanced SEO data for better link sharing - optimized for social media
-  const brandModel = [safeGet(car, 'vendor') || safeGet(car, 'brand'), safeGet(car, 'model')]
-    .filter(Boolean)
-    .join(' ');
+  const _vendor = safeGet(car, 'vendor') || safeGet(car, 'brand');
+  const _model = safeGet(car, 'model');
+  // Shopify product title without year suffix — used as model fallback
+  const _titleNoYear = safeGet(car, 'title', '').replace(/\s*(ปี|year)\s*\d+.*/i, '').trim();
+  let brandModel;
+  if (_vendor && _model) {
+    brandModel = `${_vendor} ${_model}`;
+  } else if (_model) {
+    brandModel = _model;
+  } else {
+    // spec.model metafield is empty — fall back to product title with year part stripped
+    brandModel = _titleNoYear || _vendor || safeGet(car, 'title', '');
+  }
 
   const yearPrice = [
     safeGet(car, 'year') ? `ปี ${safeGet(car, 'year')}` : '',
@@ -589,8 +599,8 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     .filter(Boolean)
     .join(' ');
 
-  // Social media optimized title (max 60 chars for Facebook)
-  const enhancedTitle = `${brandModel} ${yearPrice} | ครูหนึ่งรถสวย`.substring(0, 58);
+  // Social media optimized title (Facebook supports up to 70 chars)
+  const enhancedTitle = `${brandModel} ${yearPrice} | ครูหนึ่งรถสวย`.substring(0, 70);
 
   // Social media optimized description (max 155 chars for Facebook)
   const enhancedDescription = [
@@ -727,7 +737,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
           title: enhancedTitle,
           description: enhancedDescription,
           brand: safeGet(car, 'vendor') || safeGet(car, 'brand', 'รถมือสอง'),
-          model: safeGet(car, 'model', ''),
+          model: _model || _titleNoYear || '',
           year: safeGet(car, 'year', ''),
           images: seoImages,
           // Ensure structured data has required fields for Google Rich Results

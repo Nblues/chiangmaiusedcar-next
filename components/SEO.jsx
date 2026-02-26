@@ -501,7 +501,6 @@ export default function SEO({
       ))}
 
       {/* Additional Open Graph tags for better social sharing */}
-      <meta property="og:updated_time" content={buildTime} />
       <meta property="og:see_also" content={`${site}${localeMeta.allCarsPath}`} />
       <meta property="article:publisher" content="https://www.facebook.com/KN2car" />
       <meta property="article:author" content="ครูหนึ่งรถสวย" />
