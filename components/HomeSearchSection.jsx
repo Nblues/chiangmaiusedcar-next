@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -17,12 +17,12 @@ const PRICE_RANGES = [
 ];
 
 const QUICK_PRICE_LINKS = [
-  { href: '/all-cars?price=0-100000', label: "ต่ำกว่า 1 แสน (< 100K)", accent: false },
+  { href: '/all-cars?price=0-100000', label: 'ต่ำกว่า 1 แสน (< 100K)', accent: false },
   { href: '/all-cars?price=100000-200000', label: '1-2 แสน (100K-200K)', accent: false },
   { href: '/all-cars?price=200000-300000', label: '2-3 แสน (200K-300K)', accent: false },
   { href: '/all-cars?price=400000-500000', label: '4-5 แสน (400K-500K)', accent: false },
   { href: '/all-cars?price=600000-700000', label: '6-7 แสน (600K-700K)', accent: false },
-  { href: '/all-cars?price=700000', label: "7 แสนขึ้นไป (> 700K)", accent: true },
+  { href: '/all-cars?price=700000', label: '7 แสนขึ้นไป (> 700K)', accent: true },
 ];
 
 /**

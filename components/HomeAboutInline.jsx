@@ -19,12 +19,13 @@ export default function HomeAboutInline() {
             <p className="text-sm sm:text-base md:text-lg">
               <strong className="text-primary">ศูนย์รวมรถบ้านคุณภาพดี</strong>{' '}
               ในตลาดรถยนต์มือสองภาคเหนือ{' '}
-              <strong className="text-gray-900">คัดสรรคุณภาพทุกคัน</strong>{' '}
-              ตรวจสอบโดยผู้เชี่ยวชาญ พร้อม{' '}
-              <strong className="text-green-700">รับประกัน 1 ปีเต็ม</strong> เรามี
+              <strong className="text-gray-900">คัดสรรคุณภาพทุกคัน</strong> ตรวจสอบโดยผู้เชี่ยวชาญ
+              พร้อม <strong className="text-green-700">รับประกัน 1 ปีเต็ม</strong> เรามี
               <strong className="text-accent-800"> ฟรีดาวน์ 0%</strong> อัตราดอกเบี้ยพิเศษ และ
-              <strong className="text-primary"> อนุมัติง่าย</strong>{' '}
-              ด้วยระบบสินเชื่อที่หลากหลาย{' '}
+              <strong className="text-primary">
+                {' '}
+                อนุมัติง่าย
+              </strong> ด้วยระบบสินเชื่อที่หลากหลาย{' '}
               <strong className="text-gray-900">ผ่อนถูก ผ่อนสบาย</strong>
             </p>
           </div>

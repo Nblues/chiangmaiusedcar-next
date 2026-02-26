@@ -581,7 +581,9 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const _vendor = safeGet(car, 'vendor') || safeGet(car, 'brand');
   const _model = safeGet(car, 'model');
   // Shopify product title without year suffix — used as model fallback
-  const _titleNoYear = safeGet(car, 'title', '').replace(/\s*(ปี|year)\s*\d+.*/i, '').trim();
+  const _titleNoYear = safeGet(car, 'title', '')
+    .replace(/\s*(ปี|year)\s*\d+.*/i, '')
+    .trim();
   let brandModel;
   if (_vendor && _model) {
     brandModel = `${_vendor} ${_model}`;
