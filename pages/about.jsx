@@ -39,7 +39,7 @@ export default function About() {
         title="ครูหนึ่งรถสวย ศูนย์รวมรถยนต์มือสองคุณภาพดี - เกี่ยวกับเรา | Facebook 1M+"
         description="ครูหนึ่งรถสวย แพลตฟอร์มออนไลน์ศูนย์รวมรถบ้านคุณภาพดีในภาคเหนือ ตรวจสภาพครบถ้วน เช็คประวัติรถ ประสบการณ์ 10+ ปี Facebook 1M+ TikTok 150K+ รับประกัน 1 ปี โทร 094-064-9018"
         url="/about"
-        image="https://www.chiangmaiusedcar.com/herobanner/team.webp"
+        image="https://www.chiangmaiusedcar.com/herobanner/bannerabout-1400w.webp"
         type="profile"
         pageType="about"
         structuredData={{
@@ -48,7 +48,7 @@ export default function About() {
           name: 'ครูหนึ่งรถสวย',
           alternateName: 'KruNueng Used Cars',
           description: 'ผู้เชี่ยวชาญตลาดรถยนต์มือสองภาคเหนือ ประสบการณ์ 10+ ปี',
-          image: 'https://www.chiangmaiusedcar.com/herobanner/team.webp',
+          image: 'https://www.chiangmaiusedcar.com/herobanner/bannerabout-1400w.webp',
           url: 'https://www.chiangmaiusedcar.com/about',
           jobTitle: 'ผู้เชี่ยวชาญรถยนต์มือสอง',
           worksFor: {
@@ -94,9 +94,9 @@ export default function About() {
         <link
           rel="preload"
           as="image"
-          href="/herobanner/team-1024w.webp"
+          href="/herobanner/bannerabout-1024w.webp"
           type="image/webp"
-          imageSrcSet="/herobanner/team-480w.webp 480w, /herobanner/team-640w.webp 640w, /herobanner/team-828w.webp 828w, /herobanner/team-1024w.webp 1024w, /herobanner/team-1400w.webp 1400w"
+          imageSrcSet="/herobanner/bannerabout-414w.webp 414w, /herobanner/bannerabout-640w.webp 640w, /herobanner/bannerabout-1024w.webp 1024w, /herobanner/bannerabout-1400w.webp 1400w"
           imageSizes="100vw"
         />
       </Head>
@@ -131,8 +131,8 @@ export default function About() {
               )}
 
               <A11yImage
-                src="/herobanner/team-1024w.webp"
-                srcSet="/herobanner/team-480w.webp 480w, /herobanner/team-640w.webp 640w, /herobanner/team-828w.webp 828w, /herobanner/team-1024w.webp 1024w, /herobanner/team-1400w.webp 1400w"
+                src="/herobanner/bannerabout-1024w.webp"
+                srcSet="/herobanner/bannerabout-414w.webp 414w, /herobanner/bannerabout-640w.webp 640w, /herobanner/bannerabout-1024w.webp 1024w, /herobanner/bannerabout-1400w.webp 1400w"
                 alt="ทีมงานครูหนึ่งรถสวย"
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
