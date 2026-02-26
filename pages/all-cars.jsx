@@ -562,7 +562,7 @@ export default function AllCars({
         description={`ดูรถยนต์มือสองคุณภาพดีทั้งหมด ${Number.isFinite(totalCount) ? totalCount : 0} คัน ในเชียงใหม่และภาคเหนือ คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda นัดหมายดูรถโทร 094-064-9018`}
         url={seoPath}
         image={`https://www.chiangmaiusedcar.com/api/og?src=${encodeURIComponent(
-          '/herobanner/cnxallcar.webp'
+          '/herobanner/heroallcars-1400w.webp'
         )}&w=1200&h=630`}
         type="website"
         pageType="all-cars"
@@ -582,8 +582,8 @@ export default function AllCars({
           rel="preload"
           as="image"
           media="(max-width: 767px)"
-          href="/herobanner/cnxallcar-640w.webp"
-          imageSrcSet="/herobanner/cnxallcar-480w.webp 480w, /herobanner/cnxallcar-640w.webp 640w, /herobanner/cnxallcar-828w.webp 828w"
+          href="/herobanner/heroallcars-640w.webp"
+          imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w"
           imageSizes="100vw"
         />
 
@@ -591,8 +591,8 @@ export default function AllCars({
           rel="preload"
           as="image"
           media="(min-width: 768px)"
-          href="/herobanner/cnxallcar-1024w.webp"
-          imageSrcSet="/herobanner/cnxallcar-828w.webp 828w, /herobanner/cnxallcar-1024w.webp 1024w"
+          href="/herobanner/heroallcars-1024w.webp"
+          imageSrcSet="/herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
           imageSizes="100vw"
         />
       </Head>
@@ -634,18 +634,18 @@ export default function AllCars({
           <picture>
             <source
               media="(max-width: 767px)"
-              srcSet="/herobanner/cnxallcar-480w.webp 480w, /herobanner/cnxallcar-640w.webp 640w, /herobanner/cnxallcar-828w.webp 828w"
+              srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w"
               sizes="100vw"
             />
             <source
               media="(min-width: 768px)"
-              srcSet="/herobanner/cnxallcar-828w.webp 828w, /herobanner/cnxallcar-1024w.webp 1024w, /herobanner/cnxallcar-1400w.webp 1400w"
+              srcSet="/herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
               sizes="100vw"
             />
             <img
               ref={heroImgRef}
-              src="/herobanner/cnxallcar-1024w.webp"
-              srcSet="/herobanner/cnxallcar-480w.webp 480w, /herobanner/cnxallcar-640w.webp 640w, /herobanner/cnxallcar-828w.webp 828w, /herobanner/cnxallcar-1024w.webp 1024w, /herobanner/cnxallcar-1400w.webp 1400w"
+              src="/herobanner/heroallcars-1024w.webp"
+              srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
               sizes="100vw"
               alt=""
               className="w-full h-full object-cover object-top"
@@ -669,7 +669,7 @@ export default function AllCars({
                   '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
               }}
             >
-              รถมือสองเชียงใหม่ คุณภาพดีทั้งหมด
+              รถยนต์มือสองคุณภาพดีทั้งหมด
             </h1>
             <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap">
               <p

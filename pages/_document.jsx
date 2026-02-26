@@ -58,9 +58,9 @@ export default class MyDocument extends Document {
             <link
               rel="preload"
               as="image"
-              href="/herobanner/cnxallcar-828w.webp"
+              href="/herobanner/heroallcars-1024w.webp"
               type="image/webp"
-              imageSrcSet="/herobanner/cnxallcar-480w.webp 480w, /herobanner/cnxallcar-640w.webp 640w, /herobanner/cnxallcar-828w.webp 828w, /herobanner/cnxallcar-1024w.webp 1024w, /herobanner/cnxallcar-1400w.webp 1400w"
+              imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
               imageSizes="100vw"
               // eslint-disable-next-line react/no-unknown-property
               fetchpriority="high"
