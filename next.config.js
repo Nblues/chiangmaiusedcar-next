@@ -212,6 +212,8 @@ const nextConfig = {
 
   // Headers for deployment and performance - Enhanced 2025
   async headers() {
+    const isProd = process.env.NODE_ENV === 'production';
+
     // Sanitize SITE_URL to avoid CR/LF or trailing spaces breaking CORS headers
     const cleanSiteUrl = (() => {
       const raw = process.env.SITE_URL || 'https://www.chiangmaiusedcar.com';
@@ -311,18 +313,23 @@ const nextConfig = {
         value: cspValue,
       },
       // CSP reporting (safe hardening path)
-      {
-        key: 'Reporting-Endpoints',
-        value: `${reportGroup}="${cspReportUrl}"`,
-      },
-      {
-        key: 'Report-To',
-        value: reportToValue,
-      },
-      {
-        key: 'Content-Security-Policy-Report-Only',
-        value: cspReportOnlyValue,
-      },
+      // Enable only in production to avoid dev console noise and localhost report delivery.
+      ...(isProd
+        ? [
+            {
+              key: 'Reporting-Endpoints',
+              value: `${reportGroup}="${cspReportUrl}"`,
+            },
+            {
+              key: 'Report-To',
+              value: reportToValue,
+            },
+            {
+              key: 'Content-Security-Policy-Report-Only',
+              value: cspReportOnlyValue,
+            },
+          ]
+        : []),
     ];
 
     return [
@@ -517,6 +524,19 @@ const nextConfig = {
             value: 'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800',
           },
           { key: 'Vary', value: 'Accept-Encoding' },
+        ],
+      },
+
+      // llms.txt — AI crawler discovery files (text/plain, long cache)
+      {
+        source: '/llms:suffix((?:\.txt|-full\.txt)?)',
+        headers: [
+          { key: 'Content-Type', value: 'text/plain; charset=utf-8' },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
+          },
+          { key: 'X-Robots-Tag', value: 'noindex' },
         ],
       },
 
