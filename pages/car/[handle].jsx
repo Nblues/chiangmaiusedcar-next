@@ -599,8 +599,8 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     .filter(Boolean)
     .join(' ');
 
-  // Social media optimized title (Facebook supports up to 70 chars)
-  const enhancedTitle = `${brandModel} ${yearPrice} | ครูหนึ่งรถสวย`.substring(0, 70);
+  // Social media optimized title (max 60 chars for Facebook)
+  const enhancedTitle = `${brandModel} ${yearPrice} | ครูหนึ่งรถสวย`.substring(0, 58);
 
   // Social media optimized description (max 155 chars for Facebook)
   const enhancedDescription = [
@@ -1206,7 +1206,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
           <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
             {/* Social Sharing */}
             <div className="border-b border-gray-200 pb-6 mb-6">
-              <h3 className="text-lg font-bold text-black mb-4 font-prompt">แชร์รถคันนี้</h3>
+              <p className="text-lg font-bold text-black mb-4 font-prompt">แชร์รถคันนี้</p>
               <div className="flex flex-wrap gap-2 sm:gap-3">
                 <button
                   onClick={async () => {

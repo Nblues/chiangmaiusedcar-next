@@ -292,9 +292,9 @@ export default function PaymentCalculator() {
                 {result && (
                   <div className="bg-white bg-opacity-95 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-xl border border-gray-200">
                     <div className="flex items-center justify-center mb-3 md:mb-4">
-                      <h3 className="text-base md:text-xl font-bold text-primary text-center font-prompt">
+                      <p className="text-base md:text-xl font-bold text-primary text-center font-prompt">
                         ค่างวดรายเดือน (รวม VAT + ประกัน)
-                      </h3>
+                      </p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
                       {result.calculations.map((calc, index) => (

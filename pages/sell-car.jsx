@@ -75,7 +75,7 @@ export default function SellCar() {
           <div className="hero-card max-w-4xl w-[90%] mx-auto my-6 flex flex-col md:flex-row items-center gap-6 px-6 py-8 rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
             <div className="flex-1">
               <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2 font-prompt">
-                ขายรถยนต์มือสอง • ประเมินราคายุติธรรม
+                ขายรถมือสองเชียงใหม่ • ประเมินราคายุติธรรม
               </h1>
               <h2 className="text-xl md:text-2xl font-bold text-orange-700 mb-4 font-prompt">
                 แลกเทิร์น รับซื้อทุกสภาพ

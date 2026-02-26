@@ -68,9 +68,9 @@ export default function Promotion() {
               {/* Main Offer Title */}
               <div className="bg-black/60 rounded-xl sm:rounded-2xl p-2 sm:p-6 lg:p-8">
                 <h1 className="text-sm sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-prompt font-bold text-white drop-shadow-2xl mb-2 sm:mb-6 leading-tight">
-                  ข้อเสนอสุดคุ้มสำหรับลูกค้า
+                  โปรโมชันรถมือสองเชียงใหม่
                   <br className="sm:hidden" />
-                  ที่ออกรถกับเรา
+                  ข้อเสนอสุดคุ้มสำหรับลูกค้า
                 </h1>
 
                 {/* Special Offers Grid - Ultra Compact Mobile */}

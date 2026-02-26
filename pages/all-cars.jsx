@@ -669,11 +669,8 @@ export default function AllCars({
                   '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
               }}
             >
-              รถยนต์มือสองคุณภาพดีทั้งหมด
+              รถมือสองเชียงใหม่ คุณภาพดีทั้งหมด
             </h1>
-            <h2 className="absolute -left-[9999px] w-[1px] h-[1px] overflow-hidden">
-              ค้นหารถยนต์มือสองคุณภาพดี ตรวจสภาพครบถ้วน ฟรีดาวน์
-            </h2>
             <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap">
               <p
                 className="text-xs sm:text-sm md:text-lg lg:text-xl font-prompt text-white font-bold"
