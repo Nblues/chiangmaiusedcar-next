@@ -113,5 +113,5 @@ Sitemap: https://www.chiangmaiusedcar.com/sitemap.xml
 # Additional XML Sitemaps
 Sitemap: https://www.chiangmaiusedcar.com/sitemap-images.xml
 
-# LLMs.txt — AI model discovery
+# LLMs.txt  AI model discovery
 Llms: https://www.chiangmaiusedcar.com/llms.txt

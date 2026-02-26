@@ -134,6 +134,20 @@ function main() {
       };
 
       return runImages().then(() => {
+        // Append LLMs.txt directive to robots.txt after next-sitemap overwrites it
+        try {
+          const robotsPath = path.join(repoRoot, 'public', 'robots.txt');
+          const llmsLine = '\n# LLMs.txt — AI model discovery\nLlms: https://www.chiangmaiusedcar.com/llms.txt\n';
+          if (fs.existsSync(robotsPath)) {
+            const content = fs.readFileSync(robotsPath, 'utf8');
+            if (!content.includes('Llms:')) {
+              fs.appendFileSync(robotsPath, llmsLine, 'utf8');
+              process.stdout.write('Sitemap: appended Llms directive to robots.txt\n');
+            }
+          }
+        } catch (e) {
+          process.stderr.write(`Sitemap: warning - could not append Llms to robots.txt: ${e.message}\n`);
+        }
         process.exitCode = 0;
       });
     }

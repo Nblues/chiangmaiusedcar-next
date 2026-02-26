@@ -9,6 +9,7 @@ interface A11yImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   quality?: number;
   fill?: boolean;
   sizes?: string;
+  fetchPriority?: 'high' | 'low' | 'auto';
   fetchpriority?: 'high' | 'low' | 'auto';
   onLoad?: () => void;
   onError?: () => void;
@@ -26,6 +27,7 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
       quality,
       fill,
       sizes: customSizes, // เปลี่ยนชื่อเพื่อไม่ชนกับ generated sizes
+      fetchPriority,
       fetchpriority,
       className,
       style,
@@ -111,8 +113,9 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
     let fetchPriorityAttr: 'high' | 'low' | 'auto';
     // Allow explicit fetchpriority to override priority (useful when we want eager loading
     // but don't want to steal priority from the true LCP hero image).
-    if (fetchpriority) {
-      fetchPriorityAttr = fetchpriority;
+    const explicitFetchPriority = fetchpriority || fetchPriority;
+    if (explicitFetchPriority) {
+      fetchPriorityAttr = explicitFetchPriority;
     } else if (priority) {
       fetchPriorityAttr = 'high';
     } else if (imageType === 'thumbnail' || imageType === 'gallery' || imageType === 'card') {
