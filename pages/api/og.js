@@ -3,6 +3,8 @@ import path from 'node:path';
 
 import sharp from 'sharp';
 
+import { rateLimit } from '../../lib/rateLimit';
+
 // Force Node.js runtime - sharp requires native binaries unavailable on Edge Runtime
 export const config = {
   runtime: 'nodejs',
@@ -73,6 +75,17 @@ async function fetchRemoteBuffer(url) {
 }
 
 export default async function handler(req, res) {
+  // Rate limit: 30 requests per 10 minutes per IP
+  const ip =
+    (req.headers['x-forwarded-for'] || '').split(',')[0].trim() ||
+    req.socket?.remoteAddress ||
+    'unknown';
+  const rl = await rateLimit(`og:${ip}`, { limit: 30, windowMs: 10 * 60 * 1000 });
+  if (!rl.ok) {
+    res.setHeader('Retry-After', String(Math.ceil((rl.resetAt - Date.now()) / 1000)));
+    return res.status(429).json({ ok: false, error: 'Too many requests' });
+  }
+
   try {
     const { src } = req.query;
     const w = clampInt(req.query.w, { min: 200, max: 2000, fallback: DEFAULT_W });

@@ -27,6 +27,17 @@ export default async function handler(req, res) {
         service_id: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ? 'Set' : 'Not set',
         template_id: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ? 'Set' : 'Not set',
       },
+      kv: {
+        status:
+          (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) ||
+          (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) ||
+          process.env.KV_URL
+            ? '✅ Configured'
+            : '⚠️ Not configured (uses memory fallback)',
+      },
+      revalidate: {
+        status: process.env.REVALIDATE_SECRET ? '✅ Configured' : '❌ Missing REVALIDATE_SECRET',
+      },
       vercel: {
         status: '✅ Running',
         environment: process.env.NODE_ENV || 'development',

@@ -2,7 +2,7 @@
 export default function handler(req, res) {
   // Only allow in development or specific conditions
   if (process.env.NODE_ENV === 'production') {
-    return res.status(403).json({ error: 'Not allowed in production' });
+    return res.status(404).json({ error: 'Not found' });
   }
 
   const envVars = {

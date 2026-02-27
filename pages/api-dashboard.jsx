@@ -308,6 +308,9 @@ export default function APIDashboard() {
 
 // SSR for real-time API monitoring and system status
 export async function getServerSideProps() {
+  if (process.env.NODE_ENV === 'production') {
+    return { notFound: true };
+  }
   return {
     props: {},
   };

@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { Prompt } from 'next/font/google';
 import ClientOnly from '../components/ClientOnly';
+import ErrorBoundary from '../components/ErrorBoundary';
 import Navbar from '../components/Navbar';
 import '../styles/globals.css';
 import { onCookieConsentChange, readCookieConsent } from '../utils/cookieConsent';
@@ -259,7 +260,7 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      {getLayout(<Component {...pageProps} />)}
+      <ErrorBoundary>{getLayout(<Component {...pageProps} />)}</ErrorBoundary>
       {VercelTools ? <VercelTools /> : null}
       {!isAdminRoute && process.env.NODE_ENV === 'production' && cookieConsent?.marketing ? (
         <FacebookPixel />

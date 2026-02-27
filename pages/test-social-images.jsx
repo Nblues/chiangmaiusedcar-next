@@ -226,6 +226,9 @@ export default function TestSocialImages({ cars }) {
 }
 
 export async function getStaticProps() {
+  if (process.env.NODE_ENV === 'production') {
+    return { notFound: true };
+  }
   try {
     const cars = await getHomepageCars(20);
     return {

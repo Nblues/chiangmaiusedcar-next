@@ -294,3 +294,10 @@ export default function KeywordAudit() {
     </div>
   );
 }
+
+export async function getServerSideProps() {
+  if (process.env.NODE_ENV === 'production') {
+    return { notFound: true };
+  }
+  return { props: {} };
+}
