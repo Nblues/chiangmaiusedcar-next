@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import SEO from '../../components/SEO';
 import Breadcrumb from '../../components/Breadcrumb';
@@ -13,6 +13,21 @@ import { optimizeShopifyImage } from '../../utils/imageOptimizer';
 import { readCarStatuses } from '../../lib/carStatusStore.js';
 import { isReservedCar, isSoldCar } from '../../lib/carStatusUtils.js';
 import { buildCarDetailFaqs, buildFaqPageJsonLd } from '../../lib/seo/faq.js';
+
+// Module-level cache: ป้องกัน getAllCars() ถูกเรียกซ้ำใน getStaticPaths + getStaticProps
+let _allCarsCache = null;
+let _allCarsCacheTime = 0;
+const ALL_CARS_CACHE_TTL = 120_000; // 2 minutes
+async function getAllCarsCached() {
+  const now = Date.now();
+  if (_allCarsCache && now - _allCarsCacheTime < ALL_CARS_CACHE_TTL) {
+    return _allCarsCache;
+  }
+  const result = await getAllCars();
+  _allCarsCache = result;
+  _allCarsCacheTime = now;
+  return result;
+}
 
 function CarDetailPage({ car, recommendedCars = [] }) {
   const router = useRouter();
@@ -183,6 +198,41 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // คำนวณค่าผ่อน Flat Rate (memoized - ไม่คำนวณซ้ำทุก re-render)
+  const installment = useMemo(() => {
+    const carPrice = Number(safeGet(car, 'price.amount', 0));
+    if (!carPrice) return null;
+
+    const loanAmount = carPrice;
+    const years = 6;
+    const months = 72;
+    const age = 35;
+
+    const insuranceRatePerYear = age <= 40 ? 0.004 : 0.0062;
+    const totalInsurance = loanAmount * insuranceRatePerYear * years;
+    const monthlyInsurance = totalInsurance / months;
+
+    // Normal rate (7.5%)
+    const normalRate = 0.075;
+    const normalTotalInterest = loanAmount * normalRate * years;
+    const normalMonthlyPayment = (loanAmount + normalTotalInterest) / months;
+    const normalVat = normalMonthlyPayment * 0.07;
+    const normalTotalMonthly = normalMonthlyPayment + normalVat + monthlyInsurance;
+
+    // Good credit rate (4.5%)
+    const goodCreditRate = 0.045;
+    const goodCreditTotalInterest = loanAmount * goodCreditRate * years;
+    const goodCreditMonthlyPayment = (loanAmount + goodCreditTotalInterest) / months;
+    const goodCreditVat = goodCreditMonthlyPayment * 0.07;
+    const goodCreditTotalMonthly = goodCreditMonthlyPayment + goodCreditVat + monthlyInsurance;
+
+    return {
+      normalTotalMonthly,
+      goodCreditTotalMonthly,
+      savings: normalTotalMonthly - goodCreditTotalMonthly,
+    };
+  }, [car]);
 
   // ตั้งค่า initial loading state สำหรับ thumbnails
   useEffect(() => {
@@ -683,15 +733,13 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   }
 
   let ogImage = `https://www.chiangmaiusedcar.com/api/og?src=${encodeURIComponent(ogSource)}&w=1200&h=630`;
-  // Add stable cache buster for LINE/Facebook when using Shopify CDN
+  // Stable cache key for LINE/Facebook using car handle (not date - avoids daily cache bust)
   if (ogSource && ogSource.includes('cdn.shopify.com')) {
     const carHandle = safeGet(car, 'handle', '');
-    const dateStamp = new Date().toISOString().split('T')[0].replace(/-/g, ''); // YYYYMMDD
     try {
       const parsed = new URL(ogImage);
-      if (!parsed.searchParams.has('v')) {
-        parsed.searchParams.set('car', carHandle);
-        parsed.searchParams.set('v', dateStamp);
+      if (!parsed.searchParams.has('v') && carHandle) {
+        parsed.searchParams.set('v', carHandle);
       }
       ogImage = parsed.toString();
     } catch {
@@ -1308,79 +1356,49 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                 </div>
                 {/* ค่าผ่อนประมาณ - สูตร Flat Rate */}
                 <div className="space-y-3">
-                  {(() => {
-                    const carPrice = Number(safeGet(car, 'price.amount', 0));
-                    const loanAmount = carPrice; // สมมติเงินดาวน์ 0%
-                    const years = 6; // 6 ปี
-                    const months = 72; // 72 งวด
-                    const age = 35; // อายุเฉลี่ย 35 ปี
-
-                    // Insurance calculation based on age (same for both)
-                    const insuranceRatePerYear = age <= 40 ? 0.004 : 0.0062; // 0.40% หรือ 0.62%
-                    const totalInsurance = loanAmount * insuranceRatePerYear * years;
-                    const monthlyInsurance = totalInsurance / months;
-
-                    // Normal rate calculation (7.5%)
-                    const normalRate = 0.075;
-                    const normalTotalInterest = loanAmount * normalRate * years;
-                    const normalMonthlyPayment = (loanAmount + normalTotalInterest) / months;
-                    const normalVat = normalMonthlyPayment * 0.07;
-                    const normalTotalMonthly = normalMonthlyPayment + normalVat + monthlyInsurance;
-
-                    // Good credit calculation (4.5%)
-                    const goodCreditRate = 0.045;
-                    const goodCreditTotalInterest = loanAmount * goodCreditRate * years;
-                    const goodCreditMonthlyPayment =
-                      (loanAmount + goodCreditTotalInterest) / months;
-                    const goodCreditVat = goodCreditMonthlyPayment * 0.07;
-                    const goodCreditTotalMonthly =
-                      goodCreditMonthlyPayment + goodCreditVat + monthlyInsurance;
-
-                    const savings = normalTotalMonthly - goodCreditTotalMonthly;
-
-                    return (
-                      <>
-                        {/* Normal rate */}
-                        <div>
-                          <div className="text-lg text-primary font-prompt">
-                            {Math.round(normalTotalMonthly).toLocaleString()} บาท /เดือน*
-                          </div>
-                          <div className="text-xs text-gray-500 font-prompt">
-                            *อัตราปกติ 7.5% สำหรับ 72 งวด + VAT + ประกัน
-                          </div>
+                  {installment && (
+                    <>
+                      {/* Normal rate */}
+                      <div>
+                        <div className="text-lg text-primary font-prompt">
+                          {Math.round(installment.normalTotalMonthly).toLocaleString()} บาท /เดือน*
                         </div>
-
-                        {/* Good credit rate */}
-                        <div className="bg-white border border-accent rounded-lg p-3">
-                          <div className="flex items-center gap-2 mb-1">
-                            <svg
-                              className="w-4 h-4 text-accent-800"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <span className="text-sm font-semibold text-accent-800 font-prompt">
-                              สำหรับลูกค้าเครดิตดี
-                            </span>
-                          </div>
-                          <div className="text-lg font-bold text-primary font-prompt">
-                            {Math.round(goodCreditTotalMonthly).toLocaleString()} บาท /เดือน*
-                          </div>
-                          <div className="text-xs text-gray-600 font-prompt mb-1">
-                            *อัตราพิเศษ 4.5% สำหรับ 72 งวด + VAT + ประกัน
-                          </div>
-                          <div className="text-sm font-semibold text-accent-800 font-prompt">
-                            ประหยัดได้ {Math.round(savings).toLocaleString()} บาท/เดือน
-                          </div>
+                        <div className="text-xs text-gray-500 font-prompt">
+                          *อัตราปกติ 7.5% สำหรับ 72 งวด + VAT + ประกัน
                         </div>
-                      </>
-                    );
-                  })()}
+                      </div>
+
+                      {/* Good credit rate */}
+                      <div className="bg-white border border-accent rounded-lg p-3">
+                        <div className="flex items-center gap-2 mb-1">
+                          <svg
+                            className="w-4 h-4 text-accent-800"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          <span className="text-sm font-semibold text-accent-800 font-prompt">
+                            สำหรับลูกค้าเครดิตดี
+                          </span>
+                        </div>
+                        <div className="text-lg font-bold text-primary font-prompt">
+                          {Math.round(installment.goodCreditTotalMonthly).toLocaleString()} บาท
+                          /เดือน*
+                        </div>
+                        <div className="text-xs text-gray-600 font-prompt mb-1">
+                          *อัตราพิเศษ 4.5% สำหรับ 72 งวด + VAT + ประกัน
+                        </div>
+                        <div className="text-sm font-semibold text-accent-800 font-prompt">
+                          ประหยัดได้ {Math.round(installment.savings).toLocaleString()} บาท/เดือน
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -1493,6 +1511,14 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
                     <div className="font-semibold text-gray-600 font-prompt">เครื่องยนต์</div>
                     <div className="text-lg font-bold text-black font-prompt">{car.engine}</div>
+                  </div>
+                )}
+                {(car.drivetrain || car.drive_type) && (
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">ขับเคลื่อน</div>
+                    <div className="text-lg font-bold text-black font-prompt">
+                      {car.drivetrain || car.drive_type}
+                    </div>
                   </div>
                 )}
                 {car.province && (
@@ -1699,7 +1725,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
 // ISR - Individual car pages - revalidate every 10 minutes
 export async function getStaticPaths() {
   try {
-    const cars = await getAllCars();
+    const cars = await getAllCarsCached();
     const safeCars = Array.isArray(cars) ? cars : [];
 
     const paths = safeCars
@@ -1724,7 +1750,7 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   try {
-    const cars = await getAllCars();
+    const cars = await getAllCarsCached();
 
     // ป้องกันกรณีที่ cars เป็น null หรือ undefined
     const safeCars = Array.isArray(cars) ? cars : [];
@@ -1872,9 +1898,10 @@ export async function getStaticProps({ params }) {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('getStaticProps error:', error);
-    // ไม่ throw error - ให้หน้า 404 แทน
+    // Retry after 60s เพื่อป้องกัน permanent 404 กรณี Shopify API ล่มชั่วคราว
     return {
       notFound: true,
+      revalidate: 60,
     };
   }
 }
