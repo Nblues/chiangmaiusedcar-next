@@ -7,7 +7,6 @@ import CarCard from '../components/CarCard';
 import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
 import { readCarStatuses } from '../lib/carStatusStore.js';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import A11yImage from '../components/A11yImage'; // Static import for LCP
 import { SEO_HOME } from '../config/seo-keywords';
 import HomeAboutInline from '../components/HomeAboutInline';
@@ -15,6 +14,8 @@ import HomeSearchSection from '../components/HomeSearchSection';
 import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
 import { COMMON_OFFER_EXTENSIONS } from '../config/business';
 import { buildFaqPageJsonLd } from '../lib/seo/faq';
+import { getPriceInfo } from '../lib/carPrice';
+import { mergeCarSpecs } from '../lib/mergeCarSpecs';
 
 const HOME_FAQS = [
   {
@@ -65,26 +66,6 @@ const HomeFaqSection = dynamic(() => import('../components/HomeFaqSection'), {
   ssr: false,
   loading: () => null,
 });
-
-// Helper: format price safely for display and microdata using our safe utility
-function getPriceInfo(amount) {
-  try {
-    const num = Number(amount);
-    const valid = Number.isFinite(num) && num >= 0;
-    return {
-      valid,
-      numeric: valid ? String(num) : undefined,
-      // Specify locale to keep SSR/CSR consistent and avoid hydration churn
-      display: valid ? num.toLocaleString('th-TH') : 'ติดต่อสอบถาม',
-    };
-  } catch {
-    return {
-      valid: false,
-      numeric: undefined,
-      display: 'ติดต่อสอบถาม',
-    };
-  }
-}
 
 function buildHomeItemListJsonLd(inputCars) {
   const site = 'https://www.chiangmaiusedcar.com';
@@ -196,111 +177,12 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   // This helps mobile LCP by allowing the browser to paint the hero sooner.
   const [showDeferredSections, setShowDeferredSections] = useState(false);
 
-  const mergeSpecs = (car, extra) => {
-    const next = { ...car };
-
-    const has = v => v != null && String(v).trim() !== '';
-    const carFuel = car?.fuelType || car?.fuel_type || car?.['fuel-type'];
-    const extraFuel = extra?.fuelType || extra?.fuel_type || extra?.['fuel-type'];
-
-    const carDrive =
-      car?.drivetrain ||
-      car?.drive_type ||
-      car?.driveType ||
-      car?.['drive-type'] ||
-      car?.wheel_drive ||
-      car?.wheelDrive;
-    const extraDrive =
-      extra?.drivetrain ||
-      extra?.drive_type ||
-      extra?.driveType ||
-      extra?.['drive-type'] ||
-      extra?.wheel_drive ||
-      extra?.wheelDrive;
-
-    // Normalize fuel keys so all cards behave the same
-    if (has(carFuel)) {
-      if (!has(next.fuelType)) next.fuelType = carFuel;
-      if (!has(next.fuel_type)) next.fuel_type = carFuel;
-    }
-
-    // Normalize drivetrain keys so all cards behave the same
-    if (has(carDrive)) {
-      if (!has(next.drivetrain)) next.drivetrain = carDrive;
-      if (!has(next.drive_type)) next.drive_type = carDrive;
-    }
-
-    if (!extra) return next;
-
-    if (!has(next.year) && has(extra.year)) next.year = extra.year;
-    if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
-    if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
-    if (!has(carDrive) && has(extraDrive)) {
-      next.drivetrain = extra.drivetrain || extraDrive;
-      next.drive_type = extra.drive_type || extraDrive;
-    }
-    if (!has(carFuel) && has(extraFuel)) {
-      next.fuelType = extra.fuelType || extraFuel;
-      next.fuel_type = extra.fuel_type || extraFuel;
-    }
-    if (!has(next.installment) && has(extra.installment)) next.installment = extra.installment;
-
-    if (!has(next.category) && has(extra.category)) next.category = extra.category;
-    if (!has(next.body_type) && has(extra.body_type)) next.body_type = extra.body_type;
-
-    return next;
-  };
-
   // Defer non-critical share widget to reduce long tasks during hydration
   const [showSocialShare, setShowSocialShare] = useState(false);
   const [socialShareUrl, setSocialShareUrl] = useState('');
 
-  // Search state
-  const [searchTerm, setSearchTerm] = useState('');
-  const [priceRange, setPriceRange] = useState('all');
-  const [brandFilter, setBrandFilter] = useState('all');
-
-  const router = useRouter();
-
   // Memoize expensive computations
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
-
-  // NOTE: Always attach a catch when invoking async helpers inside effects,
-  // timers, or event handlers to avoid "Unhandled Runtime Error" overlays
-  // if a browser extension or network stack throws unexpectedly.
-
-  // Memoize static data to prevent re-creation
-  const brands = useMemo(
-    () => ['all', 'toyota', 'honda', 'nissan', 'mazda', 'mitsubishi', 'isuzu', 'ford'],
-    []
-  );
-  const priceRanges = useMemo(
-    () => [
-      { value: 'all', label: 'ทุกช่วงราคา' },
-      { value: '0-100000', label: 'ต่ำกว่า 1 แสน' },
-      { value: '100000-200000', label: '1-2 แสน' },
-      { value: '200000-300000', label: '2-3 แสน' },
-      { value: '300000-400000', label: '3-4 แสน' },
-      { value: '400000-500000', label: '4-5 แสน' },
-      { value: '500000-600000', label: '5-6 แสน' },
-      { value: '600000-700000', label: '6-7 แสน' },
-      { value: '700000', label: '7 แสนขึ้นไป' },
-    ],
-    []
-  );
-
-  // Optimize heavy functions with useCallback
-  const handleSearch = useCallback(() => {
-    const params = new URLSearchParams();
-    const term = (searchTerm || '').trim().slice(0, 120);
-    if (term) params.set('search', term);
-    if (priceRange !== 'all') params.set('price', priceRange);
-    if (brandFilter !== 'all') params.set('brand', brandFilter);
-
-    const queryString = params.toString();
-    const url = queryString ? `/all-cars?${queryString}` : '/all-cars';
-    router.push(url);
-  }, [searchTerm, priceRange, brandFilter, router]);
 
   // Load Facebook reviews only when the user is near that section.
   // This avoids loading a heavy client-only chunk during the initial render (helps LCP).
@@ -556,7 +438,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                   ) : (
                     <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
                       {safeCars.slice(0, 8).map((car, index) => {
-                        const mergedCar = mergeSpecs(car, null);
+                        const mergedCar = mergeCarSpecs(car, null);
                         return <CarCard key={car.id} car={mergedCar} priority={index < 2} />;
                       })}
                     </div>

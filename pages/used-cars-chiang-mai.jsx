@@ -16,6 +16,8 @@ import {
 } from '../config/business.js';
 import { readCarStatusesByIds } from '../lib/carStatusStore.js';
 import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
+import { getPriceInfo } from '../lib/carPrice';
+import { mergeCarSpecs } from '../lib/mergeCarSpecs';
 
 const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
   ssr: false,
@@ -27,20 +29,6 @@ const SITE = 'https://www.chiangmaiusedcar.com';
 // NOTE: This page must keep runtime JS enabled because the global Navbar/Footer are
 // client-only (dynamic + ssr:false). Disabling runtime JS makes the mobile menu
 // disappear after a full refresh.
-
-function getPriceInfo(amount) {
-  try {
-    const num = Number(amount);
-    const valid = Number.isFinite(num) && num >= 0;
-    return {
-      valid,
-      numeric: valid ? String(num) : undefined,
-      display: valid ? num.toLocaleString('th-TH') : 'ติดต่อสอบถาม',
-    };
-  } catch {
-    return { valid: false, numeric: undefined, display: 'ติดต่อสอบถาม' };
-  }
-}
 
 function buildChiangMaiLandingItemListJsonLd(inputCars) {
   const cars = Array.isArray(inputCars) ? inputCars : [];
@@ -243,58 +231,6 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
   const requestedSpecHandlesRef = useRef(new Set());
   const specFetchAttemptsRef = useRef(new Map());
 
-  const mergeSpecs = (car, extra) => {
-    const next = { ...car };
-    const has = v => v != null && String(v).trim() !== '';
-
-    const carFuel = car?.fuelType || car?.fuel_type || car?.['fuel-type'];
-    const extraFuel = extra?.fuelType || extra?.fuel_type || extra?.['fuel-type'];
-
-    const carDrive =
-      car?.drivetrain ||
-      car?.drive_type ||
-      car?.driveType ||
-      car?.['drive-type'] ||
-      car?.wheel_drive ||
-      car?.wheelDrive;
-    const extraDrive =
-      extra?.drivetrain ||
-      extra?.drive_type ||
-      extra?.driveType ||
-      extra?.['drive-type'] ||
-      extra?.wheel_drive ||
-      extra?.wheelDrive;
-
-    if (has(carFuel)) {
-      if (!has(next.fuelType)) next.fuelType = carFuel;
-      if (!has(next.fuel_type)) next.fuel_type = carFuel;
-    }
-
-    if (has(carDrive)) {
-      if (!has(next.drivetrain)) next.drivetrain = carDrive;
-      if (!has(next.drive_type)) next.drive_type = carDrive;
-    }
-
-    if (!extra) return next;
-
-    if (!has(next.year) && has(extra.year)) next.year = extra.year;
-    if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
-    if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
-    if (!has(carDrive) && has(extraDrive)) {
-      next.drivetrain = extra.drivetrain || extraDrive;
-      next.drive_type = extra.drive_type || extraDrive;
-    }
-    if (!has(carFuel) && has(extraFuel)) {
-      next.fuelType = extra.fuelType || extraFuel;
-      next.fuel_type = extra.fuel_type || extraFuel;
-    }
-    if (!has(next.installment) && has(extra.installment)) next.installment = extra.installment;
-    if (!has(next.category) && has(extra.category)) next.category = extra.category;
-    if (!has(next.body_type) && has(extra.body_type)) next.body_type = extra.body_type;
-
-    return next;
-  };
-
   // Enrich missing specs for featured cards (helps when metafields are not exposed to Storefront API).
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -311,7 +247,7 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
       if (attempts >= 2) continue;
 
       const extra = specByHandle?.[handle];
-      const merged = mergeSpecs(car, extra);
+      const merged = mergeCarSpecs(car, extra);
 
       const hasYear = merged?.year != null && String(merged.year).trim() !== '';
       const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
@@ -717,8 +653,13 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
               {featuredCars.map((car, index) => {
                 const handle = car?.handle;
                 const extra = handle ? specByHandle?.[handle] : null;
-                const mergedCar = mergeSpecs(car, extra);
-                return <CarCard key={car?.id || index} car={mergedCar} priority={index < 2} />;
+                return (
+                  <CarCard
+                    key={car?.id || index}
+                    car={mergeCarSpecs(car, extra)}
+                    priority={index < 2}
+                  />
+                );
               })}
             </div>
           ) : (

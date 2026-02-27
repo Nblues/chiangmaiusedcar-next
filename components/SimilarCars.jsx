@@ -1,38 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import CarCard from './CarCard';
-
-const scheduleIdle = (cb, { timeout = 2500, fallbackDelayMs = 1200 } = {}) => {
-  if (typeof window === 'undefined') return () => {};
-  if (typeof window.requestIdleCallback === 'function') {
-    const id = window.requestIdleCallback(cb, { timeout });
-    return () => window.cancelIdleCallback?.(id);
-  }
-  const id = window.setTimeout(cb, fallbackDelayMs);
-  return () => window.clearTimeout(id);
-};
-
-const scheduleAfterLoadThenIdle = (cb, idleOptions) => {
-  if (typeof window === 'undefined') return () => {};
-  if (document?.readyState === 'complete') {
-    return scheduleIdle(cb, idleOptions);
-  }
-
-  let cancelled = false;
-  const onLoad = () => {
-    if (cancelled) return;
-    cleanup = scheduleIdle(cb, idleOptions);
-  };
-
-  // eslint-disable-next-line no-use-before-define
-  let cleanup = () => {};
-  window.addEventListener('load', onLoad, { once: true });
-  return () => {
-    cancelled = true;
-    window.removeEventListener('load', onLoad);
-    cleanup();
-  };
-};
+import { scheduleAfterLoadThenIdle } from '../utils/scheduler';
+import { mergeCarSpecs } from '../lib/mergeCarSpecs';
 
 // คอมโพเนนต์แนะนำรถที่คล้ายกัน
 function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
@@ -111,58 +81,6 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
     [similarCars]
   );
 
-  const mergeSpecs = (car, extra) => {
-    const next = { ...car };
-    const has = v => v != null && String(v).trim() !== '';
-
-    const carFuel = car?.fuelType || car?.fuel_type || car?.['fuel-type'];
-    const extraFuel = extra?.fuelType || extra?.fuel_type || extra?.['fuel-type'];
-
-    const carDrive =
-      car?.drivetrain ||
-      car?.drive_type ||
-      car?.driveType ||
-      car?.['drive-type'] ||
-      car?.wheel_drive ||
-      car?.wheelDrive;
-    const extraDrive =
-      extra?.drivetrain ||
-      extra?.drive_type ||
-      extra?.driveType ||
-      extra?.['drive-type'] ||
-      extra?.wheel_drive ||
-      extra?.wheelDrive;
-
-    if (has(carFuel)) {
-      if (!has(next.fuelType)) next.fuelType = carFuel;
-      if (!has(next.fuel_type)) next.fuel_type = carFuel;
-    }
-
-    if (has(carDrive)) {
-      if (!has(next.drivetrain)) next.drivetrain = carDrive;
-      if (!has(next.drive_type)) next.drive_type = carDrive;
-    }
-
-    if (!extra) return next;
-
-    if (!has(next.year) && has(extra.year)) next.year = extra.year;
-    if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
-    if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
-    if (!has(carDrive) && has(extraDrive)) {
-      next.drivetrain = extra.drivetrain || extraDrive;
-      next.drive_type = extra.drive_type || extraDrive;
-    }
-    if (!has(carFuel) && has(extraFuel)) {
-      next.fuelType = extra.fuelType || extraFuel;
-      next.fuel_type = extra.fuel_type || extraFuel;
-    }
-    if (!has(next.installment) && has(extra.installment)) next.installment = extra.installment;
-    if (!has(next.category) && has(extra.category)) next.category = extra.category;
-    if (!has(next.body_type) && has(extra.body_type)) next.body_type = extra.body_type;
-
-    return next;
-  };
-
   // Enrich missing quick specs for SimilarCars cards (ปี/ไมล์/เกียร์/เชื้อเพลิง)
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -181,7 +99,7 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
       if (attempts >= 2) continue;
 
       const extra = specByHandle?.[handle];
-      const merged = mergeSpecs(car, extra);
+      const merged = mergeCarSpecs(car, extra);
 
       const hasYear = merged?.year != null && String(merged.year).trim() !== '';
       const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
@@ -340,7 +258,7 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
         {safeSimilarCars.map(car => {
           const handle = car?.handle;
           const extra = handle ? specByHandle?.[handle] : null;
-          const mergedCar = mergeSpecs(car, extra);
+          const mergedCar = mergeCarSpecs(car, extra);
           return <CarCard key={car.id} car={mergedCar} />;
         })}
       </div>

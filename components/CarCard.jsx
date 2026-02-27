@@ -4,6 +4,7 @@ import A11yImage from './A11yImage';
 import { carAlt } from '../utils/a11y';
 import { isReservedStatus, isSoldStatus } from '../lib/carStatusUtils';
 import { safeGet } from '../utils/safe';
+import { getPriceInfo } from '../lib/carPrice';
 
 function SpecIcon({ type, className = '' }) {
   const baseClassName = `h-4 w-4 shrink-0 ${className}`;
@@ -107,20 +108,6 @@ function SpecIcon({ type, className = '' }) {
       );
     default:
       return null;
-  }
-}
-
-function getPriceInfo(amount) {
-  try {
-    const num = Number(amount);
-    const valid = Number.isFinite(num) && num >= 0;
-    return {
-      valid,
-      numeric: valid ? String(num) : undefined,
-      display: valid ? num.toLocaleString('th-TH') : 'ติดต่อสอบถาม',
-    };
-  } catch {
-    return { valid: false, numeric: undefined, display: 'ติดต่อสอบถาม' };
   }
 }
 
@@ -438,29 +425,6 @@ export default function CarCard({ car, priority = false, className = '', variant
           imageType="card"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-
-        {/* Quick View Overlay (Design C) - show on hover-capable layouts (sm+) */}
-        <div className="hidden sm:block pointer-events-none select-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/10 to-transparent" />
-          <div className="absolute bottom-3 left-3">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-black/5 font-prompt">
-              ดูแบบเร็ว
-              <svg
-                viewBox="0 0 24 24"
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </span>
-          </div>
-        </div>
 
         {/* Status Badges */}
         {(isReserved || isSold) && (

@@ -9,6 +9,8 @@ import { getAllCars, getCarSpecsByHandles } from '../../lib/shopify.mjs';
 import { readCarStatuses } from '../../lib/carStatusStore.js';
 import { computeSchemaAvailability } from '../../lib/carStatusUtils.js';
 import { COMMON_OFFER_EXTENSIONS } from '../../config/business';
+import { getPriceInfo } from '../../lib/carPrice';
+import { mergeCarSpecs } from '../../lib/mergeCarSpecs';
 
 const Breadcrumb = dynamic(() => import('../../components/Breadcrumb'), {
   loading: () => null,
@@ -43,20 +45,6 @@ function getBrandInfo(brandSlug) {
   return { slug: key, ...config };
 }
 
-function getPriceInfo(amount) {
-  try {
-    const num = Number(amount);
-    const valid = Number.isFinite(num) && num > 0;
-    return {
-      valid,
-      numeric: valid ? String(num) : undefined,
-      display: valid ? num.toLocaleString('th-TH') : 'ติดต่อสอบถาม',
-    };
-  } catch {
-    return { valid: false, numeric: undefined, display: 'ติดต่อสอบถาม' };
-  }
-}
-
 function buildBrandFaqEntries(brandLabel) {
   const safeLabel = String(brandLabel || '').trim() || 'รถมือสอง';
   return [
@@ -87,7 +75,7 @@ function buildBrandStructuredDataJsonLd({ brandLabel, brandSlug, cars, page, per
     const handle = car?.handle;
     const carUrl = handle ? `${SITE}/car/${handle}` : `${SITE}/all-cars`;
 
-    const priceInfo = getPriceInfo(car?.price?.amount || 0);
+    const priceInfo = getPriceInfo(car?.price?.amount || 0, { allowZero: false });
     const rawImage = car?.images?.[0]?.url;
     const imageUrl = rawImage
       ? rawImage.startsWith('http')
@@ -248,36 +236,6 @@ export async function getServerSideProps(context) {
     );
   };
 
-  const mergeSpecsServer = (car, extra) => {
-    if (!extra) return car;
-    const next = { ...car };
-
-    const carFuel = next?.fuelType || next?.fuel_type;
-    const extraFuel = extra?.fuelType || extra?.fuel_type;
-    const carDrive = next?.drivetrain || next?.drive_type;
-    const extraDrive = extra?.drivetrain || extra?.drive_type;
-
-    if (!has(next.year) && has(extra.year)) next.year = extra.year;
-    if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
-    if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
-
-    if (!has(carFuel) && has(extraFuel)) {
-      next.fuelType = extraFuel;
-      next.fuel_type = extraFuel;
-    }
-
-    if (!has(carDrive) && has(extraDrive)) {
-      next.drivetrain = extraDrive;
-      next.drive_type = extraDrive;
-    }
-
-    if (!has(next.installment) && has(extra.installment)) next.installment = extra.installment;
-    if (!has(next.category) && has(extra.category)) next.category = extra.category;
-    if (!has(next.body_type) && has(extra.body_type)) next.body_type = extra.body_type;
-
-    return next;
-  };
-
   try {
     const handles = pageCars
       .filter(needsSpecs)
@@ -286,7 +244,7 @@ export async function getServerSideProps(context) {
     const uniqueHandles = Array.from(new Set(handles)).slice(0, 50);
     if (uniqueHandles.length > 0) {
       const raw = await getCarSpecsByHandles(uniqueHandles);
-      pageCars = pageCars.map(c => mergeSpecsServer(c, raw?.[c?.handle]));
+      pageCars = pageCars.map(c => mergeCarSpecs(c, raw?.[c?.handle]));
     }
   } catch {
     // ignore: keep baseline payload

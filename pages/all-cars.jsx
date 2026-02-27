@@ -10,6 +10,8 @@ import { readCarStatuses } from '../lib/carStatusStore.js';
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import { getCachedStatuses, setCachedStatuses } from '../lib/carStatusCache';
 import { ALL_CARS_FAQS, buildFaqPageJsonLd } from '../lib/seo/faq.js';
+import { scheduleAfterLoadThenIdle } from '../utils/scheduler';
+import { mergeCarSpecs } from '../lib/mergeCarSpecs';
 
 async function safeFetchJson(url, fetchOptions = {}, timeoutMs = 8000) {
   let timeoutId;
@@ -59,38 +61,6 @@ function normalizePageNumber(input) {
   const pg = parseInt(String(input || '1'), 10);
   return Number.isFinite(pg) && pg > 0 ? pg : 1;
 }
-
-const scheduleIdle = (cb, { timeout = 2500, fallbackDelayMs = 1200 } = {}) => {
-  if (typeof window === 'undefined') return () => {};
-  if (typeof window.requestIdleCallback === 'function') {
-    const id = window.requestIdleCallback(cb, { timeout });
-    return () => window.cancelIdleCallback?.(id);
-  }
-  const id = window.setTimeout(cb, fallbackDelayMs);
-  return () => window.clearTimeout(id);
-};
-
-const scheduleAfterLoadThenIdle = (cb, idleOptions) => {
-  if (typeof window === 'undefined') return () => {};
-  if (document?.readyState === 'complete') {
-    return scheduleIdle(cb, idleOptions);
-  }
-
-  let cancelled = false;
-  const onLoad = () => {
-    if (cancelled) return;
-    cleanup = scheduleIdle(cb, idleOptions);
-  };
-
-  // eslint-disable-next-line no-use-before-define
-  let cleanup = () => {};
-  window.addEventListener('load', onLoad, { once: true });
-  return () => {
-    cancelled = true;
-    window.removeEventListener('load', onLoad);
-    cleanup();
-  };
-};
 
 export default function AllCars({
   cars,
@@ -158,61 +128,6 @@ export default function AllCars({
     window.addEventListener('unhandledrejection', onUnhandled);
     return () => window.removeEventListener('unhandledrejection', onUnhandled);
   }, []);
-
-  const mergeSpecs = (car, extra) => {
-    const next = { ...car };
-
-    const has = v => v != null && String(v).trim() !== '';
-    const carFuel = car?.fuelType || car?.fuel_type || car?.['fuel-type'];
-    const extraFuel = extra?.fuelType || extra?.fuel_type || extra?.['fuel-type'];
-
-    const carDrive =
-      car?.drivetrain ||
-      car?.drive_type ||
-      car?.driveType ||
-      car?.['drive-type'] ||
-      car?.wheel_drive ||
-      car?.wheelDrive;
-    const extraDrive =
-      extra?.drivetrain ||
-      extra?.drive_type ||
-      extra?.driveType ||
-      extra?.['drive-type'] ||
-      extra?.wheel_drive ||
-      extra?.wheelDrive;
-
-    // Normalize fuel keys so all cards behave the same
-    if (has(carFuel)) {
-      if (!has(next.fuelType)) next.fuelType = carFuel;
-      if (!has(next.fuel_type)) next.fuel_type = carFuel;
-    }
-
-    // Normalize drivetrain keys so all cards behave the same
-    if (has(carDrive)) {
-      if (!has(next.drivetrain)) next.drivetrain = carDrive;
-      if (!has(next.drive_type)) next.drive_type = carDrive;
-    }
-
-    if (!extra) return next;
-
-    if (!has(next.year) && has(extra.year)) next.year = extra.year;
-    if (!has(next.mileage) && has(extra.mileage)) next.mileage = extra.mileage;
-    if (!has(next.transmission) && has(extra.transmission)) next.transmission = extra.transmission;
-    if (!has(carDrive) && has(extraDrive)) {
-      next.drivetrain = extra.drivetrain || extraDrive;
-      next.drive_type = extra.drive_type || extraDrive;
-    }
-    if (!has(carFuel) && has(extraFuel)) {
-      next.fuelType = extra.fuelType || extraFuel;
-      next.fuel_type = extra.fuel_type || extraFuel;
-    }
-    if (!has(next.installment) && has(extra.installment)) next.installment = extra.installment;
-
-    if (!has(next.category) && has(extra.category)) next.category = extra.category;
-    if (!has(next.body_type) && has(extra.body_type)) next.body_type = extra.body_type;
-
-    return next;
-  };
 
   // Keep state in sync when user lands via router navigation (client-side) to a URL with params
   useEffect(() => {
@@ -344,7 +259,7 @@ export default function AllCars({
       if (attempts >= 2) continue;
 
       const extra = specByHandle?.[handle];
-      const merged = mergeSpecs(car, extra);
+      const merged = mergeCarSpecs(car, extra);
 
       const hasYear = merged?.year != null && String(merged.year).trim() !== '';
       const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
@@ -777,7 +692,7 @@ export default function AllCars({
                 {currentCarsWithLive.map(car => {
                   const handle = car?.handle;
                   const extra = handle ? specByHandle?.[handle] : null;
-                  const mergedCar = mergeSpecs(car, extra);
+                  const mergedCar = mergeCarSpecs(car, extra);
                   return <CarCard key={car.id} car={mergedCar} priority={false} />;
                 })}
               </div>
@@ -934,10 +849,12 @@ export async function getServerSideProps(context) {
       vendor: car.vendor,
       tags: car.tags,
       price: car.price,
-      // Keep quick specs for CarCard (ปี/ไมล์/เกียร์/เชื้อเพลิง)
+      // Keep quick specs for CarCard (ปี/ไมล์/เกียร์/เชื้อเพลิง/ขับเคลื่อน)
       year: car.year,
       mileage: car.mileage,
       transmission: car.transmission,
+      drivetrain: car.drivetrain || car.drive_type || car.wheel_drive,
+      drive_type: car.drive_type || car.drivetrain || car.wheel_drive,
       installment: car.installment,
       fuelType: car.fuelType || car.fuel_type,
       fuel_type: car.fuel_type || car.fuelType,
