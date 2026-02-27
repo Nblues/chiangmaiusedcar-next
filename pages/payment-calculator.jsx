@@ -46,7 +46,7 @@ export default function PaymentCalculator() {
     const calculations = periods.map(period => {
       // คำนวณค่างวดแบบ Flat Rate (ดอกเบี้ยปกติ)
       let monthlyPayment;
-      const annualRate = interestRate / 100; // แปลงเป็นทศนิยม
+      const annualRate = parseFloat(interestRate) / 100; // แปลงเป็นทศนิยม (parseFloat ป้องกัน NaN)
       const years = period.months / 12; // จำนวนปี
 
       // Flat Rate: ดอกเบี้ยรวม = เงินต้น × อัตราดอกเบี้ย × จำนวนปี

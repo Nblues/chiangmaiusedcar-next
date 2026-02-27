@@ -3,6 +3,12 @@ import path from 'node:path';
 
 import sharp from 'sharp';
 
+// Force Node.js runtime - sharp requires native binaries unavailable on Edge Runtime
+export const config = {
+  runtime: 'nodejs',
+  api: { bodyParser: false },
+};
+
 const DEFAULT_W = 1200;
 const DEFAULT_H = 630;
 

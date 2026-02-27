@@ -11,18 +11,18 @@ export default async function handler(req, res) {
   res.setHeader('Expires', '0');
   res.setHeader('X-Timestamp', Date.now().toString());
 
-  // รองรับเฉพาะ POST และ GET
-  if (req.method !== 'POST' && req.method !== 'GET') {
+  // POST เท่านั้น — ป้องกัน crawler/bot trigger ผ่าน GET
+  if (req.method !== 'POST') {
     return res.status(405).json({
       success: false,
       error: 'Method not allowed',
-      message: 'Only POST and GET methods are supported',
+      message: 'Only POST method is supported',
     });
   }
 
   try {
     // ตรวจสอบ secret token หรือ authentication
-    const { secret, paths, force } = req.method === 'POST' ? req.body : req.query;
+    const { secret, paths, force } = req.body;
     const expectedSecretRaw = process.env.REVALIDATE_SECRET;
     const expectedSecret = typeof expectedSecretRaw === 'string' ? expectedSecretRaw.trim() : '';
     const hasSecretConfigured = Boolean(expectedSecret);

@@ -10,7 +10,7 @@ const ToolsPanel = dynamic(() => import('../../components/admin/ToolsPanel'), { 
 // Main dashboard component
 function AdminDashboard() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState('');
 
@@ -33,7 +33,7 @@ function AdminDashboard() {
 
         if (response.ok) {
           const data = await response.json();
-          setIsAuthenticated(true);
+          setIsLoggedIn(true);
           setUsername(data.user?.username || 'Admin');
         } else {
           // Not authenticated - redirect to login
@@ -77,7 +77,7 @@ function AdminDashboard() {
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isLoggedIn) {
     return <>{seo}</>;
   }
 
