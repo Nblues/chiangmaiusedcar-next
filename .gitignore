@@ -149,7 +149,7 @@ trace.json
 lint-output*.txt
 lint-output*.json
 type-check-output*.txt
-build-output*.txt
+build-*.txt
 pnpm-version.txt
 lint-help.txt
 lint-run.out.txt

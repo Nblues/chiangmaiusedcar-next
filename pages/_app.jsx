@@ -20,7 +20,7 @@ const prompt = Prompt({
 });
 
 // Dynamic imports keep heavy UI out of the initial bundle and avoid hydration mismatches
-const Footer = dynamic(() => import('../components/Footer'), { ssr: false, loading: () => null });
+import Footer from '../components/Footer';
 const CookieConsent = dynamic(() => import('../components/CookieConsent'), {
   ssr: false,
   loading: () => null,
@@ -246,9 +246,7 @@ export default function MyApp({ Component, pageProps }) {
           <main id="main" role="main">
             {page}
           </main>
-          <ClientOnly>
-            <Footer />
-          </ClientOnly>
+          <Footer />
           {!isAdminRoute && (
             <ClientOnly>
               <CookieConsent />
