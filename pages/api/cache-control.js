@@ -6,14 +6,26 @@ export default function handler(req, res) {
   const { method, query } = req;
   const { type = 'no-cache', maxAge = 0, resource } = query;
 
+  const isProd = process.env.NODE_ENV === 'production';
+
   // ตั้งค่า CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  if (isProd) {
+    res.setHeader('Access-Control-Allow-Origin', 'https://www.chiangmaiusedcar.com');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+  res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (method === 'OPTIONS') {
     res.status(200).end();
     return;
+  }
+
+  // In production, this endpoint is an admin tool. Hide it from unauthenticated callers.
+  if (isProd && !isAuthenticated(req)) {
+    return res.status(404).json({ success: false, error: 'Not found' });
   }
 
   // ตรวจสอบ authentication สำหรับการเปลี่ยนแปลง cache settings

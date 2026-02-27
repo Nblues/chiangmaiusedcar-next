@@ -1,7 +1,32 @@
 // pages/api/og-preview.js
 
+import { isAuthenticated } from '../../middleware/adminAuth';
+import { verifyApiAuth } from '../../lib/apiAuth';
+
 export default async function handler(req, res) {
+  // Only allow GET (admin tool)
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // In production: require admin session OR API auth.
+  // Return 404 for unauthenticated callers to avoid leaking endpoint existence.
+  if (process.env.NODE_ENV === 'production' && !isAuthenticated(req)) {
+    const apiAuth = verifyApiAuth(req);
+    if (!apiAuth.ok) {
+      return res.status(404).json({ error: 'Not found' });
+    }
+  }
+
   const { url } = req.query;
+
+  // CORS: allow same-origin in production, allow * in development.
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Access-Control-Allow-Origin', 'https://www.chiangmaiusedcar.com');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+  res.setHeader('Vary', 'Origin');
 
   // Set headers for no cache
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');

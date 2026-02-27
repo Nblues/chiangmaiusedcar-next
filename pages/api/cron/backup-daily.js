@@ -8,14 +8,16 @@ import { bucket } from '../../../lib/firebase-admin';
 
 export default async function handler(req, res) {
   // ตรวจสอบ authorization (Vercel Cron secret)
+  // Security note: in production, require CRON_SECRET to be configured.
   const authHeader = req.headers.authorization;
   const cronSecret = process.env.CRON_SECRET;
+  const isProd = process.env.NODE_ENV === 'production';
 
+  if (isProd && !cronSecret) {
+    return res.status(401).json({ success: false, error: 'Unauthorized' });
+  }
   if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-    return res.status(401).json({
-      success: false,
-      error: 'Unauthorized',
-    });
+    return res.status(401).json({ success: false, error: 'Unauthorized' });
   }
 
   try {

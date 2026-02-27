@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 const { spawnSync } = require('node:child_process');
+const fs = require('node:fs');
 const path = require('node:path');
 
 const args = process.argv.slice(2);
@@ -31,6 +32,18 @@ process.env.NODE_OPTIONS =
   process.env.NODE_OPTIONS || '--max-old-space-size=10240 --max-semi-space-size=512';
 
 const nextBin = path.join(process.cwd(), 'node_modules', 'next', 'dist', 'bin', 'next');
+
+// On some Windows machines, antivirus / file watchers can hold a lock on
+// `.next-win\\trace`, causing Next.js to crash with EPERM. A clean build
+// directory significantly reduces the chance of that happening.
+if (isWindows) {
+  const distDir = path.join(process.cwd(), '.next-win');
+  try {
+    fs.rmSync(distDir, { recursive: true, force: true });
+  } catch {
+    // best-effort cleanup
+  }
+}
 
 const result = spawnSync(process.execPath, [nextBin, 'build', ...forwardArgs], {
   stdio: 'inherit',

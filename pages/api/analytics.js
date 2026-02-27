@@ -4,6 +4,7 @@
  */
 
 import { safeFetch } from '../../lib/safeFetch';
+import { rateLimit } from '../../lib/rateLimit';
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -11,8 +12,28 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Basic abuse protection: rate limit by IP
+  const xfwd = req.headers['x-forwarded-for'] || req.headers['x-real-ip'];
+  const clientIp = Array.isArray(xfwd)
+    ? xfwd[0]
+    : xfwd || (req.socket && req.socket.remoteAddress) || 'unknown';
+
+  const rl = await rateLimit(`analytics:${clientIp}`, {
+    // Allow bursts but prevent sustained spam
+    limit: 120,
+    windowMs: 10 * 60 * 1000,
+  });
+  if (!rl.ok) {
+    res.setHeader('Retry-After', String(Math.ceil((rl.resetAt - Date.now()) / 1000)));
+    return res.status(429).json({ error: 'Too many requests' });
+  }
+
   // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Access-Control-Allow-Origin', 'https://www.chiangmaiusedcar.com');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
   res.setHeader('Access-Control-Allow-Methods', 'POST');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -34,11 +55,6 @@ export default async function handler(req, res) {
     }
 
     // Add server-side timestamp
-    const xfwd = req.headers['x-forwarded-for'] || req.headers['x-real-ip'];
-    const clientIp = Array.isArray(xfwd)
-      ? xfwd[0]
-      : xfwd || (req.socket && req.socket.remoteAddress) || 'unknown';
-
     const processedMetrics = {
       ...metrics,
       serverTimestamp: new Date().toISOString(),
