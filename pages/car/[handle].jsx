@@ -846,6 +846,25 @@ function CarDetailPage({ car, recommendedCars = [] }) {
         <div className="max-w-6xl mx-auto p-2 sm:p-4 lg:p-6">
           <Breadcrumb carTitle={safeGet(car, 'title', 'รถมือสองคุณภาพดี')} />
 
+          {/* ปุ่มย้อนกลับ */}
+          <div className="mb-4">
+            <button
+              onClick={() => {
+                if (window.history.length > 2) {
+                  router.back();
+                } else {
+                  router.push('/all-cars');
+                }
+              }}
+              className="inline-flex items-center text-sm font-medium text-gray-600 hover:text-primary transition-colors focus:outline-none group font-prompt"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="mr-1.5 h-4 w-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              ย้อนกลับ
+            </button>
+          </div>
+
           {/* ชื่อรถ */}
           <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
             <h1 className="text-2xl md:text-3xl font-bold text-black mb-3 font-prompt">
