@@ -26,8 +26,8 @@ export default function SEO({
   keywords = null, // ใส่ keywords ลง structured data (แทน meta keywords)
 }) {
   const router = useRouter();
-  const activeLocale = router?.locale || 'th';
-  const defaultLocale = router?.defaultLocale || 'th';
+  const activeLocale = (typeof window !== 'undefined' ? router?.locale : null) || 'th';
+  const defaultLocale = (typeof window !== 'undefined' ? router?.defaultLocale : null) || 'th';
 
   const localeMeta = useMemo(() => {
     const isEnglish = activeLocale === 'en';
