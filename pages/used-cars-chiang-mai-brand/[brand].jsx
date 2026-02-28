@@ -328,14 +328,10 @@ export default function UsedCarsChiangMaiBrand({
             รายละเอียดรถ
           </p>
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <Link href="/all-cars" prefetch={false} className="btn-primary text-center">
+            <Link href="/all-cars" className="btn-primary text-center">
               ดูรถทั้งหมด
             </Link>
-            <Link
-              href="/used-cars-chiang-mai"
-              prefetch={false}
-              className="btn-secondary text-center"
-            >
+            <Link href="/used-cars-chiang-mai" className="btn-secondary text-center">
               รวมรถมือสองเชียงใหม่
             </Link>
           </div>
@@ -359,14 +355,12 @@ export default function UsedCarsChiangMaiBrand({
             <div className="flex gap-2">
               <Link
                 href={`/used-cars-chiang-mai-brand/${brandInfo.slug}${safePage > 1 ? `?page=${safePage - 1}` : ''}`}
-                prefetch={false}
                 className={`inline-flex items-center justify-center rounded-xl border px-3 py-2 text-xs font-semibold font-prompt transition-colors ${safePage <= 1 ? 'border-gray-200 text-gray-400 pointer-events-none' : 'border-primary text-primary hover:bg-primary hover:text-white'}`}
               >
                 ก่อนหน้า
               </Link>
               <Link
                 href={`/used-cars-chiang-mai-brand/${brandInfo.slug}${safePage < totalPages ? `?page=${safePage + 1}` : ''}`}
-                prefetch={false}
                 className={`inline-flex items-center justify-center rounded-xl border px-3 py-2 text-xs font-semibold font-prompt transition-colors ${safePage >= totalPages ? 'border-gray-200 text-gray-400 pointer-events-none' : 'border-primary text-primary hover:bg-primary hover:text-white'}`}
               >
                 ถัดไป
@@ -384,10 +378,10 @@ export default function UsedCarsChiangMaiBrand({
               ลองดูหน้า “รถทั้งหมด” หรือหน้า “รถมือสองเชียงใหม่” เพื่อดูรถที่มีในสต็อกล่าสุด
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
-              <Link href="/all-cars" prefetch={false} className="btn-primary">
+              <Link href="/all-cars" className="btn-primary">
                 ดูรถทั้งหมด
               </Link>
-              <Link href="/used-cars-chiang-mai" prefetch={false} className="btn-secondary">
+              <Link href="/used-cars-chiang-mai" className="btn-secondary">
                 รถมือสองเชียงใหม่
               </Link>
             </div>
@@ -409,7 +403,6 @@ export default function UsedCarsChiangMaiBrand({
               <Link
                 key={slug}
                 href={`/used-cars-chiang-mai-brand/${slug}`}
-                prefetch={false}
                 className={`inline-flex items-center justify-center rounded-full border px-4 py-2 text-sm font-semibold font-prompt transition-colors ${slug === brandInfo.slug ? 'bg-primary text-white border-primary' : 'border-gray-300 text-gray-800 hover:border-primary hover:text-primary'}`}
               >
                 {BRAND_CONFIG[slug].label}

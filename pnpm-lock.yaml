@@ -87,9 +87,6 @@ importers:
       '@next/bundle-analyzer':
         specifier: ^14.2.10
         version: 14.2.33
-      '@next/swc-wasm-nodejs':
-        specifier: 14.2.5
-        version: 14.2.5
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
@@ -1168,9 +1165,6 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-
-  '@next/swc-wasm-nodejs@14.2.5':
-    resolution: {integrity: sha512-m9jZ0wDqNteFDRAWQt8jYbjANCAwHympamX6kZz9moPLspUEeFpWk0s4WfjXLbY1Z6y466wLEQMEZwgPHGAfeA==}
 
   '@next/swc-win32-arm64-msvc@14.2.5':
     resolution: {integrity: sha512-1GpG2VhbspO+aYoMOQPQiqc/tG3LzmsdBH0LhnDS3JrtDx2QmzXe0B6mSZZiN3Bq7IOMXxv1nlsjzoS1+9mzZw==}
@@ -8540,8 +8534,6 @@ snapshots:
 
   '@next/swc-linux-x64-musl@14.2.5':
     optional: true
-
-  '@next/swc-wasm-nodejs@14.2.5': {}
 
   '@next/swc-win32-arm64-msvc@14.2.5':
     optional: true
