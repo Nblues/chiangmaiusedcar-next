@@ -1,0 +1,50 @@
+const getAny = keys => {
+      for (const k of keys) {
+        if (hasValue(mergedSpec[k])) return mergedSpec[k];
+      }
+      return null;
+    };
+
+    // Strict: show specs ONLY when coming from Shopify metafields.
+    const year = getAny(['year', 'ปี']);
+    const mileage = getAny(['mileage', 'odometer', 'เลขไมล์', 'ไมล์', 'ระยะทาง', 'เลขไมล์แท้']);
+    const transmission = getAny([
+      'transmission',
+      'gear',
+      'transmission_type',
+      'transmission-type',
+      'transmissionType',
+      'gear_type',
+      'gear-type',
+      'gearType',
+      'เกียร์',
+    ]);
+    const fuelType = getAny(['fuel_type', 'fuel', 'fuel-type', 'fuel-supply', 'เชื้อเพลิง']);
+    const brand = hasValue(mergedSpec.brand) ? mergedSpec.brand : n.vendor;
+    const model = hasValue(mergedSpec.model) ? mergedSpec.model : null;
+    const installment = hasValue(mergedSpec.installment) ? mergedSpec.installment : null;
+
+    const category = getAny([
+      'category',
+      'vehicle_category',
+      'car_category',
+      'vehicle_type',
+      'car_type',
+      'carType',
+      'type',
+      'ประเภทรถ',
+      'หมวดหมู่',
+      'ประเภท',
+      'หมวดหมู่รถ',
+      'ประเภทยานพาหนะ',
+    ]);
+    const bodyType = getAny([
+      'body_type',
+      'bodyType',
+      'body',
+      'body_style',
+      'bodyStyle',
+      'ประเภทตัวถัง',
+    ]);
+
+    

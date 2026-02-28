@@ -1,0 +1,103 @@
+const getAny = keys => {
+        for (const k of keys) {
+          if (hasValue(mergedSpec[k])) return mergedSpec[k];
+        }
+        return null;
+      };
+
+      const parsed = parseCarData({
+        id: item.id,
+        handle: item.handle,
+        title: item.title || '',
+        description: item.description || '',
+        vendor: item.vendor || undefined,
+        productType: item.productType || undefined,
+        tags: Array.isArray(item.tags) ? item.tags : [],
+      });
+
+      const payload = {};
+      const year = getAny(['year', 'ปี']) || parsed?.year;
+      const mileage =
+        getAny(['mileage', 'odometer', 'เลขไมล์', 'ไมล์', 'ระยะทาง', 'เลขไมล์แท้']) ||
+        parsed?.mileage;
+      const transmission = getAny([
+        'transmission',
+        'gear',
+        'transmission_type',
+        'transmission-type',
+        'transmissionType',
+        'gear_type',
+        'gear-type',
+        'gearType',
+        'เกียร์',
+      ]);
+      const drivetrain = getAny([
+        'drivetrain',
+        'drive',
+        'drive_type',
+        'driveType',
+        'wheel_drive',
+        'wheelDrive',
+        'drive-type',
+        'wheel-drive',
+        'ระบบขับเคลื่อน',
+        'ขับเคลื่อน',
+      ]);
+      const fuelType = getAny(['fuel_type', 'fuel', 'fuel-type', 'fuel-supply', 'เชื้อเพลิง']);
+      const installment = getAny(['installment']);
+      const category = getAny([
+        'category',
+        'car-type',
+        'vehicle_category',
+        'car_category',
+        'vehicle_type',
+        'car_type',
+        'carType',
+        'type',
+        'ประเภทรถ',
+        'หมวดหมู่',
+        'ประเภท',
+        'หมวดหมู่รถ',
+        'ประเภทยานพาหนะ',
+      ]);
+      const bodyType = getAny([
+        'body_type',
+        'bodyType',
+        'body-type',
+        'body',
+        'body_style',
+        'bodyStyle',
+        'ประเภทตัวถัง',
+      ]);
+
+      // API: prefer metafields/Admin; allow conservative parse fallback for year/mileage.
+      if (hasValue(year)) payload.year = year;
+      if (hasValue(mileage)) payload.mileage = mileage;
+      if (hasValue(transmission)) payload.transmission = transmission;
+      if (hasValue(drivetrain)) {
+        payload.drivetrain = drivetrain;
+        payload.drive_type = drivetrain;
+      }
+
+      if (hasValue(fuelType)) {
+        payload.fuelType = fuelType;
+        payload.fuel_type = fuelType;
+      }
+
+      if (hasValue(installment)) payload.installment = installment;
+      if (hasValue(category)) payload.category = category;
+      if (hasValue(bodyType)) payload.body_type = bodyType;
+
+      const brand = getAny(['brand', 'ยี่ห้อ']);
+      const model = getAny(['model', 'รุ่น']);
+      if (hasValue(brand)) payload.brand = brand;
+      if (hasValue(model)) payload.model = model;
+
+      out[item.handle] = payload;
+    }
+
+    return out;
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('getCarSpecsByHandles error:', error);
+    
