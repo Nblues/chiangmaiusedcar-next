@@ -45,7 +45,7 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
       alt === '' ? '' : alt && alt.trim().length > 0 ? alt : (fallbackAlt ?? 'รูปภาพประกอบ');
 
     // ⭐ Optimize Shopify images automatically
-    let optimizedSrc = src;
+    const optimizedSrc = src;
     let generatedSrcSet = customSrcSet;
     let generatedSizes = customSizes;
 
@@ -75,7 +75,8 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
           : (qualityMap[imageType] ?? qualityMap.default);
 
       // ปรับขนาดรูป
-      optimizedSrc = optimizeShopifyImage(src, targetWidth, 'webp', resolvedQuality);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const optimizedSrc = optimizeShopifyImage(src, targetWidth, 'avif', resolvedQuality);
 
       // สร้าง srcSet ถ้ายังไม่มี
       if (!customSrcSet) {
@@ -84,14 +85,14 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
           // Add 576w to better match ~2-column mobile grids at DPR 3
           // (reduces waste vs jumping straight to 640w).
           card: [240, 360, 480, 576],
-          thumbnail: [120, 240], // ⭐ ลดขนาด srcSet สำหรับ thumbnail
+          thumbnail: [120, 240], // 🔹ลดขนาด srcset สำหรับ thumbnail
           gallery: [400, 800, 1200],
           default: [640, 1024, 1920],
         };
         generatedSrcSet = generateSrcSet(
           src,
           srcSetWidths[imageType] || srcSetWidths.default,
-          'webp',
+          'avif',
           resolvedQuality
         );
       }

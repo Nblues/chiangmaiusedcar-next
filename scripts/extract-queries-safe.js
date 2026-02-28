@@ -9,14 +9,14 @@ const matches = [];
 while ((match = regex.exec(c)) !== null) {
   matches.push({
     full: match[0],
-    inner: match[1]
+    inner: match[1],
   });
 }
 
 // 1. AdminSpecByIdsQuery (line 42) - no vars
 // 2. AllProductsQuery - no template vars inside
 // 3. CarSpecsByHandlesQuery - uses ${varDefs} and ${fields}
-// 4. HomepageProductsQuery - uses ${limitNum} 
+// 4. HomepageProductsQuery - uses ${limitNum}
 // 5. BrandCountsQuery - no template vars
 // 6. CarByHandleQuery - uses ${handle}
 
@@ -47,9 +47,12 @@ c = c.replace(matches[3].full, 'const query = getHomepageProductsQuery(limitNum)
 c = c.replace(matches[4].full, 'const query = BrandCountsQuery;');
 c = c.replace(matches[5].full, 'const query = getCarByHandleQuery(handle);');
 
-
 let lines = c.split('\n');
-lines.splice(9, 0, `import { AdminSpecByIdsQuery, AllProductsQuery, getCarSpecsByHandlesQuery, getHomepageProductsQuery, BrandCountsQuery, getCarByHandleQuery } from './shopify/queries.mjs';`);
+lines.splice(
+  9,
+  0,
+  `import { AdminSpecByIdsQuery, AllProductsQuery, getCarSpecsByHandlesQuery, getHomepageProductsQuery, BrandCountsQuery, getCarByHandleQuery } from './shopify/queries.mjs';`
+);
 fs.writeFileSync('lib/shopify.mjs', lines.join('\n'));
 
 console.log('Queries completely extracted!');

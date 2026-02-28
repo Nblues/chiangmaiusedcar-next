@@ -27,7 +27,7 @@ const names = [
   'CarSpecsByHandlesQuery',
   'HomepageProductsQuery',
   'BrandCountsQuery',
-  'CarByHandleQuery'
+  'CarByHandleQuery',
 ];
 
 let queriesExports = `// Auto-generated export of Shopify GraphQL queries\n\n`;
@@ -35,7 +35,7 @@ let queriesExports = `// Auto-generated export of Shopify GraphQL queries\n\n`;
 matches.forEach((m, idx) => {
   const name = names[idx];
   if (!name) return;
-  
+
   queriesExports += `export const ${name} = \`${m.inner}\`;\n\n`;
   content = content.replace(m.full, `const query = ${name};`);
 });

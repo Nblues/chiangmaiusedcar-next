@@ -11,7 +11,7 @@
  * @param {string} format - รูปแบบ (webp, jpg, png)
  * @returns {string} - URL ที่ปรับขนาดแล้ว
  */
-export function optimizeShopifyImage(url, width = 1200, format = 'webp', quality) {
+export function optimizeShopifyImage(url, width = 1200, format = 'avif', quality) {
   // ตรวจสอบ URL
   if (!url || typeof url !== 'string') {
     return '/herobanner/chiangmaiusedcar.webp'; // Fallback
@@ -54,7 +54,7 @@ export function optimizeShopifyImage(url, width = 1200, format = 'webp', quality
  * @param {string} format - รูปแบบ (webp, jpg, png)
  * @returns {string} - srcset attribute string
  */
-export function generateSrcSet(url, widths = [640, 1024, 1920], format = 'webp', quality) {
+export function generateSrcSet(url, widths = [640, 1024, 1920], format = 'avif', quality) {
   if (!url || typeof url !== 'string') {
     return '';
   }

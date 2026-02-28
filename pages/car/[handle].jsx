@@ -1816,10 +1816,13 @@ export async function getStaticProps({ params }) {
       };
     }
 
-    // คำนวณรถที่แนะนำแบบชาญฉลาดบนฝั่งเซิร์ฟเวอร์ (ลด page data จากการส่ง allCars ทั้งหมด)
+    // คำนวณรถที่แนะนำแบบชาญฉลาดบนฝั่งเซิร์ฟเวอร์ (Smart Recommendation)
     const currentPrice = Number(car.price?.amount) || 0;
     const currentBrand = car.vendor || car.brand || '';
     const currentYear = Number(car.year) || 0;
+    const currentCategory = car.category || '';
+    const currentBodyType = car.body_type || '';
+    const currentModel = car.model || '';
 
     const recommendedCars = safeCars
       .filter(
@@ -1835,34 +1838,47 @@ export async function getStaticProps({ params }) {
         const carPrice = Number(c.price.amount);
         const carBrand = c.vendor || c.brand || '';
         const carYear = Number(c.year) || 0;
+        const carCategory = c.category || '';
+        const carBodyType = c.body_type || '';
+        const carModel = c.model || '';
 
-        // คะแนนตามยี่ห้อ
-        if (carBrand && currentBrand && carBrand.toLowerCase() === currentBrand.toLowerCase()) {
+        // 1. คะแนนตามหมวดหมู่ตัวถัง/ประเภท (สำคัญสุด กันแนะนำข้ามสายพันธุ์) (+1000)
+        if (
+          (currentCategory &&
+            carCategory &&
+            carCategory.toLowerCase() === currentCategory.toLowerCase()) ||
+          (currentBodyType &&
+            carBodyType &&
+            carBodyType.toLowerCase() === currentBodyType.toLowerCase())
+        ) {
           score += 1000;
         }
 
-        // คะแนนตามราคา (ใกล้เคียงดีกว่า)
+        // 2. คะแนนตามรุ่นรถ (ตรงรุ่นโชว์ก่อนเพื่อน) (+500)
+        if (
+          currentModel &&
+          carModel &&
+          carModel.toLowerCase().includes(currentModel.toLowerCase())
+        ) {
+          score += 500;
+        }
+
+        // 3. คะแนนตามช่วงราคา (พิกัดงบประมาณตรงกัน) (+500 สูงสุด)
         const priceDiff = Math.abs(carPrice - currentPrice);
         const priceScore =
           currentPrice > 0 ? Math.max(0, 500 - (priceDiff / currentPrice) * 500) : 0;
         score += priceScore;
 
-        // คะแนนตามปี (ใกล้เคียงดีกว่า)
-        if (currentYear > 0 && carYear > 0) {
-          const yearDiff = Math.abs(carYear - currentYear);
-          const yearScore = Math.max(0, 200 - yearDiff * 20);
-          score += yearScore;
+        // 4. คะแนนตามยี่ห้อ (ให้อ่อนกว่าประเภทรถ เพื่อเปิดรับคู่แข่งสายเดียวกัน) (+300)
+        if (carBrand && currentBrand && carBrand.toLowerCase() === currentBrand.toLowerCase()) {
+          score += 300;
         }
 
-        // คะแนนตามช่วงราคา
-        if (currentPrice > 0) {
-          if (currentPrice >= 1000000) {
-            if (carPrice >= 1000000) score += 100;
-          } else if (currentPrice >= 500000) {
-            if (carPrice >= 500000 && carPrice < 1000000) score += 100;
-          } else {
-            if (carPrice < 500000) score += 100;
-          }
+        // 5. คะแนนตามปี (ใกล้เคียงดีกว่า) (+200)
+        if (currentYear > 0 && carYear > 0) {
+          const yearDiff = Math.abs(carYear - currentYear);
+          const yearScore = Math.max(0, 200 - yearDiff * 30); // ห่าง 1 ปี หัก 30
+          score += yearScore;
         }
 
         return { ...c, similarityScore: score };

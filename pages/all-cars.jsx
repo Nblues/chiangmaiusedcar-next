@@ -5,7 +5,6 @@ import CarCard from '../components/CarCard';
 import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
 import { getAllCars } from '../lib/shopify.mjs';
-import { safeGet } from '../utils/safe';
 import { readCarStatuses } from '../lib/carStatusStore.js';
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import { getCachedStatuses, setCachedStatuses } from '../lib/carStatusCache';
@@ -80,9 +79,6 @@ export default function AllCars({
   const [brandFilter, setBrandFilter] = useState(initialBrandFilter);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [liveStatuses, setLiveStatuses] = useState(null);
-  const [specByHandle, setSpecByHandle] = useState({});
-  const requestedSpecHandlesRef = useRef(new Set());
-  const specFetchAttemptsRef = useRef(new Map());
   const heroImgRef = useRef(null);
 
   useEffect(() => {
@@ -241,164 +237,7 @@ export default function AllCars({
   // Enrich specs for current page cards by calling the same API as the car detail page.
   // For stability on paginated pages (2+), allow limited retries when a handle returns
   // empty/incomplete specs (e.g. transient Admin fallback failures).
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const list = Array.isArray(currentCarsWithLive) ? currentCarsWithLive : [];
-    if (list.length === 0) return;
-
-    let cancelled = false;
-    let cleanup = () => {};
-
-    const needs = [];
-    for (const car of list) {
-      const handle = car?.handle;
-      if (!handle) continue;
-      if (requestedSpecHandlesRef.current.has(handle)) continue;
-
-      const attempts = Number(specFetchAttemptsRef.current.get(handle) || 0);
-      if (attempts >= 2) continue;
-
-      const extra = specByHandle?.[handle];
-      const merged = mergeCarSpecs(car, extra);
-
-      const hasYear = merged?.year != null && String(merged.year).trim() !== '';
-      const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
-      const hasTransmission =
-        merged?.transmission != null && String(merged.transmission).trim() !== '';
-      const drive =
-        merged?.drivetrain ||
-        merged?.drive_type ||
-        merged?.driveType ||
-        merged?.['drive-type'] ||
-        merged?.wheel_drive ||
-        merged?.wheelDrive;
-      const hasDrivetrain = drive != null && String(drive).trim() !== '';
-      const fuel = merged?.fuelType || merged?.fuel_type;
-      const hasFuel = fuel != null && String(fuel).trim() !== '';
-
-      const categoryRaw =
-        merged?.category ??
-        safeGet(merged, 'metafields.spec.category') ??
-        safeGet(merged, 'metafields.spec.vehicle_category') ??
-        safeGet(merged, 'metafields.spec.car_category') ??
-        safeGet(merged, 'metafields.spec.vehicle_type') ??
-        safeGet(merged, 'metafields.spec.car_type') ??
-        safeGet(merged, 'metafields.spec.carType') ??
-        safeGet(merged, 'metafields.spec.type') ??
-        safeGet(merged, 'metafields.spec.ประเภทรถ') ??
-        safeGet(merged, 'metafields.spec.หมวดหมู่') ??
-        safeGet(merged, 'metafields.spec.ประเภท') ??
-        safeGet(merged, 'metafields.spec.หมวดหมู่รถ') ??
-        safeGet(merged, 'metafields.spec.ประเภทยานพาหนะ');
-
-      const bodyTypeRaw =
-        merged?.body_type ??
-        safeGet(merged, 'metafields.spec.body_type') ??
-        safeGet(merged, 'metafields.spec.bodyType') ??
-        safeGet(merged, 'metafields.spec.ประเภทตัวถัง');
-
-      const hasCategoryOrBodyType =
-        (categoryRaw != null && String(categoryRaw).trim() !== '') ||
-        (bodyTypeRaw != null && String(bodyTypeRaw).trim() !== '');
-
-      // Also include category/body type (often stored as metaobject references).
-      // Without this, some pages (2+) can look "complete" for the 4 quick specs,
-      // so enrichment never runs and the metaobject-backed label stays blank.
-      if (
-        !(
-          hasYear &&
-          hasMileage &&
-          hasTransmission &&
-          hasDrivetrain &&
-          hasFuel &&
-          hasCategoryOrBodyType
-        )
-      ) {
-        needs.push(handle);
-      }
-    }
-
-    if (needs.length === 0) return;
-    needs.forEach(h => {
-      requestedSpecHandlesRef.current.add(h);
-      specFetchAttemptsRef.current.set(h, Number(specFetchAttemptsRef.current.get(h) || 0) + 1);
-    });
-
-    const chunk = (arr, size) => {
-      const out = [];
-      for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
-      return out;
-    };
-
-    const fetchSpecs = async () => {
-      try {
-        const batches = chunk(needs, 40);
-        for (const batch of batches) {
-          if (cancelled) return;
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 8000);
-          const canonical = Array.from(new Set(batch.filter(Boolean))).sort();
-          const params = new URLSearchParams({ handles: canonical.join(',') });
-          const resp = await fetch(`/api/public/car-specs?${params.toString()}`, {
-            // Allow browser + CDN caching (server sets s-maxage) to keep pagination snappy.
-            cache: 'force-cache',
-            credentials: 'same-origin',
-            signal: controller.signal,
-          });
-          clearTimeout(timeoutId);
-
-          if (!resp.ok) {
-            batch.forEach(h => requestedSpecHandlesRef.current.delete(h));
-            continue;
-          }
-          const data = await resp.json();
-          if (!data?.ok || !data?.specs) {
-            batch.forEach(h => requestedSpecHandlesRef.current.delete(h));
-            continue;
-          }
-
-          // If a handle wasn't returned, don't permanently block retries.
-          const returned = new Set(Object.keys(data.specs || {}));
-          for (const h of batch) {
-            if (!returned.has(h)) requestedSpecHandlesRef.current.delete(h);
-          }
-
-          setSpecByHandle(prev => ({
-            ...(prev || {}),
-            ...data.specs,
-          }));
-
-          // Treat requestedSpecHandlesRef as in-flight only.
-          // If specs are still incomplete (e.g. drivetrain missing), allow a limited retry.
-          batch.forEach(h => requestedSpecHandlesRef.current.delete(h));
-        }
-      } catch (error) {
-        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
-        if (process.env.NODE_ENV === 'development') {
-          // eslint-disable-next-line no-console
-          console.warn('Failed to fetch car specs:', error?.message);
-        }
-      }
-    };
-
-    // Defer non-critical fetch to reduce main-thread contention during pagination.
-    cleanup = scheduleAfterLoadThenIdle(
-      () => {
-        fetchSpecs().catch(error => {
-          if (process.env.NODE_ENV === 'development') {
-            // eslint-disable-next-line no-console
-            console.warn('Failed to fetch car specs (unhandled):', error?.message);
-          }
-        });
-      },
-      { timeout: 5000, fallbackDelayMs: 3500 }
-    );
-
-    return () => {
-      cancelled = true;
-      cleanup();
-    };
-  }, [currentCarsWithLive, specByHandle]);
+  // Removed heavy car-specs polling fetch loop for performance.
 
   // Determine if current view is filtered (query params affecting list)
   const isFiltered = useMemo(() => {
@@ -500,6 +339,7 @@ export default function AllCars({
           href="/herobanner/heroallcars-640w.webp"
           imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w"
           imageSizes="100vw"
+          fetchPriority="high"
         />
 
         <link
@@ -509,6 +349,7 @@ export default function AllCars({
           href="/herobanner/heroallcars-1024w.webp"
           imageSrcSet="/herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
           imageSizes="100vw"
+          fetchPriority="high"
         />
       </Head>
 
@@ -567,6 +408,7 @@ export default function AllCars({
               style={{ aspectRatio: '21/9' }}
               decoding="async"
               loading="eager"
+              fetchPriority="high"
             />
           </picture>
         </div>
@@ -689,11 +531,9 @@ export default function AllCars({
             <>
               {/* Cards Grid - standardized layout */}
               <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
-                {currentCarsWithLive.map(car => {
-                  const handle = car?.handle;
-                  const extra = handle ? specByHandle?.[handle] : null;
-                  const mergedCar = mergeCarSpecs(car, extra);
-                  return <CarCard key={car.id} car={mergedCar} priority={false} />;
+                {currentCarsWithLive.map((car, index) => {
+                  const mergedCar = mergeCarSpecs(car, null);
+                  return <CarCard key={car.id} car={mergedCar} priority={index < 4} />;
                 })}
               </div>
 
