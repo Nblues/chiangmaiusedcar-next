@@ -14,7 +14,7 @@
     "dev:wasm": "cross-env NEXT_DISABLE_SWC=1 NEXT_DISABLE_SWC_BINARY=1 UV_THREADPOOL_SIZE=4 NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=4096 next dev -p 3000",
     "dev:safe": "cross-env NEXT_DISABLE_SWC=1 NEXT_DISABLE_SWC_BINARY=1 UV_THREADPOOL_SIZE=2 NEXT_TELEMETRY_DISABLED=1 NODE_OPTIONS=--max-old-space-size=2048 next dev -p 3000",
     "dev:hmr": "node scripts/fix-hmr.js && npm run dev",
-    "build": "node scripts/run-next-build.cjs",
+    "build": "node --max-old-space-size=4096 scripts/run-next-build.cjs",
     "build:wasm": "node scripts/run-next-build.cjs --wasm",
     "dev:watch": "node scripts/dev-watch.mjs",
     "dev:watch:full": "node scripts/dev-watch.mjs --mode full",
