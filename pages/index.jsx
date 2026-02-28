@@ -546,3 +546,5 @@ export async function getStaticProps() {
     revalidate: 600, // 10 minutes - Reduce regeneration frequency for better TTFB
   };
 }
+
+// trigger reload

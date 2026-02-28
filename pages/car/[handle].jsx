@@ -393,12 +393,12 @@ function CarDetailPage({ car, recommendedCars = [] }) {
 
     // ถ้ามี query parameters ใดๆ ให้ลบออก (เพราะ car detail ไม่ต้องการ query params)
     if (
-      Object.keys(router.query).length > 1 ||
-      (router.query.handle && router.asPath.includes('?'))
+      Object.keys(router?.query || {}).length > 1 ||
+      ((router?.query || {}).handle && (router?.asPath || '').includes('?'))
     ) {
-      const cleanPath = `/car/${router.query.handle}`;
+      const cleanPath = `/car/${(router?.query || {}).handle}`;
       // ใช้ replace แทน push เพื่อไม่ให้เพิ่มใน history
-      router.replace(cleanPath, undefined, { shallow: true });
+      router?.replace(cleanPath, undefined, { shallow: true });
     }
   }, [router, mounted]);
 
@@ -851,15 +851,26 @@ function CarDetailPage({ car, recommendedCars = [] }) {
             <button
               onClick={() => {
                 if (window.history.length > 2) {
-                  router.back();
+                  router?.back();
                 } else {
                   router.push('/all-cars');
                 }
               }}
               className="inline-flex items-center text-sm font-medium text-gray-600 hover:text-primary transition-colors focus:outline-none group font-prompt"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="mr-1.5 h-4 w-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="mr-1.5 h-4 w-4 transform group-hover:-translate-x-1 transition-transform"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
               </svg>
               ย้อนกลับ
             </button>

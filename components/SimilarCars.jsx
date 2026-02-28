@@ -6,7 +6,7 @@ import { mergeCarSpecs } from '../lib/mergeCarSpecs';
 
 // คอมโพเนนต์แนะนำรถที่คล้ายกัน
 function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
-    const [specByHandle, setSpecByHandle] = useState({});
+  const [specByHandle, setSpecByHandle] = useState({});
   const requestedSpecHandlesRef = useRef(new Set());
   const specFetchAttemptsRef = useRef(new Map());
 
@@ -15,11 +15,12 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
   const sectionRef = useRef(null);
 
   useEffect(() => {
-    if (!sectionRef.current || typeof window === 'undefined' || !window.IntersectionObserver) return;
-    
+    if (!sectionRef.current || typeof window === 'undefined' || !window.IntersectionObserver)
+      return;
+
     // Add margin to trigger loading before user scrolls to the cards
     const observer = new IntersectionObserver(
-      (entries) => {
+      entries => {
         if (entries[0].isIntersecting && !shouldPreload) {
           setShouldPreload(true);
           observer.disconnect(); // Only need to trigger once
@@ -27,9 +28,9 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
       },
       { rootMargin: '400px', threshold: 0 }
     );
-    
+
     observer.observe(sectionRef.current);
-    
+
     return () => observer.disconnect();
   }, [shouldPreload]);
 
@@ -299,4 +300,3 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
 }
 
 export default SimilarCars;
-
