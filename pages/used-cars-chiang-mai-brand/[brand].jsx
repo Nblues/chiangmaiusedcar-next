@@ -300,8 +300,8 @@ export default function UsedCarsChiangMaiBrand({
   return (
     <div className="min-h-screen bg-gray-50">
       <SEO
-        title={`รถมือสอง ${brandInfo.label} เชียงใหม่ รวมรูปจริง`}
-        description={`รวมรถมือสอง ${brandInfo.label} ในเชียงใหม่ พร้อมรูปจริง ${totalCars} คัน คลิกดูรายละเอียดคันต่อคันได้ทันที`}
+        title={`รถมือสอง ${brandInfo.label} เชียงใหม่ ฟรีดาวน์ ไมล์แท้`}
+        description={`รวมรถมือสอง ${brandInfo.label} เชียงใหม่ สภาพนางฟ้า ฟรีดาวน์ ไมล์แท้ พร้อมตรวจสอบประวัติได้ ${totalCars} คัน คลิกดูรายละเอียดและโปรโมชั่นพิเศษได้เลย`}
         url={url}
         image={homeOgImage}
         type="website"
