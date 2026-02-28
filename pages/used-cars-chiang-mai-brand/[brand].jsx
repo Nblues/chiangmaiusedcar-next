@@ -172,15 +172,12 @@ export async function getServerSideProps(context) {
 
   let cars = [];
   try {
-    const result = await getAllCars();
+    // Run both fetches in parallel to reduce SSR latency
+    const [result, carStatuses] = await Promise.all([
+      getAllCars().catch(() => []),
+      readCarStatuses().catch(() => null),
+    ]);
     const allCars = Array.isArray(result) ? result : [];
-
-    let carStatuses = null;
-    try {
-      carStatuses = await readCarStatuses();
-    } catch {
-      carStatuses = null;
-    }
 
     const tokens = brandInfo.tokens;
     cars = allCars
@@ -241,7 +238,7 @@ export async function getServerSideProps(context) {
       .filter(needsSpecs)
       .map(c => c?.handle)
       .filter(Boolean);
-    const uniqueHandles = Array.from(new Set(handles)).slice(0, 50);
+    const uniqueHandles = Array.from(new Set(handles)).slice(0, 12);
     if (uniqueHandles.length > 0) {
       const raw = await getCarSpecsByHandles(uniqueHandles);
       pageCars = pageCars.map(c => mergeCarSpecs(c, raw?.[c?.handle]));
@@ -251,7 +248,7 @@ export async function getServerSideProps(context) {
   }
 
   if (context?.res?.setHeader) {
-    context.res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+    context.res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1800, stale-if-error=86400');
   }
 
   const structuredData = buildBrandStructuredDataJsonLd({
