@@ -382,73 +382,74 @@ export default function AllCars({
 
       {/* Hero Banner - 2025 Modern Design */}
       <section
-        className="relative w-full h-[150px] sm:h-[200px] md:h-[250px] lg:h-[300px] overflow-hidden bg-gradient-to-r from-primary to-accent"
+        className="relative w-full bg-[#f8f9fa] flex justify-center"
         aria-label="รถมือสองทั้งหมด - ครูหนึ่งรถสวย"
       >
-        {/* Hero image (mobile + desktop) */}
-        <div className="absolute inset-0" aria-hidden="true">
-          <picture>
-            <source
-              media="(max-width: 767px)"
-              srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w"
-              sizes="100vw"
-            />
-            <source
-              media="(min-width: 768px)"
-              srcSet="/herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
-              sizes="100vw"
-            />
-            <img
-              ref={heroImgRef}
-              src="/herobanner/heroallcars-1024w.webp"
-              srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
-              sizes="100vw"
-              alt=""
-              className="w-full h-full object-cover object-top"
-              style={{ aspectRatio: '21/9' }}
-              decoding="async"
-              loading="eager"
-              fetchPriority="high"
-            />
-          </picture>
-        </div>
+        {/* Container สำหรับรูปภาพที่ปรับอัตราส่วนตามภาพจริง (1400/474) ในทุกอุปกรณ์ */}
+        <div className="relative w-full max-w-[1400px] aspect-[1400/474]">
+          <div className="absolute inset-0" aria-hidden="true">
+            <picture>
+              <source
+                media="(max-width: 767px)"
+                srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w"
+                sizes="100vw"
+              />
+              <source
+                media="(min-width: 768px)"
+                srcSet="/herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
+                sizes="100vw"
+              />
+              <img
+                ref={heroImgRef}
+                src="/herobanner/heroallcars-1024w.webp"
+                srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
+                sizes="100vw"
+                alt=""
+                className="w-full h-full object-cover object-top"
+                decoding="async"
+                loading="eager"
+                fetchPriority="high"
+              />
+            </picture>
+          </div>
 
-        {/* Dark overlay for better text readability (mobile + desktop) */}
-        <div className="absolute inset-0 bg-black/35 sm:bg-black/40"></div>
+          {/* Dark overlay for better text readability (mobile + desktop) */}
+          <div className="absolute inset-0 bg-black/35 sm:bg-black/40"></div>
 
-        {/* Content over banner */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center px-4 max-w-4xl mx-auto">
-            <h1
-              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-1 md:mb-2 font-prompt text-white"
-              style={{
-                textShadow:
-                  '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
-              }}
-            >
-              รถยนต์มือสองคุณภาพดีทั้งหมด
-            </h1>
-            <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap">
-              <p
-                className="text-xs sm:text-sm md:text-lg lg:text-xl font-prompt text-white font-bold"
+          {/* Content over banner */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center px-4 max-w-4xl mx-auto">
+              <h1
+                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-1 md:mb-2 font-prompt text-white mt-0 md:mt-4"
                 style={{
                   textShadow:
                     '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
                 }}
               >
-                รถคุณภาพดี {Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ
-              </p>
-              {safeTotalPages > 1 && (
+                รถยนต์มือสองคุณภาพดีทั้งหมด
+              </h1>
+              <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap">
                 <p
-                  className="text-xs sm:text-xs md:text-sm lg:text-base font-prompt text-white font-semibold"
+                  className="text-xs sm:text-sm md:text-lg lg:text-xl font-prompt text-white font-bold"
                   style={{
                     textShadow:
                       '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
                   }}
                 >
-                  หน้า {safePage}/{safeTotalPages}
+                  รถคุณภาพดี {Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ
                 </p>
-              )}
+                {safeTotalPages > 1 && (
+                  <p
+                    className="text-xs sm:text-xs md:text-sm lg:text-base font-prompt text-white font-semibold"
+                    style={{
+                      textShadow:
+                        '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
+                    }}
+                  >
+                    หน้า {safePage}/{safeTotalPages}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>

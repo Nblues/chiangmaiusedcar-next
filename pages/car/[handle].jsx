@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import SEO from '../../components/SEO';
@@ -445,11 +446,17 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     if (selectedImageIndex > 0) preloadIndexes.push(selectedImageIndex - 1);
 
     // Gallery uses srcset [400, 800, 1200]
-    // Warm the likely candidates so switching doesn't wait on network/decode.
-    const widths = saveData || verySlow ? [400] : [400, 800];
-    // On fast connections, also warm 1200 for large screens.
-    const shouldWarm1200 = !saveData && !verySlow && window.innerWidth >= 800;
-    if (shouldWarm1200) widths.push(1200);
+    // Calculate expected exact match for srcset to ensure cache hit.
+    const viewportW = Number(window.innerWidth) || 0;
+    const dpr = Number(window.devicePixelRatio) || 1;
+    // For sizes="(max-width: 640px) 100vw, 100vw", rendered width is approx viewportW
+    const requiredPixels = viewportW * dpr;
+
+    let targetWidth = 1200;
+    if (requiredPixels <= 400) targetWidth = 400;
+    else if (requiredPixels <= 800) targetWidth = 800;
+
+    const widths = saveData || verySlow ? [Math.min(targetWidth, 400)] : [targetWidth];
 
     preloadIndexes.forEach(idx => {
       const originalUrl = safeGet(images[idx], 'url', '');
@@ -781,6 +788,9 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   return (
     <>
       {/* SEO component handles all meta tags including OG tags */}
+      <Head>
+        <title>TEST TITLE OVERRIDE</title>
+      </Head>
       <SEO
         title={enhancedTitle}
         description={enhancedDescription}
@@ -1913,6 +1923,8 @@ export async function getStaticProps({ params }) {
         installment: c.installment,
         fuelType: c.fuelType || c.fuel_type,
         fuel_type: c.fuel_type || c.fuelType,
+        drivetrain: c.drivetrain || c.drive_type || c.wheel_drive,
+        drive_type: c.drive_type || c.drivetrain,
         price: { amount: Number(c.price.amount) },
         images: Array.isArray(c.images) && c.images.length > 0 ? [{ url: c.images[0].url }] : [],
       }));

@@ -6,9 +6,32 @@ import { mergeCarSpecs } from '../lib/mergeCarSpecs';
 
 // คอมโพเนนต์แนะนำรถที่คล้ายกัน
 function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
-  const [specByHandle, setSpecByHandle] = useState({});
+    const [specByHandle, setSpecByHandle] = useState({});
   const requestedSpecHandlesRef = useRef(new Set());
   const specFetchAttemptsRef = useRef(new Map());
+
+  //  New Intersection Observer logic to eagerly load images right before they enter the screen
+  const [shouldPreload, setShouldPreload] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    if (!sectionRef.current || typeof window === 'undefined' || !window.IntersectionObserver) return;
+    
+    // Add margin to trigger loading before user scrolls to the cards
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !shouldPreload) {
+          setShouldPreload(true);
+          observer.disconnect(); // Only need to trigger once
+        }
+      },
+      { rootMargin: '400px', threshold: 0 }
+    );
+    
+    observer.observe(sectionRef.current);
+    
+    return () => observer.disconnect();
+  }, [shouldPreload]);
 
   // หาฟังก์ชันรถที่คล้ายกัน - อัลกอริทึมปรับปรุงใหม่
   const findSimilarCars = () => {
@@ -186,7 +209,7 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
   if (similarCars.length === 0) {
     // แสดง empty state แทนการไม่แสดงอะไรเลย
     return (
-      <section className="mb-8">
+      <section ref={sectionRef} className="mb-8">
         <div className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
           <div className="flex items-center justify-between">
             <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-black font-prompt border-b-2 border-accent pb-2 flex-1 mr-4">
@@ -230,7 +253,7 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
   }
 
   return (
-    <section className="mb-8">
+    <section ref={sectionRef} className="mb-8">
       <div className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
         <div className="flex items-center justify-between">
           <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-black font-prompt border-b-2 border-accent pb-2 flex-1 mr-4">
@@ -259,7 +282,7 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
           const handle = car?.handle;
           const extra = handle ? specByHandle?.[handle] : null;
           const mergedCar = mergeCarSpecs(car, extra);
-          return <CarCard key={car.id} car={mergedCar} />;
+          return <CarCard key={car.id} car={mergedCar} priority={shouldPreload} />;
         })}
       </div>
 
@@ -276,3 +299,4 @@ function SimilarCars({ currentCar, allCars = [], recommendations = [] }) {
 }
 
 export default SimilarCars;
+

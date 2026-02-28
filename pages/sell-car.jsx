@@ -51,20 +51,18 @@ export default function SellCar() {
         />
       </Head>
 
-      <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
-        <div className="relative w-full max-w-7xl mx-auto">
+      <header className="relative w-full bg-[#f8f9fa] flex justify-center">
+        {/* Container สำหรับแบนเนอร์ ใช้สัดส่วนตามภาพจริง (1920x650) ในทุกอุปกรณ์ */}
+        <div className="relative w-full max-w-[1920px] aspect-[1920/650]">
           <A11yImage
             src="/herobanner/chiangmaiusedcars-1200w.webp"
             srcSet="/herobanner/chiangmaiusedcars-640w.webp 640w, /herobanner/chiangmaiusedcars-828w.webp 828w, /herobanner/chiangmaiusedcars-1024w.webp 1024w, /herobanner/chiangmaiusedcars-1200w.webp 1200w, /herobanner/chiangmaiusedcars-1400w.webp 1400w, /herobanner/chiangmaiusedcars-1920w.webp 1920w"
             alt="ขายรถยนต์มือสอง - ครูหนึ่งรถสวย ประเมินราคายุติธรรม แลกเทิร์นรถ"
-            width={1920}
-            height={640}
-            aspectRatio="3/1"
-            className="w-full h-auto object-contain"
+            fill
+            className="w-full h-full object-cover md:object-contain"
             priority
             quality={75}
-            sizes="(max-width: 414px) 414px, (max-width: 768px) 768px, (max-width: 1200px) 1200px, 1920px"
-            style={{ maxHeight: '60vh' }}
+            sizes="(max-width: 414px) 100vw, (max-width: 768px) 100vw, (max-width: 1200px) 120vw, 1920px"
           />
         </div>
       </header>

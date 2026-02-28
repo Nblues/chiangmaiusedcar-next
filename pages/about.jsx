@@ -115,11 +115,13 @@ export default function About() {
           </div>
         </div>
 
-        {/* Image Section - ปรับปรุงให้แสดงผลดีในทุกหน้าจอ */}
-        <div className="relative w-full bg-gray-100">
-          {/* Container สำหรับรูปภาพที่ปรับขนาดได้ */}
-          <div className="aspect-w-16 aspect-h-9 sm:aspect-h-8 md:aspect-h-7 lg:aspect-h-6">
-            <div className="relative w-full h-full">
+        {/* Image Section - ปรับให้รูปพอดีหน้าจอไม่โดนตัด */}
+        <div className="relative w-full bg-[#f8f9fa] flex justify-center">
+          {/* Container สำหรับรูปภาพ
+              - ใช้อัตราส่วนตามภาพจริง 1400/474 ในทุกอุปกรณ์ เพื่อให้แสดงผลพอดีเป๊ะ ไม่โดนตัดเลยทั้งบนมือถือ แท็บเล็ต และเดสก์ทอป
+          */}
+          <div className="relative w-full max-w-[1400px] aspect-[1400/474]">
+            <div className="w-full h-full">
               {!imageLoaded && (
                 <div className="absolute inset-0 flex items-center justify-center z-10">
                   <div className="animate-pulse space-y-4 w-full max-w-md mx-auto p-8">
@@ -140,7 +142,6 @@ export default function About() {
                 style={{
                   objectPosition: 'center center',
                 }}
-                aspectRatio="16/9"
                 imageType="hero"
                 priority={true}
                 decoding="sync"
