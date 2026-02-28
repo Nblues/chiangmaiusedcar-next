@@ -15,11 +15,16 @@ const navItems = [
   { href: '/payment-calculator', label: 'คำนวนค่างวด' },
 ];
 
+import { useEffect } from 'react';
+
 export default function Navbar() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isActive = href => router.pathname === href;
+  const isActive = href => mounted && router.pathname === href;
 
   return (
     <nav
