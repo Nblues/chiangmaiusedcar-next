@@ -32,6 +32,24 @@ async function getAllCarsCached() {
 function CarDetailPage({ car, recommendedCars = [] }) {
   const router = useRouter();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const carImages = useMemo(() => {
+    const rawImages = safeGet(car, 'images', []);
+    const imagesArray = Array.isArray(rawImages) ? rawImages : [];
+
+    const normalized = imagesArray
+      .map(img => {
+        const url = safeGet(img, 'url', '');
+        if (!url) return null;
+        return { ...img, url };
+      })
+      .filter(Boolean);
+
+    if (normalized.length > 0) return normalized;
+    return [{ url: '/herobanner/chiangmaiusedcar.webp', alt: safeGet(car, 'title', 'รถมือสอง') }];
+  }, [car]);
+
+  const currentImage = carImages[selectedImageIndex] || carImages[0];
   const [processedDescription, setProcessedDescription] = useState(null);
   const [mounted, setMounted] = useState(false);
   // สำหรับ back ที่ฉลาด: จำหน้าล่าสุดที่มาจากภายในเว็บ (เก็บใน sessionStorage เท่านั้น)
@@ -112,7 +130,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
         ? Math.max(1, Math.min(100, quality))
         : undefined;
 
-    const optimizedUrl = optimizeShopifyImage(originalUrl, resolvedWidth, 'webp', resolvedQuality);
+    const optimizedUrl = optimizeShopifyImage(originalUrl, resolvedWidth, 'avif', resolvedQuality);
     if (!optimizedUrl) return;
     if (preloadedHeroRef.current.has(optimizedUrl)) return;
 
@@ -426,16 +444,16 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     if (selectedImageIndex + 2 < images.length) preloadIndexes.push(selectedImageIndex + 2);
     if (selectedImageIndex > 0) preloadIndexes.push(selectedImageIndex - 1);
 
-    // Hero uses srcset [640, 1024, 1920] + sizes mapping in utils/imageOptimizer.
+    // Gallery uses srcset [400, 800, 1200]
     // Warm the likely candidates so switching doesn't wait on network/decode.
-    const widths = saveData || verySlow ? [640] : [640, 1024];
-    // On fast connections, also warm 1920 for large screens.
-    const shouldWarm1920 = !saveData && !verySlow && window.innerWidth >= 1024;
-    if (shouldWarm1920) widths.push(1920);
+    const widths = saveData || verySlow ? [400] : [400, 800];
+    // On fast connections, also warm 1200 for large screens.
+    const shouldWarm1200 = !saveData && !verySlow && window.innerWidth >= 800;
+    if (shouldWarm1200) widths.push(1200);
 
     preloadIndexes.forEach(idx => {
       const originalUrl = safeGet(images[idx], 'url', '');
-      widths.forEach(w => preloadHeroCandidate(originalUrl, w, 75));
+      widths.forEach(w => preloadHeroCandidate(originalUrl, w, 80));
     });
   }, [selectedImageIndex, car, mounted, isHeroLoading, preloadHeroCandidate]);
 
@@ -467,7 +485,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
             const originalUrl = safeGet(images[idx], 'url', '');
             if (!originalUrl) return;
 
-            const thumbUrl = optimizeShopifyImage(originalUrl, 240, 'webp');
+            const thumbUrl = optimizeShopifyImage(originalUrl, 240, 'avif');
             const img = new window.Image();
             img.src = thumbUrl;
             img.fetchPriority = 'low';
@@ -620,12 +638,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
       </div>
     );
   }
-
-  // เตรียมรูปภาพ
-  const carImages = safeGet(car, 'images', [
-    { url: '/herobanner/chiangmaiusedcar.webp', alt: safeGet(car, 'title', 'รถมือสอง') },
-  ]);
-  const currentImage = carImages[selectedImageIndex] || carImages[0];
 
   // Enhanced SEO data for better link sharing - optimized for social media
   const _vendor = safeGet(car, 'vendor') || safeGet(car, 'brand');
@@ -911,10 +923,11 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                 fill
                 className="object-cover"
                 priority={selectedImageIndex === 0} // ⭐ LCP มีแค่รูปแรกที่ render
-                imageType="hero" // ⭐ ระบุเป็นรูปหลัก (1920px)
-                quality={85}
+                imageType="gallery" // ⭐ ระบุเป็นรูปหลัก (1920px)
+                sizes="(max-width: 640px) 100vw, 100vw"
+                quality={80}
                 loading="eager" // ⭐ รูปใหญ่ใน viewport: eager เพื่อให้ตอบสนองตอนสลับรูป
-                fetchpriority={selectedImageIndex === 0 ? 'high' : 'auto'}
+                fetchpriority="high"
                 decoding="async" // ⭐ Decode แบบ async ไม่บล็อก main thread
                 onLoad={() => {
                   setIsHeroLoading(false);
