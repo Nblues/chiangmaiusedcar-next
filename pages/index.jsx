@@ -437,9 +437,9 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                     </div>
                   ) : (
                     <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
-                      {safeCars.slice(0, 8).map((car, index) => {
+                      {safeCars.slice(0, 8).map(car => {
                         const mergedCar = mergeCarSpecs(car, null);
-                        return <CarCard key={car.id} car={mergedCar} priority={index < 2} />;
+                        return <CarCard key={car.id} car={mergedCar} />;
                       })}
                     </div>
                   )}

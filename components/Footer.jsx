@@ -57,7 +57,8 @@ export default function Footer() {
                       width="64"
                       height="64"
                       className="w-full h-full object-cover scale-125"
-                      loading="eager"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </picture>
                 </div>

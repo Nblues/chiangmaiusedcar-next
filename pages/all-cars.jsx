@@ -531,9 +531,9 @@ export default function AllCars({
             <>
               {/* Cards Grid - standardized layout */}
               <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
-                {currentCarsWithLive.map((car, index) => {
+                {currentCarsWithLive.map(car => {
                   const mergedCar = mergeCarSpecs(car, null);
-                  return <CarCard key={car.id} car={mergedCar} priority={index < 4} />;
+                  return <CarCard key={car.id} car={mergedCar} />;
                 })}
               </div>
 
