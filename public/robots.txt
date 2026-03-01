@@ -112,4 +112,3 @@ Sitemap: https://www.chiangmaiusedcar.com/sitemap.xml
 
 # Additional XML Sitemaps
 Sitemap: https://www.chiangmaiusedcar.com/sitemap-images.xml
-

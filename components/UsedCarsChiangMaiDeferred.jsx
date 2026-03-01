@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import A11yImage from './A11yImage';
 import { BUSINESS_INFO, createPhoneLink, createPlaceLink } from '../config/business';
+import A11yImage from './A11yImage';
 
 export default function UsedCarsChiangMaiDeferred() {
   return (

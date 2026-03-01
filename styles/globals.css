@@ -1,8 +1,50 @@
-@import './theme.css';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+body {
+  font-family: 'Prompt', 'Kanit', 'Sarabun', sans-serif;
+  color: rgb(26 26 26); /* #1a1a1a เป็น Tailwind format */
+  background-color: rgb(255 255 255); /* #ffffff เป็น Tailwind format */
+  line-height: 1.6;
+  font-size: 1rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  font-size: 2.25rem;
+  color: rgb(26 35 126); /* primary color #1a237e */
+}
+
+h2 {
+  font-size: 1.875rem;
+  color: rgb(26 35 126); /* primary color #1a237e */
+}
+
+h3 {
+  font-size: 1.5rem;
+  color: rgb(57 73 171); /* primary-600 #3949ab */
+}
+
+a {
+  color: rgb(255 152 0); /* accent color #ff9800 */
+  text-decoration: none;
+  transition: color 150ms ease-in-out;
+}
+
+a:hover, 
+a:focus {
+  color: rgb(245 124 0); /* accent-700 #f57c00 */
+  text-decoration: underline;
+}
+
+/* Focus indicators */
+*:focus {
+  outline: 2px solid rgb(255 152 0); /* accent color */
+  outline-offset: 2px;
+}
 
 /* Fonts: Prompt for Thai is provided by next/font in pages/_app.jsx */
 
@@ -13,54 +55,241 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Enhanced Focus Visible - Accessibility 2025 Standards */
+:focus-visible {
+  outline: 3px solid #ff9800; /* สีส้ม accent สว่างชัดเจน */
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.2); /* เพิ่ม glow effect */
+  transition:
+    outline 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+}
+
+/* Focus for interactive elements */
+button:focus-visible, 
+a:focus-visible, 
+input:focus-visible, 
+select:focus-visible, 
+textarea:focus-visible {
+  outline: 3px solid #ff9800;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.25);
+}
+
+body {
+  /* stylelint-disable-next-line at-rule-no-unknown */
+  @apply font-prompt text-gray-900 bg-white;
+}
+
+/* Custom Scrollbar - ปรับปรุงเป็นแบบเดียวแล้วไม่ซ้ำ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  /* stylelint-disable-next-line at-rule-no-unknown */
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  /* stylelint-disable-next-line at-rule-no-unknown */
+  @apply bg-accent rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  /* stylelint-disable-next-line at-rule-no-unknown */
+  @apply bg-accent-600;
+}
+}
+
+@layer components {
+/* ======================================
+   Modern 2025 Components (ปรับปรุงให้ใช้ Tailwind)
+   ====================================== */
+
+/* Modern Button Styles - ใช้ Tailwind color values */
+
+/* High contrast mode support */
+
+/* ======================================
+   Performance Optimizations
+   ====================================== */
+
+/* GPU acceleration for animations */
+
+/* Mobile reliability: avoid content-visibility rendering gaps on some devices */
+@media (max-width: 639px) {
+  .cv-auto, 
+  .cv-auto-md, 
+  .cv-auto-lg {
+    content-visibility: visible;
+    contain-intrinsic-size: 0px;
+  }
+}
+
+/* Pagination Container - Universal All Screen Responsive */
+
+/* Touch-Friendly Navigation - Mobile Optimized */
+
+.btn-primary, 
+.btn-secondary, 
+.form-input, 
+.form-select {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transform: translateZ(0);
+}
+
+/* Mobile Touch Improvements */
+
+/* Tablet Touch Improvements */
+
+/* Focus for primary buttons - contrast with background */
+.btn-primary:focus-visible {
+  outline: 3px solid #ffd700; /* สีทองสำหรับปุ่มหลัก */
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.3);
+}
+
+/* Optimize image gallery performance */
+
+/* Improved button touch targets for mobile */
+
+/* ตัวอย่าง: ปุ่มหลัก */
+.btn-primary {
+  @apply inline-flex items-center justify-center px-6 py-3 bg-primary hover:bg-primary-800 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl font-prompt;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center px-6 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold rounded-full transition-all duration-300 font-prompt;
+}
+
+/* ปุ่มสำหรับ Hero (บนพื้นหลังมืด/รูปภาพ) */
+
+/* ฟอร์มและ Input Fields */
+.form-input {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors duration-200 font-prompt text-gray-900;
+}
+
+.form-input:hover {
+  @apply border-accent/50;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-gray-700 mb-2 font-prompt;
+}
+
+.form-select {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors duration-200 font-prompt bg-white text-gray-900;
+}
+
+.form-select option {
+  @apply bg-white text-gray-900 py-2;
+}
+
+/* สีพื้นหลังสำหรับส่วนต่างๆ ของฟอร์ม */
+.form-section-government {
+  @apply bg-primary/5 border border-primary/20 rounded-xl p-4 mb-4;
+}
+
+.form-section-company {
+  @apply bg-accent/5 border border-accent/20 rounded-xl p-4 mb-4;
+}
+
+/* Loading Animation */
+}
+
+@layer utilities {
+/* ======================================
+   ครูหนึ่งรถสวย - Theme Colors 2025
+   โทนสีหลัก: ส้ม น้ำเงิน ขาว ดำ (ใช้ Tailwind เป็นหลัก)
+   ====================================== */
+
+/* ======================================
+   Global Base Styles (SEO Optimized)
+   ====================================== */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ======================================
+   Semantic Elements (SEO Critical)
+   ====================================== */
+
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6 {
+  font-family: 'Prompt', 'Kanit', 'Sarabun', sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  color: rgb(26 35 126); /* primary color #1a237e */
+  margin-bottom: 1rem;
+}
+
+/* ======================================
+   Responsive Design (Mobile-First)
+   ====================================== */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* ======================================
+   Accessibility (WCAG 2.1 AA)
+   ====================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ======================================
+   Print Styles (SEO Optimization)
+   ====================================== */
+
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a, 
+  a:visited {
+    text-decoration: underline;
+  }
+}
+
 /* Aspect Ratio Utilities - Prevent Image CLS */
-.aspect-16-9 {
-  aspect-ratio: 16 / 9;
-}
-
-.aspect-4-3 {
-  aspect-ratio: 4 / 3;
-}
-
-.aspect-3-2 {
-  aspect-ratio: 3 / 2;
-}
-
-.aspect-1-1 {
-  aspect-ratio: 1 / 1;
-}
 
 /* Hero Banner Aspect Ratios */
-.aspect-hero-mobile {
-  aspect-ratio: 16 / 10;
-}
-
-.aspect-hero-desktop {
-  aspect-ratio: 21 / 9;
-}
-
-@media (min-width: 768px) {
-  .aspect-hero-responsive {
-    aspect-ratio: 21 / 9;
-  }
-}
-
-@media (max-width: 767px) {
-  .aspect-hero-responsive {
-    aspect-ratio: 16 / 10;
-  }
-}
 
 /* Card Images - Consistent Aspect Ratio */
-.aspect-card {
-  aspect-ratio: 4 / 3;
-}
 
 /* Fixed Layout Support - No Jumping */
-.fixed-layout {
-  contain: layout;
-  will-change: auto;
-}
 
 /* Render defer (Chrome/Edge): reduce main-thread render cost below the fold */
 .cv-auto {
@@ -76,100 +305,6 @@ html {
 .cv-auto-lg {
   content-visibility: auto;
   contain-intrinsic-size: 2000px;
-}
-
-/* Mobile reliability: avoid content-visibility rendering gaps on some devices */
-@media (max-width: 639px) {
-  .cv-auto,
-  .cv-auto-md,
-  .cv-auto-lg {
-    content-visibility: visible;
-    contain-intrinsic-size: 0px;
-  }
-}
-
-/* Pagination Container - Universal All Screen Responsive */
-.pagination-stable {
-  min-height: 80px;
-  contain: layout style;
-  transform: translateZ(0);
-  transition: all 0.3s ease;
-}
-
-@media (min-width: 640px) {
-  .pagination-stable {
-    min-height: 90px;
-  }
-}
-
-@media (min-width: 768px) {
-  .pagination-stable {
-    min-height: 100px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .pagination-stable {
-    min-height: 120px;
-  }
-}
-
-/* Touch-Friendly Navigation - Mobile Optimized */
-.pagination-stable button,
-.btn-primary,
-.btn-secondary,
-.form-input,
-.form-select {
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-  -webkit-font-smoothing: antialiased;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  transform: translateZ(0);
-}
-
-/* Mobile Touch Improvements */
-@media (max-width: 639px) {
-  .pagination-stable button {
-    min-height: 44px; /* iOS recommended touch target */
-    min-width: 44px;
-  }
-}
-
-/* Tablet Touch Improvements */
-@media (min-width: 640px) and (max-width: 1023px) {
-  .pagination-stable button {
-    min-height: 48px;
-    min-width: 48px;
-  }
-}
-
-/* Enhanced Focus Visible - Accessibility 2025 Standards */
-:focus-visible {
-  outline: 3px solid #ff9800; /* สีส้ม accent สว่างชัดเจน */
-  outline-offset: 3px;
-  box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.2); /* เพิ่ม glow effect */
-  transition:
-    outline 0.15s ease-in-out,
-    box-shadow 0.15s ease-in-out;
-}
-
-/* Focus for interactive elements */
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 3px solid #ff9800;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(255, 152, 0, 0.25);
-}
-
-/* Focus for primary buttons - contrast with background */
-.btn-primary:focus-visible {
-  outline: 3px solid #ffd700; /* สีทองสำหรับปุ่มหลัก */
-  outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.3);
 }
 
 /* Screen Reader Only - Accessibility */
@@ -197,38 +332,8 @@ textarea:focus-visible {
 }
 
 /* Custom Scrollbar สำหรับ Image Gallery - เพิ่ม fallback */
-.scrollbar-thin {
-  /* Firefox - รองรับเฉพาะ Firefox ที่รองรับ scrollbar-width */
-  scrollbar-color: #9ca3af #f3f4f6;
-}
 
 /* Webkit browsers (Chrome, Safari, Edge) */
-.scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: #f3f4f6;
-  border-radius: 3px;
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #9ca3af;
-  border-radius: 3px;
-}
-
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
-}
-
-.scrollbar-thumb-gray-400::-webkit-scrollbar-thumb {
-  background: #9ca3af;
-}
-
-.scrollbar-track-gray-100::-webkit-scrollbar-track {
-  background: #f3f4f6;
-}
 
 /* Hide scrollbar for mobile thumbnail slider */
 .scrollbar-hide {
@@ -237,37 +342,10 @@ textarea:focus-visible {
 }
 
 /* Custom SweetAlert2 Loader */
-.custom-loader {
-  display: inline-block;
-}
-
-.swal2-loader {
-  display: inline-flex;
-  gap: 4px;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
-}
-
-.swal2-loader div {
-  width: 8px;
-  height: 8px;
-  background-color: #3b82f6;
-  border-radius: 50%;
-  animation: loading-bounce 1.4s ease-in-out infinite both;
-}
-
-.swal2-loader div:nth-child(1) {
-  animation-delay: -0.32s;
-}
-
-.swal2-loader div:nth-child(2) {
-  animation-delay: -0.16s;
-}
 
 @keyframes loading-bounce {
-  0%,
-  80%,
+  0%, 
+  80%, 
   100% {
     transform: scale(0);
   }
@@ -281,35 +359,6 @@ textarea:focus-visible {
 }
 
 /* Aspect Ratio Utilities for responsive images */
-.aspect-w-16 {
-  position: relative;
-  width: 100%;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
-}
-
-.aspect-h-9 .aspect-w-16 {
-  padding-bottom: 56.25%; /* 16:9 */
-}
-
-.aspect-h-8 .aspect-w-16 {
-  padding-bottom: 50%; /* 16:8 */
-}
-
-.aspect-h-7 .aspect-w-16 {
-  padding-bottom: 43.75%; /* 16:7 */
-}
-
-.aspect-h-6 .aspect-w-16 {
-  padding-bottom: 37.5%; /* 16:6 */
-}
-
-.aspect-w-16 > * {
-  position: absolute !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
 
 /* Cookie Consent และ PWA Install Animations */
 @keyframes slideUp {
@@ -338,47 +387,17 @@ textarea:focus-visible {
   animation: slideUp 0.5s ease-out;
 }
 
-.animate-slide-down {
-  animation: slideDown 0.3s ease-in;
-}
-
 /* Smooth transition สำหรับการเลื่อน */
-.transition-slide {
-  transition:
-    transform 0.5s ease-in-out,
-    opacity 0.3s ease-in-out;
-}
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
 }
 
 /* Smooth scrolling for better UX */
-.smooth-scroll {
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
 
 /* Fast image transitions */
-.fast-transition {
-  transition-duration: 150ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Optimize image gallery performance */
-.image-gallery {
-  will-change: transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
 
 /* Touch-friendly buttons */
-.touch-friendly {
-  min-height: 44px;
-  min-width: 44px;
-  touch-action: manipulation;
-}
 
 /* Loading skeleton animation */
 @keyframes skeleton-loading {
@@ -393,154 +412,20 @@ textarea:focus-visible {
   }
 }
 
-.skeleton {
-  animation: skeleton-loading 1.5s ease-in-out infinite;
-}
-
 /* Webkit browsers */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
 
 /* Touch manipulation for better mobile UX */
-.touch-manipulation {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Improved button touch targets for mobile */
-@media (max-width: 640px) {
-  .touch-manipulation {
-    min-height: 44px;
-    min-width: 44px;
-  }
-}
-
-/* ตัวอย่าง: ปุ่มหลัก */
-.btn-primary {
-  @apply inline-flex items-center justify-center px-6 py-3 bg-primary hover:bg-primary-800 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl font-prompt;
-}
-
-.btn-secondary {
-  @apply inline-flex items-center justify-center px-6 py-3 border-2 border-primary text-primary hover:bg-primary hover:text-white font-semibold rounded-full transition-all duration-300 font-prompt;
-}
-
-/* ปุ่มสำหรับ Hero (บนพื้นหลังมืด/รูปภาพ) */
-.btn-hero-primary {
-  @apply inline-flex items-center justify-center px-6 py-3 bg-primary hover:bg-primary-800 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl font-prompt;
-}
-
-.btn-hero-secondary {
-  @apply inline-flex items-center justify-center px-6 py-3 border-2 border-white text-white hover:bg-white hover:text-primary font-semibold rounded-full transition-all duration-300 font-prompt;
-}
 
 /* Fallback for line-clamp utilities (in case Tailwind plugin is not enabled) */
-.line-clamp-1,
-.line-clamp-2,
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-1 {
-  -webkit-line-clamp: 1;
-}
-
-.line-clamp-2 {
-  -webkit-line-clamp: 2;
-}
-
-.line-clamp-3 {
-  -webkit-line-clamp: 3;
-}
-
-/* ฟอร์มและ Input Fields */
-.form-input {
-  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors duration-200 font-prompt text-gray-900;
-}
-
-.form-input:hover {
-  @apply border-accent/50;
-}
-
-.form-label {
-  @apply block text-sm font-medium text-gray-700 mb-2 font-prompt;
-}
-
-.form-select {
-  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors duration-200 font-prompt bg-white text-gray-900;
-}
-
-.form-select option {
-  @apply bg-white text-gray-900 py-2;
-}
-
-.form-textarea {
-  @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors duration-200 font-prompt resize-none text-gray-900;
-}
-
-/* สีพื้นหลังสำหรับส่วนต่างๆ ของฟอร์ม */
-.form-section-government {
-  @apply bg-primary/5 border border-primary/20 rounded-xl p-4 mb-4;
-}
-
-.form-section-company {
-  @apply bg-accent/5 border border-accent/20 rounded-xl p-4 mb-4;
-}
-
-.form-section-freelance {
-  @apply bg-gold/10 border border-gold/30 rounded-xl p-4 mb-4;
-}
-
-.form-section-business {
-  @apply bg-success/10 border border-success/30 rounded-xl p-4 mb-4;
-}
-
-.form-section-farmer {
-  /* stylelint-disable-next-line at-rule-no-unknown */
-  @apply bg-green-50 border border-green-200 rounded-xl p-4 mb-4;
-}
-
-.form-section-other {
-  /* stylelint-disable-next-line at-rule-no-unknown */
-  @apply bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4;
-}
-
-body {
-  /* stylelint-disable-next-line at-rule-no-unknown */
-  @apply font-prompt text-gray-900 bg-white;
-}
-
-/* Custom Scrollbar - ปรับปรุงเป็นแบบเดียวแล้วไม่ซ้ำ */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  /* stylelint-disable-next-line at-rule-no-unknown */
-  @apply bg-gray-100;
-}
-
-::-webkit-scrollbar-thumb {
-  /* stylelint-disable-next-line at-rule-no-unknown */
-  @apply bg-accent rounded-full;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  /* stylelint-disable-next-line at-rule-no-unknown */
-  @apply bg-accent-600;
-}
 
 /* Responsive grid (ตัวอย่าง) */
-.grid-cols-auto {
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
 
 /* Animation สำหรับป้ายโปรโมชัน */
 @keyframes blink-promotion {
-  0%,
+  0%, 
   50% {
     opacity: 1;
     transform: scale(1);
@@ -560,12 +445,6 @@ body {
   will-change: transform, opacity;
 }
 
-/* Loading Animation */
-.loading-spinner {
-  /* stylelint-disable-next-line at-rule-no-unknown */
-  @apply animate-spin rounded-full h-8 w-8 border-b-2 border-accent;
-}
-
 /*
   NOTE: Avoid universal transitions.
   They override Tailwind's per-element transition utilities and can create non-composited animations
@@ -573,26 +452,4 @@ body {
 */
 
 /* Line Clamp Utilities - รองรับ browser ใหม่ */
-.line-clamp-1 {
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
