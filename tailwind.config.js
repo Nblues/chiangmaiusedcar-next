@@ -94,8 +94,8 @@ module.exports = {
           500: '#ff9800', // same as DEFAULT
           600: '#fb8c00',
           700: '#f57c00',
-          800: '#e65100',
-          900: '#bf360c',
+          800: '#c54400', // Adjusted from #e65100 for WCAG AA contrast (ratio 5.0)
+          900: '#9e2a00', // Adjusted from #bf360c for proper hover scaling
         },
         white: '#fff',
         black: '#181818',
