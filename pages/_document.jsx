@@ -71,7 +71,7 @@ export default class MyDocument extends Document {
           )}
 
           {/* Preconnect only to the most critical 3rd-party origin (Shopify image CDN). */}
-          <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
+          <link rel="preconnect" href="https://cdn.shopify.com" />
 
           {/* Facebook In-App Browser Compatibility */}
           <meta httpEquiv="Accept-CH" content="DPR, Viewport-Width, Width" />
