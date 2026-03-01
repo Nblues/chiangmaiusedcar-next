@@ -54,7 +54,7 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
       const widthMap = {
         hero: 1920,
         // การ์ดบนมือถือส่วนใหญ่แสดง ~50vw; 640px เพียงพอสำหรับ DPR 2-3 และช่วยลด bytes
-        card: 576,
+        card: 480,
         thumbnail: 240, // ⭐ ลดจาก 400 → 240 เพื่อโหลดเร็วขึ้น (thumbnail เล็ก)
         gallery: 800,
         default: 1200,
@@ -85,7 +85,7 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
           hero: [640, 1024, 1920],
           // Add 576w to better match ~2-column mobile grids at DPR 3
           // (reduces waste vs jumping straight to 640w).
-          card: [240, 360, 480, 576],
+          card: [240, 360, 480],
           thumbnail: [120, 240], // 🔹ลดขนาด srcset สำหรับ thumbnail
           gallery: [400, 800, 1200],
           default: [640, 1024, 1920],
