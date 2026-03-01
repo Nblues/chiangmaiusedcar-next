@@ -340,7 +340,8 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             height={467}
             className="w-full h-auto object-contain"
             priority
-            decoding="async"
+            decoding="sync"
+            fetchPriority="high"
             optimizeImage={false}
           />
         </div>
