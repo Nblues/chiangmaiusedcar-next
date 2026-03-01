@@ -201,15 +201,17 @@ function normalizeTransmission(value) {
   return raw;
 }
 
-export default function CarCard({ car, priority = false, className = '', variant = 'default' }) {
+function CarCard({ car, liveStatus, priority = false, className = '', variant = 'default' }) {
   if (!car) return null;
 
   const handle = car.handle || '';
   const href = handle ? `/car/${handle}` : '/all-cars';
   const priceInfo = getPriceInfo(safeGet(car, 'price.amount'));
 
-  // Status check
-  const status = typeof car.status === 'string' ? car.status.trim() : '';
+  // Status check - prefer liveStatus if available (prevents hydration thrashing)
+  const rawStatus = typeof liveStatus !== 'undefined' ? liveStatus : car.status;
+  const status = typeof rawStatus === 'string' ? rawStatus.trim() : '';
+
   // Check tags safely
   const tags = Array.isArray(car.tags) ? car.tags : [];
 
@@ -540,3 +542,5 @@ export default function CarCard({ car, priority = false, className = '', variant
     </Link>
   );
 }
+
+export default React.memo(CarCard);

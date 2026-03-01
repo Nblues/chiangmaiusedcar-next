@@ -143,19 +143,12 @@ export default function AllCars({
   // Keep client work minimal to reduce hydration cost (TBT).
   const safeTotalPages = Number.isFinite(totalPages) && totalPages > 0 ? totalPages : 1;
   const safePage = Math.min(Math.max(1, currentPage), safeTotalPages);
-  const currentCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
+  const currentCars = useMemo(() => {
+    const list = Array.isArray(cars) ? cars : [];
+    return list.map(car => mergeCarSpecs(car, null));
+  }, [cars]);
+
   const currentIds = useMemo(() => currentCars.map(c => c.id).filter(Boolean), [currentCars]);
-  const currentCarsWithLive = useMemo(() => {
-    if (!liveStatuses) return currentCars;
-    try {
-      return currentCars.map(c => {
-        const s = liveStatuses[c.id]?.status;
-        return s ? { ...c, status: s } : c;
-      });
-    } catch {
-      return currentCars;
-    }
-  }, [currentCars, liveStatuses]);
 
   // Fetch latest statuses for current page cars on mount and page/filter change (with cache)
   useEffect(() => {
@@ -337,7 +330,7 @@ export default function AllCars({
           href="/herobanner/heroallcars-640w.webp"
           imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w"
           imageSizes="100vw"
-          fetchpriority="high"
+          fetchPriority="high"
         />
 
         <link
@@ -347,7 +340,7 @@ export default function AllCars({
           href="/herobanner/heroallcars-1024w.webp"
           imageSrcSet="/herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
           imageSizes="100vw"
-          fetchpriority="high"
+          fetchPriority="high"
         />
       </Head>
 
@@ -406,7 +399,7 @@ export default function AllCars({
                 className="w-full h-full object-cover object-top"
                 decoding="async"
                 loading="eager"
-                fetchpriority="high"
+                fetchPriority="high"
               />
             </picture>
           </div>
@@ -536,9 +529,15 @@ export default function AllCars({
             <>
               {/* Cards Grid - standardized layout */}
               <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
-                {currentCarsWithLive.map((car, index) => {
-                  const mergedCar = mergeCarSpecs(car, null);
-                  return <CarCard key={car.id} car={mergedCar} priority={index < 2} />;
+                {currentCars.map((car, index) => {
+                  return (
+                    <CarCard
+                      key={car.id}
+                      car={car}
+                      liveStatus={liveStatuses?.[car.id]?.status}
+                      priority={index < 2}
+                    />
+                  );
                 })}
               </div>
 

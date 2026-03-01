@@ -27,6 +27,13 @@ export default class MyDocument extends Document {
 
     // Only preload the hero image on the homepage where it is actually used as LCP.
     // Preloading globally causes Chrome warnings (and wasted bandwidth) on other pages.
+    const requestPathRaw = this.props?.requestPath || this.props?.asPath || '';
+    const requestPath = String(requestPathRaw).split('?')[0] || '';
+    const shouldPreloadHero =
+      requestPath === '/' || requestPath === '/en' || requestPath === '/en/';
+
+    const shouldPreloadAllCarsHero = requestPath === '/all-cars' || requestPath === '/all-cars/';
+
     return (
       <Html lang={htmlLang}>
         <Head>
@@ -37,9 +44,34 @@ export default class MyDocument extends Document {
           {/* Mobile viewport: prevent in-app browsers (LINE/FB) from auto-scaling text/layout */}
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
+          {shouldPreloadHero && (
+            <link
+              rel="preload"
+              as="image"
+              href="/herobanner/newherobanner-828w.webp"
+              type="image/webp"
+              imageSrcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
+              imageSizes="(max-width: 414px) 414px, (max-width: 1400px) 100vw, 1400px"
+              // eslint-disable-next-line react/no-unknown-property
+              fetchpriority="high"
+            />
+          )}
+
+          {shouldPreloadAllCarsHero && (
+            <link
+              rel="preload"
+              as="image"
+              href="/herobanner/heroallcars-1024w.webp"
+              type="image/webp"
+              imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
+              imageSizes="100vw"
+              // eslint-disable-next-line react/no-unknown-property
+              fetchpriority="high"
+            />
+          )}
+
           {/* Preconnect only to the most critical 3rd-party origin (Shopify image CDN). */}
-          <link rel="preconnect" href="https://cdn.shopify.com" />
-          <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+          <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
 
           {/* Facebook In-App Browser Compatibility */}
           <meta httpEquiv="Accept-CH" content="DPR, Viewport-Width, Width" />
