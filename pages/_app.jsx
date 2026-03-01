@@ -40,54 +40,6 @@ export default function MyApp({ Component, pageProps }) {
   // Defer Vercel analytics tooling so it doesn't compete with hydration/bootup.
   const [VercelTools, setVercelTools] = useState(null);
 
-  // User Timing: measure app start -> hydrated (shows up under "User Timings" in Lighthouse)
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      if (window.performance?.mark) {
-        window.performance.mark('app:hydrated');
-        if (window.performance.measure) {
-          window.performance.measure('app:before-hydration', 'app:start', 'app:hydrated');
-        }
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
-
-  // User Timing: measure route transitions (helps correlate long tasks with navigation)
-  useEffect(() => {
-    if (!router?.events || typeof window === 'undefined') return;
-
-    const markStart = url => {
-      try {
-        window.performance?.mark?.('route:start');
-        window.performance?.mark?.(`route:start:${url}`);
-      } catch {
-        // ignore
-      }
-    };
-
-    const markDone = url => {
-      try {
-        window.performance?.mark?.('route:complete');
-        window.performance?.mark?.(`route:complete:${url}`);
-        window.performance?.measure?.('route:duration', 'route:start', 'route:complete');
-      } catch {
-        // ignore
-      }
-    };
-
-    router.events.on('routeChangeStart', markStart);
-    router.events.on('routeChangeComplete', markDone);
-    router.events.on('routeChangeError', markDone);
-    return () => {
-      router.events.off('routeChangeStart', markStart);
-      router.events.off('routeChangeComplete', markDone);
-      router.events.off('routeChangeError', markDone);
-    };
-  }, [router]);
-
   // Initialize performance monitoring (Web Vitals + custom observers) without competing with hydration.
   useEffect(() => {
     if (typeof window === 'undefined') return;

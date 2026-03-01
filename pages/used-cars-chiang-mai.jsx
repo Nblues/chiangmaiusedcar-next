@@ -8,15 +8,8 @@ import SEO from '../components/SEO.jsx';
 import CarCard from '../components/CarCard';
 import { getHomepageCars } from '../lib/shopify.mjs';
 import A11yImage from '../components/A11yImage';
-import {
-  BUSINESS_INFO,
-  createPhoneLink,
-  createPlaceLink,
-  COMMON_OFFER_EXTENSIONS,
-} from '../config/business.js';
+import { BUSINESS_INFO, createPhoneLink, createPlaceLink } from '../config/business.js';
 import { readCarStatusesByIds } from '../lib/carStatusStore.js';
-import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
-import { getPriceInfo } from '../lib/carPrice';
 import { mergeCarSpecs } from '../lib/mergeCarSpecs';
 
 const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
@@ -30,129 +23,134 @@ const SITE = 'https://www.chiangmaiusedcar.com';
 // client-only (dynamic + ssr:false). Disabling runtime JS makes the mobile menu
 // disappear after a full refresh.
 
-function buildChiangMaiLandingItemListJsonLd(inputCars) {
-  const cars = Array.isArray(inputCars) ? inputCars : [];
-  const itemListElement = cars.slice(0, 12).map((car, index) => {
-    const handle = car?.handle;
-    const carUrl = handle ? `${SITE}/car/${handle}` : SITE;
-
-    const priceInfo = getPriceInfo(car?.price?.amount || 0);
-    const rawImage = car?.images?.[0]?.url;
-    const imageUrl = rawImage
-      ? rawImage.startsWith('http')
-        ? rawImage
-        : `${SITE}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
-      : `${SITE}/herobanner/outdoorbanner-1024w.webp`;
-
-    const title = car?.title || 'รถมือสองเชียงใหม่';
-    const availabilityValue = computeSchemaAvailability({
-      status: car?.status,
-      availableForSale: car?.availableForSale,
-    });
-
-    const offer = priceInfo.valid
-      ? {
-          '@type': 'Offer',
-          price: priceInfo.numeric,
-          priceCurrency: 'THB',
-          url: carUrl,
-          itemCondition: 'https://schema.org/UsedCondition',
-          availability: `https://schema.org/${availabilityValue}`,
-          inventoryLevel: {
-            '@type': 'QuantitativeValue',
-            value: availabilityValue === 'InStock' ? 1 : 0,
-            unitCode: 'EA',
-          },
-          seller: COMMON_OFFER_EXTENSIONS.seller,
-          hasMerchantReturnPolicy: COMMON_OFFER_EXTENSIONS.hasMerchantReturnPolicy,
-          shippingDetails: COMMON_OFFER_EXTENSIONS.shippingDetails,
-        }
-      : undefined;
-
-    return {
-      '@type': 'ListItem',
-      position: index + 1,
-      item: {
-        '@type': 'Product',
-        additionalType: 'https://schema.org/Car',
-        '@id': carUrl,
-        name: title,
-        image: imageUrl,
-        url: carUrl,
-        offers: offer,
-      },
-    };
-  });
-
-  return {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'CollectionPage',
-        '@id': `${SITE}/used-cars-chiang-mai#collection`,
-        url: `${SITE}/used-cars-chiang-mai`,
-        name: 'ซื้อ-ขาย รถบ้านมือสอง เชียงใหม่-ลำพูน',
-        description:
-          'รวมรถบ้านมือสองสภาพดีในเชียงใหม่-ลำพูน พร้อมรูปจริง ราคาอัปเดต และบริการฝากขายรถแบบมืออาชีพ',
-        mainEntity: {
-          '@type': 'ItemList',
-          name: 'รถมือสองเชียงใหม่แนะนำ',
-          numberOfItems: itemListElement.length,
-          itemListElement,
-        },
-      },
-      {
-        '@type': 'FAQPage',
-        '@id': `${SITE}/used-cars-chiang-mai#faq`,
-        mainEntity: [
-          {
-            '@type': 'Question',
-            name: 'ฝากขายรถกับครูหนึ่งรถสวยมีเงื่อนไขอะไรบ้าง?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'เพื่อคัดสภาพให้ได้ตามมาตรฐาน รถที่รับฝากขายจะเน้นรถมือเดียว ไม่มีอุบัติเหตุหนัก/ไม่จมน้ำ มีประวัติดูแลบำรุงรักษาดี เครื่องยนต์/เกียร์/เล่มทะเบียนไม่มีปัญหา โดยสามารถนัดหมายนำรถเข้ามาตรวจสภาพที่เต็นท์ได้ทุกวัน',
-            },
-          },
-          {
-            '@type': 'Question',
-            name: 'ฝากขายต้องเอารถมาจอดที่เต็นท์ไหม?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'ไม่จำเป็นต้องเอารถมาจอดไว้ที่เต็นท์ตลอดเวลา โดยส่วนใหญ่คุณยังสามารถใช้รถตามปกติได้ และนัดหมายตามขั้นตอนที่ทีมงานแจ้งเพื่อความสะดวกในการขาย',
-            },
-          },
-          {
-            '@type': 'Question',
-            name: 'นัดตรวจสภาพและตั้งราคาฝากขายทำอย่างไร?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'นัดหมายล่วงหน้าแล้วนำรถเข้ามาตรวจสภาพที่เต็นท์ได้ทุกวัน หลังตรวจสภาพ ทีมงานจะช่วยประเมินและตั้งราคาให้ใกล้เคียงราคาตลาดมากที่สุดตามสภาพจริงของรถ',
-            },
-          },
-          {
-            '@type': 'Question',
-            name: 'ต้องเตรียมเอกสารอะไรบ้างสำหรับฝากขาย/ซื้อขาย?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'โดยทั่วไปแนะนำเตรียมเล่มทะเบียน/เอกสารรถที่เกี่ยวข้อง บัตรประชาชนผู้ขาย และข้อมูลการดูแลบำรุงรักษา (ถ้ามี) รายการเอกสารอาจแตกต่างตามกรณี สามารถทัก LINE เพื่อให้ทีมงานเช็คให้ได้ก่อนนัดหมาย',
-            },
-          },
-          {
-            '@type': 'Question',
-            name: 'มีบริการส่งรถต่างจังหวัด หรือช่วยดูรถแบบออนไลน์ไหม?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'มีบริการประสานงานจัดส่งรถ (ขึ้นอยู่กับเงื่อนไข) และสามารถช่วยสรุปข้อมูล/รูป/วิดีโอประกอบการตัดสินใจ พร้อมดูแลเอกสารให้ครบก่อนส่งมอบ',
-            },
-          },
-        ],
-      },
-    ],
-  };
-}
-
 export async function getStaticProps() {
   // Prefer ISR for performance: serve HTML from CDN and refresh periodically.
+
+  // Server-only requires: these modules will NOT be bundled in the client JS
+  const { getPriceInfo } = require('../lib/carPrice');
+  const { computeSchemaAvailability } = require('../lib/carStatusUtils.js');
+  const { COMMON_OFFER_EXTENSIONS } = require('../config/business.js');
+
+  function buildChiangMaiLandingItemListJsonLd(inputCars) {
+    const cars = Array.isArray(inputCars) ? inputCars : [];
+    const itemListElement = cars.slice(0, 12).map((car, index) => {
+      const handle = car?.handle;
+      const carUrl = handle ? `${SITE}/car/${handle}` : SITE;
+
+      const priceInfo = getPriceInfo(car?.price?.amount || 0);
+      const rawImage = car?.images?.[0]?.url;
+      const imageUrl = rawImage
+        ? rawImage.startsWith('http')
+          ? rawImage
+          : `${SITE}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
+        : `${SITE}/herobanner/outdoorbanner-1024w.webp`;
+
+      const title = car?.title || 'รถมือสองเชียงใหม่';
+      const availabilityValue = computeSchemaAvailability({
+        status: car?.status,
+        availableForSale: car?.availableForSale,
+      });
+
+      const offer = priceInfo.valid
+        ? {
+            '@type': 'Offer',
+            price: priceInfo.numeric,
+            priceCurrency: 'THB',
+            url: carUrl,
+            itemCondition: 'https://schema.org/UsedCondition',
+            availability: `https://schema.org/${availabilityValue}`,
+            inventoryLevel: {
+              '@type': 'QuantitativeValue',
+              value: availabilityValue === 'InStock' ? 1 : 0,
+              unitCode: 'EA',
+            },
+            seller: COMMON_OFFER_EXTENSIONS.seller,
+            hasMerchantReturnPolicy: COMMON_OFFER_EXTENSIONS.hasMerchantReturnPolicy,
+            shippingDetails: COMMON_OFFER_EXTENSIONS.shippingDetails,
+          }
+        : undefined;
+
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'Product',
+          additionalType: 'https://schema.org/Car',
+          '@id': carUrl,
+          name: title,
+          image: imageUrl,
+          url: carUrl,
+          offers: offer,
+        },
+      };
+    });
+
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'CollectionPage',
+          '@id': `${SITE}/used-cars-chiang-mai#collection`,
+          url: `${SITE}/used-cars-chiang-mai`,
+          name: 'ซื้อ-ขาย รถบ้านมือสอง เชียงใหม่-ลำพูน',
+          description:
+            'รวมรถบ้านมือสองสภาพดีในเชียงใหม่-ลำพูน พร้อมรูปจริง ราคาอัปเดต และบริการฝากขายรถแบบมืออาชีพ',
+          mainEntity: {
+            '@type': 'ItemList',
+            name: 'รถมือสองเชียงใหม่แนะนำ',
+            numberOfItems: itemListElement.length,
+            itemListElement,
+          },
+        },
+        {
+          '@type': 'FAQPage',
+          '@id': `${SITE}/used-cars-chiang-mai#faq`,
+          mainEntity: [
+            {
+              '@type': 'Question',
+              name: 'ฝากขายรถกับครูหนึ่งรถสวยมีเงื่อนไขอะไรบ้าง?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'เพื่อคัดสภาพให้ได้ตามมาตรฐาน รถที่รับฝากขายจะเน้นรถมือเดียว ไม่มีอุบัติเหตุหนัก/ไม่จมน้ำ มีประวัติดูแลบำรุงรักษาดี เครื่องยนต์/เกียร์/เล่มทะเบียนไม่มีปัญหา โดยสามารถนัดหมายนำรถเข้ามาตรวจสภาพที่เต็นท์ได้ทุกวัน',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'ฝากขายต้องเอารถมาจอดที่เต็นท์ไหม?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'ไม่จำเป็นต้องเอารถมาจอดไว้ที่เต็นท์ตลอดเวลา โดยส่วนใหญ่คุณยังสามารถใช้รถตามปกติได้ และนัดหมายตามขั้นตอนที่ทีมงานแจ้งเพื่อความสะดวกในการขาย',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'นัดตรวจสภาพและตั้งราคาฝากขายทำอย่างไร?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'นัดหมายล่วงหน้าแล้วนำรถเข้ามาตรวจสภาพที่เต็นท์ได้ทุกวัน หลังตรวจสภาพ ทีมงานจะช่วยประเมินและตั้งราคาให้ใกล้เคียงราคาตลาดมากที่สุดตามสภาพจริงของรถ',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'ต้องเตรียมเอกสารอะไรบ้างสำหรับฝากขาย/ซื้อขาย?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'โดยทั่วไปแนะนำเตรียมเล่มทะเบียน/เอกสารรถที่เกี่ยวข้อง บัตรประชาชนผู้ขาย และข้อมูลการดูแลบำรุงรักษา (ถ้ามี) รายการเอกสารอาจแตกต่างตามกรณี สามารถทัก LINE เพื่อให้ทีมงานเช็คให้ได้ก่อนนัดหมาย',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'มีบริการส่งรถต่างจังหวัด หรือช่วยดูรถแบบออนไลน์ไหม?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'มีบริการประสานงานจัดส่งรถ (ขึ้นอยู่กับเงื่อนไข) และสามารถช่วยสรุปข้อมูล/รูป/วิดีโอประกอบการตัดสินใจ พร้อมดูแลเอกสารให้ครบก่อนส่งมอบ',
+              },
+            },
+          ],
+        },
+      ],
+    };
+  }
 
   // Keep lightweight: we only need a featured set for the landing page.
   let carsRaw = [];

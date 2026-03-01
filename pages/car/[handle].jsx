@@ -1,4 +1,4 @@
-import Head from 'next/head';
+﻿import Head from 'next/head';
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import SEO from '../../components/SEO';
@@ -1425,7 +1425,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                       <div className="bg-white border border-accent rounded-lg p-3">
                         <div className="flex items-center gap-2 mb-1">
                           <svg
-                            className="w-4 h-4 text-accent-800"
+                            className="w-4 h-4 text-accent-900"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -1435,7 +1435,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                               clipRule="evenodd"
                             />
                           </svg>
-                          <span className="text-sm font-semibold text-accent-800 font-prompt">
+                          <span className="text-sm font-semibold text-accent-900 font-prompt">
                             สำหรับลูกค้าเครดิตดี
                           </span>
                         </div>
@@ -1446,7 +1446,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                         <div className="text-xs text-gray-600 font-prompt mb-1">
                           *อัตราพิเศษ 4.5% สำหรับ 72 งวด + VAT + ประกัน
                         </div>
-                        <div className="text-sm font-semibold text-accent-800 font-prompt">
+                        <div className="text-sm font-semibold text-accent-900 font-prompt">
                           ประหยัดได้ {Math.round(installment.savings).toLocaleString()} บาท/เดือน
                         </div>
                       </div>

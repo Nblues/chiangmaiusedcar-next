@@ -130,7 +130,7 @@ export default function Contact() {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center px-4 max-w-5xl mx-auto">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 font-prompt drop-shadow-lg text-white">
-                ติดต่อเรา
+                ติดต่อ ครูหนึ่งรถสวย รถมือสองเชียงใหม่
               </h1>
               <div className="text-sm sm:text-base md:text-xl lg:text-2xl font-prompt drop-shadow-lg text-white font-semibold mb-4 md:mb-6">
                 <p className="mb-1 md:mb-2">ครูหนึ่งรถสวย</p>

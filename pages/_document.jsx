@@ -70,14 +70,6 @@ export default class MyDocument extends Document {
             />
           )}
 
-          {/* User Timing: mark earliest possible app start (for hydration measurements) */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html:
-                ";(function(){try{if(window.performance&&performance.mark){performance.mark('app:start');}}catch(e){}})();",
-            }}
-          />
-
           {/* Preconnect only to the most critical 3rd-party origin (Shopify image CDN). */}
           <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
 
@@ -212,8 +204,7 @@ export default class MyDocument extends Document {
             }}
           />
 
-          {/* Note: Prompt font is loaded via @fontsource/prompt in globals.css */}
-          {/* Font preload is handled automatically by Next.js for @fontsource packages */}
+          {/* Note: Prompt font is loaded via next/font in _app.jsx */}
           {/* LCP preload has been moved to the top for better browser hint processing */}
 
           {/* Facebook Pixel - Lazy loaded via component in _app.jsx for better performance */}

@@ -1,14 +1,16 @@
 # Modern browsers only - Remove legacy polyfills
-# This configuration targets ES2020+ features to reduce bundle size
-# and eliminate unnecessary polyfills like Array.at, Array.flat, etc.
+# Targets ES2021+ baseline: eliminates ALL Next.js polyfills (Array.at, Object.hasOwn, etc.)
+# Minimum versions required:
+#   Array.prototype.at → Chrome 92, Firefox 90, Safari 15.4, Edge 92
+#   Object.hasOwn      → Chrome 93, Firefox 92, Safari 15.4, Edge 93
+# iOS 15.4 released March 2022 — covers ~97%+ of active iOS devices in 2026
 
 [production]
-# Modern browsers with native support for ES2020+ features
-chrome >= 90
-edge >= 90
-firefox >= 88
-safari >= 14.1
-ios >= 14.5
+chrome >= 93
+edge >= 93
+firefox >= 92
+safari >= 15.4
+ios >= 15.4
 
 # Exclude legacy browsers
 not dead

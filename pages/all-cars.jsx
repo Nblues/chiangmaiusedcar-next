@@ -6,9 +6,7 @@ import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
 import { getAllCars } from '../lib/shopify.mjs';
 import { readCarStatuses } from '../lib/carStatusStore.js';
-import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import { getCachedStatuses, setCachedStatuses } from '../lib/carStatusCache';
-import { ALL_CARS_FAQS, buildFaqPageJsonLd } from '../lib/seo/faq.js';
 import { scheduleAfterLoadThenIdle } from '../utils/scheduler';
 import { mergeCarSpecs } from '../lib/mergeCarSpecs';
 
@@ -71,8 +69,9 @@ export default function AllCars({
   initialPage,
   structuredDataJson,
   shopifyError,
+  seoAllCars,
+  allCarsFaqs,
 }) {
-  const seoAllCars = SEO_KEYWORD_MAP.allCars;
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [priceRange, setPriceRange] = useState(initialPriceRange);
@@ -88,7 +87,7 @@ export default function AllCars({
     // React/ESLint disagree on `fetchPriority` vs `fetchpriority`.
     // Set it imperatively so browsers get the hint without React warnings.
     try {
-      img.fetchPriority = 'high';
+      img.setAttribute('fetchpriority', 'high');
     } catch {
       // ignore
     }
@@ -307,7 +306,6 @@ export default function AllCars({
   };
 
   // เริ่มการเรนเดอร์หน้า
-  const allCarsFaqs = ALL_CARS_FAQS;
 
   return (
     <div className="min-h-screen">
@@ -426,7 +424,7 @@ export default function AllCars({
                     '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
                 }}
               >
-                รถยนต์มือสองคุณภาพดีทั้งหมด
+                รถมือสองเชียงใหม่ คุณภาพดีทั้งหมด
               </h1>
               <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap">
                 <p
@@ -458,12 +456,17 @@ export default function AllCars({
       {/* Breadcrumb */}
       <section className="bg-white py-4 border-b border-gray-200 -mt-0">
         <div className="max-w-7xl mx-auto px-6">
-          <nav className="flex items-center gap-2 text-sm text-gray-600 font-prompt">
+          <nav
+            aria-label="เส้นทางปัจจุบัน"
+            className="flex items-center gap-2 text-sm text-gray-600 font-prompt"
+          >
             <Link href="/" className="hover:text-primary transition-colors">
               หน้าแรก
             </Link>
-            <span>/</span>
-            <span className="text-primary font-medium">รถทั้งหมด</span>
+            <span aria-hidden="true">/</span>
+            <span className="text-primary font-medium" aria-current="page">
+              รถทั้งหมด
+            </span>
           </nav>
 
           <div className="mt-4 rounded-2xl border border-orange-500 bg-white px-4 py-3">
@@ -513,15 +516,19 @@ export default function AllCars({
       </section>
 
       {/* Cars Grid */}
-      <section className="py-8 md:py-12 bg-white border-t border-gray-200">
+      <section
+        className="py-8 md:py-12 bg-white border-t border-gray-200"
+        aria-label="รายการรถมือสองทั้งหมด"
+      >
         <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-5 ipadpro:px-3 lg:px-6">
           {!Number.isFinite(totalCount) || totalCount === 0 ? (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">🔍</div>
               <h2 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">
-                ไม่พบรถที่คุณค้นหา
+                ไม่พบรถมือสองเชียงใหม่ในหน้าต่างนี้
               </h2>
               <p className="text-gray-500 font-prompt">
+                เรามีรถบ้านมือสองคุณภาพดีเข้ามาใหม่ทุกวัน
                 ลองเปลี่ยนเงื่อนไขการค้นหาหรือติดต่อเราโดยตรง
               </p>
             </div>
@@ -529,16 +536,19 @@ export default function AllCars({
             <>
               {/* Cards Grid - standardized layout */}
               <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
-                {currentCarsWithLive.map(car => {
+                {currentCarsWithLive.map((car, index) => {
                   const mergedCar = mergeCarSpecs(car, null);
-                  return <CarCard key={car.id} car={mergedCar} />;
+                  return <CarCard key={car.id} car={mergedCar} priority={index < 4} />;
                 })}
               </div>
 
               {/* Pagination - Production Style (เหมือนเว็บไซต์จริง) */}
               {safeTotalPages > 1 && (
                 <div className="mt-8 md:mt-12 flex flex-col items-center">
-                  <nav className="flex items-center justify-center space-x-2">
+                  <nav
+                    aria-label="การแบ่งหน้า"
+                    className="flex items-center justify-center space-x-2"
+                  >
                     {/* Previous Button */}
                     <button
                       type="button"
@@ -648,6 +658,10 @@ export default function AllCars({
 // SSR for all-cars to ensure Google sees correct catalog HTML for query params
 // (pagination/filter/noindex/canonical) without relying on client-side JS.
 export async function getServerSideProps(context) {
+  // Server-only modules – kept out of the client bundle via require()
+  const { SEO_KEYWORD_MAP } = require('../config/seo-keyword-map');
+  const { ALL_CARS_FAQS, buildFaqPageJsonLd } = require('../lib/seo/faq.js');
+
   const enableServerTiming =
     process.env.NODE_ENV === 'development' || process.env.ENABLE_SERVER_TIMING === '1';
 
@@ -674,7 +688,10 @@ export async function getServerSideProps(context) {
     mark('readCarStatuses:start');
     let fetchError = null;
     const [result, carStatuses] = await Promise.all([
-      getAllCars().catch(e => { fetchError = e; return []; }),
+      getAllCars().catch(e => {
+        fetchError = e;
+        return [];
+      }),
       readCarStatuses().catch(() => ({})),
     ]);
     mark('getAllCars:end');
@@ -886,6 +903,8 @@ export async function getServerSideProps(context) {
       initialPage: safePage,
       structuredDataJson,
       shopifyError,
+      seoAllCars: SEO_KEYWORD_MAP.allCars,
+      allCarsFaqs: ALL_CARS_FAQS,
     },
   };
 }

@@ -86,6 +86,7 @@ export default function Navbar() {
             }}
             aria-label={mobileOpen ? 'ปิดเมนู' : 'เปิดเมนู'}
             aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-menu"
           >
             {mobileOpen ? 'ปิด' : 'เมนู'}
           </button>
@@ -93,7 +94,7 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {mobileOpen && (
-          <div className="md:hidden">
+          <div id="mobile-nav-menu" className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white rounded-md mt-2 shadow-lg border border-gray-200">
               {navItems.map(item => (
                 <Link

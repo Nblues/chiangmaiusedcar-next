@@ -1,16 +1,15 @@
-/* eslint-disable @next/next/no-img-element */
+﻿/* eslint-disable @next/next/no-img-element */
 
 import React, { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import SEO from '../../components/SEO.jsx';
 import CarCard from '../../components/CarCard';
-import { getAllCars, getCarSpecsByHandles } from '../../lib/shopify.mjs';
+import { getAllCars } from '../../lib/shopify.mjs';
 import { readCarStatuses } from '../../lib/carStatusStore.js';
 import { computeSchemaAvailability } from '../../lib/carStatusUtils.js';
 import { COMMON_OFFER_EXTENSIONS } from '../../config/business';
 import { getPriceInfo } from '../../lib/carPrice';
-import { mergeCarSpecs } from '../../lib/mergeCarSpecs';
 
 const Breadcrumb = dynamic(() => import('../../components/Breadcrumb'), {
   loading: () => null,
@@ -217,38 +216,11 @@ export async function getServerSideProps(context) {
   const start = (safePage - 1) * perPage;
   let pageCars = cars.slice(start, start + perPage);
 
-  // Bring sub-details together at SSR time for this brand page.
-  // This avoids client-side /api/public/car-specs calls while keeping the request bounded (<= 24 cars).
-  const has = v => v != null && String(v).trim() !== '';
-  const needsSpecs = car => {
-    const fuel = car?.fuelType || car?.fuel_type;
-    const drive = car?.drivetrain || car?.drive_type;
-    return !(
-      has(car?.mileage) &&
-      has(car?.transmission) &&
-      has(drive) &&
-      has(fuel) &&
-      has(car?.installment) &&
-      has(car?.category)
-    );
-  };
-
-  try {
-    const handles = pageCars
-      .filter(needsSpecs)
-      .map(c => c?.handle)
-      .filter(Boolean);
-    const uniqueHandles = Array.from(new Set(handles)).slice(0, 12);
-    if (uniqueHandles.length > 0) {
-      const raw = await getCarSpecsByHandles(uniqueHandles);
-      pageCars = pageCars.map(c => mergeCarSpecs(c, raw?.[c?.handle]));
-    }
-  } catch {
-    // ignore: keep baseline payload
-  }
-
   if (context?.res?.setHeader) {
-    context.res.setHeader('Cache-Control', 'public, s-maxage=600, stale-while-revalidate=1800, stale-if-error=86400');
+    context.res.setHeader(
+      'Cache-Control',
+      'public, s-maxage=600, stale-while-revalidate=1800, stale-if-error=86400'
+    );
   }
 
   const structuredData = buildBrandStructuredDataJsonLd({
@@ -315,22 +287,70 @@ export default function UsedCarsChiangMaiBrand({
         structuredData={structuredData}
       />
 
-      <header className="bg-gradient-to-r from-orange-100 to-blue-100">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 ipadpro:px-3 py-10">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-primary font-prompt">
-            รถมือสอง {brandInfo.label} เชียงใหม่
-          </h1>
-          <p className="mt-3 text-gray-900 font-prompt leading-relaxed max-w-3xl">
-            รวมรถมือสอง {brandInfo.label} ในเชียงใหม่ พร้อมรูปจริง ราคาอัปเดต และลิงก์ไปหน้า
-            รายละเอียดรถ
-          </p>
-          <div className="mt-6 flex flex-col sm:flex-row gap-3">
-            <Link href="/all-cars" className="btn-primary text-center">
-              ดูรถทั้งหมด
-            </Link>
-            <Link href="/used-cars-chiang-mai" className="btn-secondary text-center">
-              รวมรถมือสองเชียงใหม่
-            </Link>
+      {/* Hero Banner Area */}
+      <header
+        id="hero"
+        className="relative w-full overflow-hidden bg-gray-900 border-b border-gray-200"
+      >
+        <div className="relative w-full aspect-[16/10] xs:aspect-[16/9] sm:aspect-[1920/800] md:aspect-[1400/474]">
+          <picture>
+            <source
+              media="(max-width: 767px)"
+              srcSet="/herobanner/cnxallcar-480w.webp 480w, /herobanner/cnxallcar-640w.webp 640w, /herobanner/cnxallcar-828w.webp 828w"
+              sizes="100vw"
+            />
+            <source
+              media="(min-width: 768px)"
+              srcSet="/herobanner/cnxallcar-828w.webp 828w, /herobanner/cnxallcar-1024w.webp 1024w, /herobanner/cnxallcar-1400w.webp 1400w"
+              sizes="100vw"
+            />
+            <img
+              src="/herobanner/cnxallcar-1024w.webp"
+              alt={`รถมือสอง ${brandInfo.label} เชียงใหม่ - ครูหนึ่งรถสวย`}
+              className="block w-full h-full object-cover object-center"
+              decoding="async"
+              fetchPriority="high"
+            />
+          </picture>
+
+          {/* Dark gradient overlay to make text more readable */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 sm:from-black/50 sm:to-black/60"></div>
+
+          {/* Text Content Overlay */}
+          <div className="absolute inset-0 flex items-center justify-center p-4">
+            <div className="w-full max-w-4xl mx-auto text-center rounded-2xl bg-black/40 sm:bg-black/50 backdrop-blur-sm p-4 sm:p-6 md:p-8 outline outline-1 outline-white/20 shadow-2xl">
+              <h1
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-white font-prompt leading-tight"
+                style={{
+                  textShadow: '0 2px 4px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.6)',
+                }}
+              >
+                รถมือสอง {brandInfo.label} เชียงใหม่
+              </h1>
+              <p
+                className="mt-2 sm:mt-3 text-sm sm:text-base md:text-lg text-white/90 font-prompt leading-relaxed max-w-2xl mx-auto"
+                style={{
+                  textShadow: '0 1px 2px rgba(0,0,0,0.8)',
+                }}
+              >
+                รวมรถมือสอง {brandInfo.label} คุณภาพดี สภาพนางฟ้า ฟรีดาวน์ ไมล์แท้
+                พร้อมตรวจสอบประวัติได้ ราคาอัปเดต และลิงก์ไปหน้ารายละเอียดรถ
+              </p>
+              <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row justify-center gap-2 sm:gap-3">
+                <Link
+                  href="/all-cars"
+                  className="px-5 py-2.5 sm:px-6 sm:py-3 bg-primary hover:bg-primary-dark text-white rounded-lg font-bold font-prompt transition-colors text-sm sm:text-base border border-white/10"
+                >
+                  ดูรถทั้งหมด
+                </Link>
+                <Link
+                  href="/used-cars-chiang-mai"
+                  className="px-5 py-2.5 sm:px-6 sm:py-3 bg-white/10 hover:bg-white/20 text-white rounded-lg font-bold font-prompt backdrop-blur-md transition-colors text-sm sm:text-base border border-white/30"
+                >
+                  รวมรถมือสองเชียงใหม่
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -427,7 +447,7 @@ export default function UsedCarsChiangMaiBrand({
                   className="group rounded-2xl border border-gray-200 bg-white px-4 sm:px-5 py-4"
                 >
                   <summary className="flex cursor-pointer list-none items-start gap-3">
-                    <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent-800">
+                    <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent-900">
                       <span className="text-sm font-bold">{idx + 1}</span>
                     </span>
 

@@ -107,7 +107,7 @@ export default function About() {
         <div className="bg-accent text-white py-8 md:py-12">
           <div className="text-center px-6">
             <h1 className="text-3xl md:text-5xl font-bold mb-4 font-prompt">
-              เกี่ยวกับ ครูหนึ่งรถสวย
+              เกี่ยวกับ ครูหนึ่งรถสวย รถมือสองเชียงใหม่
             </h1>
             <p className="text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
               เพราะอะไรถึงได้รับความไว้วางใจจากลูกค้าทั่วประเทศมากกว่า 1 ล้านติดตาม

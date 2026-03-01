@@ -258,7 +258,7 @@ export default function PaymentCalculator() {
           <div className="max-w-7xl mx-auto px-4 md:px-6 text-center">
             <div className="bg-black bg-opacity-40 rounded-2xl p-4 md:p-6 mb-4 md:mb-6 backdrop-blur-sm border border-white border-opacity-20">
               <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 font-prompt text-white drop-shadow-2xl">
-                คำนวณค่างวดรถยนต์
+                คำนวณค่างวดรถมือสอง
               </h1>
               <p
                 className="text-sm md:text-lg lg:text-xl max-w-4xl mx-auto font-prompt text-white font-medium leading-relaxed"

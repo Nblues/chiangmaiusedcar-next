@@ -237,6 +237,7 @@ export default function CacheDashboard() {
         <a
           href="/test-sw.html"
           target="_blank"
+          rel="noopener noreferrer"
           className="block w-full text-center px-3 py-2 bg-purple-500 text-white text-xs rounded hover:bg-purple-600"
         >
           🔧 SW Test Center
@@ -245,6 +246,7 @@ export default function CacheDashboard() {
         <a
           href="/debug-console.html"
           target="_blank"
+          rel="noopener noreferrer"
           className="block w-full text-center px-3 py-2 bg-accent text-white text-xs rounded hover:bg-accent-700"
         >
           🐛 Console Debug
@@ -253,6 +255,7 @@ export default function CacheDashboard() {
         <a
           href="/console-errors-explained.html"
           target="_blank"
+          rel="noopener noreferrer"
           className="block w-full text-center px-3 py-2 bg-blue-600 text-white text-xs rounded hover:bg-blue-700"
         >
           📖 Error Explanations
@@ -261,6 +264,7 @@ export default function CacheDashboard() {
         <a
           href="/test-manifest.html"
           target="_blank"
+          rel="noopener noreferrer"
           className="block w-full text-center px-3 py-2 bg-green-600 text-white text-xs rounded hover:bg-green-700"
         >
           📋 Manifest Test

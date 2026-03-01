@@ -62,12 +62,13 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
       const targetWidth = widthMap[imageType] || widthMap.default;
 
       // Shopify รองรับ quality parameter (1-100). ตั้งค่า default ให้เหมาะกับแต่ละประเภท
+      // AVIF ให้คุณภาพสูงที่ quality ต่ำกว่า JPEG มาก: AVIF 50 ≈ JPEG 80 ในเชิง perceptual
       const qualityMap: Record<NonNullable<A11yImageProps['imageType']>, number> = {
-        hero: 75,
-        card: 65,
-        thumbnail: 60,
-        gallery: 70,
-        default: 70,
+        hero: 72,
+        card: 50, // ลดจาก 65 → 50 (AVIF สูญเสียคุณภาพน้อยมาก, ลดขนาดไฟล์ ~25%)
+        thumbnail: 50, // ลดจาก 60 → 50
+        gallery: 65, // ลดจาก 70 → 65
+        default: 65, // ลดจาก 70 → 65
       };
       const resolvedQuality =
         typeof quality === 'number' && Number.isFinite(quality)
