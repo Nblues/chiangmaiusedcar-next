@@ -337,7 +337,7 @@ export default function AllCars({
           href="/herobanner/heroallcars-640w.webp"
           imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w"
           imageSizes="100vw"
-          fetchPriority="high"
+          fetchpriority="high"
         />
 
         <link
@@ -347,7 +347,7 @@ export default function AllCars({
           href="/herobanner/heroallcars-1024w.webp"
           imageSrcSet="/herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
           imageSizes="100vw"
-          fetchPriority="high"
+          fetchpriority="high"
         />
       </Head>
 
@@ -406,7 +406,7 @@ export default function AllCars({
                 className="w-full h-full object-cover object-top"
                 decoding="async"
                 loading="eager"
-                fetchPriority="high"
+                fetchpriority="high"
               />
             </picture>
           </div>
@@ -538,7 +538,7 @@ export default function AllCars({
               <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
                 {currentCarsWithLive.map((car, index) => {
                   const mergedCar = mergeCarSpecs(car, null);
-                  return <CarCard key={car.id} car={mergedCar} priority={index < 4} />;
+                  return <CarCard key={car.id} car={mergedCar} priority={index < 2} />;
                 })}
               </div>
 

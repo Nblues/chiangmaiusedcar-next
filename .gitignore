@@ -67,8 +67,6 @@ api_key.txt
 lighthouse-prod-latest/
 
 # Local image experiments (do not commit)
-public/images/kn1.webp
-public/images/kn2.webp
 
 # Generated sitemaps (generated via next-sitemap in postbuild)
 public/sitemap*.xml
