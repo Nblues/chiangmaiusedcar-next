@@ -49,21 +49,21 @@ const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
   loading: () => null,
 });
 const SocialShareButtons = dynamic(() => import('../components/SocialShareButtons'), {
-  ssr: false,
+  /* ssr: false, removed for INP */
   loading: () => null,
 });
 
 // Split large below-the-fold reviews section into a separate chunk
 const FacebookReviewsSection = dynamic(() => import('../components/FacebookReviewsSection'), {
-  ssr: false,
+  /* ssr: false, removed for INP */
   loading: () => null,
 });
 const HomeWhyChooseSection = dynamic(() => import('../components/HomeWhyChooseSection'), {
-  ssr: false,
+  /* ssr: false, removed for INP */
   loading: () => null,
 });
 const HomeFaqSection = dynamic(() => import('../components/HomeFaqSection'), {
-  ssr: false,
+  /* ssr: false, removed for INP */
   loading: () => null,
 });
 
