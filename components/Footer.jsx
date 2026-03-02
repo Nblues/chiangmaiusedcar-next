@@ -146,6 +146,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/"
+                  prefetch={false}
                   className="text-gray-300 hover:text-accent-400 transition-colors flex items-center group"
                 >
                   <svg
@@ -161,6 +162,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/all-cars"
+                  prefetch={false}
                   className="text-gray-300 hover:text-accent-400 transition-colors flex items-center group"
                 >
                   <svg
@@ -180,6 +182,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/sell-car"
+                  prefetch={false}
                   className="text-gray-300 hover:text-accent-400 transition-colors flex items-center group"
                 >
                   <svg
@@ -195,6 +198,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/about"
+                  prefetch={false}
                   className="text-gray-300 hover:text-accent-400 transition-colors flex items-center group"
                 >
                   <svg
@@ -214,6 +218,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/credit-check"
+                  prefetch={false}
                   className="text-gray-300 hover:text-accent-400 transition-colors flex items-center group"
                 >
                   <svg
@@ -229,6 +234,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/promotion"
+                  prefetch={false}
                   className="text-gray-300 hover:text-accent-400 transition-colors flex items-center group"
                 >
                   <svg
@@ -248,6 +254,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/contact"
+                  prefetch={false}
                   className="text-gray-300 hover:text-accent-400 transition-colors flex items-center group"
                 >
                   <svg
@@ -437,6 +444,7 @@ export default function Footer() {
 
               <Link
                 href="/contact"
+                prefetch={false}
                 className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-800 transition-all duration-300 group"
               >
                 <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -470,12 +478,14 @@ export default function Footer() {
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
               <Link
                 href="/privacy-policy"
+                prefetch={false}
                 className="text-gray-400 hover:text-accent-400 text-sm transition-colors"
               >
                 นโยบายความเป็นส่วนตัว
               </Link>
               <Link
                 href="/terms-of-service"
+                prefetch={false}
                 className="text-gray-400 hover:text-accent-400 text-sm transition-colors"
               >
                 ข้อกำหนดการใช้งาน

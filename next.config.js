@@ -338,6 +338,34 @@ const nextConfig = {
         source: '/(.*)',
         headers: securityHeaders,
       },
+      // Public hero + logo assets - long-term caching (explicit paths)
+      // Some platforms may not apply the generic extension matcher reliably for /public assets.
+      {
+        source: '/herobanner/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Vary',
+            value: 'Accept-Encoding',
+          },
+        ],
+      },
+      {
+        source: '/logo/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Vary',
+            value: 'Accept-Encoding',
+          },
+        ],
+      },
       // Static assets - long-term caching
       {
         source: '/_next/static/(.*)',
