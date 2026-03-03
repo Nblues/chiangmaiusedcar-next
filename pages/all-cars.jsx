@@ -399,7 +399,6 @@ export default function AllCars({
                 className="w-full h-full object-cover object-top"
                 decoding="async"
                 loading="eager"
-                fetchPriority="high"
               />
             </picture>
           </div>

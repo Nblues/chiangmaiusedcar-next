@@ -40,7 +40,10 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="bg-gray-900 text-white py-12 mt-16 font-prompt" role="contentinfo">
+    <footer
+      className="bg-gray-900 text-white py-12 mt-16 font-prompt min-h-[600px] sm:min-h-[400px]"
+      role="contentinfo"
+    >
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-8 lg:gap-12">
@@ -274,6 +277,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/payment-calculator"
+                  prefetch={false}
                   className="text-gray-300 hover:text-accent-400 transition-colors flex items-center group"
                 >
                   <svg
@@ -476,20 +480,20 @@ export default function Footer() {
               © {currentYear} ครูหนึ่งรถสวย. สงวนลิขสิทธิ์ทุกประการ
             </p>
             <div className="flex items-center space-x-6 mt-4 md:mt-0">
-              <Link
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+              <a
                 href="/privacy-policy"
-                prefetch={false}
                 className="text-gray-400 hover:text-accent-400 text-sm transition-colors"
               >
                 นโยบายความเป็นส่วนตัว
-              </Link>
-              <Link
+              </a>
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+              <a
                 href="/terms-of-service"
-                prefetch={false}
                 className="text-gray-400 hover:text-accent-400 text-sm transition-colors"
               >
                 ข้อกำหนดการใช้งาน
-              </Link>
+              </a>
               <span className="text-gray-600">|</span>
               <p className="text-gray-300 text-xs">Designed with ❤️ in Chiang Mai</p>
             </div>
