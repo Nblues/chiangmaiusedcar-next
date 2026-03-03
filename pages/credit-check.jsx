@@ -1084,7 +1084,7 @@ export default function CreditCheck() {
               <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-5">
                 <Link
                   href="/all-cars"
-                  className="group relative overflow-hidden bg-accent hover:bg-accent/90 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 inline-flex items-center justify-center gap-3 text-base sm:text-lg"
+                  className="group relative overflow-hidden bg-accent hover:bg-accent/90 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-[0.95] inline-flex items-center justify-center gap-3 text-base sm:text-lg"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-accent to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <svg
@@ -1104,7 +1104,7 @@ export default function CreditCheck() {
                 </Link>
                 <Link
                   href="/payment-calculator"
-                  className="group relative overflow-hidden bg-white hover:bg-gray-50 text-accent-800 border-2 border-accent font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 inline-flex items-center justify-center gap-3 text-base sm:text-lg"
+                  className="group relative overflow-hidden bg-white hover:bg-gray-50 text-accent-800 border-2 border-accent font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-[0.95] inline-flex items-center justify-center gap-3 text-base sm:text-lg"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-orange-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <svg
@@ -1134,7 +1134,7 @@ export default function CreditCheck() {
                     href="https://lin.ee/8ugfzstD"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-accent hover:bg-accent/90 text-white font-bold px-6 sm:px-8 py-4 sm:py-5 rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 inline-flex items-center justify-center gap-3 text-base sm:text-lg"
+                    className="bg-accent hover:bg-accent/90 text-white font-bold px-6 sm:px-8 py-4 sm:py-5 rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-[0.95] inline-flex items-center justify-center gap-3 text-base sm:text-lg"
                     aria-label="แชท LINE ครูหนึ่งรถสวย"
                   >
                     <svg
@@ -1148,7 +1148,7 @@ export default function CreditCheck() {
                   </a>
                   <a
                     href="tel:0940649018"
-                    className="bg-primary hover:bg-primary-600 text-white font-bold px-6 sm:px-8 py-4 sm:py-5 rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 inline-flex items-center justify-center gap-3 text-base sm:text-lg"
+                    className="bg-primary hover:bg-primary-600 text-white font-bold px-6 sm:px-8 py-4 sm:py-5 rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-[0.95] inline-flex items-center justify-center gap-3 text-base sm:text-lg"
                     aria-label="โทร 094-064-9018"
                   >
                     <svg

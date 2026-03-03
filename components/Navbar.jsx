@@ -61,7 +61,7 @@ export default function Navbar() {
                 key={item.href}
                 href={item.href}
                 prefetch={false}
-                className={`px-3 py-2 rounded-md text-sm font-medium font-prompt transition-colors duration-200 ${
+                className={`px-3 py-2 rounded-md text-sm font-medium font-prompt transition-all duration-200 active:scale-[0.95] ${
                   isActive(item.href)
                     ? 'bg-primary text-white'
                     : 'text-primary hover:bg-accent hover:text-white'
@@ -101,7 +101,7 @@ export default function Navbar() {
                   key={item.href}
                   href={item.href}
                   prefetch={false}
-                  className={`block px-3 py-2 rounded-md font-prompt font-semibold text-base tracking-wide transition-colors duration-200 ${
+                  className={`block px-3 py-2 rounded-md font-prompt font-semibold text-base tracking-wide transition-all duration-200 active:scale-[0.95] ${
                     isActive(item.href)
                       ? 'bg-primary text-white'
                       : 'text-primary hover:bg-accent hover:text-white'

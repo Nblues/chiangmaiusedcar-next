@@ -208,7 +208,7 @@ export default function Contact() {
           <div className="flex justify-center mb-12">
             <Link
               href="/all-cars"
-              className="px-8 py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              className="px-8 py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300"
             >
               ดูรถทั้งหมด
             </Link>
@@ -225,7 +225,7 @@ export default function Contact() {
                 href={BUSINESS_INFO.socialMedia.facebook.main}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-600 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-600 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -252,7 +252,7 @@ export default function Contact() {
                 href={BUSINESS_INFO.socialMedia.facebook.personal}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-500 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-500 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -279,7 +279,7 @@ export default function Contact() {
                 href={BUSINESS_INFO.socialMedia.facebook.fcGroup}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-700 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-700 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -306,7 +306,7 @@ export default function Contact() {
                 href={BUSINESS_INFO.socialMedia.tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-gray-900 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-gray-900 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -333,7 +333,7 @@ export default function Contact() {
                 href={BUSINESS_INFO.socialMedia.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-red-600 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-red-600 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -360,7 +360,7 @@ export default function Contact() {
                 href={BUSINESS_INFO.socialMedia.lemon8}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-yellow-500 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-yellow-500 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -387,7 +387,7 @@ export default function Contact() {
                 href={BUSINESS_INFO.lineUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-green-500 hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-green-500 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -445,7 +445,7 @@ export default function Contact() {
                     href={mapOpenUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-full font-semibold hover:bg-primary-600 transform hover:scale-105 transition-all duration-300"
+                    className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-full font-semibold hover:bg-primary-600 transform hover:scale-105 active:scale-[0.95] transition-all duration-300"
                   >
                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                       <path
@@ -527,7 +527,7 @@ export default function Contact() {
                     href={createMapOpenUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-xl text-sm font-semibold transform hover:scale-105 transition-all duration-300"
+                    className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-xl text-sm font-semibold transform hover:scale-105 active:scale-[0.95] transition-all duration-300"
                   >
                     Google Maps
                   </a>
@@ -535,7 +535,7 @@ export default function Contact() {
                     href="https://g.co/kgs/Fe9dhXt"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-accent hover:bg-accent/90 text-white rounded-xl text-sm font-semibold transform hover:scale-105 transition-all duration-300"
+                    className="px-4 py-2 bg-accent hover:bg-accent/90 text-white rounded-xl text-sm font-semibold transform hover:scale-105 active:scale-[0.95] transition-all duration-300"
                   >
                     รีวิว Google
                   </a>
