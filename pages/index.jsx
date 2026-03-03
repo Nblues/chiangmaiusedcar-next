@@ -493,12 +493,16 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             />
           ) : null}
         </>
-        ) : (
-          <div className="min-h-[60vh] flex flex-col items-center justify-center bg-gray-50/50">
-            <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4"></div>
-            <p className="text-gray-500 font-prompt">กำลังเตรียมข้อมูลรถสวยๆ...</p>
-          </div>
-        )}
+      ) : null}
+    </div>
+  );
+}
+
+// ISR - Homepage with car listings - revalidate every 5 minutes
+export async function getStaticProps() {
+  let cars = [];
+  let brandCounts = {};
+  let homeOgImage = null;
   let homeItemListJsonLd = null;
 
   const carsPromise = getHomepageCars(8).catch(() => []);
