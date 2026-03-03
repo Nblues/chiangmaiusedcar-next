@@ -193,9 +193,9 @@ export default function MyApp({ Component, pageProps }) {
     (page => {
       // Default layout for public pages
       return (
-        <div className={`${prompt.variable} font-prompt`}>
+        <div className={`${prompt.variable} font-prompt flex flex-col min-h-screen`}>
           <Navbar />
-          <main id="main" role="main">
+          <main id="main" role="main" className="flex-1 w-full relative flex flex-col">
             {page}
           </main>
           <Footer />
