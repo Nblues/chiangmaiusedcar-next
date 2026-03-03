@@ -388,7 +388,7 @@ export default function PaymentCalculator() {
                       name="carPrice"
                       inputMode="numeric"
                       pattern="[0-9]*"
-                      className="form-input text-sm md:text-base"
+                      className="form-input text-base"
                       placeholder="เช่น 500,000"
                       value={carPrice ? Number(carPrice).toLocaleString('th-TH') : ''}
                       onChange={e => {
@@ -416,7 +416,7 @@ export default function PaymentCalculator() {
                       name="downPayment"
                       inputMode="numeric"
                       pattern="[0-9]*"
-                      className="form-input text-sm md:text-base"
+                      className="form-input text-base"
                       placeholder="เช่น 50,000"
                       value={downPayment ? Number(downPayment).toLocaleString('th-TH') : ''}
                       onChange={e => {
@@ -441,7 +441,7 @@ export default function PaymentCalculator() {
                       <select
                         id="interestRate"
                         name="interestRate"
-                        className="form-select text-sm md:text-base"
+                        className="form-select text-base"
                         value={interestRate}
                         onChange={e => setInterestRate(e.target.value)}
                       >
@@ -465,7 +465,7 @@ export default function PaymentCalculator() {
                       <select
                         id="customerAge"
                         name="customerAge"
-                        className="form-select text-sm md:text-base"
+                        className="form-select text-base"
                         value={customerAge}
                         onChange={e => setCustomerAge(e.target.value)}
                       >
@@ -503,7 +503,7 @@ export default function PaymentCalculator() {
                     <select
                       id="loanTerm"
                       name="loanTerm"
-                      className="form-select text-sm md:text-base"
+                      className="form-select text-base"
                       value={loanTerm}
                       onChange={e => setLoanTerm(e.target.value)}
                     >
