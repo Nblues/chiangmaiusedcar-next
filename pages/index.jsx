@@ -9,6 +9,7 @@ import { readCarStatuses } from '../lib/carStatusStore.js';
 import Link from 'next/link';
 import A11yImage from '../components/A11yImage'; // Static import for LCP
 import { SEO_HOME } from '../config/seo-keywords';
+import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import HomeAboutInline from '../components/HomeAboutInline';
 import HomeSearchSection from '../components/HomeSearchSection';
 import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
@@ -319,6 +320,11 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       <SEO
         title={seoHome.title}
         description={seoHome.description}
+        keywords={[
+          SEO_KEYWORD_MAP.home.primary,
+          ...SEO_KEYWORD_MAP.home.secondary,
+          ...SEO_KEYWORD_MAP.home.longTail.slice(0, 5),
+        ]}
         url="/"
         image={homeOgImage}
         type="website"
@@ -354,10 +360,10 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         <div className="hero-card max-w-6xl w-[95%] mx-auto my-3 md:my-6 flex flex-col md:flex-row items-center gap-4 md:gap-6 px-4 py-5 md:px-8 md:py-8 rounded-xl md:rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-xl sm:text-2xl md:text-4xl font-extrabold text-primary mb-1 md:mb-2 font-prompt">
-              รถยนต์มือสองเชียงใหม่
+              รถมือสองเชียงใหม่ ฟรีดาวน์ 0%
             </h1>
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-orange-700 mb-2 md:mb-4 font-prompt">
-              คุณภาพระดับพรีเมียม
+              รถบ้านมือเดียว คุณภาพระดับพรีเมียม
             </h2>
             <p className="text-sm md:text-base leading-snug md:leading-relaxed text-gray-900 font-prompt">
               ครูหนึ่งรถสวย ศูนย์รวมรถบ้านคุณภาพดีในภาคเหนือ คัดเฉพาะรถมือเดียว ฟรีดาวน์ ผ่อนถูก
