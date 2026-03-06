@@ -148,6 +148,7 @@ function buildHomeItemListJsonLd(inputCars) {
 export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonLd }) {
   const seoHome = SEO_HOME;
   const homeFaqSchema = useMemo(() => buildFaqPageJsonLd({ url: '/', faqs: HOME_FAQS }), []);
+  const [heroImageReady, setHeroImageReady] = useState(false);
 
   // Helper function to get brand count with fallback to sample data
   const getBrandCount = useCallback(
@@ -189,6 +190,15 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   // Memoize expensive computations
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
 
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    const heroImage = document.querySelector('header img[fetchpriority="high"]');
+    if (heroImage && heroImage.complete) {
+      setHeroImageReady(true);
+    }
+  }, []);
+
   // Load Facebook reviews only when the user is near that section.
   // This avoids loading a heavy client-only chunk during the initial render (helps LCP).
   useEffect(() => {
@@ -225,6 +235,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (showSocialShare) return;
+    if (!heroImageReady) return;
 
     let done = false;
     let idleId;
@@ -242,7 +253,9 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       cleanupListeners();
     };
 
-    const onInteraction = () => enable();
+    const onInteraction = () => {
+      window.setTimeout(enable, 50);
+    };
     const events = ['scroll', 'click', 'touchstart', 'keydown'];
 
     const cleanupListeners = () => {
@@ -256,13 +269,13 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
     }
 
     if ('requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(enable, { timeout: 3500 });
+      idleId = window.requestIdleCallback(enable, { timeout: 5000 });
     } else {
-      timeoutId = window.setTimeout(enable, 2000);
+      timeoutId = window.setTimeout(enable, 3000);
     }
 
-    // Fallback safety net: always show within 8s even if idle callback doesn't fire.
-    const hardTimeoutId = window.setTimeout(enable, 8000);
+    // Fallback safety net: always show eventually even if idle callback doesn't fire.
+    const hardTimeoutId = window.setTimeout(enable, 10000);
 
     return () => {
       cleanupListeners();
@@ -270,12 +283,13 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       if (timeoutId) window.clearTimeout(timeoutId);
       window.clearTimeout(hardTimeoutId);
     };
-  }, [showSocialShare]);
+  }, [heroImageReady, showSocialShare]);
 
   // Show deferred content after the browser is idle, or earlier if the user interacts.
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (showDeferredSections) return;
+    if (!heroImageReady) return;
 
     let done = false;
     let idleId;
@@ -289,7 +303,9 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       cleanupListeners();
     };
 
-    const onInteraction = () => enable();
+    const onInteraction = () => {
+      window.setTimeout(enable, 75);
+    };
     const events = ['scroll', 'click', 'touchstart', 'keydown'];
 
     const cleanupListeners = () => {
@@ -303,13 +319,13 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
     }
 
     if ('requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(enable, { timeout: 1500 });
+      idleId = window.requestIdleCallback(enable, { timeout: 4000 });
     } else {
-      timeoutId = window.setTimeout(enable, 800);
+      timeoutId = window.setTimeout(enable, 2500);
     }
 
-    // Safety net: always show within a few seconds.
-    hardTimeoutId = window.setTimeout(enable, 4000);
+    // Safety net: always show once above-the-fold content has had time to settle.
+    hardTimeoutId = window.setTimeout(enable, 7000);
 
     return () => {
       cleanupListeners();
@@ -317,7 +333,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       if (timeoutId) window.clearTimeout(timeoutId);
       if (hardTimeoutId) window.clearTimeout(hardTimeoutId);
     };
-  }, [showDeferredSections]);
+  }, [heroImageReady, showDeferredSections]);
 
   return (
     <div>
@@ -362,6 +378,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             priority
             decoding="sync"
             fetchPriority="high"
+            onLoad={() => setHeroImageReady(true)}
             optimizeImage={false}
             aspectRatio="1400/467"
           />
