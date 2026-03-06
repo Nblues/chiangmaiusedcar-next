@@ -270,9 +270,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
     if (showDeferredSections) return;
 
     let done = false;
-    let idleId;
-    let timeoutId;
-    let hardTimeoutId;
 
     const enable = () => {
       if (done) return;
