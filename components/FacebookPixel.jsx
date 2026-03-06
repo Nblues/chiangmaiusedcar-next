@@ -73,7 +73,14 @@ export default function FacebookPixel() {
     const interactionEvents = ['scroll', 'click', 'touchstart', 'mousemove', 'keydown'];
 
     const handleInteraction = () => {
-      loadFacebookPixel();
+      // Defer pixel load to prevent INP blocking on first interaction
+      setTimeout(() => {
+        if (typeof window !== 'undefined' && window.requestIdleCallback) {
+          window.requestIdleCallback(loadFacebookPixel, { timeout: 2000 });
+        } else {
+          loadFacebookPixel();
+        }
+      }, 100);
       // ลบ event listeners หลังจากโหลดแล้ว
       interactionEvents.forEach(event => {
         window.removeEventListener(event, handleInteraction);

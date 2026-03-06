@@ -116,7 +116,7 @@ export default function MobileBottomNav() {
               <li key={item.href} className="flex-1">
                 <Link
                   href={item.href}
-                  className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${
+                  className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-all active:scale-95 active:bg-gray-50 rounded-lg ${
                     active ? 'text-primary' : 'text-gray-500 hover:text-primary'
                   }`}
                 >

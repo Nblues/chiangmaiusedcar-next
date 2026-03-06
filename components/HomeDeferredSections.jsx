@@ -115,7 +115,16 @@ export default function HomeDeferredSections({
       cleanupListeners();
     };
 
-    const onInteraction = () => enable();
+    const onInteraction = () => {
+      // Defer to prevent blocking the interaction's Next Paint (INP)
+      setTimeout(() => {
+        if (typeof window !== 'undefined' && window.requestIdleCallback) {
+          window.requestIdleCallback(enable, { timeout: 2000 });
+        } else {
+          enable();
+        }
+      }, 50);
+    };
     const events = ['scroll', 'click', 'touchstart', 'keydown'];
 
     const cleanupListeners = () => {
