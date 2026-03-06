@@ -1783,9 +1783,10 @@ export async function getStaticPaths() {
 
     const paths = safeCars
       .filter(car => car?.handle)
-      .map(car => ({
-        params: { handle: car.handle },
-      }));
+      .map(car => {
+        const prettyHandle = createPrettyUrl(car.handle) || car.handle;
+        return { params: { handle: prettyHandle } };
+      });
 
     return {
       paths,
@@ -1860,10 +1861,10 @@ export async function getStaticProps({ params }) {
 
     // Redirect ไป canonical URL ถ้าไม่ตรง
     const canonicalPretty = createPrettyUrl(car.handle) || car.handle;
-    if ((requestedPrettyRaw || requestedPretty || requestedRaw) !== canonicalPretty) {
+    if (requestedRaw !== canonicalPretty && requested !== canonicalPretty) {
       return {
         redirect: {
-          destination: `/car/${canonicalPretty}`,
+          destination: `/car/${encodeURIComponent(canonicalPretty)}`,
           permanent: true,
         },
       };
