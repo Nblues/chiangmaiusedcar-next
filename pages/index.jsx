@@ -10,7 +10,6 @@ import Link from 'next/link';
 import A11yImage from '../components/A11yImage'; // Static import for LCP
 import { SEO_HOME } from '../config/seo-keywords';
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
-import HomeAboutInline from '../components/HomeAboutInline';
 import HomeSearchSection from '../components/HomeSearchSection';
 import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
 import { COMMON_OFFER_EXTENSIONS } from '../config/business';
@@ -55,6 +54,10 @@ const SocialShareButtons = dynamic(() => import('../components/SocialShareButton
 });
 
 // Split large below-the-fold reviews section into a separate chunk
+const HomeAboutInline = dynamic(() => import('../components/HomeAboutInline'), {
+  ssr: false,
+  loading: () => <div className="min-h-[250px] w-full" aria-hidden="true" />,
+});
 const FacebookReviewsSection = dynamic(() => import('../components/FacebookReviewsSection'), {
   ssr: false,
   loading: () => <div className="min-h-[400px] w-full" aria-hidden="true" />,
@@ -471,15 +474,18 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
               </Link>
             </div>
           </main>
-          {/* FAQ Section (extracted) */}
-          <HomeFaqSection />
+          
+          <div className="content-visibility-auto pb-8 md:pb-12" style={{ contentVisibility: 'auto', containIntrinsicSize: '600px' }}>
+            {/* FAQ Section (extracted) */}
+            <HomeFaqSection />
 
-          {/* รีวิว Facebook 9 รีวิวจริง (โหลดเมื่อใกล้ viewport) */}
-          <div id="fb-reviews-anchor" className="h-px w-full" aria-hidden="true" />
-          {showFbReviews && <FacebookReviewsSection />}
+            {/* รีวิว Facebook 9 รีวิวจริง (โหลดเมื่อใกล้ viewport) */}
+            <div id="fb-reviews-anchor" className="h-px w-full" aria-hidden="true" />
+            {showFbReviews && <FacebookReviewsSection />}
 
-          {/* Why Choose Us Section - 2025 Modern Design (extracted) */}
-          <HomeWhyChooseSection getBrandCount={getBrandCount} />
+            {/* Why Choose Us Section - 2025 Modern Design (extracted) */}
+            <HomeWhyChooseSection getBrandCount={getBrandCount} />
+          </div>
 
           {/* Social Share Buttons - Fixed Position */}
           {showSocialShare && (
