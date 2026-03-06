@@ -351,40 +351,40 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       <Breadcrumb />
 
       <section id="hero" className="relative">
-        <div className="hero-card max-w-6xl w-[95%] mx-auto my-6 flex flex-col md:flex-row items-center gap-6 px-8 py-8 rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
-          <div className="flex-1">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2 font-prompt">
+        <div className="hero-card max-w-6xl w-[95%] mx-auto my-3 md:my-6 flex flex-col md:flex-row items-center gap-4 md:gap-6 px-4 py-5 md:px-8 md:py-8 rounded-xl md:rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
+          <div className="flex-1 text-center md:text-left">
+            <h1 className="text-xl sm:text-2xl md:text-4xl font-extrabold text-primary mb-1 md:mb-2 font-prompt">
               รถยนต์มือสองเชียงใหม่
             </h1>
-            <h2 className="text-xl md:text-2xl font-bold text-orange-700 mb-4 font-prompt">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-orange-700 mb-2 md:mb-4 font-prompt">
               คุณภาพระดับพรีเมียม
             </h2>
-            <p className="text-base leading-relaxed text-gray-900 font-prompt">
-              ครูหนึ่งรถสวย แพลตฟอร์มออนไลน์ศูนย์รวมรถบ้านคุณภาพดีในภาคเหนือ คัดเฉพาะรถมือเดียว
-              ตรวจสอบประวัติทุกคัน ฟรีดาวน์ ผ่อนถูก รับประกันหลังการขาย 1 ปี จัดส่งฟรีทั่วประเทศ
+            <p className="text-sm md:text-base leading-snug md:leading-relaxed text-gray-900 font-prompt">
+              ครูหนึ่งรถสวย ศูนย์รวมรถบ้านคุณภาพดีในภาคเหนือ คัดเฉพาะรถมือเดียว ฟรีดาวน์ ผ่อนถูก
+              รับประกัน 1 ปี จัดส่งฟรีทั่วประเทศ
             </p>
           </div>
-          <div className="flex flex-col gap-4 w-full md:w-auto md:min-w-[200px]">
+          <div className="flex flex-col sm:flex-row md:flex-col gap-2 md:gap-4 w-full md:w-auto md:min-w-[200px]">
             <Link
               href="/all-cars"
               prefetch={false}
-              className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base bg-accent-800 text-white hover:bg-accent-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95]"
+              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-accent-800 text-white hover:bg-accent-900 transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
             >
               เลือกซื้อรถยนต์
             </Link>
             <Link
               href="/used-cars-chiang-mai"
               prefetch={false}
-              className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base border-2 border-orange-600 text-orange-700 hover:bg-orange-600 hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95]"
+              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-orange-600 text-orange-700 hover:bg-orange-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
             >
-              ฝากขายได้ราคาดี
+              ฝากขายรถ
             </Link>
             <Link
               href="/sell-car"
               prefetch={false}
-              className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95]"
+              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
             >
-              ขายด่วนรับเงินเลย!
+              ขายด่วน!
             </Link>
           </div>
         </div>

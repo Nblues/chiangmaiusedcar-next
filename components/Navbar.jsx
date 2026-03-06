@@ -28,14 +28,14 @@ export default function Navbar() {
 
   return (
     <nav
-      className="bg-white shadow-lg sticky top-0 z-60 border-b-2 border-accent pt-[env(safe-area-inset-top)]"
+      className="bg-white shadow-md md:shadow-lg sticky top-0 z-60 border-b md:border-b-2 border-accent pt-[env(safe-area-inset-top)]"
       aria-label="เมนูหลัก"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-14 md:h-16">
           {/* LOGO */}
-          <Link href="/" prefetch={false} className="flex items-center space-x-3">
-            <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-gold shadow-lg">
+          <Link href="/" prefetch={false} className="flex items-center space-x-2 md:space-x-3">
+            <div className="relative w-9 h-9 md:w-12 md:h-12 rounded-full overflow-hidden border md:border-2 border-gold shadow-sm md:shadow-lg">
               <picture>
                 <source srcSet="/logo/logo_main_optimized.webp" type="image/webp" />
                 <img
@@ -51,7 +51,9 @@ export default function Navbar() {
                 />
               </picture>
             </div>
-            <div className="text-2xl font-bold text-primary font-prompt">ครูหนึ่งรถสวย</div>
+            <div className="text-xl md:text-2xl font-bold text-primary font-prompt">
+              ครูหนึ่งรถสวย
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -76,9 +78,9 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-white hover:bg-primary focus:outline-none font-prompt font-semibold tracking-wide"
+            className="md:hidden inline-flex items-center justify-center p-1.5 rounded-md text-primary hover:text-white hover:bg-primary focus:outline-none font-prompt font-semibold tracking-wide"
             style={{
-              fontSize: '16px',
+              fontSize: '14px',
               fontWeight: '600',
               letterSpacing: '0.025em',
               WebkitFontSmoothing: 'antialiased',
@@ -88,7 +90,27 @@ export default function Navbar() {
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav-menu"
           >
-            {mobileOpen ? 'ปิด' : 'เมนู'}
+            <span className="flex items-center gap-1">
+              {mobileOpen ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              )}
+            </span>
           </button>
         </div>
 
