@@ -4,14 +4,12 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import SEO from '../components/SEO.jsx';
 import Head from 'next/head';
-import CarCard from '../components/CarCard';
 import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
 import { readCarStatuses } from '../lib/carStatusStore.js';
 import Link from 'next/link';
 import A11yImage from '../components/A11yImage'; // Static import for LCP
 import { SEO_HOME } from '../config/seo-keywords';
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
-import HomeSearchSection from '../components/HomeSearchSection';
 import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
 import { COMMON_OFFER_EXTENSIONS } from '../config/business';
 import { buildFaqPageJsonLd } from '../lib/seo/faq';
@@ -46,6 +44,12 @@ const HOME_FAQS = [
 ];
 
 // Lazy load non-critical components to reduce TBT
+const CarCard = dynamic(() => import('../components/CarCard'), {
+  loading: () => <div className="h-[300px] w-full bg-gray-100 animate-pulse rounded-lg"></div>,
+});
+const HomeSearchSection = dynamic(() => import('../components/HomeSearchSection'), {
+  loading: () => <div className="h-[200px] w-full bg-gray-100 animate-pulse rounded-lg"></div>,
+});
 const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
   loading: () => null,
 });
