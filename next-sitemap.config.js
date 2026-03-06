@@ -1,3 +1,17 @@
+function createPrettyUrl(handle) {
+  if (!handle) return '';
+  const safeDecode = value => { try { return decodeURIComponent(String(value)); } catch { return String(value); } };
+  let cleanHandle = safeDecode(handle);
+  const thaiWords = ['ปี', 'รุ่น', 'ปีที่', 'ปีคศ', 'เกียร์'];
+  thaiWords.forEach(word => {
+    cleanHandle = cleanHandle.replace(new RegExp(`-${word}-`, 'g'), '-');
+    cleanHandle = cleanHandle.replace(new RegExp(`-${encodeURIComponent(word)}-`, 'gi'), '-');
+  });
+  cleanHandle = cleanHandle.replace(/[\u0E00-\u0E7F]+/g, '');
+  cleanHandle = cleanHandle.replace(/[\s_]+/g, '-').replace(/[^a-zA-Z0-9-]+/g, '-').replace(/-+/g, '-').replace(/^-+/, '').replace(/-+$/, '');
+  return cleanHandle.toLowerCase();
+}
+
 module.exports = {
   // When building on Windows we emit Next build artifacts to a different distDir
   // for stability; next-sitemap must read manifests from the same directory.
@@ -281,8 +295,9 @@ module.exports = {
         if (car.handle) {
           // Bing 2025: Use real updatedAt from Shopify for accurate freshness signals
           const lastModified = car.updatedAt || new Date().toISOString();
+          const cleanCarUrl = createPrettyUrl(car.handle) || car.handle;
           paths.push(
-            await config.transform(config, `/car/${car.handle}`, {
+            await config.transform(config, `/car/${cleanCarUrl}`, {
               lastmod: lastModified,
             })
           );
