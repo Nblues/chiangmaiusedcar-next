@@ -148,7 +148,6 @@ function buildHomeItemListJsonLd(inputCars) {
 export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonLd }) {
   const seoHome = SEO_HOME;
   const homeFaqSchema = useMemo(() => buildFaqPageJsonLd({ url: '/', faqs: HOME_FAQS }), []);
-  const [heroImageReady, setHeroImageReady] = useState(false);
 
   // Helper function to get brand count with fallback to sample data
   const getBrandCount = useCallback(
@@ -190,15 +189,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   // Memoize expensive computations
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
 
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-
-    const heroImage = document.querySelector('header img[fetchpriority="high"]');
-    if (heroImage && heroImage.complete) {
-      setHeroImageReady(true);
-    }
-  }, []);
-
   // Load Facebook reviews only when the user is near that section.
   // This avoids loading a heavy client-only chunk during the initial render (helps LCP).
   useEffect(() => {
@@ -235,7 +225,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (showSocialShare) return;
-    if (!heroImageReady) return;
 
     let done = false;
     let idleId;
@@ -253,9 +242,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       cleanupListeners();
     };
 
-    const onInteraction = () => {
-      window.setTimeout(enable, 50);
-    };
+    const onInteraction = () => enable();
     const events = ['scroll', 'click', 'touchstart', 'keydown'];
 
     const cleanupListeners = () => {
@@ -268,28 +255,19 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       window.addEventListener(ev, onInteraction, { passive: true, once: true });
     }
 
-    if ('requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(enable, { timeout: 5000 });
-    } else {
-      timeoutId = window.setTimeout(enable, 3000);
-    }
-
-    // Fallback safety net: always show eventually even if idle callback doesn't fire.
-    const hardTimeoutId = window.setTimeout(enable, 10000);
+    // Only rely on interaction or a long fallback timeout to prevent blocking LCP paint
+    const hardTimeoutId = window.setTimeout(enable, 8000);
 
     return () => {
       cleanupListeners();
-      if (idleId && 'cancelIdleCallback' in window) window.cancelIdleCallback(idleId);
-      if (timeoutId) window.clearTimeout(timeoutId);
       window.clearTimeout(hardTimeoutId);
     };
-  }, [heroImageReady, showSocialShare]);
+  }, [showSocialShare]);
 
   // Show deferred content after the browser is idle, or earlier if the user interacts.
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (showDeferredSections) return;
-    if (!heroImageReady) return;
 
     let done = false;
     let idleId;
@@ -303,9 +281,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       cleanupListeners();
     };
 
-    const onInteraction = () => {
-      window.setTimeout(enable, 75);
-    };
+    const onInteraction = () => enable();
     const events = ['scroll', 'click', 'touchstart', 'keydown'];
 
     const cleanupListeners = () => {
@@ -318,22 +294,14 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       window.addEventListener(ev, onInteraction, { passive: true, once: true });
     }
 
-    if ('requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(enable, { timeout: 4000 });
-    } else {
-      timeoutId = window.setTimeout(enable, 2500);
-    }
-
-    // Safety net: always show once above-the-fold content has had time to settle.
-    hardTimeoutId = window.setTimeout(enable, 7000);
+    // Only rely on interaction or a long fallback timeout to prevent blocking LCP paint
+    const hardTimeoutId = window.setTimeout(enable, 5000);
 
     return () => {
       cleanupListeners();
-      if (idleId && 'cancelIdleCallback' in window) window.cancelIdleCallback(idleId);
-      if (timeoutId) window.clearTimeout(timeoutId);
       if (hardTimeoutId) window.clearTimeout(hardTimeoutId);
     };
-  }, [heroImageReady, showDeferredSections]);
+  }, [showDeferredSections]);
 
   return (
     <div>
@@ -341,6 +309,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         <link
           rel="preload"
           as="image"
+          href="/herobanner/newherobanner-828w.webp"
           imageSrcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
           imageSizes="(max-width: 414px) 414px, (max-width: 1400px) 100vw, 1400px"
           fetchPriority="high"
@@ -367,7 +336,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           {/* LCP Optimized: Native responsive img for critical hero banner */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <A11yImage
-            src="/herobanner/newherobanner-414w.webp"
+            src="/herobanner/newherobanner-828w.webp"
             srcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
             sizes="(max-width: 414px) 414px, (max-width: 1400px) 100vw, 1400px"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
@@ -377,7 +346,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             priority
             decoding="sync"
             fetchPriority="high"
-            onLoad={() => setHeroImageReady(true)}
             optimizeImage={false}
             aspectRatio="1400/467"
           />

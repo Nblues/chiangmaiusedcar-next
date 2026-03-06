@@ -568,16 +568,6 @@ const nextConfig = {
         ],
       },
 
-      // Link preload header for LCP banners
-      {
-        source: '/',
-        headers: [{ key: 'Link', value: '</herobanner/newherobanner-828w.webp>; rel=preload; as=image; fetchpriority=high' }]
-      },
-      {
-        source: '/all-cars',
-        headers: [{ key: 'Link', value: '</herobanner/heroallcars-1024w.webp>; rel=preload; as=image; fetchpriority=high' }]
-      },
-
       // 4) Default API fallback: no-cache + CORS (safe)
       {
         source: '/api/(.*)',
