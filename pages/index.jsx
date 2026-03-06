@@ -341,7 +341,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         <link
           rel="preload"
           as="image"
-          href="/herobanner/newherobanner-828w.webp"
           imageSrcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
           imageSizes="(max-width: 414px) 414px, (max-width: 1400px) 100vw, 1400px"
           fetchPriority="high"
@@ -368,7 +367,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           {/* LCP Optimized: Native responsive img for critical hero banner */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <A11yImage
-            src="/herobanner/newherobanner-828w.webp"
+            src="/herobanner/newherobanner-414w.webp"
             srcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
             sizes="(max-width: 414px) 414px, (max-width: 1400px) 100vw, 1400px"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"

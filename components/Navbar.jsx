@@ -44,7 +44,7 @@ export default function Navbar() {
                   width="48"
                   height="48"
                   className="w-full h-full object-cover scale-125"
-                  loading="eager"
+                  loading="lazy"
                   // eslint-disable-next-line react/no-unknown-property
                   fetchpriority="low"
                   decoding="async"
