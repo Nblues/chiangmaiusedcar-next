@@ -50,22 +50,22 @@ const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
   loading: () => null,
 });
 const SocialShareButtons = dynamic(() => import('../components/SocialShareButtons'), {
-  /* ssr: false, removed for INP */
+  ssr: false,
   loading: () => null,
 });
 
 // Split large below-the-fold reviews section into a separate chunk
 const FacebookReviewsSection = dynamic(() => import('../components/FacebookReviewsSection'), {
-  /* ssr: false, removed for INP */
-  loading: () => null,
+  ssr: false,
+  loading: () => <div className="min-h-[400px] w-full" aria-hidden="true" />,
 });
 const HomeWhyChooseSection = dynamic(() => import('../components/HomeWhyChooseSection'), {
-  /* ssr: false, removed for INP */
-  loading: () => null,
+  ssr: false,
+  loading: () => <div className="min-h-[500px] w-full" aria-hidden="true" />,
 });
 const HomeFaqSection = dynamic(() => import('../components/HomeFaqSection'), {
-  /* ssr: false, removed for INP */
-  loading: () => null,
+  ssr: false,
+  loading: () => <div className="min-h-[600px] w-full" aria-hidden="true" />,
 });
 
 function buildHomeItemListJsonLd(inputCars) {
@@ -349,6 +349,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             decoding="sync"
             fetchPriority="high"
             optimizeImage={false}
+            aspectRatio="1400/467"
           />
         </div>
       </header>
