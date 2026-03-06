@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import A11yImage from '../components/A11yImage';
 import SEO from '../components/SEO';
 import Head from 'next/head';
+import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 
 export default function About() {
+  const seoAbout = SEO_KEYWORD_MAP.about;
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const features = [
@@ -39,6 +41,7 @@ export default function About() {
         title="ครูหนึ่งรถสวย ศูนย์รวมรถยนต์มือสองคุณภาพดี - เกี่ยวกับเรา | Facebook 1M+"
         description="ครูหนึ่งรถสวย แพลตฟอร์มออนไลน์ศูนย์รวมรถบ้านคุณภาพดีในภาคเหนือ ตรวจสภาพครบถ้วน เช็คประวัติรถ ประสบการณ์ 10+ ปี Facebook 1M+ TikTok 150K+ รับประกัน 1 ปี โทร 094-064-9018"
         url="/about"
+        keywords={[seoAbout.primary, ...seoAbout.secondary, ...seoAbout.longTail.slice(0, 5)]}
         image="https://www.chiangmaiusedcar.com/herobanner/bannerabout-1400w.webp"
         type="profile"
         pageType="about"
@@ -512,3 +515,4 @@ export async function getStaticProps() {
     revalidate: 1800, // 30 minutes
   };
 }
+

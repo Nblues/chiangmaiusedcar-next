@@ -305,6 +305,7 @@ export default function AllCars({
       <SEO
         title={`${seoAllCars.titleBase}${safeTotalPages > 1 && safePage > 1 ? ` หน้า ${safePage}` : ''} | ครูหนึ่งรถสวย`}
         description={`ดูรถยนต์มือสองคุณภาพดีทั้งหมด ${Number.isFinite(totalCount) ? totalCount : 0} คัน ในเชียงใหม่และภาคเหนือ คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda นัดหมายดูรถโทร 094-064-9018`}
+        keywords={[seoAllCars.primary, ...seoAllCars.secondary, ...seoAllCars.longTail.slice(0, 5)]}
         url={seoPath}
         image={`https://www.chiangmaiusedcar.com/api/og?src=${encodeURIComponent(
           '/herobanner/heroallcars-1400w.webp'
@@ -416,7 +417,7 @@ export default function AllCars({
                     '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
                 }}
               >
-                รถมือสองเชียงใหม่ คุณภาพดีทั้งหมด
+                {seoAllCars.h1 || 'รถมือสองเชียงใหม่ คัดสรรคุณภาพ'}
               </h1>
               <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap">
                 <p

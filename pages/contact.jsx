@@ -83,6 +83,7 @@ export default function Contact() {
       <SEO
         title={seoContact.title}
         description={seoContact.description}
+        keywords={[seoContact.primary, ...seoContact.secondary, ...seoContact.longTail.slice(0, 5)]}
         url="/contact"
         image="https://www.chiangmaiusedcar.com/herobanner/contact.webp"
         pageType="contact"

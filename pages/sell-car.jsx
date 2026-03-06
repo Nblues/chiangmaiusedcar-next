@@ -23,6 +23,7 @@ export default function SellCar() {
       <SEO
         title={seoSellCar.title}
         description={seoSellCar.description}
+        keywords={[seoSellCar.primary, ...seoSellCar.secondary, ...seoSellCar.longTail.slice(0, 5)]}
         url="/sell-car"
         image={pageImage}
         structuredData={{

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
+import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
 
 export default function PaymentCalculator() {
+  const seoPayment = SEO_KEYWORD_MAP.paymentCalculator;
   const router = useRouter();
   const [carPrice, setCarPrice] = useState('');
   const [downPayment, setDownPayment] = useState('');
@@ -226,6 +228,7 @@ export default function PaymentCalculator() {
         title="คำนวณค่างวด รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย"
         description="คำนวณค่างวด รถมือสองเชียงใหม่ เครื่องมือคำนวณค่าผ่อนรายเดือน ดอกเบี้ย และยอดชำระรวม | ครูหนึ่งรถสวย"
         url="/payment-calculator"
+        keywords={[seoPayment.primary, ...seoPayment.secondary, ...seoPayment.longTail.slice(0, 5)]}
         image="https://www.chiangmaiusedcar.com/herobanner/paymentcalculator.webp"
         pageType="payment-calculator"
       />
@@ -520,7 +523,7 @@ export default function PaymentCalculator() {
                   <button
                     type="button"
                     onClick={() => calculatePayment()}
-                    className="w-full text-sm md:text-base py-3 md:py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 font-prompt disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
+                    className="w-full text-sm md:text-base py-3 md:py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 font-prompt disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.95]"
                     disabled={!carPrice}
                   >
                     คำนวนค่างวด
@@ -531,7 +534,7 @@ export default function PaymentCalculator() {
                     <button
                       type="button"
                       onClick={() => router.back()}
-                      className="w-full mt-2 md:mt-4 px-4 py-2 md:py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl transition-colors font-prompt text-sm md:text-base"
+                      className="w-full mt-2 md:mt-4 px-4 py-2 md:py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl transition-all duration-300 active:scale-[0.95] font-prompt text-sm md:text-base"
                     >
                       ← กลับไปหน้ารายละเอียดรถ
                     </button>
@@ -739,14 +742,14 @@ export default function PaymentCalculator() {
               href="https://lin.ee/8ugfzstD"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-primary hover:bg-primary/90 text-white px-6 md:px-8 py-3 rounded-2xl font-semibold transition-all duration-300 font-prompt text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-primary hover:bg-primary/90 text-white px-6 md:px-8 py-3 rounded-2xl font-semibold transition-all duration-300 font-prompt text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95]"
               aria-label="แชท LINE ครูหนึ่งรถสวย"
             >
               สอบถามผ่าน LINE
             </a>
             <a
               href="tel:094-0649018"
-              className="bg-white text-orange-700 hover:bg-gray-50 border-2 border-accent hover:border-accent/80 px-6 md:px-8 py-3 rounded-2xl font-semibold transition-all duration-300 font-prompt text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-white text-orange-700 hover:bg-gray-50 border-2 border-accent hover:border-accent/80 px-6 md:px-8 py-3 rounded-2xl font-semibold transition-all duration-300 font-prompt text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95]"
               aria-label="โทร 094-064-9018"
             >
               โทร 094-064-9018
@@ -764,3 +767,4 @@ export async function getServerSideProps() {
     props: {},
   };
 }
+

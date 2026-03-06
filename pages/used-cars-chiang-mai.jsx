@@ -221,6 +221,8 @@ export async function getStaticProps() {
   };
 }
 
+import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
+const seoHome = SEO_KEYWORD_MAP.home;
 export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, shopifyError }) {
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
   const featuredCars = useMemo(() => safeCars.slice(0, 8), [safeCars]);
@@ -339,16 +341,7 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
         image={homeOgImage}
         type="website"
         pageType="home"
-        keywords={[
-          'รถมือสองเชียงใหม่',
-          'รถบ้านมือสองเชียงใหม่',
-          'ฝากขายรถเชียงใหม่',
-          'ฝากขายรถลำพูน',
-          'รับฝากขายรถ',
-          'ขายรถบ้านเชียงใหม่',
-          'เต็นท์รถมือสองเชียงใหม่',
-          'ฝากขายรถไม่ต้องเอารถมาจอด',
-        ]}
+        keywords={[seoHome.primary, ...seoHome.secondary, ...seoHome.longTail.slice(0, 5)]}
         breadcrumbs={[
           { name: 'หน้าแรก', url: '/' },
           { name: 'ซื้อ-ขาย รถบ้านมือสอง เชียงใหม่-ลำพูน', url: '/used-cars-chiang-mai' },
