@@ -95,7 +95,7 @@ const SocialShareButtons = ({
             {/* LINE */}
             <button
               onClick={() => handleShare('line')}
-              className="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white w-10 h-10 md:w-auto md:px-4 md:py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+              className="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white w-12 h-12 md:w-auto md:px-4 md:py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
               title="แชร์ทาง LINE"
             >
               <svg className="w-5 h-5 md:mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -107,7 +107,7 @@ const SocialShareButtons = ({
             {/* Facebook */}
             <button
               onClick={() => handleShare('facebook')}
-              className="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white w-10 h-10 md:h-auto md:w-auto md:px-4 md:py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+              className="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white w-12 h-12 md:h-auto md:w-auto md:px-4 md:py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
               title="แชร์ทาง Facebook"
             >
               <svg className="w-5 h-5 md:mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -119,7 +119,7 @@ const SocialShareButtons = ({
             {/* Copy Link */}
             <button
               onClick={() => handleShare('copy')}
-              className="flex items-center justify-center bg-gray-600 hover:bg-gray-700 text-white w-10 h-10 md:h-auto md:w-auto md:px-4 md:py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+              className="flex items-center justify-center bg-gray-600 hover:bg-gray-700 text-white w-12 h-12 md:h-auto md:w-auto md:px-4 md:py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
               title="คัดลอกลิงก์"
             >
               <svg

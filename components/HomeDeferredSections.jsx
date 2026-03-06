@@ -274,7 +274,7 @@ export default function HomeDeferredSections({
               </p>
               <a
                 href="tel:0940649018"
-                className="flex w-fit mx-auto items-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-xl transition-all duration-300 hover:shadow-lg text-base sm:text-lg"
+                className="flex w-fit mx-auto items-center gap-4 bg-primary hover:bg-primary/90 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-xl transition-all duration-300 hover:shadow-lg text-base sm:text-lg"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -378,42 +378,42 @@ export default function HomeDeferredSections({
                 <Link
                   href="/all-cars?price=0-100000"
                   prefetch={false}
-                  className="text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
+                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
                   ต่ำกว่า 1 แสน ({'< 100K'})
                 </Link>
                 <Link
                   href="/all-cars?price=100000-200000"
                   prefetch={false}
-                  className="text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
+                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
                   1-2 แสน (100K-200K)
                 </Link>
                 <Link
                   href="/all-cars?price=200000-300000"
                   prefetch={false}
-                  className="text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
+                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
                   2-3 แสน (200K-300K)
                 </Link>
                 <Link
                   href="/all-cars?price=400000-500000"
                   prefetch={false}
-                  className="text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
+                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
                   4-5 แสน (400K-500K)
                 </Link>
                 <Link
                   href="/all-cars?price=600000-700000"
                   prefetch={false}
-                  className="text-center p-3 bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
+                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
                   6-7 แสน (600K-700K)
                 </Link>
                 <Link
                   href="/all-cars?price=700000"
                   prefetch={false}
-                  className="text-center p-3 bg-white border-2 border-accent rounded-xl hover:bg-accent-800 hover:border-accent-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-accent-800 hover:text-white"
+                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-accent rounded-xl hover:bg-accent-800 hover:border-accent-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-accent-800 hover:text-white"
                 >
                   7 แสนขึ้นไป ({'> 700K'})
                 </Link>
@@ -451,13 +451,13 @@ export default function HomeDeferredSections({
                     href="https://lin.ee/8ugfzstD"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+                    className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-\[48px\] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
                   >
                     <span>ติดต่อสอบถาม</span>
                   </a>
                 </div>
               ) : (
-                <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
+                <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-4 lg:gap-4 xl:gap-6">
                   {safeCars.slice(0, 8).map((car, index) => {
                     const mergedCar = mergeSpecs(car, null);
                     return <CarCard key={car.id} car={mergedCar} priority={index < 2} />;
@@ -736,11 +736,11 @@ export default function HomeDeferredSections({
             </div>
 
             {/* Brand Grid - Ultra Glass Design */}
-            <div className="relative z-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-4 lg:gap-6 mb-6 md:mb-8">
+            <div className="relative z-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-4 lg:gap-6 mb-6 md:mb-8">
               <Link
                 href="/all-cars?brand=toyota"
                 prefetch={false}
-                className="group relative backdrop-blur-2xl bg-white/20 rounded-xl md:rounded-3xl p-3 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
+                className="group relative backdrop-blur-2xl bg-white/20 rounded-xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
                 style={{
                   boxShadow:
                     '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
@@ -915,7 +915,7 @@ export default function HomeDeferredSections({
             </div>
 
             {/* Service Links - Ultra Modern 2025 Neomorphic Glass Design */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 md:gap-4 px-2 md:px-0">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 md:gap-4 px-2 md:px-0">
               <Link
                 href="/contact"
                 className="group relative backdrop-blur-xl bg-white/85 hover:bg-white/90 text-primary font-semibold text-xs md:text-sm py-3 md:py-5 px-2 md:px-4 rounded-xl md:rounded-3xl text-center transition-all duration-700 hover:scale-[1.02] active:scale-95 overflow-hidden font-prompt shadow-[4px_4px_8px_rgba(163,177,198,0.3),-2px_-2px_6px_rgba(255,255,255,0.7)] hover:shadow-[6px_6px_12px_rgba(163,177,198,0.4),-3px_-3px_8px_rgba(255,255,255,0.8),inset_1px_1px_2px_rgba(26,35,126,0.08)] border border-white/60"
@@ -923,7 +923,7 @@ export default function HomeDeferredSections({
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
                   <svg
                     className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
                     fill="none"
@@ -950,7 +950,7 @@ export default function HomeDeferredSections({
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
                   <svg
                     className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
                     fill="none"
@@ -977,7 +977,7 @@ export default function HomeDeferredSections({
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,152,0,0.2),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
                   <svg
                     className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
                     fill="none"
@@ -1005,7 +1005,7 @@ export default function HomeDeferredSections({
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
                   <svg
                     className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
                     fill="none"
@@ -1032,7 +1032,7 @@ export default function HomeDeferredSections({
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
                   <svg
                     className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
                     fill="none"
@@ -1060,7 +1060,7 @@ export default function HomeDeferredSections({
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
                   <svg
                     className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
                     fill="none"

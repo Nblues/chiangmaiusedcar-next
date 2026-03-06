@@ -441,7 +441,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                         href="https://lin.ee/8ugfzstD"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+                        className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-[48px] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
                       >
                         <span>ติดต่อสอบถาม</span>
                       </a>
@@ -474,8 +474,11 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
               </Link>
             </div>
           </main>
-          
-          <div className="content-visibility-auto pb-8 md:pb-12" style={{ contentVisibility: 'auto', containIntrinsicSize: '600px' }}>
+
+          <div
+            className="content-visibility-auto pb-8 md:pb-12"
+            style={{ contentVisibility: 'auto', containIntrinsicSize: '600px' }}
+          >
             {/* FAQ Section (extracted) */}
             <HomeFaqSection />
 
