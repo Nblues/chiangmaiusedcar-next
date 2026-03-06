@@ -398,7 +398,6 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
     <Link
       href={href}
       prefetch={false}
-      aria-label={`ดูรายละเอียด ${car.title || 'รถมือสองเชียงใหม่'}`}
       className={`group block rounded-3xl border border-accent-800/60 bg-white ring-1 ring-black/5 shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-accent-800 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30 motion-reduce:transition-none motion-reduce:hover:transform-none ${className}`}
       onClick={() => {
         try {
@@ -413,6 +412,7 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
         }
       }}
     >
+      <span className="sr-only">ดูรายละเอียด</span>
       <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden">
         <A11yImage
           src={imageUrl}

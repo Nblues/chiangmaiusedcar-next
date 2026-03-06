@@ -41,8 +41,7 @@ export default function Footer() {
 
   return (
     <footer
-      className="bg-gray-900 text-white py-12 mt-16 font-prompt min-h-[600px] sm:min-h-[400px] content-visibility-auto"
-      style={{ contentVisibility: 'auto', containIntrinsicSize: '600px' }}
+      className="bg-gray-900 text-white pt-12 pb-24 md:py-12 mt-16 font-prompt min-h-[600px] sm:min-h-[400px] "
       role="contentinfo"
     >
       {/* Main Footer Content */}

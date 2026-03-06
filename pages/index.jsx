@@ -475,10 +475,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             </div>
           </main>
 
-          <div
-            className="content-visibility-auto pb-8 md:pb-12"
-            style={{ contentVisibility: 'auto', containIntrinsicSize: '600px' }}
-          >
+          <div className="pb-8 md:pb-12">
             {/* FAQ Section (extracted) */}
             <HomeFaqSection />
 
