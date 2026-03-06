@@ -48,6 +48,7 @@ const CarCard = dynamic(() => import('../components/CarCard'), {
   loading: () => <div className="h-[300px] w-full bg-gray-100 animate-pulse rounded-lg"></div>,
 });
 const HomeSearchSection = dynamic(() => import('../components/HomeSearchSection'), {
+  ssr: false,
   loading: () => <div className="h-[200px] w-full bg-gray-100 animate-pulse rounded-lg"></div>,
 });
 const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
@@ -306,16 +307,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
 
   return (
     <div>
-      <Head>
-        <link
-          rel="preload"
-          as="image"
-          href="/herobanner/newherobanner-828w.webp"
-          imageSrcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
-          imageSizes="(max-width: 414px) 414px, (max-width: 1400px) 100vw, 1400px"
-          fetchPriority="high"
-        />
-      </Head>
       <SEO
         title={seoHome.title}
         description={seoHome.description}
