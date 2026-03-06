@@ -20,7 +20,11 @@ export default function Promotion() {
         title={pageTitle}
         description={pageDescription}
         url="/promotion"
-        keywords={[seoPromotion.primary, ...seoPromotion.secondary, ...seoPromotion.longTail.slice(0, 5)]}
+        keywords={[
+          seoPromotion.primary,
+          ...seoPromotion.secondary,
+          ...seoPromotion.longTail.slice(0, 5),
+        ]}
         image={pageImage}
         pageType="promotion"
       />
@@ -595,4 +599,3 @@ export async function getStaticProps() {
     revalidate: 600, // 10 minutes
   };
 }
-

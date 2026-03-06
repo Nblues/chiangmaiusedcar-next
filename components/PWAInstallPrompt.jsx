@@ -207,7 +207,7 @@ const PWAInstallPrompt = () => {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-90 font-prompt">
+    <div className="fixed bottom-[80px] left-4 right-4 md:bottom-4 md:left-auto md:right-4 md:w-96 z-90 font-prompt pb-[env(safe-area-inset-bottom,0px)] md:pb-0">
       <div className="bg-white border border-gray-200 rounded-2xl shadow-2xl p-6 animate-slide-up">
         <div className="flex items-start gap-4">
           <div className="flex-shrink-0">

@@ -294,7 +294,11 @@ export default function CreditCheck() {
       <SEO
         title={seoCreditCheck.title}
         description={seoCreditCheck.description}
-        keywords={[seoCreditCheck.primary, ...seoCreditCheck.secondary, ...seoCreditCheck.longTail.slice(0, 5)]}
+        keywords={[
+          seoCreditCheck.primary,
+          ...seoCreditCheck.secondary,
+          ...seoCreditCheck.longTail.slice(0, 5),
+        ]}
         url="/credit-check"
         image="https://www.chiangmaiusedcar.com/herobanner/outdoorbanner.webp"
         locale="th_TH"

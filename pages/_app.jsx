@@ -25,6 +25,9 @@ const CookieConsent = dynamic(() => import('../components/CookieConsent'), {
   ssr: false,
   loading: () => null,
 });
+const MobileBottomNav = dynamic(() => import('../components/MobileBottomNav'), {
+  ssr: false,
+});
 const FacebookPixel = dynamic(() => import('../components/FacebookPixel'), {
   ssr: false,
   loading: () => null,
@@ -200,9 +203,12 @@ export default function MyApp({ Component, pageProps }) {
           </main>
           <Footer />
           {!isAdminRoute && (
-            <ClientOnly>
-              <CookieConsent />
-            </ClientOnly>
+            <>
+              <MobileBottomNav />
+              <ClientOnly>
+                <CookieConsent />
+              </ClientOnly>
+            </>
           )}
         </div>
       );

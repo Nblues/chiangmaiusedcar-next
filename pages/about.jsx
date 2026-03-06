@@ -515,4 +515,3 @@ export async function getStaticProps() {
     revalidate: 1800, // 30 minutes
   };
 }
-

@@ -88,7 +88,7 @@ const SocialShareButtons = ({
 
   if (position === 'fixed') {
     return (
-      <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-80 flex flex-col items-end space-y-2 md:space-y-3">
+      <div className="fixed bottom-[80px] right-4 md:bottom-6 md:right-6 z-80 flex flex-col items-end space-y-2 md:space-y-3 pb-[env(safe-area-inset-bottom,0px)] md:pb-0">
         {/* Expanded Buttons */}
         {isExpanded && (
           <div className="flex flex-col space-y-2 transform transition-all duration-300 ease-out animate-in slide-in-from-bottom-5">
