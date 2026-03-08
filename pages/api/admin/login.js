@@ -46,6 +46,18 @@ export default async function handler(req, res) {
       });
     }
 
+    // Security Enhancement: Block non-TH login attempts (IP Whitelisting by Country)
+    stage = 'country-check';
+    const country = req.headers['x-vercel-ip-country'] || req.headers['cf-ipcountry'] || '';
+    if (country && country.toUpperCase() !== 'TH') {
+      console.warn(`[Admin Security] Blocked login attempt from non-TH country: ${country}`);
+      // Return generic error to not reveal country blocking
+      return res.status(403).json({
+        success: false,
+        error: 'Access denied from your current region.',
+      });
+    }
+
     stage = 'rate-limit-check';
     const ip = getClientIp(req);
     const limiter = await rateLimit(`admin:login:${ip}`, {
