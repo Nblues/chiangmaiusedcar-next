@@ -184,8 +184,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   const [showFbReviews, setShowFbReviews] = useState(false);
 
   // Defer large below-the-fold sections to reduce initial DOM/style/layout work.
-  // This helps mobile LCP by allowing the browser to paint the hero sooner.
-  const [showDeferredSections, setShowDeferredSections] = useState(false);
+  // (showDeferredSections removed to display content immediately)
 
   // Defer non-critical share widget to reduce long tasks during hydration
   const [showSocialShare, setShowSocialShare] = useState(false);
@@ -232,8 +231,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
     if (showSocialShare) return;
 
     let done = false;
-    let idleId;
-    let timeoutId;
 
     const enable = () => {
       if (done) return;
@@ -268,42 +265,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       window.clearTimeout(hardTimeoutId);
     };
   }, [showSocialShare]);
-
-  // Show deferred content after the browser is idle, or earlier if the user interacts.
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (showDeferredSections) return;
-
-    let done = false;
-
-    const enable = () => {
-      if (done) return;
-      done = true;
-      setShowDeferredSections(true);
-      cleanupListeners();
-    };
-
-    const onInteraction = () => enable();
-    const events = ['scroll', 'click', 'touchstart', 'keydown'];
-
-    const cleanupListeners = () => {
-      for (const ev of events) {
-        window.removeEventListener(ev, onInteraction);
-      }
-    };
-
-    for (const ev of events) {
-      window.addEventListener(ev, onInteraction, { passive: true, once: true });
-    }
-
-    // Only rely on interaction or a long fallback timeout to prevent blocking LCP paint
-    const hardTimeoutId = window.setTimeout(enable, 5000);
-
-    return () => {
-      cleanupListeners();
-      if (hardTimeoutId) window.clearTimeout(hardTimeoutId);
-    };
-  }, [showDeferredSections]);
 
   return (
     <div>
@@ -403,118 +364,113 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         </div>
       </section>
 
-      {showDeferredSections ? (
-        <>
-          {/* Why Choose Us Section - SEO Content (extracted) */}
-          <HomeAboutInline />
+      {/* Removed defer lock to prevent slow spinning */}
+      <>
+        {/* Why Choose Us Section - SEO Content (extracted) */}
+        <HomeAboutInline />
 
-          <main
-            className="max-w-[1400px] mx-auto px-6 md:px-8 lg:px-12 py-16 bg-white font-prompt cv-auto-md"
-            id="recommended-cars"
-          >
-            {/* Search Section (extracted) */}
-            <HomeSearchSection />
+        <main
+          className="max-w-[1400px] mx-auto px-6 md:px-8 lg:px-12 py-16 bg-white font-prompt cv-auto-md"
+          id="recommended-cars"
+        >
+          {/* Search Section (extracted) */}
+          <HomeSearchSection />
 
-            {/* รถแนะนำเข้าใหม่ */}
-            <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-prompt">
-                รถแนะนำเข้าใหม่วันนี้
-              </h2>
-              <p className="text-base text-gray-700 font-prompt leading-relaxed max-w-3xl mx-auto">
-                รถเก๋ง รถกระบะ รถครอบครัว รถอีโค่คาร์ SUV โฟร์วีล{' '}
-                <span className="font-bold text-primary">คัดเฉพาะรถมือเดียว ประวัติใส 100%</span>{' '}
-                คัดสรรมาเพื่อคุณโดยเฉพาะ ผ่านการตรวจสอบอย่างละเอียด เพื่อให้คุณมั่นใจในทุกการเดินทาง
-              </p>
-            </div>
-            {/* Cars grid (standardized layout across pages) */}
-            <div className="-mx-6 md:-mx-8 lg:-mx-12">
-              <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-5 ipadpro:px-3 lg:px-6">
-                <section aria-label="รถเข้าใหม่แนะนำวันนี้">
-                  {safeCars.length === 0 ? (
-                    // Empty state when no cars available
-                    <div className="text-center py-12">
-                      <div className="text-6xl mb-4">🚗</div>
-                      <h3 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">
-                        ขออภัย ยังไม่มีรถให้แสดง
-                      </h3>
-                      <p className="text-gray-500 font-prompt mb-4">
-                        เรากำลังอัปเดตรถใหม่ ติดตามได้ที่ Facebook หรือ LINE
-                      </p>
-                      <a
-                        href="https://lin.ee/8ugfzstD"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-[48px] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
-                      >
-                        <span>ติดต่อสอบถาม</span>
-                      </a>
-                    </div>
-                  ) : (
-                    <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
-                      {safeCars.slice(0, 8).map(car => {
-                        const mergedCar = mergeCarSpecs(car, null);
-                        return <CarCard key={car.id} car={mergedCar} />;
-                      })}
-                    </div>
-                  )}
-                </section>
-              </div>
-            </div>
-            <div className="text-center mt-12">
-              <Link
-                href="/all-cars"
-                className="inline-flex items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
-                aria-label="ดูรถทั้งหมด ครูหนึ่งรถสวย"
-              >
-                <span>ดูรถทั้งหมด</span>
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </Link>
-            </div>
-          </main>
-
-          <div className="pb-8 md:pb-12">
-            {/* FAQ Section (extracted) */}
-            <HomeFaqSection />
-
-            {/* รีวิว Facebook 9 รีวิวจริง (โหลดเมื่อใกล้ viewport) */}
-            <div id="fb-reviews-anchor" className="h-px w-full" aria-hidden="true" />
-            {showFbReviews && <FacebookReviewsSection />}
-
-            {/* Why Choose Us Section - 2025 Modern Design (extracted) */}
-            <HomeWhyChooseSection getBrandCount={getBrandCount} />
+          {/* รถแนะนำเข้าใหม่ */}
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-prompt">
+              รถแนะนำเข้าใหม่วันนี้
+            </h2>
+            <p className="text-base text-gray-700 font-prompt leading-relaxed max-w-3xl mx-auto">
+              รถเก๋ง รถกระบะ รถครอบครัว รถอีโค่คาร์ SUV โฟร์วีล{' '}
+              <span className="font-bold text-primary">คัดเฉพาะรถมือเดียว ประวัติใส 100%</span>{' '}
+              คัดสรรมาเพื่อคุณโดยเฉพาะ ผ่านการตรวจสอบอย่างละเอียด เพื่อให้คุณมั่นใจในทุกการเดินทาง
+            </p>
           </div>
+          {/* Cars grid (standardized layout across pages) */}
+          <div className="-mx-6 md:-mx-8 lg:-mx-12">
+            <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-5 ipadpro:px-3 lg:px-6">
+              <section aria-label="รถเข้าใหม่แนะนำวันนี้">
+                {safeCars.length === 0 ? (
+                  // Empty state when no cars available
+                  <div className="text-center py-12">
+                    <div className="text-6xl mb-4">🚗</div>
+                    <h3 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">
+                      ขออภัย ยังไม่มีรถให้แสดง
+                    </h3>
+                    <p className="text-gray-500 font-prompt mb-4">
+                      เรากำลังอัปเดตรถใหม่ ติดตามได้ที่ Facebook หรือ LINE
+                    </p>
+                    <a
+                      href="https://lin.ee/8ugfzstD"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-[48px] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+                    >
+                      <span>ติดต่อสอบถาม</span>
+                    </a>
+                  </div>
+                ) : (
+                  <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
+                    {safeCars.slice(0, 8).map(car => {
+                      const mergedCar = mergeCarSpecs(car, null);
+                      return <CarCard key={car.id} car={mergedCar} />;
+                    })}
+                  </div>
+                )}
+              </section>
+            </div>
+          </div>
+          <div className="text-center mt-12">
+            <Link
+              href="/all-cars"
+              className="inline-flex items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
+              aria-label="ดูรถทั้งหมด ครูหนึ่งรถสวย"
+            >
+              <span>ดูรถทั้งหมด</span>
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </Link>
+          </div>
+        </main>
 
-          {/* Social Share Buttons - Fixed Position */}
-          {showSocialShare && (
-            <SocialShareButtons
-              url={socialShareUrl}
-              title="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่คุณภาพดี"
-              description="รถมือสองเชียงใหม่คุณภาพดี คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย"
-              position="fixed"
-            />
-          )}
+        <div className="pb-8 md:pb-12">
+          {/* FAQ Section (extracted) */}
+          <HomeFaqSection />
 
-          {/* Defer large JSON-LD parsing until after above-the-fold content */}
-          {homeItemListJsonLd ? (
-            <script
-              type="application/ld+json"
-              // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{ __html: homeItemListJsonLd }}
-            />
-          ) : null}
-        </>
-      ) : (
-        <div className="min-h-[50vh] flex flex-col items-center justify-center bg-gray-50 mt-8 rounded-2xl">
-          <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4"></div>
-          <p className="text-gray-500 font-prompt">กำลังเตรียมข้อมูลรถสวยๆ...</p>
+          {/* รีวิว Facebook 9 รีวิวจริง (โหลดเมื่อใกล้ viewport) */}
+          <div id="fb-reviews-anchor" className="h-px w-full" aria-hidden="true" />
+          {showFbReviews && <FacebookReviewsSection />}
+
+          {/* Why Choose Us Section - 2025 Modern Design (extracted) */}
+          <HomeWhyChooseSection getBrandCount={getBrandCount} />
         </div>
-      )}
+
+        {/* Social Share Buttons - Fixed Position */}
+        {showSocialShare && (
+          <SocialShareButtons
+            url={socialShareUrl}
+            title="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่คุณภาพดี"
+            description="รถมือสองเชียงใหม่คุณภาพดี คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย"
+            position="fixed"
+          />
+        )}
+
+        {/* Defer large JSON-LD parsing until after above-the-fold content */}
+        {homeItemListJsonLd ? (
+          <script
+            type="application/ld+json"
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: homeItemListJsonLd }}
+          />
+        ) : null}
+      </>
+      {/* End main content */}
     </div>
   );
 }
