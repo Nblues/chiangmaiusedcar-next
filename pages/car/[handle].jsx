@@ -955,20 +955,18 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                 heroSwipeRef.current.canceled = true;
               }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <A11yImage
                 ref={heroImageRef}
-                src={optimizeShopifyImage(
-                  safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp'),
-                  1400,
-                  'webp',
-                  80
-                )}
-                srcSet={`${optimizeShopifyImage(safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp'), 800, 'webp', 80)} 800w, ${optimizeShopifyImage(safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp'), 1400, 'webp', 80)} 1400w`}
-                sizes="(max-width: 640px) 100vw, 100vw"
+                src={safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp')}
                 alt={carAlt(car) || safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
-                className="w-full h-full object-cover transition-opacity duration-300"
-                fetchPriority={selectedImageIndex === 0 ? 'high' : 'auto'}
+                fallbackAlt={safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
+                fill
+                className="object-cover transition-opacity duration-300"
+                priority={selectedImageIndex === 0}
+                imageType="gallery"
+                quality={80}
+                fetchpriority={selectedImageIndex === 0 ? 'high' : 'low'}
+                loading={selectedImageIndex === 0 ? 'eager' : 'lazy'}
                 decoding="async"
                 onLoad={() => {
                   setIsHeroLoading(false);
