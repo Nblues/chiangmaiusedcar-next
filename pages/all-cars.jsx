@@ -78,7 +78,14 @@ export default function AllCars({
   const [brandFilter, setBrandFilter] = useState(initialBrandFilter);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [liveStatuses, setLiveStatuses] = useState(null);
+  const [showAllCars, setShowAllCars] = useState(false);
   const heroImgRef = useRef(null);
+
+  useEffect(() => {
+    // Delays rendering below-the-fold cards to free up main thread (better TBT)
+    const timer = setTimeout(() => setShowAllCars(true), 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const img = heroImgRef.current;
@@ -530,6 +537,17 @@ export default function AllCars({
               {/* Cards Grid - standardized layout */}
               <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
                 {currentCars.map((car, index) => {
+                  const isBelowFold = index >= 8;
+
+                  if (isBelowFold && !showAllCars) {
+                    return (
+                      <div
+                        key={`skeleton-${car.id}`}
+                        className="h-[320px] w-full bg-gray-50 animate-pulse rounded-lg border border-gray-100"
+                      ></div>
+                    );
+                  }
+
                   return (
                     <CarCard
                       key={car.id}
