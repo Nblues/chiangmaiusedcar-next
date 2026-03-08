@@ -125,7 +125,10 @@ module.exports = {
         crawlDelay: 3,
       },
     ],
-    additionalSitemaps: ['https://www.chiangmaiusedcar.com/sitemap-images.xml'],
+    additionalSitemaps: [
+      'https://www.chiangmaiusedcar.com/sitemap-images.xml',
+      'https://www.chiangmaiusedcar.com/server-sitemap-cars.xml'
+    ],
     // Add host directive for consistency
     host: 'www.chiangmaiusedcar.com',
     // 2025 enhancement: crawl delay for different bots
@@ -198,124 +201,7 @@ module.exports = {
       paths.push(await config.transform(config, page.path, page));
     }
 
-    // Dynamic car URLs (if cars data is available)
-    try {
-      // Use ESM-compatible dynamic import to load Shopify helper in Node 20
-      const { getAllCars } = await import('./lib/shopify.mjs');
-      const cars = await getAllCars();
-
-      const carsPerPage = 8; // Must match pages/all-cars.jsx
-      const totalPages = Math.ceil((cars?.length || 0) / carsPerPage);
-      const lastModifiedAllCars = (() => {
-        try {
-          let latestTs = 0;
-          for (const car of cars || []) {
-            const ts = car?.updatedAt ? new Date(car.updatedAt).getTime() : 0;
-            if (Number.isFinite(ts) && ts > latestTs) latestTs = ts;
-          }
-          return latestTs > 0 ? new Date(latestTs).toISOString() : new Date().toISOString();
-        } catch {
-          return new Date().toISOString();
-        }
-      })();
-
-      // Brand landing pagination pages (page 2..N)
-      // NOTE: We keep page=1 as static entries above; this only adds deeper pages for discovery.
-      const brandConfigs = [
-        { slug: 'toyota', tokens: ['toyota'] },
-        { slug: 'honda', tokens: ['honda'] },
-        { slug: 'isuzu', tokens: ['isuzu'] },
-        { slug: 'nissan', tokens: ['nissan'] },
-        { slug: 'mazda', tokens: ['mazda'] },
-        { slug: 'mitsubishi', tokens: ['mitsubishi'] },
-        { slug: 'ford', tokens: ['ford'] },
-      ];
-      const brandPerPage = 24; // Must match pages/used-cars-chiang-mai-brand/[brand].jsx
-      const maxBrandPagesInSitemap = 100;
-
-      for (const brand of brandConfigs) {
-        const tokens = brand.tokens || [];
-        const brandCars = (cars || []).filter(car => {
-          const hay = `${car?.vendor || ''} ${car?.brand || ''} ${car?.title || ''}`.toLowerCase();
-          return tokens.some(t => hay.includes(t));
-        });
-
-        const brandTotalPages = Math.ceil((brandCars.length || 0) / brandPerPage);
-        const cappedBrandTotalPages = Math.min(brandTotalPages, maxBrandPagesInSitemap);
-        if (cappedBrandTotalPages <= 1) continue;
-
-        const brandLastmod = (() => {
-          try {
-            let latestTs = 0;
-            for (const car of brandCars) {
-              const ts = car?.updatedAt ? new Date(car.updatedAt).getTime() : 0;
-              if (Number.isFinite(ts) && ts > latestTs) latestTs = ts;
-            }
-            return latestTs > 0 ? new Date(latestTs).toISOString() : lastModifiedAllCars;
-          } catch {
-            return lastModifiedAllCars;
-          }
-        })();
-
-        for (let page = 2; page <= cappedBrandTotalPages; page += 1) {
-          paths.push(
-            await config.transform(
-              config,
-              `/used-cars-chiang-mai-brand/${brand.slug}?page=${page}`,
-              {
-                lastmod: brandLastmod,
-              }
-            )
-          );
-        }
-      }
-
-      // Catalog page + pagination pages (page 2..N)
-      paths.push(
-        await config.transform(config, '/all-cars', {
-          lastmod: lastModifiedAllCars,
-        })
-      );
-
-      // NOTE: Sitemap can include query URLs, but avoid generating an excessive number.
-      const maxCatalogPagesInSitemap = 500;
-      const cappedTotalPages = Math.min(totalPages, maxCatalogPagesInSitemap);
-
-      if (cappedTotalPages > 1) {
-        for (let page = 2; page <= cappedTotalPages; page += 1) {
-          paths.push(
-            await config.transform(config, `/all-cars?page=${page}`, {
-              lastmod: lastModifiedAllCars,
-            })
-          );
-        }
-      }
-
-      for (const car of cars) {
-        if (car.handle) {
-          // Bing 2025: Use real updatedAt from Shopify for accurate freshness signals
-          const lastModified = car.updatedAt || new Date().toISOString();
-          const cleanCarUrl = createPrettyUrl(car.handle) || car.handle;
-          paths.push(
-            await config.transform(config, `/car/${cleanCarUrl}`, {
-              lastmod: lastModified,
-            })
-          );
-        }
-      }
-    } catch (error) {
-      if (process.env.NODE_ENV !== 'production') {
-        // eslint-disable-next-line no-console
-        console.warn('Warning: Could not load cars for sitemap generation:', error?.message);
-      }
-
-      // Fallback: ensure catalog page exists even if Shopify fetch fails
-      paths.push(
-        await config.transform(config, '/all-cars', { lastmod: new Date().toISOString() })
-      );
-    }
-
-    return paths;
+return paths;
   },
   // Bing 2025 compliant transform: only lastmod matters for AI-powered crawling
   transform: async (config, path, options = {}) => {

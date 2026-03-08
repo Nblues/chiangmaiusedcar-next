@@ -852,9 +852,21 @@ export async function getServerSideProps(context) {
             return {
               '@type': 'ListItem',
               position: startIndex + index + 1,
-              url: carUrl,
-              name: car?.title || 'รถมือสอง',
-              image: imageUrl,
+              item: {
+                '@type': 'Car',
+                '@id': carUrl,
+                url: carUrl,
+                name: car?.title || 'รถมือสอง',
+                image: imageUrl,
+                offers: {
+                  '@type': 'Offer',
+                  priceCurrency: 'THB',
+                  price: car?.price?.amount || 0,
+                  availability: car?.availableForSale
+                    ? 'https://schema.org/InStock'
+                    : 'https://schema.org/OutOfStock',
+                },
+              },
             };
           }),
         },
