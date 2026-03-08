@@ -34,12 +34,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   const router = useRouter();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-  // รีเซ็ตรูปกลับไปภาพแรกเสมอ
-  useEffect(() => {
-    setSelectedImageIndex(0);
-  }, [car?.handle]);
-
-
   const carImages = useMemo(() => {
     const rawImages = safeGet(car, 'images', []);
     const imagesArray = Array.isArray(rawImages) ? rawImages : [];
@@ -456,12 +450,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     const viewportW = Number(window.innerWidth) || 0;
     const dpr = Number(window.devicePixelRatio) || 1;
     // For sizes="(max-width: 640px) 100vw, 100vw", rendered width is approx viewportW
-    // ⭐ MATCH THE <img sizes="(max-width: 768px) 100vw, 800px"> EXACTLY ⭐
-    let expectedRenderW = 800; // default for desktop
-    if (typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 768px)').matches) {
-      expectedRenderW = viewportW; // 100vw on mobile
-    }
-    const requiredPixels = expectedRenderW * dpr;
+    const requiredPixels = viewportW * dpr;
 
     let targetWidth = 1200;
     if (requiredPixels <= 400) targetWidth = 400;
@@ -471,7 +460,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
 
     preloadIndexes.forEach(idx => {
       const originalUrl = safeGet(images[idx], 'url', '');
-      widths.forEach(w => preloadHeroCandidate(originalUrl, w, 60)); // แก้ให้ quality ตรงกับ A11yImage (60) เพื่อให้ Cache-hit ทำงาน
+      widths.forEach(w => preloadHeroCandidate(originalUrl, w, 80));
     });
   }, [selectedImageIndex, car, mounted, isHeroLoading, preloadHeroCandidate]);
 
@@ -503,7 +492,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
             const originalUrl = safeGet(images[idx], 'url', '');
             if (!originalUrl) return;
 
-            const thumbUrl = optimizeShopifyImage(originalUrl, 240, 'avif', 50); // ⭐ Quality = 50 เพื่อให้ตรงกลไกของ A11yImage(thumbnail) ป้องกัน Cache misses
+            const thumbUrl = optimizeShopifyImage(originalUrl, 240, 'avif');
             const img = new window.Image();
             img.src = thumbUrl;
             img.fetchPriority = 'low';
@@ -597,8 +586,8 @@ function CarDetailPage({ car, recommendedCars = [] }) {
         .replace(/\r\n|\r/g, '\n')
         // Add line breaks before certain Thai keywords for readability
         .replace(/(ราคา)/gi, '\n$1')
-        // Handle price ranges like "1,000 - " into a readable price line
-        .replace(/(\d{1,3}(?:,\d{3})*)\s*-\s*/g, '\n\nราคา $1 บาท\n')
+        // Handle price ranges like "1,000.- " into a readable price line
+        .replace(/(\d{1,3}(?:,\d{3})+)\s*\.-\s*/g, '\n\nราคา $1 บาท\n')
         .replace(/(ออกรถ\s*\d+\s*บาท)/gi, '\n$1')
         // Group common spec lines onto their own lines
         .replace(/(เครื่องยนต์[^\n#]*)/gi, '\n$1')
@@ -889,29 +878,9 @@ function CarDetailPage({ car, recommendedCars = [] }) {
 
           {/* ชื่อรถ */}
           <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
-            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
-              <h1 className="text-2xl md:text-3xl font-bold text-black font-prompt flex-1 mb-0">
-                {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
-              </h1>
-              <button 
-                onClick={() => {
-                  if (navigator.share) {
-                    navigator.share({
-                      title: safeGet(car, 'title', 'รถมือสองคุณภาพดี'),
-                      url: window.location.href,
-                    }).catch(console.error);
-                  } else {
-                    navigator.clipboard.writeText(window.location.href);
-                    alert('คัดลอกลิงก์เรียบร้อยแล้ว');
-                  }
-                }} 
-                className="flex items-center justify-center gap-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-sm font-prompt transition-colors w-max whitespace-nowrap self-start border border-gray-200"
-                aria-label="แชร์บอกเพื่อน"
-              >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
-                แชร์รถคันนี้
-              </button>
-            </div>
+            <h1 className="text-2xl md:text-3xl font-bold text-black mb-3 font-prompt">
+              {safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
+            </h1>
           </div>
 
           {/* รูปรถ - Modern 2025 Style */}
@@ -987,19 +956,17 @@ function CarDetailPage({ car, recommendedCars = [] }) {
               }}
             >
               <A11yImage
-                
                 ref={heroImageRef}
                 src={safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp')}
                 alt={carAlt(car) || safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
                 fallbackAlt={safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
                 fill
-                className="object-cover"
-                priority={true} 
-                imageType="gallery" 
-                sizes="(max-width: 768px) 100vw, 800px" 
-                quality={60}
-                fetchpriority="high" 
-                loading="eager" // รูปหลัก ไม่ควร lazy-load ตอนเลื่อนมาดู
+                className="object-cover transition-opacity duration-300"
+                priority={selectedImageIndex === 0}
+                imageType="gallery"
+                quality={80}
+                fetchpriority={selectedImageIndex === 0 ? 'high' : 'low'}
+                loading={selectedImageIndex === 0 ? 'eager' : 'lazy'}
                 decoding="async"
                 onLoad={() => {
                   setIsHeroLoading(false);
@@ -1010,6 +977,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   }
                 }}
                 onError={() => {
+                  // ถ้าโหลดผิดพลาด ให้ปิดสถานะโหลด เพื่อไม่ให้ผู้ใช้สับสน
                   setIsHeroLoading(false);
                   setShowHeroLoading(false);
                   if (heroLoadingTimerRef.current) {
@@ -1052,8 +1020,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   </div>
                 );
               })()}
-
-              
 
               {/* Loading hint for slow images (non-blocking) */}
               {isHeroLoading && showHeroLoading && (
@@ -1344,7 +1310,44 @@ function CarDetailPage({ car, recommendedCars = [] }) {
             <div className="border-b border-gray-200 pb-6 mb-6">
               <p className="text-lg font-bold text-black mb-4 font-prompt">แชร์รถคันนี้</p>
               <div className="flex flex-wrap gap-2 sm:gap-3">
-                                <a
+                <button
+                  onClick={async () => {
+                    // ใช้ URL จริงของ Shopify (ไม่แก้ไข) เพื่อป้องกัน 404
+                    const shareUrl =
+                      createShortShareUrl(safeGet(car, 'handle', '')) || canonicalUrl;
+                    const shareText = createShareText(car);
+                    const copyText = `${shareText}\n${shareUrl}`;
+
+                    if (navigator.share) {
+                      try {
+                        await navigator.share({ title: shareText, url: shareUrl });
+                      } catch {
+                        // user cancelled / unsupported
+                      }
+                    } else {
+                      const ok = await copyTextToClipboard(copyText);
+                      if (ok) {
+                        alert('✅ คัดลอกลิ้งค์แล้ว!');
+                      } else {
+                        // Last resort: allow manual copy without crashing
+                        window.prompt('คัดลอกลิ้งค์นี้ได้เลย:', copyText);
+                      }
+                    }
+                  }}
+                  className="bg-white hover:bg-gray-50 text-black border border-gray-200 flex items-center gap-2 px-4 py-3 rounded-lg font-prompt transition-colors"
+                  aria-label="แชร์ข้อมูลรถคันนี้"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                    />
+                  </svg>
+                  แชร์รถคันนี้
+                </button>
+                <a
                   href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(canonicalUrl)}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -1507,24 +1510,75 @@ function CarDetailPage({ car, recommendedCars = [] }) {
               <h2 className="text-xl font-bold text-black mb-4 font-prompt">รายละเอียดรถยนต์</h2>
 
               {/* ข้อมูลพื้นฐาน */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-3 mb-6">
-                {[
-                  { label: 'ยี่ห้อ', value: car.vendor },
-                  { label: 'รุ่น', value: car.model },
-                  { label: 'ปี', value: car.year },
-                  { label: 'สี', value: car.color },
-                  { label: 'เลขไมล์', value: car.mileage ? Number(car.mileage).toLocaleString() + ' กม.' : null },
-                  { label: 'เกียร์', value: car.transmission },
-                  { label: 'เชื้อเพลิง', value: car.fuel_type || car.fuelType },
-                  { label: 'เครื่องยนต์', value: car.engine },
-                  { label: 'ขับเคลื่อน', value: car.drivetrain || car.drive_type },
-                  { label: 'จังหวัด', value: car.province },
-                ].filter(s => s.value && String(s.value).trim() !== '').map((spec, i) => (
-                  <div key={i} className="flex flex-col py-1">
-                    <span className="text-sm text-gray-500 font-prompt mb-0.5">{spec.label}</span>
-                    <span className="text-base font-semibold text-gray-900 font-prompt truncate" title={String(spec.value)}>{spec.value}</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                {car.vendor && (
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">ยี่ห้อ</div>
+                    <div className="text-lg font-bold text-black font-prompt">{car.vendor}</div>
                   </div>
-                ))}
+                )}
+                {car.model && (
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">รุ่น</div>
+                    <div className="text-lg font-bold text-black font-prompt">{car.model}</div>
+                  </div>
+                )}
+                {car.year && (
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">ปี</div>
+                    <div className="text-lg font-bold text-gray-900 font-prompt">{car.year}</div>
+                  </div>
+                )}
+                {car.color && (
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">สี</div>
+                    <div className="text-lg font-bold text-gray-900 font-prompt">{car.color}</div>
+                  </div>
+                )}
+                {car.mileage && (
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">เลขไมล์</div>
+                    <div className="text-lg font-bold text-black font-prompt">
+                      {Number(car.mileage).toLocaleString()} กม.
+                    </div>
+                  </div>
+                )}
+                {car.transmission && (
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">เกียร์</div>
+                    <div className="text-lg font-bold text-black font-prompt">
+                      {car.transmission}
+                    </div>
+                  </div>
+                )}
+                {(car.fuel_type || car.fuelType) && (
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">เชื้อเพลิง</div>
+                    <div className="text-lg font-bold text-black font-prompt">
+                      {car.fuel_type || car.fuelType}
+                    </div>
+                  </div>
+                )}
+                {car.engine && (
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">เครื่องยนต์</div>
+                    <div className="text-lg font-bold text-black font-prompt">{car.engine}</div>
+                  </div>
+                )}
+                {(car.drivetrain || car.drive_type) && (
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">ขับเคลื่อน</div>
+                    <div className="text-lg font-bold text-black font-prompt">
+                      {car.drivetrain || car.drive_type}
+                    </div>
+                  </div>
+                )}
+                {car.province && (
+                  <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg">
+                    <div className="font-semibold text-gray-600 font-prompt">จังหวัด</div>
+                    <div className="text-lg font-bold text-black font-prompt">{car.province}</div>
+                  </div>
+                )}
               </div>
 
               {/* คำอธิบาย */}
@@ -1539,35 +1593,65 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                           {/* แสดงข้อความหลักพร้อมการจัดรูปแบบ (Rich Text) */}
                           {processedDescription.paragraphs.map((paragraph, index) => {
                             const pText = paragraph.trim();
-                            
+
                             // 1. ตรวจสอบรูปแบบ Bullet Points (รายการ)
                             const isBullet = /^[-•*]\s*(.+)/.exec(pText);
                             if (isBullet) {
                               return (
-                                <div key={`p-${index}`} className="flex items-start gap-2 my-1.5 ml-1">
-                                  <svg className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                                <div
+                                  key={`p-${index}`}
+                                  className="flex items-start gap-2 my-1.5 ml-1"
+                                >
+                                  <svg
+                                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      d="M5 13l4 4L19 7"
+                                    ></path>
                                   </svg>
-                                  <span className="text-gray-800 leading-relaxed">{isBullet[1]}</span>
+                                  <span className="text-gray-800 leading-relaxed">
+                                    {isBullet[1]}
+                                  </span>
                                 </div>
                               );
                             }
 
                             // 2. ตรวจสอบไฮไลท์โปรโมชั่น/ราคา
-                            const isPromo = /(ราคา|ผ่อน|ฟรีดาวน์|โปรโมชั่น|ดอกเบี้ย|ยอดจัด|ส่วนลด|ดาวน์|แถม)/i.test(pText);
+                            const isPromo =
+                              /(ราคา|ผ่อน|ฟรีดาวน์|โปรโมชั่น|ดอกเบี้ย|ยอดจัด|ส่วนลด|ดาวน์|แถม)/i.test(
+                                pText
+                              );
                             if (isPromo && pText.length < 100) {
                               return (
-                                <div key={`p-${index}`} className="p-3 bg-blue-50/80 border-l-4 border-primary rounded-r-lg my-3 shadow-sm">
-                                  <span className="font-bold text-primary text-[1.05rem]">{pText}</span>
+                                <div
+                                  key={`p-${index}`}
+                                  className="p-3 bg-blue-50/80 border-l-4 border-primary rounded-r-lg my-3 shadow-sm"
+                                >
+                                  <span className="font-bold text-primary text-[1.05rem]">
+                                    {pText}
+                                  </span>
                                 </div>
                               );
                             }
 
                             // 3. ตรวจสอบ หัวข้อ (Headings) - บรรทัดสั้นๆ จบด้วย : หรือคำเฉพาะ
-                            const isHeader = /^(.{2,40}):$/.test(pText) || /^(ออปชั่น|อุปกรณ์เสริม|ข้อมูลรถ|รายละเอียด|จุดเด่น|เครื่องยนต์|ภายใน|ภายนอก)/.test(pText);
+                            const isHeader =
+                              /^(.{2,40}):$/.test(pText) ||
+                              /^(ออปชั่น|อุปกรณ์เสริม|ข้อมูลรถ|รายละเอียด|จุดเด่น|เครื่องยนต์|ภายใน|ภายนอก)/.test(
+                                pText
+                              );
                             if (isHeader) {
                               return (
-                                <h4 key={`p-${index}`} className="font-bold text-gray-900 mt-5 mb-2 text-md flex items-center gap-2">
+                                <h4
+                                  key={`p-${index}`}
+                                  className="font-bold text-gray-900 mt-5 mb-2 text-md flex items-center gap-2"
+                                >
                                   <div className="w-1.5 h-4 bg-orange-500 rounded-full"></div>
                                   {pText}
                                 </h4>
@@ -1575,13 +1659,26 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                             }
 
                             // 4. บรรทัดปกติ แต่เน้นคำสำคัญ (Keyword highlighting)
-                            const keywords = /(รถบ้าน|มือเดียว|ไม่เคยชน|รับประกัน|ไมล์แท้|สภาพนางฟ้า|พร้อมใช้งาน|ขับดี|แอร์เย็น)/g;
+                            const keywords =
+                              /(รถบ้าน|มือเดียว|ไม่เคยชน|รับประกัน|ไมล์แท้|สภาพนางฟ้า|พร้อมใช้งาน|ขับดี|แอร์เย็น)/g;
                             if (keywords.test(pText)) {
                               const parts = pText.split(keywords);
                               return (
-                                <div key={`p-${index}`} className="my-2 text-gray-700 leading-relaxed">
-                                  {parts.map((part, i) => 
-                                    /(รถบ้าน|มือเดียว|ไม่เคยชน|รับประกัน|ไมล์แท้|สภาพนางฟ้า|พร้อมใช้งาน|ขับดี|แอร์เย็น)/.test(part) ? <strong key={i} className="text-green-700 bg-green-50 px-1 rounded">{part}</strong> : part
+                                <div
+                                  key={`p-${index}`}
+                                  className="my-2 text-gray-700 leading-relaxed"
+                                >
+                                  {parts.map((part, i) =>
+                                    keywords.test(part) ? (
+                                      <strong
+                                        key={i}
+                                        className="text-green-700 bg-green-50 px-1 rounded"
+                                      >
+                                        {part}
+                                      </strong>
+                                    ) : (
+                                      part
+                                    )
                                   )}
                                 </div>
                               );
@@ -1599,10 +1696,10 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                           })}
 
                           {/* แสดง hashtags ในบรรทัดเดียว */}
-                          {(processedDescription.hashtags?.length > 0 || (car?.tags && car.tags.length > 0)) && (
+                          {processedDescription.hashtags.length > 0 && (
                             <div className="mt-6 pt-4 border-t border-gray-300">
                               <div className="flex flex-wrap gap-2">
-                                {Array.from(new Set([...(processedDescription.hashtags || []), ...(Array.isArray(car?.tags) ? car.tags.map(t => typeof t === "string" && t.startsWith("#") ? t : "#" + t) : [])])).map((hashtag, index) => (
+                                {processedDescription.hashtags.map((hashtag, index) => (
                                   <a
                                     key={`tag-${hashtag}-${index}`}
                                     href={`/all-cars?search=${encodeURIComponent(hashtag.substring(1))}`}
@@ -1708,74 +1805,63 @@ function CarDetailPage({ car, recommendedCars = [] }) {
             </div>
           )}
 
-                        {/* ขั้นตอนการซื้อรถ Modern 2026 Compact */}
-              <div className="bg-slate-50/50 rounded-2xl border border-gray-100 p-4 sm:p-6 mb-6">
-                <div className="flex items-center gap-2.5 mb-4 sm:mb-5">
-                  <div className="w-8 h-8 rounded-lg bg-blue-100 text-primary flex items-center justify-center">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
-                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 font-prompt m-0">ขั้นตอนการซื้อรถ</h2>
-                </div>
+          {/* ขั้นตอนการซื้อรถ Modern 2025 */}
+          <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 mb-6 sm:mb-8">
+            <h2 className="text-xl font-bold text-black mb-6 font-prompt">ขั้นตอนการซื้อรถ</h2>
 
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
-                  {[
-                    { step: 1, title: 'ติดต่อสอบถาม', desc: 'โทรหรือ Line สอบถาม', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg> },
-                    { step: 2, title: 'นัดดูรถ', desc: 'นัดดูรถและทดลองขับ', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg> },
-                    { step: 3, title: 'ตรวจสภาพ', desc: 'ตรวจสภาพอย่างละเอียด', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
-                    { step: 4, title: 'จัดการเอกสาร', desc: 'โอนและจัดไฟแนนซ์', icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg> },
-                  ].map((item, idx) => (
-                    <div key={idx} className="bg-white border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all duration-300 rounded-xl p-3 flex flex-col relative overflow-hidden group">
-                      <div className="absolute top-0 right-0 bg-gradient-to-bl from-orange-400 to-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-lg shadow-sm">
-                        Step {item.step}
-                      </div>
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-2 group-hover:scale-105 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
-                        {item.icon}
-                      </div>
-                      <h3 className="font-bold text-[13px] sm:text-base text-gray-900 font-prompt mb-0.5">{item.title}</h3>
-                      <p className="text-[11px] sm:text-sm text-gray-500 font-prompt leading-snug">{item.desc}</p>
-                    </div>
-                  ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary text-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <span className="text-2xl font-bold">1</span>
                 </div>
+                <h3 className="font-bold text-black mb-2 font-prompt">ติดต่อสอบถาม</h3>
+                <p className="text-gray-600 text-sm font-prompt">โทรหรือ Line สอบถามรายละเอียด</p>
               </div>
 
+              <div className="text-center">
+                <div className="w-16 h-16 bg-[#e65100] text-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <span className="text-2xl font-bold">2</span>
+                </div>
+                <h3 className="font-bold text-black mb-2 font-prompt">นัดดูรถ</h3>
+                <p className="text-gray-600 text-sm font-prompt">นัดหมายเวลาดูรถและทดลองขับ</p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary text-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <span className="text-2xl font-bold">3</span>
+                </div>
+                <h3 className="font-bold text-black mb-2 font-prompt">ตรวจสภาพ</h3>
+                <p className="text-gray-600 text-sm font-prompt">ตรวจสอบสภาพรถอย่างละเอียด</p>
+              </div>
+
+              <div className="text-center">
+                <div className="w-16 h-16 bg-[#e65100] text-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                  <span className="text-2xl font-bold">4</span>
+                </div>
+                <h3 className="font-bold text-black mb-2 font-prompt">จัดการเอกสาร</h3>
+                <p className="text-gray-600 text-sm font-prompt">ดำเนินการโอนและจัดไฟแนนซ์</p>
+              </div>
+            </div>
+          </div>
+
           {/* ปุ่มกลับ Modern 2025 */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pb-24 sm:pb-8 mt-6 px-4">
+          <div className="text-center pb-8">
             <button
               onClick={goBackSmart}
               type="button"
-              className="group relative flex items-center justify-center w-full sm:w-auto px-8 py-3 bg-white text-gray-800 border border-gray-200 rounded-full shadow-sm hover:shadow hover:border-gray-300 transition-all duration-300 flex-1 max-w-[280px] font-prompt"
+              className="bg-primary hover:bg-blue-700 text-white inline-block px-6 py-3 rounded-lg font-semibold transition-colors text-lg font-prompt"
               aria-label="กลับไปหน้าก่อนหน้า"
             >
-              <svg className="w-5 h-5 mr-3 text-gray-500 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-              </svg>
-              <span className="font-medium text-[1.1rem]">หน้าก่อนหน้า</span>
+              กลับหน้าก่อนหน้า
             </button>
-            
-            <Link 
-              href="/all-cars" 
-              className="group relative flex items-center justify-center w-full sm:w-auto px-8 py-3 bg-primary text-white rounded-full shadow-md hover:shadow-lg hover:bg-blue-800 transition-all duration-300 flex-1 max-w-[280px] font-prompt"
-            >
-              <span className="font-medium text-[1.1rem]">หน้ารวมรถทั้งหมด</span>
-              <svg className="w-5 h-5 ml-3 text-white/80 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-              </svg>
-            </Link>
+            <div className="mt-2">
+              <Link href="/all-cars" className="text-sm text-gray-500 underline font-prompt">
+                หรือกลับหน้ารวมรถ
+              </Link>
+            </div>
           </div>
         </div>
       </main>
-
-      {/* Floating Action Buttons (วงกลมลอยขอบจอสำหรับมือถือ) */}
-      <div className="fixed bottom-[80px] right-4 sm:hidden z-50 flex flex-col gap-3 items-end pointer-events-none pb-[env(safe-area-inset-bottom,0px)]">
-        <a href="tel:0940649018" className="w-[52px] h-[52px] bg-white border border-gray-200 text-primary rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-xl active:scale-95 transition-all pointer-events-auto" aria-label="โทรเลย">
-          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.15 6.59 6.59l2.2-2.2c.28-.28.67-.36 1.02-.25 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" /></svg>
-        </a>
-        <a href="https://lin.ee/8ugfzstD" target="_blank" rel="noopener noreferrer" className="w-[52px] h-[52px] bg-[#06C755] text-white rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,200,85,0.3)] hover:shadow-xl active:scale-95 transition-all pointer-events-auto" aria-label="ทัก LINE">
-          <svg className="w-7 h-7 object-contain" viewBox="0 0 24 24" fill="currentColor"><path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 3.266 8.847 8.04 9.613.313.067.733.204.843.486.1.258.05.65.023.822-.054.343-.243 1.464-.29 1.73-.082.392-.41.564.084.812.43.212 2.378 1.127 3.515 1.58.742.296 2.333.684 3.215.684 5.674 0 8.57-3.957 8.57-9.727zM8.337 12.1H5.973v-2.905c0-.285-.23-.514-.514-.516h-.002c-.285 0-.517.231-.517.516v3.421c0 .285.232.516.517.516h2.881c.285 0 .515-.231.515-.516v-.002c-.001-.285-.232-.516-.516-.516zm3.327-.516v-2.905c0-.284-.23-.514-.515-.514h-.002c-.284 0-.516.23-.516.514v3.421c0 .285.232.516.516.516h.002c.285 0 .515-.231.515-.516v-.002zm1.65-2.905H11.53c-.285 0-.515.231-.515.516v3.419c0 .285.23.516.515.516h1.785c.284 0 .515-.231.515-.516v-3.419c0-.285-.231-.516-.515-.516zm4.619 0h-1.579l-1.393 2.128v-2.128c0-.285-.232-.516-.516-.516h-.002c-.285 0-.516.231-.516.516v3.42c0 .285.231.516.516.516h.002c.285 0 .516-.231.516-.516v-.002l1.417-2.164v2.166c0 .285.23.516.515.516h.001c.285 0 .515-.231.515-.516v-3.42c-.003-.283-.234-.514-.519-.514z"/></svg>
-        </a>
-      </div>
 
       {/* All structured data handled by SEO component */}
     </>
