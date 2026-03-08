@@ -968,8 +968,8 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                 sizes="(max-width: 640px) 100vw, 100vw"
                 alt={carAlt(car) || safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
                 className="w-full h-full object-cover transition-opacity duration-300"
-                fetchPriority="high"
-                decoding="sync"
+                fetchPriority={selectedImageIndex === 0 ? 'high' : 'auto'}
+                decoding="async"
                 onLoad={() => {
                   setIsHeroLoading(false);
                   setShowHeroLoading(false);
