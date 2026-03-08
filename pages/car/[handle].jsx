@@ -580,19 +580,14 @@ function CarDetailPage({ car, recommendedCars = [] }) {
       const text = String(input || '')
         // Convert HTML line breaks to new lines
         .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/p>/gi, '\n\n')
+        .replace(/<p[^>]*>/gi, '')
         // Remove any remaining HTML tags
         .replace(/<[^>]+>/g, '')
         // Normalize CRLF to LF
         .replace(/\r\n|\r/g, '\n')
-        // Add line breaks before certain Thai keywords for readability
-        .replace(/(ราคา)/gi, '\n$1')
-        // Handle price ranges like "1,000.- " into a readable price line
-        .replace(/(\d{1,3}(?:,\d{3})+)\s*\.-\s*/g, '\n\nราคา $1 บาท\n')
-        .replace(/(ออกรถ\s*\d+\s*บาท)/gi, '\n$1')
-        // Group common spec lines onto their own lines
-        .replace(/(เครื่องยนต์[^\n#]*)/gi, '\n$1')
-        .replace(/(รถบ้าน[^\n#]*)/gi, '\n$1')
-        .replace(/(Option\s*เต็ม[^\n#]*)/gi, '\n$1')
+        // Limit max consecutive newlines to 2
+        .replace(/\n{3,}/g, '\n\n')
         .trim();
 
       return text;
