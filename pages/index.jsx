@@ -7,7 +7,6 @@ import Head from 'next/head';
 import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
 import { readCarStatuses } from '../lib/carStatusStore.js';
 import Link from 'next/link';
-import A11yImage from '../components/A11yImage'; // Static import for LCP
 import { SEO_HOME } from '../config/seo-keywords';
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
@@ -183,6 +182,15 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
   // Facebook reviews: render only client
   const [showFbReviews, setShowFbReviews] = useState(false);
 
+  // Lazy render for lower car cards to improve TBT
+  const [showAllCars, setShowAllCars] = useState(false);
+  useEffect(() => {
+    // Delays the rendering of the secondary row of cards to keep the main thread free
+    // during the critical initial hydration phase.
+    const timer = setTimeout(() => setShowAllCars(true), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Defer large below-the-fold sections to reduce initial DOM/style/layout work.
   // (showDeferredSections removed to display content immediately)
 
@@ -303,20 +311,16 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-[1400px] mx-auto">
           {/* LCP Optimized: Native responsive img for critical hero banner */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <A11yImage
+          <img
             src="/herobanner/newherobanner-828w.webp"
             srcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
             sizes="(max-width: 414px) 414px, (max-width: 1400px) 100vw, 1400px"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             width={1400}
             height={467}
-            className="w-full h-auto object-contain"
-            priority
+            className="w-full h-auto object-contain block mx-auto text-transparent"
             decoding="sync"
             fetchPriority="high"
-            optimizeImage={false}
-            aspectRatio="1400/467"
           />
         </div>
       </header>
@@ -412,10 +416,18 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
                   </div>
                 ) : (
                   <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
-                    {safeCars.slice(0, 8).map(car => {
+                    {safeCars.slice(0, showAllCars ? 8 : 4).map(car => {
                       const mergedCar = mergeCarSpecs(car, null);
                       return <CarCard key={car.id} car={mergedCar} />;
                     })}
+                    {!showAllCars &&
+                      safeCars.length > 4 &&
+                      Array.from({ length: Math.min(4, safeCars.length - 4) }).map((_, i) => (
+                        <div
+                          key={`skeleton-${i}`}
+                          className="h-[320px] w-full bg-gray-50 animate-pulse rounded-lg border border-gray-100"
+                        ></div>
+                      ))}
                   </div>
                 )}
               </section>
