@@ -57,7 +57,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden lg:flex items-center space-x-1">
             {navItems.map(item => (
               <Link
                 key={item.href}
@@ -78,7 +78,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden inline-flex items-center justify-center p-1.5 rounded-md text-primary hover:text-white hover:bg-primary focus:outline-none font-prompt font-semibold tracking-wide"
+            className="lg:hidden inline-flex items-center justify-center p-1.5 rounded-md text-primary hover:text-white hover:bg-primary focus:outline-none font-prompt font-semibold tracking-wide"
             style={{
               fontSize: '14px',
               fontWeight: '600',
@@ -116,7 +116,7 @@ export default function Navbar() {
 
         {/* Mobile Navigation */}
         {mobileOpen && (
-          <div id="mobile-nav-menu" className="md:hidden">
+          <div id="mobile-nav-menu" className="lg:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white rounded-md mt-2 shadow-lg border border-gray-200">
               {navItems.map(item => (
                 <Link
