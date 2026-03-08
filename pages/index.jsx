@@ -59,19 +59,19 @@ const SocialShareButtons = dynamic(() => import('../components/SocialShareButton
 
 // Split large below-the-fold reviews section into a separate chunk
 const HomeAboutInline = dynamic(() => import('../components/HomeAboutInline'), {
-  ssr: false,
+  // SSR enabled for SEO rich text
   loading: () => <div className="min-h-[250px] w-full" aria-hidden="true" />,
 });
 const FacebookReviewsSection = dynamic(() => import('../components/FacebookReviewsSection'), {
-  ssr: false,
+  ssr: false, // Keep user-generated reviews and external JS out of critical path
   loading: () => <div className="min-h-[400px] w-full" aria-hidden="true" />,
 });
 const HomeWhyChooseSection = dynamic(() => import('../components/HomeWhyChooseSection'), {
-  ssr: false,
+  // SSR enabled for SEO content (business value props)
   loading: () => <div className="min-h-[500px] w-full" aria-hidden="true" />,
 });
 const HomeFaqSection = dynamic(() => import('../components/HomeFaqSection'), {
-  ssr: false,
+  // SSR enabled to ensure FAQ schema matches HTML output immediately
   loading: () => <div className="min-h-[600px] w-full" aria-hidden="true" />,
 });
 
