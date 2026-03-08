@@ -1,6 +1,7 @@
 # SEO Keyword Map (Single Source of Truth)
 
-เป้าหมาย: ทำให้ทั้งเว็บ “สอดคล้อง” (Title/Description/H1/H2-H3) และสร้าง long-tail แบบไม่สแปม โดยอ้างอิงจากไฟล์ config เดียว
+เป้าหมาย: ทำให้ทั้งเว็บ “สอดคล้อง” (Title/Description/H1/H2-H3) และสร้าง long-tail แบบไม่สแปม โดยอ้างอิงจากไฟล์ config
+เดียว
 
 - แหล่งข้อมูลหลัก: `config/seo-keyword-map.js`
 - กติกาสำคัญ

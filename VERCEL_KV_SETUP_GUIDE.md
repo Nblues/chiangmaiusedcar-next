@@ -27,11 +27,13 @@
 4. เลือก **KV (Redis-compatible)**
 
 5. ตั้งชื่อ Database:
+
    ```
    car-status-db
    ```
 
 6. เลือก Region:
+
    ```
    Singapore (ใกล้ไทยที่สุด)
    ```
@@ -39,6 +41,7 @@
 7. คลิก **Create**
 
 8. เลือกโปรเจค:
+
    ```
    chiangmaiusedcar-next
    ```
@@ -142,14 +145,14 @@ const data = await kv.get(`car:${carId}`);
 
 ## ✅ ผลลัพธ์หลังติดตั้ง
 
-| คุณสมบัติ | ก่อน (File Storage) | หลัง (Vercel KV) |
-|----------|---------------------|------------------|
-| **ข้อมูลถาวร** | ❌ หายทุก 1-2 ชม. | ✅ ถาวร 100% |
-| **ความเร็ว** | 🐌 ช้า (file I/O) | ⚡ เร็ว (in-memory) |
-| **พึ่งพา Shopify** | ⚠️ ต้องมี Admin Token | ✅ ไม่ต้องพึ่ง |
-| **ราคา** | ✅ ฟรี | ✅ ฟรี (256MB) |
-| **Scalability** | ❌ จำกัด | ✅ รองรับหลายพันคัน |
-| **จัดการเอง** | ❌ พึ่ง /tmp | ✅ ควบคุมเอง 100% |
+| คุณสมบัติ          | ก่อน (File Storage)   | หลัง (Vercel KV)    |
+| ------------------ | --------------------- | ------------------- |
+| **ข้อมูลถาวร**     | ❌ หายทุก 1-2 ชม.     | ✅ ถาวร 100%        |
+| **ความเร็ว**       | 🐌 ช้า (file I/O)     | ⚡ เร็ว (in-memory) |
+| **พึ่งพา Shopify** | ⚠️ ต้องมี Admin Token | ✅ ไม่ต้องพึ่ง      |
+| **ราคา**           | ✅ ฟรี                | ✅ ฟรี (256MB)      |
+| **Scalability**    | ❌ จำกัด              | ✅ รองรับหลายพันคัน |
+| **จัดการเอง**      | ❌ พึ่ง /tmp          | ✅ ควบคุมเอง 100%   |
 
 ---
 
@@ -208,6 +211,7 @@ TTL:   ไม่มี (ถาวร)
 **สาเหตุ**: ยังไม่ connect KV กับโปรเจค
 
 **แก้ไข**:
+
 1. Vercel Dashboard → Storage → car-status-db
 2. Settings → Connected Projects
 3. เลือก chiangmaiusedcar-next
@@ -218,6 +222,7 @@ TTL:   ไม่มี (ถาวร)
 **สาเหตุ**: ยังไม่ได้ติดตั้ง package
 
 **แก้ไข**:
+
 ```bash
 pnpm add @vercel/kv
 ```
@@ -227,6 +232,7 @@ pnpm add @vercel/kv
 **สาเหตุ**: Local dev ไม่มี env variables
 
 **แก้ไข**: เพิ่มใน `.env.local`:
+
 ```bash
 # Pull from Vercel
 vercel env pull .env.local
@@ -252,6 +258,7 @@ vercel env pull .env.local
 ## 🚀 พร้อมเริ่มไหมครับ?
 
 ขั้นตอนต่อไป:
+
 1. ✅ คุณสร้าง KV database (ตามขั้นตอน 1)
 2. ✅ รัน `pnpm add @vercel/kv`
 3. ✅ ผมแก้ไขโค้ดให้

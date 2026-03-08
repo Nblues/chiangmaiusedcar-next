@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import SEO from '../components/SEO.jsx';
-import Head from 'next/head';
 import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
 import { readCarStatuses } from '../lib/carStatusStore.js';
 import Link from 'next/link';
@@ -276,22 +275,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
 
   return (
     <div>
-      <Head>
-        <link
-          rel="preload"
-          as="image"
-          href="/herobanner/newherobanner-828w.webp"
-          media="(max-width: 768px)"
-          fetchPriority="high"
-        />
-        <link
-          rel="preload"
-          as="image"
-          href="/herobanner/newherobanner-1400w.webp"
-          media="(min-width: 769px)"
-          fetchPriority="high"
-        />
-      </Head>
       <SEO
         title={seoHome.title}
         description={seoHome.description}

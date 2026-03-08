@@ -34,12 +34,14 @@
 3. คลิก **Develop apps** (ด้านล่างสุด)
 
 4. คลิก **Create an app**
+
    - App name: `Car Management API`
    - App developer: `kn-goodcar.com`
 
 5. คลิก **Configure Admin API scopes**
 
 6. เลือก scopes ที่ต้องการ:
+
    - ✅ `read_products` (อ่านข้อมูลรถ)
    - ✅ `write_products` (แก้ไขสถานะรถ)
 
@@ -54,6 +56,7 @@
 ### 2️⃣ เพิ่ม Token ใน Vercel
 
 1. เข้า **Vercel Dashboard**:
+
    ```
    https://vercel.com/nblues/chiangmaiusedcar-next/settings/environment-variables
    ```
@@ -61,12 +64,14 @@
 2. คลิก **Add New**
 
 3. กรอกข้อมูล:
+
    ```
    Name:  SHOPIFY_ADMIN_TOKEN
    Value: shpat_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
    ```
 
 4. เลือก **Environments**:
+
    - ✅ Production
    - ✅ Preview
    - ✅ Development
@@ -84,6 +89,7 @@
 ### 3️⃣ ทดสอบหลัง Deploy เสร็จ (3-5 นาที)
 
 1. เข้าหน้า **Admin Cars**:
+
    ```
    https://www.chiangmaiusedcar.com/admin/cars
    ```
@@ -180,10 +186,12 @@ PUT Shopify Metafield (custom.status = "reserved")
 ### ปัญหา: Token ไม่ทำงาน
 
 1. ตรวจสอบ scopes ใน Shopify:
+
    - `read_products` ✅
    - `write_products` ✅
 
 2. ตรวจสอบ token ใน Vercel:
+
    - Format ถูกต้อง: `shpat_xxxxx...`
    - Environments: Production ✅
 
@@ -192,6 +200,7 @@ PUT Shopify Metafield (custom.status = "reserved")
 ### ปัญหา: สถานะยังหาย
 
 1. ตรวจสอบ deployment logs:
+
    - มีข้อความ error หรือไม่?
    - ใช้ storage อะไร? (shopify / file)
 
