@@ -955,20 +955,15 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                 heroSwipeRef.current.canceled = true;
               }}
             >
-              <A11yImage
+              <img
                 ref={heroImageRef}
-                src={safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp')}
-                alt={carAlt(car)}
-                fallbackAlt={safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
-                fill
-                className="object-cover"
-                priority={selectedImageIndex === 0} // ⭐ LCP มีแค่รูปแรกที่ render
-                imageType="gallery" // ⭐ ระบุเป็นรูปหลัก (1920px)
+                src={optimizeShopifyImage(safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp'), 1400, 'webp', 80)}
+                srcSet={`${optimizeShopifyImage(safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp'), 800, 'webp', 80)} 800w, ${optimizeShopifyImage(safeGet(currentImage, 'url', '/herobanner/chiangmaiusedcar.webp'), 1400, 'webp', 80)} 1400w`}
                 sizes="(max-width: 640px) 100vw, 100vw"
-                quality={80}
-                loading="eager" // ⭐ รูปใหญ่ใน viewport: eager เพื่อให้ตอบสนองตอนสลับรูป
+                alt={carAlt(car) || safeGet(car, 'title', 'รถมือสองคุณภาพดี')}
+                className="w-full h-full object-cover transition-opacity duration-300"
                 fetchpriority="high"
-                decoding="async" // ⭐ Decode แบบ async ไม่บล็อก main thread
+                decoding="sync"
                 onLoad={() => {
                   setIsHeroLoading(false);
                   setShowHeroLoading(false);
