@@ -87,16 +87,14 @@ function AdminDashboard() {
 
       <div className="min-h-screen bg-gray-100">
         {/* Modern Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <h1 className="absolute -left-[9999px] w-[1px] h-[1px] overflow-hidden">
-              Admin Dashboard - ระบบจัดการหลังบ้าน
-            </h1>
+            <h1 className="sr-only">Admin Dashboard - ระบบจัดการหลังบ้าน</h1>
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center shadow-md">
+                <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center shadow-md">
                   <svg
-                    className="w-6 h-6 text-white"
+                    className="w-5 h-5 text-white"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -110,18 +108,24 @@ function AdminDashboard() {
                   </svg>
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-primary font-prompt">Admin Dashboard</h1>
-                  <p className="text-xs text-gray-500">ครูหนึ่งรถสวย - ระบบจัดการ</p>
+                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900 font-prompt leading-tight">
+                    Admin Dashboard
+                  </h1>
+                  <p className="text-xs sm:text-sm text-gray-500 font-medium">ภาพรวมระบบ</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="hidden sm:block text-right">
-                  <p className="text-xs text-gray-500">ผู้ดูแลระบบ</p>
-                  <p className="text-sm font-semibold text-primary">{username}</p>
+                <div className="hidden sm:block text-right mr-2">
+                  <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
+                    บัญชีผู้ดูแล
+                  </p>
+                  <p className="text-sm font-semibold text-gray-900 leading-none mt-1">
+                    {username}
+                  </p>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors text-sm font-medium"
+                  className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-all duration-200 text-sm font-medium border border-red-100"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -138,20 +142,21 @@ function AdminDashboard() {
           </div>
         </header>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Quick Actions */}
-          <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <button
-              onClick={() => router.push('/admin/cars')}
-              className="group relative overflow-hidden bg-gradient-to-br from-primary to-blue-700 hover:from-blue-700 hover:to-primary text-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-            >
-              <div className="flex items-center justify-between">
-                <div className="text-left text-white">
-                  <h3 className="text-lg font-bold font-prompt mb-1 text-white">จัดการรถทั้งหมด</h3>
-                  <p className="text-sm opacity-90 text-white/90">จัดการสถานะรถยนต์</p>
-                </div>
-                <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          {/* Quick Actions Dashboard */}
+          <div className="mb-8">
+            <h2 className="text-lg font-bold text-gray-900 font-prompt mb-4 flex items-center gap-2">
+              <span className="w-1.5 h-5 bg-primary rounded-full inline-block"></span>
+              เมนูจัดการหลัก
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              {/* Manage Cars Card */}
+              <button
+                onClick={() => router.push('/admin/cars')}
+                className="group relative overflow-hidden bg-white border border-gray-100 hover:border-primary/30 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
+              >
+                <div className="w-12 h-12 bg-blue-50 text-primary rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -160,47 +165,46 @@ function AdminDashboard() {
                     />
                   </svg>
                 </div>
-              </div>
-              <div className="absolute bottom-0 right-0 opacity-10">
-                <svg className="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z" />
-                </svg>
-              </div>
-            </button>
+                <h3 className="text-lg font-bold font-prompt text-gray-900 mb-1 group-hover:text-primary transition-colors">
+                  ระบบจัดการรถอัจฉริยะ
+                </h3>
+                <p className="text-sm text-gray-500">
+                  ดูรายการรถ, เปลี่ยนสถานะพร้อมขาย/ติดจองได้อย่างรวดเร็ว
+                </p>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+              </button>
 
-            <button
-              onClick={() => router.push('/')}
-              className="group relative overflow-hidden bg-gradient-to-br from-accent to-orange-600 hover:from-orange-600 hover:to-accent text-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-            >
-              <div className="flex items-center justify-between">
-                <div className="text-left">
-                  <h3 className="text-lg font-bold font-prompt mb-1">ดูหน้าเว็บไซต์</h3>
-                  <p className="text-sm opacity-90">เข้าสู่หน้าบ้าน</p>
-                </div>
-                <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {/* View Website Card */}
+              <button
+                onClick={() => router.push('/')}
+                className="group relative overflow-hidden bg-white border border-gray-100 hover:border-accent/30 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
+              >
+                <div className="w-12 h-12 bg-orange-50 text-accent rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                      d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
                     />
                   </svg>
                 </div>
-              </div>
-            </button>
+                <h3 className="text-lg font-bold font-prompt text-gray-900 mb-1 group-hover:text-accent transition-colors">
+                  ดูหน้าเว็บไซต์จริง
+                </h3>
+                <p className="text-sm text-gray-500">
+                  กลับไปยังหน้าร้านหลักของลูกค้า เพื่อดูการแสดงผล
+                </p>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-orange-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+              </button>
 
-            <button
-              onClick={() => window.open('/admin/access-guide', '_blank')}
-              className="group relative overflow-hidden bg-gradient-to-br from-green-500 to-green-700 hover:from-green-700 hover:to-green-500 text-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-            >
-              <div className="flex items-center justify-between">
-                <div className="text-left">
-                  <h3 className="text-lg font-bold font-prompt mb-1">คู่มือใช้งาน</h3>
-                  <p className="text-sm opacity-90">วิธีการใช้งานระบบ</p>
-                </div>
-                <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {/* Guide Card */}
+              <button
+                onClick={() => window.open('/admin/access-guide', '_blank')}
+                className="group relative overflow-hidden bg-white border border-gray-100 hover:border-green-500/30 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
+              >
+                <div className="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -209,8 +213,15 @@ function AdminDashboard() {
                     />
                   </svg>
                 </div>
-              </div>
-            </button>
+                <h3 className="text-lg font-bold font-prompt text-gray-900 mb-1 group-hover:text-green-600 transition-colors">
+                  คู่มือใช้งาน
+                </h3>
+                <p className="text-sm text-gray-500">
+                  วิธีการใช้งานระบบหลังบ้านและคู่มือสำหรับแอดมิน
+                </p>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-green-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+              </button>
+            </div>
           </div>
 
           {/* Modern 2025 Dashboard */}

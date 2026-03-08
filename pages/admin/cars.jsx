@@ -24,9 +24,9 @@ function AdminCarsManagement() {
   );
 
   // Fetch all cars from Shopify
-  const fetchCars = async () => {
+  const fetchCars = async (showLoader = true) => {
     try {
-      setIsLoading(true);
+      if (showLoader) setIsLoading(true);
       const response = await fetch('/api/admin/cars/list', {
         credentials: 'include',
       });
@@ -40,7 +40,7 @@ function AdminCarsManagement() {
       // eslint-disable-next-line no-console
       console.error('Failed to fetch cars:', error);
     } finally {
-      setIsLoading(false);
+      if (showLoader) setIsLoading(false);
     }
   };
 
@@ -155,8 +155,8 @@ function AdminCarsManagement() {
           )
         );
 
-        // ✅ Fetch fresh data from API to sync with file storage
-        await fetchCars();
+        // ✅ Fetch fresh data from API to sync with file storage (silent fetch to avoid screen flash)
+        await fetchCars(false);
         return true;
       }
 
@@ -264,21 +264,91 @@ function AdminCarsManagement() {
       {seo}
 
       <div className="min-h-screen bg-gray-100">
-        {/* Header */}
-        <header className="bg-gradient-to-r from-primary to-blue-700 shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        {/* Modern Header */}
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <h1 className="absolute -left-[9999px] w-[1px] h-[1px] overflow-hidden">
-              จัดการรถทั้งหมด - Admin Dashboard
-            </h1>
+            <h1 className="sr-only">จัดการรถทั้งหมด - Admin Dashboard</h1>
             <div className="flex justify-between items-center">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <button
                   onClick={() => router.push('/admin/dashboard')}
-                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  className="p-2.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-xl transition-all duration-200 border border-gray-200 shadow-sm"
                   title="กลับไป Dashboard"
                 >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2.5}
+                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                    />
+                  </svg>
+                </button>
+                <div className="flex items-center gap-3">
+                  <div className="hidden sm:flex w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl items-center justify-center shadow-md">
+                    <svg
+                      className="w-5 h-5 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900 font-prompt leading-tight">
+                      จัดการคลังรถยนต์
+                    </h1>
+                    <p className="text-xs sm:text-sm text-gray-500 font-medium">
+                      ระบบควบคุมสถานะสินค้า
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => fetchCars(true)}
+                className="flex items-center gap-2 px-4 py-2.5 bg-primary hover:bg-blue-800 text-white rounded-xl transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed font-medium text-sm"
+                disabled={isLoading}
+              >
+                <svg
+                  className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2.5}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+                <span className="hidden sm:inline">
+                  {isLoading ? 'กำลังรีเฟรช...' : 'รีเฟรชข้อมูล'}
+                </span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content Area */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          {/* Advanced Filters */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-6 transition-all">
+            <div className="flex flex-col md:flex-row gap-4">
+              {/* Search Box */}
+              <div className="flex-1 relative group">
+                <label className="sr-only" htmlFor="searchCars">
+                  ค้นหารถ
+                </label>
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                   <svg
-                    className="w-6 h-6 text-white"
+                    className="w-5 h-5 text-gray-400 group-focus-within:text-primary transition-colors"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -287,92 +357,140 @@ function AdminCarsManagement() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                     />
                   </svg>
-                </button>
-                <div>
-                  <h1 className="text-2xl font-bold text-white font-prompt">จัดการรถทั้งหมด</h1>
-                  <p className="text-sm text-white/80">ระบบจัดการสถานะรถยนต์</p>
                 </div>
-              </div>
-              <button
-                onClick={fetchCars}
-                className="btn-primary flex items-center gap-2"
-                disabled={isLoading}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-                รีเฟรช
-              </button>
-            </div>
-          </div>
-        </header>
-
-        {/* Filters and Search */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
-            <div className="flex flex-col md:flex-row gap-4">
-              {/* Search */}
-              <div className="flex-1">
-                <label className="form-label" htmlFor="searchCars">
-                  ค้นหารถ
-                </label>
                 <input
                   type="text"
                   id="searchCars"
                   name="searchCars"
-                  className="form-input w-full"
-                  placeholder="ค้นหาจากยี่ห้อ รุ่น หรือชื่อ..."
+                  className="block w-full pl-10 pr-4 py-2.5 bg-gray-50 border-transparent focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-xl text-sm transition-all text-gray-900 placeholder-gray-400"
+                  placeholder="ค้นหาชื่อรถ, ยี่ห้อ, หรือรุ่น..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                 />
               </div>
 
               {/* Status Filter */}
-              <div className="w-full md:w-64">
-                <label className="form-label" htmlFor="filterStatus">
+              <div className="w-full md:w-56 relative group">
+                <label className="sr-only" htmlFor="filterStatus">
                   กรองตามสถานะ
                 </label>
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none z-10">
+                  <svg
+                    className="w-4 h-4 text-gray-400 group-focus-within:text-primary transition-colors"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+                    />
+                  </svg>
+                </div>
                 <select
                   id="filterStatus"
                   name="filterStatus"
-                  className="form-select w-full"
+                  className="block w-full pl-10 pr-8 py-2.5 bg-gray-50 border-transparent focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-xl text-sm transition-all text-gray-700 appearance-none font-medium"
                   value={filterStatus}
                   onChange={e => setFilterStatus(e.target.value)}
                 >
-                  <option value="all">ทั้งหมด</option>
-                  <option value="available">พร้อมขาย</option>
-                  <option value="reserved">จองแล้ว</option>
+                  <option value="all">แสดงทุกสถานะ</option>
+                  <option value="available">🟢 พร้อมขาย</option>
+                  <option value="reserved">🔴 จองแล้ว</option>
                 </select>
+                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                  <svg
+                    className="w-4 h-4 text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </div>
               </div>
             </div>
 
-            {/* Stats */}
-            <div className="mt-4 flex flex-wrap gap-4 text-sm">
-              <div className="flex items-center gap-2">
-                <span className="text-gray-600">ทั้งหมด:</span>
-                <span className="font-semibold text-gray-900">{cars.length} คัน</span>
+            {/* Modern Stats */}
+            <div className="mt-5 grid grid-cols-3 gap-3 md:gap-4 pt-5 border-t border-gray-100">
+              <div className="bg-gray-50 rounded-xl p-3 sm:p-4 flex items-center justify-between border border-gray-100 transition-all hover:bg-gray-100/80">
+                <div>
+                  <p className="text-xs text-gray-500 font-medium mb-1">รถทั้งหมด</p>
+                  <p className="text-lg sm:text-2xl font-bold text-gray-900 leading-none">
+                    {cars.length}
+                  </p>
+                </div>
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 sm:w-5 sm:h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                    ></path>
+                  </svg>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 bg-green-500 rounded-full"></span>
-                <span className="text-gray-600">พร้อมขาย:</span>
-                <span className="font-semibold text-green-600">
-                  {cars.filter(c => c.status === 'available').length} คัน
-                </span>
+              <div className="bg-green-50/50 rounded-xl p-3 sm:p-4 flex items-center justify-between border border-green-100 transition-all hover:bg-green-50">
+                <div>
+                  <p className="text-xs text-green-600 font-medium mb-1">พร้อมขาย</p>
+                  <p className="text-lg sm:text-2xl font-bold text-green-700 leading-none">
+                    {cars.filter(c => c.status === 'available').length}
+                  </p>
+                </div>
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-200 text-green-700 flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 sm:w-5 sm:h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="w-3 h-3 bg-red-500 rounded-full"></span>
-                <span className="text-gray-600">จองแล้ว:</span>
-                <span className="font-semibold text-red-600">
-                  {cars.filter(c => c.status === 'reserved').length} คัน
-                </span>
+              <div className="bg-red-50/50 rounded-xl p-3 sm:p-4 flex items-center justify-between border border-red-100 transition-all hover:bg-red-50">
+                <div>
+                  <p className="text-xs text-red-600 font-medium mb-1">จองแล้ว</p>
+                  <p className="text-lg sm:text-2xl font-bold text-red-700 leading-none">
+                    {cars.filter(c => c.status === 'reserved').length}
+                  </p>
+                </div>
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-red-200 text-red-700 flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 sm:w-5 sm:h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    ></path>
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
@@ -401,135 +519,145 @@ function AdminCarsManagement() {
               <p className="mt-4 text-gray-600">ไม่พบรถที่ตรงกับเงื่อนไข</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
-              {filteredCars.map(car => (
-                <div
-                  key={car.id}
-                  className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden"
-                >
-                  {/* Car Image */}
-                  <div className="relative h-48 bg-gray-200">
-                    {car.image ? (
-                      <A11yImage
-                        src={car.image}
-                        alt={car.title}
-                        fill
-                        className="object-cover"
-                        imageType="card"
-                        sizes="(max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                      />
-                    ) : (
-                      <div className="flex items-center justify-center h-full">
-                        <svg
-                          className="w-16 h-16 text-gray-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                          />
-                        </svg>
-                      </div>
-                    )}
-
-                    {/* Status Badge */}
-                    <div className="absolute top-2 right-2">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          car.status === 'available'
-                            ? 'bg-green-500 text-white'
-                            : 'bg-red-500 text-white'
-                        }`}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mt-6">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left text-gray-500 whitespace-nowrap">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+                    <tr>
+                      <th scope="col" className="px-2 sm:px-4 py-3 w-12 sm:w-16 text-center">
+                        รูปภาพ
+                      </th>
+                      <th scope="col" className="px-2 sm:px-4 py-3 min-w-[150px] sm:min-w-[250px]">
+                        ข้อมูลรถ
+                      </th>
+                      <th scope="col" className="px-4 py-3 hidden md:table-cell">
+                        ยี่ห้อ / รุ่น
+                      </th>
+                      <th scope="col" className="px-4 py-3 text-center hidden sm:table-cell">
+                        ปี
+                      </th>
+                      <th scope="col" className="px-2 sm:px-4 py-3 text-right">
+                        ราคา
+                      </th>
+                      <th scope="col" className="px-2 sm:px-4 py-3 text-center">
+                        จัดการสถานะ
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredCars.map(car => (
+                      <tr
+                        key={car.id}
+                        className="bg-white border-b hover:bg-gray-50 transition-colors"
                       >
-                        {car.status === 'available' ? '✓ พร้อมขาย' : '✕ จองแล้ว'}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Car Info */}
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900 font-prompt line-clamp-2 mb-2">
-                      {car.title}
-                    </h3>
-
-                    <div className="space-y-1 text-sm text-gray-600 mb-3">
-                      {car.brand && (
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">ยี่ห้อ:</span>
-                          <span>{car.brand}</span>
-                        </div>
-                      )}
-                      {car.model && (
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">รุ่น:</span>
-                          <span>{car.model}</span>
-                        </div>
-                      )}
-                      {car.year && (
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">ปี:</span>
-                          <span>{car.year}</span>
-                        </div>
-                      )}
-                      {car.price && (
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">ราคา:</span>
-                          <span className="text-accent font-semibold">
-                            {parseInt(car.price).toLocaleString()} บาท
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Toggle Switch */}
-                    <div className="pt-3 border-t border-gray-200">
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="flex-1">
-                          <span className="text-sm font-medium text-gray-700">สถานะ:</span>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {car.status === 'available'
-                              ? 'คลิกเพื่อเปลี่ยนเป็นจองแล้ว'
-                              : 'คลิกเพื่อเปลี่ยนเป็นพร้อมขาย'}
-                          </p>
-                        </div>
-                        <button
-                          onClick={() => {
-                            if (!isUpdating[car.id]) {
-                              toggleCarStatus(car.id, car.status);
-                            }
-                          }}
-                          disabled={isUpdating[car.id]}
-                          className={`relative inline-flex h-8 w-14 items-center rounded-full transition-all duration-300 font-medium text-sm ${
-                            car.status === 'available'
-                              ? 'bg-green-500 hover:bg-green-600'
-                              : 'bg-red-500 hover:bg-red-600'
-                          } ${
-                            isUpdating[car.id]
-                              ? 'opacity-50 cursor-not-allowed'
-                              : 'cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2'
-                          }`}
-                          aria-label={`สถานะ${car.title}: ${car.status === 'available' ? 'พร้อมขาย' : 'จองแล้ว'}`}
-                          title={isUpdating[car.id] ? 'กำลังอัปเดต...' : 'คลิกเพื่อเปลี่ยนสถานะ'}
-                        >
-                          <span
-                            className={`h-6 w-6 transform rounded-full bg-white shadow-md transition-all duration-300 flex items-center justify-center text-xs font-bold ${
-                              car.status === 'available'
-                                ? 'translate-x-1 text-green-500'
-                                : 'translate-x-7 text-red-500'
-                            }`}
+                        <td className="px-2 sm:px-4 py-2">
+                          <div className="relative w-12 h-9 sm:w-16 sm:h-12 rounded overflow-hidden bg-gray-200 shadow-sm mx-auto">
+                            {car.image ? (
+                              <A11yImage
+                                src={car.image}
+                                alt={car.title}
+                                fill
+                                className="object-cover"
+                                sizes="64px"
+                              />
+                            ) : (
+                              <div className="flex items-center justify-center h-full text-gray-400">
+                                <svg
+                                  className="w-4 h-4 sm:w-6 sm:h-6"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                  />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-2 sm:px-4 py-2">
+                          <div
+                            className="font-semibold text-gray-900 line-clamp-2 max-w-[150px] sm:max-w-[250px] whitespace-normal font-prompt text-xs sm:text-sm"
+                            title={car.title}
                           >
-                            {isUpdating[car.id] ? '⟳' : car.status === 'available' ? '✓' : '✕'}
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                            {car.title}
+                          </div>
+                          <div className="text-[10px] sm:text-xs text-gray-400 mt-0.5">
+                            ID: {String(car.id).slice(-6)}
+                          </div>
+                        </td>
+                        <td className="px-4 py-2 hidden md:table-cell">
+                          <div className="text-gray-900 font-medium text-xs sm:text-sm">
+                            {car.brand || '-'}
+                          </div>
+                          <div
+                            className="text-xs text-gray-500 truncate max-w-[120px]"
+                            title={car.model}
+                          >
+                            {car.model || '-'}
+                          </div>
+                        </td>
+                        <td className="px-4 py-2 text-center text-gray-700 hidden sm:table-cell">
+                          {car.year || '-'}
+                        </td>
+                        <td className="px-2 sm:px-4 py-2 text-right">
+                          <div className="text-accent font-bold text-xs sm:text-sm">
+                            {car.price ? `${Number(car.price).toLocaleString()} ฿` : '-'}
+                          </div>
+                        </td>
+                        <td className="px-2 sm:px-4 py-2">
+                          <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3">
+                            <span
+                              className={`inline-flex items-center justify-center px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold w-20 sm:w-24 shrink-0 ${
+                                car.status === 'available'
+                                  ? 'bg-green-100 text-green-800 border border-green-200'
+                                  : 'bg-red-100 text-red-800 border border-red-200'
+                              }`}
+                            >
+                              {car.status === 'available' ? 'พร้อมขาย' : 'จองแล้ว'}
+                            </span>
+
+                            <button
+                              onClick={() => {
+                                if (!isUpdating[car.id]) {
+                                  toggleCarStatus(car.id, car.status);
+                                }
+                              }}
+                              disabled={isUpdating[car.id]}
+                              className={`relative inline-flex h-6 w-10 sm:h-7 sm:w-12 shrink-0 items-center rounded-full transition-all duration-300 shadow-inner ${
+                                car.status === 'available'
+                                  ? 'bg-green-500 hover:bg-green-600'
+                                  : 'bg-red-500 hover:bg-red-600'
+                              } ${
+                                isUpdating[car.id]
+                                  ? 'opacity-50 cursor-not-allowed'
+                                  : 'cursor-pointer focus:ring-2 focus:ring-primary focus:ring-offset-2'
+                              }`}
+                              title={
+                                isUpdating[car.id] ? 'กำลังอัปเดต...' : 'คลิกเพื่อเปลี่ยนสถานะ'
+                              }
+                            >
+                              <span
+                                className={`h-4 w-4 sm:h-5 sm:w-5 transform rounded-full bg-white shadow flex items-center justify-center text-[8px] sm:text-[10px] font-bold transition-all duration-300 ${
+                                  car.status === 'available'
+                                    ? 'translate-x-1 text-green-600'
+                                    : 'translate-x-[16px] sm:translate-x-6 text-red-600'
+                                }`}
+                              >
+                                {isUpdating[car.id] ? '⟳' : car.status === 'available' ? '✓' : '✕'}
+                              </span>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>

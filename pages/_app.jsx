@@ -22,7 +22,9 @@ const prompt = Prompt({
 // Dynamic imports keep heavy UI out of the initial bundle and avoid hydration mismatches
 const Footer = dynamic(() => import('../components/Footer'), {
   ssr: false, // Footer doesn't need to be server-rendered for initial LCP
-  loading: () => <footer className="min-h-[300px] bg-white border-t border-gray-200" aria-hidden="true" />,
+  loading: () => (
+    <footer className="min-h-[300px] bg-white border-t border-gray-200" aria-hidden="true" />
+  ),
 });
 const CookieConsent = dynamic(() => import('../components/CookieConsent'), {
   ssr: false,
