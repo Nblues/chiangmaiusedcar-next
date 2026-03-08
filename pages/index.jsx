@@ -303,7 +303,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             height={467}
             className="w-full h-auto object-contain block mx-auto text-transparent"
             decoding="sync"
-            fetchPriority="high"
+            fetchpriority="high"
           />
         </div>
       </header>

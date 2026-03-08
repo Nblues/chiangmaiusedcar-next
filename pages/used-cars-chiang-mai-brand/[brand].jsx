@@ -309,7 +309,7 @@ export default function UsedCarsChiangMaiBrand({
               alt={`รถมือสอง ${brandInfo.label} เชียงใหม่ - ครูหนึ่งรถสวย`}
               className="block w-full h-full object-cover object-center"
               decoding="async"
-              fetchPriority="high"
+              fetchpriority="high"
             />
           </picture>
 
