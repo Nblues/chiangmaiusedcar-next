@@ -15,6 +15,7 @@ export default function HomeWhyChooseSection({ getBrandCount }) {
           <div className="relative h-[220px] sm:h-[260px] md:h-[280px] lg:h-[340px]">
             <A11yImage
               src="/images/kn9.webp"
+              srcSet="/images/kn9-sm.webp 640w, /images/kn9.webp 1400w"
               alt=""
               aria-hidden="true"
               fill
