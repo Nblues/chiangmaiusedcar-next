@@ -161,7 +161,10 @@ export const SELLER_INFO = {
   '@id': `${BUSINESS_INFO.baseUrl}/#organization`,
   name: BUSINESS_INFO.name,
   url: BUSINESS_INFO.baseUrl,
-  telephone: '+66940649018', // E.164 format
+  telephone: `+66${BUSINESS_INFO.phone.replace(/[^0-9]/g, '')}`, // E.164 format
+  email: BUSINESS_INFO.email,
+  image: `${BUSINESS_INFO.baseUrl}/logo/logo_main.png`,
+  priceRange: '฿฿',
   address: {
     '@type': 'PostalAddress',
     streetAddress: BUSINESS_INFO.address.street,

@@ -175,7 +175,7 @@ export default function Contact() {
           </p>
 
           {/* Contact Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             <div className="bg-white border-2 border-primary/20 hover:border-primary p-6 rounded-xl shadow-lg transition-all duration-300">
               <h3 className="font-bold text-primary mb-3 text-lg">โทรศัพท์</h3>
               <a
@@ -199,7 +199,16 @@ export default function Contact() {
                 @kruneungcar
               </a>
             </div>
-            <div className="bg-white border-2 border-primary/20 hover:border-primary p-6 rounded-xl shadow-lg transition-all duration-300 md:col-span-2 lg:col-span-1">
+            <div className="bg-white border-2 border-primary/20 hover:border-primary p-6 rounded-xl shadow-lg transition-all duration-300">
+              <h3 className="font-bold text-primary mb-3 text-lg">อีเมล (Email)</h3>
+              <a
+                href="mailto:info@chiangmaiusedcar.com"
+                className="text-blue-600 font-semibold hover:text-blue-800 transition-colors text-base break-all"
+              >
+                info@chiangmaiusedcar.com
+              </a>
+            </div>
+            <div className="bg-white border-2 border-primary/20 hover:border-primary p-6 rounded-xl shadow-lg transition-all duration-300">
               <h3 className="font-bold text-primary mb-3 text-lg">เวลาทำการ</h3>
               <p className="text-gray-700 font-medium">จันทร์ - อาทิตย์ เวลา 9:00 - 20:00 น.</p>
             </div>

@@ -65,8 +65,7 @@ const nextConfig = {
   // Enhanced TypeScript configuration
   typescript: {
     ignoreBuildErrors: false,
-    // Use absolute Windows-native path to avoid TS path assertion (C:/... vs C:\\...)
-    tsconfigPath: path.join(__dirname, 'tsconfig.json'),
+    tsconfigPath: 'tsconfig.json',
   },
 
   // Enhanced ESLint configuration

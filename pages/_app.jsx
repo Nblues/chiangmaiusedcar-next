@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { Prompt } from 'next/font/google';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import ClientOnly from '../components/ClientOnly';
 import ErrorBoundary from '../components/ErrorBoundary';
 import Navbar from '../components/Navbar';
@@ -226,6 +227,9 @@ export default function MyApp({ Component, pageProps }) {
       {!isAdminRoute && process.env.NODE_ENV === 'production' && cookieConsent?.marketing ? (
         <FacebookPixel />
       ) : null}
+      {!isAdminRoute && process.env.NODE_ENV === 'production' && cookieConsent?.analytics && (
+        <GoogleAnalytics gaId="G-Y5BYL58YBB" />
+      )}
     </>
   );
 }

@@ -2024,26 +2024,39 @@ export async function getStaticProps({ params }) {
       carMeta = candidates[0] || null;
     }
 
-    // ไม่พบจริง ๆ
+    // ไม่พบจริง ๆ ใน cache ให้ลองดึงตรงจาก Shopify เผื่อเป็นรถใหม่เพิ่งลง
+    let car = null;
     if (!carMeta) {
-      return { notFound: true };
+      car = await getCarByHandle(requestedRaw);
+      if (!car && requested !== requestedRaw) {
+        car = await getCarByHandle(requested);
+      }
+      if (!car) {
+        return { notFound: true };
+      }
+      // สร้าง proxy carMeta ให้ทำงานไปต่อได้
+      carMeta = { handle: car.handle };
+    } else {
+      car = await getCarByHandle(carMeta.handle);
+      if (!car) {
+        return { notFound: true };
+      }
     }
 
-    // Fetch full car detail (including full image gallery) via per-handle query.
-    // getAllCars() is optimized for listings and may only include a single image.
-    const car = await getCarByHandle(carMeta.handle);
-    if (!car) {
-      return { notFound: true };
-    }
-
-    // Add status to car object
+    // อัพเดตสถานะถ้ารถมีข้อมูลอยู่ในระบบภายใน
     if (car) {
       car.status = carStatuses[car.id]?.status || 'available';
     }
 
     // Redirect ไป canonical URL ถ้าไม่ตรง
+    // *หลีกเลี่ยง* การ redirect ถ้ารถเพิ่งถูกเพิ่มและยังไม่ปรากฏใน allCarsCache (รถใหม่)
+    // เพราะถ้ารีไดเรกต์ไปเป็น pretty URL ตัว getStaticProps ถัดไปจะเอา pretty URL ไปหาใน Shopify ตรง ๆ ไม่ได้
+    // และเนื่องจากยังไม่มี map ในแคช จึงทำให้เกิด 404
+    const isNewCarNotInCache = !safeCars.find(
+      c => decodeURIComponent(c?.handle || '') === decodeURIComponent(car.handle || '')
+    );
     const canonicalPretty = createPrettyUrl(car.handle) || car.handle;
-    if (requestedRaw !== canonicalPretty && requested !== canonicalPretty) {
+    if (!isNewCarNotInCache && requestedRaw !== canonicalPretty && requested !== canonicalPretty) {
       return {
         redirect: {
           destination: `/car/${encodeURIComponent(canonicalPretty)}`,

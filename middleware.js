@@ -17,7 +17,13 @@ export function middleware(request) {
   }
 
   // Do not override HTML caching here; let Next/Vercel determine caching semantics
-  // based on SSR/SSG/ISR and response headers configured in next.config.js.
+  // based on SSR/SSG/ISR and response headers configured in next.config.js.  
+  if (request.nextUrl.pathname.startsWith('/admin')) {
+    const token = request.cookies.get('admin_token')?.value;
+    if (!token) {
+      // return NextResponse.redirect(new URL('/login', request.url))
+    }
+  }
   return NextResponse.next();
 }
 

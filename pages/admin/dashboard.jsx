@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import SEO from '../../components/SEO';
@@ -17,7 +17,7 @@ function AdminDashboard() {
   const seo = (
     <SEO
       title="Admin Dashboard"
-      description="ระบบจัดการหลังบ้านสำหรับเว็บไซต์ครูหนึ่งรถสวย"
+      description="เธฃเธฐเธเธเธเธฑเธ”เธเธฒเธฃเธซเธฅเธฑเธเธเนเธฒเธเธชเธณเธซเธฃเธฑเธเน€เธงเนเธเนเธเธ•เนเธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข"
       url="/admin/dashboard"
       noindex={true}
     />
@@ -70,7 +70,7 @@ function AdminDashboard() {
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            <p className="mt-4 text-gray-600">กำลังโหลด...</p>
+            <p className="mt-4 text-gray-600">เธเธณเธฅเธฑเธเนเธซเธฅเธ”...</p>
           </div>
         </div>
       </>
@@ -89,7 +89,7 @@ function AdminDashboard() {
         {/* Modern Header */}
         <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <h1 className="sr-only">Admin Dashboard - ระบบจัดการหลังบ้าน</h1>
+            <h1 className="sr-only">Admin Dashboard - เธฃเธฐเธเธเธเธฑเธ”เธเธฒเธฃเธซเธฅเธฑเธเธเนเธฒเธ</h1>
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center shadow-md">
@@ -111,13 +111,13 @@ function AdminDashboard() {
                   <h1 className="text-xl sm:text-2xl font-bold text-gray-900 font-prompt leading-tight">
                     Admin Dashboard
                   </h1>
-                  <p className="text-xs sm:text-sm text-gray-500 font-medium">ภาพรวมระบบ</p>
+                  <p className="text-xs sm:text-sm text-gray-500 font-medium">เธ เธฒเธเธฃเธงเธกเธฃเธฐเธเธ</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <div className="hidden sm:block text-right mr-2">
                   <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
-                    บัญชีผู้ดูแล
+                    เธเธฑเธเธเธตเธเธนเนเธ”เธนเนเธฅ
                   </p>
                   <p className="text-sm font-semibold text-gray-900 leading-none mt-1">
                     {username}
@@ -135,7 +135,7 @@ function AdminDashboard() {
                       d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                     />
                   </svg>
-                  <span className="hidden sm:inline">ออกจากระบบ</span>
+                  <span className="hidden sm:inline">เธญเธญเธเธเธฒเธเธฃเธฐเธเธ</span>
                 </button>
               </div>
             </div>
@@ -147,36 +147,35 @@ function AdminDashboard() {
           <div className="mb-8">
             <h2 className="text-lg font-bold text-gray-900 font-prompt mb-4 flex items-center gap-2">
               <span className="w-1.5 h-5 bg-primary rounded-full inline-block"></span>
-              เมนูจัดการหลัก
+              เน€เธกเธเธนเธเธฑเธ”เธเธฒเธฃเธซเธฅเธฑเธ
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {/* Manage Cars Card */}
-              <button
-                onClick={() => router.push('/admin/cars')}
-                className="group relative overflow-hidden bg-white border border-gray-100 hover:border-primary/30 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
+              
+
+              {/* Valuation Dashboard Card */}
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => router.push('/admin/valuation')}
+                className="group relative cursor-pointer overflow-hidden bg-white border border-gray-100 hover:border-purple-500/30 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
               >
-                <div className="w-12 h-12 bg-blue-50 text-primary rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-                    />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold font-prompt text-gray-900 mb-1 group-hover:text-primary transition-colors">
-                  ระบบจัดการรถอัจฉริยะ
+                <h3 className="text-lg font-bold font-prompt text-gray-900 mb-1 group-hover:text-purple-600 transition-colors">
+                  ประเมินราคากลางรถ
                 </h3>
                 <p className="text-sm text-gray-500">
-                  ดูรายการรถ, เปลี่ยนสถานะพร้อมขาย/ติดจองได้อย่างรวดเร็ว
+                  วิเคราะห์โครงสร้างราคารถด้วย AI, เช็คราคาอ้างอิงจากตลาด
                 </p>
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-              </button>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-purple-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+              </div>
 
               {/* View Website Card */}
-              <button
-                onClick={() => router.push('/')}
+              <div role="button" tabIndex={0} onClick={() => router.push('/')}
                 className="group relative overflow-hidden bg-white border border-gray-100 hover:border-accent/30 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
               >
                 <div className="w-12 h-12 bg-orange-50 text-accent rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -190,17 +189,15 @@ function AdminDashboard() {
                   </svg>
                 </div>
                 <h3 className="text-lg font-bold font-prompt text-gray-900 mb-1 group-hover:text-accent transition-colors">
-                  ดูหน้าเว็บไซต์จริง
+                  เธ”เธนเธซเธเนเธฒเน€เธงเนเธเนเธเธ•เนเธเธฃเธดเธ
                 </h3>
                 <p className="text-sm text-gray-500">
-                  กลับไปยังหน้าร้านหลักของลูกค้า เพื่อดูการแสดงผล
+                  เธเธฅเธฑเธเนเธเธขเธฑเธเธซเธเนเธฒเธฃเนเธฒเธเธซเธฅเธฑเธเธเธญเธเธฅเธนเธเธเนเธฒ เน€เธเธทเนเธญเธ”เธนเธเธฒเธฃเนเธชเธ”เธเธเธฅ
                 </p>
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-orange-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-              </button>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-orange-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div></div>
 
               {/* Guide Card */}
-              <button
-                onClick={() => window.open('/admin/access-guide', '_blank')}
+              <div role="button" tabIndex={0} onClick={() => window.open('/admin/access-guide', '_blank')}
                 className="group relative overflow-hidden bg-white border border-gray-100 hover:border-green-500/30 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
               >
                 <div className="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
@@ -214,13 +211,12 @@ function AdminDashboard() {
                   </svg>
                 </div>
                 <h3 className="text-lg font-bold font-prompt text-gray-900 mb-1 group-hover:text-green-600 transition-colors">
-                  คู่มือใช้งาน
+                  เธเธนเนเธกเธทเธญเนเธเนเธเธฒเธ
                 </h3>
                 <p className="text-sm text-gray-500">
-                  วิธีการใช้งานระบบหลังบ้านและคู่มือสำหรับแอดมิน
+                  เธงเธดเธเธตเธเธฒเธฃเนเธเนเธเธฒเธเธฃเธฐเธเธเธซเธฅเธฑเธเธเนเธฒเธเนเธฅเธฐเธเธนเนเธกเธทเธญเธชเธณเธซเธฃเธฑเธเนเธญเธ”เธกเธดเธ
                 </p>
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-green-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
-              </button>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-green-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div></div>
             </div>
           </div>
 
@@ -258,3 +254,6 @@ export async function getServerSideProps({ req }) {
 
   return { props: {} };
 }
+
+
+

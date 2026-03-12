@@ -26,6 +26,7 @@ module.exports = {
     extend: {
       fontFamily: {
         prompt: ['var(--font-prompt)', 'Prompt', 'Kanit', 'Sarabun', 'system-ui', 'sans-serif'],
+        thai: ['var(--font-thai)', 'Noto Sans Thai', 'sans-serif'],
       },
       screens: {
         xs: '475px',

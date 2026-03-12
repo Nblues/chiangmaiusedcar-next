@@ -336,7 +336,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             <Link
               href="/used-cars-chiang-mai"
               prefetch={false}
-              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-orange-600 text-orange-700 hover:bg-orange-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
+              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-orange-700 text-orange-800 hover:bg-orange-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
             >
               ฝากขายรถ
             </Link>

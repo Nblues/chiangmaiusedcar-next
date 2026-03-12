@@ -477,7 +477,7 @@ export default function AllCars({
               <div className="flex flex-wrap gap-2">
                 <Link
                   href="/used-cars-chiang-mai"
-                  className="inline-flex items-center justify-center rounded-xl bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-700 transition-colors"
+                  className="inline-flex items-center justify-center rounded-xl bg-orange-700 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-800 transition-colors"
                 >
                   ฝากขายราคาดี
                 </Link>
