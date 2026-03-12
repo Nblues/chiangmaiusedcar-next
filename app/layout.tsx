@@ -1,5 +1,5 @@
 import '../styles/globals.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Prompt, Noto_Sans_Thai } from 'next/font/google'
 
 const notoSansThai = Noto_Sans_Thai({ 
@@ -15,6 +15,13 @@ const prompt = Prompt({
   display: 'swap',
   variable: '--font-prompt',
 })
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+}
 
 export const metadata: Metadata = {
   title: 'ประเมินราคากลางรถมือสองมาตรฐานประเทศไทย',
