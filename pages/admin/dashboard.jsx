@@ -17,7 +17,7 @@ function AdminDashboard() {
   const seo = (
     <SEO
       title="Admin Dashboard"
-      description="เธฃเธฐเธเธเธเธฑเธ”เธเธฒเธฃเธซเธฅเธฑเธเธเนเธฒเธเธชเธณเธซเธฃเธฑเธเน€เธงเนเธเนเธเธ•เนเธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข"
+      description="ระบบจัดการหลังบ้านสำหรับเว็บไซต์ครูหนึ่งรถสวย"
       url="/admin/dashboard"
       noindex={true}
     />
@@ -67,10 +67,10 @@ function AdminDashboard() {
     return (
       <>
         {seo}
-        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-          <div className="text-center">
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center font-prompt antialiased">
+          <div className="text-center bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            <p className="mt-4 text-gray-600">เธเธณเธฅเธฑเธเนเธซเธฅเธ”...</p>
+            <p className="mt-4 text-slate-700 font-medium">กำลังโหลดเข้าสู่ระบบ...</p>
           </div>
         </div>
       </>
@@ -85,16 +85,16 @@ function AdminDashboard() {
     <>
       {seo}
 
-      <div className="min-h-screen bg-gray-100">
-        {/* Modern Header */}
-        <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
+      <div className="min-h-screen bg-slate-50 font-prompt antialiased text-slate-800">
+        {/* Modern Header - crisp borders and shadows */}
+        <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <h1 className="sr-only">Admin Dashboard - เธฃเธฐเธเธเธเธฑเธ”เธเธฒเธฃเธซเธฅเธฑเธเธเนเธฒเธ</h1>
+            <h1 className="sr-only">Admin Dashboard - ระบบจัดการหลังบ้าน</h1>
             <div className="flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center shadow-md">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-primary to-blue-700 rounded-xl flex items-center justify-center shadow-md border border-blue-800/10">
                   <svg
-                    className="w-5 h-5 text-white"
+                    className="w-6 h-6 text-white drop-shadow-sm"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -108,78 +108,96 @@ function AdminDashboard() {
                   </svg>
                 </div>
                 <div>
-                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900 font-prompt leading-tight">
-                    Admin Dashboard
+                  <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+                    แอดมินแดชบอร์ด
                   </h1>
-                  <p className="text-xs sm:text-sm text-gray-500 font-medium">เธ เธฒเธเธฃเธงเธกเธฃเธฐเธเธ</p>
+                  <p className="text-sm text-slate-500 font-medium">ภาพรวมระบบจัดการหลังบ้าน</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="hidden sm:block text-right mr-2">
-                  <p className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
-                    เธเธฑเธเธเธตเธเธนเนเธ”เธนเนเธฅ
+              <div className="flex items-center gap-4">
+                <div className="hidden sm:block text-right mr-2 bg-slate-50 px-4 py-2 rounded-lg border border-slate-200">
+                  <p className="text-[11px] text-slate-500 uppercase tracking-wider font-semibold">
+                    บัญชีผู้ดูแลระบบ
                   </p>
-                  <p className="text-sm font-semibold text-gray-900 leading-none mt-1">
-                    {username}
-                  </p>
+                  <p className="text-sm font-bold text-slate-900 leading-none mt-1">{username}</p>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-xl transition-all duration-200 text-sm font-medium border border-red-100"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-white hover:bg-red-50 text-red-600 rounded-xl hover:shadow-sm transition-all duration-200 text-sm font-bold border border-slate-200 hover:border-red-200 group"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth={2.5}
                       d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                     />
                   </svg>
-                  <span className="hidden sm:inline">เธญเธญเธเธเธฒเธเธฃเธฐเธเธ</span>
+                  <span className="hidden sm:inline tracking-wide">ออกจากระบบ</span>
                 </button>
               </div>
             </div>
           </div>
         </header>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
           {/* Quick Actions Dashboard */}
-          <div className="mb-8">
-            <h2 className="text-lg font-bold text-gray-900 font-prompt mb-4 flex items-center gap-2">
-              <span className="w-1.5 h-5 bg-primary rounded-full inline-block"></span>
-              เน€เธกเธเธนเธเธฑเธ”เธเธฒเธฃเธซเธฅเธฑเธ
+          <div className="mb-10">
+            <h2 className="text-xl font-bold text-slate-900 mb-5 flex items-center gap-3 tracking-tight">
+              <span className="w-1.5 h-6 bg-primary rounded-full inline-block shadow-sm"></span>
+              เมนูจัดการหลัก
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              {/* Manage Cars Card */}
-              
-
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
               {/* Valuation Dashboard Card */}
               <div
                 role="button"
                 tabIndex={0}
                 onClick={() => router.push('/admin/valuation')}
-                className="group relative cursor-pointer overflow-hidden bg-white border border-gray-100 hover:border-purple-500/30 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
+                className="group relative cursor-pointer overflow-hidden bg-white border border-slate-200 hover:border-purple-400 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
               >
-                <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-purple-100">
+                  <svg
+                    className="w-7 h-7 drop-shadow-sm"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                    />
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold font-prompt text-gray-900 mb-1 group-hover:text-purple-600 transition-colors">
+                <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-purple-700 transition-colors tracking-tight">
                   ประเมินราคากลางรถ
                 </h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-slate-500 font-medium leading-relaxed">
                   วิเคราะห์โครงสร้างราคารถด้วย AI, เช็คราคาอ้างอิงจากตลาด
                 </p>
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-purple-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+                <div className="absolute bottom-0 left-0 w-full h-1.5 bg-gradient-to-r from-purple-500 to-purple-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
               </div>
 
               {/* View Website Card */}
-              <div role="button" tabIndex={0} onClick={() => router.push('/')}
-                className="group relative overflow-hidden bg-white border border-gray-100 hover:border-accent/30 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => router.push('/')}
+                className="group relative cursor-pointer overflow-hidden bg-white border border-slate-200 hover:border-orange-400 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
               >
-                <div className="w-12 h-12 bg-orange-50 text-accent rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-14 h-14 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-orange-100">
+                  <svg
+                    className="w-7 h-7 drop-shadow-sm"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -188,20 +206,29 @@ function AdminDashboard() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold font-prompt text-gray-900 mb-1 group-hover:text-accent transition-colors">
-                  เธ”เธนเธซเธเนเธฒเน€เธงเนเธเนเธเธ•เนเธเธฃเธดเธ
+                <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors tracking-tight">
+                  ดูหน้าเว็บไซต์จริง
                 </h3>
-                <p className="text-sm text-gray-500">
-                  เธเธฅเธฑเธเนเธเธขเธฑเธเธซเธเนเธฒเธฃเนเธฒเธเธซเธฅเธฑเธเธเธญเธเธฅเธนเธเธเนเธฒ เน€เธเธทเนเธญเธ”เธนเธเธฒเธฃเนเธชเธ”เธเธเธฅ
+                <p className="text-sm text-slate-500 font-medium leading-relaxed">
+                  กลับไปยังหน้าแรกของเว็บไซต์ เพื่อดูลักษณะการแสดงผลจริงที่ลูกค้าเห็น
                 </p>
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-orange-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div></div>
+                <div className="absolute bottom-0 left-0 w-full h-1.5 bg-gradient-to-r from-orange-400 to-orange-300 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+              </div>
 
               {/* Guide Card */}
-              <div role="button" tabIndex={0} onClick={() => window.open('/admin/access-guide', '_blank')}
-                className="group relative overflow-hidden bg-white border border-gray-100 hover:border-green-500/30 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => window.open('/admin/access-guide', '_blank')}
+                className="group relative cursor-pointer overflow-hidden bg-white border border-slate-200 hover:border-emerald-400 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
               >
-                <div className="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-emerald-100">
+                  <svg
+                    className="w-7 h-7 drop-shadow-sm"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -210,18 +237,21 @@ function AdminDashboard() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-lg font-bold font-prompt text-gray-900 mb-1 group-hover:text-green-600 transition-colors">
-                  เธเธนเนเธกเธทเธญเนเธเนเธเธฒเธ
+                <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-emerald-700 transition-colors tracking-tight">
+                  คู่มือการใช้งาน
                 </h3>
-                <p className="text-sm text-gray-500">
-                  เธงเธดเธเธตเธเธฒเธฃเนเธเนเธเธฒเธเธฃเธฐเธเธเธซเธฅเธฑเธเธเนเธฒเธเนเธฅเธฐเธเธนเนเธกเธทเธญเธชเธณเธซเธฃเธฑเธเนเธญเธ”เธกเธดเธ
+                <p className="text-sm text-slate-500 font-medium leading-relaxed">
+                  เรียนรู้วิธีการทำงานของระบบ แนะนำการจัดการรถยนต์และเครื่องมือต่างๆ
                 </p>
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-green-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div></div>
+                <div className="absolute bottom-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 to-emerald-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+              </div>
             </div>
           </div>
 
-          {/* Modern 2025 Dashboard */}
-          <ToolsPanel />
+          {/* Modern 2025 Dashboard Tools Panel */}
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-8 mb-8 transform transition-all duration-300">
+            <ToolsPanel />
+          </div>
         </div>
       </div>
     </>
@@ -234,7 +264,7 @@ AdminDashboard.displayName = 'AdminDashboard';
 // Use custom layout (minimal, no Navbar/Footer/PWA)
 AdminDashboard.getLayout = function getLayout(page) {
   return (
-    <main id="main" role="main">
+    <main id="main" role="main" className="antialiased bg-slate-50">
       {page}
     </main>
   );
@@ -254,6 +284,3 @@ export async function getServerSideProps({ req }) {
 
   return { props: {} };
 }
-
-
-
