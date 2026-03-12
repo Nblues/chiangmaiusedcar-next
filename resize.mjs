@@ -1,0 +1,1 @@
+import fs from 'fs'; import sharp from 'sharp'; ['414w','640w','828w','1024w','1400w'].forEach(async (w) => { const path = \public/herobanner/newherobanner-\.webp\; const out = \public/herobanner/newherobanner-\-sm.webp\; await sharp(path).webp({ quality: 60, effort: 6 }).toFile(out); console.log('compressed', w); fs.renameSync(out, path); });

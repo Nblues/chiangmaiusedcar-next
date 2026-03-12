@@ -1,0 +1,34 @@
+npm info using npm@10.8.2
+npm info using node@v20.19.0
+npm warn config cache-min This option has been deprecated in favor of `--prefer-offline`.
+app/actions/carFormActions.ts(28,31): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/actions/carFormActions.ts(49,31): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/actions/evaluateCar.ts(22,31): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/actions/evaluateCar.ts(70,31): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+app/admin/valuation/page.tsx(122,21): error TS2345: Argument of type '(prev: { brand: string; model: string; subModel: string; bodyType: string; gear: string; color: string; year: number; mileage: number; region: string; condition: string; referencePrice: string; }) => { ...; }' is not assignable to parameter of type 'SetStateAction<{ brand: string; model: string; subModel: string; bodyType: string; gear: string; color: string; year: number; mileage: number; region: string; condition: string; referencePrice: string; }>'.
+  Type '(prev: { brand: string; model: string; subModel: string; bodyType: string; gear: string; color: string; year: number; mileage: number; region: string; condition: string; referencePrice: string; }) => { ...; }' is not assignable to type '(prevState: { brand: string; model: string; subModel: string; bodyType: string; gear: string; color: string; year: number; mileage: number; region: string; condition: string; referencePrice: string; }) => { ...; }'.
+    Call signature return types '{ subModel: string | undefined; brand: string; model: string; bodyType: string; gear: string; color: string; year: number; mileage: number; region: string; condition: string; referencePrice: string; }' and '{ brand: string; model: string; subModel: string; bodyType: string; gear: string; color: string; year: number; mileage: number; region: string; condition: string; referencePrice: string; }' are incompatible.
+      The types of 'subModel' are incompatible between these types.
+        Type 'string | undefined' is not assignable to type 'string'.
+          Type 'undefined' is not assignable to type 'string'.
+app/admin/valuation/page.tsx(300,40): error TS2322: Type '{ children: Element; className: string; }' is not assignable to type 'IntrinsicAttributes & { children: ReactNode; }'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & { children: ReactNode; }'.
+app/admin/valuation/page.tsx(301,40): error TS2322: Type '{ placeholder: string; }' is not assignable to type 'IntrinsicAttributes'.
+  Property 'placeholder' does not exist on type 'IntrinsicAttributes'.
+app/admin/valuation/page.tsx(303,40): error TS2322: Type '{ children: Element[]; className: string; }' is not assignable to type 'IntrinsicAttributes & { children: ReactNode; }'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & { children: ReactNode; }'.
+app/admin/valuation/page.tsx(325,38): error TS2322: Type '{ children: Element; className: string; }' is not assignable to type 'IntrinsicAttributes & { children: ReactNode; }'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & { children: ReactNode; }'.
+app/admin/valuation/page.tsx(328,38): error TS2322: Type '{ children: Element[]; className: string; }' is not assignable to type 'IntrinsicAttributes & { children: ReactNode; }'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & { children: ReactNode; }'.
+app/admin/valuation/page.tsx(347,40): error TS2322: Type '{ children: Element; className: string; }' is not assignable to type 'IntrinsicAttributes & { children: ReactNode; }'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & { children: ReactNode; }'.
+app/admin/valuation/page.tsx(586,46): error TS7006: Parameter 'pro' implicitly has an 'any' type.
+app/admin/valuation/page.tsx(586,51): error TS7006: Parameter 'idx' implicitly has an 'any' type.
+app/admin/valuation/page.tsx(602,48): error TS7006: Parameter 'con' implicitly has an 'any' type.
+app/admin/valuation/page.tsx(602,53): error TS7006: Parameter 'idx' implicitly has an 'any' type.
+app/admin/valuation/page.tsx(660,29): error TS7006: Parameter 'c' implicitly has an 'any' type.

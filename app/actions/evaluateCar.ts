@@ -19,7 +19,7 @@ async function fetchTTBBluebook(brand: string, model: string, year: number, subM
     const match = html.match(/<script id="__NEXT_DATA__"([^>]*)>(.+?)<\/script>/);
     
     if (match) {
-      const json = JSON.parse(match[2]);
+      const json = JSON.parse(match[2] as string);
       const results = json?.props?.pageProps?.initialState?.bluebookReducer?.bluebookSearchResult?.data?.results || [];
       const validPrices = results.filter((r:any) => Number(r.marketPriceSecondhand) > 0);
       
@@ -67,7 +67,7 @@ export async function getTTBSubModels(brand: string, model: string, year: number
     const match = html.match(/<script id="__NEXT_DATA__"([^>]*)>(.+?)<\/script>/);
     
     if (match) {
-      const json = JSON.parse(match[2]);
+      const json = JSON.parse(match[2] as string);
       const results = json?.props?.pageProps?.initialState?.bluebookReducer?.bluebookSearchResult?.data?.results || [];
       const validPrices = results.filter((r:any) => Number(r.marketPriceSecondhand) > 0);
       
@@ -116,7 +116,7 @@ export async function evaluateCarWithAI(formData: {
       }
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY as string;
     if (!apiKey) {
       throw new Error('GEMINI_API_KEY is not defined in environment variables');
     }

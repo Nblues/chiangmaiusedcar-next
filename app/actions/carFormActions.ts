@@ -25,7 +25,7 @@ export async function fetchModels(brand: string) {
     const html = await res.text();
     const match = html.match(/<script id="__NEXT_DATA__"([^>]*)>(.+?)<\/script>/);
     if (match) {
-      const json = JSON.parse(match[2]);
+      const json = JSON.parse(match[2] as string);
       const results = json?.props?.pageProps?.initialState?.bluebookReducer?.bluebookSearchResult?.data?.results || [];
       const models = [...new Set(results.map((r: any) => r.carModel))].filter(Boolean);
       return models as string[];
@@ -46,7 +46,7 @@ export async function fetchSubModels(brand: string, model: string) {
     const html = await res.text();
     const match = html.match(/<script id="__NEXT_DATA__"([^>]*)>(.+?)<\/script>/);
     if (match) {
-      const json = JSON.parse(match[2]);
+      const json = JSON.parse(match[2] as string);
       const results = json?.props?.pageProps?.initialState?.bluebookReducer?.bluebookSearchResult?.data?.results || [];
       // Also grab matching year options and prices if possible? Not required for dropdown, but we extract subModels.
       const submodels = [...new Set(results.map((r: any) => r.carSubModel))].filter(Boolean);

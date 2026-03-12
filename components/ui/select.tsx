@@ -25,9 +25,9 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(({ className, on
 Select.displayName = "Select"
 
 // Mock these so we don't have to change the page.tsx layout much
-const SelectTrigger = ({ children }: { children: React.ReactNode }) => <>{children}</>;
-const SelectValue = () => null; // Native select doesn't need this
-const SelectContent = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+const SelectTrigger = ({ children, ...props }: any) => <>{children}</>;
+const SelectValue = ({ placeholder, ...props }: any) => null;
+const SelectContent = ({ children, ...props }: any) => <>{children}</>;
 const SelectItem = ({ value, children }: { value: string, children: React.ReactNode }) => <option value={value}>{children}</option>;
 
 export { Select, SelectTrigger, SelectValue, SelectContent, SelectItem }
