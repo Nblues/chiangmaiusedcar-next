@@ -1,15 +1,52 @@
-﻿import React from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Sparkles, HeartHandshake } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, HeartHandshake, Info } from 'lucide-react';
 import GoogleReviewButton from '../components/GoogleReviewButton';
 
-const GOOGLE_REVIEW_URL = 'https://urlgeni.us/h9hjMQ';
+const GOOGLE_REVIEW_URL = 'https://g.page/r/Ccu3ZhBBWbWcEBM/review';
 const SITE_URL = 'https://www.chiangmaiusedcar.com';
 
 export default function ReviewPage() {
+  const [showIosWarning, setShowIosWarning] = useState(false);
+
+  useEffect(() => {
+    // ตรวจจับตอนโหลดหน้าเว็บ
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isFacebook =
+      ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1 || ua.indexOf('Instagram') > -1;
+    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+
+    // ถ้าเป็น iPhone และเปิดจาก Facebook ให้แสดงคำแนะนำเล็กๆ ล่วงหน้า
+    if (isFacebook && isIOS) {
+      setShowIosWarning(true);
+    }
+  }, []);
+
+  const handleReviewClick = e => {
+    e.preventDefault();
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isFacebook =
+      ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1 || ua.indexOf('Instagram') > -1;
+    const isAndroid = /android/i.test(ua);
+    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+
+    // กรณี 1: Android เล่นผ่าน Facebook (เตะออก Chrome เนียนๆ 100%)
+    if (isFacebook && isAndroid) {
+      window.location.href =
+        'intent://g.page/r/Ccu3ZhBBWbWcEBM/review#Intent;scheme=https;package=com.android.chrome;end;';
+      setTimeout(() => {
+        window.location.href = GOOGLE_REVIEW_URL + '?openExternalBrowser=1'; // Fallback
+      }, 500);
+      return;
+    }
+
+    // กรณี 2: iOS หรือเครื่องอื่นๆ ที่ไม่ได้เจาะจง ให้พาไปลิงก์ตรง + เผื่อฟลุคเตะของฝั่งแอปแชทอื่น
+    window.location.href = GOOGLE_REVIEW_URL + '?openExternalBrowser=1';
+  };
+
   return (
     <>
       <Head>
@@ -21,7 +58,7 @@ export default function ReviewPage() {
 
         {/* Open Graph Meta Tags */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.chiangmaiusedcar.com/review" />
+        <meta property="og:url" content={'$SITE_URL/review'} />
         <meta property="og:title" content=" ขอบคุณที่ไว้วางใจออกรถกับ ครูหนึ่งรถสวยเชียงใหม่" />
         <meta
           property="og:description"
@@ -29,25 +66,19 @@ export default function ReviewPage() {
         />
 
         {/* OG Image */}
-        <meta
-          property="og:image"
-          content="https://www.chiangmaiusedcar.com/herobanner/thank-you.webp"
-        />
+        <meta property="og:image" content={'$SITE_URL/herobanner/thank-you.webp'} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
 
         {/* Twitter Card Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://www.chiangmaiusedcar.com/review" />
+        <meta name="twitter:url" content={'$SITE_URL/review'} />
         <meta name="twitter:title" content=" ขอบคุณที่ไว้วางใจออกรถกับ ครูหนึ่งรถสวยเชียงใหม่" />
         <meta
           name="twitter:description"
           content="ขอให้รถคันนี้นำพาความสุขและโชคลาภมาให้ท่าน รบกวนเวลา 1 นาทีรีวิว 5 ดาวเพื่อเป็นกำลังใจให้ทีมงานหน่อยนะครับ "
         />
-        <meta
-          name="twitter:image"
-          content="https://www.chiangmaiusedcar.com/herobanner/thank-you.webp"
-        />
+        <meta name="twitter:image" content={'$SITE_URL/herobanner/thank-you.webp'} />
 
         <meta name="robots" content="noindex, nofollow" />
       </Head>
@@ -115,15 +146,38 @@ export default function ReviewPage() {
             </div>
           </div>
 
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="pt-2 pb-2 w-full flex justify-center"
-          >
-            <GoogleReviewButton reviewUrl={GOOGLE_REVIEW_URL} />
-          </motion.div>
+          <div className="w-full flex flex-col items-center">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="pt-2 pb-2 w-full flex justify-center cursor-pointer"
+              onClick={handleReviewClick}
+            >
+              <div className="pointer-events-none w-full flex justify-center">
+                <GoogleReviewButton reviewUrl="#" />
+              </div>
+            </motion.div>
 
-          <div className="w-full mt-7 sm:mt-9 pt-5 sm:pt-6 border-t border-slate-100 sm:border-slate-200/50 flex flex-col items-center gap-3 sm:gap-4">
+            {/* แจ้งเตือนแบบน่ารักๆ เบาๆ สำหรับผู้ใช้ iPhone ในเฟสด้านล่างปุ่ม เพื่อให้ไม่รกเกินไป */}
+            <AnimatePresence>
+              {showIosWarning && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="mt-3 text-[12px] sm:text-[13px] text-slate-500 text-center font-light px-2 flex items-center justify-center gap-1.5"
+                >
+                  <Info className="w-4 h-4 text-blue-400 shrink-0" />
+                  <span>
+                    สำหรับ iPhone หากกดไม่ได้ แนะนำให้กด
+                    <b className="font-semibold text-slate-600">จุดสามจุด ()</b>{' '}
+                    มุมขวาล่างเพื่อเปิดในเบราว์เซอร์
+                  </span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <div className="w-full mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-slate-100 sm:border-slate-200/50 flex flex-col items-center gap-3 sm:gap-4">
             <Link
               href="/"
               className="text-[13px] sm:text-[14px] font-medium text-slate-400 hover:text-blue-600 transition-colors"
