@@ -136,7 +136,7 @@ export async function evaluateCarWithAI(formData: {
       - Brand: ${formData.brand}
       - Model: ${formData.model}
       - Sub-Model: ${formData.subModel || 'Not specified'}
-      - Body Type: ${formData.bodyType && formData.bodyType !== 'เนเธกเนเธฃเธฐเธเธธ' ? formData.bodyType : 'Auto-detect from sub-model'}
+      - Body Type: ${formData.bodyType && formData.bodyType !== 'ไม่ระบุ' ? formData.bodyType : 'Auto-detect from sub-model'}
       - Gear: ${formData.gear || 'Auto'}
       - Year: ${formData.year}
       - Mileage: ${formData.mileage} km
@@ -147,31 +147,19 @@ export async function evaluateCarWithAI(formData: {
       - HISTORICAL VALUATION DATA: ${historicContext}
 
       Rules:
-      1. CRITICAL CONTEXT: You are an expert Thai used car dealer appraiser. Your valuation methodology MUST strictly follow the authoritative TTB Bluebook standard: "เธชเธณเธฃเธงเธเธฃเธฒเธเธฒเธ•เธฅเธฒเธ” เธเธฒเธเนเธซเธฅเนเธเธเนเธญเธกเธนเธฅเธ—เธตเนเธเนเธฒเน€เธเธทเนเธญเธ–เธทเธญ เธญเธฒเธ—เธด เธเธฒเธเธเธฃเธฐเธกเธนเธฅเธฃเธ–เธขเธเธ•เน, เธเธฒเธเนเธชเธ”เธเธฃเธ–เธขเธเธ•เน, เธเธฑเธเธเธกเธดเธ•เธฃ เนเธฅเธฐเธฅเธนเธเธเนเธฒ เธเธณเธเนเธญเธกเธนเธฅเธกเธฒเธงเธดเน€เธเธฃเธฒเธฐเธซเนเธ•เธฒเธกเธกเธฒเธ•เธฃเธเธฒเธ ISO9001: 2015 เนเธเนเน€เธเธ“เธ‘เนเธเธ“เธฐเธเธฃเธฃเธกเธเธฒเธฃเธเธดเธเธฒเธฃเธ“เธฒเนเธฅเธฐเธเธณเธซเธเธ”เธฃเธฒเธเธฒเธเธฅเธฒเธเธฃเธ–เธขเธเธ•เนเนเธเนเนเธฅเนเธง เธเนเธฒเธเธเธฒเธฃเธ•เธฃเธงเธเธชเธญเธเธเธฒเธ Auditor 'SGS Thailand Co., Ltd.' เนเธฅเธฐเนเธ”เนเธฃเธฑเธเธเธฒเธฃเธฃเธฑเธเธฃเธญเธ Certificate เธเธฒเธเธ—เธฒเธ UKAS เธเธฃเธฐเน€เธ—เธจ". Prices MUST also strictly anchor to the "เธเธฑเธเธเธตเธฃเธฒเธเธฒเธเธฃเธฐเน€เธกเธดเธเธฃเธ–เธขเธเธ•เน เธ.เธจ. 2568 เธเธฒเธเธเธฃเธกเธเธฒเธฃเธเธเธชเนเธเธ—เธฒเธเธเธ (Thai DLT 2025)".
-      2. Step 1: Access your internal knowledge of the TTB ISO9001 certified market data and the DLT 2568 appraisal for this exact Make, Model, Sub-model, and Year. Base your pricing on these official standards. 
-      3. Step 2: Set the 'market_middle_price' (เธฃเธฒเธเธฒเธเธฅเธฒเธเธฃเธ–เธกเธทเธญเธชเธญเธ) heavily relying on the TTB and DLT 2568 baseline. IF the user provides a "User Reference TTB Price" in the context, you MULT absolutely, strictly set 'market_middle_price' to that exact number provided by the user. Do not discount it. If exact data is fuzzy, fallback to this strict depreciation curve from the Original New Car Price:
-         - Japanese Cars (Toyota/Honda): 1-3 yrs (75-85%), 4-7 yrs (60-70%), 8-12 yrs (40-55%), 13-16 yrs (15-20%), 17+ yrs (max 10-15%). 
-         - Note: Very old cars (like a 2009 Yaris) should generally have a strictly low baseline book value, often not exceeding 90,000 THB - 100,000 THB depending on exact sub-models. Always lean to the lower bound to protect the dealer.
-         - Euro/American: Depreciate 10-20% faster.
-      4. Step 3: Compute 'finance_ceiling' (เธขเธญเธ”เธเธฑเธ”เนเธเนเธเธเธเนเธชเธนเธเธชเธธเธ”). This MUST mathematically be EXACTLY 80% to 90% of your computed 'market_middle_price' based on current Thai bank LTV standards for this brand.
-      5. Step 4: Determine 'retail_target' (เธฃเธฒเธเธฒเธ•เธฑเนเธเธเธฒเธขเธซเธเนเธฒเน€เธ•เนเธเธ—เน) mirroring current One2Car or Roddonjai listing market values for this precise sub-model and mileage.
-      6. Step 5: Compute 'estimated_profit' (เธเธณเนเธฃเน€เธเนเธฒเธซเธกเธฒเธข). Adjust profit margin dynamically based on liquidity (เธชเธ เธฒเธเธเธฅเนเธญเธ):
-         - Fast Movers (Toyota, Honda, Isuzu - City cars & popular pickups): 10% to 15% of retail_target. Doing this ensures the safe_buy_in can be highly competitive.
-         - Moderate Movers (Nissan, Mitsubishi, Suzuki): 15% to 20% of retail_target.
-         - Slow Movers (Ford, Mazda, Chevrolet, MG, Euro cars): 20% to 30% of retail_target (higher risk/holding cost).
-         ROUND the result to the nearest 1,000 THB (e.g. 62,340 becomes 62,000).
-      7. Step 6: Compute 'safe_buy_in' (เธฃเธฒเธเธฒเธฃเธฑเธเธเธทเนเธญเน€เธเนเธฒ). Formula: safe_buy_in = retail_target - estimated_profit - reconditioning_costs.
-         - Mileage Penalty: Standard mileage is approx 20,000 km/year. If mileage is significantly higher than standard, deduct an extra 1 to 1.5 THB per excess kilometer from the buy-in price.
-         - Reconditioning & Age Penalty: usually 15,000-20,000 THB for cars under 5 years. For cars 6-10 years old use 25,000-30,000 THB. For cars OLDER than 10 years (e.g. 2009 year model), the reconditioning/risk cost MUST be strictly 40,000-50,000 THB because old cars have high hidden repair costs.
-         - Hard Cap on Old Cars: If the car is older than 12 years (e.g. Year < 2014), the safe_buy_in MUST be heavily suppressed (at least 45% to 55% lower than retail_target) to avoid negative equity and slow sales. Under no circumstance should an old car be bought at a high price.
-         ROUND the final 'safe_buy_in' to the nearest 1,000 THB.
-      8. Provide 1-3 critical mechanical inspection checkpoints or common defects for this specific car model (เธเธฑเธเธซเธฒเธญเธฒเธเธฒเธฃเน€เธชเธตเธขเธเธฃเธฐเธเธณเธฃเธธเนเธ). If there are no known issues, provide a single string "เนเธกเนเธกเธตเธญเธฒเธเธฒเธฃเธเธฃเธฐเธเธณเธฃเธธเนเธเธ—เธตเนเธเนเธฒเธเธฑเธเธงเธฅ" inside the array.
-      9. Compare with HISTORICAL VALUATION DATA (if any). If internal past history exists, you MUST mention the depreciation or price trend compared to your current evaluation inside the \`cost_breakdown_explanation\`.
-      10. Provide 3-5 pros and cons of this specific car model.
-      11. Provide information about spare parts pricing (cheap/expensive) and availability of service centers in Thailand.
+      1. CRITICAL CONTEXT: You are an expert Thai used car dealer appraiser.
+      2. Step 1 (Middle Price): Base your 'market_middle_price' heavily on the User Reference TTB Price if provided. If not provided AND the API link is inactive, fall back to your internal market knowledge for 2026 Thailand. Use realistic bounds (e.g. 2017 Japanese pickup: 350K-450K, 2018 Eco car: 200K-330K). Do NOT invent unusually low or high prices.
+      3. Step 2 (Finance Ceiling): Compute 'finance_ceiling'. MUST be EXACTLY 80% to 90% of your computed 'market_middle_price'.
+      4. Step 3 (Retail Target): Determine 'retail_target' mirroring current Thai market actual sell prices for this model/year.
+      5. Step 4 (Profit Margin): Compute 'estimated_profit'. MUST strictly be 10% to 20% of 'retail_target'. MATHEMATICAL FAIL-SAFE: Double check that estimated_profit is NEVER larger than retail_target. For a 360,000 THB car, 10% is 36,000 THB. Do NOT accidentally write 360,000 THB profit!
+      6. Step 5 (Safe Buy-in): Compute 'safe_buy_in' = retail_target - estimated_profit - reconditioning_costs. Reconditioning cost varies from 15,000 to 50,000 THB depending on age.
+      7. Provide 1-3 critical mechanical inspection checkpoints (ปัญหาอาการเสียประจำรุ่น).
+      8. Provide 3-5 pros and cons of this specific car model.
+      9. Provide information about spare parts pricing and availability.
 
       Return STRICTLY a JSON object with NO markdown formatting, NO backticks, ONLY raw JSON with keys:
       {
+        "calculation_reasoning": "IN THAI: Explain your step-by-step mathematical reasoning FIRST. Mention how you arrived at market_middle_price, retail_target, what percentage you used for estimated_profit, and the final safe_buy_in. Also compare with HISTORICAL VALUATION DATA if any.",
         "new_car_price": number,
         "market_middle_price": number,
         "finance_ceiling": number,
@@ -179,12 +167,12 @@ export async function evaluateCarWithAI(formData: {
         "safe_buy_in": number,
         "estimated_profit": number,
         "reconditioning_cost": number,
-        "cost_breakdown_explanation": "string explaining how the buy_in and profit were calculated (including deductions like mileage/age). **CRITICAL: You MUST include comparison thoughts against the 'HISTORICAL VALUATION DATA' provided in the prompt (if relevant) explaining how prices depreciated or changed** IN THAI",
-        "checkpoints": ["string array of 3-5 inspection focuses and risk summary IN THAI"],
-        "pros": ["string array of 3-5 pros/highlights IN THAI"],
-        "cons": ["string array of 3-5 cons/weaknesses IN THAI"],
-        "common_issues": ["string array of known common issues IN THAI"],
-        "spare_parts_and_service": "string detailing spare parts pricing and service center availability IN THAI"
+        "cost_breakdown_explanation": "Summarize the final calculation.",
+        "checkpoints": ["string array IN THAI"],
+        "pros": ["string array IN THAI"],
+        "cons": ["string array IN THAI"],
+        "common_issues": ["string array IN THAI"],
+        "spare_parts_and_service": "string IN THAI"
       }
     `;
 
