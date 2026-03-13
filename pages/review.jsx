@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, HeartHandshake, Info } from 'lucide-react';
+import { Sparkles, HeartHandshake, Info, ExternalLink } from 'lucide-react';
 import GoogleReviewButton from '../components/GoogleReviewButton';
 
 const GOOGLE_REVIEW_URL = 'https://g.page/r/Ccu3ZhBBWbWcEBM/review';
@@ -172,12 +172,15 @@ export default function ReviewPage() {
                   </p>
                   <button
                     onClick={() => {
-                      window.location.href =
-                        'x-web-search://?q=https://g.page/r/Ccu3ZhBBWbWcEBM/review';
+                      navigator.clipboard.writeText('https://g.page/r/Ccu3ZhBBWbWcEBM/review');
+                      alert(
+                        '✅ คัดลอกลิงก์สำเร็จ!\n\nกรุณาเปิดแอป Safari หรือ Chrome ในมือถือของคุณ แล้ว "วางลิงก์" เพื่อทำการรีวิวได้เลยครับ'
+                      );
                     }}
                     className="flex items-center justify-center gap-2 w-full max-w-[280px] px-5 py-3.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl shadow-lg shadow-slate-800/20 active:scale-95 transition-all text-[14px] font-medium"
                   >
-                    เปิดแอพ Safari ด้านนอก
+                    <ExternalLink className="w-5 h-5 opacity-90" />
+                    คัดลอกลิงก์ไปเปิดใน Safari
                   </button>
                   <p className="text-[11px] text-slate-400 mt-3 max-w-[240px] leading-relaxed font-light text-center">
                     หรือกด <span className="font-medium text-slate-600">จุด 3 จุด</span>{' '}
