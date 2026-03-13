@@ -6,32 +6,10 @@ import { motion } from 'framer-motion';
 import { Sparkles, HeartHandshake } from 'lucide-react';
 import GoogleReviewButton from '../components/GoogleReviewButton';
 
-const GOOGLE_REVIEW_URL = 'https://g.page/r/Ccu3ZhBBWbWcEBM/review?openExternalBrowser=1';
+const GOOGLE_REVIEW_URL = 'https://urlgeni.us/h9hjMQ';
 const SITE_URL = 'https://www.chiangmaiusedcar.com';
 
 export default function ReviewPage() {
-  const handleAutoRedirect = () => {
-    // พยายามบังคับเตะออกไปแอปอื่นเวลาลูกค้ากดปุ่ม
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    const isFacebook =
-      ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1 || ua.indexOf('Instagram') > -1;
-    const isAndroid = /android/i.test(ua);
-
-    // ถ้าเป็น Android และเปิดผ่าน FB ให้บังคับเด้งเข้า Chrome เลย
-    if (isFacebook && isAndroid) {
-      window.location.href =
-        'intent://g.page/r/Ccu3ZhBBWbWcEBM/review#Intent;scheme=https;package=com.android.chrome;end;';
-      // ใช้ delay เผื่อ fallback
-      setTimeout(() => {
-        window.location.href = GOOGLE_REVIEW_URL;
-      }, 500);
-      return;
-    }
-
-    // หน้าปกติ หรือ iOS ให้ไปที่ URL เดิม
-    window.location.href = GOOGLE_REVIEW_URL;
-  };
-
   return (
     <>
       <Head>
@@ -140,12 +118,9 @@ export default function ReviewPage() {
           <motion.div
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="pt-2 pb-2 w-full flex justify-center cursor-pointer"
-            onClick={handleAutoRedirect}
+            className="pt-2 pb-2 w-full flex justify-center"
           >
-            <div className="pointer-events-none w-full flex justify-center">
-              <GoogleReviewButton reviewUrl="#" />
-            </div>
+            <GoogleReviewButton reviewUrl={GOOGLE_REVIEW_URL} />
           </motion.div>
 
           <div className="w-full mt-7 sm:mt-9 pt-5 sm:pt-6 border-t border-slate-100 sm:border-slate-200/50 flex flex-col items-center gap-3 sm:gap-4">
