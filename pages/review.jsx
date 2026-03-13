@@ -152,7 +152,7 @@ export default function ReviewPage() {
 
             {/* ปุ่ม Facebook Review */}
             <motion.a
-              href="https://www.facebook.com/krunuengusedcar/reviews"
+              href="https://www.facebook.com/KN2car/reviews/"
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.02 }}
