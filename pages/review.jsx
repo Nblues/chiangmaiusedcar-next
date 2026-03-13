@@ -10,21 +10,6 @@ const GOOGLE_REVIEW_URL = 'https://g.page/r/Ccu3ZhBBWbWcEBM/review';
 const SITE_URL = 'https://www.chiangmaiusedcar.com';
 
 export default function ReviewPage() {
-  const [showIosWarning, setShowIosWarning] = useState(false);
-
-  useEffect(() => {
-    // ตรวจจับตอนโหลดหน้าเว็บ
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    const isFacebook =
-      ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1 || ua.indexOf('Instagram') > -1;
-    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-
-    // ถ้าเป็น iPhone และเปิดจาก Facebook ให้แสดงคำแนะนำเล็กๆ ล่วงหน้า
-    if (isFacebook && isIOS) {
-      setShowIosWarning(true);
-    }
-  }, []);
-
   const handleReviewClick = e => {
     e.preventDefault();
     const ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -158,40 +143,27 @@ export default function ReviewPage() {
               </div>
             </motion.div>
 
-            {/* แจ้งเตือนแบบน่ารักๆ เบาๆ สำหรับผู้ใช้ iPhone ในเฟสด้านล่างปุ่ม เพื่อให้ไม่รกเกินไป */}
-            <AnimatePresence>
-              {showIosWarning && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, height: 'auto', scale: 1 }}
-                  exit={{ opacity: 0, height: 0, scale: 0.95 }}
-                  className="mt-5 w-full flex flex-col items-center overflow-hidden"
-                >
-                  <p className="text-[12px] sm:text-[13px] text-slate-500 mb-2 font-light">
-                    กดปุ่มด้านบนแล้วต้องล็อกอินใหม่? 👇
-                  </p>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText('https://g.page/r/Ccu3ZhBBWbWcEBM/review');
-                      alert(
-                        '✅ คัดลอกลิงก์สำเร็จ!\n\nกรุณาเปิดแอป Safari หรือ Chrome ในมือถือของคุณ แล้ว "วางลิงก์" เพื่อทำการรีวิวได้เลยครับ'
-                      );
-                    }}
-                    className="flex items-center justify-center gap-2 w-full max-w-[280px] px-5 py-3.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl shadow-lg shadow-slate-800/20 active:scale-95 transition-all text-[14px] font-medium"
-                  >
-                    <ExternalLink className="w-5 h-5 opacity-90" />
-                    คัดลอกลิงก์ไปเปิดใน Safari
-                  </button>
-                  <p className="text-[11px] text-slate-400 mt-3 max-w-[240px] leading-relaxed font-light text-center">
-                    หรือกด <span className="font-medium text-slate-600">จุด 3 จุด</span>{' '}
-                    ที่มุมขวาล่าง แล้วเลือก{' '}
-                    <span className="font-medium text-slate-600">
-                      &quot;เปิดในเบราว์เซอร์&quot;
-                    </span>
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* ตัวแบ่ง */}
+            <div className="flex items-center w-[85%] my-4 sm:my-5">
+              <div className="flex-1 border-t border-slate-200"></div>
+              <span className="px-3 text-[12px] text-slate-400 font-light">หรือทางเลือกอื่น</span>
+              <div className="flex-1 border-t border-slate-200"></div>
+            </div>
+
+            {/* ปุ่ม Facebook Review */}
+            <motion.a
+              href="https://www.facebook.com/krunuengusedcar/reviews"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="flex items-center justify-center gap-2 w-full max-w-[280px] px-5 py-3.5 bg-[#1877F2] hover:bg-[#166FE5] text-white rounded-xl shadow-[0_8px_20px_-6px_rgba(24,119,242,0.4)] transition-all font-medium text-[14px] cursor-pointer"
+            >
+              <svg className="w-[20px] h-[20px] fill-current" viewBox="0 0 24 24">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+              </svg>
+              รีวิวผ่านเพจ Facebook ให้เรา
+            </motion.a>
           </div>
 
           <div className="w-full mt-6 sm:mt-8 pt-5 sm:pt-6 border-t border-slate-100 sm:border-slate-200/50 flex flex-col items-center gap-3 sm:gap-4">
