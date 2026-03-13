@@ -123,7 +123,7 @@ export async function evaluateCarWithAI(formData: {
 
     const ai = new GoogleGenerativeAI(apiKey);
     const model = ai.getGenerativeModel({ 
-      model: 'gemini-1.5-pro', // Upgraded to the ultimate latest 3.1 Pro version
+      model: 'gemini-3.1-pro-preview', // Upgraded to the ultimate latest 3.1 Pro version
       generationConfig: {
         temperature: 0, // เธ•เธฑเนเธเธเนเธฒเธเธงเธฒเธกเธชเธฃเนเธฒเธเธชเธฃเธฃเธเนเน€เธเนเธ 0 เน€เธเธทเนเธญเนเธซเนเนเธ”เนเธเธฅเธฅเธฑเธเธเน(เธฃเธฒเธเธฒ) เธ—เธตเนเธ•เธฒเธขเธ•เธฑเธงเธ—เธตเนเธชเธธเธ”
         topK: 1,
@@ -228,4 +228,5 @@ export async function evaluateCarWithAI(formData: {
     return { success: false, error: error.message || 'Failed to parse AI response' };
   }
 }
+
 
