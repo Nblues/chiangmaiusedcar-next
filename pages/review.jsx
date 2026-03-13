@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Sparkles, HeartHandshake } from 'lucide-react';
 import GoogleReviewButton from '../components/GoogleReviewButton';
 
-const GOOGLE_REVIEW_URL = 'https://g.page/r/Ccu3ZhBBWbWcEBM/review';
+const GOOGLE_REVIEW_URL = 'https://g.page/r/Ccu3ZhBBWbWcEBM/review?openExternalBrowser=1';
 const SITE_URL = 'https://www.chiangmaiusedcar.com';
 
 export default function ReviewPage() {
