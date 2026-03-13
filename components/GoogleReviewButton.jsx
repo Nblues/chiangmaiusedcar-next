@@ -7,12 +7,11 @@ const GoogleReviewButton = ({ reviewUrl = 'https://g.page/r/Ccu3ZhBBWbWcEBM/revi
       href={reviewUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="relative flex items-center justify-center w-full px-5 py-4 sm:px-8 sm:py-4 bg-white/95 backdrop-blur-md shadow-[0_8px_20px_rgba(0,0,0,0.04)] sm:shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100/80 rounded-2xl sm:rounded-full hover:shadow-[0_15px_40px_-5px_rgba(66,133,244,0.15)] hover:-translate-y-1 hover:border-blue-200 transition-all duration-500 ease-out group overflow-hidden"
+      className="relative flex items-center justify-center w-full px-5 py-4 sm:px-8 sm:py-4 bg-white hover:bg-slate-50 shadow-[0_12px_24px_rgba(0,0,0,0.08)] sm:shadow-[0_12px_30px_rgb(0,0,0,0.06)] border-[1.5px] border-slate-200/80 rounded-[1.25rem] sm:rounded-full hover:shadow-[0_15px_40px_-5px_rgba(66,133,244,0.15)] hover:-translate-y-1 hover:border-blue-300 transition-all duration-500 ease-out group overflow-hidden"
     >
       <div className="absolute inset-0 -translate-x-[150%] bg-gradient-to-r from-transparent via-blue-50/50 to-transparent group-hover:translate-x-[150%] transition-transform duration-[1.5s] ease-in-out pointer-events-none" />
-
       <svg
-        className="w-[30px] h-[30px] sm:w-[34px] sm:h-[34px] mr-3.5 sm:mr-5 drop-shadow-sm group-hover:scale-110 transition-transform duration-500 ease-out z-10 shrink-0"
+        className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] mr-3 sm:mr-5 drop-shadow-sm group-hover:scale-110 transition-transform duration-500 ease-out z-10 shrink-0"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -35,25 +34,25 @@ const GoogleReviewButton = ({ reviewUrl = 'https://g.page/r/Ccu3ZhBBWbWcEBM/revi
       </svg>
 
       <div className="text-left flex flex-col z-10 items-start">
-        <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-[0.1em] sm:tracking-[0.14em] group-hover:text-blue-600 transition-colors duration-300 font-sans">
-          ให้คะแนนเราบน
+        <span className="text-[12px] sm:text-[13px] font-semibold text-slate-500 uppercase tracking-[0.1em] sm:tracking-[0.14em] group-hover:text-blue-600 transition-colors duration-300 font-sans">
+          รีวิวให้เราบน
         </span>
         <div className="flex items-center gap-2 sm:gap-3 mt-0.5 sm:mt-1">
-          <span className="text-[17px] sm:text-[19px] font-bold text-slate-800 tracking-tight leading-none group-hover:text-slate-900 font-sans whitespace-nowrap">
+          <span className="text-[20px] sm:text-[22px] font-bold text-slate-800 tracking-tight leading-none group-hover:text-slate-900 font-sans whitespace-nowrap">
             Google
           </span>
 
-          {/* Always show stars so it looks consistent without shifting, scales for mobile */}
-          <div className="flex text-yellow-400 gap-[1px] sm:gap-0.5 opacity-90 group-hover:opacity-100 transition-opacity">
-            <Star className="w-[14px] h-[14px] sm:w-[16px] sm:h-[16px] fill-current drop-shadow-sm" />
-            <Star className="w-[14px] h-[14px] sm:w-[16px] sm:h-[16px] fill-current drop-shadow-sm" />
-            <Star className="w-[14px] h-[14px] sm:w-[16px] sm:h-[16px] fill-current drop-shadow-sm" />
-            <Star className="w-[14px] h-[14px] sm:w-[16px] sm:h-[16px] fill-current drop-shadow-sm" />
-            <Star className="w-[14px] h-[14px] sm:w-[16px] sm:h-[16px] fill-current drop-shadow-sm" />
+          <div className="flex text-yellow-400 gap-[1.5px] sm:gap-0.5 opacity-95 group-hover:opacity-100 transition-opacity">
+            <Star className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] fill-current drop-shadow-sm" />
+            <Star className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] fill-current drop-shadow-sm" />
+            <Star className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] fill-current drop-shadow-sm" />
+            <Star className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] fill-current drop-shadow-sm" />
+            <Star className="w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] fill-current drop-shadow-sm" />
           </div>
         </div>
       </div>
     </a>
   );
 };
+
 export default GoogleReviewButton;
