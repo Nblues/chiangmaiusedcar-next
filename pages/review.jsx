@@ -1,15 +1,25 @@
-﻿import React from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Sparkles, HeartHandshake } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sparkles, HeartHandshake, AlertCircle } from 'lucide-react';
 import GoogleReviewButton from '../components/GoogleReviewButton';
 
 const GOOGLE_REVIEW_URL = 'https://g.page/r/Ccu3ZhBBWbWcEBM/review?openExternalBrowser=1';
 const SITE_URL = 'https://www.chiangmaiusedcar.com';
 
 export default function ReviewPage() {
+  const [isFbBrowser, setIsFbBrowser] = useState(false);
+
+  useEffect(() => {
+    // Detect In-App Browser (Facebook, Messenger, Instagram)
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    if (ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1 || ua.indexOf('Instagram') > -1) {
+      setIsFbBrowser(true);
+    }
+  }, []);
+
   return (
     <>
       <Head>
@@ -82,6 +92,27 @@ export default function ReviewPage() {
               />
             </div>
           </motion.div>
+
+          {/* Social In-App Browser Warning message */}
+          <AnimatePresence>
+            {isFbBrowser && (
+              <motion.div
+                initial={{ opacity: 0, y: -10, height: 0 }}
+                animate={{ opacity: 1, y: 0, height: 'auto' }}
+                className="w-full mb-6 overflow-hidden"
+              >
+                <div className="bg-red-50/80 border border-red-200 p-4 rounded-2xl flex items-start gap-3 text-left shadow-sm">
+                  <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                  <div className="text-[13.5px] sm:text-[14.5px] text-red-800 leading-[1.5]">
+                    <span className="font-semibold block mb-1">เปิดผ่าน Facebook?</span>
+                    รบกวนกดที่เมนู <b>จุด 3 จุด ()</b> มุมหน้าจอ แล้วเลือก{' '}
+                    <b>&quot;เปิดในเบราว์เซอร์&quot;</b> (Open in browser) ก่อนกดรีวิว
+                    เพื่อป้องกันระบบให้ใส่รหัสผ่านใหม่ครับ
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="w-full space-y-5 sm:space-y-6 mb-7 sm:mb-8">
             <h1 className="text-[20px] sm:text-[24px] font-bold text-slate-800 leading-[1.3] sm:leading-[1.25] tracking-tight">
