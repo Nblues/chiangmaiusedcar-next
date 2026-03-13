@@ -202,7 +202,7 @@ export default function ValuationDashboard() {
     ﻿<div className="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8 font-thai antialiased selection:bg-accent selection:text-white">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Modern 2026 Hero Header */}
-        <div className="relative overflow-hidden mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gradient-to-br from-slate-900 via-primary-900 to-black p-8 md:p-10 rounded-[2rem] shadow-2xl border border-white/10">
+        <div className="relative overflow-hidden mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-gradient-to-br from-slate-900 via-primary-900 to-black p-5 sm:p-8 md:p-10 rounded-[2rem] shadow-2xl border border-white/10">
           <div className="absolute top-0 right-0 -mr-20 -mt-20 w-72 h-72 rounded-full bg-accent/20 blur-3xl mix-blend-screen pointer-events-none"></div>
           <div className="absolute bottom-0 left-10 -mb-20 w-64 h-64 rounded-full bg-primary/30 blur-3xl mix-blend-screen pointer-events-none"></div>
           
@@ -218,7 +218,7 @@ export default function ValuationDashboard() {
               </picture>
             </div>
             <div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-3 drop-shadow-md">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl font-black tracking-tight text-white mb-3 drop-shadow-md">
                 ระบบประเมินราคากลางรถมือสอง
                 <br className="hidden sm:block md:hidden" />{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-orange-400">
@@ -337,7 +337,7 @@ export default function ValuationDashboard() {
                     </Select>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <label className="text-sm font-medium text-slate-700">ระบบเกียร์</label>
                       <Select
@@ -364,7 +364,7 @@ export default function ValuationDashboard() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <label className="text-sm font-medium text-slate-700">ปีรถ</label>
                       <Input
@@ -695,20 +695,20 @@ export default function ValuationDashboard() {
           {!result && !loading && (
             <div className="lg:col-span-8 h-full animate-in fade-in slide-in-from-right-8 duration-700">
               <Card className="h-full shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-none rounded-3xl bg-white/80 backdrop-blur-xl overflow-hidden flex flex-col">
-                <CardHeader className="bg-slate-50/80 border-b border-slate-100/80 px-6 py-5">
+                <CardHeader className="bg-slate-50/80 border-b border-slate-100/80 px-4 sm:px-6 py-4 sm:py-5">
                   <CardTitle className="text-xl text-primary-900 font-semibold flex items-center">
                     <History className="w-5 h-5 mr-2 text-primary-500" /> ประวัติการประเมิน
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-0 flex-grow">
-                  <div className="overflow-x-auto">
+                  <div className="overflow-x-auto w-full -mx-4 sm:mx-0 px-4 sm:px-0">
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-transparent border-b-slate-100 hover:bg-transparent">
                           <TableHead className="whitespace-nowrap py-4 text-slate-500 font-medium px-6">
                             วันที่
                           </TableHead>
-                          <TableHead className="min-w-[200px] py-4 text-slate-500 font-medium px-6">
+                          <TableHead className="min-w-[200px] md:min-w-[250px] py-4 text-slate-500 font-medium px-4 md:px-6">
                             ข้อมูลรถ
                           </TableHead>
                           <TableHead className="whitespace-nowrap py-4 text-slate-500 font-medium px-6 text-right">
@@ -729,27 +729,27 @@ export default function ValuationDashboard() {
                               key={row.id}
                               className="hover:bg-primary-50/40 transition-colors border-b-slate-50/80 group"
                             >
-                              <TableCell className="text-sm text-slate-500 whitespace-nowrap px-6 py-3">
+                              <TableCell className="text-sm text-slate-500 whitespace-nowrap px-4 sm:px-6 py-3">
                                 {new Date(row.created_at).toLocaleDateString('th-TH', {
                                   year: '2-digit',
                                   month: 'short',
                                   day: 'numeric',
                                 })}
                               </TableCell>
-                              <TableCell className="font-medium text-slate-800 px-6 py-3">
+                              <TableCell className="font-medium text-slate-800 px-4 sm:px-6 py-3">
                                 <div className="truncate max-w-[200px]">{row.car_details}</div>
                                 <span className="block text-xs font-normal text-slate-400 mt-0.5">
                                   ปี {row.year} •{' '}
                                   {row.region === 'Chiang Mai/Northern' ? 'ภาคเหนือ' : 'ภาคกลาง'}
                                 </span>
                               </TableCell>
-                              <TableCell className="text-emerald-600 font-semibold whitespace-nowrap px-6 py-3 text-right">
+                              <TableCell className="text-emerald-600 font-semibold whitespace-nowrap px-4 sm:px-6 py-3 text-right">
                                 ฿{row.max_buy_in?.toLocaleString()}
                               </TableCell>
-                              <TableCell className="text-slate-600 font-medium whitespace-nowrap px-6 py-3 text-right">
+                              <TableCell className="text-slate-600 font-medium whitespace-nowrap px-4 sm:px-6 py-3 text-right">
                                 ฿{((row.retail_target || 0) - (row.max_buy_in || 0)).toLocaleString()}
                               </TableCell>
-                              <TableCell className="whitespace-nowrap px-6 py-3 text-center sticky right-0 bg-white/95 z-10 shadow-[-10px_0_15px_-3px_rgba(0,0,0,0.05)] border-l border-slate-50/50">
+                              <TableCell className="whitespace-nowrap px-4 sm:px-6 py-3 text-center sticky right-0 bg-white/95 z-10 shadow-[-10px_0_15px_-3px_rgba(0,0,0,0.05)] border-l border-slate-50/50">
                                 <Button
                                   variant="ghost"
                                   size="sm"
@@ -792,20 +792,20 @@ export default function ValuationDashboard() {
         {(result || loading) && (
           <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 mt-8">
             <Card className="shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-none rounded-3xl bg-white overflow-hidden">
-              <CardHeader className="bg-slate-50/50 border-b border-slate-100 px-6 py-5">
+              <CardHeader className="bg-slate-50/50 border-b border-slate-100 px-4 sm:px-6 py-4 sm:py-5">
                 <CardTitle className="text-xl text-primary-900 font-semibold flex items-center">
                     <History className="w-5 h-5 mr-2 text-primary-500" /> ประวัติการประเมิน
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto w-full -mx-4 sm:mx-0 px-4 sm:px-0">
                   <Table>
                     <TableHeader>
                       <TableRow className="bg-slate-50/50 border-b-slate-100 hover:bg-slate-50/50">
                         <TableHead className="whitespace-nowrap py-4 text-slate-500 font-medium px-6">
                           วันที่
                         </TableHead>
-                        <TableHead className="min-w-[250px] py-4 text-slate-500 font-medium px-6">
+                        <TableHead className="min-w-[200px] md:min-w-[250px] py-4 text-slate-500 font-medium px-4 md:px-6">
                           ข้อมูลรถ
                         </TableHead>
                         <TableHead className="whitespace-nowrap py-4 text-slate-500 font-medium px-6">
@@ -829,7 +829,7 @@ export default function ValuationDashboard() {
                             key={row.id}
                             className="hover:bg-primary-50/30 transition-colors border-b-slate-50 group"
                           >
-                            <TableCell className="text-sm text-slate-500 whitespace-nowrap px-6 py-4">
+                            <TableCell className="text-sm text-slate-500 whitespace-nowrap px-4 sm:px-6 py-4">
                               {new Date(row.created_at).toLocaleString('th-TH', {
                                 year: 'numeric',
                                 month: 'short',
@@ -838,7 +838,7 @@ export default function ValuationDashboard() {
                                 minute: '2-digit',
                               })}
                             </TableCell>
-                            <TableCell className="font-semibold text-slate-800 px-6 py-4">
+                            <TableCell className="font-semibold text-slate-800 px-4 sm:px-6 py-4">
                               {row.car_details} ({row.year})
                               <span className="block text-xs font-normal text-slate-400 mt-1">
                                 {row.region === 'Chiang Mai/Northern'
@@ -846,16 +846,16 @@ export default function ValuationDashboard() {
                                   : '📍 ภาคกลาง'}
                               </span>
                             </TableCell>
-                            <TableCell className="text-primary-600 font-medium whitespace-nowrap px-6 py-4">
+                            <TableCell className="text-primary-600 font-medium whitespace-nowrap px-4 sm:px-6 py-4">
                               ฿{row.ttb_finance_max?.toLocaleString()}
                             </TableCell>
-                            <TableCell className="text-emerald-600 bg-emerald-50/30 font-bold whitespace-nowrap px-6 py-4 group-hover:bg-emerald-50/60 transition-colors">
+                            <TableCell className="text-emerald-600 bg-emerald-50/30 font-bold whitespace-nowrap px-4 sm:px-6 py-4 group-hover:bg-emerald-50/60 transition-colors">
                               ฿{row.max_buy_in?.toLocaleString()}
                             </TableCell>
-                            <TableCell className="text-slate-600 font-medium whitespace-nowrap px-6 py-4">
+                            <TableCell className="text-slate-600 font-medium whitespace-nowrap px-4 sm:px-6 py-4">
                               ฿{((row.retail_target || 0) - (row.max_buy_in || 0)).toLocaleString()}
                             </TableCell>
-                            <TableCell className="whitespace-nowrap px-6 py-4 text-center sticky right-0 bg-white/95 z-10 shadow-[-10px_0_15px_-3px_rgba(0,0,0,0.05)] border-l border-slate-50/50">
+                            <TableCell className="whitespace-nowrap px-4 sm:px-6 py-4 text-center sticky right-0 bg-white/95 z-10 shadow-[-10px_0_15px_-3px_rgba(0,0,0,0.05)] border-l border-slate-50/50">
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -898,3 +898,6 @@ export default function ValuationDashboard() {
 }
 
 // trigger reload
+
+
+
