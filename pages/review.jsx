@@ -162,16 +162,30 @@ export default function ReviewPage() {
             <AnimatePresence>
               {showIosWarning && (
                 <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className="mt-3 text-[12px] sm:text-[13px] text-slate-500 text-center font-light px-2 flex items-center justify-center gap-1.5"
+                  initial={{ opacity: 0, height: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, height: 'auto', scale: 1 }}
+                  exit={{ opacity: 0, height: 0, scale: 0.95 }}
+                  className="mt-5 w-full flex flex-col items-center overflow-hidden"
                 >
-                  <Info className="w-4 h-4 text-blue-400 shrink-0" />
-                  <span>
-                    สำหรับ iPhone หากกดไม่ได้ แนะนำให้กด
-                    <b className="font-semibold text-slate-600">จุดสามจุด ()</b>{' '}
-                    มุมขวาล่างเพื่อเปิดในเบราว์เซอร์
-                  </span>
+                  <p className="text-[12px] sm:text-[13px] text-slate-500 mb-2 font-light">
+                    กดปุ่มด้านบนแล้วต้องล็อกอินใหม่? 👇
+                  </p>
+                  <button
+                    onClick={() => {
+                      window.location.href =
+                        'x-web-search://?q=https://g.page/r/Ccu3ZhBBWbWcEBM/review';
+                    }}
+                    className="flex items-center justify-center gap-2 w-full max-w-[280px] px-5 py-3.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl shadow-lg shadow-slate-800/20 active:scale-95 transition-all text-[14px] font-medium"
+                  >
+                    เปิดแอพ Safari ด้านนอก
+                  </button>
+                  <p className="text-[11px] text-slate-400 mt-3 max-w-[240px] leading-relaxed font-light text-center">
+                    หรือกด <span className="font-medium text-slate-600">จุด 3 จุด</span>{' '}
+                    ที่มุมขวาล่าง แล้วเลือก{' '}
+                    <span className="font-medium text-slate-600">
+                      &quot;เปิดในเบราว์เซอร์&quot;
+                    </span>
+                  </p>
                 </motion.div>
               )}
             </AnimatePresence>
