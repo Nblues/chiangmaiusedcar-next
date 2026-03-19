@@ -56,7 +56,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   }, [car]);
 
   const currentImage = carImages[selectedImageIndex] || carImages[0];
-  const [processedDescription, setProcessedDescription] = useState(null);
   const [mounted, setMounted] = useState(false);
   // สำหรับ back ที่ฉลาด: จำหน้าล่าสุดที่มาจากภายในเว็บ (เก็บใน sessionStorage เท่านั้น)
   // สถานะโหลดรูปหลัก (Hero)
@@ -588,7 +587,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   }, [mounted, car, selectedImageIndex]);
 
   // Process and clean the car description into readable paragraphs and hashtags
-  useEffect(() => {
+  const processedDescription = useMemo(() => {
     const processText = (input = '') => {
       const text = String(input || '')
         // Convert HTML line breaks to new lines
@@ -614,10 +613,10 @@ function CarDetailPage({ car, recommendedCars = [] }) {
       .map(line => line.trim())
       .filter(line => line.length > 0);
 
-    setProcessedDescription({
+    return {
       paragraphs,
       hashtags: hashtagMatches,
-    });
+    };
   }, [car?.description]);
 
   // ป้องกัน hydration error
@@ -792,6 +791,29 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     model: safeGet(car, 'model', ''),
   });
   const carFaqStructuredData = buildFaqPageJsonLd({ url: canonicalUrl, faqs: carFaqs });
+
+  // สังเคราะห์บทความ SEO อัตโนมัติ (แก้ไขปัญหารถมือสอง Thin Content)
+  const autoSyntheticContent = (() => {
+    const b = safeGet(car, 'vendor') || safeGet(car, 'brand', '');
+    const m = _model || _titleNoYear || '';
+    const y = safeGet(car, 'year', '');
+    const p = safeGet(car, 'price.amount', 0);
+    const pr = parseInt(p) > 0 ? `${safeFormatPrice(p).display} บาท` : 'ติดต่อสอบถาม';
+    const c = safeGet(car, 'color', '');
+    const ge = safeGet(car, 'gear', '');
+    const mi = safeGet(car, 'mileage', '');
+    const cc = safeGet(car, 'engine_size', '');
+
+    let text = `รถมือสอง ${b} ${m} ${y ? `ปี ${y}` : ''} `;
+    if (c) text += `สี${c} `;
+    text += `คันนี้ สภาพสมบูรณ์พร้อมใช้งานในเชียงใหม่และจังหวัดใกล้เคียง `;
+    if (cc) text += `มาพร้อมเครื่องยนต์ขนาด ${cc} ซีซี `;
+    if (ge) text += `ระบบเกียร์${ge} `;
+    if (mi) text += `เลขไมล์ปัจจุบัน ${mi} กม. `;
+    text += `ตอบโจทย์ทุกการเดินทาง ด้วยราคาเพียง ${pr} หากคุณกำลังมองหารถ ${b} มือสองคุณภาพดี คันนี้ถือเป็นตัวเลือกที่คุ้มค่าอย่างยิ่ง รองรับทั้งการซื้อเงินสดและการจัดไฟแนนซ์พร้อมบริการให้คำปรึกษาฟรี`;
+
+    return text;
+  })();
 
   return (
     <>
@@ -1540,6 +1562,27 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   ))}
               </div>
 
+              {/* Auto-Synthesized SEO Content */}
+              <div className="mt-8 bg-blue-50 outline outline-1 outline-blue-100 p-5 rounded-lg w-full mb-6">
+                <h3 className="text-lg font-bold text-primary mb-2 font-prompt flex items-center gap-2">
+                  <svg
+                    className="w-5 h-5 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
+                  </svg>
+                  ข้อมูลรถเบื้องต้น (Auto-Summary)
+                </h3>
+                <p className="text-gray-700 leading-loose font-prompt">{autoSyntheticContent}</p>
+              </div>
+
               {/* คำอธิบาย */}
               {car.description && (
                 <div className="mt-6">
@@ -2024,6 +2067,28 @@ export async function getStaticProps({ params }) {
       carMeta = candidates[0] || null;
     }
 
+    // ถ้ารถถูกลบไปแล้ว (ขายไปแล้วและถูกลบจาก Shopify) ให้ Redirect ไปหน้ารวมแทนที่จะขึ้น 404 (ช่วย SEO GSC 114 pages errors)
+    const handleFallbackRedirect = handle => {
+      const lowerHandle = handle.toLowerCase();
+      let destination = '/all-cars?reason=sold';
+
+      // ลองเดายี่ห้อจาก URL
+      const brands = ['toyota', 'honda', 'isuzu', 'nissan', 'mazda', 'mitsubishi', 'ford', 'mg'];
+      for (const brand of brands) {
+        if (lowerHandle.includes(brand)) {
+          destination = `/used-cars-chiang-mai-brand/${brand}?reason=sold`;
+          break;
+        }
+      }
+
+      return {
+        redirect: {
+          destination,
+          permanent: true, // 301 Redirect ให้ Google รู้ว่ารถคันนี้ย้ายไปรวมอยู่ในหมวดหมู่นี้แล้ว
+        },
+      };
+    };
+
     // ไม่พบจริง ๆ ใน cache ให้ลองดึงตรงจาก Shopify เผื่อเป็นรถใหม่เพิ่งลง
     let car = null;
     if (!carMeta) {
@@ -2032,14 +2097,14 @@ export async function getStaticProps({ params }) {
         car = await getCarByHandle(requested);
       }
       if (!car) {
-        return { notFound: true };
+        return handleFallbackRedirect(requestedRaw || requested);
       }
       // สร้าง proxy carMeta ให้ทำงานไปต่อได้
       carMeta = { handle: car.handle };
     } else {
       car = await getCarByHandle(carMeta.handle);
       if (!car) {
-        return { notFound: true };
+        return handleFallbackRedirect(carMeta.handle);
       }
     }
 

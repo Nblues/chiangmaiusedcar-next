@@ -152,7 +152,38 @@ function AdminDashboard() {
               <span className="w-1.5 h-6 bg-primary rounded-full inline-block shadow-sm"></span>
               เมนูจัดการหลัก
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 sm:gap-6">
+              {/* Cars Management Card */}
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => router.push('/admin/cars')}
+                className="group relative cursor-pointer overflow-hidden bg-white border border-slate-200 hover:border-blue-500 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
+              >
+                <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-blue-100">
+                  <svg
+                    className="w-7 h-7 drop-shadow-sm"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-blue-700 transition-colors tracking-tight">
+                  จัดการรถยนต์
+                </h3>
+                <p className="text-sm text-slate-500 font-medium leading-relaxed">
+                  เพิ่ม ลบ แก้ไข ข้อมูลรถยนต์ และจัดการสถานะรถในสต็อก
+                </p>
+                <div className="absolute bottom-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-blue-400 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></div>
+              </div>
+
               {/* Valuation Dashboard Card */}
               <div
                 role="button"

@@ -129,7 +129,7 @@ export default function SEO({
     const aiOptimizedKeywords =
       BUSINESS_INFO.seo.keywords ||
       'รถมือสองเชียงใหม่, รถยนต์มือสองเชียงใหม่, รถมือสอง, รถบ้านเชียงใหม่';
-    const siteAuthor = author || process.env.NEXT_PUBLIC_SITE_AUTHOR || 'ครูหนึ่งรถสวย';
+    const siteAuthor = author || 'ครูหนึ่งรถสวย';
     const buildTime = process.env.CUSTOM_BUILD_TIME || new Date().toISOString();
 
     return {

@@ -186,10 +186,23 @@ export default function ValuationDashboard() {
     }
   };
 
+  const getCleanBodyTypeSearch = (bt: string) => {
+    if (!bt || bt === 'ไม่ระบุ') return '';
+    if (bt.includes('กระบะแคป')) return 'Cab';
+    if (bt.includes('4 ประตู')) return '4 ประตู';
+    if (bt.includes('ตอนเดียว')) return 'ตอนเดียว';
+    if (bt.includes('SUV')) return 'SUV';
+    if (bt.includes('PPV')) return 'PPV';
+    return '';
+  };
+
+  const cleanSubModelForSearch = formData.subModel?.replace(/\(ปี.*?\)/g, '')?.trim();
+
   const currentSearchQuery = [
     formData.brand,
     formData.model,
-    formData.subModel,
+    getCleanBodyTypeSearch(formData.bodyType || ''),
+    cleanSubModelForSearch,
     formData.year
   ].filter(Boolean).join(' ');
 
@@ -369,7 +382,7 @@ export default function ValuationDashboard() {
                       <label className="text-sm font-medium text-slate-700">ปีรถ</label>
                       <Input
                         type="number"
-                        defaultValue={2020}
+                        value={formData.year || ''}
                         className="rounded-xl border-slate-200 focus:ring-primary-500/20 focus:border-primary bg-white shadow-sm text-center"
                         onChange={e => setFormData({ ...formData, year: Number(e.target.value) })}
                       />
@@ -378,7 +391,7 @@ export default function ValuationDashboard() {
                       <label className="text-sm font-medium text-slate-700">เลขไมล์</label>
                       <Input
                         type="number"
-                        defaultValue={50000}
+                        value={formData.mileage || ''}
                         className="rounded-xl border-slate-200 focus:ring-primary-500/20 focus:border-primary bg-white shadow-sm text-center"
                         onChange={e =>
                           setFormData({ ...formData, mileage: Number(e.target.value) })
@@ -410,6 +423,7 @@ export default function ValuationDashboard() {
                   </label>
                   <Input
                     type="number"
+                    value={formData.referencePrice || ''}
                     placeholder="เช่น 930000"
                     className="rounded-xl border-slate-200 focus:ring-primary-500/20 focus:border-primary bg-white shadow-sm"
                     onChange={e => setFormData({ ...formData, referencePrice: e.target.value })}

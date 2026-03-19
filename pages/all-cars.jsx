@@ -403,7 +403,7 @@ export default function AllCars({
                 src="/herobanner/heroallcars-1024w.webp"
                 srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
                 sizes="100vw"
-                alt=""
+                alt="รวมรถยนต์มือสองคุณภาพดี ครูหนึ่งรถสวย เชียงใหม่"
                 className="w-full h-full object-cover object-top"
                 decoding="async"
                 loading="eager"
