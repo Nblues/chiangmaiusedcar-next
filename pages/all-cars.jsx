@@ -534,30 +534,18 @@ export default function AllCars({
             {/* Background accent for premium feel */}
             <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-orange-100/50 rounded-full blur-2xl pointer-events-none"></div>
 
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 font-prompt mb-4 relative z-10">
+            {/* SEO Header (Short version for UX) */}
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 font-prompt mb-3 relative z-10">
               ศูนย์รวมรถมือสองเชียงใหม่ คุณภาพดี คัดเกรดพรีเมียม
             </h2>
-            <div className="text-sm md:text-base text-gray-700 font-prompt space-y-4 leading-[1.8] relative z-10">
-              <p className="text-justify md:text-left">
-                ยินดีต้อนรับสู่ <strong className="text-primary font-medium">ครูหนึ่งรถสวย</strong> ศูนย์รวม
-                <strong className="text-primary font-medium">รถมือสองเชียงใหม่</strong>ที่ได้รับความไว้วางใจจากลูกค้าทั่วภาคเหนือ
-                เราคัดสรรเฉพาะรถบ้านสภาพดี ไมล์แท้ ประวัติใสสะอาด โครงสร้างเดิม ไม่เคยมีประวัติชนหนักหรือจมน้ำ เพื่อส่งมอบความมั่นใจสูงสุดให้กับคุณ
-                ไม่ว่าคุณกำลังตามหา รถเก๋งประหยัดน้ำมัน <span className="text-gray-500">(Toyota, Honda, Mazda)</span>,
-                รถกระบะพันธุ์แกร่งทนทานสำหรับลุยงาน <span className="text-gray-500">(Isuzu, Nissan, Mitsubishi)</span> หรือรถอเนกประสงค์
-                SUV แบบครอบครัว เรามีรถคุณภาพพร้อมใช้งานให้เลือกชมมากกว่า{' '}
-                <strong className="text-accent text-lg">{Number.isFinite(totalCount) ? totalCount : 0} คัน</strong>{' '}
-                ที่ครอบคลุมและตอบโจทย์ทุกไลฟ์สไตล์
-              </p>
-              <p className="text-justify md:text-left">
-                รถยนต์มือสองทุกคันของเราผ่านการตรวจเช็คสภาพอย่างละเอียดจากช่างผู้เชี่ยวชาญ
-                พร้อมการรับประกันเครื่องยนต์และเกียร์หลังการขาย เรามุ่งเน้นการให้บริการที่ซื่อสัตย์
-                โปร่งใส พร้อมให้คำปรึกษาด้านการจัดไฟแนนซ์{' '}
-                <span className="inline-block bg-orange-100 text-orange-800 px-2 py-0.5 rounded-md font-medium my-1">
-                  ออกรถได้ทุกอาชีพ จัดไฟแนนซ์ง่าย อนุมัติไว ฟรีดาวน์ 0%
-                </span>{' '}
-                และกรณีลูกค้าต่างจังหวัดเรามีบริการส่งรถฟรีถึงหน้าบ้านท่านทั่วประเทศไทย
-                หากคุณกำลังมองหารถยนต์ในราคาที่เหมาะสม คุ้มค่าเงินทุกบาท
-                ลองเลือกชมรถที่อัปเดตล่าสุดด้านล่างนี้เลย
+            <div className="text-sm md:text-base text-gray-600 font-prompt space-y-2 relative z-10 max-w-4xl">
+              <p>
+                เรามีรถคุณภาพพร้อมใช้งานให้เลือกชมมากกว่า{' '}
+                <strong className="text-accent text-lg">
+                  {Number.isFinite(totalCount) ? totalCount : 0} คัน
+                </strong>{' '}
+                ที่ครอบคลุมทุกไลฟ์สไตล์ รถทุกคันผ่านการตรวจเช็คสภาพ ไมล์แท้ โครงสร้างเดิม
+                พร้อมบริการจัดไฟแนนซ์ อนุมัติไว ฟรีดาวน์ 0%
               </p>
             </div>
           </div>
@@ -681,6 +669,48 @@ export default function AllCars({
                   </div>
                 </div>
               )}
+
+              {/* SEO Long Text - Moved to bottom for better UX and conversion */}
+              <section className="mt-12 md:mt-16 mb-8" aria-labelledby="seo-about-heading">
+                <div className="rounded-2xl bg-blue-50/40 border border-blue-100 p-6 md:p-8">
+                  <h2
+                    id="seo-about-heading"
+                    className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900 font-prompt mb-4"
+                  >
+                    ทำไมต้องเลือกครูหนึ่งรถสวย ศูนย์รวมรถมือสองเชียงใหม่?
+                  </h2>
+                  <div className="text-sm md:text-base text-gray-700 font-prompt space-y-4 leading-[1.8]">
+                    <p className="text-left">
+                      ยินดีต้อนรับสู่{' '}
+                      <strong className="text-primary font-semibold">ครูหนึ่งรถสวย</strong>{' '}
+                      ศูนย์รวมรถมือสองเชียงใหม่ที่ได้รับความไว้วางใจจากลูกค้าทั่วภาคเหนือ
+                      เราคัดสรรเฉพาะรถบ้านสภาพดี ไมล์แท้ ประวัติใสสะอาด โครงสร้างเดิม
+                      ไม่เคยมีประวัติชนหนักหรือจมน้ำ เพื่อส่งมอบความมั่นใจสูงสุดให้กับคุณ
+                    </p>
+                    <p className="text-left">
+                      ไม่ว่าคุณกำลังตามหา <strong>รถเก๋งประหยัดน้ำมัน</strong>{' '}
+                      <span className="text-gray-500 text-sm">(Toyota, Honda, Mazda)</span>,{' '}
+                      <strong>รถกระบะพันธุ์แกร่งทนทานสำหรับลุยงาน</strong>{' '}
+                      <span className="text-gray-500 text-sm">(Isuzu, Nissan, Mitsubishi)</span>{' '}
+                      หรือ<strong>รถอเนกประสงค์ SUV แบบครอบครัว</strong>
+                    </p>
+                    <p className="text-left">
+                      รถยนต์มือสองทุกคันของเราผ่านการตรวจเช็คสภาพอย่างละเอียดจากช่างผู้เชี่ยวชาญ
+                      พร้อมการรับประกันเครื่องยนต์และเกียร์หลังการขาย
+                      เรามุ่งเน้นการให้บริการที่ซื่อสัตย์ โปร่งใส พร้อมให้คำปรึกษาด้านการจัดไฟแนนซ์
+                    </p>
+                    <p className="text-left">
+                      <span className="inline-block bg-orange-100 text-orange-800 px-3 py-1.5 rounded-md font-semibold my-2 shadow-sm">
+                        ออกรถได้ทุกอาชีพ จัดไฟแนนซ์ง่าย อนุมัติไว ฟรีดาวน์ 0%
+                      </span>
+                      <br />
+                      และกรณีลูกค้าต่างจังหวัดเรามีบริการส่งรถฟรีถึงหน้าบ้านท่านทั่วประเทศไทย
+                      หากคุณกำลังมองหารถยนต์ในราคาที่เหมาะสม คุ้มค่าเงินทุกบาท
+                      ลองเลือกชมรถที่อัปเดตล่าสุดและติดต่อทีมงานของเราได้เลย
+                    </p>
+                  </div>
+                </div>
+              </section>
 
               {/* FAQ (AEO) - visible content to match FAQPage schema */}
               {!isFiltered && allCarsFaqs?.length > 0 && (
@@ -882,7 +912,11 @@ export async function getServerSideProps(context) {
     if (!isFiltered) {
       const seoPath = safePage > 1 ? `/all-cars?page=${safePage}` : '/all-cars';
 
-      const topCarImages = pageCars.slice(0, 4).map(c => c?.images?.[0]?.url).filter(Boolean).map(url => url.startsWith('/') ? 'https://www.chiangmaiusedcar.com' + url : url);
+      const topCarImages = pageCars
+        .slice(0, 4)
+        .map(c => c?.images?.[0]?.url)
+        .filter(Boolean)
+        .map(url => (url.startsWith('/') ? 'https://www.chiangmaiusedcar.com' + url : url));
       const collectionSchema = {
         '@context': 'https://schema.org',
         image: topCarImages.length > 0 ? topCarImages : undefined,
@@ -917,11 +951,16 @@ export async function getServerSideProps(context) {
                 brand: car?.vendor ? { '@type': 'Brand', name: car.vendor } : undefined,
                 modelDate: car?.year || undefined,
                 vehicleTransmission: car?.transmission || undefined,
-                mileageFromOdometer: car?.mileage ? {
-                  '@type': 'QuantitativeValue',
-                  value: typeof car.mileage === 'string' ? Number(car.mileage.replace(/\\D/g, '')) || 0 : car.mileage,
-                  unitCode: 'KMT'
-                } : undefined,
+                mileageFromOdometer: car?.mileage
+                  ? {
+                      '@type': 'QuantitativeValue',
+                      value:
+                        typeof car.mileage === 'string'
+                          ? Number(car.mileage.replace(/\\D/g, '')) || 0
+                          : car.mileage,
+                      unitCode: 'KMT',
+                    }
+                  : undefined,
                 offers: {
                   '@type': 'Offer',
                   priceCurrency: 'THB',
@@ -934,7 +973,7 @@ export async function getServerSideProps(context) {
                   seller: {
                     '@type': 'AutoDealer',
                     name: 'ครูหนึ่งรถสวย เชียงใหม่',
-                  }
+                  },
                 },
               },
             };

@@ -116,6 +116,13 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     };
   }, []);
 
+  const lightboxSwipeRef = useRef({
+    startX: 0,
+    startY: 0,
+    startTime: 0,
+    active: false,
+  });
+
   const heroSwipeRef = useRef({
     active: false,
     canceled: false,
@@ -672,23 +679,22 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     brandModel = _titleNoYear || _vendor || safeGet(car, 'title', '');
   }
 
-  const yearPrice = [
-    safeGet(car, 'year') ? `ปี ${safeGet(car, 'year')}` : '',
-    `${safeFormatPrice(safeGet(car, 'price.amount')).display}฿`,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const yearText = safeGet(car, 'year') ? `ปี ${safeGet(car, 'year')}` : '';
+  const priceText = safeGet(car, 'price.amount')
+    ? `${safeFormatPrice(safeGet(car, 'price.amount')).display}฿`
+    : '';
 
-  // Social media optimized title (max 60 chars for Facebook)
-  const enhancedTitle = `${brandModel} ${yearPrice} | ครูหนึ่งรถสวย`.substring(0, 58);
+  // ดึงข้อมูลปีและราคา สำหรับตั้งชื่อ Title ให้ครอบคลุมการค้นหา (SEO)
+  const enhancedTitle = `${brandModel} ${yearText} รถมือสองเชียงใหม่ สภาพดี ฟรีดาวน์`.trim();
 
-  // Social media optimized description (max 155 chars for Facebook)
+  // Social media optimized description (max 155 chars for Facebook & Google)
   const enhancedDescription = [
-    `${brandModel} ${yearPrice}`,
+    `${brandModel} ${yearText}`,
     safeGet(car, 'mileage')
-      ? `วิ่ง ${Number(safeGet(car, 'mileage', 0)).toLocaleString()} กม.`
+      ? `ไมล์แท้ ${Number(safeGet(car, 'mileage', 0)).toLocaleString()} กม.`
       : '',
-    'รถบ้านแท้ รับประกัน เชียงใหม่',
+    priceText ? `ราคา ${priceText}` : '',
+    'รถบ้านเชียงใหม่ สภาพดี รับประกันเครื่องเกียร์ ออกรถ 0 บาท ครูหนึ่งรถสวย',
   ]
     .filter(Boolean)
     .join(' • ')
@@ -820,9 +826,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
   return (
     <>
       {/* SEO component handles all meta tags including OG tags */}
-      <Head>
-        <title>TEST TITLE OVERRIDE</title>
-      </Head>
       <SEO
         title={enhancedTitle}
         description={enhancedDescription}
@@ -2032,8 +2035,51 @@ function CarDetailPage({ car, recommendedCars = [] }) {
             </button>
           </div>
           <div
-            className="flex-1 relative flex items-center justify-center overflow-hidden touch-pan-x touch-pan-y"
+            className="flex-1 relative flex items-center justify-center overflow-hidden touch-pan-y"
             onClick={() => setIsLightboxOpen(false)}
+            onPointerDown={e => {
+              lightboxSwipeRef.current = {
+                startX: e.clientX,
+                startY: e.clientY,
+                startTime: Date.now(),
+                active: true,
+              };
+            }}
+            onPointerUp={e => {
+              if (!lightboxSwipeRef.current.active) return;
+              lightboxSwipeRef.current.active = false;
+
+              const dx = e.clientX - lightboxSwipeRef.current.startX;
+              const dy = e.clientY - lightboxSwipeRef.current.startY;
+              const dt = Date.now() - lightboxSwipeRef.current.startTime;
+
+              // It's a quick tap
+              if (Math.abs(dx) < 10 && Math.abs(dy) < 10 && dt < 500) {
+                // If clicked on empty space, the wrapper onClick handles it.
+                return;
+              }
+
+              // It's a swipe, don't close the lightbox if it's mostly horizontal
+              if (Math.abs(dx) > 50 && Math.abs(dy) < 80 && dt < 900) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (dx < 0) {
+                  // Swipe Left -> Next Image
+                  setSelectedImageIndex(prev => (prev === carImages.length - 1 ? 0 : prev + 1));
+                } else {
+                  // Swipe Right -> Prev Image
+                  setSelectedImageIndex(prev => (prev === 0 ? carImages.length - 1 : prev - 1));
+                }
+              }
+            }}
+            onPointerCancel={() => {
+              lightboxSwipeRef.current.active = false;
+            }}
+            onPointerLeave={() => {
+              // Same as cancel/up if they drag out
+              if (!lightboxSwipeRef.current.active) return;
+              lightboxSwipeRef.current.active = false;
+            }}
           >
             {/* Render actual image (using next/image or img) */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -2046,6 +2092,8 @@ function CarDetailPage({ car, recommendedCars = [] }) {
               alt={`${carAlt(car)} (ขยาย)`}
               className="max-w-full max-h-full object-contain cursor-zoom-in"
               onClick={e => e.stopPropagation()}
+              draggable={false}
+              style={{ touchAction: 'pan-y' }}
             />
             {/* Prev/Next Overlay Buttons */}
             {carImages.length > 1 && (

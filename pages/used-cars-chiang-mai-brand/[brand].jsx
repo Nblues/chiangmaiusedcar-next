@@ -269,8 +269,8 @@ export default function UsedCarsChiangMaiBrand({
   return (
     <div className="min-h-screen bg-gray-50">
       <SEO
-        title={`รถมือสอง ${brandInfo.label} เชียงใหม่ ฟรีดาวน์ ไมล์แท้`}
-        description={`รวมรถมือสอง ${brandInfo.label} เชียงใหม่ สภาพนางฟ้า ฟรีดาวน์ ไมล์แท้ พร้อมตรวจสอบประวัติได้ ${totalCars} คัน คลิกดูรายละเอียดและโปรโมชั่นพิเศษได้เลย`}
+        title={`รถมือสอง ${brandInfo.label} เชียงใหม่ สภาพดี ฟรีดาวน์ ออกรถ 0 บาท${safePage > 1 ? ` หน้า ${safePage}` : ''}`}
+        description={`รวมรถ ${brandInfo.label} มือสอง เชียงใหม่ สภาพนางฟ้า ไมล์แท้ ฟรีดาวน์ มีให้เลือก ${totalCars} คัน รับประกันเครื่องยนต์และเกียร์ ออกรถ 0 บาท ที่ครูหนึ่งรถสวย`}
         url={url}
         image={homeOgImage}
         type="website"

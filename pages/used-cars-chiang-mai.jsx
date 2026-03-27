@@ -440,151 +440,58 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
           className="mb-6 rounded-2xl border border-gray-200 bg-white p-4 sm:p-5"
         >
           <div className="text-sm font-semibold text-gray-900 font-prompt">ไปยังส่วนที่ต้องการ</div>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 flex overflow-x-auto whitespace-nowrap gap-2 pb-2 scrollbar-hide snap-x">
             <a
               href="#about"
-              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
             >
               ซื้อ-ขาย/ฝากขาย
             </a>
             <a
               href="#consign-conditions"
-              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
             >
               เงื่อนไขฝากขาย
             </a>
             <a
               href="#brands"
-              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
             >
               เลือกดูตามยี่ห้อ
             </a>
             <a
               href="#featured-cars"
-              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
             >
               รถลงประกาศล่าสุด
             </a>
             <a
               href="#social"
-              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
             >
               ติดตามบนโซเชียล
             </a>
             <a
               href="#dealer"
-              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
             >
               ข้อมูลเต็นท์/ติดต่อ
             </a>
             <a
               href="#faq"
-              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
             >
               คำถามที่พบบ่อย
             </a>
             <Link
               href="/all-cars"
               prefetch={false}
-              className="inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-colors font-prompt"
             >
               ดูรถทั้งหมด
             </Link>
           </div>
         </nav>
-
-        <section id="about" className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
-            ซื้อ-ขาย รถบ้านมือสอง ในเชียงใหม่-ลำพูน (ฝากขายได้)
-          </h2>
-          <div className="mt-3 space-y-3 text-gray-800 font-prompt leading-relaxed">
-            <p>
-              หน้านี้เป็นบริการ “ซื้อ-ขาย รถบ้านมือสอง” ในจังหวัดเชียงใหม่-ลำพูน — ไม่ว่าจะหา{' '}
-              <Link
-                href="/all-cars"
-                prefetch={false}
-                className="text-primary font-semibold hover:underline"
-              >
-                รถมือสองเชียงใหม่
-              </Link>{' '}
-              สภาพดีไว้ใช้งาน หรือ{' '}
-              <Link
-                href="/sell-car"
-                prefetch={false}
-                className="text-primary font-semibold hover:underline"
-              >
-                ฝากขายรถเชียงใหม่
-              </Link>{' '}
-              เราดูแลให้ครบจนจบขั้นตอนซื้อขาย
-            </p>
-            <p>
-              ฝากขายกับ “ครูหนึ่งรถสวย” ได้ราคาสูงกว่าขายด่วนเข้าเต็นท์โดยตรงในหลายกรณี
-              และไม่ต้องเอารถมาจอดไว้ที่ร้าน คุณยังสามารถใช้รถตามปกติได้เลย ขายผ่านทีมงานมืออาชีพ
-              ขายง่าย ขายเร็ว ไม่ต้องปวดหัวรับสาย/นัดดูรถที่บ้านเอง
-            </p>
-            <p>
-              ทางเราดำเนินการให้จนจบขั้นตอนซื้อขาย รับเงินกลับบ้านสบายใจ
-              เพราะมีลูกค้ารอซื้อทั่วประเทศ และมีผู้ติดตามจากทุกช่องทางหลักแสน-หลักล้าน
-              ซื้อขายทั่วประเทศมายาวนานมากกว่า 10 ปี
-            </p>
-            <p className="text-gray-700">
-              เหมาะสำหรับคนที่ “ไม่รีบขายเข้าเต็นท์” อยากได้ราคาที่ใกล้เคียงราคาตลาดมากที่สุด
-              และอยากให้ทีมงานช่วยดูแลแทนแบบมืออาชีพ
-            </p>
-          </div>
-
-          <div
-            id="consign-conditions"
-            className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-4 sm:p-5"
-          >
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900 font-prompt">
-              เงื่อนไขการฝากขายรถกับครูหนึ่งรถสวย (เพื่อคัดสภาพให้ได้ตามมาตรฐาน)
-            </h3>
-            <p className="mt-2 text-gray-700 font-prompt leading-relaxed">
-              ลูกค้าที่ซื้อรถกับครูหนึ่งรถสวยจากทั่วประเทศจำนวนมากตัดสินใจจากความไว้วางใจสูง
-              เราจึงต้องคัดสภาพรถทุกคันให้ได้ตามมาตรฐาน หากรถของท่านมีสภาพตามนี้
-              สามารถนัดหมายนำรถเข้ามาตรวจสภาพที่เต็นท์ได้ทุกวัน
-            </p>
-
-            <ul className="mt-4 list-disc pl-5 space-y-2 text-gray-800 font-prompt">
-              <li>รถมือเดียว</li>
-              <li>ไม่มีอุบัติเหตุหนัก และไม่จมน้ำ 100%</li>
-              <li>มีประวัติดูแลบำรุงรักษามาเป็นอย่างดี</li>
-              <li>เครื่องยนต์และเกียร์ไม่มีปัญหา</li>
-              <li>เล่มทะเบียนไม่มีปัญหา</li>
-            </ul>
-
-            <div className="mt-4 space-y-2 text-gray-700 font-prompt leading-relaxed">
-              <p>
-                หลังจากตรวจสภาพแล้ว ทีมงานจะช่วยตั้งราคาให้ใกล้เคียงราคาตลาดมากที่สุด
-                เพื่อให้ท่านขายได้คุ้ม ไม่ต้องขาดทุนเป็นแสนเหมือนขายด่วน และได้ราคาที่ยิ้มได้แน่นอน
-              </p>
-              <p className="text-sm text-gray-600">
-                หมายเหตุ: ผลการประเมินขึ้นอยู่กับสภาพจริงและเอกสารประกอบของรถแต่ละคัน
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-5 flex flex-col sm:flex-row gap-2.5">
-            <Link href="/sell-car" prefetch={false} className="btn-primary text-center">
-              ฝากขายรถกับครูหนึ่ง
-            </Link>
-            <Link
-              href="/all-cars"
-              prefetch={false}
-              className="btn-secondary text-center rounded-xl px-4 py-2"
-            >
-              หารถมือสองสภาพดี
-            </Link>
-            <Link
-              href="/contact"
-              prefetch={false}
-              className="inline-flex items-center justify-center rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white transition-colors font-prompt"
-            >
-              ติดต่อทีมงาน
-            </Link>
-          </div>
-        </section>
 
         <section
           id="brands"
@@ -674,9 +581,106 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
             </div>
           )}
 
-          <div className="mt-8 flex justify-center">
-            <Link href="/all-cars" prefetch={false} className="btn-primary text-center">
+          <div className="mt-8 flex flex-col sm:flex-row justify-center w-full">
+            <Link
+              href="/all-cars"
+              prefetch={false}
+              className="btn-primary text-center w-full sm:w-auto"
+            >
               ดูรถทั้งหมดในสต็อก
+            </Link>
+          </div>
+        </section>
+
+        <section
+          id="about"
+          className="mt-8 mb-8 bg-blue-50/40 rounded-2xl border border-blue-100 p-5 sm:p-6"
+        >
+          <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
+            ซื้อ-ขาย รถบ้านมือสอง ในเชียงใหม่-ลำพูน (ฝากขายได้)
+          </h2>
+          <div className="mt-3 space-y-3 text-gray-800 font-prompt leading-relaxed">
+            <p>
+              หน้านี้เป็นบริการ “ซื้อ-ขาย รถบ้านมือสอง” ในจังหวัดเชียงใหม่-ลำพูน — ไม่ว่าจะหา{' '}
+              <Link
+                href="/all-cars"
+                prefetch={false}
+                className="text-primary font-semibold hover:underline"
+              >
+                รถมือสองเชียงใหม่
+              </Link>{' '}
+              สภาพดีไว้ใช้งาน หรือ{' '}
+              <Link
+                href="/sell-car"
+                prefetch={false}
+                className="text-primary font-semibold hover:underline"
+              >
+                ฝากขายรถเชียงใหม่
+              </Link>{' '}
+              เราดูแลให้ครบจนจบขั้นตอนซื้อขาย
+            </p>
+            <p>
+              ฝากขายกับ “ครูหนึ่งรถสวย” ได้ราคาสูงกว่าขายด่วนเข้าเต็นท์โดยตรงในหลายกรณี
+              และไม่ต้องเอารถมาจอดไว้ที่ร้าน คุณยังสามารถใช้รถตามปกติได้เลย ขายผ่านทีมงานมืออาชีพ
+              ขายง่าย ขายเร็ว ไม่ต้องปวดหัวรับสาย/นัดดูรถที่บ้านเอง
+            </p>
+            <p>
+              ทางเราดำเนินการให้จนจบขั้นตอนซื้อขาย รับเงินกลับบ้านสบายใจ
+              เพราะมีลูกค้ารอซื้อทั่วประเทศ และมีผู้ติดตามจากทุกช่องทางหลักแสน-หลักล้าน
+              ซื้อขายทั่วประเทศมายาวนานมากกว่า 10 ปี
+            </p>
+            <p className="text-gray-700">
+              เหมาะสำหรับคนที่ “ไม่รีบขายเข้าเต็นท์” อยากได้ราคาที่ใกล้เคียงราคาตลาดมากที่สุด
+              และอยากให้ทีมงานช่วยดูแลแทนแบบมืออาชีพ
+            </p>
+          </div>
+
+          <div
+            id="consign-conditions"
+            className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-4 sm:p-5"
+          >
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 font-prompt">
+              เงื่อนไขการฝากขายรถกับครูหนึ่งรถสวย (เพื่อคัดสภาพให้ได้ตามมาตรฐาน)
+            </h3>
+            <p className="mt-2 text-gray-700 font-prompt leading-relaxed">
+              ลูกค้าที่ซื้อรถกับครูหนึ่งรถสวยจากทั่วประเทศจำนวนมากตัดสินใจจากความไว้วางใจสูง
+              เราจึงต้องคัดสภาพรถทุกคันให้ได้ตามมาตรฐาน หากรถของท่านมีสภาพตามนี้
+              สามารถนัดหมายนำรถเข้ามาตรวจสภาพที่เต็นท์ได้ทุกวัน
+            </p>
+
+            <ul className="mt-4 list-disc pl-5 space-y-2 text-gray-800 font-prompt">
+              <li>รถมือเดียว</li>
+              <li>ไม่มีอุบัติเหตุหนัก และไม่จมน้ำ 100%</li>
+              <li>มีประวัติดูแลบำรุงรักษามาเป็นอย่างดี</li>
+              <li>เครื่องยนต์และเกียร์ไม่มีปัญหา</li>
+              <li>เล่มทะเบียนไม่มีปัญหา</li>
+            </ul>
+
+            <div className="mt-4 space-y-2 text-gray-700 font-prompt leading-relaxed">
+              <p>
+                หลังจากตรวจสภาพแล้ว ทีมงานจะช่วยตั้งราคาให้ใกล้เคียงราคาตลาดมากที่สุด
+                เพื่อให้ท่านขายได้คุ้ม ไม่ต้องขาดทุนเป็นแสนเหมือนขายด่วน และได้ราคาที่ยิ้มได้แน่นอน
+              </p>
+              <p className="text-sm text-gray-600">
+                หมายเหตุ: ผลการประเมินขึ้นอยู่กับสภาพจริงและเอกสารประกอบของรถแต่ละคัน
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-col sm:flex-row gap-3">
+            <Link
+              href="/sell-car"
+              prefetch={false}
+              className="btn-primary text-center w-full sm:w-auto px-6 py-2.5"
+            >
+              ฝากขายรถกับครูหนึ่ง (ได้ราคาดีกว่า)
+            </Link>
+            <Link
+              href="/all-cars"
+              prefetch={false}
+              className="btn-secondary text-center rounded-xl w-full sm:w-auto px-6 py-2.5"
+            >
+              ดูรถทั้งหมดของเรา
             </Link>
           </div>
         </section>

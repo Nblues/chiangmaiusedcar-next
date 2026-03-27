@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import SEO from '../components/SEO';
+import { buildLocalBusinessJsonLd } from '../lib/seo/jsonld';
 import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
 import { createMapEmbedUrl, createMapOpenUrl, clearLocationCache } from '../utils/siteLocation';

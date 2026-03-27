@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Prompt } from 'next/font/google';
 import { GoogleAnalytics } from '@next/third-parties/google';
@@ -222,6 +223,9 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      </Head>
       <ErrorBoundary>{getLayout(<Component {...pageProps} />)}</ErrorBoundary>
       {VercelTools ? <VercelTools /> : null}
       {!isAdminRoute && process.env.NODE_ENV === 'production' && cookieConsent?.marketing ? (
