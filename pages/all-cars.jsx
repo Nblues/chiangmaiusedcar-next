@@ -882,7 +882,10 @@ export async function getServerSideProps(context) {
     if (!isFiltered) {
       const seoPath = safePage > 1 ? `/all-cars?page=${safePage}` : '/all-cars';
 
+      const topCarImages = pageCars.slice(0, 4).map(c => c?.images?.[0]?.url).filter(Boolean).map(url => url.startsWith('/') ? 'https://www.chiangmaiusedcar.com' + url : url);
       const collectionSchema = {
+        '@context': 'https://schema.org',
+        image: topCarImages.length > 0 ? topCarImages : undefined,
         '@type': 'CollectionPage',
         name: `รถมือสองทั้งหมด${totalPages > 1 ? ` - หน้า ${safePage}` : ''}`,
         description: `รถมือสองคุณภาพดี ${Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ`,
@@ -911,13 +914,27 @@ export async function getServerSideProps(context) {
                 url: carUrl,
                 name: car?.title || 'รถมือสอง',
                 image: imageUrl,
+                brand: car?.vendor ? { '@type': 'Brand', name: car.vendor } : undefined,
+                modelDate: car?.year || undefined,
+                vehicleTransmission: car?.transmission || undefined,
+                mileageFromOdometer: car?.mileage ? {
+                  '@type': 'QuantitativeValue',
+                  value: typeof car.mileage === 'string' ? Number(car.mileage.replace(/\\D/g, '')) || 0 : car.mileage,
+                  unitCode: 'KMT'
+                } : undefined,
                 offers: {
                   '@type': 'Offer',
                   priceCurrency: 'THB',
                   price: car?.price?.amount || 0,
+                  itemCondition: 'https://schema.org/UsedCondition',
                   availability: car?.availableForSale
                     ? 'https://schema.org/InStock'
                     : 'https://schema.org/OutOfStock',
+                  url: carUrl,
+                  seller: {
+                    '@type': 'AutoDealer',
+                    name: 'ครูหนึ่งรถสวย เชียงใหม่',
+                  }
                 },
               },
             };
