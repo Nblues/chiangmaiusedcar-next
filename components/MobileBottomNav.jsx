@@ -12,8 +12,8 @@ export default function MobileBottomNav() {
 
   if (!mounted) return null;
 
-  // Do not show on admin routes
-  if (router.pathname.startsWith('/admin')) {
+  // Do not show on admin routes or car detail pages (which have their own sticky CTA)
+  if (router.pathname.startsWith('/admin') || router.pathname.startsWith('/car/')) {
     return null;
   }
 

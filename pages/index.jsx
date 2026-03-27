@@ -355,7 +355,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
       <>
         {/* Why Choose Us Section - SEO Content (extracted) */}
         <HomeAboutInline />
-
         <main
           className="max-w-[1400px] mx-auto px-6 md:px-8 lg:px-12 py-16 bg-white font-prompt cv-auto-md"
           id="recommended-cars"
@@ -433,7 +432,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             </Link>
           </div>
         </main>
-
         <div className="pb-8 md:pb-12">
           {/* FAQ Section (extracted) */}
           <HomeFaqSection />
@@ -445,7 +443,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           {/* Why Choose Us Section - 2025 Modern Design (extracted) */}
           <HomeWhyChooseSection getBrandCount={getBrandCount} />
         </div>
-
         {/* Social Share Buttons - Fixed Position */}
         {showSocialShare && (
           <SocialShareButtons
@@ -455,7 +452,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             position="fixed"
           />
         )}
-
         {/* Defer large JSON-LD parsing until after above-the-fold content */}
         {homeItemListJsonLd ? (
           <script
@@ -464,6 +460,53 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             dangerouslySetInnerHTML={{ __html: homeItemListJsonLd }}
           />
         ) : null}
+        {/* AutoDealer LocalBusiness Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'AutoDealer',
+              name: 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่',
+              image: 'https://www.chiangmaiusedcar.com/herobanner/newherobanner-1024w.webp',
+              '@id': 'https://www.chiangmaiusedcar.com/',
+              url: 'https://www.chiangmaiusedcar.com/',
+              telephone: '+66940649018',
+              priceRange: '฿฿-฿฿฿',
+              address: {
+                '@type': 'PostalAddress',
+                streetAddress: '7/1 ถนนสันทราย-แม่โจ้',
+                addressLocality: 'สันทราย',
+                addressRegion: 'เชียงใหม่',
+                postalCode: '50210',
+                addressCountry: 'TH',
+              },
+              geo: {
+                '@type': 'GeoCoordinates',
+                latitude: 18.8406,
+                longitude: 99.0044,
+              },
+              openingHoursSpecification: {
+                '@type': 'OpeningHoursSpecification',
+                dayOfWeek: [
+                  'Monday',
+                  'Tuesday',
+                  'Wednesday',
+                  'Thursday',
+                  'Friday',
+                  'Saturday',
+                  'Sunday',
+                ],
+                opens: '08:30',
+                closes: '17:30',
+              },
+              sameAs: [
+                'https://www.facebook.com/chiangmaiusedcar',
+                'https://www.youtube.com/@Kru1',
+              ],
+            }),
+          }}
+        />{' '}
       </>
       {/* End main content */}
     </div>

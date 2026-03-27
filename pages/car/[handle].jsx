@@ -33,10 +33,12 @@ async function getAllCarsCached() {
 function CarDetailPage({ car, recommendedCars = [] }) {
   const router = useRouter();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   // รีเซ็ตรูปกลับไปภาพแรกเสมอ
   useEffect(() => {
     setSelectedImageIndex(0);
+    setIsLightboxOpen(false);
   }, [car?.handle]);
 
   const carImages = useMemo(() => {
@@ -945,7 +947,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
           {/* รูปรถ - Modern 2025 Style */}
           <div className="mb-6 sm:mb-8">
             <div
-              className="relative w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[600px] bg-white rounded-xl overflow-hidden border border-gray-200 touch-pan-y select-none"
+              className="relative w-full h-[220px] sm:h-[350px] md:h-[500px] lg:h-[600px] bg-white rounded-xl overflow-hidden border border-gray-200 touch-pan-y select-none cursor-pointer group"
               onPointerDown={e => {
                 if (carImages.length < 2) return;
                 // Left click / primary touch only
@@ -997,6 +999,12 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                 const dx = e.clientX - s.startX;
                 const dy = e.clientY - s.startY;
                 const dt = Date.now() - s.startTime;
+
+                // It's a click/tap
+                if (Math.abs(dx) < 10 && Math.abs(dy) < 10 && dt < 500) {
+                  setIsLightboxOpen(true);
+                  return;
+                }
 
                 // Horizontal swipe: quick enough, not too vertical.
                 if (Math.abs(dx) < 50) return;
@@ -1174,16 +1182,45 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                 <span className="text-gray-300 ml-2">ภาพรถจริง</span>
               </div>
 
-              {/* Keyboard hint */}
+              {/* Keyboard hint & Zoom Hint */}
               <div
-                className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-black/60 text-white px-3 py-1 rounded-lg text-xs font-prompt hidden sm:block"
+                className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-black/60 text-white px-3 py-1.5 rounded-lg text-xs font-prompt hidden sm:flex items-center gap-3 transition-opacity group-hover:bg-black/80"
                 aria-hidden="true"
               >
-                <span className="flex items-center gap-1.5">
-                  <kbd className="bg-white/20 px-1.5 py-0.5 rounded text-xs">←</kbd>
-                  <kbd className="bg-white/20 px-1.5 py-0.5 rounded text-xs">→</kbd>
-                  <span className="ml-1">เลื่อนรูป</span>
-                </span>
+                <div className="flex items-center gap-1">
+                  <svg
+                    className="w-3.5 h-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                    />
+                  </svg>
+                  <span>คลิกเพื่อซูม</span>
+                </div>
+                <div className="w-px h-3 bg-white/30" />
+                <div className="flex items-center gap-1.5">
+                  <kbd className="bg-white/20 px-1.5 py-0.5 rounded text-[10px]">←</kbd>
+                  <kbd className="bg-white/20 px-1.5 py-0.5 rounded text-[10px]">→</kbd>
+                  <span className="ml-0.5">เลื่อน</span>
+                </div>
+              </div>
+              {/* Mobile Zoom Hint */}
+              <div className="absolute bottom-2 left-2 bg-black/60 text-white px-3 py-1.5 rounded-lg text-xs font-prompt sm:hidden flex items-center gap-1.5 backdrop-blur-sm pointer-events-none">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                  />
+                </svg>
+                <span>แตะเพื่อขยาย</span>
               </div>
             </div>
 
@@ -1970,27 +2007,135 @@ function CarDetailPage({ car, recommendedCars = [] }) {
         </div>
       </main>
 
-      {/* Floating Action Buttons (วงกลมลอยขอบจอสำหรับมือถือ) */}
-      <div className="fixed bottom-[80px] right-4 sm:hidden z-50 flex flex-col gap-3 items-end pointer-events-none pb-[env(safe-area-inset-bottom,0px)]">
+      {/* Image Fullscreen Lightbox (ซูมดูรูปเต็มจอ) */}
+      {isLightboxOpen && (
+        <div className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex flex-col touchscreen-none">
+          <div className="flex items-center justify-between p-4 z-10 bg-gradient-to-b from-black/80 to-transparent">
+            {/* Image Count */}
+            <div className="text-white bg-black/50 px-3 py-1.5 rounded-lg text-sm font-prompt">
+              {selectedImageIndex + 1} / {carImages.length}
+            </div>
+            {/* Close Button */}
+            <button
+              onClick={() => setIsLightboxOpen(false)}
+              className="text-white p-2 bg-black/50 hover:bg-white/20 rounded-full transition-colors"
+              aria-label="ปิดโหมดดูรูปขยาย"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          <div
+            className="flex-1 relative flex items-center justify-center overflow-hidden touch-pan-x touch-pan-y"
+            onClick={() => setIsLightboxOpen(false)}
+          >
+            {/* Render actual image (using next/image or img) */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={safeGet(
+                carImages[selectedImageIndex],
+                'url',
+                '/herobanner/chiangmaiusedcar.webp'
+              )}
+              alt={`${carAlt(car)} (ขยาย)`}
+              className="max-w-full max-h-full object-contain cursor-zoom-in"
+              onClick={e => e.stopPropagation()}
+            />
+            {/* Prev/Next Overlay Buttons */}
+            {carImages.length > 1 && (
+              <>
+                <button
+                  onClick={e => {
+                    e.stopPropagation();
+                    setSelectedImageIndex(prev => (prev === 0 ? carImages.length - 1 : prev - 1));
+                  }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-white bg-black/50 hover:bg-black/80 p-3 rounded-full hidden sm:block"
+                >
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
+                  </svg>
+                </button>
+                <button
+                  onClick={e => {
+                    e.stopPropagation();
+                    setSelectedImageIndex(prev => (prev === carImages.length - 1 ? 0 : prev + 1));
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-black/50 hover:bg-black/80 p-3 rounded-full hidden sm:block"
+                >
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </button>
+              </>
+            )}
+          </div>
+          {/* Thumbnails list inside lightbox for quick navigation */}
+          {carImages.length > 1 && (
+            <div className="h-24 bg-black/50 backdrop-blur-md p-2 flex gap-2 overflow-x-auto snap-x scrollbar-hide">
+              {carImages.map((img, idx) => (
+                <button
+                  key={`lb-${idx}`}
+                  onClick={e => {
+                    e.stopPropagation();
+                    setSelectedImageIndex(idx);
+                  }}
+                  className={`relative h-full aspect-[4/3] rounded-md overflow-hidden flex-shrink-0 snap-start transition-all ${
+                    selectedImageIndex === idx
+                      ? 'ring-2 ring-primary scale-105'
+                      : 'opacity-50 hover:opacity-100'
+                  }`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={safeGet(img, 'url')}
+                    alt={`thumbnail ${idx}`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Sticky Bottom Contact Bar สำหรับมือถือ */}
+      <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-200 z-50 sm:hidden flex px-2 py-3 gap-2 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] pb-[calc(12px+env(safe-area-inset-bottom,0px))]">
         <a
           href="tel:0940649018"
-          className="w-[52px] h-[52px] bg-white border border-gray-200 text-primary rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.1)] hover:shadow-xl active:scale-95 transition-all pointer-events-auto"
-          aria-label="โทรเลย"
+          className="flex-1 bg-white border border-primary text-primary rounded-xl flex items-center justify-center gap-2 font-bold py-3 active:bg-gray-50 transition-colors"
         >
-          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M6.62 10.79c1.44 2.83 3.76 5.15 6.59 6.59l2.2-2.2c.28-.28.67-.36 1.02-.25 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
           </svg>
+          โทรสอบถาม
         </a>
         <a
           href="https://lin.ee/8ugfzstD"
           target="_blank"
           rel="noopener noreferrer"
-          className="w-[52px] h-[52px] bg-[#06C755] text-white rounded-full flex items-center justify-center shadow-[0_4px_12px_rgba(0,200,85,0.3)] hover:shadow-xl active:scale-95 transition-all pointer-events-auto"
-          aria-label="ทัก LINE"
+          className="flex-1 bg-[#06C755] text-white rounded-xl flex items-center justify-center gap-2 font-bold py-3 hover:bg-[#05b34c] active:bg-[#049a41] transition-colors"
         >
-          <svg className="w-7 h-7 object-contain" viewBox="0 0 24 24" fill="currentColor">
+          <svg className="w-6 h-6 object-contain" viewBox="0 0 24 24" fill="currentColor">
             <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 3.266 8.847 8.04 9.613.313.067.733.204.843.486.1.258.05.65.023.822-.054.343-.243 1.464-.29 1.73-.082.392-.41.564.084.812.43.212 2.378 1.127 3.515 1.58.742.296 2.333.684 3.215.684 5.674 0 8.57-3.957 8.57-9.727zM8.337 12.1H5.973v-2.905c0-.285-.23-.514-.514-.516h-.002c-.285 0-.517.231-.517.516v3.421c0 .285.232.516.517.516h2.881c.285 0 .515-.231.515-.516v-.002c-.001-.285-.232-.516-.516-.516zm3.327-.516v-2.905c0-.284-.23-.514-.515-.514h-.002c-.284 0-.516.23-.516.514v3.421c0 .285.232.516.516.516h.002c.285 0 .515-.231.515-.516v-.002zm1.65-2.905H11.53c-.285 0-.515.231-.515.516v3.419c0 .285.23.516.515.516h1.785c.284 0 .515-.231.515-.516v-3.419c0-.285-.231-.516-.515-.516zm4.619 0h-1.579l-1.393 2.128v-2.128c0-.285-.232-.516-.516-.516h-.002c-.285 0-.516.231-.516.516v3.42c0 .285.231.516.516.516h.002c.285 0 .516-.231.516-.516v-.002l1.417-2.164v2.166c0 .285.23.516.515.516h.001c.285 0 .515-.231.515-.516v-3.42c-.003-.283-.234-.514-.519-.514z" />
           </svg>
+          คุยผ่าน LINE
         </a>
       </div>
 
