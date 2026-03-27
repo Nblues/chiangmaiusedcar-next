@@ -530,31 +530,34 @@ export default function AllCars({
       >
         <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-5 ipadpro:px-3 lg:px-6">
           {/* SEO Content: The Volume Up & Content Deep Strategy */}
-          <div className="mb-8 p-6 bg-orange-50/50 rounded-2xl border border-orange-100">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 font-prompt mb-3">
+          <div className="mb-8 p-6 md:p-8 bg-gradient-to-br from-orange-50 to-white rounded-2xl border border-orange-100 shadow-sm relative overflow-hidden">
+            {/* Background accent for premium feel */}
+            <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-orange-100/50 rounded-full blur-2xl pointer-events-none"></div>
+
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 font-prompt mb-4 relative z-10">
               ศูนย์รวมรถมือสองเชียงใหม่ คุณภาพดี คัดเกรดพรีเมียม
             </h2>
-            <div className="text-sm md:text-base text-gray-700 font-prompt space-y-4 leading-relaxed">
-              <p>
-                ยินดีต้อนรับสู่ <strong>ครูหนึ่งรถสวย</strong> ศูนย์รวม
-                <strong>รถมือสองเชียงใหม่</strong>ที่ได้รับความไว้วางใจจากลูกค้าทั่วภาคเหนือ
-                เราคัดสรรเฉพาะรถบ้านสภาพดี ไมล์แท้ ประวัติใสสะอาด โครงสร้างเดิม
-                ไม่เคยมีประวัติชนหนักหรือจมน้ำ เพื่อส่งมอบความมั่นใจสูงสุดให้กับคุณ
-                ไม่ว่าคุณกำลังตามหา รถเก๋งประหยัดน้ำมัน (Toyota, Honda, Mazda),
-                รถกระบะพันธุ์แกร่งทนทานสำหรับลุยงาน (Isuzu, Nissan, Mitsubishi) หรือรถอเนกประสงค์
+            <div className="text-sm md:text-base text-gray-700 font-prompt space-y-4 leading-[1.8] relative z-10">
+              <p className="text-justify md:text-left">
+                ยินดีต้อนรับสู่ <strong className="text-primary font-medium">ครูหนึ่งรถสวย</strong> ศูนย์รวม
+                <strong className="text-primary font-medium">รถมือสองเชียงใหม่</strong>ที่ได้รับความไว้วางใจจากลูกค้าทั่วภาคเหนือ
+                เราคัดสรรเฉพาะรถบ้านสภาพดี ไมล์แท้ ประวัติใสสะอาด โครงสร้างเดิม ไม่เคยมีประวัติชนหนักหรือจมน้ำ เพื่อส่งมอบความมั่นใจสูงสุดให้กับคุณ
+                ไม่ว่าคุณกำลังตามหา รถเก๋งประหยัดน้ำมัน <span className="text-gray-500">(Toyota, Honda, Mazda)</span>,
+                รถกระบะพันธุ์แกร่งทนทานสำหรับลุยงาน <span className="text-gray-500">(Isuzu, Nissan, Mitsubishi)</span> หรือรถอเนกประสงค์
                 SUV แบบครอบครัว เรามีรถคุณภาพพร้อมใช้งานให้เลือกชมมากกว่า{' '}
-                {Number.isFinite(totalCount) ? totalCount : 0} คัน
+                <strong className="text-accent text-lg">{Number.isFinite(totalCount) ? totalCount : 0} คัน</strong>{' '}
                 ที่ครอบคลุมและตอบโจทย์ทุกไลฟ์สไตล์
               </p>
-              <p>
+              <p className="text-justify md:text-left">
                 รถยนต์มือสองทุกคันของเราผ่านการตรวจเช็คสภาพอย่างละเอียดจากช่างผู้เชี่ยวชาญ
                 พร้อมการรับประกันเครื่องยนต์และเกียร์หลังการขาย เรามุ่งเน้นการให้บริการที่ซื่อสัตย์
                 โปร่งใส พร้อมให้คำปรึกษาด้านการจัดไฟแนนซ์{' '}
-                <strong>ออกรถได้ทุกอาชีพ จัดไฟแนนซ์ง่าย อนุมัติไว ฟรีดาวน์ 0%</strong>{' '}
+                <span className="inline-block bg-orange-100 text-orange-800 px-2 py-0.5 rounded-md font-medium my-1">
+                  ออกรถได้ทุกอาชีพ จัดไฟแนนซ์ง่าย อนุมัติไว ฟรีดาวน์ 0%
+                </span>{' '}
                 และกรณีลูกค้าต่างจังหวัดเรามีบริการส่งรถฟรีถึงหน้าบ้านท่านทั่วประเทศไทย
                 หากคุณกำลังมองหารถยนต์ในราคาที่เหมาะสม คุ้มค่าเงินทุกบาท
-                ลองเลือกชมกรถที่อัปเดตล่าสุดด้านล่างนี้เลย
-                หรือติดต่อทีมงานของเราเพื่อขอนัดหมายดูรถและทดลองขับได้ทุกวัน
+                ลองเลือกชมรถที่อัปเดตล่าสุดด้านล่างนี้เลย
               </p>
             </div>
           </div>
