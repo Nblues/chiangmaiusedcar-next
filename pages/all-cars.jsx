@@ -279,13 +279,15 @@ export default function AllCars({
         scroll: false,
       })
       .then(() => {
-        // ทันทีที่ข้อมูลมา เลื่อนจอให้อยู่ตำแหน่งบนสุดของส่วนรายการรถ (grid)
-        // เพื่อให้ผู้ใช้เห็นรถคันแรกของหน้าใหม่ โดยไม่เด้งทะลุขึ้นไปที่ Hero Banner
-        const grid = document.getElementById('cars-grid-section');
-        if (grid) {
-          const y = grid.getBoundingClientRect().top + window.scrollY - 80; // ชดเชย 80px เผื่อ sticky header
-          window.scrollTo({ top: y, behavior: 'instant' });
-        }
+        // ใช้ requestAnimationFrame หรือ setTimeout เพื่อดักให้ DOM เรนเดอร์รถชุดใหม่เสร็จก่อน
+        // ถึงจะคำนวณตำแหน่งและเลื่อนจอจริงๆ
+        setTimeout(() => {
+          const grid = document.getElementById('cars-grid-section');
+          if (grid) {
+            const y = grid.getBoundingClientRect().top + window.scrollY - 80;
+            window.scrollTo({ top: y, behavior: 'auto' });
+          }
+        }, 50);
       });
   };
 
