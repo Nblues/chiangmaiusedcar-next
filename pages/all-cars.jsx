@@ -268,6 +268,26 @@ export default function AllCars({
     return queryString ? `/all-cars?${queryString}` : '/all-cars';
   };
 
+  // Navigate to page while keeping viewport exactly where it was (ไม่เด้งและไม่เลื่อนกลับขึ้นไปบนสุด)
+  const handlePaginationNav = (page, e) => {
+    e.preventDefault();
+    if (page === currentPage) return;
+
+    // บันทึกตำแหน่งปัจจุบันหน้าจอไว้ก่อนกด
+    const scrollY = window.scrollY;
+
+    // เติมพารามิเตอร์ตื้น (shallow) เพื่ออัพเดท URL โดยไม่กระตุ้นให้ re-render หนัก
+    router
+      .push(getPageUrl(page), undefined, {
+        scroll: false,
+        shallow: true,
+      })
+      .then(() => {
+        // บังคับคืนตำแหน่งเลื่อนเดิมหลังจากการนำทางเสร็จสิ้น
+        window.scrollTo(0, scrollY);
+      });
+  };
+
   const generatePageNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5; // แสดงหน้าสูงสุด 5 หน้า
@@ -499,6 +519,7 @@ export default function AllCars({
 
       {/* Cars Grid */}
       <section
+        id="cars-grid-section"
         className="py-8 md:py-12 bg-white border-t border-gray-200"
         aria-label="รายการรถมือสองทั้งหมด"
       >
@@ -582,8 +603,10 @@ export default function AllCars({
                     {currentPage > 1 ? (
                       <Link
                         href={getPageUrl(currentPage - 1)}
+                        scroll={false}
                         className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center justify-center"
                         aria-label="ไปหน้าก่อนหน้า"
+                        onClick={e => handlePaginationNav(currentPage - 1, e)}
                       >
                         ← ก่อนหน้า
                       </Link>
@@ -602,6 +625,7 @@ export default function AllCars({
                         <Link
                           key={page}
                           href={getPageUrl(page)}
+                          scroll={false}
                           className={`w-10 h-10 text-sm font-medium rounded-lg border transition-colors flex items-center justify-center ${
                             page === currentPage
                               ? 'bg-primary border-primary text-white cursor-default'
@@ -609,9 +633,7 @@ export default function AllCars({
                           }`}
                           aria-label={`ไปหน้าที่ ${page}`}
                           aria-current={page === currentPage ? 'page' : undefined}
-                          onClick={e => {
-                            if (page === currentPage) e.preventDefault();
-                          }}
+                          onClick={e => handlePaginationNav(page, e)}
                         >
                           {page}
                         </Link>
@@ -622,8 +644,10 @@ export default function AllCars({
                     {currentPage < safeTotalPages ? (
                       <Link
                         href={getPageUrl(currentPage + 1)}
+                        scroll={false}
                         className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center justify-center"
                         aria-label="ไปหน้าถัดไป"
+                        onClick={e => handlePaginationNav(currentPage + 1, e)}
                       >
                         ถัดไป →
                       </Link>
