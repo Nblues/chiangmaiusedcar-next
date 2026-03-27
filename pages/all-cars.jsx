@@ -282,8 +282,10 @@ export default function AllCars({
         // ใช้ requestAnimationFrame หรือ setTimeout เพื่อดักให้ DOM เรนเดอร์รถชุดใหม่เสร็จก่อน
         // ถึงจะคำนวณตำแหน่งและเลื่อนจอจริงๆ
         setTimeout(() => {
-          const grid = document.getElementById('cars-grid-section');
+          // เลื่อนไปที่ตะกร้ารถจริงๆ ไม่ใช่ block SEO ด้านบน
+          const grid = document.getElementById('cars-list-top');
           if (grid) {
+            // หักลบความสูง navbar
             const y = grid.getBoundingClientRect().top + window.scrollY - 80;
             window.scrollTo({ top: y, behavior: 'auto' });
           }
@@ -570,6 +572,9 @@ export default function AllCars({
             </div>
           ) : (
             <>
+              {/* จุดปักหมุดสำหรับด้านบนของรายการรถจริงๆ (ไม่รวม text SEO ด้านบน) */}
+              <div id="cars-list-top" className="scroll-mt-24"></div>
+
               {/* Cards Grid - standardized layout */}
               <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
                 {currentCars.map((car, index) => {
