@@ -268,23 +268,24 @@ export default function AllCars({
     return queryString ? `/all-cars?${queryString}` : '/all-cars';
   };
 
-  // Navigate to page while keeping viewport exactly where it was (ไม่เด้งและไม่เลื่อนกลับขึ้นไปบนสุด)
+  // เปลี่ยนหน้าและเลื่อนไปที่จุดเริ่มต้นของรายการรถ (ไม่เด้งขึ้นไปบนสุดที่แบนเนอร์)
   const handlePaginationNav = (page, e) => {
     e.preventDefault();
     if (page === currentPage) return;
 
-    // บันทึกตำแหน่งปัจจุบันหน้าจอไว้ก่อนกด
-    const scrollY = window.scrollY;
-
-    // เติมพารามิเตอร์ตื้น (shallow) เพื่ออัพเดท URL โดยไม่กระตุ้นให้ re-render หนัก
+    // เลื่อนหน้าไป (scroll: false ปิดการเด้งไปบนสุดอัตโนมัติของ Next.js)
     router
       .push(getPageUrl(page), undefined, {
         scroll: false,
-        shallow: true,
       })
       .then(() => {
-        // บังคับคืนตำแหน่งเลื่อนเดิมหลังจากการนำทางเสร็จสิ้น
-        window.scrollTo(0, scrollY);
+        // ทันทีที่ข้อมูลมา เลื่อนจอให้อยู่ตำแหน่งบนสุดของส่วนรายการรถ (grid)
+        // เพื่อให้ผู้ใช้เห็นรถคันแรกของหน้าใหม่ โดยไม่เด้งทะลุขึ้นไปที่ Hero Banner
+        const grid = document.getElementById('cars-grid-section');
+        if (grid) {
+          const y = grid.getBoundingClientRect().top + window.scrollY - 80; // ชดเชย 80px เผื่อ sticky header
+          window.scrollTo({ top: y, behavior: 'instant' });
+        }
       });
   };
 
