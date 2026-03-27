@@ -232,7 +232,7 @@ export default function MyApp({ Component, pageProps }) {
         <FacebookPixel />
       ) : null}
       {!isAdminRoute && process.env.NODE_ENV === 'production' && cookieConsent?.analytics && (
-        <GoogleAnalytics gaId="G-Y5BYL58YBB" />
+        <GoogleAnalytics gaId="G-6X6MT38ML7" />
       )}
     </>
   );
