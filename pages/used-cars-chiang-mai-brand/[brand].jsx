@@ -394,11 +394,17 @@ export default function UsedCarsChiangMaiBrand({
             <div className="mt-2 text-sm text-gray-700 font-prompt">
               ลองดูหน้า “รถทั้งหมด” หรือหน้า “รถมือสองเชียงใหม่” เพื่อดูรถที่มีในสต็อกล่าสุด
             </div>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <Link href="/all-cars" className="btn-primary">
+            <div className="mt-6 flex flex-col sm:flex-row flex-wrap gap-3">
+              <Link
+                href="/all-cars"
+                className="btn-primary text-center w-full sm:w-auto px-6 py-2.5"
+              >
                 ดูรถทั้งหมด
               </Link>
-              <Link href="/used-cars-chiang-mai" className="btn-secondary">
+              <Link
+                href="/used-cars-chiang-mai"
+                className="btn-secondary text-center rounded-xl w-full sm:w-auto px-6 py-2.5"
+              >
                 รถมือสองเชียงใหม่
               </Link>
             </div>
