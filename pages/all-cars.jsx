@@ -268,24 +268,6 @@ export default function AllCars({
     return queryString ? `/all-cars?${queryString}` : '/all-cars';
   };
 
-  // ฟังก์ชันสำหรับเปลี่ยนหน้าแบบ smooth navigation
-  const handlePageChange = (page, event) => {
-    event.preventDefault();
-    if (!Number.isFinite(page) || page < 1 || page > safeTotalPages) return;
-
-    setCurrentPage(page);
-    try {
-      const newUrl = getPageUrl(page);
-      // ใช้ shallow routing และไม่ scroll เหมือนปุ่มรีวิว
-      router.push(newUrl, undefined, {
-        shallow: false,
-        scroll: false,
-      });
-    } catch {
-      // Silent error handling for production
-    }
-  };
-
   const generatePageNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5; // แสดงหน้าสูงสุด 5 หน้า
@@ -521,6 +503,36 @@ export default function AllCars({
         aria-label="รายการรถมือสองทั้งหมด"
       >
         <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-5 ipadpro:px-3 lg:px-6">
+          {/* SEO Content: The Volume Up & Content Deep Strategy */}
+          <div className="mb-8 p-6 bg-orange-50/50 rounded-2xl border border-orange-100">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 font-prompt mb-3">
+              ศูนย์รวมรถมือสองเชียงใหม่ คุณภาพดี คัดเกรดพรีเมียม
+            </h2>
+            <div className="text-sm md:text-base text-gray-700 font-prompt space-y-4 leading-relaxed">
+              <p>
+                ยินดีต้อนรับสู่ <strong>ครูหนึ่งรถสวย</strong> ศูนย์รวม
+                <strong>รถมือสองเชียงใหม่</strong>ที่ได้รับความไว้วางใจจากลูกค้าทั่วภาคเหนือ
+                เราคัดสรรเฉพาะรถบ้านสภาพดี ไมล์แท้ ประวัติใสสะอาด โครงสร้างเดิม
+                ไม่เคยมีประวัติชนหนักหรือจมน้ำ เพื่อส่งมอบความมั่นใจสูงสุดให้กับคุณ
+                ไม่ว่าคุณกำลังตามหา รถเก๋งประหยัดน้ำมัน (Toyota, Honda, Mazda),
+                รถกระบะพันธุ์แกร่งทนทานสำหรับลุยงาน (Isuzu, Nissan, Mitsubishi) หรือรถอเนกประสงค์
+                SUV แบบครอบครัว เรามีรถคุณภาพพร้อมใช้งานให้เลือกชมมากกว่า{' '}
+                {Number.isFinite(totalCount) ? totalCount : 0} คัน
+                ที่ครอบคลุมและตอบโจทย์ทุกไลฟ์สไตล์
+              </p>
+              <p>
+                รถยนต์มือสองทุกคันของเราผ่านการตรวจเช็คสภาพอย่างละเอียดจากช่างผู้เชี่ยวชาญ
+                พร้อมการรับประกันเครื่องยนต์และเกียร์หลังการขาย เรามุ่งเน้นการให้บริการที่ซื่อสัตย์
+                โปร่งใส พร้อมให้คำปรึกษาด้านการจัดไฟแนนซ์{' '}
+                <strong>ออกรถได้ทุกอาชีพ จัดไฟแนนซ์ง่าย อนุมัติไว ฟรีดาวน์ 0%</strong>{' '}
+                และกรณีลูกค้าต่างจังหวัดเรามีบริการส่งรถฟรีถึงหน้าบ้านท่านทั่วประเทศไทย
+                หากคุณกำลังมองหารถยนต์ในราคาที่เหมาะสม คุ้มค่าเงินทุกบาท
+                ลองเลือกชมกรถที่อัปเดตล่าสุดด้านล่างนี้เลย
+                หรือติดต่อทีมงานของเราเพื่อขอนัดหมายดูรถและทดลองขับได้ทุกวัน
+              </p>
+            </div>
+          </div>
+
           {!Number.isFinite(totalCount) || totalCount === 0 ? (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">🔍</div>
@@ -537,7 +549,7 @@ export default function AllCars({
               {/* Cards Grid - standardized layout */}
               <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
                 {currentCars.map((car, index) => {
-                  const isBelowFold = index >= 8;
+                  const isBelowFold = index >= 12;
 
                   if (isBelowFold && !showAllCars) {
                     return (
@@ -567,56 +579,62 @@ export default function AllCars({
                     className="flex items-center justify-center space-x-2"
                   >
                     {/* Previous Button */}
-                    <button
-                      type="button"
-                      onClick={e => (currentPage > 1 ? handlePageChange(currentPage - 1, e) : null)}
-                      disabled={currentPage <= 1}
-                      className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                        currentPage > 1
-                          ? 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-                          : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
-                      }`}
-                      aria-label="ไปหน้าก่อนหน้า"
-                    >
-                      ← ก่อนหน้า
-                    </button>
+                    {currentPage > 1 ? (
+                      <Link
+                        href={getPageUrl(currentPage - 1)}
+                        className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center justify-center"
+                        aria-label="ไปหน้าก่อนหน้า"
+                      >
+                        ← ก่อนหน้า
+                      </Link>
+                    ) : (
+                      <span
+                        className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed flex items-center justify-center"
+                        aria-hidden="true"
+                      >
+                        ← ก่อนหน้า
+                      </span>
+                    )}
 
                     {/* Page Numbers */}
                     <div className="flex items-center space-x-1">
                       {generatePageNumbers().map(page => (
-                        <button
+                        <Link
                           key={page}
-                          type="button"
-                          onClick={e => handlePageChange(page, e)}
-                          className={`w-10 h-10 text-sm font-medium rounded-lg border transition-colors ${
+                          href={getPageUrl(page)}
+                          className={`w-10 h-10 text-sm font-medium rounded-lg border transition-colors flex items-center justify-center ${
                             page === currentPage
-                              ? 'bg-primary border-primary text-white'
+                              ? 'bg-primary border-primary text-white cursor-default'
                               : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
                           }`}
                           aria-label={`ไปหน้าที่ ${page}`}
                           aria-current={page === currentPage ? 'page' : undefined}
+                          onClick={e => {
+                            if (page === currentPage) e.preventDefault();
+                          }}
                         >
                           {page}
-                        </button>
+                        </Link>
                       ))}
                     </div>
 
                     {/* Next Button */}
-                    <button
-                      type="button"
-                      onClick={e =>
-                        currentPage < safeTotalPages ? handlePageChange(currentPage + 1, e) : null
-                      }
-                      disabled={currentPage >= safeTotalPages}
-                      className={`px-3 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                        currentPage < safeTotalPages
-                          ? 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
-                          : 'bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed'
-                      }`}
-                      aria-label="ไปหน้าถัดไป"
-                    >
-                      ถัดไป →
-                    </button>
+                    {currentPage < safeTotalPages ? (
+                      <Link
+                        href={getPageUrl(currentPage + 1)}
+                        className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center justify-center"
+                        aria-label="ไปหน้าถัดไป"
+                      >
+                        ถัดไป →
+                      </Link>
+                    ) : (
+                      <span
+                        className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed flex items-center justify-center"
+                        aria-hidden="true"
+                      >
+                        ถัดไป →
+                      </span>
+                    )}
                   </nav>
 
                   {/* Page Info */}
@@ -762,7 +780,7 @@ export async function getServerSideProps(context) {
   const initialPage = q.page ? normalizePageNumber(q.page) : 1;
 
   // Apply filtering/pagination on the server to reduce client hydration cost (TBT)
-  const carsPerPage = 8;
+  const carsPerPage = 24;
   mark('ssr:filtering:start');
   let filtered = Array.isArray(cars) ? cars : [];
 
