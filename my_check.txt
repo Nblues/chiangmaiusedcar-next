@@ -1,0 +1,34 @@
+op-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-orange-100/50 rounded-full blur-2xl pointer-events-none"></div>
+
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900 font-prompt mb-4 relative z-10">
+              ศูนย์รวมรถมือสองเชียงใหม่ คุณภาพดี คัดเกรดพรีเมียม
+            </h2>
+            <div className="text-base md:text-lg text-gray-800 font-prompt space-y-4 md:space-y-5 leading-[1.8] md:leading-[1.8] relative z-10">
+              <p className="text-left">
+                ยินดีต้อนรับสู่ <strong className="text-primary font-semibold">ครูหนึ่งรถสวย</strong> ศูนย์รวมรถมือสองเชียงใหม่ที่ได้รับความไว้วางใจจากลูกค้าทั่วภาคเหนือ
+              </p>
+              <p className="text-left">
+                เราคัดสรรเฉพาะรถบ้านสภาพดี ไมล์แท้ ประวัติใสสะอาด โครงสร้างเดิม ไม่เคยมีประวัติชนหนักหรือจมน้ำ เพื่อส่งมอบความมั่นใจสูงสุดให้กับคุณ
+              </p>
+              <p className="text-left">
+                ไม่ว่าคุณกำลังตามหา <strong>รถเก๋งประหยัดน้ำมัน</strong> <span className="text-gray-500 text-sm md:text-base">(Toyota, Honda, Mazda)</span>, <strong>รถกระบะพันธุ์แกร่งทนทานสำหรับลุยงาน</strong> <span className="text-gray-500 text-sm md:text-base">(Isuzu, Nissan, Mitsubishi)</span> หรือ<strong>รถอเนกประสงค์ SUV แบบครอบครัว</strong> 
+              </p>
+              <p className="text-left">
+                เรามีรถคุณภาพพร้อมใช้งานให้เลือกชมมากกว่า <strong className="text-accent text-lg md:text-xl">{Number.isFinite(totalCount) ? totalCount : 0} คัน</strong> ที่ครอบคลุมและตอบโจทย์ทุกไลฟ์สไตล์
+              </p>
+              <p className="text-left">
+                รถยนต์มือสองทุกคันของเราผ่านการตรวจเช็คสภาพอย่างละเอียดจากช่างผู้เชี่ยวชาญ พร้อมการรับประกันเครื่องยนต์และเกียร์หลังการขาย เรามุ่งเน้นการให้บริการที่ซื่อสัตย์ โปร่งใส พร้อมให้คำปรึกษาด้านการจัดไฟแนนซ์
+              </p>
+              <p className="text-left">
+                <span className="inline-block bg-orange-100 text-orange-800 px-3 py-1.5 rounded-md font-semibold my-2 shadow-sm">
+                  ออกรถได้ทุกอาชีพ จัดไฟแนนซ์ง่าย อนุมัติไว ฟรีดาวน์ 0%
+                </span>
+                <br/>
+                และกรณีลูกค้าต่างจังหวัดเรามีบริการส่งรถฟรีถึงหน้าบ้านท่านทั่วประเทศไทย
+              </p>
+              <p className="text-left font-semibold text-primary mt-2">
+                หากคุณกำลังมองหารถยนต์ในราคาที่เหมาะสม คุ้มค่าเงินทุกบาท ลองเลือกชมรถที่อัปเดตล่าสุดด้านล่างนี้เลย
+              </p></div>
+          </div>
+
+          {!Number.isFinite(totalCount) || t

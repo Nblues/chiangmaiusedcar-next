@@ -1,0 +1,59 @@
+</header>
+
+      <Breadcrumb />
+
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 ipadpro:px-3 py-8">
+        <nav
+          aria-label="ไปยังส่วนต่างๆ ของหน้า"
+          className="mb-6 rounded-2xl border border-gray-200 bg-white p-4 sm:p-5"
+        >
+          <div className="text-sm font-semibold text-gray-900 font-prompt">ไปยังส่วนที่ต้องการ</div>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <a
+              href="#about"
+              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              ซื้อ-ขาย/ฝากขาย
+            </a>
+            <a
+              href="#consign-conditions"
+              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              เงื่อนไขฝากขาย
+            </a>
+            <a
+              href="#brands"
+              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              เลือกดูตามยี่ห้อ
+            </a>
+            <a
+              href="#featured-cars"
+              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              รถลงประกาศล่าสุด
+            </a>
+            <a
+              href="#social"
+              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              ติดตามบนโซเชียล
+            </a>
+            <a
+              href="#dealer"
+              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              ข้อมูลเต็นท์/ติดต่อ
+            </a>
+            <a
+              href="#faq"
+              className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              คำถามที่พบบ่อย
+            </a>
+            <Link
+              href="/all-cars"
+              prefetch={false}
+              className="inline-flex items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-colors font-prompt"
+            >
+              ดูรถทั้ง

@@ -20,6 +20,28 @@ async function readRawBody(req) {
   });
 }
 
+// Helper to clear Tier-1 & Tier-2 caching (KV & Memory) so revalidation gets fresh Shopify data
+async function clearShopifyCaches() {
+  try {
+    // 1. Clear Memory Cache
+    if (globalThis.__CNX_ALL_CARS_CACHE__) {
+      globalThis.__CNX_ALL_CARS_CACHE__ = null;
+    }
+
+    // 2. Clear KV Cache
+    const { getKv, getShopifyStoreKey } = await import('../../../lib/shopify/helpers/kv.mjs');
+    const kv = await getKv();
+    if (kv) {
+      const storeKey = getShopifyStoreKey() || 'unknown-store';
+      const kvCacheKey = `cache:allcars:v1:${storeKey}`;
+      await kv.del(kvCacheKey);
+      console.log('[Webhook] KV Cache cleared for key:', kvCacheKey);
+    }
+  } catch (error) {
+    console.warn('[Webhook] No KV or error clearing caches:', error.message);
+  }
+}
+
 function verifyShopifyHmac(rawBody, headerHmac, secret) {
   if (!headerHmac || !secret) return false;
   try {
@@ -90,6 +112,9 @@ export default async function handler(req, res) {
   // Try to extract handle and id
   const handle = payload?.handle || payload?.product?.handle || null;
   const productId = payload?.id || payload?.product?.id || null;
+
+  // Clear cache first before Next.js makes fresh requests
+  await clearShopifyCaches();
 
   // Revalidate relevant pages
   await revalidatePaths(res, handle);
