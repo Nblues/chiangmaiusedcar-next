@@ -4,6 +4,28 @@
 import { isAuthenticated } from '../../middleware/adminAuth';
 import { verifyApiAuth } from '../../lib/apiAuth';
 
+// Helper to clear Tier-1 & Tier-2 caching (KV & Memory) so revalidation gets fresh Shopify data
+async function clearShopifyCaches() {
+  try {
+    // 1. Clear Memory Cache
+    if (globalThis.__CNX_ALL_CARS_CACHE__) {
+      globalThis.__CNX_ALL_CARS_CACHE__ = null;
+    }
+
+    // 2. Clear KV Cache
+    const { getKv, getShopifyStoreKey } = await import('../../lib/shopify/helpers/kv.mjs');
+    const kv = await getKv();
+    if (kv) {
+      const storeKey = getShopifyStoreKey() || 'unknown-store';
+      const kvCacheKey = `cache:allcars:v1:${storeKey}`;
+      await kv.del(kvCacheKey);
+      console.log('[Revalidate] KV Cache cleared for key:', kvCacheKey);
+    }
+  } catch (error) {
+    console.warn('[Revalidate] No KV or error clearing caches:', error.message);
+  }
+}
+
 export default async function handler(req, res) {
   // ตั้งค่า headers ป้องกัน cache
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
@@ -52,6 +74,11 @@ export default async function handler(req, res) {
     ];
 
     const pathsToRevalidate = paths ? (Array.isArray(paths) ? paths : [paths]) : defaultPaths;
+
+    // เคลียร์แคชลึก (KV & Memory) ทุกครั้งที่สั่ง revalidate รถ หรือบังคับ force
+    if (force === 'true' || force === true || pathsToRevalidate.includes('/all-cars')) {
+      await clearShopifyCaches();
+    }
 
     // บังคับ revalidate หรือ smart revalidation
     const revalidationResults = [];
