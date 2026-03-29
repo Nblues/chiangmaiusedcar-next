@@ -1,7 +1,7 @@
 // Service Worker สำหรับการจัดการแคชตามมาตรฐานสากล 2025
 // Cache Strategy: Stale-While-Revalidate + Network First สำหรับเนื้อหาล่าสุด
 
-const CACHE_VERSION = 'v2026-1.0.3';
+const CACHE_VERSION = 'v2026-1.0.4';
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
@@ -95,6 +95,11 @@ self.addEventListener('fetch', e => {
   // Skip Facebook Pixel tracking completely - let browser handle it directly
   if (hostname.includes('facebook.net') || hostname.includes('facebook.com')) {
     return; // Don't intercept Facebook requests
+  }
+
+  // Skip Google Analytics & Tag Manager
+  if (hostname.includes('google-analytics.com') || hostname.includes('googletagmanager.com')) {
+    return;
   }
 
   // Skip Google Fonts - let browser handle it directly
