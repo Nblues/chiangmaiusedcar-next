@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+﻿/* eslint-disable @next/next/no-img-element */
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
@@ -462,53 +462,6 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             dangerouslySetInnerHTML={{ __html: homeItemListJsonLd }}
           />
         ) : null}
-        {/* AutoDealer LocalBusiness Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'AutoDealer',
-              name: 'ครูหนึ่งรถสวย รถมือสองเชียงใหม่',
-              image: 'https://www.chiangmaiusedcar.com/herobanner/newherobanner-1024w.webp',
-              '@id': 'https://www.chiangmaiusedcar.com/',
-              url: 'https://www.chiangmaiusedcar.com/',
-              telephone: '+66940649018',
-              priceRange: '฿฿-฿฿฿',
-              address: {
-                '@type': 'PostalAddress',
-                streetAddress: '7/1 ถนนสันทราย-แม่โจ้',
-                addressLocality: 'สันทราย',
-                addressRegion: 'เชียงใหม่',
-                postalCode: '50210',
-                addressCountry: 'TH',
-              },
-              geo: {
-                '@type': 'GeoCoordinates',
-                latitude: 18.8406,
-                longitude: 99.0044,
-              },
-              openingHoursSpecification: {
-                '@type': 'OpeningHoursSpecification',
-                dayOfWeek: [
-                  'Monday',
-                  'Tuesday',
-                  'Wednesday',
-                  'Thursday',
-                  'Friday',
-                  'Saturday',
-                  'Sunday',
-                ],
-                opens: '08:30',
-                closes: '17:30',
-              },
-              sameAs: [
-                'https://www.facebook.com/chiangmaiusedcar',
-                'https://www.youtube.com/@Kru1',
-              ],
-            }),
-          }}
-        />{' '}
       </>
       {/* End main content */}
     </div>

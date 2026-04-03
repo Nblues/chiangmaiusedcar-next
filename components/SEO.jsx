@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { buildCarJsonLd, buildLocalBusinessJsonLd, buildProductJsonLd } from '../lib/seo/jsonld.js';
@@ -627,31 +627,6 @@ export default function SEO({
       )}
 
       {/* Product Schema (Google Rich Results friendly) - ใช้ร่วมกับ Car schema */}
-      {carData && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(
-              buildProductJsonLd({
-                url: fullUrl,
-                name: carData.title,
-                description: carData.description || metaDesc,
-                images: carData.images?.map(img => img.url) || [absoluteImage],
-                brand: carData.brand,
-                sku: carData.sku || carData.id,
-                mpn: carData.mpn,
-                price: carData.price?.amount,
-                currency: carData.price?.currencyCode || 'THB',
-                inStock: carData.availableForSale !== false,
-                status: carData.status,
-                availability: carData.status === 'reserved' ? 'OutOfStock' : 'InStock',
-                sellerName: 'ครูหนึ่งรถสวย',
-                review: carData.review,
-              })
-            ),
-          }}
-        />
-      )}
 
       {/* WebSite Schema with Site Search */}
       <script
