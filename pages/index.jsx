@@ -295,7 +295,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         <div className="relative w-full max-w-[1400px] mx-auto">
           {/* LCP Optimized: Native responsive img for critical hero banner */}
           <img
-            src="/herobanner/newherobanner-828w.webp"
+            src="/herobanner/newherobanner-414w.webp"
             srcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
             sizes="(max-width: 414px) 414px, (max-width: 1400px) 100vw, 1400px"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
@@ -303,6 +303,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
             height={467}
             className="w-full h-auto object-contain block mx-auto text-transparent"
             decoding="sync"
+            loading="eager"
             fetchpriority="high"
           />
         </div>
@@ -418,6 +419,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           <div className="text-center mt-12">
             <Link
               href="/all-cars"
+              prefetch={false}
               className="inline-flex items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
               aria-label="ดูรถทั้งหมด ครูหนึ่งรถสวย"
             >
@@ -558,7 +560,7 @@ export async function getStaticProps() {
 
   return {
     props: { cars, brandCounts, homeOgImage, homeItemListJsonLd },
-    revalidate: 600, // 10 minutes - Reduce regeneration frequency for better TTFB
+    revalidate: 300, // 5 minutes - Improve TTFB frequency standard
   };
 }
 
