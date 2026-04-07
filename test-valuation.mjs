@@ -1,7 +1,9 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 async function test() {
-  const ai = new GoogleGenerativeAI('AIzaSyA_IfyYoGoRofIKBQTD0pJZquk2bju4gpg');
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = ai.getGenerativeModel({ model: 'gemini-3.1-pro-preview' });
 
   const prompt = `
