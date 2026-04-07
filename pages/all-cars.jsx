@@ -611,7 +611,7 @@ export default function AllCars({
                       </Link>
                     ) : (
                       <span
-                        className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed flex items-center justify-center"
+                        className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed flex items-center justify-center"
                         aria-hidden="true"
                       >
                         ← ก่อนหน้า
@@ -652,7 +652,7 @@ export default function AllCars({
                       </Link>
                     ) : (
                       <span
-                        className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed flex items-center justify-center"
+                        className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed flex items-center justify-center"
                         aria-hidden="true"
                       >
                         ถัดไป →

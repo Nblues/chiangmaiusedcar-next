@@ -372,13 +372,15 @@ export default function UsedCarsChiangMaiBrand({
             <div className="flex gap-2">
               <Link
                 href={`/used-cars-chiang-mai-brand/${brandInfo.slug}${safePage > 1 ? `?page=${safePage - 1}` : ''}`}
-                className={`inline-flex items-center justify-center rounded-xl border px-3 py-2 text-xs font-semibold font-prompt transition-colors ${safePage <= 1 ? 'border-gray-200 text-gray-400 pointer-events-none' : 'border-primary text-primary hover:bg-primary hover:text-white'}`}
+                className={`inline-flex items-center justify-center rounded-xl border px-3 py-2 text-xs font-semibold font-prompt transition-colors ${safePage <= 1 ? 'border-gray-300 text-gray-500 pointer-events-none' : 'border-primary text-primary hover:bg-primary hover:text-white'}`}
+                aria-disabled={safePage <= 1}
               >
                 ก่อนหน้า
               </Link>
               <Link
                 href={`/used-cars-chiang-mai-brand/${brandInfo.slug}${safePage < totalPages ? `?page=${safePage + 1}` : ''}`}
-                className={`inline-flex items-center justify-center rounded-xl border px-3 py-2 text-xs font-semibold font-prompt transition-colors ${safePage >= totalPages ? 'border-gray-200 text-gray-400 pointer-events-none' : 'border-primary text-primary hover:bg-primary hover:text-white'}`}
+                className={`inline-flex items-center justify-center rounded-xl border px-3 py-2 text-xs font-semibold font-prompt transition-colors ${safePage >= totalPages ? 'border-gray-300 text-gray-500 pointer-events-none' : 'border-primary text-primary hover:bg-primary hover:text-white'}`}
+                aria-disabled={safePage >= totalPages}
               >
                 ถัดไป
               </Link>

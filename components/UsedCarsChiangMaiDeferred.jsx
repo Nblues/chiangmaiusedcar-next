@@ -20,7 +20,6 @@ export default function UsedCarsChiangMaiDeferred() {
             target="_blank"
             rel="noopener noreferrer"
             className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
-            aria-label="ติดตาม Facebook เพจหลัก ครูหนึ่งรถสวย"
           >
             <div className="flex items-center mb-3">
               <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -56,7 +55,7 @@ export default function UsedCarsChiangMaiDeferred() {
                 </svg>
               </div>
               <div className="ml-3">
-                <h3 className="font-bold text-gray-800 group-hover:text-blue-500 transition-colors font-prompt">
+                <h3 className="font-bold text-gray-800 group-hover:text-blue-700 transition-colors font-prompt">
                   Facebook
                 </h3>
                 <p className="text-xs text-gray-500 font-prompt">
@@ -64,7 +63,7 @@ export default function UsedCarsChiangMaiDeferred() {
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-blue-500 font-prompt">
+            <p className="text-sm font-semibold text-blue-700 font-prompt">
               {BUSINESS_INFO.socialFollowStats.facebook.personal.metricText}
             </p>
           </a>
@@ -74,7 +73,6 @@ export default function UsedCarsChiangMaiDeferred() {
             target="_blank"
             rel="noopener noreferrer"
             className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
-            aria-label="เข้าร่วม Facebook กลุ่ม FC ครูหนึ่งรถสวย"
           >
             <div className="flex items-center mb-3">
               <div className="w-12 h-12 bg-blue-700 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -101,7 +99,6 @@ export default function UsedCarsChiangMaiDeferred() {
             target="_blank"
             rel="noopener noreferrer"
             className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
-            aria-label="ติดตาม TikTok ครูหนึ่งรถสวย"
           >
             <div className="flex items-center mb-3">
               <div className="w-12 h-12 bg-gray-900 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -128,7 +125,6 @@ export default function UsedCarsChiangMaiDeferred() {
             target="_blank"
             rel="noopener noreferrer"
             className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
-            aria-label="ติดตาม YouTube วิดีโอรีวิว ครูหนึ่งรถสวย"
           >
             <div className="flex items-center mb-3">
               <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -137,7 +133,7 @@ export default function UsedCarsChiangMaiDeferred() {
                 </svg>
               </div>
               <div className="ml-3">
-                <h3 className="font-bold text-gray-800 group-hover:text-red-600 transition-colors font-prompt">
+                <h3 className="font-bold text-gray-800 group-hover:text-red-700 transition-colors font-prompt">
                   YouTube
                 </h3>
                 <p className="text-xs text-gray-500 font-prompt">
@@ -145,7 +141,7 @@ export default function UsedCarsChiangMaiDeferred() {
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-red-600 font-prompt">
+            <p className="text-sm font-semibold text-red-700 font-prompt">
               {BUSINESS_INFO.socialFollowStats.youtube.metricText}
             </p>
           </a>
@@ -155,7 +151,6 @@ export default function UsedCarsChiangMaiDeferred() {
             target="_blank"
             rel="noopener noreferrer"
             className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
-            aria-label="ติดตาม Lemon8 ครูหนึ่งรถสวย"
           >
             <div className="flex items-center mb-3">
               <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -164,7 +159,7 @@ export default function UsedCarsChiangMaiDeferred() {
                 </svg>
               </div>
               <div className="ml-3">
-                <h3 className="font-bold text-gray-800 group-hover:text-yellow-600 transition-colors font-prompt">
+                <h3 className="font-bold text-gray-800 group-hover:text-yellow-700 transition-colors font-prompt">
                   Lemon8
                 </h3>
                 <p className="text-xs text-gray-500 font-prompt">
@@ -172,7 +167,7 @@ export default function UsedCarsChiangMaiDeferred() {
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-yellow-600 font-prompt">
+            <p className="text-sm font-semibold text-yellow-700 font-prompt">
               {BUSINESS_INFO.socialFollowStats.lemon8.metricText}
             </p>
           </a>
@@ -182,7 +177,6 @@ export default function UsedCarsChiangMaiDeferred() {
             target="_blank"
             rel="noopener noreferrer"
             className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group sm:col-span-2 lg:col-span-1"
-            aria-label="แชท LINE ครูหนึ่งรถสวย"
           >
             <div className="flex items-center mb-3">
               <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -191,7 +185,7 @@ export default function UsedCarsChiangMaiDeferred() {
                 </svg>
               </div>
               <div className="ml-3">
-                <h3 className="font-bold text-gray-800 group-hover:text-green-600 transition-colors font-prompt">
+                <h3 className="font-bold text-gray-800 group-hover:text-green-700 transition-colors font-prompt">
                   LINE
                 </h3>
                 <p className="text-xs text-gray-500 font-prompt">
@@ -199,7 +193,7 @@ export default function UsedCarsChiangMaiDeferred() {
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-green-600 font-prompt">
+            <p className="text-sm font-semibold text-green-700 font-prompt">
               {BUSINESS_INFO.socialFollowStats.line.metricText}
             </p>
           </a>
