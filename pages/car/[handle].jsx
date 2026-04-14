@@ -932,7 +932,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   }
                 }}
                 className="flex items-center justify-center gap-1.5 bg-gray-50 hover:bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-sm font-prompt transition-colors w-max whitespace-nowrap self-start border border-gray-200"
-                aria-label="แชร์บอกเพื่อน"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
@@ -2178,7 +2177,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
           href="https://lin.ee/8ugfzstD"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 bg-[#06C755] text-white rounded-xl flex items-center justify-center gap-2 font-bold py-3 hover:bg-[#05b34c] active:bg-[#049a41] transition-colors"
+          className="flex-1 bg-[#06C755] text-gray-900 rounded-xl flex items-center justify-center gap-2 font-bold py-3 hover:bg-[#05b34c] active:bg-[#049a41] transition-colors"
         >
           <svg className="w-6 h-6 object-contain" viewBox="0 0 24 24" fill="currentColor">
             <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 3.266 8.847 8.04 9.613.313.067.733.204.843.486.1.258.05.65.023.822-.054.343-.243 1.464-.29 1.73-.082.392-.41.564.084.812.43.212 2.378 1.127 3.515 1.58.742.296 2.333.684 3.215.684 5.674 0 8.57-3.957 8.57-9.727zM8.337 12.1H5.973v-2.905c0-.285-.23-.514-.514-.516h-.002c-.285 0-.517.231-.517.516v3.421c0 .285.232.516.517.516h2.881c.285 0 .515-.231.515-.516v-.002c-.001-.285-.232-.516-.516-.516zm3.327-.516v-2.905c0-.284-.23-.514-.515-.514h-.002c-.284 0-.516.23-.516.514v3.421c0 .285.232.516.516.516h.002c.285 0 .515-.231.515-.516v-.002zm1.65-2.905H11.53c-.285 0-.515.231-.515.516v3.419c0 .285.23.516.515.516h1.785c.284 0 .515-.231.515-.516v-3.419c0-.285-.231-.516-.515-.516zm4.619 0h-1.579l-1.393 2.128v-2.128c0-.285-.232-.516-.516-.516h-.002c-.285 0-.516.231-.516.516v3.42c0 .285.231.516.516.516h.002c.285 0 .516-.231.516-.516v-.002l1.417-2.164v2.166c0 .285.23.516.515.516h.001c.285 0 .515-.231.515-.516v-3.42c-.003-.283-.234-.514-.519-.514z" />
