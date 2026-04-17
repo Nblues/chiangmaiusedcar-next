@@ -15,8 +15,8 @@ export default function HomeFaqSection() {
       {/* Features Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {/* Feature 1 */}
-          <div className="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <div className="relative flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 lg:w-20 lg:h-20 mb-3 rounded-2xl overflow-hidden">
+          <div className="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
+            <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
               <A11yImage
                 src="/images/kn2.webp"
                 alt="ไอคอนรถบ้านแท้"
@@ -25,24 +25,26 @@ export default function HomeFaqSection() {
                 loading="lazy"
                 fetchpriority="low"
                 optimizeImage={false}
-                className="w-full h-full max-w-none object-contain"
+                className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
               />
             </div>
-            <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
-              <span className="block text-primary font-semibold">คัดเฉพาะรถมือเดียว</span>
-              <span className="block">
-                <span className="text-primary font-semibold">จากเจ้าของโดยตรง</span>{' '}
-                <span className="text-accent-800 font-semibold">
-                  ไม่มีรถน้ำท่วม ไม่มีรถอุบัติเหตุ
-                </span>{' '}
-                <span className="text-primary">ขอดูเล่มทะเบียนได้ทุกหน้า</span>
-              </span>
-            </p>
+            <div className="flex-1 w-full text-left">
+              <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
+                <span className="block text-primary font-semibold">คัดเฉพาะรถมือเดียว</span>
+                <span className="block">
+                  <span className="text-primary font-semibold">จากเจ้าของโดยตรง</span>{' '}
+                  <span className="text-accent-800 font-semibold">
+                    ไม่มีรถน้ำท่วม ไม่มีรถอุบัติเหตุ
+                  </span>{' '}
+                  <span className="text-primary">ขอดูเล่มทะเบียนได้ทุกหน้า</span>
+                </span>
+              </p>
+            </div>
           </div>
 
           {/* Feature 2 */}
-          <div className="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <div className="relative flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 lg:w-20 lg:h-20 mb-3 rounded-2xl overflow-hidden">
+          <div className="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
+            <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
               <A11yImage
                 src="/images/kn1.webp"
                 alt="ไอคอนฟรีดาวน์ 0%"
@@ -51,21 +53,23 @@ export default function HomeFaqSection() {
                 loading="lazy"
                 fetchpriority="low"
                 optimizeImage={false}
-                className="w-full h-full max-w-none object-contain"
+                className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
               />
             </div>
-            <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
-              <span className="block text-orange-700 font-semibold">ออกรถไม่ต้องวางเงินดาวน์</span>
-              <span className="block">
-                ตามเงื่อนไขไฟแนนซ์{' '}
-                <span className="text-primary font-semibold">อนุมัติง่าย ผ่อนสบาย</span>
-              </span>
-            </p>
+            <div className="flex-1 w-full text-left">
+              <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
+                <span className="block text-orange-700 font-semibold">ออกรถไม่ต้องวางเงินดาวน์</span>
+                <span className="block">
+                  ตามเงื่อนไขไฟแนนซ์{' '}
+                  <span className="text-primary font-semibold">อนุมัติง่าย ผ่อนสบาย</span>
+                </span>
+              </p>
+            </div>
           </div>
 
           {/* Feature 3 */}
-          <div className="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <div className="relative flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 lg:w-20 lg:h-20 mb-3 rounded-2xl overflow-hidden">
+          <div className="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
+            <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
               <A11yImage
                 src="/images/kn6.webp"
                 alt="ไอคอนรับประกัน"
@@ -74,21 +78,23 @@ export default function HomeFaqSection() {
                 loading="lazy"
                 fetchpriority="low"
                 optimizeImage={false}
-                className="w-full h-full max-w-none object-contain"
+                className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
               />
             </div>
-            <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
-              <span className="block">รับประกันเครื่องยนต์และเกียร์</span>
-              <span className="block">
-                <span className="text-primary font-semibold">1 ปีเต็ม ไม่จำกัดกิโลเมตร</span> พร้อม{' '}
-                <span className="text-orange-700 font-semibold">บริการหลังการขาย</span>
-              </span>
-            </p>
+            <div className="flex-1 w-full text-left">
+              <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
+                <span className="block">รับประกันเครื่องยนต์และเกียร์</span>
+                <span className="block">
+                  <span className="text-primary font-semibold">1 ปีเต็ม ไม่จำกัดกิโลเมตร</span> พร้อม{' '}
+                  <span className="text-orange-700 font-semibold">บริการหลังการขาย</span>
+                </span>
+              </p>
+            </div>
           </div>
 
           {/* Feature 4 */}
-          <div className="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <div className="relative flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 lg:w-20 lg:h-20 mb-3 rounded-2xl overflow-hidden">
+          <div className="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
+            <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
               <A11yImage
                 src="/images/kn5.webp"
                 alt="ไอคอนส่งฟรี"
@@ -97,17 +103,19 @@ export default function HomeFaqSection() {
                 loading="lazy"
                 fetchpriority="low"
                 optimizeImage={false}
-                className="w-full h-full max-w-none object-contain"
+                className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
               />
             </div>
-            <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
-              <span className="block text-orange-700 font-semibold">จัดส่งฟรีทุกจังหวัด</span>
-              <span className="block">
-                พร้อมประกันการขนส่ง{' '}
-                <span className="text-primary font-semibold">ลูกค้า 90% เชื่อมั่น</span>
-              </span>
-              <span className="block">ไม่ต้องมาดูรถ</span>
-            </p>
+            <div className="flex-1 w-full text-left">
+              <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
+                <span className="block text-orange-700 font-semibold">จัดส่งฟรีทุกจังหวัด</span>
+                <span className="block">
+                  พร้อมประกันการขนส่ง{' '}
+                  <span className="text-primary font-semibold">ลูกค้า 90% เชื่อมั่น</span>
+                </span>
+                <span className="block">ไม่ต้องมาดูรถ</span>
+              </p>
+            </div>
           </div>
         </div>
 
