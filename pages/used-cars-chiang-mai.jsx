@@ -400,12 +400,12 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
                         '0 4px 14px rgba(0,0,0,0.85), 0 2px 6px rgba(0,0,0,0.95), 0 0 1px rgba(0,0,0,1)',
                     }}
                   >
-                    {seoUsedCarsLanding.h1 || 'ศูนย์ซื้อ-ขายรถมือสองเชียงใหม่ ราคาถูก สภาพนางฟ้า'}
+                    ฝากขายรถมือสองกับครูหนึ่งรถสวย
                   </h1>
                   <p className="mt-1.5 xs:mt-2 sm:mt-3 text-white font-prompt leading-relaxed text-center text-sm sm:text-base font-semibold">
-                    <span className="sm:hidden">หารถมือสองสภาพดี หรือฝากขายรถแบบมืออาชีพ</span>
+                    <span className="sm:hidden">ฝากขายรถแบบมืออาชีพ ได้ราคาดี</span>
                     <span className="hidden sm:inline">
-                      หารถมือสองสภาพดีไว้ใช้งาน หรือฝากลงขายรถของท่านได้ราคาดีกว่าขายด่วน —
+                      ฝากลงขายรถของท่านได้ราคาดีกว่าขายด่วน —
                       ทีมงานมืออาชีพดูแลจนจบขั้นตอน ซื้อขายสบายใจ
                     </span>
                   </p>
