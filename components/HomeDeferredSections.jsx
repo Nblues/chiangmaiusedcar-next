@@ -476,14 +476,14 @@ export default function HomeDeferredSections({
             </section>
           </div>
         </div>
-        <div className="text-center mt-12">
+        <div className="text-center mt-8 sm:mt-12 px-4 sm:px-0">
           <Link
             href="/all-cars"
             prefetch={false}
-            className="inline-flex items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
+            className="flex w-full justify-center md:inline-flex md:w-auto items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-full sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
           >
             <span>ดูรถทั้งหมด</span>
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
