@@ -166,7 +166,7 @@ export default function HomeDeferredSections({
       {/* Why Choose Us Section - SEO Content */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16 bg-white cv-auto-md">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-6 sm:mb-8 text-center font-prompt">
+          <h2 className="text-3xl sm:text-3xl md:text-4xl font-bold text-primary mb-6 sm:mb-8 text-center font-prompt">
             ทำไมต้องเลือกครูหนึ่งรถสวย?
           </h2>
 
@@ -174,7 +174,7 @@ export default function HomeDeferredSections({
           <div className="space-y-6 text-gray-700 leading-relaxed font-prompt">
             {/* Paragraph 1 - Quality & Financing */}
             <div className="bg-gray-50 rounded-xl p-5 sm:p-6 md:p-8">
-              <p className="text-sm sm:text-base md:text-lg">
+              <p className="text-base sm:text-base md:text-lg">
                 <strong className="text-primary">ศูนย์รวมรถบ้านคุณภาพดี</strong>{' '}
                 ในตลาดรถยนต์มือสองภาคเหนือ{' '}
                 <strong className="text-gray-900">คัดสรรคุณภาพทุกคัน</strong> ตรวจสอบโดยผู้เชี่ยวชาญ
@@ -190,7 +190,7 @@ export default function HomeDeferredSections({
 
             {/* Paragraph 2 - Car Selection */}
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 sm:p-6 md:p-8">
-              <p className="text-sm sm:text-base md:text-lg mb-4">
+              <p className="text-base sm:text-base md:text-lg mb-4">
                 <strong className="text-gray-900">เรามีรถยี่ห้อดังให้เลือกมากมาย</strong>{' '}
                 <Link
                   href="/all-cars?brand=toyota"
@@ -227,7 +227,7 @@ export default function HomeDeferredSections({
                 >
                   Isuzu
                 </Link>{' '}
-                ทั้ง
+                ทั้ง{' '}
                 <Link
                   href="/all-cars?type=เก๋ง"
                   prefetch={false}
@@ -256,7 +256,7 @@ export default function HomeDeferredSections({
 
             {/* Paragraph 3 - Services & Contact */}
             <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-5 sm:p-6 md:p-8">
-              <p className="text-sm sm:text-base md:text-lg mb-4">
+              <p className="text-base sm:text-base md:text-lg mb-4">
                 <strong className="text-gray-900">มีปัญหาเรื่องสินเชื่อ?</strong>{' '}
                 <Link
                   href="/credit-check"
@@ -278,12 +278,12 @@ export default function HomeDeferredSections({
               </p>
 
               {/* Contact CTA */}
-              <p className="mt-6 pt-6 border-t border-orange-200 text-center text-sm sm:text-base mb-3 text-gray-700">
-                <strong className="text-gray-900">นัดหมายดูรถ</strong>
+              <p className="mt-6 pt-6 border-t border-orange-200 text-center text-lg sm:text-xl font-bold mb-3 text-gray-900 leading-tight">
+                นัดหมายดูรถ
               </p>
               <a
                 href="tel:0940649018"
-                className="flex w-fit mx-auto items-center gap-4 bg-primary hover:bg-primary/90 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-xl transition-all duration-300 hover:shadow-lg text-base sm:text-lg"
+                className="flex w-fit mx-auto items-center gap-4 bg-primary hover:bg-primary/90 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-xl transition-all duration-300 hover:shadow-lg text-lg sm:text-xl"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
