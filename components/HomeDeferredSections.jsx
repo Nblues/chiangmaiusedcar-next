@@ -627,10 +627,10 @@ export default function HomeDeferredSections({
           </div>
 
           {/* Features Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
             {/* Feature 1 */}
-            <div className="group bg-white rounded-2xl p-5 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <div className="relative flex items-center justify-center w-24 h-24 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-3 sm:mb-4 lg:mb-5 rounded-2xl overflow-hidden">
+            <div className="group bg-white rounded-2xl p-4 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
+              <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
                 <A11yImage
                   src="/images/kn2.webp"
                   alt="ไอคอนรถบ้านแท้"
@@ -639,24 +639,26 @@ export default function HomeDeferredSections({
                   loading="lazy"
                   fetchpriority="low"
                   optimizeImage={false}
-                  className="w-full h-full max-w-none object-contain"
+                  className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
                 />
               </div>
-              <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
-                <span className="block text-primary font-semibold">คัดเฉพาะรถมือเดียว</span>
-                <span className="block">
-                  <span className="text-primary font-semibold">จากเจ้าของโดยตรง</span>{' '}
-                  <span className="text-accent-800 font-semibold">
-                    ไม่มีรถน้ำท่วม ไม่มีรถอุบัติเหตุ
-                  </span>{' '}
-                  <span className="text-primary">ขอดูเล่มทะเบียนได้ทุกหน้า</span>
-                </span>
-              </p>
+              <div className="flex-1 w-full text-left">
+                <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
+                  <span className="block text-primary font-semibold">คัดเฉพาะรถมือเดียว</span>
+                  <span className="block">
+                    <span className="text-primary font-semibold">จากเจ้าของโดยตรง</span>{' '}
+                    <span className="text-accent-800 font-semibold">
+                      ไม่มีรถน้ำท่วม ไม่มีรถอุบัติเหตุ
+                    </span>{' '}
+                    <span className="text-primary">ขอดูเล่มทะเบียนได้ทุกหน้า</span>
+                  </span>
+                </p>
+              </div>
             </div>
 
             {/* Feature 2 */}
-            <div className="group bg-white rounded-2xl p-5 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <div className="relative flex items-center justify-center w-24 h-24 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-3 sm:mb-4 lg:mb-5 rounded-2xl overflow-hidden">
+            <div className="group bg-white rounded-2xl p-4 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
+              <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
                 <A11yImage
                   src="/images/kn1.webp"
                   alt="ไอคอนฟรีดาวน์ 0%"
@@ -665,23 +667,25 @@ export default function HomeDeferredSections({
                   loading="lazy"
                   fetchpriority="low"
                   optimizeImage={false}
-                  className="w-full h-full max-w-none object-contain"
+                  className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
                 />
               </div>
-              <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
-                <span className="block text-orange-700 font-semibold">
-                  ออกรถไม่ต้องวางเงินดาวน์
-                </span>
-                <span className="block">
-                  ตามเงื่อนไขไฟแนนซ์{' '}
-                  <span className="text-primary font-semibold">อนุมัติง่าย ผ่อนสบาย</span>
-                </span>
-              </p>
+              <div className="flex-1 w-full text-left">
+                <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
+                  <span className="block text-orange-700 font-semibold">
+                    ออกรถไม่ต้องวางเงินดาวน์
+                  </span>
+                  <span className="block">
+                    ตามเงื่อนไขไฟแนนซ์{' '}
+                    <span className="text-primary font-semibold">อนุมัติง่าย ผ่อนสบาย</span>
+                  </span>
+                </p>
+              </div>
             </div>
 
             {/* Feature 3 */}
-            <div className="group bg-white rounded-2xl p-5 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <div className="relative flex items-center justify-center w-24 h-24 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-3 sm:mb-4 lg:mb-5 rounded-2xl overflow-hidden">
+            <div className="group bg-white rounded-2xl p-4 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
+              <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
                 <A11yImage
                   src="/images/kn6.webp"
                   alt="ไอคอนรับประกัน"
@@ -690,21 +694,23 @@ export default function HomeDeferredSections({
                   loading="lazy"
                   fetchpriority="low"
                   optimizeImage={false}
-                  className="w-full h-full max-w-none object-contain"
+                  className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
                 />
               </div>
-              <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
-                <span className="block">รับประกันเครื่องยนต์และเกียร์</span>
-                <span className="block">
-                  <span className="text-primary font-semibold">1 ปีเต็ม ไม่จำกัดกิโลเมตร</span>{' '}
-                  พร้อม <span className="text-orange-700 font-semibold">บริการหลังการขาย</span>
-                </span>
-              </p>
+              <div className="flex-1 w-full text-left">
+                <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
+                  <span className="block">รับประกันเครื่องยนต์และเกียร์</span>
+                  <span className="block">
+                    <span className="text-primary font-semibold">1 ปีเต็ม ไม่จำกัดกิโลเมตร</span>{' '}
+                    พร้อม <span className="text-orange-700 font-semibold">บริการหลังการขาย</span>
+                  </span>
+                </p>
+              </div>
             </div>
 
             {/* Feature 4 */}
-            <div className="group bg-white rounded-2xl p-5 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <div className="relative flex items-center justify-center w-24 h-24 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-3 sm:mb-4 lg:mb-5 rounded-2xl overflow-hidden">
+            <div className="group bg-white rounded-2xl p-4 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
+              <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
                 <A11yImage
                   src="/images/kn5.webp"
                   alt="ไอคอนส่งฟรี"
@@ -713,17 +719,19 @@ export default function HomeDeferredSections({
                   loading="lazy"
                   fetchpriority="low"
                   optimizeImage={false}
-                  className="w-full h-full max-w-none object-contain"
+                  className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
                 />
               </div>
-              <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
-                <span className="block text-orange-700 font-semibold">จัดส่งฟรีทุกจังหวัด</span>
-                <span className="block">
-                  พร้อมประกันการขนส่ง{' '}
-                  <span className="text-primary font-semibold">ลูกค้า 90% เชื่อมั่น</span>
-                </span>
-                <span className="block">ไม่ต้องมาดูรถ</span>
-              </p>
+              <div className="flex-1 w-full text-left">
+                <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
+                  <span className="block text-orange-700 font-semibold">จัดส่งฟรีทุกจังหวัด</span>
+                  <span className="block">
+                    พร้อมประกันการขนส่ง{' '}
+                    <span className="text-primary font-semibold">ลูกค้า 90% เชื่อมั่น</span>
+                  </span>
+                  <span className="block">ไม่ต้องมาดูรถ</span>
+                </p>
+              </div>
             </div>
           </div>
 
@@ -738,30 +746,75 @@ export default function HomeDeferredSections({
                   รถมือสองคุณภาพจากทุกแบรนด์ชั้นนำ ตามมาตรฐาน ครูหนึ่งรถสวย
                 </p>
               </div>
-              <Link 
-                href="/all-cars" 
+              <Link
+                href="/all-cars"
                 prefetch={false}
                 className="hidden md:inline-flex items-center text-sm lg:text-base font-semibold text-primary hover:text-orange-600 transition-colors group font-prompt"
               >
-                ดูรถทุกยี่ห้อ 
-                <svg className="w-4 h-4 md:w-5 md:h-5 ml-1 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                ดูรถทุกยี่ห้อ
+                <svg
+                  className="w-4 h-4 md:w-5 md:h-5 ml-1 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
                 </svg>
               </Link>
             </div>
 
             {/* Brand Pills - Horizontal Scroll (Space Saving & Mobile Friendly) */}
-            <div className="relative z-10 flex overflow-x-auto pb-6 -mx-2 px-2 sm:px-0 sm:mx-0 snap-x snap-mandatory gap-3 sm:gap-4 md:mb-8 hide-scrollbar scroll-smooth" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
+            <div
+              className="relative z-10 flex overflow-x-auto pb-6 -mx-2 px-2 sm:px-0 sm:mx-0 snap-x snap-mandatory gap-3 sm:gap-4 md:mb-8 hide-scrollbar scroll-smooth"
+              style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+            >
               {[
-                { id: 'toyota', name: 'Toyota', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
-                { id: 'honda', name: 'Honda', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-5H7v5H5V7h2v4h2V7h2v10z' },
-                { id: 'isuzu', name: 'Isuzu', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
-                { id: 'mazda', name: 'Mazda', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
-                { id: 'nissan', name: 'Nissan', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
-                { id: 'mitsubishi', name: 'Mitsubishi', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
-                { id: 'ford', name: 'Ford', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
-                { id: 'hyundai', name: 'Hyundai', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
-              ].map((brand) => {
+                {
+                  id: 'toyota',
+                  name: 'Toyota',
+                  icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z',
+                },
+                {
+                  id: 'honda',
+                  name: 'Honda',
+                  icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-5H7v5H5V7h2v4h2V7h2v10z',
+                },
+                {
+                  id: 'isuzu',
+                  name: 'Isuzu',
+                  icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z',
+                },
+                {
+                  id: 'mazda',
+                  name: 'Mazda',
+                  icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z',
+                },
+                {
+                  id: 'nissan',
+                  name: 'Nissan',
+                  icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z',
+                },
+                {
+                  id: 'mitsubishi',
+                  name: 'Mitsubishi',
+                  icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z',
+                },
+                {
+                  id: 'ford',
+                  name: 'Ford',
+                  icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z',
+                },
+                {
+                  id: 'hyundai',
+                  name: 'Hyundai',
+                  icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z',
+                },
+              ].map(brand => {
                 const count = getBrandCount(brand.id);
                 // ซ่อนแบรนด์ที่ไม่มีรถ เพื่อให้แผงดูสะอาด
                 if (count === 0 && process.env.NODE_ENV === 'production') return null;
@@ -774,7 +827,11 @@ export default function HomeDeferredSections({
                     className="snap-start shrink-0 group relative flex items-center justify-between px-5 sm:px-6 py-3 sm:py-3.5 bg-white rounded-full border border-gray-200/80 hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95"
                   >
                     <div className="flex items-center gap-2.5">
-                      <svg className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                      <svg
+                        className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
                         <path d={brand.icon} />
                       </svg>
                       <span className="font-bold text-gray-800 text-sm sm:text-base font-prompt group-hover:text-primary transition-colors">
@@ -787,7 +844,7 @@ export default function HomeDeferredSections({
                   </Link>
                 );
               })}
-              
+
               {/* Fallback button at end of scroll on mobile */}
               <Link
                 href="/all-cars"
