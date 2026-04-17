@@ -27,6 +27,22 @@ const BRAND_CONFIG = {
   ford: { label: 'Ford', tokens: ['ford'] },
 };
 
+const BRAND_DESCRIPTIONS = {
+  toyota:
+    'Toyota ครองใจคนไทยมาหลายทศวรรษ ด้วยชื่อเสียงด้านความทนทาน ประหยัดน้ำมัน และอะไหล่หาง่ายราคาไม่แพง รุ่นยอดนิยมในตลาดมือสองได้แก่ Hilux Revo, Fortuner, Vios, Yaris และ Corolla Altis เหมาะทุกไลฟ์สไตล์ตั้งแต่ครอบครัวจนถึงงานพาณิชย์',
+  honda:
+    'Honda โดดเด่นด้านเทคโนโลยีประหยัดน้ำมัน VTEC และดีไซน์สปอร์ตที่เป็นเอกลักษณ์ รุ่นยอดนิยมในตลาดมือสองได้แก่ City, Jazz, Civic, HR-V และ CR-V ขับขี่สนุก ดูแลรักษาง่าย เหมาะสำหรับคนรุ่นใหม่และครอบครัวที่ต้องการรถประหยัดน้ำมัน',
+  isuzu:
+    'Isuzu ครองตลาดรถกระบะในไทยมาอย่างยาวนาน มีชื่อเสียงด้านเครื่องดีเซลที่ทรงพลังและทนทานสูง รุ่นยอดนิยมได้แก่ D-MAX ทั้งแบบตอนเดียวและ 4 ประตู เหมาะสำหรับใช้งานหนัก ทำธุรกิจ หรือเดินทางในทุกสภาพถนนภาคเหนือ',
+  nissan:
+    'Nissan มีจุดเด่นด้านความสะดวกสบายและสมรรถนะสมดุล รุ่นยอดนิยมในตลาดมือสองได้แก่ Navara, Almera, Kicks, Terra และ Teana ช่วงล่างนุ่มนวล เหมาะทั้งขับในเมืองและทางไกลระหว่างจังหวัด',
+  mazda:
+    'Mazda โดดเด่นด้านดีไซน์สวยงามสไตล์ Kodo และเทคโนโลยี SKYACTIV ที่ผสานสมรรถนะกับการประหยัดน้ำมัน รุ่นยอดนิยมได้แก่ Mazda2, Mazda3, CX-3 และ CX-5 เหมาะสำหรับคนรักสุนทรียภาพที่ต้องการรถมีเอกลักษณ์',
+  mitsubishi:
+    'Mitsubishi เป็นที่นิยมด้านรถอเนกประสงค์และ SUV ที่แข็งแกร่ง รุ่นยอดนิยมได้แก่ Triton, Pajero Sport, Xpander และ Outlander พื้นที่โดยสารกว้างขวาง เหมาะสำหรับครอบครัวขนาดใหญ่และผู้ที่ต้องการความสามารถออฟโรด',
+  ford: 'Ford มีชื่อเสียงด้านรถกระบะและ SUV สมรรถนะสูงสไตล์อเมริกัน รุ่นยอดนิยมได้แก่ Ranger และ Everest ตัวถังแข็งแกร่ง ขับขี่มั่นใจ เหมาะสำหรับผู้ที่ชื่นชอบพลังเครื่องยนต์และใช้งานได้จริง',
+};
+
 function normalizeBrandSlug(input) {
   const raw = String(input || '')
     .trim()
@@ -269,7 +285,7 @@ export default function UsedCarsChiangMaiBrand({
   return (
     <div className="min-h-screen bg-gray-50">
       <SEO
-        title={`รถมือสอง ${brandInfo.label} เชียงใหม่ สภาพดี ฟรีดาวน์ ออกรถ 0 บาท${safePage > 1 ? ` หน้า ${safePage}` : ''}`}
+        title={`รถมือสอง ${brandInfo.label} เชียงใหม่ สภาพสวย ฟรีดาวน์${safePage > 1 ? ` หน้า ${safePage}` : ''} | ครูหนึ่งรถสวย`}
         description={`รวมรถ ${brandInfo.label} มือสอง เชียงใหม่ สภาพนางฟ้า ไมล์แท้ ฟรีดาวน์ มีให้เลือก ${totalCars} คัน รับประกันเครื่องยนต์และเกียร์ ออกรถ 0 บาท ที่ครูหนึ่งรถสวย`}
         url={url}
         image={homeOgImage}
@@ -325,7 +341,7 @@ export default function UsedCarsChiangMaiBrand({
                   textShadow: '0 2px 4px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.6)',
                 }}
               >
-                รถมือสอง {brandInfo.label} เชียงใหม่
+                รถมือสอง {brandInfo.label} เชียงใหม่ คัดสภาพสวย
               </h1>
               <p
                 className="mt-2 sm:mt-3 text-sm sm:text-base md:text-lg text-white/90 font-prompt leading-relaxed max-w-2xl mx-auto"
@@ -420,6 +436,18 @@ export default function UsedCarsChiangMaiBrand({
             </div>
           </section>
         )}
+
+        <section className="mt-8 bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
+            รู้จัก {brandInfo.label} มือสองเชียงใหม่
+          </h2>
+          <p className="mt-3 text-gray-700 font-prompt leading-relaxed">
+            {BRAND_DESCRIPTIONS[brandInfo.slug]}
+          </p>
+          <p className="mt-3 text-gray-700 font-prompt leading-relaxed">
+            ที่ครูหนึ่งรถสวย เราคัดสรรรถมือสอง {brandInfo.label} สภาพดี ไมล์แท้ ตรวจสอบประวัติรถทุกคัน พร้อมรับประกันเครื่องยนต์และเกียร์ 1 ปี ฟรีดาวน์ 0% ผ่อนสบาย และจัดส่งฟรีทั่วประเทศ
+          </p>
+        </section>
 
         <section className="mt-8 bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
           <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">ยี่ห้ออื่น ๆ</h2>

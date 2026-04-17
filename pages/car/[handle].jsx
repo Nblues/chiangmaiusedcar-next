@@ -685,7 +685,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     : '';
 
   // ดึงข้อมูลปีและราคา สำหรับตั้งชื่อ Title ให้ครอบคลุมการค้นหา (SEO)
-  const enhancedTitle = `${brandModel} ${yearText} รถมือสองเชียงใหม่ สภาพดี ฟรีดาวน์`.trim();
+  const enhancedTitle = `${brandModel} ${yearText} รถบ้านมือสองเชียงใหม่ ฟรีดาวน์ | ครูหนึ่งรถสวย`.replace(/\s+/g, ' ').trim();
 
   // Social media optimized description (max 155 chars for Facebook & Google)
   const enhancedDescription = [
@@ -799,29 +799,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
     model: safeGet(car, 'model', ''),
   });
   const carFaqStructuredData = buildFaqPageJsonLd({ url: canonicalUrl, faqs: carFaqs });
-
-  // สังเคราะห์บทความ SEO อัตโนมัติ (แก้ไขปัญหารถมือสอง Thin Content)
-  const autoSyntheticContent = (() => {
-    const b = safeGet(car, 'vendor') || safeGet(car, 'brand', '');
-    const m = _model || _titleNoYear || '';
-    const y = safeGet(car, 'year', '');
-    const p = safeGet(car, 'price.amount', 0);
-    const pr = parseInt(p) > 0 ? `${safeFormatPrice(p).display} บาท` : 'ติดต่อสอบถาม';
-    const c = safeGet(car, 'color', '');
-    const ge = safeGet(car, 'gear', '');
-    const mi = safeGet(car, 'mileage', '');
-    const cc = safeGet(car, 'engine_size', '');
-
-    let text = `รถมือสอง ${b} ${m} ${y ? `ปี ${y}` : ''} `;
-    if (c) text += `สี${c} `;
-    text += `คันนี้ สภาพสมบูรณ์พร้อมใช้งานในเชียงใหม่และจังหวัดใกล้เคียง `;
-    if (cc) text += `มาพร้อมเครื่องยนต์ขนาด ${cc} ซีซี `;
-    if (ge) text += `ระบบเกียร์${ge} `;
-    if (mi) text += `เลขไมล์ปัจจุบัน ${mi} กม. `;
-    text += `ตอบโจทย์ทุกการเดินทาง ด้วยราคาเพียง ${pr} หากคุณกำลังมองหารถ ${b} มือสองคุณภาพดี คันนี้ถือเป็นตัวเลือกที่คุ้มค่าอย่างยิ่ง รองรับทั้งการซื้อเงินสดและการจัดไฟแนนซ์พร้อมบริการให้คำปรึกษาฟรี`;
-
-    return text;
-  })();
 
   return (
     <>
@@ -1599,27 +1576,6 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                       </span>
                     </div>
                   ))}
-              </div>
-
-              {/* Auto-Synthesized SEO Content */}
-              <div className="mt-8 bg-blue-50 outline outline-1 outline-blue-100 p-5 rounded-lg w-full mb-6">
-                <h3 className="text-lg font-bold text-primary mb-2 font-prompt flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5 flex-shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
-                  ข้อมูลรถเบื้องต้น (Auto-Summary)
-                </h3>
-                <p className="text-gray-700 leading-loose font-prompt">{autoSyntheticContent}</p>
               </div>
 
               {/* คำอธิบาย */}

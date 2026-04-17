@@ -1,10 +1,10 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-
-async function test() {
 import dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
-const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const model = ai.getGenerativeModel({ model: 'gemini-3.1-pro-preview' });
+
+async function test() {
+  const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  const model = ai.getGenerativeModel({ model: 'gemini-pro' });
 
   const prompt = `
         You are the Head of Procurement for a used car dealership in Thailand (Year 2026). Evaluate the car:

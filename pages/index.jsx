@@ -316,10 +316,10 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         <div className="hero-card max-w-6xl w-[95%] mx-auto my-3 md:my-6 flex flex-col md:flex-row items-center gap-4 md:gap-6 px-4 py-5 md:px-8 md:py-8 rounded-xl md:rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-xl sm:text-2xl md:text-4xl font-extrabold text-primary mb-1 md:mb-2 font-prompt">
-              รถมือสองเชียงใหม่ ฟรีดาวน์ 0%
+              ครูหนึ่งรถสวย รถบ้านมือสองเชียงใหม่ คัดเกรดพรีเมียมมือเดียว
             </h1>
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-orange-700 mb-2 md:mb-4 font-prompt">
-              รถบ้านมือเดียว คุณภาพระดับพรีเมียม
+              ฟรีดาวน์ 0% รับประกัน 1 ปี รถบ้านมือเดียว
             </h2>
             <p className="text-sm md:text-base leading-snug md:leading-relaxed text-gray-900 font-prompt">
               ครูหนึ่งรถสวย ศูนย์รวมรถบ้านคุณภาพดีในภาคเหนือ คัดเฉพาะรถมือเดียว ฟรีดาวน์ ผ่อนถูก
@@ -354,14 +354,15 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
 
       {/* Removed defer lock to prevent slow spinning */}
       <>
-        {/* Why Choose Us Section - SEO Content (extracted) */}
-        <HomeAboutInline />
         <main
-          className="max-w-[1400px] mx-auto px-6 md:px-8 lg:px-12 py-16 bg-white font-prompt cv-auto-md"
+          className="max-w-[1400px] mx-auto px-6 md:px-8 lg:px-12 py-8 bg-white font-prompt cv-auto-md"
           id="recommended-cars"
         >
           {/* Search Section (extracted) */}
           <HomeSearchSection />
+
+          {/* Why Choose Us Section - 2026 Modern Design (extracted) */}
+          <HomeWhyChooseSection getBrandCount={getBrandCount} />
 
           {/* รถแนะนำเข้าใหม่ */}
           <div className="text-center mb-8">
@@ -435,15 +436,15 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           </div>
         </main>
         <div className="pb-8 md:pb-12">
-          {/* FAQ Section (extracted) */}
-          <HomeFaqSection />
-
           {/* รีวิว Facebook 9 รีวิวจริง (โหลดเมื่อใกล้ viewport) */}
           <div id="fb-reviews-anchor" className="h-px w-full" aria-hidden="true" />
           {showFbReviews && <FacebookReviewsSection />}
 
-          {/* Why Choose Us Section - 2025 Modern Design (extracted) */}
-          <HomeWhyChooseSection getBrandCount={getBrandCount} />
+          {/* Why Choose Us Section - SEO Content (extracted) */}
+          <HomeAboutInline />
+
+          {/* FAQ Section (extracted) */}
+          <HomeFaqSection />
         </div>
         {/* Social Share Buttons - Fixed Position */}
         {showSocialShare && (

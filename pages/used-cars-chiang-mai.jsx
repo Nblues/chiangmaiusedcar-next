@@ -222,7 +222,7 @@ export async function getStaticProps() {
 }
 
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
-const seoHome = SEO_KEYWORD_MAP.home;
+const seoUsedCarsLanding = SEO_KEYWORD_MAP.usedCarsLanding;
 export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, shopifyError }) {
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
   const featuredCars = useMemo(() => safeCars.slice(0, 8), [safeCars]);
@@ -336,12 +336,13 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
         />
       </Head>
       <SEO
-        title="ซื้อ-ขาย รถบ้านมือสอง เชียงใหม่-ลำพูน | ฝากขายรถ ขายง่าย ขายเร็ว | ครูหนึ่งรถสวย"
+        title={seoUsedCarsLanding.title}
+        description={seoUsedCarsLanding.description}
         url="/used-cars-chiang-mai"
         image={homeOgImage}
         type="website"
         pageType="home"
-        keywords={[seoHome.primary, ...seoHome.secondary, ...seoHome.longTail.slice(0, 5)]}
+        keywords={[seoUsedCarsLanding.primary, ...seoUsedCarsLanding.secondary, ...seoUsedCarsLanding.longTail.slice(0, 5)]}
         breadcrumbs={[
           { name: 'หน้าแรก', url: '/' },
           { name: 'ซื้อ-ขาย รถบ้านมือสอง เชียงใหม่-ลำพูน', url: '/used-cars-chiang-mai' },
@@ -399,7 +400,7 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
                         '0 4px 14px rgba(0,0,0,0.85), 0 2px 6px rgba(0,0,0,0.95), 0 0 1px rgba(0,0,0,1)',
                     }}
                   >
-                    ซื้อ-ขาย รถบ้านมือสอง เชียงใหม่-ลำพูน
+                    {seoUsedCarsLanding.h1 || 'ศูนย์ซื้อ-ขายรถมือสองเชียงใหม่ ราคาถูก สภาพนางฟ้า'}
                   </h1>
                   <p className="mt-1.5 xs:mt-2 sm:mt-3 text-white font-prompt leading-relaxed text-center text-sm sm:text-base font-semibold">
                     <span className="sm:hidden">หารถมือสองสภาพดี หรือฝากขายรถแบบมืออาชีพ</span>

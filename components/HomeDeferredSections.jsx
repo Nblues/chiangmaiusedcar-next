@@ -727,190 +727,74 @@ export default function HomeDeferredSections({
             </div>
           </div>
 
-          {/* Car Brands Section - Glass Effect */}
-          <div className="relative rounded-3xl p-4 md:p-8 border border-gray-200 shadow-2xl overflow-hidden bg-white">
-            {/* Animated Background Elements */}
-            <div className="hidden absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(26,35,126,0.03),transparent_50%)]"></div>
-            <div className="hidden absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(59,130,246,0.02),transparent_50%)]"></div>
-            <div className="hidden absolute inset-0 bg-[radial-gradient(circle_at_40%_80%,rgba(37,99,235,0.02),transparent_50%)]"></div>
-
-            <div className="relative z-10 text-center mb-6 md:mb-8">
-              <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 md:mb-4 font-prompt leading-tight">
-                ศูนย์รวมแบรนด์ดังครบครัน
-              </h3>
-              <p className="text-gray-700 font-prompt text-sm md:text-lg leading-relaxed max-w-2xl mx-auto px-2">
-                รถมือสองคุณภาพจากทุกแบรนด์ชั้นนำ ตามมาตรฐาน ครูหนึ่งรถสวย
-              </p>
+          {/* Car Brands Section - Modern Compact 2026 Design */}
+          <div className="relative rounded-3xl p-5 md:p-8 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden bg-gradient-to-br from-white via-gray-50/80 to-white/90 backdrop-blur-xl">
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-8">
+              <div className="text-left">
+                <h3 className="text-lg sm:text-xl md:text-3xl font-extrabold text-gray-900 mb-1 md:mb-2 font-prompt tracking-tight">
+                  ศูนย์รวมแบรนด์ดังครบครัน
+                </h3>
+                <p className="text-gray-600 font-prompt text-sm md:text-base leading-relaxed">
+                  รถมือสองคุณภาพจากทุกแบรนด์ชั้นนำ ตามมาตรฐาน ครูหนึ่งรถสวย
+                </p>
+              </div>
+              <Link 
+                href="/all-cars" 
+                prefetch={false}
+                className="hidden md:inline-flex items-center text-sm lg:text-base font-semibold text-primary hover:text-orange-600 transition-colors group font-prompt"
+              >
+                ดูรถทุกยี่ห้อ 
+                <svg className="w-4 h-4 md:w-5 md:h-5 ml-1 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
             </div>
 
-            {/* Brand Grid - Ultra Glass Design */}
-            <div className="relative z-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-4 lg:gap-6 mb-6 md:mb-8">
-              <Link
-                href="/all-cars?brand=toyota"
-                prefetch={false}
-                className="group relative backdrop-blur-2xl bg-white/20 rounded-xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
-                style={{
-                  boxShadow:
-                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="font-bold text-gray-900 text-sm md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
-                    Toyota
-                  </div>
-                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
-                    {getBrandCount('toyota')}
-                  </div>
-                </div>
-              </Link>
+            {/* Brand Pills - Horizontal Scroll (Space Saving & Mobile Friendly) */}
+            <div className="relative z-10 flex overflow-x-auto pb-6 -mx-2 px-2 sm:px-0 sm:mx-0 snap-x snap-mandatory gap-3 sm:gap-4 md:mb-8 hide-scrollbar scroll-smooth" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
+              {[
+                { id: 'toyota', name: 'Toyota', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
+                { id: 'honda', name: 'Honda', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-5H7v5H5V7h2v4h2V7h2v10z' },
+                { id: 'isuzu', name: 'Isuzu', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
+                { id: 'mazda', name: 'Mazda', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
+                { id: 'nissan', name: 'Nissan', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
+                { id: 'mitsubishi', name: 'Mitsubishi', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
+                { id: 'ford', name: 'Ford', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
+                { id: 'hyundai', name: 'Hyundai', icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z' },
+              ].map((brand) => {
+                const count = getBrandCount(brand.id);
+                // ซ่อนแบรนด์ที่ไม่มีรถ เพื่อให้แผงดูสะอาด
+                if (count === 0 && process.env.NODE_ENV === 'production') return null;
 
+                return (
+                  <Link
+                    key={brand.id}
+                    href={`/all-cars?brand=${brand.id}`}
+                    prefetch={false}
+                    className="snap-start shrink-0 group relative flex items-center justify-between px-5 sm:px-6 py-3 sm:py-3.5 bg-white rounded-full border border-gray-200/80 hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <svg className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                        <path d={brand.icon} />
+                      </svg>
+                      <span className="font-bold text-gray-800 text-sm sm:text-base font-prompt group-hover:text-primary transition-colors">
+                        {brand.name}
+                      </span>
+                    </div>
+                    <span className="ml-3 sm:ml-4 inline-flex items-center justify-center min-w-[28px] h-6 px-2 text-xs font-bold leading-none bg-gray-100/80 text-gray-600 group-hover:bg-blue-50 group-hover:text-primary rounded-full transition-colors">
+                      {count}
+                    </span>
+                  </Link>
+                );
+              })}
+              
+              {/* Fallback button at end of scroll on mobile */}
               <Link
-                href="/all-cars?brand=honda"
+                href="/all-cars"
                 prefetch={false}
-                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
-                style={{
-                  boxShadow:
-                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
-                }}
+                className="md:hidden snap-start shrink-0 flex items-center justify-center px-6 py-3 bg-gray-900 text-white rounded-full font-bold text-sm font-prompt active:scale-95 transition-transform shadow-md"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
-                    Honda
-                  </div>
-                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
-                    {getBrandCount('honda')}
-                  </div>
-                </div>
-              </Link>
-
-              <Link
-                href="/all-cars?brand=nissan"
-                prefetch={false}
-                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
-                style={{
-                  boxShadow:
-                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
-                    Nissan
-                  </div>
-                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
-                    {getBrandCount('nissan')}
-                  </div>
-                </div>
-              </Link>
-
-              <Link
-                href="/all-cars?brand=mazda"
-                prefetch={false}
-                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
-                style={{
-                  boxShadow:
-                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
-                    Mazda
-                  </div>
-                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
-                    {getBrandCount('mazda')}
-                  </div>
-                </div>
-              </Link>
-
-              <Link
-                href="/all-cars?brand=mitsubishi"
-                prefetch={false}
-                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
-                style={{
-                  boxShadow:
-                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
-                    Mitsubishi
-                  </div>
-                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
-                    {getBrandCount('mitsubishi')}
-                  </div>
-                </div>
-              </Link>
-
-              <Link
-                href="/all-cars?brand=ford"
-                prefetch={false}
-                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
-                style={{
-                  boxShadow:
-                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
-                    Ford
-                  </div>
-                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
-                    {getBrandCount('ford')}
-                  </div>
-                </div>
-              </Link>
-
-              <Link
-                href="/all-cars?brand=isuzu"
-                prefetch={false}
-                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
-                style={{
-                  boxShadow:
-                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
-                    Isuzu
-                  </div>
-                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
-                    {getBrandCount('isuzu')}
-                  </div>
-                </div>
-              </Link>
-
-              <Link
-                href="/all-cars?brand=hyundai"
-                prefetch={false}
-                className="group relative backdrop-blur-2xl bg-white/20 rounded-2xl md:rounded-3xl p-4 md:p-6 lg:p-8 text-center border border-white/40 hover:border-white/60 transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.15)] hover:bg-white/30 active:scale-95 overflow-hidden"
-                style={{
-                  boxShadow:
-                    '0 8px 32px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 1px rgba(255,255,255,0.3)',
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10">
-                  <div className="font-bold text-gray-900 text-base md:text-lg lg:text-xl mb-2 md:mb-3 font-prompt drop-shadow-sm">
-                    Hyundai
-                  </div>
-                  <div className="inline-flex items-center justify-center text-xs md:text-sm text-gray-800 font-medium backdrop-blur-lg bg-white/50 rounded-lg py-1 px-2 font-prompt border border-white/50 shadow-sm">
-                    {getBrandCount('hyundai')}
-                  </div>
-                </div>
+                ดูทุกยี่ห้อ ➔
               </Link>
             </div>
 

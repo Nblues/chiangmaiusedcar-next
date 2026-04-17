@@ -17,12 +17,12 @@ const PRICE_RANGES = [
 ];
 
 const QUICK_PRICE_LINKS = [
-  { href: '/all-cars?price=0-100000', label: 'ต่ำกว่า 1 แสน (< 100K)', accent: false },
-  { href: '/all-cars?price=100000-200000', label: '1-2 แสน (100K-200K)', accent: false },
-  { href: '/all-cars?price=200000-300000', label: '2-3 แสน (200K-300K)', accent: false },
-  { href: '/all-cars?price=400000-500000', label: '4-5 แสน (400K-500K)', accent: false },
-  { href: '/all-cars?price=600000-700000', label: '6-7 แสน (600K-700K)', accent: false },
-  { href: '/all-cars?price=700000', label: '7 แสนขึ้นไป (> 700K)', accent: true },
+  { href: '/all-cars?price=0-100000', label: 'ต่ำกว่า 1 แสน (< 100K)', title: 'รถมือสองเชียงใหม่ ราคาไม่เกิน 1 แสนบาท', accent: false },
+  { href: '/all-cars?price=100000-200000', label: '1-2 แสน (100K-200K)', title: 'รถมือสองเชียงใหม่ ราคา 1-2 แสนบาท ฟรีดาวน์', accent: false },
+  { href: '/all-cars?price=200000-300000', label: '2-3 แสน (200K-300K)', title: 'รถมือสองเชียงใหม่ ราคา 2-3 แสนบาท สภาพดี', accent: false },
+  { href: '/all-cars?price=400000-500000', label: '4-5 แสน (400K-500K)', title: 'รถมือสองเชียงใหม่ ราคา 4-5 แสนบาท รถบ้านมือเดียว', accent: false },
+  { href: '/all-cars?price=600000-700000', label: '6-7 แสน (600K-700K)', title: 'รถมือสองเชียงใหม่ ราคา 6-7 แสนบาท รถครอบครัว', accent: false },
+  { href: '/all-cars?price=700000', label: '7 แสนขึ้นไป (> 700K)', title: 'รถมือสองพรีเมียม เชียงใหม่ ราคา 7 แสนบาทขึ้นไป', accent: true },
 ];
 
 /**
@@ -127,11 +127,12 @@ export default function HomeSearchSection() {
 
           {/* Quick Links - Price Ranges */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {QUICK_PRICE_LINKS.map(({ href, label, accent }) => (
+            {QUICK_PRICE_LINKS.map(({ href, label, title, accent }) => (
               <Link
                 key={href}
                 href={href}
                 prefetch={false}
+                title={title || label}
                 className={
                   accent
                     ? 'text-center p-3 bg-white border-2 border-accent rounded-xl hover:bg-accent-800 hover:border-accent-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-accent-800 hover:text-white'

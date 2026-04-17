@@ -453,7 +453,7 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
       </div>
 
       <div className="p-3.5 sm:p-4 flex flex-col">
-        <div
+        <h3
           className="font-extrabold text-gray-900 font-prompt overflow-hidden break-words group-hover:text-primary transition-colors text-[15px] leading-[18px] h-[36px] sm:text-base sm:leading-[22px] sm:h-[44px]"
           style={{
             display: '-webkit-box',
@@ -462,7 +462,7 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
           }}
         >
           {car.title || 'รถมือสองเชียงใหม่'}
-        </div>
+        </h3>
 
         <div className="mt-0.5 min-h-[1.25rem] text-sm font-prompt font-semibold text-gray-700">
           {mileageLabel ? (

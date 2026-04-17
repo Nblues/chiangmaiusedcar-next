@@ -68,11 +68,35 @@ export default function SEO({
       if (raw.startsWith('http')) {
         try {
           const u = new URL(raw);
-          return `${u.pathname}${u.search}${u.hash}`;
+          // Always strip query parameters and hash for SEO canonical URLs
+          // Query params (like ?reason=sold, ?variant=xxx) dilute SEO ranking and cause duplicate content issues.
+          // Exception: allow '?page=' if pagination canonicals are desired, though usually /all-cars is sufficient.
+          if (u.searchParams.has('page')) {
+            return `${u.pathname}?page=${u.searchParams.get('page')}`;
+          }
+          return u.pathname;
         } catch {
           return '/';
         }
       }
+      
+      // For relative inputs, strip '?xxx' manually
+      const qIndex = raw.indexOf('?');
+      if (qIndex > -1) {
+        const query = raw.substring(qIndex);
+        const path = raw.substring(0, qIndex);
+        const pageMatch = query.match(/[?&]page=(\d+)/);
+        if (pageMatch) {
+          return `${path}?page=${pageMatch[1]}`;
+        }
+        return path;
+      }
+      
+      const hIndex = raw.indexOf('#');
+      if (hIndex > -1) {
+        return raw.substring(0, hIndex);
+      }
+      
       return raw;
     };
 
@@ -411,13 +435,19 @@ export default function SEO({
 
       <meta name="color-scheme" content="light" />
       <meta name="format-detection" content="telephone=yes" />
-      <link rel="canonical" href={localizedUrls.canonicalUrl} />
-      {/* Hreflang alternates for i18n locales */}
-      <link rel="alternate" hrefLang="th" href={localizedUrls.thUrl} />
-      <link rel="alternate" hrefLang="th-TH" href={localizedUrls.thUrl} />
-      <link rel="alternate" hrefLang="en" href={localizedUrls.enUrl} />
-      <link rel="alternate" hrefLang="en-US" href={localizedUrls.enUrl} />
-      <link rel="alternate" hrefLang="x-default" href={localizedUrls.xDefaultUrl} />
+
+      {/* ถ้ามี noindex ไม่ใส่ canonical เพราะ Google อาจนำ noindex ไปใช้กับหน้าหลัก (Canonical link merging issues) */}
+      {!noindex && <link rel="canonical" href={localizedUrls.canonicalUrl} />}
+      {!noindex && (
+        <>
+          {/* Hreflang alternates for i18n locales */}
+          <link rel="alternate" hrefLang="th" href={localizedUrls.thUrl} />
+          <link rel="alternate" hrefLang="th-TH" href={localizedUrls.thUrl} />
+          <link rel="alternate" hrefLang="en" href={localizedUrls.enUrl} />
+          <link rel="alternate" hrefLang="en-US" href={localizedUrls.enUrl} />
+          <link rel="alternate" hrefLang="x-default" href={localizedUrls.xDefaultUrl} />
+        </>
+      )}
 
       {/* Enhanced Open Graph Meta Tags for Better Link Sharing */}
       <meta property="og:type" content={type} />
