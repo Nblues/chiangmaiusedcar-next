@@ -70,7 +70,10 @@ export default function TikTokFeed({ videos }) {
           {displayVideos.map((video, index) => {
             const title = cleanVideoTitle(video.title);
             const url = video.url || 'https://www.tiktok.com/@krunueng_usedcar';
-            const imageUrl = video.image || '/herobanner/outdoorbanner-480w.webp';
+            const rawImageUrl = video.image || null;
+            const imageUrl = rawImageUrl
+              ? `/api/tiktok-image?url=${encodeURIComponent(rawImageUrl)}`
+              : '/herobanner/outdoorbanner-480w.webp';
 
             return (
               <button
@@ -78,13 +81,12 @@ export default function TikTokFeed({ videos }) {
                 onClick={() => setSelectedVideoUrl(url)}
                 type="button"
                 className="group flex flex-col text-left bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
-                aria-label={`เธ”เธนเธงเธดเธ”เธตเนเธญ TikTok: ${title.slice(0, 50)}...`}
+                aria-label={`เธ"เธนเธงเธดเธ"เธตเนเธญ TikTok: ${title.slice(0, 50)}...`}
               >
                 {/* Thumbnail container (9:16 aspect ratio for TikTok) */}
                 <div className="relative w-full aspect-[9/16] bg-black overflow-hidden flex-shrink-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    referrerPolicy="no-referrer"
                     src={imageUrl}
                     alt={`เธซเธเนเธฒเธเธเธงเธดเธ”เธตเนเธญ TikTok: ${title.slice(0, 100)}`}
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"

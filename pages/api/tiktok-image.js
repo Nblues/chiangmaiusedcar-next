@@ -1,0 +1,63 @@
+/**
+ * Proxy API for TikTok CDN images.
+ * TikTok blocks direct hotlinking from external domains in browsers,
+ * so we fetch images server-side and forward them to the client.
+ */
+
+const ALLOWED_HOSTNAMES = [
+  'p16-common-sign.tiktokcdn-us.com',
+  'p16-sign.tiktokcdn-us.com',
+  'p19-sign.tiktokcdn-us.com',
+  'p77-sign.tiktokcdn-us.com',
+  'p16-amd-va.tiktokcdn.com',
+  'p19-amd-va.tiktokcdn.com',
+  'p16-sg.tiktokcdn.com',
+  'p19-sg.tiktokcdn.com',
+  'p16-pu.tiktokcdn.com',
+];
+
+export default async function handler(req, res) {
+  if (req.method !== 'GET') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
+
+  const { url } = req.query;
+
+  if (!url) {
+    return res.status(400).json({ error: 'Missing url parameter' });
+  }
+
+  let parsed;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return res.status(400).json({ error: 'Invalid URL' });
+  }
+
+  if (parsed.protocol !== 'https:' || !ALLOWED_HOSTNAMES.includes(parsed.hostname)) {
+    return res.status(403).json({ error: 'Domain not allowed' });
+  }
+
+  try {
+    const upstream = await fetch(parsed.toString(), {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; chiangmaiusedcar-bot/1.0)',
+      },
+      signal: AbortSignal.timeout(8000),
+    });
+
+    if (!upstream.ok) {
+      return res.status(upstream.status).json({ error: 'Upstream error' });
+    }
+
+    const contentType = upstream.headers.get('content-type') || 'image/jpeg';
+    const buffer = await upstream.arrayBuffer();
+
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=3600');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    return res.status(200).send(Buffer.from(buffer));
+  } catch {
+    return res.status(502).json({ error: 'Failed to fetch image' });
+  }
+}
