@@ -381,7 +381,7 @@ export default function AllCars({
           media="(max-width: 767px)"
           href="/herobanner/heroallcars-640w.webp"
           imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w"
-          imageSizes="100vw"
+          imageSizes="(max-width: 640px) 100vw, 640px"
           fetchpriority="high"
         />
 
@@ -391,7 +391,7 @@ export default function AllCars({
           media="(min-width: 768px)"
           href="/herobanner/heroallcars-1024w.webp"
           imageSrcSet="/herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
-          imageSizes="100vw"
+          imageSizes="(max-width: 1400px) 100vw, 1400px"
           fetchpriority="high"
         />
       </Head>
@@ -435,18 +435,18 @@ export default function AllCars({
               <source
                 media="(max-width: 767px)"
                 srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w"
-                sizes="100vw"
+                sizes="(max-width: 640px) 100vw, 640px"
               />
               <source
                 media="(min-width: 768px)"
                 srcSet="/herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
-                sizes="100vw"
+                sizes="(max-width: 1400px) 100vw, 1400px"
               />
               <img
                 ref={heroImgRef}
                 src="/herobanner/heroallcars-1024w.webp"
                 srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
-                sizes="100vw"
+                sizes="(max-width: 1400px) 100vw, 1400px"
                 alt="รวมรถยนต์มือสองคุณภาพดี ครูหนึ่งรถสวย เชียงใหม่"
                 className="w-full h-full object-cover object-top"
                 decoding="async"
@@ -527,6 +527,7 @@ export default function AllCars({
                 </Link>
                 <Link
                   href="/contact"
+                  prefetch={false}
                   className="inline-flex items-center justify-center rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white transition-colors"
                 >
                   นัดดูรถ / ติดต่อ

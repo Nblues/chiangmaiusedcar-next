@@ -297,7 +297,7 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           <img
             src="/herobanner/newherobanner-414w.webp"
             srcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
-            sizes="(max-width: 414px) 414px, (max-width: 1400px) 100vw, 1400px"
+            sizes="(max-width: 1400px) 100vw, 1400px"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             width={1400}
             height={467}

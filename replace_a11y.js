@@ -1,0 +1,1 @@
+const fs=require('fs'); let txt=fs.readFileSync('pages/car/[handle].jsx', 'utf8'); txt = txt.replace('aria-label=\"แชร์บอกเพื่อน\"', ''); txt = txt.replace('bg-[#06C755] text-white', 'bg-[#06C755] text-gray-900'); fs.writeFileSync('pages/car/[handle].jsx', txt);

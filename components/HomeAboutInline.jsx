@@ -19,7 +19,7 @@ export default function HomeAboutInline() {
           <img
             src="/images/kn-10.webp"
             srcSet="/images/kn-10-sm.webp 640w, /images/kn-10.webp 1400w"
-            sizes="(max-width: 640px) 100vw, 1400px"
+            sizes="(max-width: 640px) 100vw, 800px"
             alt="ประสบการณ์ 10 ปี ลูกค้าทั่วประเทศไว้วางใจ ซื้อรถมือสองเชียงใหม่ไม่ต้องมาดูรถที่ ศูนย์รวมรถยนต์มือสองครูหนึ่งรถสวย"
             title="ครูหนึ่งรถสวย รถมือสองเชียงใหม่ ประสบการณ์ 10 ปี+ เฟซบุ๊กผู้ติดตาม 1 ล้านคนทั่วประเทศ"
             className="w-full max-w-[800px] aspect-[16/10] md:aspect-[16/9] object-cover object-center rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"

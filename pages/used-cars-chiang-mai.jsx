@@ -331,8 +331,7 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
           as="image"
           href="/herobanner/outdoorbanner-828w.webp"
           imageSrcSet="/herobanner/outdoorbanner-480w.webp 480w, /herobanner/outdoorbanner-640w.webp 640w, /herobanner/outdoorbanner-828w.webp 828w, /herobanner/outdoorbanner-1024w.webp 1024w, /herobanner/outdoorbanner-1280w.webp 1280w, /herobanner/outdoorbanner-1400w.webp 1400w"
-          imageSizes="(max-width: 1024px) 100vw, 1400px"
-          media="(max-width: 1024px)"
+          imageSizes="(max-width: 1400px) 100vw, 1400px"
         />
       </Head>
       <SEO
@@ -379,6 +378,7 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
                 sizes="(max-width: 1400px) 100vw, 1400px"
                 alt="รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย"
                 aspectRatio="1920/800"
+                fetchPriority="high"
                 priority
                 decoding="async"
                 imageType="hero"
