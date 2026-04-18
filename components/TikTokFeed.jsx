@@ -1,11 +1,11 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import A11yImage from './A11yImage';
 
 // Helper to clean up excessive hashtags and the TikTok music note for a cleaner UI and SEO title
 const cleanVideoTitle = rawTitle => {
-  if (!rawTitle) return 'เธเธฅเธดเธเธงเธดเธ”เธตเนเธญ TikTok เธฃเธตเธงเธดเธงเธฃเธ–';
-  // 1. Remove the "โฌ เน€เธชเธตเธขเธเธ•เนเธเธเธเธฑเธ..." text added by TikTok
-  let cleaned = rawTitle.replace(/โฌ.*/g, '');
+  if (!rawTitle) return 'คลิปวิดีโอ TikTok รีวิวรถ';
+  // 1. Remove the "♬ เสียงต้นฉบับ..." text added by TikTok
+  let cleaned = rawTitle.replace(/♬.*/g, '');
   // 2. Remove inline hashtags to make it look like a clean sentence
   cleaned = cleaned.replace(/#\S+/g, '');
   return cleaned.trim();
@@ -21,7 +21,7 @@ export default function TikTokFeed({ videos }) {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'เธฃเธตเธงเธดเธงเธชเนเธเธกเธญเธเธฃเธ– เนเธฅเธฐเธชเธฒเธฃเธฐเธ”เธตเน เธเธฒเธ TikTok',
+    name: 'รีวิวส่งมอบรถ และสาระดีๆ จาก TikTok',
     itemListElement: displayVideos.map((video, index) => {
       const cleanTitle = cleanVideoTitle(video.title);
       const url = video.url || 'https://www.tiktok.com/@krunueng_usedcar';
@@ -53,15 +53,11 @@ export default function TikTokFeed({ videos }) {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
           <h2 className="text-2xl xs:text-3xl sm:text-4xl font-extrabold text-primary font-prompt tracking-tight">
-            <span className="block sm:inline">เธฃเธตเธงเธดเธงเธชเนเธเธกเธญเธเธฃเธ–</span>{' '}
-            <span className="block sm:inline mt-1 sm:mt-0">
-              เนเธฅเธฐเธชเธฒเธฃเธฐเธ”เธตเน เธเธฒเธ TikTok
-            </span>
+            <span className="block sm:inline">รีวิวส่งมอบรถ</span>{' '}
+            <span className="block sm:inline mt-1 sm:mt-0">และสาระดีๆ จาก TikTok</span>
           </h2>
           <p className="mt-3 sm:mt-4 text-sm sm:text-lg text-gray-600 font-prompt leading-relaxed px-2">
-            เธ•เธดเธ”เธ•เธฒเธกเธเธฅเธดเธเธญเธฑเธเน€เธ”เธ•เธฃเธ–เน€เธเนเธฒเนเธซเธกเน
-            เธเธฒเธฃเธชเนเธเธกเธญเธเธฃเธ–เนเธซเนเธฅเธนเธเธเนเธฒ
-            เนเธฅเธฐเธเธงเธฒเธกเธฃเธนเนเน€เธฃเธทเนเธญเธเธฃเธ–เธกเธทเธญเธชเธญเธ
+            ติดตามคลิปอัปเดตรถเข้าใหม่ การส่งมอบรถให้ลูกค้า และความรู้เรื่องรถมือสอง
           </p>
         </div>
 
@@ -78,15 +74,14 @@ export default function TikTokFeed({ videos }) {
                 onClick={() => setSelectedVideoUrl(url)}
                 type="button"
                 className="group flex flex-col text-left bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
-                aria-label={`เธ”เธนเธงเธดเธ”เธตเนเธญ TikTok: ${title.slice(0, 50)}...`}
+                aria-label={`ดูวิดีโอ TikTok: ${title.slice(0, 50)}...`}
               >
                 {/* Thumbnail container (9:16 aspect ratio for TikTok) */}
                 <div className="relative w-full aspect-[9/16] bg-black overflow-hidden flex-shrink-0">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}{' '}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={imageUrl}
-                    alt={`เธซเธเนเธฒเธเธเธงเธดเธ”เธตเนเธญ TikTok: ${title.slice(0, 100)}`}
+                    alt={`หน้าปกวิดีโอ TikTok: ${title.slice(0, 100)}`}
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                     loading="lazy"
                   />
@@ -102,6 +97,7 @@ export default function TikTokFeed({ videos }) {
                       </svg>
                     </div>
                   </div>
+
                   {/* TikTok Icon indicator */}
                   <div className="absolute top-3 left-3 w-8 h-8 bg-black/60 backdrop-blur-sm rounded-full flex items-center justify-center">
                     <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -145,7 +141,7 @@ export default function TikTokFeed({ videos }) {
             >
               <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1.04-.1z" />
             </svg>
-            เธ”เธนเธเธฅเธดเธเธ—เธฑเนเธเธซเธกเธ”เธเธ TikTok
+            ดูคลิปทั้งหมดบน TikTok
           </a>
         </div>
       </div>
@@ -166,12 +162,12 @@ export default function TikTokFeed({ videos }) {
             {/* Close Header */}
             <div className="flex justify-between items-center px-4 py-3 bg-gray-900 z-10 border-b border-gray-800">
               <span className="text-white font-prompt font-semibold text-sm">
-                เธงเธดเธ”เธตเนเธญเธเธฒเธเธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข
+                วิดีโอจากครูหนึ่งรถสวย
               </span>
               <button
                 onClick={() => setSelectedVideoUrl(null)}
                 className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
-                aria-label="เธเธดเธ”เธงเธดเธ”เธตเนเธญ"
+                aria-label="ปิดวิดีโอ"
               >
                 <svg
                   className="w-5 h-5"
@@ -210,8 +206,7 @@ export default function TikTokFeed({ videos }) {
                   return (
                     <div className="flex flex-col items-center justify-center h-full p-6 text-center text-white">
                       <p className="mb-4 font-prompt text-gray-300 text-sm">
-                        เธงเธดเธ”เธตเนเธญเธเธตเนเธ”เธนเน€เธซเธกเธทเธญเธเธเธฐเนเธกเนเธกเธตเธฃเธนเธเนเธเธ
-                        ID เธเธเธ•เธด
+                        วิดีโอนี้ดูเหมือนจะไม่มีรูปแบบ ID ปกติ
                       </p>
                       <a
                         href={selectedVideoUrl}
@@ -219,7 +214,7 @@ export default function TikTokFeed({ videos }) {
                         rel="noopener noreferrer"
                         className="px-6 py-2 bg-primary rounded-full hover:bg-primary-600 transition-colors font-prompt font-semibold"
                       >
-                        เน€เธเธดเธ”เธ”เธนเนเธเนเธญเธ TikTok
+                        เปิดดูในแอป TikTok
                       </a>
                     </div>
                   );
@@ -239,7 +234,7 @@ export default function TikTokFeed({ videos }) {
                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 3.55 8.888 8.498 9.59.394.085.928.261 1.066.593.125.302.04.721.019.988-.027.34-.143 1.025-.143 1.025s-.044.269.135.378c.178.109.431-.059.431-.059l.86-.532c.86-.532 3.031-1.954 4.148-3.056 2.879-2.83 4.986-5.834 4.986-8.927zM9.544 13.914h-1.931a.576.576 0 0 1-.575-.575V8.528A.576.576 0 0 1 7.613 7.95h1.931a.575.575 0 0 1 .575.575v4.814a.576.576 0 0 1-.575.572zm3.834 0h-1.93a.576.576 0 0 1-.575-.575V8.528A.576.576 0 0 1 11.447 7.95h1.931a.577.577 0 0 1 .575.575v4.814a.577.577 0 0 1-.575.572zm4.568 0h-.843a.577.577 0 0 1-.575-.575V9.658l-1.32 1.34c-.118.12-.303.136-.441.037a.57.57 0 0 1-.035-.802l1.637-1.684a.578.578 0 0 1 .412-.178.576.576 0 0 1 .575.57h.59c.318 0 .576.258.576.576v4.815c0 .318-.258.582-.576.582z" />
                 </svg>
-                <span>เธชเธญเธเธ–เธฒเธกเธ—เธฑเธ LINE</span>
+                <span>สอบถามทัก LINE</span>
               </a>
             </div>
           </div>
