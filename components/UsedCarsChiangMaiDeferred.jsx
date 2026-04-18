@@ -46,7 +46,6 @@ export default function UsedCarsChiangMaiDeferred() {
             target="_blank"
             rel="noopener noreferrer"
             className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
-            aria-label="ติดตาม Facebook ส่วนตัว ครูหนึ่งรถสวย"
           >
             <div className="flex items-center mb-3">
               <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">

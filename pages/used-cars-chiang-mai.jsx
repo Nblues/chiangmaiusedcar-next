@@ -203,6 +203,16 @@ export async function getStaticProps() {
     };
   });
 
+  let tiktokVideos = [];
+  try {
+    const rawFeed = await fetch('https://rss.app/feeds/v1.1/MkPoJo3SV77U3XXe.json').then(r =>
+      r.json()
+    );
+    tiktokVideos = rawFeed?.items || [];
+  } catch (error) {
+    tiktokVideos = [];
+  }
+
   const homeOgImage = `${SITE}/api/og?src=${encodeURIComponent(
     '/herobanner/outdoorbanner.webp'
   )}&w=1200&h=630`;
@@ -215,15 +225,26 @@ export async function getStaticProps() {
       homeOgImage,
       structuredData,
       shopifyError,
+      tiktokVideos,
     },
     // Refresh every 5 minutes
     revalidate: 300,
   };
 }
 
+const TikTokFeed = dynamic(() => import('../components/TikTokFeed'), {
+  loading: () => <div className="min-h-[400px] w-full" aria-hidden="true" />,
+});
+
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 const seoUsedCarsLanding = SEO_KEYWORD_MAP.usedCarsLanding;
-export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, shopifyError }) {
+export default function UsedCarsChiangMai({
+  cars,
+  homeOgImage,
+  structuredData,
+  shopifyError,
+  tiktokVideos,
+}) {
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
   const featuredCars = useMemo(() => safeCars.slice(0, 8), [safeCars]);
 
@@ -341,7 +362,11 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
         image={homeOgImage}
         type="website"
         pageType="home"
-        keywords={[seoUsedCarsLanding.primary, ...seoUsedCarsLanding.secondary, ...seoUsedCarsLanding.longTail.slice(0, 5)]}
+        keywords={[
+          seoUsedCarsLanding.primary,
+          ...seoUsedCarsLanding.secondary,
+          ...seoUsedCarsLanding.longTail.slice(0, 5),
+        ]}
         breadcrumbs={[
           { name: 'หน้าแรก', url: '/' },
           { name: 'ซื้อ-ขาย รถบ้านมือสอง เชียงใหม่-ลำพูน', url: '/used-cars-chiang-mai' },
@@ -392,21 +417,14 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
             <div className="relative flex justify-center p-3 xs:p-4 sm:absolute sm:inset-0 sm:items-center sm:justify-center sm:p-6">
               <div className="w-full max-w-6xl mx-auto">
                 <div className="mx-auto w-full max-w-[22rem] xs:max-w-sm sm:w-auto sm:max-w-2xl rounded-2xl bg-black/80 sm:bg-black/85 sm:backdrop-blur-md ring-1 ring-white/30 px-3 xs:px-4 sm:px-6 py-3 xs:px-6 py-4 shadow-2xl">
-                  <h1
-                    className="text-lg xs:text-xl sm:text-2xl lg:text-4xl font-extrabold text-white font-prompt text-center leading-tight"
-                    style={{
-                      WebkitTextStroke: '0.6px rgba(0,0,0,0.85)',
-                      textShadow:
-                        '0 4px 14px rgba(0,0,0,0.85), 0 2px 6px rgba(0,0,0,0.95), 0 0 1px rgba(0,0,0,1)',
-                    }}
-                  >
+                  <h1 className="text-lg xs:text-xl sm:text-2xl lg:text-4xl font-extrabold text-white font-prompt text-center leading-tight drop-shadow-md">
                     ฝากขายรถมือสองกับครูหนึ่งรถสวย
                   </h1>
                   <p className="mt-1.5 xs:mt-2 sm:mt-3 text-white font-prompt leading-relaxed text-center text-sm sm:text-base font-semibold">
                     <span className="sm:hidden">ฝากขายรถแบบมืออาชีพ ได้ราคาดี</span>
                     <span className="hidden sm:inline">
-                      ฝากลงขายรถของท่านได้ราคาดีกว่าขายด่วน —
-                      ทีมงานมืออาชีพดูแลจนจบขั้นตอน ซื้อขายสบายใจ
+                      ฝากลงขายรถของท่านได้ราคาดีกว่าขายด่วน — ทีมงานมืออาชีพดูแลจนจบขั้นตอน
+                      ซื้อขายสบายใจ
                     </span>
                   </p>
                   <div className="mt-3 xs:mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2 xs:gap-3 justify-center">
@@ -687,6 +705,9 @@ export default function UsedCarsChiangMai({ cars, homeOgImage, structuredData, s
         </section>
 
         <UsedCarsChiangMaiDeferred />
+
+        {/* TikTok Feed Section */}
+        {tiktokVideos && tiktokVideos.length > 0 && <TikTokFeed videos={tiktokVideos} />}
       </main>
 
       {/* Floating LINE CTA for mobile conversion */}

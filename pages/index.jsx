@@ -75,6 +75,10 @@ const HomeFaqSection = dynamic(() => import('../components/HomeFaqSection'), {
   loading: () => <div className="min-h-[600px] w-full" aria-hidden="true" />,
 });
 
+const TikTokFeed = dynamic(() => import('../components/TikTokFeed'), {
+  loading: () => <div className="min-h-[400px] w-full" aria-hidden="true" />,
+});
+
 function buildHomeItemListJsonLd(inputCars) {
   const site = 'https://www.chiangmaiusedcar.com';
   const cars = Array.isArray(inputCars) ? inputCars : [];
@@ -148,7 +152,7 @@ function buildHomeItemListJsonLd(inputCars) {
   });
 }
 
-export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonLd }) {
+export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonLd, tiktokVideos }) {
   const seoHome = SEO_HOME;
   const homeFaqSchema = useMemo(() => buildFaqPageJsonLd({ url: '/', faqs: HOME_FAQS }), []);
 
@@ -316,13 +320,17 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         <div className="hero-card max-w-6xl w-[95%] mx-auto my-3 md:my-6 flex flex-col md:flex-row items-center gap-4 md:gap-6 px-4 py-5 md:px-8 md:py-8 rounded-xl md:rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-xl sm:text-2xl md:text-4xl font-extrabold text-primary mb-1 md:mb-2 font-prompt">
-              ศูนย์รวมรถบ้านมือสองเชียงใหม่ คุณภาพพรีเมียม
+              <span className="block md:inline">ศูนย์รวมรถบ้านมือสองเชียงใหม่</span>{' '}
+              <span className="block md:inline mt-1 md:mt-0 text-primary text-xl sm:text-2xl md:text-4xl">
+                คุณภาพพรีเมียม
+              </span>
             </h1>
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-orange-700 mb-2 md:mb-4 font-prompt">
               ฟรีดาวน์ 0% อนุมัติไว รับประกัน 1 ปีเต็ม
             </h2>
             <p className="text-sm md:text-base leading-snug md:leading-relaxed text-gray-900 font-prompt">
-              ครูหนึ่งรถสวย คัดเฉพาะรถมือเดียวจากป้ายแดง สภาพนางฟ้า บริการจัดส่งทั่วประเทศไทย ซื้อ-ขาย อุ่นใจ มีใบรับรอง
+              ครูหนึ่งรถสวย คัดเฉพาะรถมือเดียวจากป้ายแดง สภาพนางฟ้า บริการจัดส่งทั่วประเทศไทย
+              ซื้อ-ขาย อุ่นใจ มีใบรับรอง
             </p>
           </div>
           <div className="flex flex-col sm:flex-row md:flex-col gap-2 md:gap-4 w-full md:w-auto md:min-w-[200px]">
@@ -435,6 +443,9 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
           </div>
         </main>
         <div className="pb-8 md:pb-12">
+          {/* TikTok Feed Section */}
+          {tiktokVideos && tiktokVideos.length > 0 && <TikTokFeed videos={tiktokVideos} />}
+
           {/* รีวิว Facebook 9 รีวิวจริง (โหลดเมื่อใกล้ viewport) */}
           <div id="fb-reviews-anchor" className="h-px w-full" aria-hidden="true" />
           {showFbReviews && <FacebookReviewsSection />}
@@ -474,19 +485,26 @@ export async function getStaticProps() {
   let brandCounts = {};
   let homeOgImage = null;
   let homeItemListJsonLd = null;
+  let tiktokVideos = [];
 
   const carsPromise = getHomepageCars(8).catch(() => []);
   const statusesPromise = readCarStatuses().catch(() => ({}));
   const brandCountsPromise = getBrandCounts().catch(() => ({}));
+  const tiktokPromise = fetch('https://rss.app/feeds/v1.1/MkPoJo3SV77U3XXe.json')
+    .then(r => r.json())
+    .then(d => d.items || [])
+    .catch(() => []);
 
-  const [carsRaw, carStatuses, counts] = await Promise.all([
+  const [carsRaw, carStatuses, counts, tiktokRaw] = await Promise.all([
     carsPromise,
     statusesPromise,
     brandCountsPromise,
+    tiktokPromise,
   ]);
 
   cars = Array.isArray(carsRaw) ? carsRaw : [];
   brandCounts = counts || {};
+  tiktokVideos = tiktokRaw || [];
 
   // Add status to homepage cars (do not filter; show badge instead)
   try {
@@ -512,7 +530,7 @@ export async function getStaticProps() {
   }
 
   return {
-    props: { cars, brandCounts, homeOgImage, homeItemListJsonLd },
+    props: { cars, brandCounts, homeOgImage, homeItemListJsonLd, tiktokVideos },
     revalidate: 300, // 5 minutes - Improve TTFB frequency standard
   };
 }
