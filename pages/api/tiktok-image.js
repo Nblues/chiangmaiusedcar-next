@@ -6,6 +6,7 @@
 
 const ALLOWED_HOSTNAMES = [
   'p16-common-sign.tiktokcdn-us.com',
+  'p19-common-sign.tiktokcdn-us.com',
   'p16-sign.tiktokcdn-us.com',
   'p19-sign.tiktokcdn-us.com',
   'p77-sign.tiktokcdn-us.com',
@@ -34,7 +35,15 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid URL' });
   }
 
-  if (parsed.protocol !== 'https:' || !ALLOWED_HOSTNAMES.includes(parsed.hostname)) {
+  if (
+    parsed.protocol !== 'https:' ||
+    !(
+      parsed.hostname.endsWith('.tiktokcdn-us.com') ||
+      parsed.hostname.endsWith('.tiktokcdn.com') ||
+      parsed.hostname.endsWith('.tiktok.com') ||
+      ALLOWED_HOSTNAMES.includes(parsed.hostname)
+    )
+  ) {
     return res.status(403).json({ error: 'Domain not allowed' });
   }
 
