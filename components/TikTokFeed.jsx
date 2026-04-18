@@ -199,11 +199,11 @@ export default function TikTokFeed({ videos }) {
                 if (videoId) {
                   return (
                     <iframe
-                      src={`https://www.tiktok.com/embed/v2/${videoId}?lang=th-TH&autoplay=1`}
+                      src={`https://www.tiktok.com/embed/v2/${videoId}?lang=th-TH`}
                       className="w-full h-full border-none"
                       allowFullScreen
                       title="TikTok Video Player"
-                      allow="autoplay; encrypted-media;"
+                      allow="encrypted-media;"
                     ></iframe>
                   );
                 } else {
