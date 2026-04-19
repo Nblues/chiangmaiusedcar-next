@@ -834,7 +834,7 @@ export default function HomeDeferredSections({
                         {brand.name}
                       </span>
                     </div>
-                    <span className="ml-3 sm:ml-4 inline-flex items-center justify-center min-w-[28px] h-6 px-2 text-xs font-bold leading-none bg-gray-100/80 text-gray-600 group-hover:bg-blue-50 group-hover:text-primary rounded-full transition-colors">
+                    <span className="ml-3 sm:ml-4 inline-flex items-center justify-center h-6 px-3 whitespace-nowrap overflow-visible text-xs font-bold leading-none bg-gray-100/80 text-gray-600 group-hover:bg-blue-50 group-hover:text-primary rounded-full transition-colors">
                       {count}
                     </span>
                   </Link>
