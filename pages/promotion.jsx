@@ -593,7 +593,7 @@ export default function Promotion({ seoPromotion }) {
 // Using ISR for better performance - revalidate every 10 minutes
 export async function getStaticProps() {
   return {
-    props: {},
+    props: { seoPromotion: require('../config/seo-keyword-map').SEO_KEYWORD_MAP.promotion },
     revalidate: 600, // 10 minutes
   };
 }

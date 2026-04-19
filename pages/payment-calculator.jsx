@@ -5,10 +5,6 @@ import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
 
-export async function getStaticProps() {
-  return { props: { seoPayment: SEO_KEYWORD_MAP.paymentCalculator } };
-}
-
 export default function PaymentCalculator({ seoPayment }) {
   const router = useRouter();
   const [carPrice, setCarPrice] = useState('');
@@ -766,7 +762,8 @@ export default function PaymentCalculator({ seoPayment }) {
 
 // SSR for payment calculator with real-time interest rates
 export async function getServerSideProps() {
+  const { SEO_KEYWORD_MAP } = require('../config/seo-keyword-map');
   return {
-    props: {},
+    props: { seoPayment: SEO_KEYWORD_MAP.paymentCalculator },
   };
 }

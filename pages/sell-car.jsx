@@ -368,7 +368,7 @@ export default function SellCar({ seoSellCar }) {
 // ISR for performance
 export async function getStaticProps() {
   return {
-    props: {},
+    props: { seoSellCar: require('../config/seo-keyword-map').SEO_KEYWORD_MAP.sellCar },
     revalidate: 86400, // 24 hours
   };
 }

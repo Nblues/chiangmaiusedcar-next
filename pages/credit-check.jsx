@@ -6,12 +6,6 @@ import A11yImage from '../components/A11yImage';
 import Swal from 'sweetalert2';
 import emailjs from 'emailjs-com';
 
-export async function getStaticProps() {
-  return {
-    props: { seoCreditCheck: require('../config/seo-keyword-map').SEO_KEYWORD_MAP.creditCheck },
-  };
-}
-
 export default function CreditCheck({ seoCreditCheck }) {
   const formRef = useRef();
   const [career, setCareer] = useState('');
@@ -1272,6 +1266,8 @@ export default function CreditCheck({ seoCreditCheck }) {
 // SSR for credit check security and real-time verification
 export async function getServerSideProps() {
   return {
-    props: {},
+    props: {
+      seoCreditCheck: require('../config/seo-keyword-map').SEO_KEYWORD_MAP.creditCheck,
+    },
   };
 }

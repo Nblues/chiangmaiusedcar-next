@@ -509,7 +509,7 @@ export default function About({ seoAbout }) {
 // ISR - Company info changes infrequently - revalidate every 30 minutes
 export async function getStaticProps() {
   return {
-    props: {},
+    props: { seoAbout: require('../config/seo-keyword-map').SEO_KEYWORD_MAP.about },
     revalidate: 1800, // 30 minutes
   };
 }

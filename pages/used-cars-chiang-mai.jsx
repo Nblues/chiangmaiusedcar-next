@@ -364,10 +364,10 @@ export default function UsedCarsChiangMai({
         type="website"
         pageType="home"
         keywords={[
-          seoUsedCarsLanding.primary,
-          ...seoUsedCarsLanding.secondary,
-          ...seoUsedCarsLanding.longTail.slice(0, 5),
-        ]}
+          seoData?.primary || '',
+          ...(seoData?.secondary || []),
+          ...(seoData?.longTail?.slice(0, 5) || []),
+        ].filter(Boolean)}
         breadcrumbs={[
           { name: 'หน้าแรก', url: '/' },
           { name: 'ซื้อ-ขาย รถบ้านมือสอง เชียงใหม่-ลำพูน', url: '/used-cars-chiang-mai' },

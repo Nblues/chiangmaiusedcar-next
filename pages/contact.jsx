@@ -621,7 +621,7 @@ export default function Contact({ seoContact }) {
 // ISR for better performance - contact page is mostly static
 export async function getStaticProps() {
   return {
-    props: {},
+    props: { seoContact: require('../config/seo-keyword-map').SEO_KEYWORD_MAP.contact },
     revalidate: 1800, // 30 minutes - contact info may change occasionally
   };
 }
