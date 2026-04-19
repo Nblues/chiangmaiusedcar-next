@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { forwardRef } from 'react';
 import { optimizeShopifyImage, generateSrcSet, generateSizes } from '../utils/imageOptimizer';
+import NextImage from 'next/image';
 
 interface A11yImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   alt?: string;
@@ -178,6 +179,55 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
     }
     if (props.onError) {
       imgAttributes.onError = props.onError;
+    }
+
+    if (src && src.startsWith('/')) {
+      const type = imageType || 'default';
+      const widthMap: Record<string, number> = {
+        hero: 1920,
+        card: 480,
+        thumbnail: 240,
+        gallery: 800,
+        default: 1200,
+      };
+      const localTargetWidth = widthMap[type] || widthMap.default;
+
+      const qualityMap: Record<string, number> = {
+        hero: 72,
+        card: 50,
+        thumbnail: 50,
+        gallery: 65,
+        default: 65,
+      };
+      const localResolvedQuality =
+        typeof quality === 'number' && Number.isFinite(quality)
+          ? Math.max(1, Math.min(100, quality))
+          : (qualityMap[type] ?? qualityMap.default);
+
+      const nextProps: any = {
+        src,
+        alt: finalAlt,
+        priority,
+        quality: localResolvedQuality,
+        sizes: customSizes || generatedSizes,
+        className: finalClassName,
+        style: finalStyle,
+        onLoad: props.onLoad,
+        onError: props.onError,
+      };
+
+      if (fill) {
+        nextProps.fill = true;
+      } else {
+        nextProps.width = props.width ? Number(props.width) : localTargetWidth;
+        nextProps.height = props.height ? Number(props.height) : localTargetWidth;
+      }
+
+      if (fetchPriorityAttr !== 'auto') {
+        nextProps.fetchPriority = fetchPriorityAttr;
+      }
+
+      return <NextImage ref={ref as any} {...nextProps} unoptimized={src.startsWith('/api')} />;
     }
 
     // eslint-disable-next-line jsx-a11y/alt-text
