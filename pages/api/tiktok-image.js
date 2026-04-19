@@ -70,8 +70,8 @@ export default async function handler(req, res) {
     try {
       const sharp = (await import('sharp')).default;
       outputBuffer = await sharp(originalBuffer)
-        .resize({ width: 360, withoutEnlargement: true })
-        .webp({ quality: 65, effort: 4 })
+        .resize({ width: 315, withoutEnlargement: true })
+        .webp({ quality: 50, effort: 4 })
         .toBuffer();
       finalContentType = 'image/webp';
     } catch (sharpError) {
