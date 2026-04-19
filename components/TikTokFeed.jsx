@@ -203,7 +203,8 @@ export default function TikTokFeed({ videos }) {
                       className="w-full h-full border-none"
                       allowFullScreen
                       title="TikTok Video Player"
-                      allow="encrypted-media;"
+                      allow="autoplay; encrypted-media; picture-in-picture; web-share"
+                      sandbox="allow-popups allow-popups-to-escape-sandbox allow-scripts allow-top-navigation allow-same-origin"
                     ></iframe>
                   );
                 } else {
