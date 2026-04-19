@@ -77,7 +77,7 @@ export default function TikTokFeed({ videos }) {
                 onClick={() => setSelectedVideoUrl(url)}
                 type="button"
                 className="group flex flex-col text-left bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
-                aria-label={`ดูวิดีโอ TikTok: ${title.slice(0, 50)}...`}
+                aria-label={title}
               >
                 {/* Thumbnail container (9:16 aspect ratio for TikTok) */}
                 <div className="relative w-full aspect-[9/16] bg-black overflow-hidden flex-shrink-0">
@@ -116,7 +116,7 @@ export default function TikTokFeed({ videos }) {
                     {title}
                   </h3>
                   {video.date_published && (
-                    <p className="mt-2 text-xs text-gray-400 font-prompt mt-auto">
+                    <p className="mt-2 text-xs text-gray-500 font-prompt mt-auto">
                       {new Date(video.date_published).toLocaleDateString('th-TH', {
                         day: 'numeric',
                         month: 'short',

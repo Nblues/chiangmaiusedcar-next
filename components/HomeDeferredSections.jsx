@@ -594,7 +594,6 @@ export default function HomeDeferredSections({
                 fill
                 loading="lazy"
                 fetchpriority="low"
-                optimizeImage={false}
                 sizes="(max-width: 640px) 100vw, (max-width: 1400px) 1400px, 1400px"
                 className="absolute inset-0 w-full h-full object-cover object-[50%_36%] sm:object-[50%_62%] lg:object-[50%_56%]"
               />
@@ -638,7 +637,6 @@ export default function HomeDeferredSections({
                   height={128}
                   loading="lazy"
                   fetchpriority="low"
-                  optimizeImage={false}
                   className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
                 />
               </div>
@@ -666,7 +664,6 @@ export default function HomeDeferredSections({
                   height={128}
                   loading="lazy"
                   fetchpriority="low"
-                  optimizeImage={false}
                   className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
                 />
               </div>
@@ -693,7 +690,6 @@ export default function HomeDeferredSections({
                   height={128}
                   loading="lazy"
                   fetchpriority="low"
-                  optimizeImage={false}
                   className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
                 />
               </div>
@@ -718,7 +714,6 @@ export default function HomeDeferredSections({
                   height={128}
                   loading="lazy"
                   fetchpriority="low"
-                  optimizeImage={false}
                   className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
                 />
               </div>

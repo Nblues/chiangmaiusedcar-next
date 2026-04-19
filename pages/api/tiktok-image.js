@@ -63,7 +63,7 @@ export default async function handler(req, res) {
     const buffer = await upstream.arrayBuffer();
 
     res.setHeader('Content-Type', contentType);
-    res.setHeader('Cache-Control', 'public, max-age=86400, stale-while-revalidate=3600');
+    res.setHeader('Cache-Control', 'public, max-age=31536000, stale-while-revalidate=86400');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     return res.status(200).send(Buffer.from(buffer));
   } catch {
