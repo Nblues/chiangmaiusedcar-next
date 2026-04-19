@@ -50,6 +50,9 @@ export default function MyApp({ Component, pageProps }) {
   // Defer Vercel analytics tooling so it doesn't compete with hydration/bootup.
   const [VercelTools, setVercelTools] = useState(null);
 
+  // Defer Google Analytics so it doesn't block the main thread initially
+  const [analyticsReady, setAnalyticsReady] = useState(false);
+
   // Initialize performance monitoring (Web Vitals + custom observers) without competing with hydration.
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -132,6 +135,52 @@ export default function MyApp({ Component, pageProps }) {
       cancelled = true;
       if (idleId && window.cancelIdleCallback) window.cancelIdleCallback(idleId);
       if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, [isAdminRoute, cookieConsent?.analytics]);
+
+  // Defer Google Analytics aggressively until user interaction or 5 seconds idle
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (process.env.NODE_ENV !== 'production') return;
+    if (isAdminRoute) return;
+    if (!cookieConsent?.analytics) return;
+
+    let timeoutId;
+    let loaded = false;
+
+    const loadAnalytics = () => {
+      if (loaded) return;
+      loaded = true;
+      setAnalyticsReady(true);
+      interactionEvents.forEach(event => {
+        window.removeEventListener(event, handleInteraction);
+      });
+    };
+
+    const handleInteraction = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      setTimeout(() => {
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(loadAnalytics, { timeout: 2000 });
+        } else {
+          loadAnalytics();
+        }
+      }, 100);
+    };
+
+    const interactionEvents = ['scroll', 'click', 'touchstart', 'mousemove', 'keydown'];
+
+    interactionEvents.forEach(event => {
+      window.addEventListener(event, handleInteraction, { passive: true, once: true });
+    });
+
+    timeoutId = setTimeout(loadAnalytics, 5000);
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      interactionEvents.forEach(event => {
+        window.removeEventListener(event, handleInteraction);
+      });
     };
   }, [isAdminRoute, cookieConsent?.analytics]);
 
@@ -231,9 +280,10 @@ export default function MyApp({ Component, pageProps }) {
       {!isAdminRoute && process.env.NODE_ENV === 'production' && cookieConsent?.marketing ? (
         <FacebookPixel />
       ) : null}
-      {!isAdminRoute && process.env.NODE_ENV === 'production' && cookieConsent?.analytics && (
-        <GoogleAnalytics gaId="G-6X6MT38ML7" />
-      )}
+      {!isAdminRoute &&
+        process.env.NODE_ENV === 'production' &&
+        cookieConsent?.analytics &&
+        analyticsReady && <GoogleAnalytics gaId="G-6X6MT38ML7" />}
     </>
   );
 }
