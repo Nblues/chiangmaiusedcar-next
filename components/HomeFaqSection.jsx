@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Fragment } from 'react';
 import A11yImage from './A11yImage';
+import Image from 'next/image';
 /**
  * HomeFaqSection – คำถามที่พบบ่อย accordion section.
  * Extracted from pages/index.jsx. No props required.

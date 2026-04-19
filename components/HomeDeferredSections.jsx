@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import A11yImage from './A11yImage';
+import Image from 'next/image';
 import CarCard from './CarCard';
 
 const SocialShareButtons = dynamic(() => import('./SocialShareButtons'), { ssr: false });
