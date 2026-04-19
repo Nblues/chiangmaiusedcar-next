@@ -4,15 +4,13 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import A11yImage from '../components/A11yImage';
-import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import proseStyles from '../styles/prose.module.css';
 // Organization JSON-LD is injected centrally by <SEO /> to avoid duplicates
 
-export default function SellCar() {
+export default function SellCar({ seoSellCar }) {
   const router = useRouter();
   const activeLocale = router?.locale || 'th';
 
-  const seoSellCar = SEO_KEYWORD_MAP.sellCar;
   const baseUrl = 'https://www.chiangmaiusedcar.com';
   const pagePath = activeLocale === 'en' ? '/en/sell-car' : '/sell-car';
   const pageUrl = `${baseUrl}${pagePath}`;

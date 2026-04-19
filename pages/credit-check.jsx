@@ -5,10 +5,14 @@ import SEO from '../components/SEO';
 import A11yImage from '../components/A11yImage';
 import Swal from 'sweetalert2';
 import emailjs from 'emailjs-com';
-import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 
-export default function CreditCheck() {
-  const seoCreditCheck = SEO_KEYWORD_MAP.creditCheck;
+export async function getStaticProps() {
+  return {
+    props: { seoCreditCheck: require('../config/seo-keyword-map').SEO_KEYWORD_MAP.creditCheck },
+  };
+}
+
+export default function CreditCheck({ seoCreditCheck }) {
   const formRef = useRef();
   const [career, setCareer] = useState('');
   const [downOption, setDownOption] = useState('');

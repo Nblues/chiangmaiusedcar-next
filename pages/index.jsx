@@ -7,7 +7,6 @@ import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
 import { readCarStatuses } from '../lib/carStatusStore.js';
 import Link from 'next/link';
 import { SEO_HOME } from '../config/seo-keywords';
-import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
 import { COMMON_OFFER_EXTENSIONS } from '../config/business';
 import { buildFaqPageJsonLd } from '../lib/seo/faq';
@@ -152,7 +151,14 @@ function buildHomeItemListJsonLd(inputCars) {
   });
 }
 
-export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonLd, tiktokVideos }) {
+export default function Home({
+  seoHomeData,
+  cars,
+  brandCounts,
+  homeOgImage,
+  homeItemListJsonLd,
+  tiktokVideos,
+}) {
   const seoHome = SEO_HOME;
   const homeFaqSchema = useMemo(() => buildFaqPageJsonLd({ url: '/', faqs: HOME_FAQS }), []);
 
@@ -283,9 +289,9 @@ export default function Home({ cars, brandCounts, homeOgImage, homeItemListJsonL
         title={seoHome.title}
         description={seoHome.description}
         keywords={[
-          SEO_KEYWORD_MAP.home.primary,
-          ...SEO_KEYWORD_MAP.home.secondary,
-          ...SEO_KEYWORD_MAP.home.longTail.slice(0, 5),
+          seoHomeData.primary,
+          ...seoHomeData.secondary,
+          ...seoHomeData.longTail.slice(0, 5),
         ]}
         url="/"
         image={homeOgImage}
@@ -529,8 +535,17 @@ export async function getStaticProps() {
     homeItemListJsonLd = null;
   }
 
+  const seoMap = require('../config/seo-keyword-map.js').SEO_KEYWORD_MAP;
+
   return {
-    props: { cars, brandCounts, homeOgImage, homeItemListJsonLd, tiktokVideos },
+    props: {
+      seoHomeData: seoMap.home,
+      cars,
+      brandCounts,
+      homeOgImage,
+      homeItemListJsonLd,
+      tiktokVideos,
+    },
     revalidate: 300, // 5 minutes - Improve TTFB frequency standard
   };
 }

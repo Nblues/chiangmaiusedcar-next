@@ -8,8 +8,7 @@ import { createMapEmbedUrl, createMapOpenUrl, clearLocationCache } from '../util
 import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import { BUSINESS_INFO } from '../config/business';
 
-export default function Contact() {
-  const seoContact = SEO_KEYWORD_MAP.contact;
+export default function Contact({ seoContact }) {
   // State สำหรับแผนที่
   const [mapEmbedUrl, setMapEmbedUrl] = useState('');
   const [mapOpenUrl, setMapOpenUrl] = useState('');

@@ -1,12 +1,10 @@
 import React from 'react';
 import SEO from '../components/SEO';
-import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
 // Organization JSON-LD is injected centrally by <SEO /> to avoid duplicates
 
-export default function Promotion() {
-  const seoPromotion = SEO_KEYWORD_MAP.promotion;
+export default function Promotion({ seoPromotion }) {
   const baseUrl = 'https://www.chiangmaiusedcar.com';
   const pageUrl = `${baseUrl}/promotion`;
   const pageTitle = 'โปรโมชัน ศูนย์รวมรถยนต์มือสองคุณภาพดี ฟรีดาวน์ 0% รถ ECO Car | ครูหนึ่งรถสวย';

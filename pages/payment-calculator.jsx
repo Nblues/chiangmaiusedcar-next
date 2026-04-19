@@ -5,8 +5,11 @@ import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
 
-export default function PaymentCalculator() {
-  const seoPayment = SEO_KEYWORD_MAP.paymentCalculator;
+export async function getStaticProps() {
+  return { props: { seoPayment: SEO_KEYWORD_MAP.paymentCalculator } };
+}
+
+export default function PaymentCalculator({ seoPayment }) {
   const router = useRouter();
   const [carPrice, setCarPrice] = useState('');
   const [downPayment, setDownPayment] = useState('');

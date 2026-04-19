@@ -327,34 +327,56 @@ export default function AllCars({
             '400000-500000': 'ราคา 4-5 แสน',
             '500000-600000': 'ราคา 5-6 แสน',
             '600000-700000': 'ราคา 6-7 แสน',
-            '700000': 'ราคา 7 แสนขึ้นไป'
+            700000: 'ราคา 7 แสนขึ้นไป',
           };
           const brandLabels = {
-            'toyota': 'รถ Toyota', 'honda': 'รถ Honda', 'nissan': 'รถ Nissan', 'mazda': 'รถ Mazda', 'mitsubishi': 'รถ Mitsubishi', 'isuzu': 'รถ Isuzu', 'ford': 'รถ Ford'
+            toyota: 'รถ Toyota',
+            honda: 'รถ Honda',
+            nissan: 'รถ Nissan',
+            mazda: 'รถ Mazda',
+            mitsubishi: 'รถ Mitsubishi',
+            isuzu: 'รถ Isuzu',
+            ford: 'รถ Ford',
           };
           let prefix = [];
           if (brandFilter && brandFilter !== 'all' && brandLabels[brandFilter]) {
             prefix.push(brandLabels[brandFilter]);
             isSpecific = true;
-          } else { prefix.push('รถมือสอง'); }
-          
+          } else {
+            prefix.push('รถมือสอง');
+          }
+
           if (priceRange && priceRange !== 'all' && priceLabels[priceRange]) {
             prefix.push(priceLabels[priceRange]);
             isSpecific = true;
           }
-          
-          let desc = prefix.join(' ') + ' ศูนย์รวมรถบ้านมือเดียวในจังหวัดเชียงใหม่ สภาพดี ฟรีดาวน์ พร้อมรับประกัน 1 ปี';
+
+          let desc =
+            prefix.join(' ') +
+            ' ศูนย์รวมรถบ้านมือเดียวในจังหวัดเชียงใหม่ สภาพดี ฟรีดาวน์ พร้อมรับประกัน 1 ปี';
           title = prefix.join(' ') + ' เชียงใหม่ สภาพดี ฟรีดาวน์';
-          
+
           return { title, desc, isSpecific };
         };
         const dynamicSEO = getDynamicSEO();
-        
+
         return (
           <SEO
-            title={dynamicSEO.isSpecific ? `${dynamicSEO.title}${safeTotalPages > 1 && safePage > 1 ? ` หน้า ${safePage}` : ''} | ครูหนึ่งรถสวย` : `${seoAllCars.titleBase}${safeTotalPages > 1 && safePage > 1 ? ` หน้า ${safePage}` : ''} | ครูหนึ่งรถสวย`}
-            description={dynamicSEO.isSpecific ? (dynamicSEO.desc + " โทร 094-064-9018") : `ดูรถยนต์มือสองคุณภาพดีทั้งหมด ${Number.isFinite(totalCount) ? totalCount : 0} คัน ในเชียงใหม่และภาคเหนือ คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda นัดหมายดูรถโทร 094-064-9018`}
-            keywords={[seoAllCars.primary, ...seoAllCars.secondary, ...seoAllCars.longTail.slice(0, 5)]}
+            title={
+              dynamicSEO.isSpecific
+                ? `${dynamicSEO.title}${safeTotalPages > 1 && safePage > 1 ? ` หน้า ${safePage}` : ''} | ครูหนึ่งรถสวย`
+                : `${seoAllCars.titleBase}${safeTotalPages > 1 && safePage > 1 ? ` หน้า ${safePage}` : ''} | ครูหนึ่งรถสวย`
+            }
+            description={
+              dynamicSEO.isSpecific
+                ? dynamicSEO.desc + ' โทร 094-064-9018'
+                : `ดูรถยนต์มือสองคุณภาพดีทั้งหมด ${Number.isFinite(totalCount) ? totalCount : 0} คัน ในเชียงใหม่และภาคเหนือ คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda นัดหมายดูรถโทร 094-064-9018`
+            }
+            keywords={[
+              seoAllCars.primary,
+              ...seoAllCars.secondary,
+              ...seoAllCars.longTail.slice(0, 5),
+            ]}
             url={seoPath}
             image={`https://www.chiangmaiusedcar.com/api/og?src=${encodeURIComponent(
               '/herobanner/heroallcars-1400w.webp'
@@ -372,9 +394,6 @@ export default function AllCars({
       })()}
 
       <Head>
-        <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="" />
-        <link rel="dns-prefetch" href="//cdn.shopify.com" />
-
         <link
           rel="preload"
           as="image"

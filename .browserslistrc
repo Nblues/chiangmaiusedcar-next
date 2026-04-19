@@ -1,25 +1,6 @@
-# Modern browsers only - Remove legacy polyfills
-# Targets ES2021+ baseline: eliminates ALL Next.js polyfills (Array.at, Object.hasOwn, etc.)
-# Minimum versions required:
-#   Array.prototype.at → Chrome 92, Firefox 90, Safari 15.4, Edge 92
-#   Object.hasOwn      → Chrome 93, Firefox 92, Safari 15.4, Edge 93
-# iOS 15.4 released March 2022 — covers ~97%+ of active iOS devices in 2026
-
-[production]
-chrome >= 93
-edge >= 93
-firefox >= 92
-safari >= 15.4
-ios >= 15.4
-
-# Exclude legacy browsers
+>0.3%
 not dead
 not op_mini all
 not ie 11
-not samsung < 13
-not kaios > 0
-
-[development]
-last 1 chrome version
-last 1 firefox version
-last 1 safari version
+not ie_mob 11
+not < 2%

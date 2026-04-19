@@ -221,6 +221,7 @@ export async function getStaticProps() {
 
   return {
     props: {
+      seoData: require('../config/seo-keyword-map').SEO_KEYWORD_MAP.usedCarsLanding,
       cars,
       homeOgImage,
       structuredData,
@@ -236,9 +237,9 @@ const TikTokFeed = dynamic(() => import('../components/TikTokFeed'), {
   loading: () => <div className="min-h-[400px] w-full" aria-hidden="true" />,
 });
 
-import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
-const seoUsedCarsLanding = SEO_KEYWORD_MAP.usedCarsLanding;
 export default function UsedCarsChiangMai({
+  seoData,
+
   cars,
   homeOgImage,
   structuredData,
@@ -356,8 +357,8 @@ export default function UsedCarsChiangMai({
         />
       </Head>
       <SEO
-        title={seoUsedCarsLanding.title}
-        description={seoUsedCarsLanding.description}
+        title={seoData.title}
+        description={seoData.description}
         url="/used-cars-chiang-mai"
         image={homeOgImage}
         type="website"

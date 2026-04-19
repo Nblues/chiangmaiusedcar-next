@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import A11yImage from '../components/A11yImage';
 import SEO from '../components/SEO';
 import Head from 'next/head';
-import { SEO_KEYWORD_MAP } from '../config/seo-keyword-map';
 
-export default function About() {
-  const seoAbout = SEO_KEYWORD_MAP.about;
+export default function About({ seoAbout }) {
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const features = [
