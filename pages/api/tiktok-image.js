@@ -66,23 +66,23 @@ export default async function handler(req, res) {
     let finalContentType = contentType;
 
     // Use Sharp to optimize and resize TikTok covers
-    // Mobile view is roughly 237x421, we set width slightly higher for retina displays.
+    // Mobile view is roughly 237x421, desktop max is 315x560.
     try {
       const sharp = (await import('sharp')).default;
       outputBuffer = await sharp(originalBuffer)
-        .resize({ width: 480, withoutEnlargement: true })
-        .webp({ quality: 80, effort: 4 })
+        .resize({ width: 360, withoutEnlargement: true })
+        .webp({ quality: 65, effort: 4 })
         .toBuffer();
       finalContentType = 'image/webp';
     } catch (sharpError) {
       console.error('TikTok API Sharp processing error:', sharpError);
     }
 
-    // s-maxage=31536000 caches on Vercel CDN for 1 year, cutting function invocations
+    // Cache on Vercel CDN and browser for 1 year (31536000 seconds)
     res.setHeader('Content-Type', finalContentType);
     res.setHeader(
       'Cache-Control',
-      'public, max-age=86400, s-maxage=31536000, stale-while-revalidate=2592000'
+      'public, max-age=31536000, s-maxage=31536000, stale-while-revalidate=86400'
     );
     res.setHeader('X-Content-Type-Options', 'nosniff');
     return res.status(200).send(outputBuffer);
