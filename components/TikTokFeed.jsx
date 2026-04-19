@@ -35,7 +35,7 @@ export default function TikTokFeed({ videos }) {
           thumbnailUrl: [
             video.image || 'https://www.chiangmaiusedcar.com/herobanner/outdoorbanner-480w.webp',
           ],
-          uploadDate: video.date_published || new Date().toISOString(),
+          uploadDate: video.date_published || '2024-01-01T12:00:00Z',
           contentUrl: url,
           embedUrl: url,
         },
@@ -68,7 +68,7 @@ export default function TikTokFeed({ videos }) {
             const url = video.url || 'https://www.tiktok.com/@krunueng_usedcar';
             const rawImageUrl = video.image || null;
             const imageUrl = rawImageUrl
-              ? `/api/tiktok-image?url=${encodeURIComponent(rawImageUrl)}`
+              ? `/api/tiktok-image?url=${encodeURIComponent(rawImageUrl)}&w=360&q=65`
               : '/herobanner/outdoorbanner-480w.webp';
 
             return (
