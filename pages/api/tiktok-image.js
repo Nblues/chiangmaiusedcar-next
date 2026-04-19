@@ -60,13 +60,34 @@ export default async function handler(req, res) {
     }
 
     const contentType = upstream.headers.get('content-type') || 'image/jpeg';
-    const buffer = await upstream.arrayBuffer();
+    const originalBuffer = Buffer.from(await upstream.arrayBuffer());
 
-    res.setHeader('Content-Type', contentType);
-    res.setHeader('Cache-Control', 'public, max-age=31536000, stale-while-revalidate=86400');
+    let outputBuffer = originalBuffer;
+    let finalContentType = contentType;
+
+    // Use Sharp to optimize and resize TikTok covers
+    // Mobile view is roughly 237x421, we set width slightly higher for retina displays.
+    try {
+      const sharp = (await import('sharp')).default;
+      outputBuffer = await sharp(originalBuffer)
+        .resize({ width: 480, withoutEnlargement: true })
+        .webp({ quality: 80, effort: 4 })
+        .toBuffer();
+      finalContentType = 'image/webp';
+    } catch (sharpError) {
+      console.error('TikTok API Sharp processing error:', sharpError);
+    }
+
+    // s-maxage=31536000 caches on Vercel CDN for 1 year, cutting function invocations
+    res.setHeader('Content-Type', finalContentType);
+    res.setHeader(
+      'Cache-Control',
+      'public, max-age=86400, s-maxage=31536000, stale-while-revalidate=2592000'
+    );
     res.setHeader('X-Content-Type-Options', 'nosniff');
-    return res.status(200).send(Buffer.from(buffer));
-  } catch {
+    return res.status(200).send(outputBuffer);
+  } catch (error) {
+    console.error('TikTok API fetch error:', error);
     return res.status(502).json({ error: 'Failed to fetch image' });
   }
 }
