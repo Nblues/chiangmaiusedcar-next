@@ -186,12 +186,27 @@ export default function FacebookReviewsSection() {
           ))}
         </div>
 
-        {/* Scroll Indicator - ปรับข้อความให้เหมาะสมกับมือถือ */}
-        <div className="text-center mt-4">
-          <p className="text-sm text-gray-500 font-prompt">
-            <span className="md:hidden">เลื่อนดูรีวิวเพิ่มเติม</span>
-            <span className="hidden md:inline">คลิกปุ่มลูกศร หรือ เลื่อนดูรีวิวเพิ่มเติม</span>
-          </p>
+        {/* Scroll Indicator - ปรับข้อความให้เหมาะสมกับมือถือและเดสก์ท็อปให้ใหญ่คมชัด */}
+        <div className="text-center mt-6 mb-2">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-50 border border-gray-200 rounded-full shadow-sm text-gray-700 font-prompt hover:bg-gray-100 transition-colors">
+            <svg
+              className="w-5 h-5 text-gray-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+              />
+            </svg>
+            <p className="text-sm sm:text-base font-medium tracking-wide">
+              <span className="md:hidden">เลื่อนดูรีวิวเพิ่มเติม</span>
+              <span className="hidden md:inline">คลิกปุ่มลูกศร หรือ เลื่อนดูรีวิวเพิ่มเติม</span>
+            </p>
+          </div>
         </div>
       </div>
 

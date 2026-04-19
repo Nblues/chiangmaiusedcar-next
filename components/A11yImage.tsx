@@ -168,9 +168,9 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
       imgAttributes.sizes = generatedSizes;
     }
 
-    // Add fetchpriority as lowercase attribute (HTML spec)
+    // Add fetchpriority as React prop (React 18.3+ supported)
     if (fetchPriorityAttr !== 'auto') {
-      imgAttributes['fetchpriority'] = fetchPriorityAttr;
+      imgAttributes['fetchPriority'] = fetchPriorityAttr;
     }
 
     // Add onLoad and onError handlers from props

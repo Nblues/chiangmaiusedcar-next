@@ -312,9 +312,10 @@ export default function Home({
             width={1400}
             height={467}
             className="w-full h-auto object-contain block mx-auto text-transparent"
+            style={{ aspectRatio: '1400/467' }}
             decoding="sync"
             loading="eager"
-            fetchpriority="high"
+            fetchPriority="high"
           />
         </div>
       </header>
