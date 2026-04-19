@@ -81,13 +81,13 @@ export default function TikTokFeed({ videos }) {
               >
                 {/* Thumbnail container (9:16 aspect ratio for TikTok) */}
                 <div className="relative w-full aspect-[9/16] bg-black overflow-hidden flex-shrink-0">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    referrerPolicy="no-referrer"
+                  <A11yImage
                     src={imageUrl}
                     alt={`หน้าปกวิดีโอ TikTok: ${title.slice(0, 100)}`}
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                    fill
                     loading="lazy"
+                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                   />
                   {/* Play Button Overlay */}
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">

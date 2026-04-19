@@ -227,7 +227,7 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
         nextProps.fetchPriority = fetchPriorityAttr;
       }
 
-      return <NextImage ref={ref as any} {...nextProps} unoptimized={src.startsWith('/api')} />;
+      return <NextImage ref={ref as any} {...nextProps} />;
     }
 
     // eslint-disable-next-line jsx-a11y/alt-text
