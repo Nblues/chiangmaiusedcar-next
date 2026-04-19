@@ -83,9 +83,9 @@ export default function FacebookReviewsSection() {
           รีวิวจากลูกค้าจริง
         </h2>
         <p className="text-base sm:text-lg text-orange-700 font-prompt max-w-sm md:max-w-xl mx-auto px-4 leading-relaxed">
-          ความประทับใจจากลูกค้าที่เลือกใช้บริการ
+          ความประทับใจจากลูกค้า
           <br className="block sm:hidden" />
-          <span className="hidden sm:inline"> </span>ครูหนึ่งรถสวย
+          <span className="hidden sm:inline"> </span>ที่เลือกใช้บริการ ครูหนึ่งรถสวย
         </p>
       </div>
 
