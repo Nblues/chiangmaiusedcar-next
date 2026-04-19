@@ -119,7 +119,7 @@ export default function HomeWhyChooseSection({ getBrandCount }) {
                       {brand.name}
                     </span>
                   </div>
-                  <span className="ml-1.5 sm:ml-2 inline-flex items-center justify-center h-6 sm:h-7 px-2 sm:px-3 whitespace-nowrap overflow-visible text-[11px] sm:text-sm font-bold leading-none bg-gray-100/80 text-gray-600 group-hover:bg-blue-50 group-hover:text-primary rounded-full transition-colors flex-shrink-0">
+                  <span className="ml-1 sm:ml-2 text-[10px] sm:text-xs md:text-sm font-medium text-gray-500 group-hover:text-primary transition-colors flex-shrink-0 whitespace-nowrap">
                     {count}
                   </span>
                 </Link>
