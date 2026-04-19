@@ -312,7 +312,7 @@ export default function Home({
             width={1400}
             height={467}
             className="w-full h-auto object-contain block mx-auto text-transparent"
-            decoding="async"
+            decoding="sync"
             loading="eager"
             fetchPriority="high"
           />
