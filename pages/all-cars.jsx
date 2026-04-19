@@ -91,16 +91,16 @@ export default function AllCars({
     const img = heroImgRef.current;
     if (!img) return;
 
-    // React/ESLint disagree on `fetchPriority` vs `fetchpriority`.
+    // React/ESLint disagree on `fetchPriority` vs `fetchPriority`.
     // Set it imperatively so browsers get the hint without React warnings.
     try {
-      img.setAttribute('fetchpriority', 'high');
+      img.setAttribute('fetchPriority', 'high');
     } catch {
       // ignore
     }
 
     try {
-      img.setAttribute('fetchpriority', 'high');
+      img.setAttribute('fetchPriority', 'high');
     } catch {
       // ignore
     }
@@ -401,7 +401,7 @@ export default function AllCars({
           href="/herobanner/heroallcars-640w.webp"
           imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w"
           imageSizes="(max-width: 640px) 100vw, 640px"
-          fetchpriority="high"
+          fetchPriority="high"
         />
 
         <link
@@ -411,7 +411,7 @@ export default function AllCars({
           href="/herobanner/heroallcars-1024w.webp"
           imageSrcSet="/herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
           imageSizes="(max-width: 1400px) 100vw, 1400px"
-          fetchpriority="high"
+          fetchPriority="high"
         />
       </Head>
 

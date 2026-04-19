@@ -51,8 +51,7 @@ export default class MyDocument extends Document {
               type="image/webp"
               imageSrcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
               imageSizes="(max-width: 1400px) 100vw, 1400px"
-              // eslint-disable-next-line react/no-unknown-property
-              fetchpriority="high"
+              fetchPriority="high"
             />
           )}
 
@@ -64,8 +63,7 @@ export default class MyDocument extends Document {
               type="image/webp"
               imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
               imageSizes="(max-width: 1400px) 100vw, 1400px"
-              // eslint-disable-next-line react/no-unknown-property
-              fetchpriority="high"
+              fetchPriority="high"
             />
           )}
 

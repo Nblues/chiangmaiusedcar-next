@@ -1,4 +1,4 @@
-﻿/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/no-img-element */
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
@@ -15,28 +15,28 @@ import { mergeCarSpecs } from '../lib/mergeCarSpecs';
 
 const HOME_FAQS = [
   {
-    q: 'ดาวน์ 0% จริงไหม?',
-    a: 'จริง! ครูหนึ่งรถสวยมีโปรโมชันฟรีดาวน์ 0% ลูกค้าสามารถออกรถโดยไม่ต้องวางเงินดาวน์ ตรวจสภาพครบถ้วน ตรวจสอบประวัติรถทุกคันก่อนส่งมอบ พร้อมเอกสารครบถ้วน',
+    q: '��ǹ� 0% ��ԧ���?',
+    a: '��ԧ! ���˹��ö����������ѹ��մ�ǹ� 0% �١�������ö�͡ö������ͧ�ҧ�Թ��ǹ� ��Ǩ��Ҿ�ú��ǹ ��Ǩ�ͺ����ѵ�ö�ء�ѹ��͹���ͺ ������͡��äú��ǹ',
   },
   {
-    q: 'ติดเครดิตบูโรออกได้ไหม?',
-    a: 'ออกได้! เรามีไฟแนนซ์หลากหลายรายผู้ให้สินเชื่อ รองรับทุกอาชีพ แนะนำให้ทัก LINE @krunung.car หรือโทร 094-064-9018 เพื่อประเมินเบื้องต้น ทีมงานจะช่วยหาวิธีที่เหมาะสมที่สุด',
+    q: '�Դ�ôԵ�����͡�����?',
+    a: '�͡��! ������ṹ����ҡ������¼������Թ���� �ͧ�Ѻ�ء�Ҫվ �й����ѡ LINE @krunung.car ������ 094-064-9018 ���ͻ����Թ���ͧ�� ����ҹ�Ъ������Ըշ�������������ش',
   },
   {
-    q: 'มีรับประกันไหม?',
-    a: 'รับประกันเครื่องยนต์และเกียร์ 1 ปีเต็ม ตรวจสภาพครบถ้วนก่อนส่งมอบโดยช่างผู้เชี่ยวชาญ มีบริการหลังการขายและศูนย์บริการครบวงจร',
+    q: '���Ѻ��Сѹ���?',
+    a: '�Ѻ��Сѹ����ͧ¹���������� 1 ����� ��Ǩ��Ҿ�ú��ǹ��͹���ͺ�ª�ҧ�������Ǫҭ �պ�ԡ����ѧ��â������ٹ���ԡ�äúǧ��',
   },
   {
-    q: 'รถมือสองเชียงใหม่ที่ไหนดี?',
-    a: 'ครูหนึ่งรถสวย (www.chiangmaiusedcar.com) เป็นศูนย์รถมือสองออนไลน์ชั้นนำในเชียงใหม่ คัดสรรรถบ้านคุณภาพดี ฟรีดาวน์ ผ่อนถูก รับประกัน 1 ปี จัดส่งฟรีทั่วประเทศ',
+    q: 'ö����ͧ��§�������˹��?',
+    a: '���˹��ö��� (www.chiangmaiusedcar.com) ���ٹ��ö����ͧ�͹�Ź��鹹����§���� �Ѵ���ö��ҹ�س�Ҿ�� ��մ�ǹ� ��͹�١ �Ѻ��Сѹ 1 �� �Ѵ�觿�շ��ǻ����',
   },
   {
-    q: 'มีรถยี่ห้ออะไรบ้าง?',
-    a: 'มีรถยี่ห้อชั้นนำทุกยี่ห้อ ได้แก่ Toyota, Honda, Nissan, Mazda, Mitsubishi, Isuzu, Ford ทั้งรถเก๋ง รถกระบะ รถ SUV และรถครอบครัว 7 ที่นั่ง ราคาตั้งแต่ 100,000 บาทขึ้นไป',
+    q: '��ö���������ú�ҧ?',
+    a: '��ö�����ͪ�鹹ӷء������ ���� Toyota, Honda, Nissan, Mazda, Mitsubishi, Isuzu, Ford ���ö�� ö��к� ö SUV ���ö��ͺ���� 7 ����� �Ҥҵ���� 100,000 �ҷ����',
   },
   {
-    q: 'จัดส่งได้ไหม?',
-    a: 'จัดส่งฟรีทั่วประเทศ! มีบริการนำรถส่งถึงบ้านลูกค้า ตรวจสภาพก่อนส่งมอบทุกครั้ง',
+    q: '�Ѵ�������?',
+    a: '�Ѵ�觿�շ��ǻ����! �պ�ԡ�ù�ö�觶֧��ҹ�١��� ��Ǩ��Ҿ��͹���ͺ�ء����',
   },
 ];
 
@@ -93,7 +93,7 @@ function buildHomeItemListJsonLd(inputCars) {
         : `${site}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
       : `${site}/herobanner/cnxcar.webp`;
 
-    const vendorOrBrand = car?.vendor || car?.brand || car?.title?.split(' ')?.[0] || 'รถยนต์';
+    const vendorOrBrand = car?.vendor || car?.brand || car?.title?.split(' ')?.[0] || 'ö¹��';
     const model = car?.model || car?.title || '';
     const year = car?.year || '';
     const title = car?.title || `${vendorOrBrand} ${model}`.trim();
@@ -113,7 +113,7 @@ function buildHomeItemListJsonLd(inputCars) {
         additionalType: 'https://schema.org/Car',
         '@id': carUrl,
         name: title,
-        description: `${vendorOrBrand} ${model} ${year} ราคา ${priceInfo.display} บาท`.trim(),
+        description: `${vendorOrBrand} ${model} ${year} �Ҥ� ${priceInfo.display} �ҷ`.trim(),
         brand: {
           '@type': 'Brand',
           name: vendorOrBrand,
@@ -144,8 +144,8 @@ function buildHomeItemListJsonLd(inputCars) {
   return JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'รถมือสองแนะนำ',
-    description: 'รถมือสองคุณภาพดีจากครูหนึ่งรถสวย',
+    name: 'ö����ͧ�й�',
+    description: 'ö����ͧ�س�Ҿ�ըҡ���˹��ö���',
     numberOfItems: cars.length,
     itemListElement,
   });
@@ -170,20 +170,20 @@ export default function Home({
       // Use real data if available, otherwise use sample data
       if (brandCounts && Object.keys(brandCounts).length > 0) {
         const count = brandCounts[normalizedBrand] || 0;
-        return count > 0 ? `${count} คัน` : '0 คัน';
+        return count > 0 ? `${count} �ѹ` : '0 �ѹ';
       }
 
       // Fallback sample data
       const sampleCounts = {
-        toyota: '50+ คัน',
-        honda: '30+ คัน',
-        nissan: '20+ คัน',
-        mazda: '15+ คัน',
-        mitsubishi: '10+ คัน',
-        ford: '8+ คัน',
+        toyota: '50+ �ѹ',
+        honda: '30+ �ѹ',
+        nissan: '20+ �ѹ',
+        mazda: '15+ �ѹ',
+        mitsubishi: '10+ �ѹ',
+        ford: '8+ �ѹ',
       };
 
-      return sampleCounts[normalizedBrand] || '0 คัน';
+      return sampleCounts[normalizedBrand] || '0 �ѹ';
     },
     [brandCounts]
   );
@@ -297,7 +297,7 @@ export default function Home({
         image={homeOgImage}
         type="website"
         pageType="home"
-        breadcrumbs={[{ name: 'หน้าแรก', url: '/' }]}
+        breadcrumbs={[{ name: '˹���á', url: '/' }]}
         structuredData={homeFaqSchema}
       />
 
@@ -308,13 +308,13 @@ export default function Home({
             src="/herobanner/newherobanner-414w.webp"
             srcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
             sizes="(max-width: 1400px) 100vw, 1400px"
-            alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
+            alt="����� ���˹��ö��� ö����ͧ��§����"
             width={1400}
             height={467}
             className="w-full h-auto object-contain block mx-auto text-transparent"
-            decoding="sync"
+            decoding="async"
             loading="eager"
-            fetchpriority="high"
+            fetchPriority="high"
           />
         </div>
       </header>
@@ -326,17 +326,16 @@ export default function Home({
         <div className="hero-card max-w-6xl w-[95%] mx-auto my-3 md:my-6 flex flex-col md:flex-row items-center gap-4 md:gap-6 px-4 py-5 md:px-8 md:py-8 rounded-xl md:rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-xl sm:text-2xl md:text-4xl font-extrabold text-primary mb-1 md:mb-2 font-prompt">
-              <span className="block md:inline">ศูนย์รวมรถบ้านมือสองเชียงใหม่</span>{' '}
+              <span className="block md:inline">�ٹ�����ö��ҹ����ͧ��§����</span>{' '}
               <span className="block md:inline mt-1 md:mt-0 text-primary text-xl sm:text-2xl md:text-4xl">
-                คุณภาพพรีเมียม
+                �س�Ҿ��������
               </span>
             </h1>
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-orange-700 mb-2 md:mb-4 font-prompt">
-              ฟรีดาวน์ 0% อนุมัติไว รับประกัน 1 ปีเต็ม
+              ��մ�ǹ� 0% ͹��ѵ��� �Ѻ��Сѹ 1 �����
             </h2>
             <p className="text-sm md:text-base leading-snug md:leading-relaxed text-gray-900 font-prompt">
-              ครูหนึ่งรถสวย คัดเฉพาะรถมือเดียวจากป้ายแดง สภาพนางฟ้า บริการจัดส่งทั่วประเทศไทย
-              ซื้อ-ขาย อุ่นใจ มีใบรับรอง
+              ���˹��ö��� �Ѵ੾��ö������Ǩҡ����ᴧ ��Ҿ�ҧ��� ��ԡ�èѴ�觷��ǻ������ ����-��� ���� ����Ѻ�ͧ
             </p>
           </div>
           <div className="flex flex-col sm:flex-row md:flex-col gap-2 md:gap-4 w-full md:w-auto md:min-w-[200px]">
@@ -345,21 +344,21 @@ export default function Home({
               prefetch={false}
               className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-accent-800 text-white hover:bg-accent-900 transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
             >
-              เลือกซื้อรถยนต์
+              ���͡����ö¹��
             </Link>
             <Link
               href="/used-cars-chiang-mai"
               prefetch={false}
               className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-orange-700 text-orange-800 hover:bg-orange-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
             >
-              ฝากขายรถ
+              �ҡ���ö
             </Link>
             <Link
               href="/sell-car"
               prefetch={false}
               className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
             >
-              ขายด่วน!
+              ��´�ǹ!
             </Link>
           </div>
         </div>
@@ -377,30 +376,30 @@ export default function Home({
           {/* Why Choose Us Section - 2026 Modern Design (extracted) */}
           <HomeWhyChooseSection getBrandCount={getBrandCount} />
 
-          {/* รถแนะนำเข้าใหม่ */}
+          {/* ö�й�������� */}
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-prompt">
-              รถแนะนำเข้าใหม่วันนี้
+              ö�й���������ѹ���
             </h2>
             <p className="text-base text-gray-700 font-prompt leading-relaxed max-w-3xl mx-auto">
-              รถเก๋ง รถกระบะ รถครอบครัว รถอีโค่คาร์ SUV โฟร์วีล{' '}
-              <span className="font-bold text-primary">คัดเฉพาะรถมือเดียว ประวัติใส 100%</span>{' '}
-              คัดสรรมาเพื่อคุณโดยเฉพาะ ผ่านการตรวจสอบอย่างละเอียด เพื่อให้คุณมั่นใจในทุกการเดินทาง
+              ö�� ö��к� ö��ͺ���� ö������� SUV ������{' '}
+              <span className="font-bold text-primary">�Ѵ੾��ö������� ����ѵ��� 100%</span>{' '}
+              �Ѵ��������ͤس��੾�� ��ҹ��õ�Ǩ�ͺ���ҧ�����´ �������س����㹷ء����Թ�ҧ
             </p>
           </div>
           {/* Cars grid (standardized layout across pages) */}
           <div className="-mx-6 md:-mx-8 lg:-mx-12">
             <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-5 ipadpro:px-3 lg:px-6">
-              <section aria-label="รถเข้าใหม่แนะนำวันนี้">
+              <section aria-label="ö��������й��ѹ���">
                 {safeCars.length === 0 ? (
                   // Empty state when no cars available
                   <div className="text-center py-12">
-                    <div className="text-6xl mb-4">🚗</div>
+                    <div className="text-6xl mb-4">??</div>
                     <h3 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">
-                      ขออภัย ยังไม่มีรถให้แสดง
+                      ������ �ѧ�����ö����ʴ�
                     </h3>
                     <p className="text-gray-500 font-prompt mb-4">
-                      เรากำลังอัปเดตรถใหม่ ติดตามได้ที่ Facebook หรือ LINE
+                      ��ҡ��ѧ�ѻവö���� �Դ������� Facebook ���� LINE
                     </p>
                     <a
                       href="https://lin.ee/8ugfzstD"
@@ -408,7 +407,7 @@ export default function Home({
                       rel="noopener noreferrer"
                       className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-[48px] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
                     >
-                      <span>ติดต่อสอบถาม</span>
+                      <span>�Դ����ͺ���</span>
                     </a>
                   </div>
                 ) : (
@@ -435,9 +434,9 @@ export default function Home({
               href="/all-cars"
               prefetch={false}
               className="flex w-full justify-center md:inline-flex md:w-auto items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-full sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
-              aria-label="ดูรถทั้งหมด ครูหนึ่งรถสวย"
+              aria-label="��ö������ ���˹��ö���"
             >
-              <span>ดูรถทั้งหมด</span>
+              <span>��ö������</span>
               <svg className="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
@@ -452,7 +451,7 @@ export default function Home({
           {/* TikTok Feed Section */}
           {tiktokVideos && tiktokVideos.length > 0 && <TikTokFeed videos={tiktokVideos} />}
 
-          {/* รีวิว Facebook 9 รีวิวจริง (โหลดเมื่อใกล้ viewport) */}
+          {/* ����� Facebook 9 ����Ǩ�ԧ (��Ŵ�������� viewport) */}
           <div id="fb-reviews-anchor" className="h-px w-full" aria-hidden="true" />
           {showFbReviews && <FacebookReviewsSection />}
 
@@ -466,8 +465,8 @@ export default function Home({
         {showSocialShare && (
           <SocialShareButtons
             url={socialShareUrl}
-            title="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่คุณภาพดี"
-            description="รถมือสองเชียงใหม่คุณภาพดี คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย"
+            title="���˹��ö��� - ö����ͧ��§����س�Ҿ��"
+            description="ö����ͧ��§����س�Ҿ�� �Ѵ��÷ء�ѹ ��մ�ǹ� 0% �Ѻ��Сѹ 1 �� �觿�շ�����"
             position="fixed"
           />
         )}

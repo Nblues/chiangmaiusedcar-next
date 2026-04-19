@@ -28,7 +28,7 @@ export default function HomeFaqSection() {
                 width={128}
                 height={128}
                 loading="lazy"
-                fetchpriority="low"
+                fetchPriority="low"
                 className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
               />
             </div>
@@ -55,7 +55,7 @@ export default function HomeFaqSection() {
                 width={128}
                 height={128}
                 loading="lazy"
-                fetchpriority="low"
+                fetchPriority="low"
                 className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
               />
             </div>
@@ -81,7 +81,7 @@ export default function HomeFaqSection() {
                 width={128}
                 height={128}
                 loading="lazy"
-                fetchpriority="low"
+                fetchPriority="low"
                 className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
               />
             </div>
@@ -105,7 +105,7 @@ export default function HomeFaqSection() {
                 width={128}
                 height={128}
                 loading="lazy"
-                fetchpriority="low"
+                fetchPriority="low"
                 className="w-full h-full max-w-none object-contain scale-[1.15] md:scale-100 origin-center"
               />
             </div>
