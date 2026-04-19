@@ -57,7 +57,9 @@ export default function TikTokFeed({ videos }) {
             <span className="block sm:inline mt-1 sm:mt-0">และสาระดีๆ จาก TikTok</span>
           </h2>
           <p className="mt-3 sm:mt-4 text-sm sm:text-lg text-gray-600 font-prompt leading-relaxed px-4 max-w-xl mx-auto">
-            ติดตามคลิปอัปเดตรถเข้าใหม่ การส่งมอบรถให้ลูกค้า
+            ติดตามคลิปอัปเดตรถเข้าใหม่
+            <br className="block sm:hidden" />
+            <span className="hidden sm:inline"> </span>การส่งมอบรถให้ลูกค้า
             <br className="hidden sm:inline" />
             <span className="sm:hidden"> </span>และความรู้เรื่องรถมือสอง
           </p>
