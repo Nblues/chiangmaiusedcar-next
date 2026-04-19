@@ -6,6 +6,9 @@ import SEO from '../components/SEO.jsx';
 import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
 import { readCarStatuses } from '../lib/carStatusStore.js';
 import Link from 'next/link';
+import CarCard from '../components/CarCard';
+import Breadcrumb from '../components/Breadcrumb';
+import HomeSearchSection from '../components/HomeSearchSection';
 import { SEO_HOME } from '../config/seo-keywords';
 import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
 import { COMMON_OFFER_EXTENSIONS } from '../config/business';
@@ -41,16 +44,6 @@ const HOME_FAQS = [
 ];
 
 // Lazy load non-critical components to reduce TBT
-const CarCard = dynamic(() => import('../components/CarCard'), {
-  loading: () => <div className="h-[300px] w-full bg-gray-100 animate-pulse rounded-lg"></div>,
-});
-const HomeSearchSection = dynamic(() => import('../components/HomeSearchSection'), {
-  ssr: false,
-  loading: () => <div className="h-[200px] w-full bg-gray-100 animate-pulse rounded-lg"></div>,
-});
-const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
-  loading: () => null,
-});
 const SocialShareButtons = dynamic(() => import('../components/SocialShareButtons'), {
   ssr: false,
   loading: () => null,
@@ -313,7 +306,7 @@ export default function Home({
             height={467}
             className="w-full h-auto object-contain block mx-auto text-transparent"
             style={{ aspectRatio: '1400/467' }}
-            decoding="sync"
+            decoding="async"
             loading="eager"
             fetchPriority="high"
           />
@@ -414,9 +407,9 @@ export default function Home({
                   </div>
                 ) : (
                   <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
-                    {safeCars.slice(0, showAllCars ? 8 : 4).map(car => {
+                    {safeCars.slice(0, showAllCars ? 8 : 4).map((car, index) => {
                       const mergedCar = mergeCarSpecs(car, null);
-                      return <CarCard key={car.id} car={mergedCar} />;
+                      return <CarCard key={car.id} car={mergedCar} priority={index < 4} />;
                     })}
                     {!showAllCars &&
                       safeCars.length > 4 &&
