@@ -847,7 +847,7 @@ export default function HomeDeferredSections({
                     key={brand.id}
                     href={`/used-cars-chiang-mai-brand/${brand.id}`}
                     prefetch={true}
-                    className="snap-start shrink-0 group relative flex items-center justify-center gap-1.5 sm:gap-2.5 pl-3 pr-2.5 sm:pl-5 sm:pr-4 py-2.5 sm:py-3.5 bg-white rounded-full border border-gray-200/80 hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95"
+                    className="snap-start shrink-0 min-w-max group relative flex items-center justify-center gap-2 sm:gap-2.5 pl-4 pr-3 sm:pl-5 sm:pr-4 py-2.5 sm:py-3.5 bg-white rounded-full border border-gray-200/80 hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95"
                   >
                     <svg
                       className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors flex-shrink-0"
@@ -859,7 +859,7 @@ export default function HomeDeferredSections({
                     <span className="font-bold text-gray-800 text-xs sm:text-base font-prompt group-hover:text-primary transition-colors whitespace-nowrap">
                       {brand.name}
                     </span>
-                    <span className="text-xs sm:text-sm font-semibold text-gray-600 group-hover:text-primary transition-colors flex-shrink-0 whitespace-nowrap bg-gray-50/80 px-2.5 py-1 rounded-md">
+                    <span className="text-xs sm:text-sm font-semibold text-gray-600 group-hover:text-primary transition-colors flex-shrink-0 whitespace-nowrap bg-gray-50/80 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md">
                       {count}
                     </span>
                   </Link>
