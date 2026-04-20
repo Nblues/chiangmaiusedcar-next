@@ -104,7 +104,7 @@ export default function HomeWhyChooseSection({ getBrandCount }) {
                   key={brand.id}
                   href={`/all-cars?brand=${brand.id}`}
                   prefetch={false}
-                  className="group relative flex items-center justify-between px-3.5 sm:px-5 py-3.5 sm:py-4 bg-white rounded-full border border-gray-200/80 hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95"
+                  className="group relative flex items-center justify-between px-2.5 sm:px-5 py-2.5 sm:py-4 bg-white rounded-full border border-gray-200/80 hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95"
                 >
                   <div className="flex items-center gap-2 sm:gap-3">
                     <svg
@@ -115,7 +115,7 @@ export default function HomeWhyChooseSection({ getBrandCount }) {
                     >
                       <path d={brand.icon} />
                     </svg>
-                    <span className="font-bold text-gray-800 text-sm sm:text-base md:text-lg font-prompt group-hover:text-primary transition-colors truncate">
+                    <span className="font-bold text-gray-800 text-xs sm:text-base md:text-lg font-prompt group-hover:text-primary transition-colors truncate">
                       {brand.name}
                     </span>
                   </div>
