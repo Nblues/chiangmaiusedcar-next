@@ -419,7 +419,7 @@ export default function UsedCarsChiangMai({
               <div className="w-full max-w-6xl mx-auto">
                 <div className="mx-auto w-full max-w-[22rem] xs:max-w-sm sm:w-auto sm:max-w-2xl rounded-2xl bg-black/80 sm:bg-black/85 sm:backdrop-blur-md ring-1 ring-white/30 px-3 xs:px-4 sm:px-6 py-3 xs:px-6 py-4 shadow-2xl">
                   <h1 className="text-lg xs:text-xl sm:text-2xl lg:text-4xl font-extrabold text-white font-prompt text-center leading-tight drop-shadow-md">
-                    ฝากขายรถมือสองกับครูหนึ่งรถสวย
+                    ศูนย์รับซื้อและฝากขายรถมือสองเชียงใหม่ | ครูหนึ่งรถสวย
                   </h1>
                   <p className="mt-1.5 xs:mt-2 sm:mt-3 text-white font-prompt leading-relaxed text-center text-sm sm:text-base font-semibold">
                     <span className="sm:hidden">ฝากขายรถแบบมืออาชีพ ได้ราคาดี</span>
