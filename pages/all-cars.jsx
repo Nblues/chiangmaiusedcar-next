@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
+import Image from 'next/image';
 import CarCard from '../components/CarCard';
 import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
@@ -452,28 +453,14 @@ export default function AllCars({
         {/* Container สำหรับรูปภาพที่ปรับอัตราส่วนตามภาพจริง (1400/474) ในทุกอุปกรณ์ */}
         <div className="relative w-full max-w-[1400px] aspect-[1400/474]">
           <div className="absolute inset-0" aria-hidden="true">
-            <picture>
-              <source
-                media="(max-width: 767px)"
-                srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w"
-                sizes="(max-width: 640px) 100vw, 640px"
-              />
-              <source
-                media="(min-width: 768px)"
-                srcSet="/herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
-                sizes="(max-width: 1400px) 100vw, 1400px"
-              />
-              <img
-                ref={heroImgRef}
-                src="/herobanner/heroallcars-1024w.webp"
-                srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
-                sizes="(max-width: 1400px) 100vw, 1400px"
-                alt="รวมรถยนต์มือสองคุณภาพดี ครูหนึ่งรถสวย เชียงใหม่"
-                className="w-full h-full object-cover object-top"
-                decoding="async"
-                loading="eager"
-              />
-            </picture>
+            <Image
+              src="/herobanner/heroallcars-1400w.webp"
+              alt="รวมรถยนต์มือสองคุณภาพดี ครูหนึ่งรถสวย เชียงใหม่"
+              className="object-cover object-top"
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1400px) 100vw, 1400px"
+              priority
+            />
           </div>
 
           {/* Dark overlay for better text readability (mobile + desktop) */}
