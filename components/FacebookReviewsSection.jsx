@@ -27,6 +27,12 @@ const REVIEWS = [
     rating: 5,
   },
   {
+    url: 'https://www.facebook.com/krunuengrodsauy/reviews',
+    name: 'Siwagorn Tee',
+    text: 'เพจผู้ติดตามหลักล้าน รถสวย โอน ต่อภาษีให้ ส่งถึงบ้าน บริการหลังการขายประทับใจ ติดต่อขอคำแนะนำได้ตลอดครับ ครูตอบแชทเอง👍👍👍🥰',
+    rating: 5,
+  },
+  {
     url: 'https://www.facebook.com/nongtee.myson/posts/pfbid02xgQBPEGhpPyeVemBEymTBUDmByZ33GJh2fvcWCfoznu5MjhQ82ZDptUXC53RHz5el',
     name: 'Tily Pattaya Kaewdee',
     text: 'พึ่งเป็นลูกค้า และพึ่งซื้อรถกับครูหนึ่งคะ ซึ่งเพจมีผูติดตามหลักเเสน แต่ครูหนึ่งตอบเเชทเองตลอด ถามอะไรตอบตลอดเวลา ใส่ใจดูแลหลังการขายดีมาก ซึ่งไม่เคยได้รับจากเต้นรถมือสอง จากที่ได๋มาก่อนคะ ประทับใจคะ',
@@ -48,12 +54,6 @@ const REVIEWS = [
     url: 'https://www.facebook.com/chalida.twoslim/posts/pfbid02aZHpp5tcQUdhhT4SiR4c4zZv4HhrBGEEUiEuSYSNzzc1PF9yTiTrRgqZYwNXER31l',
     name: 'Chalida Pakwan',
     text: 'ครูหนึ่งคือขายแต่รถดีๆจริงๆค่ะ ซื้อจากครูหนึ่งมาแล้ว 3 คัน',
-    rating: 5,
-  },
-  {
-    url: 'https://www.facebook.com/krunuengrodsauy/reviews',
-    name: 'Siwagorn Tee',
-    text: 'เพจผู้ติดตามหลักล้าน รถสวย โอน ต่อภาษีให้ ส่งถึงบ้าน บริการหลังการขายประทับใจ ติดต่อขอคำแนะนำได้ตลอดครับ ครูตอบแชทเอง👍👍👍🥰',
     rating: 5,
   },
 ];
