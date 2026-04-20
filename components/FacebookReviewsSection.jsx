@@ -22,8 +22,8 @@ const REVIEWS = [
   },
   {
     url: 'https://www.facebook.com/NaowaratUpachal/posts/pfbid0K9xEwV4KmtjFaQvZ7g7PsVchrPE1vko4esuchpSuuvBNrwVfhJ1KMkiqhYhxKhtSl',
-    name: 'คุณเนาวรัตน์',
-    text: 'พอใจมากค่ะ รถตรงปก ไม่โกหก จัดส่งตรงเวลา',
+    name: 'Siwagorn Tee',
+    text: 'เพจผู้ติดตามหลักล้าน รถสวย โอน ต่อภาษีให้ ส่งถึงบ้าน บริการหลังการขายประทับใจ ติดต่อขอคำแนะนำได้ตลอดครับ ครูตอบแชทเอง👍👍👍🥰',
     rating: 5,
   },
   {
