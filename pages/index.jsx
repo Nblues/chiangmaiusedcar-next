@@ -298,15 +298,25 @@ export default function Home({
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-[1400px] mx-auto">
           {/* LCP Optimized: Native responsive img for critical hero banner */}
-          {/* Next.js Image component for Hero Banner */}
-          <Image
+          {/* HTML img tag for Hero Banner because Next Image unoptimized handles srcSet poorly */}
+          <img
             src="/herobanner/newherobanner-1400w.webp"
-            alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
-            width={1400}
-            height={467}
+            srcSet="
+              /herobanner/newherobanner-414w.webp 414w,
+              /herobanner/newherobanner-640w.webp 640w,
+              /herobanner/newherobanner-828w.webp 828w,
+              /herobanner/newherobanner-1024w.webp 1024w,
+              /herobanner/newherobanner-1400w.webp 1400w
+            "
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
-            className="w-full h-auto object-contain block mx-auto"
-            priority
+            alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
+            className="w-full h-auto object-contain block mx-auto text-transparent"
+            style={{ aspectRatio: '1400/467' }}
+            decoding="async"
+            loading="eager"
+            fetchpriority="high"
+            width="1400"
+            height="467"
           />
         </div>
       </header>

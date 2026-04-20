@@ -401,9 +401,9 @@ export default function AllCars({
           rel="preload"
           as="image"
           media="(max-width: 767px)"
-          href="/herobanner/heroallcars-640w.webp"
-          imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w"
-          imageSizes="(max-width: 640px) 100vw, 640px"
+          href="/herobanner/heroallcars-828w.webp"
+          imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-828w.webp 828w"
+          imageSizes="100vw"
           fetchPriority="high"
         />
 
@@ -411,9 +411,9 @@ export default function AllCars({
           rel="preload"
           as="image"
           media="(min-width: 768px)"
-          href="/herobanner/heroallcars-1024w.webp"
-          imageSrcSet="/herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
-          imageSizes="(max-width: 1400px) 100vw, 1400px"
+          href="/herobanner/heroallcars-1200w.webp"
+          imageSrcSet="/herobanner/heroallcars-828w.webp 828w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1200w.webp 1200w, /herobanner/heroallcars-1400w.webp 1400w"
+          imageSizes="100vw"
           fetchPriority="high"
         />
       </Head>
@@ -458,7 +458,7 @@ export default function AllCars({
               alt="รวมรถยนต์มือสองคุณภาพดี ครูหนึ่งรถสวย เชียงใหม่"
               className="object-cover object-top"
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1400px) 100vw, 1400px"
+              sizes="100vw"
               priority
             />
           </div>
