@@ -58,6 +58,30 @@ const REVIEWS = [
   },
 ];
 
+// Helper สร้างตัวย่อชื่อลูกค้า
+const getInitial = name => {
+  const cleanName = name.replace(/^(คุณ|ลูกค้า)/, '').trim();
+  return cleanName.charAt(0) || name.charAt(0);
+};
+
+// Helper สุ่มสีพื้นหลังอวตารตามชื่อ
+const getBgColor = name => {
+  const colors = [
+    'bg-pink-100 text-pink-700',
+    'bg-purple-100 text-purple-700',
+    'bg-indigo-100 text-indigo-700',
+    'bg-teal-100 text-teal-700',
+    'bg-emerald-100 text-emerald-700',
+    'bg-orange-100 text-orange-700',
+    'bg-rose-100 text-rose-700',
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+};
+
 export default function FacebookReviewsSection() {
   const containerRef = useRef(null);
 
@@ -68,16 +92,33 @@ export default function FacebookReviewsSection() {
     }
   }, []);
 
-  const openReview = useCallback(url => {
-    try {
-      window.open(url, '_blank', 'noopener,noreferrer');
-    } catch {
-      // ignore
-    }
-  }, []);
+  // 1. สร้าง Schema แบบฝัง (Structured Data สำหรับโชว์ดาวบน Google)
+  const schemaData = {
+    '@context': 'https://schema.org',
+    '@type': 'AutoDealer',
+    name: 'ครูหนึ่งรถสวย',
+    image: 'https://www.chiangmaiusedcar.com/logo.png',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '5.0',
+      reviewCount: REVIEWS.length.toString(),
+    },
+    review: REVIEWS.map(r => ({
+      '@type': 'Review',
+      author: { '@type': 'Person', name: r.name },
+      reviewRating: { '@type': 'Rating', ratingValue: r.rating.toString(), bestRating: '5' },
+      reviewBody: r.text,
+    })),
+  };
 
   return (
     <section className="max-w-[1400px] mx-auto py-12 px-6 md:px-8 lg:px-12">
+      {/* ฝัง Schema ลงเว็บเพื่อ SEO Rating */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
+      />
+
       <div className="text-center mb-8">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-prompt">
           รีวิวจากลูกค้าจริง
@@ -89,12 +130,12 @@ export default function FacebookReviewsSection() {
         </p>
       </div>
 
-      <div className="relative overflow-hidden">
-        {/* Desktop Arrow Buttons - ซ่อนในมือถือ */}
+      <div className="relative overflow-hidden group">
+        {/* Desktop Arrow Buttons */}
         <button
           type="button"
-          className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-700 hover:text-primary rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
-          onClick={() => scrollBy(-320)}
+          className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-700 hover:text-primary rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 opacity-0 group-hover:opacity-100 focus:opacity-100"
+          onClick={() => scrollBy(-360)}
           aria-label="เลื่อนดูรีวิวก่อนหน้า"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,8 +150,8 @@ export default function FacebookReviewsSection() {
 
         <button
           type="button"
-          className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-700 hover:text-primary rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
-          onClick={() => scrollBy(320)}
+          className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-700 hover:text-primary rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 opacity-0 group-hover:opacity-100 focus:opacity-100"
+          onClick={() => scrollBy(360)}
           aria-label="เลื่อนดูรีวิวถัดไป"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -121,7 +162,7 @@ export default function FacebookReviewsSection() {
         {/* Horizontal Scroll Container */}
         <div
           ref={containerRef}
-          className="reviews-scroll-container flex gap-3 md:gap-4 lg:gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4 mx-0 md:mx-16 lg:mx-20 px-4 md:px-0"
+          className="reviews-scroll-container flex gap-4 md:gap-5 lg:gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-6 pt-2 px-4 md:px-12 lg:px-16 mx-auto"
           style={{
             scrollbarWidth: 'none',
             msOverflowStyle: 'none',
@@ -131,63 +172,62 @@ export default function FacebookReviewsSection() {
           {REVIEWS.map((review, i) => (
             <article
               key={i}
-              className="flex-none w-72 sm:w-80 md:w-96 bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 h-44 sm:h-48 md:h-60 snap-center"
+              className="flex-none w-[280px] sm:w-[320px] md:w-[360px] bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-gray-200 transition-all duration-300 transform hover:-translate-y-1 snap-center flex flex-col relative group/card"
             >
-              <div className="relative h-full">
-                {/* ใช้ Static content แทน iframe สำหรับ production */}
-                <div className="w-full h-full bg-white border border-gray-200 rounded-lg p-3 md:p-4 overflow-hidden">
-                  <div className="flex items-start space-x-2 md:space-x-3">
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <svg
-                          className="w-4 h-4 md:w-6 md:h-6 text-blue-600"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                        </svg>
-                      </div>
+              <div className="flex-1 p-5 lg:p-6 flex flex-col h-full">
+                <div className="flex items-center space-x-3 mb-4">
+                  {/* 3. Avatar ดีไซน์ใหม่ สกัดตัวย่อ พร้อมไอคอน FB */}
+                  <div className="relative flex-shrink-0">
+                    <div
+                      className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold font-prompt ${getBgColor(review.name)}`}
+                    >
+                      {getInitial(review.name)}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs md:text-sm font-medium text-gray-900 mb-1">
-                        {review.name}
-                      </div>
-                      <div className="text-xs text-gray-500 mb-1 md:mb-2">รีวิวจาก Facebook</div>
-                      <div className="text-xs md:text-sm text-gray-700 line-clamp-3 md:line-clamp-4">
-                        &ldquo;{review.text}&rdquo;
-                      </div>
-                      <div className="flex items-center mt-1 md:mt-2">
-                        <div className="flex text-yellow-400 text-xs md:text-sm">
-                          {'★'.repeat(review.rating)}
-                        </div>
-                        <span className="ml-1 text-xs text-gray-500">{review.rating}.0</span>
-                      </div>
+                    {/* Facebook Tiny Badge */}
+                    <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-white rounded-full flex items-center justify-center p-[1px] shadow-sm border border-gray-100">
+                      <svg
+                        className="w-full h-full text-[#1877F2]"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-base font-semibold text-gray-900 leading-tight truncate font-prompt">
+                      {review.name}
+                    </div>
+                    <div className="flex items-center mt-0.5">
+                      <div className="flex text-[#FFB400] text-sm">{'★'.repeat(review.rating)}</div>
+                      <span className="ml-1.5 text-xs text-gray-500 font-medium pt-0.5">
+                        {review.rating}.0
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div
-                  onClick={() => openReview(review.url)}
-                  className="absolute bottom-1 md:bottom-2 right-1 md:right-2 bg-blue-600 hover:bg-blue-700 text-white px-2 md:px-3 py-1 rounded-full text-xs font-semibold shadow-lg transition-colors cursor-pointer"
-                  aria-label={`ดูรีวิวเต็มของ ${review.name} บน Facebook`}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      openReview(review.url);
-                    }
-                  }}
+                <div className="text-sm md:text-base text-gray-600 leading-relaxed flex-1 mb-6">
+                  <q className="italic">{review.text}</q>
+                </div>
+
+                {/* 2. เปลี่ยนปุ่มอ่านรีวิวเต็ม เป็น Tag A เพื่อให้ Robot ของ Google ตรวจสอบ Link ได้ */}
+                <a
+                  href={review.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block w-full text-center mt-auto bg-gray-50 text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors duration-300 border border-gray-100 hover:border-blue-600 font-prompt"
+                  aria-label={`อ่านรีวิวฉบับเต็มของ ${review.name} บน Facebook`}
                 >
                   อ่านรีวิวเต็ม
-                </div>
+                </a>
               </div>
             </article>
           ))}
         </div>
 
-        {/* Scroll Indicator - ปรับข้อความให้เหมาะสมกับมือถือและเดสก์ท็อปให้ใหญ่คมชัด */}
-        <div className="text-center mt-6 mb-2">
+        {/* Scroll Indicator */}
+        <div className="text-center mt-2 mb-2">
           <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-50 border border-gray-200 rounded-full shadow-sm text-gray-700 font-prompt hover:bg-gray-100 transition-colors">
             <svg
               className="w-5 h-5 text-gray-500"
@@ -212,16 +252,16 @@ export default function FacebookReviewsSection() {
 
       <div className="text-center mt-8">
         <a
-          href="https://www.facebook.com/KN2car"
+          href="https://www.facebook.com/KN2car/reviews"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
-          aria-label="ดูรีวิวลูกค้าเพิ่มเติมบน Facebook ครูหนึ่งรถสวย"
+          className="inline-flex items-center bg-[#1877F2] hover:bg-[#166fe5] text-white px-6 md:px-8 py-3.5 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 space-x-2 font-prompt"
+          aria-label="ดูรีวิวลูกค้าเพิ่มเติมบนเพจ Facebook ครูหนึ่งรถสวย"
         >
           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
           </svg>
-          <span>ดูรีวิวลูกค้าเพิ่มเติม</span>
+          <span>ดูรีวิวทั้งหมดบน Facebook</span>
         </a>
       </div>
     </section>
