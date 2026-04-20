@@ -46,8 +46,8 @@ const REVIEWS = [
   },
   {
     url: 'https://www.facebook.com/malee.daengprasert/posts/pfbid0LRfqmX9JGEZZvvFBnfK8GABoZmdSVB7VjAiWA8TfgvR7FHzed7h9XyD4pCpJLkGJl',
-    name: 'คุณมาลี',
-    text: 'โอเคมากเลย ครูหนึ่งให้คำแนะนำดี รถดี ราคาเป็นธรรม',
+    name: 'Malee Daengprasert',
+    text: 'ขอบคุณ ครูหนึ่งรถสวยมือสองมากๆได้รับเงินรางวัล 3000 บาทแล้วค่ะ และจะติดตามครูหนึ่งรถสวยมือสองตลอดไปค่ะ',
     rating: 5,
   },
   {
