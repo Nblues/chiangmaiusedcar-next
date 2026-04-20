@@ -92,33 +92,8 @@ export default function FacebookReviewsSection() {
     }
   }, []);
 
-  // 1. สร้าง Schema แบบฝัง (Structured Data สำหรับโชว์ดาวบน Google)
-  const schemaData = {
-    '@context': 'https://schema.org',
-    '@type': 'AutoDealer',
-    name: 'ครูหนึ่งรถสวย',
-    image: 'https://www.chiangmaiusedcar.com/logo.png',
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '5.0',
-      reviewCount: REVIEWS.length.toString(),
-    },
-    review: REVIEWS.map(r => ({
-      '@type': 'Review',
-      author: { '@type': 'Person', name: r.name },
-      reviewRating: { '@type': 'Rating', ratingValue: r.rating.toString(), bestRating: '5' },
-      reviewBody: r.text,
-    })),
-  };
-
   return (
     <section className="max-w-[1400px] mx-auto py-12 px-6 md:px-8 lg:px-12">
-      {/* ฝัง Schema ลงเว็บเพื่อ SEO Rating */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
-      />
-
       <div className="text-center mb-8">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 font-prompt">
           รีวิวจากลูกค้าจริง
