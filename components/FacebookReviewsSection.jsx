@@ -10,8 +10,8 @@ const REVIEWS = [
   },
   {
     url: 'https://www.facebook.com/tai.thanchanok.7/posts/pfbid02o1H8XvSfrYBy3SJyHAjGQySsunfzAtL7pZha7pLCQnXj4GQXVQisp7mMXczdVrLol',
-    name: 'คุณใต้',
-    text: 'ขอบคุณครูหนึ่งรถสวยมากค่ะ ได้รถตามที่ใจหวัง ราคาดี คุ้มค่า',
+    name: 'Tai Maewin Trekking Cnx',
+    text: 'ไม่ผิดหวังเลย ที่ติดตามครูหนึ่งมานาน ได้รถที่ตั้งใจ อยากจะได้❤️...รถสภาพดีมากๆๆๆ (ก.ไก่ล้านตัว) ไม่ผิดหวังเลยจริงๆค่ะ, ..ขอแนะนำเป็นอย่างยิ่ง รถมือสองสภาพดีที่สุด ที่ครูหนึ่งรถสวยเท่านั้นนะค่ะ',
     rating: 5,
   },
   {
