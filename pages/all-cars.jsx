@@ -10,6 +10,7 @@ import { readCarStatuses } from '../lib/carStatusStore.js';
 import { getCachedStatuses, setCachedStatuses } from '../lib/carStatusCache';
 import { scheduleAfterLoadThenIdle } from '../utils/scheduler';
 import { mergeCarSpecs } from '../lib/mergeCarSpecs';
+import { useInView } from 'react-intersection-observer';
 
 async function safeFetchJson(url, fetchOptions = {}, timeoutMs = 8000) {
   let timeoutId;
@@ -82,9 +83,20 @@ export default function AllCars({
   const [showAllCars, setShowAllCars] = useState(false);
   const heroImgRef = useRef(null);
 
+  const { ref: observerRef, inView } = useInView({
+    triggerOnce: true,
+    rootMargin: '400px 0px',
+  });
+
   useEffect(() => {
-    // Delays rendering below-the-fold cards to free up main thread (better TBT)
-    const timer = setTimeout(() => setShowAllCars(true), 1500);
+    if (inView) {
+      setShowAllCars(true);
+    }
+  }, [inView]);
+
+  useEffect(() => {
+    // Fallback: render remaining cars after 2s if intersection observer fails to trigger
+    const timer = setTimeout(() => setShowAllCars(true), 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -651,6 +663,7 @@ export default function AllCars({
                     return (
                       <div
                         key={`skeleton-${car.id}`}
+                        ref={index === 12 ? observerRef : null}
                         className="h-[320px] w-full bg-gray-50 animate-pulse rounded-lg border border-gray-100"
                       ></div>
                     );
