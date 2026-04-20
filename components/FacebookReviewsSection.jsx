@@ -28,8 +28,8 @@ const REVIEWS = [
   },
   {
     url: 'https://www.facebook.com/nongtee.myson/posts/pfbid02xgQBPEGhpPyeVemBEymTBUDmByZ33GJh2fvcWCfoznu5MjhQ82ZDptUXC53RHz5el',
-    name: 'คุณนงที',
-    text: 'ประทับใจการบริการ ให้คำปรึกษาดี รถคุณภาพดี แนะนำเพื่อนๆ',
+    name: 'Tily Pattaya Kaewdee',
+    text: 'พึ่งเป็นลูกค้า และพึ่งซื้อรถกับครูหนึ่งคะ ซึ่งเพจมีผูติดตามหลักเเสน แต่ครูหนึ่งตอบเเชทเองตลอด ถามอะไรตอบตลอดเวลา ใส่ใจดูแลหลังการขายดีมาก ซึ่งไม่เคยได้รับจากเต้นรถมือสอง จากที่ได๋มาก่อนคะ ประทับใจคะ',
     rating: 5,
   },
   {
