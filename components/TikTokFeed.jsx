@@ -81,7 +81,7 @@ export default function TikTokFeed({ videos }) {
                 onClick={() => setSelectedVideoUrl(url)}
                 type="button"
                 className="group flex flex-col text-left bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
-                aria-label={title}
+                aria-label={`${title}${video.date_published ? ` ${new Date(video.date_published * 1000).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' })}` : ''}`}
               >
                 {/* Thumbnail container (9:16 aspect ratio for TikTok) */}
                 <div className="relative w-full aspect-[9/16] bg-black overflow-hidden flex-shrink-0">
