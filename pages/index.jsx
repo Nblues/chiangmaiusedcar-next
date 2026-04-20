@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import SEO from '../components/SEO.jsx';
 import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
 import { readCarStatuses } from '../lib/carStatusStore.js';
@@ -297,18 +298,14 @@ export default function Home({
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-[1400px] mx-auto">
           {/* LCP Optimized: Native responsive img for critical hero banner */}
-          <img
-            src="/herobanner/newherobanner-414w.webp"
-            srcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
-            sizes="(max-width: 1400px) 100vw, 1400px"
+          {/* Next.js Image component for Hero Banner */}
+          <Image
+            src="/herobanner/newherobanner-1400w.webp"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             width={1400}
             height={467}
-            className="w-full h-auto object-contain block mx-auto text-transparent"
-            style={{ aspectRatio: '1400/467' }}
-            decoding="async"
-            loading="eager"
-            fetchPriority="high"
+            className="w-full h-auto object-contain block mx-auto"
+            priority
           />
         </div>
       </header>
