@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 
 const REVIEWS = [
   {
@@ -84,6 +84,20 @@ const getBgColor = name => {
 
 export default function FacebookReviewsSection() {
   const containerRef = useRef(null);
+
+  useEffect(() => {
+    // เลื่อนรีวิวของ "เนาวรัตน์ อุปชัย" (index 3) ให้อยู่ตรงกลางจอเฉพาะหน้าจอมือถือตอนโหลด
+    if (window.innerWidth < 768 && containerRef.current) {
+      setTimeout(() => {
+        const container = containerRef.current;
+        const target = container.children[3]; // The 4th review
+        if (target) {
+          const scrollLeft = target.offsetLeft - container.clientWidth / 2 + target.clientWidth / 2;
+          container.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'auto' });
+        }
+      }, 100);
+    }
+  }, []);
 
   const scrollBy = useCallback(delta => {
     const el = containerRef.current;
