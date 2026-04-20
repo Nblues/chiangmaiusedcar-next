@@ -4,8 +4,8 @@ import React, { useCallback, useRef } from 'react';
 const REVIEWS = [
   {
     url: 'https://www.facebook.com/oonmaxx/posts/pfbid0YcUhHBngfrZmqz4SWWF5rKkVFzrTSMyw4dzayqhbcnEFviMCEwWPc9vhqcQ5Fnzvl',
-    name: 'คุณอุ๋น',
-    text: 'บริการดีมาก รถสวย คุณภาพดี ส่งมาถึงบ้านตามที่นัดหมาย แนะนำเลยครับ',
+    name: 'Oon Thongna',
+    text: 'รถสวยถูกใจ❤️ราคาน่ารัก🥰แนะนำเลยค่ะ',
     rating: 5,
   },
   {
