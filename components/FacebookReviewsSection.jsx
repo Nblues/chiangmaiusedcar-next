@@ -39,12 +39,6 @@ const REVIEWS = [
     rating: 5,
   },
   {
-    url: 'https://www.facebook.com/na.mo.payya.ym/posts/pfbid0ssojKSqnysqj4tidSPBTVfteipcWvDU1weJCE8doDAZKKq8S74vuyUy2qihwEww7l',
-    name: 'คุณนะโม',
-    text: 'ขอบคุณครูหนึ่งรถสวย ได้รับรถตามเวลาที่นัด รถสภาพดี',
-    rating: 5,
-  },
-  {
     url: 'https://www.facebook.com/malee.daengprasert/posts/pfbid0LRfqmX9JGEZZvvFBnfK8GABoZmdSVB7VjAiWA8TfgvR7FHzed7h9XyD4pCpJLkGJl',
     name: 'Malee Daengprasert',
     text: 'ขอบคุณ ครูหนึ่งรถสวยมือสองมากๆได้รับเงินรางวัล 3000 บาทแล้วค่ะ และจะติดตามครูหนึ่งรถสวยมือสองตลอดไปค่ะ',
