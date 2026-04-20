@@ -460,7 +460,7 @@ export default function UsedCarsChiangMai({
           className="mb-6 rounded-2xl border border-gray-200 bg-white p-4 sm:p-5"
         >
           <div className="text-sm font-semibold text-gray-900 font-prompt">ไปยังส่วนที่ต้องการ</div>
-          <div className="mt-3 flex overflow-x-auto whitespace-nowrap gap-2 pb-2 scrollbar-hide snap-x">
+          <div className="mt-3 flex flex-wrap gap-2 pb-2">
             <a
               href="#about"
               className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
