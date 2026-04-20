@@ -847,7 +847,7 @@ export default function HomeDeferredSections({
                     key={brand.id}
                     href={`/all-cars?brand=${brand.id}`}
                     prefetch={false}
-                    className="snap-start shrink-0 group relative flex items-center justify-between px-5 sm:px-6 py-3 sm:py-3.5 bg-white rounded-full border border-gray-200/80 hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95"
+                    className="snap-start shrink-0 group relative flex items-center justify-between pl-5 pr-4 sm:pl-6 sm:pr-5 py-3 sm:py-3.5 bg-white rounded-full border border-gray-200/80 hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95"
                   >
                     <div className="flex items-center gap-2.5">
                       <svg
@@ -857,11 +857,11 @@ export default function HomeDeferredSections({
                       >
                         <path d={brand.icon} />
                       </svg>
-                      <span className="font-bold text-gray-800 text-sm sm:text-base font-prompt group-hover:text-primary transition-colors">
+                      <span className="font-bold text-gray-800 text-sm sm:text-base font-prompt group-hover:text-primary transition-colors whitespace-nowrap">
                         {brand.name}
                       </span>
                     </div>
-                    <span className="ml-2 sm:ml-3 text-xs sm:text-sm font-semibold text-gray-600 group-hover:text-primary transition-colors flex-shrink-0 whitespace-nowrap bg-gray-50/50 px-1.5 py-0.5 rounded-md">
+                    <span className="ml-3 sm:ml-4 text-xs sm:text-sm font-semibold text-gray-600 group-hover:text-primary transition-colors flex-shrink-0 whitespace-nowrap bg-gray-50/80 px-2.5 py-1 rounded-md">
                       {count}
                     </span>
                   </Link>
