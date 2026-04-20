@@ -9,9 +9,9 @@ import A11yImage from './A11yImage';
 export default function HomeWhyChooseSection({ getBrandCount }) {
   return (
     <section className="py-6 sm:py-8 max-w-[1400px] mx-auto cv-auto-lg">
-      <div className="px-2 sm:px-6 md:px-10">
+      <div className="px-1 sm:px-4 md:px-8 lg:px-10">
         {/* Car Brands Section - Modern Compact 2026 Design */}
-        <div className="relative rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 lg:p-8 border border-white/60 shadow-lg bg-gradient-to-br from-white via-gray-50/80 to-white/90 backdrop-blur-xl mb-2 sm:mb-4">
+        <div className="relative rounded-2xl sm:rounded-3xl p-3 sm:p-5 md:p-6 lg:p-8 border border-white/60 shadow-lg bg-gradient-to-br from-white via-gray-50/80 to-white/90 backdrop-blur-xl mb-2 sm:mb-4">
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 mb-5 sm:mb-6 md:mb-8 md:text-left">
             <div>
               <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 mb-1 lg:mb-2 font-prompt tracking-tight">
