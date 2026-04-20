@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+﻿import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -39,15 +39,15 @@ export default function HomeDeferredSections({
   );
   const priceRanges = useMemo(
     () => [
-      { value: 'all', label: 'ทุกช่วงราคา' },
-      { value: '0-100000', label: 'ต่ำกว่า 1 แสน' },
-      { value: '100000-200000', label: '1-2 แสน' },
-      { value: '200000-300000', label: '2-3 แสน' },
-      { value: '300000-400000', label: '3-4 แสน' },
-      { value: '400000-500000', label: '4-5 แสน' },
-      { value: '500000-600000', label: '5-6 แสน' },
-      { value: '600000-700000', label: '6-7 แสน' },
-      { value: '700000', label: '7 แสนขึ้นไป' },
+      { value: 'all', label: 'เธ—เธธเธเธเนเธงเธเธฃเธฒเธเธฒ' },
+      { value: '0-100000', label: 'เธ•เนเธณเธเธงเนเธฒ 1 เนเธชเธ' },
+      { value: '100000-200000', label: '1-2 เนเธชเธ' },
+      { value: '200000-300000', label: '2-3 เนเธชเธ' },
+      { value: '300000-400000', label: '3-4 เนเธชเธ' },
+      { value: '400000-500000', label: '4-5 เนเธชเธ' },
+      { value: '500000-600000', label: '5-6 เนเธชเธ' },
+      { value: '600000-700000', label: '6-7 เนเธชเธ' },
+      { value: '700000', label: '7 เนเธชเธเธเธถเนเธเนเธ' },
     ],
     []
   );
@@ -168,7 +168,7 @@ export default function HomeDeferredSections({
       <section className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16 bg-white cv-auto-md">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl sm:text-3xl md:text-4xl font-bold text-primary mb-6 sm:mb-8 text-center font-prompt">
-            ทำไมต้องเลือกครูหนึ่งรถสวย?
+            เธ—เธณเนเธกเธ•เนเธญเธเน€เธฅเธทเธญเธเธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข?
           </h2>
 
           {/* Main Content */}
@@ -176,23 +176,32 @@ export default function HomeDeferredSections({
             {/* Paragraph 1 - Quality & Financing */}
             <div className="bg-gray-50 rounded-xl p-5 sm:p-6 md:p-8">
               <p className="text-base sm:text-base md:text-lg">
-                <strong className="text-primary">ศูนย์รวมรถบ้านคุณภาพดี</strong>{' '}
-                ในตลาดรถยนต์มือสองภาคเหนือ{' '}
-                <strong className="text-gray-900">คัดสรรคุณภาพทุกคัน</strong> ตรวจสอบโดยผู้เชี่ยวชาญ
-                พร้อม <strong className="text-green-700">รับประกัน 1 ปีเต็ม</strong> เรามี
-                <strong className="text-accent-800"> ฟรีดาวน์ 0%</strong> อัตราดอกเบี้ยพิเศษ และ
                 <strong className="text-primary">
-                  {' '}
-                  อนุมัติง่าย
-                </strong> ด้วยระบบสินเชื่อที่หลากหลาย{' '}
-                <strong className="text-gray-900">ผ่อนถูก ผ่อนสบาย</strong>
+                  เธจเธนเธเธขเนเธฃเธงเธกเธฃเธ–เธเนเธฒเธเธเธธเธ“เธ เธฒเธเธ”เธต
+                </strong>{' '}
+                เนเธเธ•เธฅเธฒเธ”เธฃเธ–เธขเธเธ•เนเธกเธทเธญเธชเธญเธเธ เธฒเธเน€เธซเธเธทเธญ{' '}
+                <strong className="text-gray-900">
+                  เธเธฑเธ”เธชเธฃเธฃเธเธธเธ“เธ เธฒเธเธ—เธธเธเธเธฑเธ
+                </strong>{' '}
+                เธ•เธฃเธงเธเธชเธญเธเนเธ”เธขเธเธนเนเน€เธเธตเนเธขเธงเธเธฒเธ เธเธฃเนเธญเธก{' '}
+                <strong className="text-green-700">
+                  เธฃเธฑเธเธเธฃเธฐเธเธฑเธ 1 เธเธตเน€เธ•เนเธก
+                </strong>{' '}
+                เน€เธฃเธฒเธกเธต
+                <strong className="text-accent-800"> เธเธฃเธตเธ”เธฒเธงเธเน 0%</strong>{' '}
+                เธญเธฑเธ•เธฃเธฒเธ”เธญเธเน€เธเธตเนเธขเธเธดเน€เธจเธฉ เนเธฅเธฐ
+                <strong className="text-primary"> เธญเธเธธเธกเธฑเธ•เธดเธเนเธฒเธข</strong>{' '}
+                เธ”เนเธงเธขเธฃเธฐเธเธเธชเธดเธเน€เธเธทเนเธญเธ—เธตเนเธซเธฅเธฒเธเธซเธฅเธฒเธข{' '}
+                <strong className="text-gray-900">เธเนเธญเธเธ–เธนเธ เธเนเธญเธเธชเธเธฒเธข</strong>
               </p>
             </div>
 
             {/* Paragraph 2 - Car Selection */}
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 sm:p-6 md:p-8">
               <p className="text-base sm:text-base md:text-lg mb-4">
-                <strong className="text-gray-900">เรามีรถยี่ห้อดังให้เลือกมากมาย</strong>{' '}
+                <strong className="text-gray-900">
+                  เน€เธฃเธฒเธกเธตเธฃเธ–เธขเธตเนเธซเนเธญเธ”เธฑเธเนเธซเนเน€เธฅเธทเธญเธเธกเธฒเธเธกเธฒเธข
+                </strong>{' '}
                 <Link
                   href="/all-cars?brand=toyota"
                   prefetch={false}
@@ -228,59 +237,64 @@ export default function HomeDeferredSections({
                 >
                   Isuzu
                 </Link>{' '}
-                ทั้ง{' '}
+                เธ—เธฑเนเธ{' '}
                 <Link
-                  href="/all-cars?type=เก๋ง"
+                  href="/all-cars?type=เน€เธเนเธ"
                   prefetch={false}
                   className="text-accent-800 hover:text-accent-900 hover:underline font-medium"
                 >
-                  รถเก๋ง
+                  เธฃเธ–เน€เธเนเธ
                 </Link>{' '}
                 <Link
-                  href="/all-cars?type=กระบะ"
+                  href="/all-cars?type=เธเธฃเธฐเธเธฐ"
                   prefetch={false}
                   className="text-accent-800 hover:text-accent-900 hover:underline font-medium"
                 >
-                  รถกระบะ
+                  เธฃเธ–เธเธฃเธฐเธเธฐ
                 </Link>{' '}
                 <Link
                   href="/all-cars?type=SUV"
                   prefetch={false}
                   className="text-accent-800 hover:text-accent-900 hover:underline font-medium"
                 >
-                  รถ SUV
+                  เธฃเธ– SUV
                 </Link>{' '}
-                และรถครอบครัว 7 ที่นั่ง พร้อม
-                <strong className="text-primary"> ส่งฟรีทั่วประเทศไทย</strong>
+                เนเธฅเธฐเธฃเธ–เธเธฃเธญเธเธเธฃเธฑเธง 7 เธ—เธตเนเธเธฑเนเธ เธเธฃเนเธญเธก
+                <strong className="text-primary">
+                  {' '}
+                  เธชเนเธเธเธฃเธตเธ—เธฑเนเธงเธเธฃเธฐเน€เธ—เธจเนเธ—เธข
+                </strong>
               </p>
             </div>
 
             {/* Paragraph 3 - Services & Contact */}
             <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-5 sm:p-6 md:p-8">
               <p className="text-base sm:text-base md:text-lg mb-4">
-                <strong className="text-gray-900">มีปัญหาเรื่องสินเชื่อ?</strong>{' '}
+                <strong className="text-gray-900">
+                  เธกเธตเธเธฑเธเธซเธฒเน€เธฃเธทเนเธญเธเธชเธดเธเน€เธเธทเนเธญ?
+                </strong>{' '}
                 <Link
                   href="/credit-check"
                   prefetch={false}
                   className="text-accent-800 hover:text-accent-900 hover:underline font-semibold"
                 >
-                  ปรึกษาไฟแนนซ์ฟรี
+                  เธเธฃเธถเธเธฉเธฒเนเธเนเธเธเธเนเธเธฃเธต
                 </Link>{' '}
-                เรามีทีมงานมืออาชีพคอยให้คำปรึกษา{' '}
-                <strong className="text-gray-900">และอยากขายรถ?</strong>{' '}
+                เน€เธฃเธฒเธกเธตเธ—เธตเธกเธเธฒเธเธกเธทเธญเธญเธฒเธเธตเธเธเธญเธขเนเธซเนเธเธณเธเธฃเธถเธเธฉเธฒ{' '}
+                <strong className="text-gray-900">เนเธฅเธฐเธญเธขเธฒเธเธเธฒเธขเธฃเธ–?</strong>{' '}
                 <Link
                   href="/sell-car"
                   prefetch={false}
                   className="text-primary hover:underline font-semibold"
                 >
-                  ประเมินราคาฟรี รับซื้อทันที
+                  เธเธฃเธฐเน€เธกเธดเธเธฃเธฒเธเธฒเธเธฃเธต เธฃเธฑเธเธเธทเนเธญเธ—เธฑเธเธ—เธต
                 </Link>{' '}
-                ราคายุติธรรม
+                เธฃเธฒเธเธฒเธขเธธเธ•เธดเธเธฃเธฃเธก
               </p>
 
               {/* Contact CTA */}
               <p className="mt-6 pt-6 border-t border-orange-200 text-center text-lg sm:text-xl font-bold mb-3 text-gray-900 leading-tight">
-                นัดหมายดูรถ
+                เธเธฑเธ”เธซเธกเธฒเธขเธ”เธนเธฃเธ–
               </p>
               <a
                 href="tel:0940649018"
@@ -307,7 +321,7 @@ export default function HomeDeferredSections({
       >
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 font-prompt">
-            ค้นหารถที่คุณต้องการ
+            เธเนเธเธซเธฒเธฃเธ–เธ—เธตเนเธเธธเธ“เธ•เนเธญเธเธเธฒเธฃ
           </h2>
 
           {/* Search Bar - 2025 Modern Design */}
@@ -317,13 +331,13 @@ export default function HomeDeferredSections({
                 {/* Search */}
                 <div>
                   <label htmlFor="searchTerm" className="sr-only">
-                    ค้นหารถ
+                    เธเนเธเธซเธฒเธฃเธ–
                   </label>
                   <input
                     type="text"
                     id="searchTerm"
                     name="search"
-                    placeholder="ค้นหารถ..."
+                    placeholder="เธเนเธเธซเธฒเธฃเธ–..."
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
                     className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 placeholder-gray-500 bg-white transition-all duration-200"
@@ -333,7 +347,7 @@ export default function HomeDeferredSections({
                 {/* Price Range */}
                 <div>
                   <label htmlFor="priceRange" className="sr-only">
-                    ช่วงราคา
+                    เธเนเธงเธเธฃเธฒเธเธฒ
                   </label>
                   <select
                     id="priceRange"
@@ -353,7 +367,7 @@ export default function HomeDeferredSections({
                 {/* Brand Filter */}
                 <div>
                   <label htmlFor="brandFilter" className="sr-only">
-                    ยี่ห้อรถ
+                    เธขเธตเนเธซเนเธญเธฃเธ–
                   </label>
                   <select
                     id="brandFilter"
@@ -362,7 +376,7 @@ export default function HomeDeferredSections({
                     onChange={e => setBrandFilter(e.target.value)}
                     className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary/20 text-gray-900 bg-white transition-all duration-200"
                   >
-                    <option value="all">ทุกยี่ห้อ</option>
+                    <option value="all">เธ—เธธเธเธขเธตเนเธซเนเธญ</option>
                     {brands.slice(1).map(brand => (
                       <option key={brand} value={brand}>
                         {brand.charAt(0).toUpperCase() + brand.slice(1)}
@@ -378,7 +392,7 @@ export default function HomeDeferredSections({
                     onClick={handleSearch}
                     className="w-full bg-accent-800 hover:bg-accent-900 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 font-prompt shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
-                    ค้นหา
+                    เธเนเธเธซเธฒ
                   </button>
                 </div>
               </div>
@@ -390,72 +404,78 @@ export default function HomeDeferredSections({
                   prefetch={false}
                   className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
-                  ต่ำกว่า 1 แสน ({'< 100K'})
+                  เธ•เนเธณเธเธงเนเธฒ 1 เนเธชเธ ({'< 100K'})
                 </Link>
                 <Link
                   href="/all-cars?price=100000-200000"
                   prefetch={false}
                   className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
-                  1-2 แสน (100K-200K)
+                  1-2 เนเธชเธ (100K-200K)
                 </Link>
                 <Link
                   href="/all-cars?price=200000-300000"
                   prefetch={false}
                   className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
-                  2-3 แสน (200K-300K)
+                  2-3 เนเธชเธ (200K-300K)
                 </Link>
                 <Link
                   href="/all-cars?price=400000-500000"
                   prefetch={false}
                   className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
-                  4-5 แสน (400K-500K)
+                  4-5 เนเธชเธ (400K-500K)
                 </Link>
                 <Link
                   href="/all-cars?price=600000-700000"
                   prefetch={false}
                   className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
                 >
-                  6-7 แสน (600K-700K)
+                  6-7 เนเธชเธ (600K-700K)
                 </Link>
                 <Link
                   href="/all-cars?price=700000"
                   prefetch={false}
                   className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-accent rounded-xl hover:bg-accent-800 hover:border-accent-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-accent-800 hover:text-white"
                 >
-                  7 แสนขึ้นไป ({'> 700K'})
+                  7 เนเธชเธเธเธถเนเธเนเธ ({'> 700K'})
                 </Link>
               </div>
             </div>
           </div>
         </div>
 
-        {/* รถแนะนำเข้าใหม่ */}
+        {/* เธฃเธ–เนเธเธฐเธเธณเน€เธเนเธฒเนเธซเธกเน */}
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 font-prompt">
-            รถแนะนำเข้าใหม่วันนี้
+            เธฃเธ–เนเธเธฐเธเธณเน€เธเนเธฒเนเธซเธกเนเธงเธฑเธเธเธตเน
           </h2>
           <p className="text-base text-gray-700 font-prompt leading-relaxed max-w-3xl mx-auto">
-            รถเก๋ง รถกระบะ รถครอบครัว รถอีโค่คาร์ SUV โฟร์วีล{' '}
-            <span className="font-bold text-primary">คัดเฉพาะรถมือเดียว ประวัติใส 100%</span>{' '}
-            คัดสรรมาเพื่อคุณโดยเฉพาะ ผ่านการตรวจสอบอย่างละเอียด เพื่อให้คุณมั่นใจในทุกการเดินทาง
+            เธฃเธ–เน€เธเนเธ เธฃเธ–เธเธฃเธฐเธเธฐ เธฃเธ–เธเธฃเธญเธเธเธฃเธฑเธง
+            เธฃเธ–เธญเธตเนเธเนเธเธฒเธฃเน SUV เนเธเธฃเนเธงเธตเธฅ{' '}
+            <span className="font-bold text-primary">
+              เธเธฑเธ”เน€เธเธเธฒเธฐเธฃเธ–เธกเธทเธญเน€เธ”เธตเธขเธง เธเธฃเธฐเธงเธฑเธ•เธดเนเธช 100%
+            </span>{' '}
+            เธเธฑเธ”เธชเธฃเธฃเธกเธฒเน€เธเธทเนเธญเธเธธเธ“เนเธ”เธขเน€เธเธเธฒเธฐ
+            เธเนเธฒเธเธเธฒเธฃเธ•เธฃเธงเธเธชเธญเธเธญเธขเนเธฒเธเธฅเธฐเน€เธญเธตเธขเธ”
+            เน€เธเธทเนเธญเนเธซเนเธเธธเธ“เธกเธฑเนเธเนเธเนเธเธ—เธธเธเธเธฒเธฃเน€เธ”เธดเธเธ—เธฒเธ
           </p>
         </div>
         {/* Cars grid (standardized layout across pages) */}
         <div className="-mx-6 md:-mx-8 lg:-mx-12">
           <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-5 ipadpro:px-3 lg:px-6">
-            <section aria-label="รถเข้าใหม่แนะนำวันนี้">
+            <section aria-label="เธฃเธ–เน€เธเนเธฒเนเธซเธกเนเนเธเธฐเธเธณเธงเธฑเธเธเธตเน">
               {safeCars.length === 0 ? (
                 // Empty state when no cars available
                 <div className="text-center py-12">
-                  <div className="text-6xl mb-4">🚗</div>
+                  <div className="text-6xl mb-4">๐—</div>
                   <h3 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">
-                    ขออภัย ยังไม่มีรถให้แสดง
+                    เธเธญเธญเธ เธฑเธข เธขเธฑเธเนเธกเนเธกเธตเธฃเธ–เนเธซเนเนเธชเธ”เธ
                   </h3>
                   <p className="text-gray-500 font-prompt mb-4">
-                    เรากำลังอัปเดตรถใหม่ ติดตามได้ที่ Facebook หรือ LINE
+                    เน€เธฃเธฒเธเธณเธฅเธฑเธเธญเธฑเธเน€เธ”เธ•เธฃเธ–เนเธซเธกเน
+                    เธ•เธดเธ”เธ•เธฒเธกเนเธ”เนเธ—เธตเน Facebook เธซเธฃเธทเธญ LINE
                   </p>
                   <a
                     href="https://lin.ee/8ugfzstD"
@@ -463,7 +483,7 @@ export default function HomeDeferredSections({
                     rel="noopener noreferrer"
                     className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-\[48px\] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
                   >
-                    <span>ติดต่อสอบถาม</span>
+                    <span>เธ•เธดเธ”เธ•เนเธญเธชเธญเธเธ–เธฒเธก</span>
                   </a>
                 </div>
               ) : (
@@ -483,7 +503,7 @@ export default function HomeDeferredSections({
             prefetch={false}
             className="flex w-full justify-center md:inline-flex md:w-auto items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-full sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
           >
-            <span>ดูรถทั้งหมด</span>
+            <span>เธ”เธนเธฃเธ–เธ—เธฑเนเธเธซเธกเธ”</span>
             <svg className="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
@@ -499,10 +519,11 @@ export default function HomeDeferredSections({
         <div className="px-4 sm:px-6">
           <div className="mb-5 sm:mb-6">
             <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
-              คำถามที่พบบ่อย
+              เธเธณเธ–เธฒเธกเธ—เธตเนเธเธเธเนเธญเธข
             </h2>
             <p className="mt-1 text-sm sm:text-base text-gray-700 font-prompt">
-              รวมคำตอบเรื่องดาวน์ 0% เครดิตบูโร และรับประกัน
+              เธฃเธงเธกเธเธณเธ•เธญเธเน€เธฃเธทเนเธญเธเธ”เธฒเธงเธเน 0% เน€เธเธฃเธ”เธดเธ•เธเธนเนเธฃ
+              เนเธฅเธฐเธฃเธฑเธเธเธฃเธฐเธเธฑเธ
             </p>
           </div>
 
@@ -510,20 +531,22 @@ export default function HomeDeferredSections({
             <details className="group rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
               <summary className="cursor-pointer list-none font-prompt flex items-start justify-between gap-4 p-4 sm:p-5 [&::-webkit-details-marker]:hidden">
                 <span className="font-bold text-gray-900 text-base sm:text-lg leading-snug">
-                  ดาวน์ 0% จริงไหม?
+                  เธ”เธฒเธงเธเน 0% เธเธฃเธดเธเนเธซเธก?
                 </span>
                 <span className="text-sm sm:text-base font-semibold text-primary whitespace-nowrap group-open:hidden">
-                  ดูคำตอบ
+                  เธ”เธนเธเธณเธ•เธญเธ
                 </span>
                 <span className="text-sm sm:text-base font-semibold text-primary whitespace-nowrap hidden group-open:inline">
-                  ซ่อนคำตอบ
+                  เธเนเธญเธเธเธณเธ•เธญเธ
                 </span>
               </summary>
 
               <div className="px-4 sm:px-5 pb-4 sm:pb-5">
                 <div className="rounded-xl bg-white border border-gray-200 p-3 sm:p-4 text-sm sm:text-base font-prompt leading-relaxed text-gray-800">
-                  <span className="font-semibold text-accent-800">จริง!</span>{' '}
-                  ลูกค้าสามารถออกรถฟรีดาวน์ตามโปรโมชัน ตรวจสภาพครบถ้วน และตรวจสอบประวัติรถก่อนส่งมอบ
+                  <span className="font-semibold text-accent-800">เธเธฃเธดเธ!</span>{' '}
+                  เธฅเธนเธเธเนเธฒเธชเธฒเธกเธฒเธฃเธ–เธญเธญเธเธฃเธ–เธเธฃเธตเธ”เธฒเธงเธเนเธ•เธฒเธกเนเธเธฃเนเธกเธเธฑเธ
+                  เธ•เธฃเธงเธเธชเธ เธฒเธเธเธฃเธเธ–เนเธงเธ
+                  เนเธฅเธฐเธ•เธฃเธงเธเธชเธญเธเธเธฃเธฐเธงเธฑเธ•เธดเธฃเธ–เธเนเธญเธเธชเนเธเธกเธญเธ
                 </div>
               </div>
             </details>
@@ -531,24 +554,25 @@ export default function HomeDeferredSections({
             <details className="group rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
               <summary className="cursor-pointer list-none font-prompt flex items-start justify-between gap-4 p-4 sm:p-5 [&::-webkit-details-marker]:hidden">
                 <span className="font-bold text-gray-900 text-base sm:text-lg leading-snug">
-                  ติดเครดิตบูโรออกได้ไหม?
+                  เธ•เธดเธ”เน€เธเธฃเธ”เธดเธ•เธเธนเนเธฃเธญเธญเธเนเธ”เนเนเธซเธก?
                 </span>
                 <span className="text-sm sm:text-base font-semibold text-primary whitespace-nowrap group-open:hidden">
-                  ดูคำตอบ
+                  เธ”เธนเธเธณเธ•เธญเธ
                 </span>
                 <span className="text-sm sm:text-base font-semibold text-primary whitespace-nowrap hidden group-open:inline">
-                  ซ่อนคำตอบ
+                  เธเนเธญเธเธเธณเธ•เธญเธ
                 </span>
               </summary>
 
               <div className="px-4 sm:px-5 pb-4 sm:pb-5">
                 <div className="rounded-xl bg-white border border-gray-200 p-3 sm:p-4 text-sm sm:text-base font-prompt leading-relaxed text-gray-800">
-                  <span className="font-semibold text-primary">ได้!</span>
-                  เรามีไฟแนนซ์หลากหลายแบบ แนะนำให้ทัก LINE หรือโทร{' '}
+                  <span className="font-semibold text-primary">เนเธ”เน!</span>
+                  เน€เธฃเธฒเธกเธตเนเธเนเธเธเธเนเธซเธฅเธฒเธเธซเธฅเธฒเธขเนเธเธ
+                  เนเธเธฐเธเธณเนเธซเนเธ—เธฑเธ LINE เธซเธฃเธทเธญเนเธ—เธฃ{' '}
                   <a href="tel:0940649018" className="text-primary font-bold hover:underline ml-1">
                     094-064-9018
                   </a>{' '}
-                  เพื่อประเมินเบื้องต้น
+                  เน€เธเธทเนเธญเธเธฃเธฐเน€เธกเธดเธเน€เธเธทเนเธญเธเธ•เนเธ
                 </div>
               </div>
             </details>
@@ -556,21 +580,23 @@ export default function HomeDeferredSections({
             <details className="group rounded-2xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
               <summary className="cursor-pointer list-none font-prompt flex items-start justify-between gap-4 p-4 sm:p-5 [&::-webkit-details-marker]:hidden">
                 <span className="font-bold text-gray-900 text-base sm:text-lg leading-snug">
-                  มีรับประกันไหม?
+                  เธกเธตเธฃเธฑเธเธเธฃเธฐเธเธฑเธเนเธซเธก?
                 </span>
                 <span className="text-sm sm:text-base font-semibold text-primary whitespace-nowrap group-open:hidden">
-                  ดูคำตอบ
+                  เธ”เธนเธเธณเธ•เธญเธ
                 </span>
                 <span className="text-sm sm:text-base font-semibold text-primary whitespace-nowrap hidden group-open:inline">
-                  ซ่อนคำตอบ
+                  เธเนเธญเธเธเธณเธ•เธญเธ
                 </span>
               </summary>
 
               <div className="px-4 sm:px-5 pb-4 sm:pb-5">
                 <div className="rounded-xl bg-white border border-gray-200 p-3 sm:p-4 text-sm sm:text-base font-prompt leading-relaxed text-gray-800">
-                  <span className="font-semibold text-accent-800">รับประกัน</span>
-                  เครื่องยนต์และเกียร์ <span className="font-bold text-primary">1 ปีเต็ม</span>{' '}
-                  ตรวจสภาพครบถ้วนก่อนส่งมอบ และมีบริการหลังการขาย
+                  <span className="font-semibold text-accent-800">เธฃเธฑเธเธเธฃเธฐเธเธฑเธ</span>
+                  เน€เธเธฃเธทเนเธญเธเธขเธเธ•เนเนเธฅเธฐเน€เธเธตเธขเธฃเน{' '}
+                  <span className="font-bold text-primary">1 เธเธตเน€เธ•เนเธก</span>{' '}
+                  เธ•เธฃเธงเธเธชเธ เธฒเธเธเธฃเธเธ–เนเธงเธเธเนเธญเธเธชเนเธเธกเธญเธ
+                  เนเธฅเธฐเธกเธตเธเธฃเธดเธเธฒเธฃเธซเธฅเธฑเธเธเธฒเธฃเธเธฒเธข
                 </div>
               </div>
             </details>
@@ -578,7 +604,7 @@ export default function HomeDeferredSections({
         </div>
       </section>
 
-      {/* รีวิว Facebook 9 รีวิวจริง (โหลดเมื่อใกล้ viewport) */}
+      {/* เธฃเธตเธงเธดเธง Facebook 9 เธฃเธตเธงเธดเธงเธเธฃเธดเธ (เนเธซเธฅเธ”เน€เธกเธทเนเธญเนเธเธฅเน viewport) */}
       <div id="fb-reviews-anchor" className="h-px w-full" aria-hidden="true" />
       {showFbReviews && <FacebookReviewsSection />}
 
@@ -603,14 +629,19 @@ export default function HomeDeferredSections({
               {/* Floating text above image */}
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-start text-center px-4 sm:px-8 pt-10 sm:pt-12">
                 <h2 className="text-[19px] sm:text-3xl md:text-4xl font-bold text-white mb-4 font-prompt whitespace-nowrap sm:whitespace-normal leading-tight tracking-tight drop-shadow-sm">
-                  ลูกค้าทั่วประเทศไว้วางใจเพราะ?
+                  เธฅเธนเธเธเนเธฒเธ—เธฑเนเธงเธเธฃเธฐเน€เธ—เธจเนเธงเนเธงเธฒเธเนเธเน€เธเธฃเธฒเธฐ?
                 </h2>
                 <p className="text-base sm:text-lg lg:text-base text-white/90 max-w-2xl lg:max-w-none mx-auto font-prompt leading-relaxed lg:leading-tight whitespace-normal lg:whitespace-nowrap drop-shadow-sm">
-                  <span className="text-white font-semibold">ประสบการณ์ 10 ปี+</span>{' '}
-                  <span className="font-semibold text-white">
-                    เฟซบุ๊กผู้ติดตาม 1 ล้านคนทั่วประเทศ
+                  <span className="text-white font-semibold">
+                    เธเธฃเธฐเธชเธเธเธฒเธฃเธ“เน 10 เธเธต+
                   </span>{' '}
-                  <span className="text-white font-semibold">ลูกค้า 90% เชื่อมั่น</span>{' '}
+                  <span className="font-semibold text-white">
+                    เน€เธเธเธเธธเนเธเธเธนเนเธ•เธดเธ”เธ•เธฒเธก 1
+                    เธฅเนเธฒเธเธเธเธ—เธฑเนเธงเธเธฃเธฐเน€เธ—เธจ
+                  </span>{' '}
+                  <span className="text-white font-semibold">
+                    เธฅเธนเธเธเนเธฒ 90% เน€เธเธทเนเธญเธกเธฑเนเธ
+                  </span>{' '}
                   <span
                     className="inline-block font-extrabold text-white tracking-tight text-lg sm:text-xl lg:text-lg px-2 py-0.5 rounded-lg bg-black/45"
                     style={{
@@ -618,7 +649,7 @@ export default function HomeDeferredSections({
                         '-2px 0 rgba(0,0,0,0.9), 2px 0 rgba(0,0,0,0.9), 0 -2px rgba(0,0,0,0.9), 0 2px rgba(0,0,0,0.9), -2px -2px rgba(0,0,0,0.9), 2px -2px rgba(0,0,0,0.9), -2px 2px rgba(0,0,0,0.9), 2px 2px rgba(0,0,0,0.9), 0 3px 18px rgba(0,0,0,0.45)',
                     }}
                   >
-                    ไม่ต้องมาดูรถ
+                    เนเธกเนเธ•เนเธญเธเธกเธฒเธ”เธนเธฃเธ–
                   </span>
                 </p>
                 <div className="w-32 h-1 bg-white/70 mx-auto rounded-full mt-6"></div>
@@ -633,7 +664,7 @@ export default function HomeDeferredSections({
               <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
                 <A11yImage
                   src="/images/kn2.webp"
-                  alt="ไอคอนรถบ้านแท้"
+                  alt="เนเธญเธเธญเธเธฃเธ–เธเนเธฒเธเนเธ—เน"
                   width={128}
                   height={128}
                   loading="lazy"
@@ -643,13 +674,20 @@ export default function HomeDeferredSections({
               </div>
               <div className="flex-1 w-full text-left">
                 <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
-                  <span className="block text-primary font-semibold">คัดเฉพาะรถมือเดียว</span>
+                  <span className="block text-primary font-semibold">
+                    เธเธฑเธ”เน€เธเธเธฒเธฐเธฃเธ–เธกเธทเธญเน€เธ”เธตเธขเธง
+                  </span>
                   <span className="block">
-                    <span className="text-primary font-semibold">จากเจ้าของโดยตรง</span>{' '}
-                    <span className="text-accent-800 font-semibold">
-                      ไม่มีรถน้ำท่วม ไม่มีรถอุบัติเหตุ
+                    <span className="text-primary font-semibold">
+                      เธเธฒเธเน€เธเนเธฒเธเธญเธเนเธ”เธขเธ•เธฃเธ
                     </span>{' '}
-                    <span className="text-primary">ขอดูเล่มทะเบียนได้ทุกหน้า</span>
+                    <span className="text-accent-800 font-semibold">
+                      เนเธกเนเธกเธตเธฃเธ–เธเนเธณเธ—เนเธงเธก
+                      เนเธกเนเธกเธตเธฃเธ–เธญเธธเธเธฑเธ•เธดเน€เธซเธ•เธธ
+                    </span>{' '}
+                    <span className="text-primary">
+                      เธเธญเธ”เธนเน€เธฅเนเธกเธ—เธฐเน€เธเธตเธขเธเนเธ”เนเธ—เธธเธเธซเธเนเธฒ
+                    </span>
                   </span>
                 </p>
               </div>
@@ -660,7 +698,7 @@ export default function HomeDeferredSections({
               <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
                 <A11yImage
                   src="/images/kn1.webp"
-                  alt="ไอคอนฟรีดาวน์ 0%"
+                  alt="เนเธญเธเธญเธเธเธฃเธตเธ”เธฒเธงเธเน 0%"
                   width={128}
                   height={128}
                   loading="lazy"
@@ -671,11 +709,13 @@ export default function HomeDeferredSections({
               <div className="flex-1 w-full text-left">
                 <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
                   <span className="block text-orange-700 font-semibold">
-                    ออกรถไม่ต้องวางเงินดาวน์
+                    เธญเธญเธเธฃเธ–เนเธกเนเธ•เนเธญเธเธงเธฒเธเน€เธเธดเธเธ”เธฒเธงเธเน
                   </span>
                   <span className="block">
-                    ตามเงื่อนไขไฟแนนซ์{' '}
-                    <span className="text-primary font-semibold">อนุมัติง่าย ผ่อนสบาย</span>
+                    เธ•เธฒเธกเน€เธเธทเนเธญเธเนเธเนเธเนเธเธเธเน{' '}
+                    <span className="text-primary font-semibold">
+                      เธญเธเธธเธกเธฑเธ•เธดเธเนเธฒเธข เธเนเธญเธเธชเธเธฒเธข
+                    </span>
                   </span>
                 </p>
               </div>
@@ -686,7 +726,7 @@ export default function HomeDeferredSections({
               <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
                 <A11yImage
                   src="/images/kn6.webp"
-                  alt="ไอคอนรับประกัน"
+                  alt="เนเธญเธเธญเธเธฃเธฑเธเธเธฃเธฐเธเธฑเธ"
                   width={128}
                   height={128}
                   loading="lazy"
@@ -696,10 +736,17 @@ export default function HomeDeferredSections({
               </div>
               <div className="flex-1 w-full text-left">
                 <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
-                  <span className="block">รับประกันเครื่องยนต์และเกียร์</span>
                   <span className="block">
-                    <span className="text-primary font-semibold">1 ปีเต็ม ไม่จำกัดกิโลเมตร</span>{' '}
-                    พร้อม <span className="text-orange-700 font-semibold">บริการหลังการขาย</span>
+                    เธฃเธฑเธเธเธฃเธฐเธเธฑเธเน€เธเธฃเธทเนเธญเธเธขเธเธ•เนเนเธฅเธฐเน€เธเธตเธขเธฃเน
+                  </span>
+                  <span className="block">
+                    <span className="text-primary font-semibold">
+                      1 เธเธตเน€เธ•เนเธก เนเธกเนเธเธณเธเธฑเธ”เธเธดเนเธฅเน€เธกเธ•เธฃ
+                    </span>{' '}
+                    เธเธฃเนเธญเธก{' '}
+                    <span className="text-orange-700 font-semibold">
+                      เธเธฃเธดเธเธฒเธฃเธซเธฅเธฑเธเธเธฒเธฃเธเธฒเธข
+                    </span>
                   </span>
                 </p>
               </div>
@@ -710,7 +757,7 @@ export default function HomeDeferredSections({
               <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
                 <A11yImage
                   src="/images/kn5.webp"
-                  alt="ไอคอนส่งฟรี"
+                  alt="เนเธญเธเธญเธเธชเนเธเธเธฃเธต"
                   width={128}
                   height={128}
                   loading="lazy"
@@ -720,12 +767,16 @@ export default function HomeDeferredSections({
               </div>
               <div className="flex-1 w-full text-left">
                 <p className="text-gray-800 font-prompt text-sm sm:text-[15px] md:text-sm leading-relaxed antialiased">
-                  <span className="block text-orange-700 font-semibold">จัดส่งฟรีทุกจังหวัด</span>
-                  <span className="block">
-                    พร้อมประกันการขนส่ง{' '}
-                    <span className="text-primary font-semibold">ลูกค้า 90% เชื่อมั่น</span>
+                  <span className="block text-orange-700 font-semibold">
+                    เธเธฑเธ”เธชเนเธเธเธฃเธตเธ—เธธเธเธเธฑเธเธซเธงเธฑเธ”
                   </span>
-                  <span className="block">ไม่ต้องมาดูรถ</span>
+                  <span className="block">
+                    เธเธฃเนเธญเธกเธเธฃเธฐเธเธฑเธเธเธฒเธฃเธเธเธชเนเธ{' '}
+                    <span className="text-primary font-semibold">
+                      เธฅเธนเธเธเนเธฒ 90% เน€เธเธทเนเธญเธกเธฑเนเธ
+                    </span>
+                  </span>
+                  <span className="block">เนเธกเนเธ•เนเธญเธเธกเธฒเธ”เธนเธฃเธ–</span>
                 </p>
               </div>
             </div>
@@ -735,7 +786,7 @@ export default function HomeDeferredSections({
           <div className="relative rounded-3xl p-5 md:p-8 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden bg-gradient-to-br from-white via-gray-50/80 to-white/90 backdrop-blur-xl">
             <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-8">
               <div className="text-left">
-                {/* ปุ่มย้อนกลับ */}
+                {/* เธเธธเนเธกเธขเนเธญเธเธเธฅเธฑเธ */}
                 <button
                   onClick={() => {
                     if (window.history.length > 2) {
@@ -760,13 +811,14 @@ export default function HomeDeferredSections({
                       d="M10 19l-7-7m0 0l7-7m-7 7h18"
                     />
                   </svg>
-                  ย้อนกลับ
+                  เธขเนเธญเธเธเธฅเธฑเธ
                 </button>
                 <h3 className="text-lg sm:text-xl md:text-3xl font-extrabold text-gray-900 mb-1 md:mb-2 font-prompt tracking-tight">
-                  ศูนย์รวมแบรนด์ดังครบครัน
+                  เธจเธนเธเธขเนเธฃเธงเธกเนเธเธฃเธเธ”เนเธ”เธฑเธเธเธฃเธเธเธฃเธฑเธ
                 </h3>
                 <p className="text-gray-600 font-prompt text-sm md:text-base leading-relaxed">
-                  รถมือสองคุณภาพจากทุกแบรนด์ชั้นนำ ตามมาตรฐาน ครูหนึ่งรถสวย
+                  เธฃเธ–เธกเธทเธญเธชเธญเธเธเธธเธ“เธ เธฒเธเธเธฒเธเธ—เธธเธเนเธเธฃเธเธ”เนเธเธฑเนเธเธเธณ
+                  เธ•เธฒเธกเธกเธฒเธ•เธฃเธเธฒเธ เธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข
                 </p>
               </div>
               <Link
@@ -774,7 +826,7 @@ export default function HomeDeferredSections({
                 prefetch={false}
                 className="hidden md:inline-flex items-center text-sm lg:text-base font-semibold text-primary hover:text-orange-600 transition-colors group font-prompt"
               >
-                ดูรถทุกยี่ห้อ
+                เธ”เธนเธฃเธ–เธ—เธธเธเธขเธตเนเธซเนเธญ
                 <svg
                   className="w-4 h-4 md:w-5 md:h-5 ml-1 group-hover:translate-x-1 transition-transform"
                   fill="none"
@@ -839,29 +891,27 @@ export default function HomeDeferredSections({
                 },
               ].map(brand => {
                 const count = getBrandCount(brand.id);
-                // ซ่อนแบรนด์ที่ไม่มีรถ เพื่อให้แผงดูสะอาด
+                // เธเนเธญเธเนเธเธฃเธเธ”เนเธ—เธตเนเนเธกเนเธกเธตเธฃเธ– เน€เธเธทเนเธญเนเธซเนเนเธเธเธ”เธนเธชเธฐเธญเธฒเธ”
                 if (count === 0 && process.env.NODE_ENV === 'production') return null;
 
                 return (
                   <Link
                     key={brand.id}
-                    href={`/all-cars?brand=${brand.id}`}
-                    prefetch={false}
-                    className="snap-start shrink-0 group relative flex items-center justify-between pl-5 pr-4 sm:pl-6 sm:pr-5 py-3 sm:py-3.5 bg-white rounded-full border border-gray-200/80 hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95"
+                    href={`/used-cars-chiang-mai-brand/${brand.id}`}
+                    prefetch={true}
+                    className="snap-start shrink-0 group relative flex items-center justify-center gap-2 sm:gap-2.5 pl-4 pr-3 sm:pl-5 sm:pr-4 py-3 sm:py-3.5 bg-white rounded-full border border-gray-200/80 hover:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 shadow-sm hover:shadow-md transition-all duration-300 active:scale-95"
                   >
-                    <div className="flex items-center gap-2.5">
-                      <svg
-                        className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                      >
-                        <path d={brand.icon} />
-                      </svg>
-                      <span className="font-bold text-gray-800 text-sm sm:text-base font-prompt group-hover:text-primary transition-colors whitespace-nowrap">
-                        {brand.name}
-                      </span>
-                    </div>
-                    <span className="ml-3 sm:ml-4 text-xs sm:text-sm font-semibold text-gray-600 group-hover:text-primary transition-colors flex-shrink-0 whitespace-nowrap bg-gray-50/80 px-2.5 py-1 rounded-md">
+                    <svg
+                      className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors flex-shrink-0"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                    >
+                      <path d={brand.icon} />
+                    </svg>
+                    <span className="font-bold text-gray-800 text-sm sm:text-base font-prompt group-hover:text-primary transition-colors whitespace-nowrap">
+                      {brand.name}
+                    </span>
+                    <span className="text-xs sm:text-sm font-semibold text-gray-600 group-hover:text-primary transition-colors flex-shrink-0 whitespace-nowrap bg-gray-50/80 px-2.5 py-1 rounded-md">
                       {count}
                     </span>
                   </Link>
@@ -874,7 +924,7 @@ export default function HomeDeferredSections({
                 prefetch={false}
                 className="md:hidden snap-start shrink-0 flex items-center justify-center px-6 py-3 bg-gray-900 text-white rounded-full font-bold text-sm font-prompt active:scale-95 transition-transform shadow-md"
               >
-                ดูทุกยี่ห้อ ➔
+                เธ”เธนเธ—เธธเธเธขเธตเนเธซเนเธญ โ”
               </Link>
             </div>
 
@@ -902,7 +952,7 @@ export default function HomeDeferredSections({
                     />
                   </svg>
                   <span className="group-hover:tracking-wider transition-all duration-700">
-                    ติดต่อเรา
+                    เธ•เธดเธ”เธ•เนเธญเน€เธฃเธฒ
                   </span>
                 </div>
               </Link>
@@ -928,7 +978,7 @@ export default function HomeDeferredSections({
                     />
                   </svg>
                   <span className="group-hover:tracking-wider transition-all duration-700">
-                    เกี่ยวกับเรา
+                    เน€เธเธตเนเธขเธงเธเธฑเธเน€เธฃเธฒ
                   </span>
                 </div>
               </Link>
@@ -954,7 +1004,7 @@ export default function HomeDeferredSections({
                     />
                   </svg>
                   <span className="group-hover:tracking-wider transition-all duration-700">
-                    โปรโมชั่น
+                    เนเธเธฃเนเธกเธเธฑเนเธ
                   </span>
                 </div>
               </Link>
@@ -981,7 +1031,7 @@ export default function HomeDeferredSections({
                     />
                   </svg>
                   <span className="group-hover:tracking-wider transition-all duration-700">
-                    ประเมินสินเชื่อ
+                    เธเธฃเธฐเน€เธกเธดเธเธชเธดเธเน€เธเธทเนเธญ
                   </span>
                 </div>
               </Link>
@@ -1008,7 +1058,7 @@ export default function HomeDeferredSections({
                     />
                   </svg>
                   <span className="group-hover:tracking-wider transition-all duration-700">
-                    คิดเงินผ่อน
+                    เธเธดเธ”เน€เธเธดเธเธเนเธญเธ
                   </span>
                 </div>
               </Link>
@@ -1035,7 +1085,7 @@ export default function HomeDeferredSections({
                     />
                   </svg>
                   <span className="group-hover:tracking-wider transition-all duration-700">
-                    ขายรถ
+                    เธเธฒเธขเธฃเธ–
                   </span>
                 </div>
               </Link>
@@ -1048,8 +1098,8 @@ export default function HomeDeferredSections({
       {showSocialShare && (
         <SocialShareButtons
           url={socialShareUrl}
-          title="ครูหนึ่งรถสวย - รถมือสองเชียงใหม่คุณภาพดี"
-          description="รถมือสองเชียงใหม่คุณภาพดี คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย"
+          title="เธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข - เธฃเธ–เธกเธทเธญเธชเธญเธเน€เธเธตเธขเธเนเธซเธกเนเธเธธเธ“เธ เธฒเธเธ”เธต"
+          description="เธฃเธ–เธกเธทเธญเธชเธญเธเน€เธเธตเธขเธเนเธซเธกเนเธเธธเธ“เธ เธฒเธเธ”เธต เธเธฑเธ”เธชเธฃเธฃเธ—เธธเธเธเธฑเธ เธเธฃเธตเธ”เธฒเธงเธเน 0% เธฃเธฑเธเธเธฃเธฐเธเธฑเธ 1 เธเธต เธชเนเธเธเธฃเธตเธ—เธฑเนเธงเนเธ—เธข"
           position="fixed"
         />
       )}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+﻿import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import CarCard from '../components/CarCard';
@@ -242,8 +242,10 @@ export default function AllCars({
   // Updated: Allow price and brand to be indexed
   const isFiltered = useMemo(() => {
     const hasSearch = !!(searchTerm && String(searchTerm).trim());
-    return hasSearch;
-  }, [searchTerm]);
+    const hasBrand = brandFilter !== 'all';
+    const hasPrice = priceRange !== 'all';
+    return hasSearch || hasBrand || hasPrice;
+  }, [searchTerm, brandFilter, priceRange]);
 
   // Canonical URL for SEO component
   const seoPath = useMemo(() => {
@@ -252,7 +254,7 @@ export default function AllCars({
     return safePage > 1 ? `/all-cars?page=${safePage}` : '/all-cars';
   }, [isFiltered, safePage]);
 
-  // ฟังก์ชันสำหรับสร้างลิงก์ SEO-friendly
+  // เธเธฑเธเธเนเธเธฑเธเธชเธณเธซเธฃเธฑเธเธชเธฃเนเธฒเธเธฅเธดเธเธเน SEO-friendly
   const getPageUrl = page => {
     const params = new URLSearchParams();
     const term = String(searchTerm || '')
@@ -267,24 +269,24 @@ export default function AllCars({
     return queryString ? `/all-cars?${queryString}` : '/all-cars';
   };
 
-  // เปลี่ยนหน้าและเลื่อนไปที่จุดเริ่มต้นของรายการรถ (ไม่เด้งขึ้นไปบนสุดที่แบนเนอร์)
+  // เน€เธเธฅเธตเนเธขเธเธซเธเนเธฒเนเธฅเธฐเน€เธฅเธทเนเธญเธเนเธเธ—เธตเนเธเธธเธ”เน€เธฃเธดเนเธกเธ•เนเธเธเธญเธเธฃเธฒเธขเธเธฒเธฃเธฃเธ– (เนเธกเนเน€เธ”เนเธเธเธถเนเธเนเธเธเธเธชเธธเธ”เธ—เธตเนเนเธเธเน€เธเธญเธฃเน)
   const handlePaginationNav = (page, e) => {
     e.preventDefault();
     if (page === currentPage) return;
 
-    // เลื่อนหน้าไป (scroll: false ปิดการเด้งไปบนสุดอัตโนมัติของ Next.js)
+    // เน€เธฅเธทเนเธญเธเธซเธเนเธฒเนเธ (scroll: false เธเธดเธ”เธเธฒเธฃเน€เธ”เนเธเนเธเธเธเธชเธธเธ”เธญเธฑเธ•เนเธเธกเธฑเธ•เธดเธเธญเธ Next.js)
     router
       .push(getPageUrl(page), undefined, {
         scroll: false,
       })
       .then(() => {
-        // ใช้ requestAnimationFrame หรือ setTimeout เพื่อดักให้ DOM เรนเดอร์รถชุดใหม่เสร็จก่อน
-        // ถึงจะคำนวณตำแหน่งและเลื่อนจอจริงๆ
+        // เนเธเน requestAnimationFrame เธซเธฃเธทเธญ setTimeout เน€เธเธทเนเธญเธ”เธฑเธเนเธซเน DOM เน€เธฃเธเน€เธ”เธญเธฃเนเธฃเธ–เธเธธเธ”เนเธซเธกเนเน€เธชเธฃเนเธเธเนเธญเธ
+        // เธ–เธถเธเธเธฐเธเธณเธเธงเธ“เธ•เธณเนเธซเธเนเธเนเธฅเธฐเน€เธฅเธทเนเธญเธเธเธญเธเธฃเธดเธเน
         setTimeout(() => {
-          // เลื่อนไปที่ตะกร้ารถจริงๆ ไม่ใช่ block SEO ด้านบน
+          // เน€เธฅเธทเนเธญเธเนเธเธ—เธตเนเธ•เธฐเธเธฃเนเธฒเธฃเธ–เธเธฃเธดเธเน เนเธกเนเนเธเน block SEO เธ”เนเธฒเธเธเธ
           const grid = document.getElementById('cars-list-top');
           if (grid) {
-            // หักลบความสูง navbar
+            // เธซเธฑเธเธฅเธเธเธงเธฒเธกเธชเธนเธ navbar
             const y = grid.getBoundingClientRect().top + window.scrollY - 80;
             window.scrollTo({ top: y, behavior: 'auto' });
           }
@@ -294,12 +296,12 @@ export default function AllCars({
 
   const generatePageNumbers = () => {
     const pages = [];
-    const maxVisiblePages = 5; // แสดงหน้าสูงสุด 5 หน้า
+    const maxVisiblePages = 5; // เนเธชเธ”เธเธซเธเนเธฒเธชเธนเธเธชเธธเธ” 5 เธซเธเนเธฒ
 
     let startPage = Math.max(1, safePage - Math.floor(maxVisiblePages / 2));
     let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
-    // ปรับให้แสดงครบ 5 หน้าถ้าเป็นไปได้
+    // เธเธฃเธฑเธเนเธซเนเนเธชเธ”เธเธเธฃเธ 5 เธซเธเนเธฒเธ–เนเธฒเน€เธเนเธเนเธเนเธ”เน
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
@@ -311,7 +313,7 @@ export default function AllCars({
     return pages;
   };
 
-  // เริ่มการเรนเดอร์หน้า
+  // เน€เธฃเธดเนเธกเธเธฒเธฃเน€เธฃเธเน€เธ”เธญเธฃเนเธซเธเนเธฒ
 
   return (
     <div className="min-h-screen">
@@ -320,30 +322,30 @@ export default function AllCars({
           let title = seoAllCars.titleBase;
           let isSpecific = false;
           const priceLabels = {
-            '0-100000': 'ราคาไม่เกิน 1 แสน',
-            '100000-200000': 'ราคา 1-2 แสน',
-            '200000-300000': 'ราคา 2-3 แสน',
-            '300000-400000': 'ราคา 3-4 แสน',
-            '400000-500000': 'ราคา 4-5 แสน',
-            '500000-600000': 'ราคา 5-6 แสน',
-            '600000-700000': 'ราคา 6-7 แสน',
-            700000: 'ราคา 7 แสนขึ้นไป',
+            '0-100000': 'เธฃเธฒเธเธฒเนเธกเนเน€เธเธดเธ 1 เนเธชเธ',
+            '100000-200000': 'เธฃเธฒเธเธฒ 1-2 เนเธชเธ',
+            '200000-300000': 'เธฃเธฒเธเธฒ 2-3 เนเธชเธ',
+            '300000-400000': 'เธฃเธฒเธเธฒ 3-4 เนเธชเธ',
+            '400000-500000': 'เธฃเธฒเธเธฒ 4-5 เนเธชเธ',
+            '500000-600000': 'เธฃเธฒเธเธฒ 5-6 เนเธชเธ',
+            '600000-700000': 'เธฃเธฒเธเธฒ 6-7 เนเธชเธ',
+            700000: 'เธฃเธฒเธเธฒ 7 เนเธชเธเธเธถเนเธเนเธ',
           };
           const brandLabels = {
-            toyota: 'รถ Toyota',
-            honda: 'รถ Honda',
-            nissan: 'รถ Nissan',
-            mazda: 'รถ Mazda',
-            mitsubishi: 'รถ Mitsubishi',
-            isuzu: 'รถ Isuzu',
-            ford: 'รถ Ford',
+            toyota: 'เธฃเธ– Toyota',
+            honda: 'เธฃเธ– Honda',
+            nissan: 'เธฃเธ– Nissan',
+            mazda: 'เธฃเธ– Mazda',
+            mitsubishi: 'เธฃเธ– Mitsubishi',
+            isuzu: 'เธฃเธ– Isuzu',
+            ford: 'เธฃเธ– Ford',
           };
           let prefix = [];
           if (brandFilter && brandFilter !== 'all' && brandLabels[brandFilter]) {
             prefix.push(brandLabels[brandFilter]);
             isSpecific = true;
           } else {
-            prefix.push('รถมือสอง');
+            prefix.push('เธฃเธ–เธกเธทเธญเธชเธญเธ');
           }
 
           if (priceRange && priceRange !== 'all' && priceLabels[priceRange]) {
@@ -353,8 +355,9 @@ export default function AllCars({
 
           let desc =
             prefix.join(' ') +
-            ' ศูนย์รวมรถบ้านมือเดียวในจังหวัดเชียงใหม่ สภาพดี ฟรีดาวน์ พร้อมรับประกัน 1 ปี';
-          title = prefix.join(' ') + ' เชียงใหม่ สภาพดี ฟรีดาวน์';
+            ' เธจเธนเธเธขเนเธฃเธงเธกเธฃเธ–เธเนเธฒเธเธกเธทเธญเน€เธ”เธตเธขเธงเนเธเธเธฑเธเธซเธงเธฑเธ”เน€เธเธตเธขเธเนเธซเธกเน เธชเธ เธฒเธเธ”เธต เธเธฃเธตเธ”เธฒเธงเธเน เธเธฃเนเธญเธกเธฃเธฑเธเธเธฃเธฐเธเธฑเธ 1 เธเธต';
+          title =
+            prefix.join(' ') + ' เน€เธเธตเธขเธเนเธซเธกเน เธชเธ เธฒเธเธ”เธต เธเธฃเธตเธ”เธฒเธงเธเน';
 
           return { title, desc, isSpecific };
         };
@@ -364,13 +367,13 @@ export default function AllCars({
           <SEO
             title={
               dynamicSEO.isSpecific
-                ? `${dynamicSEO.title}${safeTotalPages > 1 && safePage > 1 ? ` หน้า ${safePage}` : ''} | ครูหนึ่งรถสวย`
-                : `${seoAllCars.titleBase}${safeTotalPages > 1 && safePage > 1 ? ` หน้า ${safePage}` : ''} | ครูหนึ่งรถสวย`
+                ? `${dynamicSEO.title}${safeTotalPages > 1 && safePage > 1 ? ` เธซเธเนเธฒ ${safePage}` : ''} | เธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข`
+                : `${seoAllCars.titleBase}${safeTotalPages > 1 && safePage > 1 ? ` เธซเธเนเธฒ ${safePage}` : ''} | เธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข`
             }
             description={
               dynamicSEO.isSpecific
-                ? dynamicSEO.desc + ' โทร 094-064-9018'
-                : `ดูรถยนต์มือสองคุณภาพดีทั้งหมด ${Number.isFinite(totalCount) ? totalCount : 0} คัน ในเชียงใหม่และภาคเหนือ คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda นัดหมายดูรถโทร 094-064-9018`
+                ? dynamicSEO.desc + ' เนเธ—เธฃ 094-064-9018'
+                : `เธ”เธนเธฃเธ–เธขเธเธ•เนเธกเธทเธญเธชเธญเธเธเธธเธ“เธ เธฒเธเธ”เธตเธ—เธฑเนเธเธซเธกเธ” ${Number.isFinite(totalCount) ? totalCount : 0} เธเธฑเธ เนเธเน€เธเธตเธขเธเนเธซเธกเนเนเธฅเธฐเธ เธฒเธเน€เธซเธเธทเธญ เธเธฑเธ”เธชเธฃเธฃเธ—เธธเธเธเธฑเธ เธเธฃเธตเธ”เธฒเธงเธเน 0% เธฃเธฑเธเธเธฃเธฐเธเธฑเธ 1 เธเธต เธชเนเธเธเธฃเธตเธ—เธฑเนเธงเนเธ—เธข Toyota Honda Nissan Mazda เธเธฑเธ”เธซเธกเธฒเธขเธ”เธนเธฃเธ–เนเธ—เธฃ 094-064-9018`
             }
             keywords={[
               seoAllCars.primary,
@@ -385,8 +388,8 @@ export default function AllCars({
             pageType="all-cars"
             noindex={isFiltered}
             breadcrumbs={[
-              { name: 'หน้าแรก', url: '/' },
-              { name: 'รถมือสองทั้งหมด', url: '/all-cars' },
+              { name: 'เธซเธเนเธฒเนเธฃเธ', url: '/' },
+              { name: 'เธฃเธ–เธกเธทเธญเธชเธญเธเธ—เธฑเนเธเธซเธกเธ”', url: '/all-cars' },
             ]}
             structuredData={structuredDataJson || null}
           />
@@ -418,14 +421,19 @@ export default function AllCars({
       {process.env.NODE_ENV === 'development' && shopifyError && currentCars.length === 0 && (
         <section className="max-w-7xl mx-auto px-6 mt-4" aria-label="Dev Shopify error">
           <div className="rounded-2xl border border-red-200 bg-red-50 p-4 font-prompt">
-            <div className="font-bold text-red-900">Dev: ดึงข้อมูลรถจาก Shopify ไม่สำเร็จ</div>
+            <div className="font-bold text-red-900">
+              Dev: เธ”เธถเธเธเนเธญเธกเธนเธฅเธฃเธ–เธเธฒเธ Shopify เนเธกเนเธชเธณเน€เธฃเนเธ
+            </div>
             <div className="mt-1 text-sm text-red-800">
-              ตรวจสอบไฟล์ <span className="font-semibold">.env.local</span> ว่ามี{' '}
-              <span className="font-semibold">SHOPIFY_DOMAIN</span> และ{' '}
-              <span className="font-semibold">SHOPIFY_STOREFRONT_TOKEN</span> แล้วรันใหม่ด้วย{' '}
+              เธ•เธฃเธงเธเธชเธญเธเนเธเธฅเน <span className="font-semibold">.env.local</span>{' '}
+              เธงเนเธฒเธกเธต <span className="font-semibold">SHOPIFY_DOMAIN</span> เนเธฅเธฐ{' '}
+              <span className="font-semibold">SHOPIFY_STOREFRONT_TOKEN</span>{' '}
+              เนเธฅเนเธงเธฃเธฑเธเนเธซเธกเนเธ”เนเธงเธข{' '}
               <span className="font-semibold">pnpm dev</span>
             </div>
-            <div className="mt-1 text-xs text-red-700/80">รายละเอียด: {shopifyError}</div>
+            <div className="mt-1 text-xs text-red-700/80">
+              เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”: {shopifyError}
+            </div>
           </div>
         </section>
       )}
@@ -445,9 +453,9 @@ export default function AllCars({
       {/* Hero Banner - 2025 Modern Design */}
       <section
         className="relative w-full bg-[#f8f9fa] flex justify-center"
-        aria-label="รถมือสองทั้งหมด - ครูหนึ่งรถสวย"
+        aria-label="เธฃเธ–เธกเธทเธญเธชเธญเธเธ—เธฑเนเธเธซเธกเธ” - เธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข"
       >
-        {/* Container สำหรับรูปภาพที่ปรับอัตราส่วนตามภาพจริง (1400/474) ในทุกอุปกรณ์ */}
+        {/* Container เธชเธณเธซเธฃเธฑเธเธฃเธนเธเธ เธฒเธเธ—เธตเนเธเธฃเธฑเธเธญเธฑเธ•เธฃเธฒเธชเนเธงเธเธ•เธฒเธกเธ เธฒเธเธเธฃเธดเธ (1400/474) เนเธเธ—เธธเธเธญเธธเธเธเธฃเธ“เน */}
         <div className="relative w-full max-w-[1400px] aspect-[1400/474]">
           <div className="absolute inset-0" aria-hidden="true">
             <picture>
@@ -466,7 +474,7 @@ export default function AllCars({
                 src="/herobanner/heroallcars-1024w.webp"
                 srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
                 sizes="(max-width: 1400px) 100vw, 1400px"
-                alt="รวมรถยนต์มือสองคุณภาพดี ครูหนึ่งรถสวย เชียงใหม่"
+                alt="เธฃเธงเธกเธฃเธ–เธขเธเธ•เนเธกเธทเธญเธชเธญเธเธเธธเธ“เธ เธฒเธเธ”เธต เธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข เน€เธเธตเธขเธเนเธซเธกเน"
                 className="w-full h-full object-cover object-top"
                 decoding="async"
                 loading="eager"
@@ -487,7 +495,8 @@ export default function AllCars({
                     '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
                 }}
               >
-                {seoAllCars.h1 || 'รวมรถมือสองเชียงใหม่ ครบทุกยี่ห้อ'}
+                {seoAllCars.h1 ||
+                  'เธฃเธงเธกเธฃเธ–เธกเธทเธญเธชเธญเธเน€เธเธตเธขเธเนเธซเธกเน เธเธฃเธเธ—เธธเธเธขเธตเนเธซเนเธญ'}
               </h1>
               <div className="flex flex-row items-center justify-center gap-2 sm:gap-3 flex-wrap">
                 <p
@@ -497,7 +506,8 @@ export default function AllCars({
                       '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
                   }}
                 >
-                  รถคุณภาพดี {Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ
+                  เธฃเธ–เธเธธเธ“เธ เธฒเธเธ”เธต {Number.isFinite(totalCount) ? totalCount : 0}{' '}
+                  เธเธฑเธ เธเธฃเนเธญเธกเธชเนเธเธกเธญเธ
                 </p>
                 {safeTotalPages > 1 && (
                   <p
@@ -507,7 +517,7 @@ export default function AllCars({
                         '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
                     }}
                   >
-                    หน้า {safePage}/{safeTotalPages}
+                    เธซเธเนเธฒ {safePage}/{safeTotalPages}
                   </p>
                 )}
               </div>
@@ -519,7 +529,7 @@ export default function AllCars({
       {/* Breadcrumb */}
       <section className="bg-white py-4 border-b border-gray-200 -mt-0">
         <div className="max-w-7xl mx-auto px-6">
-          {/* ปุ่มย้อนกลับ */}
+          {/* เธเธธเนเธกเธขเนเธญเธเธเธฅเธฑเธ */}
           <div className="mb-3">
             <button
               onClick={() => {
@@ -545,47 +555,50 @@ export default function AllCars({
                   d="M10 19l-7-7m0 0l7-7m-7 7h18"
                 />
               </svg>
-              ย้อนกลับ
+              เธขเนเธญเธเธเธฅเธฑเธ
             </button>
           </div>
 
           <nav
-            aria-label="เส้นทางปัจจุบัน"
+            aria-label="เน€เธชเนเธเธ—เธฒเธเธเธฑเธเธเธธเธเธฑเธ"
             className="flex items-center gap-2 text-sm text-gray-600 font-prompt"
           >
             <Link href="/" className="hover:text-primary transition-colors">
-              หน้าแรก
+              เธซเธเนเธฒเนเธฃเธ
             </Link>
             <span aria-hidden="true">/</span>
             <span className="text-primary font-medium" aria-current="page">
-              รถทั้งหมด
+              เธฃเธ–เธ—เธฑเนเธเธซเธกเธ”
             </span>
           </nav>
 
           <div className="mt-4 rounded-2xl border border-orange-500 bg-white px-4 py-3">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
               <div className="text-sm text-gray-950 font-semibold font-prompt">
-                รายการลงประกาศรถทั้งหมดของทางร้าน พร้อมข้อมูลติดต่อ
+                เธฃเธฒเธขเธเธฒเธฃเธฅเธเธเธฃเธฐเธเธฒเธจเธฃเธ–เธ—เธฑเนเธเธซเธกเธ”เธเธญเธเธ—เธฒเธเธฃเนเธฒเธ
+                เธเธฃเนเธญเธกเธเนเธญเธกเธนเธฅเธ•เธดเธ”เธ•เนเธญ
               </div>
               <div className="flex flex-wrap gap-2">
                 <Link
                   href="/used-cars-chiang-mai"
                   className="inline-flex items-center justify-center rounded-xl bg-orange-700 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-800 transition-colors"
                 >
-                  ฝากขายราคาดี
+                  เธเธฒเธเธเธฒเธขเธฃเธฒเธเธฒเธ”เธต
                 </Link>
                 <Link
                   href="/contact"
                   prefetch={false}
                   className="inline-flex items-center justify-center rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white transition-colors"
                 >
-                  นัดดูรถ / ติดต่อ
+                  เธเธฑเธ”เธ”เธนเธฃเธ– / เธ•เธดเธ”เธ•เนเธญ
                 </Link>
               </div>
             </div>
 
             <div className="mt-3 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-              <div className="text-xs text-gray-700 font-prompt">หรือเลือกดูตามยี่ห้อรถ:</div>
+              <div className="text-xs text-gray-700 font-prompt">
+                เธซเธฃเธทเธญเน€เธฅเธทเธญเธเธ”เธนเธ•เธฒเธกเธขเธตเนเธซเนเธญเธฃเธ–:
+              </div>
               <div className="flex flex-wrap gap-2">
                 {[
                   { slug: 'toyota', label: 'Toyota' },
@@ -613,7 +626,7 @@ export default function AllCars({
       <section
         id="cars-grid-section"
         className="py-8 md:py-12 bg-white border-t border-gray-200"
-        aria-label="รายการรถมือสองทั้งหมด"
+        aria-label="เธฃเธฒเธขเธเธฒเธฃเธฃเธ–เธกเธทเธญเธชเธญเธเธ—เธฑเนเธเธซเธกเธ”"
       >
         <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-5 ipadpro:px-3 lg:px-6">
           {/* SEO Content: The Volume Up & Content Deep Strategy */}
@@ -623,34 +636,38 @@ export default function AllCars({
 
             {/* SEO Header (Short version for UX) */}
             <h2 className="text-xl md:text-2xl font-bold text-gray-900 font-prompt mb-3 relative z-10">
-              ศูนย์รวมรถมือสองเชียงใหม่ คุณภาพดี คัดเกรดพรีเมียม
+              เธจเธนเธเธขเนเธฃเธงเธกเธฃเธ–เธกเธทเธญเธชเธญเธเน€เธเธตเธขเธเนเธซเธกเน
+              เธเธธเธ“เธ เธฒเธเธ”เธต เธเธฑเธ”เน€เธเธฃเธ”เธเธฃเธตเน€เธกเธตเธขเธก
             </h2>
             <div className="text-sm md:text-base text-gray-600 font-prompt space-y-2 relative z-10 max-w-4xl">
               <p>
-                เรามีรถคุณภาพพร้อมใช้งานให้เลือกชมมากกว่า{' '}
+                เน€เธฃเธฒเธกเธตเธฃเธ–เธเธธเธ“เธ เธฒเธเธเธฃเนเธญเธกเนเธเนเธเธฒเธเนเธซเนเน€เธฅเธทเธญเธเธเธกเธกเธฒเธเธเธงเนเธฒ{' '}
                 <strong className="text-accent text-lg">
-                  {Number.isFinite(totalCount) ? totalCount : 0} คัน
+                  {Number.isFinite(totalCount) ? totalCount : 0} เธเธฑเธ
                 </strong>{' '}
-                ที่ครอบคลุมทุกไลฟ์สไตล์ รถทุกคันผ่านการตรวจเช็คสภาพ ไมล์แท้ โครงสร้างเดิม
-                พร้อมบริการจัดไฟแนนซ์ อนุมัติไว ฟรีดาวน์ 0%
+                เธ—เธตเนเธเธฃเธญเธเธเธฅเธธเธกเธ—เธธเธเนเธฅเธเนเธชเนเธ•เธฅเน
+                เธฃเธ–เธ—เธธเธเธเธฑเธเธเนเธฒเธเธเธฒเธฃเธ•เธฃเธงเธเน€เธเนเธเธชเธ เธฒเธ
+                เนเธกเธฅเนเนเธ—เน เนเธเธฃเธเธชเธฃเนเธฒเธเน€เธ”เธดเธก
+                เธเธฃเนเธญเธกเธเธฃเธดเธเธฒเธฃเธเธฑเธ”เนเธเนเธเธเธเน เธญเธเธธเธกเธฑเธ•เธดเนเธง
+                เธเธฃเธตเธ”เธฒเธงเธเน 0%
               </p>
             </div>
           </div>
 
           {!Number.isFinite(totalCount) || totalCount === 0 ? (
             <div className="text-center py-12">
-              <div className="text-6xl mb-4">🔍</div>
+              <div className="text-6xl mb-4">๐”</div>
               <h2 className="text-2xl font-bold text-gray-600 mb-2 font-prompt">
-                ไม่พบรถมือสองเชียงใหม่ในหน้าต่างนี้
+                เนเธกเนเธเธเธฃเธ–เธกเธทเธญเธชเธญเธเน€เธเธตเธขเธเนเธซเธกเนเนเธเธซเธเนเธฒเธ•เนเธฒเธเธเธตเน
               </h2>
               <p className="text-gray-500 font-prompt">
-                เรามีรถบ้านมือสองคุณภาพดีเข้ามาใหม่ทุกวัน
-                ลองเปลี่ยนเงื่อนไขการค้นหาหรือติดต่อเราโดยตรง
+                เน€เธฃเธฒเธกเธตเธฃเธ–เธเนเธฒเธเธกเธทเธญเธชเธญเธเธเธธเธ“เธ เธฒเธเธ”เธตเน€เธเนเธฒเธกเธฒเนเธซเธกเนเธ—เธธเธเธงเธฑเธ
+                เธฅเธญเธเน€เธเธฅเธตเนเธขเธเน€เธเธทเนเธญเธเนเธเธเธฒเธฃเธเนเธเธซเธฒเธซเธฃเธทเธญเธ•เธดเธ”เธ•เนเธญเน€เธฃเธฒเนเธ”เธขเธ•เธฃเธ
               </p>
             </div>
           ) : (
             <>
-              {/* จุดปักหมุดสำหรับด้านบนของรายการรถจริงๆ (ไม่รวม text SEO ด้านบน) */}
+              {/* เธเธธเธ”เธเธฑเธเธซเธกเธธเธ”เธชเธณเธซเธฃเธฑเธเธ”เนเธฒเธเธเธเธเธญเธเธฃเธฒเธขเธเธฒเธฃเธฃเธ–เธเธฃเธดเธเน (เนเธกเนเธฃเธงเธก text SEO เธ”เนเธฒเธเธเธ) */}
               <div id="cars-list-top" className="scroll-mt-24"></div>
 
               {/* Cards Grid - standardized layout */}
@@ -678,11 +695,11 @@ export default function AllCars({
                 })}
               </div>
 
-              {/* Pagination - Production Style (เหมือนเว็บไซต์จริง) */}
+              {/* Pagination - Production Style (เน€เธซเธกเธทเธญเธเน€เธงเนเธเนเธเธ•เนเธเธฃเธดเธ) */}
               {safeTotalPages > 1 && (
                 <div className="mt-8 md:mt-12 flex flex-col items-center">
                   <nav
-                    aria-label="การแบ่งหน้า"
+                    aria-label="เธเธฒเธฃเนเธเนเธเธซเธเนเธฒ"
                     className="flex items-center justify-center space-x-2"
                   >
                     {/* Previous Button */}
@@ -691,17 +708,17 @@ export default function AllCars({
                         href={getPageUrl(currentPage - 1)}
                         scroll={false}
                         className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center justify-center"
-                        aria-label="ไปหน้าก่อนหน้า"
+                        aria-label="เนเธเธซเธเนเธฒเธเนเธญเธเธซเธเนเธฒ"
                         onClick={e => handlePaginationNav(currentPage - 1, e)}
                       >
-                        ← ก่อนหน้า
+                        โ เธเนเธญเธเธซเธเนเธฒ
                       </Link>
                     ) : (
                       <span
                         className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-gray-100 border-gray-200 text-gray-700 cursor-not-allowed flex items-center justify-center"
                         aria-hidden="true"
                       >
-                        ← ก่อนหน้า
+                        โ เธเนเธญเธเธซเธเนเธฒ
                       </span>
                     )}
 
@@ -717,7 +734,7 @@ export default function AllCars({
                               ? 'bg-primary border-primary text-white cursor-default'
                               : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
                           }`}
-                          aria-label={`ไปหน้าที่ ${page}`}
+                          aria-label={`เนเธเธซเธเนเธฒเธ—เธตเน ${page}`}
                           aria-current={page === currentPage ? 'page' : undefined}
                           onClick={e => handlePaginationNav(page, e)}
                         >
@@ -732,17 +749,17 @@ export default function AllCars({
                         href={getPageUrl(currentPage + 1)}
                         scroll={false}
                         className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-white border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center justify-center"
-                        aria-label="ไปหน้าถัดไป"
+                        aria-label="เนเธเธซเธเนเธฒเธ–เธฑเธ”เนเธ"
                         onClick={e => handlePaginationNav(currentPage + 1, e)}
                       >
-                        ถัดไป →
+                        เธ–เธฑเธ”เนเธ โ’
                       </Link>
                     ) : (
                       <span
                         className="px-3 py-2 text-sm font-medium rounded-lg border transition-colors bg-gray-100 border-gray-200 text-gray-700 cursor-not-allowed flex items-center justify-center"
                         aria-hidden="true"
                       >
-                        ถัดไป →
+                        เธ–เธฑเธ”เนเธ โ’
                       </span>
                     )}
                   </nav>
@@ -750,8 +767,8 @@ export default function AllCars({
                   {/* Page Info */}
                   <div className="mt-4 text-center">
                     <p className="text-sm text-gray-600">
-                      หน้า <span className="font-medium text-primary">{currentPage}</span> จาก{' '}
-                      <span className="font-medium text-primary">{safeTotalPages}</span>
+                      เธซเธเนเธฒ <span className="font-medium text-primary">{currentPage}</span>{' '}
+                      เธเธฒเธ <span className="font-medium text-primary">{safeTotalPages}</span>
                     </p>
                   </div>
                 </div>
@@ -764,36 +781,52 @@ export default function AllCars({
                     id="seo-about-heading"
                     className="text-lg md:text-xl lg:text-2xl font-bold text-gray-900 font-prompt mb-4"
                   >
-                    ทำไมต้องเลือกครูหนึ่งรถสวย ศูนย์รวมรถมือสองเชียงใหม่?
+                    เธ—เธณเนเธกเธ•เนเธญเธเน€เธฅเธทเธญเธเธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข
+                    เธจเธนเธเธขเนเธฃเธงเธกเธฃเธ–เธกเธทเธญเธชเธญเธเน€เธเธตเธขเธเนเธซเธกเน?
                   </h2>
                   <div className="text-sm md:text-base text-gray-700 font-prompt space-y-4 leading-[1.8]">
                     <p className="text-left">
-                      ยินดีต้อนรับสู่{' '}
-                      <strong className="text-primary font-semibold">ครูหนึ่งรถสวย</strong>{' '}
-                      ศูนย์รวมรถมือสองเชียงใหม่ที่ได้รับความไว้วางใจจากลูกค้าทั่วภาคเหนือ
-                      เราคัดสรรเฉพาะรถบ้านสภาพดี ไมล์แท้ ประวัติใสสะอาด โครงสร้างเดิม
-                      ไม่เคยมีประวัติชนหนักหรือจมน้ำ เพื่อส่งมอบความมั่นใจสูงสุดให้กับคุณ
+                      เธขเธดเธเธ”เธตเธ•เนเธญเธเธฃเธฑเธเธชเธนเน{' '}
+                      <strong className="text-primary font-semibold">
+                        เธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข
+                      </strong>{' '}
+                      เธจเธนเธเธขเนเธฃเธงเธกเธฃเธ–เธกเธทเธญเธชเธญเธเน€เธเธตเธขเธเนเธซเธกเนเธ—เธตเนเนเธ”เนเธฃเธฑเธเธเธงเธฒเธกเนเธงเนเธงเธฒเธเนเธเธเธฒเธเธฅเธนเธเธเนเธฒเธ—เธฑเนเธงเธ เธฒเธเน€เธซเธเธทเธญ
+                      เน€เธฃเธฒเธเธฑเธ”เธชเธฃเธฃเน€เธเธเธฒเธฐเธฃเธ–เธเนเธฒเธเธชเธ เธฒเธเธ”เธต
+                      เนเธกเธฅเนเนเธ—เน เธเธฃเธฐเธงเธฑเธ•เธดเนเธชเธชเธฐเธญเธฒเธ”
+                      เนเธเธฃเธเธชเธฃเนเธฒเธเน€เธ”เธดเธก
+                      เนเธกเนเน€เธเธขเธกเธตเธเธฃเธฐเธงเธฑเธ•เธดเธเธเธซเธเธฑเธเธซเธฃเธทเธญเธเธกเธเนเธณ
+                      เน€เธเธทเนเธญเธชเนเธเธกเธญเธเธเธงเธฒเธกเธกเธฑเนเธเนเธเธชเธนเธเธชเธธเธ”เนเธซเนเธเธฑเธเธเธธเธ“
                     </p>
                     <p className="text-left">
-                      ไม่ว่าคุณกำลังตามหา <strong>รถเก๋งประหยัดน้ำมัน</strong>{' '}
+                      เนเธกเนเธงเนเธฒเธเธธเธ“เธเธณเธฅเธฑเธเธ•เธฒเธกเธซเธฒ{' '}
+                      <strong>เธฃเธ–เน€เธเนเธเธเธฃเธฐเธซเธขเธฑเธ”เธเนเธณเธกเธฑเธ</strong>{' '}
                       <span className="text-gray-500 text-sm">(Toyota, Honda, Mazda)</span>,{' '}
-                      <strong>รถกระบะพันธุ์แกร่งทนทานสำหรับลุยงาน</strong>{' '}
+                      <strong>
+                        เธฃเธ–เธเธฃเธฐเธเธฐเธเธฑเธเธเธธเนเนเธเธฃเนเธเธ—เธเธ—เธฒเธเธชเธณเธซเธฃเธฑเธเธฅเธธเธขเธเธฒเธ
+                      </strong>{' '}
                       <span className="text-gray-500 text-sm">(Isuzu, Nissan, Mitsubishi)</span>{' '}
-                      หรือ<strong>รถอเนกประสงค์ SUV แบบครอบครัว</strong>
+                      เธซเธฃเธทเธญ
+                      <strong>
+                        เธฃเธ–เธญเน€เธเธเธเธฃเธฐเธชเธเธเน SUV เนเธเธเธเธฃเธญเธเธเธฃเธฑเธง
+                      </strong>
                     </p>
                     <p className="text-left">
-                      รถยนต์มือสองทุกคันของเราผ่านการตรวจเช็คสภาพอย่างละเอียดจากช่างผู้เชี่ยวชาญ
-                      พร้อมการรับประกันเครื่องยนต์และเกียร์หลังการขาย
-                      เรามุ่งเน้นการให้บริการที่ซื่อสัตย์ โปร่งใส พร้อมให้คำปรึกษาด้านการจัดไฟแนนซ์
+                      เธฃเธ–เธขเธเธ•เนเธกเธทเธญเธชเธญเธเธ—เธธเธเธเธฑเธเธเธญเธเน€เธฃเธฒเธเนเธฒเธเธเธฒเธฃเธ•เธฃเธงเธเน€เธเนเธเธชเธ เธฒเธเธญเธขเนเธฒเธเธฅเธฐเน€เธญเธตเธขเธ”เธเธฒเธเธเนเธฒเธเธเธนเนเน€เธเธตเนเธขเธงเธเธฒเธ
+                      เธเธฃเนเธญเธกเธเธฒเธฃเธฃเธฑเธเธเธฃเธฐเธเธฑเธเน€เธเธฃเธทเนเธญเธเธขเธเธ•เนเนเธฅเธฐเน€เธเธตเธขเธฃเนเธซเธฅเธฑเธเธเธฒเธฃเธเธฒเธข
+                      เน€เธฃเธฒเธกเธธเนเธเน€เธเนเธเธเธฒเธฃเนเธซเนเธเธฃเธดเธเธฒเธฃเธ—เธตเนเธเธทเนเธญเธชเธฑเธ•เธขเน
+                      เนเธเธฃเนเธเนเธช
+                      เธเธฃเนเธญเธกเนเธซเนเธเธณเธเธฃเธถเธเธฉเธฒเธ”เนเธฒเธเธเธฒเธฃเธเธฑเธ”เนเธเนเธเธเธเน
                     </p>
                     <p className="text-left">
                       <span className="inline-block bg-orange-100 text-orange-800 px-3 py-1.5 rounded-md font-semibold my-2 shadow-sm">
-                        ออกรถได้ทุกอาชีพ จัดไฟแนนซ์ง่าย อนุมัติไว ฟรีดาวน์ 0%
+                        เธญเธญเธเธฃเธ–เนเธ”เนเธ—เธธเธเธญเธฒเธเธตเธ เธเธฑเธ”เนเธเนเธเธเธเนเธเนเธฒเธข
+                        เธญเธเธธเธกเธฑเธ•เธดเนเธง เธเธฃเธตเธ”เธฒเธงเธเน 0%
                       </span>
                       <br />
-                      และกรณีลูกค้าต่างจังหวัดเรามีบริการส่งรถฟรีถึงหน้าบ้านท่านทั่วประเทศไทย
-                      หากคุณกำลังมองหารถยนต์ในราคาที่เหมาะสม คุ้มค่าเงินทุกบาท
-                      ลองเลือกชมรถที่อัปเดตล่าสุดและติดต่อทีมงานของเราได้เลย
+                      เนเธฅเธฐเธเธฃเธ“เธตเธฅเธนเธเธเนเธฒเธ•เนเธฒเธเธเธฑเธเธซเธงเธฑเธ”เน€เธฃเธฒเธกเธตเธเธฃเธดเธเธฒเธฃเธชเนเธเธฃเธ–เธเธฃเธตเธ–เธถเธเธซเธเนเธฒเธเนเธฒเธเธ—เนเธฒเธเธ—เธฑเนเธงเธเธฃเธฐเน€เธ—เธจเนเธ—เธข
+                      เธซเธฒเธเธเธธเธ“เธเธณเธฅเธฑเธเธกเธญเธเธซเธฒเธฃเธ–เธขเธเธ•เนเนเธเธฃเธฒเธเธฒเธ—เธตเนเน€เธซเธกเธฒเธฐเธชเธก
+                      เธเธธเนเธกเธเนเธฒเน€เธเธดเธเธ—เธธเธเธเธฒเธ—
+                      เธฅเธญเธเน€เธฅเธทเธญเธเธเธกเธฃเธ–เธ—เธตเนเธญเธฑเธเน€เธ”เธ•เธฅเนเธฒเธชเธธเธ”เนเธฅเธฐเธ•เธดเธ”เธ•เนเธญเธ—เธตเธกเธเธฒเธเธเธญเธเน€เธฃเธฒเนเธ”เนเน€เธฅเธข
                     </p>
                   </div>
                 </div>
@@ -807,10 +840,11 @@ export default function AllCars({
                       id="faq-allcars-heading"
                       className="text-lg sm:text-xl font-bold text-gray-900 font-prompt"
                     >
-                      คำถามที่พบบ่อย (FAQ)
+                      เธเธณเธ–เธฒเธกเธ—เธตเนเธเธเธเนเธญเธข (FAQ)
                     </h2>
                     <p className="mt-1 text-sm text-gray-600 font-prompt">
-                      คำตอบสั้นๆ ก่อนตัดสินใจดูรถและนัดหมาย
+                      เธเธณเธ•เธญเธเธชเธฑเนเธเน
+                      เธเนเธญเธเธ•เธฑเธ”เธชเธดเธเนเธเธ”เธนเธฃเธ–เนเธฅเธฐเธเธฑเธ”เธซเธกเธฒเธข
                     </p>
 
                     <div className="mt-4 space-y-3">
@@ -822,7 +856,7 @@ export default function AllCars({
                           <summary className="cursor-pointer list-none font-semibold text-gray-900 font-prompt flex items-start justify-between gap-3">
                             <span>{item.q}</span>
                             <span className="text-gray-400 group-open:rotate-180 transition-transform">
-                              ▾
+                              โ–พ
                             </span>
                           </summary>
                           <div className="mt-2 text-sm text-gray-700 font-prompt leading-relaxed">
@@ -845,7 +879,7 @@ export default function AllCars({
 // SSR for all-cars to ensure Google sees correct catalog HTML for query params
 // (pagination/filter/noindex/canonical) without relying on client-side JS.
 export async function getServerSideProps(context) {
-  // Server-only modules – kept out of the client bundle via require()
+  // Server-only modules โ€“ kept out of the client bundle via require()
   const { SEO_KEYWORD_MAP } = require('../config/seo-keyword-map');
   const { ALL_CARS_FAQS, buildFaqPageJsonLd } = require('../lib/seo/faq.js');
 
@@ -886,7 +920,7 @@ export async function getServerSideProps(context) {
     if (fetchError) throw fetchError;
     cars = Array.isArray(result) ? result : [];
 
-    // ลดขนาดข้อมูลโดยเก็บเฉพาะฟิลด์ที่จำเป็น
+    // เธฅเธ”เธเธเธฒเธ”เธเนเธญเธกเธนเธฅเนเธ”เธขเน€เธเนเธเน€เธเธเธฒเธฐเธเธดเธฅเธ”เนเธ—เธตเนเธเธณเน€เธเนเธ
     cars = cars.map(car => ({
       id: car.id,
       handle: car.handle,
@@ -894,7 +928,7 @@ export async function getServerSideProps(context) {
       vendor: car.vendor,
       tags: car.tags,
       price: car.price,
-      // Keep quick specs for CarCard (ปี/ไมล์/เกียร์/เชื้อเพลิง/ขับเคลื่อน)
+      // Keep quick specs for CarCard (เธเธต/เนเธกเธฅเน/เน€เธเธตเธขเธฃเน/เน€เธเธทเนเธญเน€เธเธฅเธดเธ/เธเธฑเธเน€เธเธฅเธทเนเธญเธ)
       year: car.year,
       mileage: car.mileage,
       transmission: car.transmission,
@@ -903,18 +937,18 @@ export async function getServerSideProps(context) {
       installment: car.installment,
       fuelType: car.fuelType || car.fuel_type,
       fuel_type: car.fuel_type || car.fuelType,
-      // Keep metaobject-backed display labels for cards (ประเภทรถ/ประเภทตัวถัง)
+      // Keep metaobject-backed display labels for cards (เธเธฃเธฐเน€เธ เธ—เธฃเธ–/เธเธฃเธฐเน€เธ เธ—เธ•เธฑเธงเธ–เธฑเธ)
       // so mobile Safari doesn't depend on deferred client enrichment to show them.
       category: car.category,
       body_type: car.body_type,
-      images: car.images?.slice(0, 1) || [], // เก็บแค่รูปแรกสำหรับ listing
+      images: car.images?.slice(0, 1) || [], // เน€เธเนเธเนเธเนเธฃเธนเธเนเธฃเธเธชเธณเธซเธฃเธฑเธ listing
       availableForSale: car.availableForSale,
       status: carStatuses[car.id]?.status || 'available', // Add status from file
     }));
 
-    // แสดงรถทั้งหมดที่มีจริง ไม่จำกัดจำนวน
+    // เนเธชเธ”เธเธฃเธ–เธ—เธฑเนเธเธซเธกเธ”เธ—เธตเนเธกเธตเธเธฃเธดเธ เนเธกเนเธเธณเธเธฑเธ”เธเธณเธเธงเธ
   } catch (error) {
-    // Silent error handling for production - ให้ UI แสดงข้อมูลว่างแทน
+    // Silent error handling for production - เนเธซเน UI เนเธชเธ”เธเธเนเธญเธกเธนเธฅเธงเนเธฒเธเนเธ—เธ
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line no-console
       console.error('getServerSideProps(/all-cars) error:', error);
@@ -987,14 +1021,14 @@ export async function getServerSideProps(context) {
   const startIndex = (safePage - 1) * carsPerPage;
   let pageCars = filtered.slice(startIndex, startIndex + carsPerPage);
 
-  // Precompute JSON-LD for SEO on the server (lightweight) so the client doesn’t rebuild
+  // Precompute JSON-LD for SEO on the server (lightweight) so the client doesnโ€t rebuild
   // a large graph during hydration. Skip on filtered pages because they are noindex.
   let structuredDataJson = null;
   try {
     const hasSearch = !!(initialSearchTerm && String(initialSearchTerm).trim());
     const hasPrice = initialPriceRange !== 'all';
     const hasBrand = initialBrandFilter !== 'all';
-    const isFiltered = hasSearch; // Allow price and brand to be indexed
+    const isFiltered = hasSearch || hasBrand || hasPrice; // Prevent duplicate indexing of filtered queries
 
     if (!isFiltered) {
       const seoPath = safePage > 1 ? `/all-cars?page=${safePage}` : '/all-cars';
@@ -1008,12 +1042,12 @@ export async function getServerSideProps(context) {
         '@context': 'https://schema.org',
         image: topCarImages.length > 0 ? topCarImages : undefined,
         '@type': 'CollectionPage',
-        name: `รถมือสองทั้งหมด${totalPages > 1 ? ` - หน้า ${safePage}` : ''}`,
-        description: `รถมือสองคุณภาพดี ${Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ`,
+        name: `เธฃเธ–เธกเธทเธญเธชเธญเธเธ—เธฑเนเธเธซเธกเธ”${totalPages > 1 ? ` - เธซเธเนเธฒ ${safePage}` : ''}`,
+        description: `เธฃเธ–เธกเธทเธญเธชเธญเธเธเธธเธ“เธ เธฒเธเธ”เธต ${Number.isFinite(totalCount) ? totalCount : 0} เธเธฑเธ เธเธฃเนเธญเธกเธชเนเธเธกเธญเธ`,
         url: `https://www.chiangmaiusedcar.com/all-cars${safePage > 1 ? `?page=${safePage}` : ''}`,
         mainEntity: {
           '@type': 'ItemList',
-          name: 'รายการรถมือสอง',
+          name: 'เธฃเธฒเธขเธเธฒเธฃเธฃเธ–เธกเธทเธญเธชเธญเธ',
           numberOfItems: pageCars.length,
           itemListElement: pageCars.map((car, index) => {
             const carUrl = car?.handle
@@ -1033,7 +1067,7 @@ export async function getServerSideProps(context) {
                 '@type': 'Car',
                 '@id': carUrl,
                 url: carUrl,
-                name: car?.title || 'รถมือสอง',
+                name: car?.title || 'เธฃเธ–เธกเธทเธญเธชเธญเธ',
                 image: imageUrl,
                 brand: car?.vendor ? { '@type': 'Brand', name: car.vendor } : undefined,
                 modelDate: car?.year || undefined,
@@ -1059,7 +1093,7 @@ export async function getServerSideProps(context) {
                   url: carUrl,
                   seller: {
                     '@type': 'AutoDealer',
-                    name: 'ครูหนึ่งรถสวย เชียงใหม่',
+                    name: 'เธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข เน€เธเธตเธขเธเนเธซเธกเน',
                   },
                 },
               },
@@ -1068,7 +1102,7 @@ export async function getServerSideProps(context) {
         },
         publisher: {
           '@type': 'AutoDealer',
-          name: 'ครูหนึ่งรถสวย',
+          name: 'เธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข',
           url: 'https://www.chiangmaiusedcar.com',
         },
       };
