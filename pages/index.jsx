@@ -304,6 +304,7 @@ export default function Home({
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             width={1400}
             height={467}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
             className="w-full h-auto object-contain block mx-auto"
             priority
           />
