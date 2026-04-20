@@ -22,8 +22,8 @@ const REVIEWS = [
   },
   {
     url: 'https://www.facebook.com/NaowaratUpachal/posts/pfbid0K9xEwV4KmtjFaQvZ7g7PsVchrPE1vko4esuchpSuuvBNrwVfhJ1KMkiqhYhxKhtSl',
-    name: 'Siwagorn Tee',
-    text: 'เพจผู้ติดตามหลักล้าน รถสวย โอน ต่อภาษีให้ ส่งถึงบ้าน บริการหลังการขายประทับใจ ติดต่อขอคำแนะนำได้ตลอดครับ ครูตอบแชทเอง👍👍👍🥰',
+    name: 'เนาวรัตน์ อุปชัย',
+    text: 'คิดถูกทีสุดออกรถกับครูหนึ่งรถสวย สมชื่อครูหนึ่งรถสวยจริงๆค่ะ ได้รถคันนีมาสวยและถูกใจมากไม่ทำให้ผิดหวังเลยค่ะ การบริการก็ดี คำพูดก็ดี อีกอย่าง ขอชื่นชมครูหนึ่งรีวิวรถทำให้เราเข้าใจได้ง่ายเพราะเป็นคนไม่รู้เรื่องรถเลยแต่เชื่อใจครูหนึ่งและสามารถตัดสินได้เลยไม่ต้องคิดมาก เพราะติดตามเพจครูหนึ่งมานาน คิดอยู่อย่างเดียวครูหนึ่งเอารถมารีวิวเดียวไม่ทันคนอื่น คนอืนจองรถไวมาก ขอบคุณมากค่ะครู',
     rating: 5,
   },
   {
@@ -48,6 +48,12 @@ const REVIEWS = [
     url: 'https://www.facebook.com/chalida.twoslim/posts/pfbid02aZHpp5tcQUdhhT4SiR4c4zZv4HhrBGEEUiEuSYSNzzc1PF9yTiTrRgqZYwNXER31l',
     name: 'Chalida Pakwan',
     text: 'ครูหนึ่งคือขายแต่รถดีๆจริงๆค่ะ ซื้อจากครูหนึ่งมาแล้ว 3 คัน',
+    rating: 5,
+  },
+  {
+    url: 'https://www.facebook.com/krunuengrodsauy/reviews',
+    name: 'Siwagorn Tee',
+    text: 'เพจผู้ติดตามหลักล้าน รถสวย โอน ต่อภาษีให้ ส่งถึงบ้าน บริการหลังการขายประทับใจ ติดต่อขอคำแนะนำได้ตลอดครับ ครูตอบแชทเอง👍👍👍🥰',
     rating: 5,
   },
 ];
