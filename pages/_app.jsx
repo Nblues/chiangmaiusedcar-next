@@ -35,10 +35,6 @@ const CookieConsent = dynamic(() => import('../components/CookieConsent'), {
 const MobileBottomNav = dynamic(() => import('../components/MobileBottomNav'), {
   ssr: false,
 });
-const FacebookPixel = dynamic(() => import('../components/FacebookPixel'), {
-  ssr: false,
-  loading: () => null,
-});
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -267,9 +263,6 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
       <ErrorBoundary>{getLayout(<Component {...pageProps} />)}</ErrorBoundary>
       {VercelTools ? <VercelTools /> : null}
-      {!isAdminRoute && process.env.NODE_ENV === 'production' && cookieConsent?.marketing ? (
-        <FacebookPixel />
-      ) : null}
       {!isAdminRoute &&
         process.env.NODE_ENV === 'production' &&
         cookieConsent?.analytics &&
