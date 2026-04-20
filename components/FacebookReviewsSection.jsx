@@ -236,10 +236,10 @@ export default function FacebookReviewsSection() {
           </div>
 
           {/* Scroll Indicator */}
-          <div className="text-center mt-2 mb-2 relative z-10">
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-200/60 rounded-full shadow-[0_4px_16px_-4px_rgba(0,0,0,0.05)] text-gray-600 font-prompt hover:bg-gray-50 transition-all hover:border-gray-300">
+          <div className="text-center mt-6 mb-2 relative z-10 md:hidden flex justify-center">
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-white/80 backdrop-blur-md border border-gray-100 rounded-full shadow-[0_2px_8px_-2px_rgba(0,0,0,0.05)] text-gray-500 font-prompt">
               <svg
-                className="w-4 h-4 text-gray-400"
+                className="w-4 h-4 text-gray-400 animate-pulse"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -251,26 +251,42 @@ export default function FacebookReviewsSection() {
                   d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
                 />
               </svg>
-              <p className="text-sm font-medium tracking-wide">
-                <span className="md:hidden">เลื่อนดูรีวิวเพิ่มเติม</span>
-                <span className="hidden md:inline">คลิกปุ่มลูกศร หรือ เลื่อนดูรีวิวเพิ่มเติม</span>
-              </p>
+              <span className="text-[13px] font-medium tracking-wide">
+                ปัดซ้าย-ขวา เพื่อดูรีวิว
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="text-center mt-12 relative z-10">
+        <div className="text-center mt-10 md:mt-14 relative z-10">
           <a
             href="https://www.facebook.com/KN2car/reviews"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center bg-[#1877F2] hover:bg-[#166fe5] text-white px-7 md:px-10 py-4 min-h-[56px] rounded-full font-bold text-[17px] shadow-[0_8px_24px_rgba(24,119,242,0.3)] hover:shadow-[0_12px_32px_rgba(24,119,242,0.4)] transform hover:-translate-y-1 transition-all duration-300 space-x-3 font-prompt"
-            aria-label="ดูรีวิวลูกค้าเพิ่มเติมบนเพจ Facebook ครูหนึ่งรถสวย"
+            className="group inline-flex items-center justify-center bg-[#1877F2] hover:bg-[#166fe5] text-white px-8 py-4 rounded-full font-semibold text-[16px] md:text-[17px] shadow-lg hover:shadow-xl shadow-blue-500/30 hover:shadow-blue-500/40 transform hover:-translate-y-0.5 transition-all duration-300 font-prompt ring-1 ring-[#1877F2]/50"
+            aria-label="ดูรีวิวทั้งหมดบนเพจ Facebook ครูหนึ่งรถสวย"
           >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-            </svg>
-            <span>ดูรีวิวรับประกันจากผู้ใช้กว่าแสนคน</span>
+            <div className="flex items-center gap-3">
+              <div className="bg-white/20 p-1.5 rounded-full group-hover:bg-white/30 transition-colors">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+              </div>
+              <span className="tracking-wide">ดูรีวิวทั้งหมด</span>
+              <svg
+                className="w-4 h-4 ml-0.5 transform group-hover:translate-x-1 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </div>
           </a>
         </div>
       </div>
