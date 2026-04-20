@@ -16,8 +16,8 @@ const REVIEWS = [
   },
   {
     url: 'https://www.facebook.com/nongnoo.kookkook/posts/pfbid0tpxVdnyyomBdnd2UECRPa567pYnev2b2fTe9jcmVtK6mTWSQFTM8PmyQQRXx8Kqjl',
-    name: 'คุณหนู',
-    text: 'รถดีมาก เครื่องยนต์ดี ไม่มีปัญหา ขอบคุณที่ให้คำแนะนำดีๆ',
+    name: 'นรวรรณ ไชยรัตน์',
+    text: 'รถดี มีคุณภาพ ราคาไม่แพง บริการหลังการขายดีมาก ต้องครูหนึ่งรถสวย รถมือสองค่ะ ไม่ผิดหวัง ขายรถด้วยความจริงใจได้รถแท้ ไม่สวมทะเบียน และยังได้ความรู้เรื่องรถอีกมากมายค่ะ',
     rating: 5,
   },
   {
