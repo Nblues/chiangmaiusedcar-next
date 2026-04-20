@@ -52,8 +52,8 @@ const REVIEWS = [
   },
   {
     url: 'https://www.facebook.com/chalida.twoslim/posts/pfbid02aZHpp5tcQUdhhT4SiR4c4zZv4HhrBGEEUiEuSYSNzzc1PF9yTiTrRgqZYwNXER31l',
-    name: 'คุณชลิดา',
-    text: 'ดีใจมากที่ได้รถมา สวยมาก ไม่มีตำหนิ ขอบคุณครูหนึ่งค่ะ',
+    name: 'Chalida Pakwan',
+    text: 'ครูหนึ่งคือขายแต่รถดีๆจริงๆค่ะ ซื้อจากครูหนึ่งมาแล้ว 3 คัน',
     rating: 5,
   },
 ];
