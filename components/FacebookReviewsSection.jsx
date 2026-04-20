@@ -34,8 +34,8 @@ const REVIEWS = [
   },
   {
     url: 'https://www.facebook.com/permalink.php?story_fbid=pfbid0XmfHjMnKrL6i2tn5W3UyJSHdx9K6wqY99bqfsBDR5rpGMrcj2mGufNtfYVY2nbFQl&id=100004184059361',
-    name: 'ลูกค้าครูหนึ่ง',
-    text: 'ได้รถดีมาก ไม่มีปัญหา เอกสารครบถ้วน บริการดีเยี่ยม',
+    name: 'นะโม ปัญญายม',
+    text: 'รถสวยสภาพดี บริการคุณภาพ เป็นกันเอง มีสาระความรู้เรื่องรถมาแนะนำตลอด เรื่องรถไว้ใจได้ ดีเยี่ยมมากกๆๆๆครับ',
     rating: 5,
   },
   {
