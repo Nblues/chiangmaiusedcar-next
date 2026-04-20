@@ -8,120 +8,43 @@
 'use client';
 /* eslint-disable @next/next/no-img-element */
 
-import { useEffect } from 'react';
+import Script from 'next/script';
 
 export default function FacebookPixel() {
-  useEffect(() => {
-    // ตรวจสอบว่าอยู่ใน production และมี Pixel ID
-    const pixelId = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
-    const isProduction = process.env.NODE_ENV === 'production';
-
-    // ถ้าไม่มี Pixel ID หรือไม่ใช่ production ให้ข้ามการโหลด
-    if (!pixelId || !isProduction) {
-      return;
-    }
-
-    let loaded = false;
-    let timeoutId = null;
-
-    const loadFacebookPixel = () => {
-      // ป้องกันการโหลดซ้ำ
-      if (loaded || window.fbq) return;
-      loaded = true;
-
-      // ยกเลิก timeout ถ้ามี
-      if (timeoutId) clearTimeout(timeoutId);
-
-      // สร้าง fbq function stub
-      window.fbq = function () {
-        if (window.fbq.callMethod) {
-          window.fbq.callMethod.apply(window.fbq, arguments);
-        } else {
-          window.fbq.queue.push(arguments);
-        }
-      };
-      if (!window._fbq) window._fbq = window.fbq;
-      window.fbq.push = window.fbq;
-      window.fbq.loaded = true;
-      window.fbq.version = '2.0';
-      window.fbq.queue = [];
-
-      // โหลด Facebook Pixel script
-      const script = document.createElement('script');
-      script.src = 'https://connect.facebook.net/en_US/fbevents.js';
-      script.async = true;
-      script.defer = true;
-
-      script.onload = () => {
-        // Initialize Facebook Pixel
-        if (window.fbq) {
-          window.fbq('init', pixelId);
-          window.fbq('track', 'PageView');
-        }
-      };
-
-      script.onerror = () => {
-        // Silent fail - Facebook Pixel is non-critical
-        // eslint-disable-next-line no-console
-        console.warn('Facebook Pixel failed to load - check traffic permissions');
-      };
-
-      document.body.appendChild(script);
-    };
-
-    // Event listeners สำหรับการโต้ตอบของผู้ใช้
-    const interactionEvents = ['scroll', 'click', 'touchstart', 'mousemove', 'keydown'];
-
-    const handleInteraction = () => {
-      // Defer pixel load to prevent INP blocking on first interaction
-      setTimeout(() => {
-        if (typeof window !== 'undefined' && window.requestIdleCallback) {
-          window.requestIdleCallback(loadFacebookPixel, { timeout: 2000 });
-        } else {
-          loadFacebookPixel();
-        }
-      }, 100);
-      // ลบ event listeners หลังจากโหลดแล้ว
-      interactionEvents.forEach(event => {
-        window.removeEventListener(event, handleInteraction);
-      });
-    };
-
-    // ติดตั้ง event listeners
-    interactionEvents.forEach(event => {
-      window.addEventListener(event, handleInteraction, { passive: true, once: true });
-    });
-
-    // Fallback: โหลดหลัง 5 วินาทีถ้าไม่มีการโต้ตอบ
-    timeoutId = setTimeout(() => {
-      loadFacebookPixel();
-      // ลบ event listeners
-      interactionEvents.forEach(event => {
-        window.removeEventListener(event, handleInteraction);
-      });
-    }, 5000);
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-      interactionEvents.forEach(event => {
-        window.removeEventListener(event, handleInteraction);
-      });
-    };
-  }, []);
-
-  // Noscript fallback
   const pixelId = process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID;
-  if (!pixelId) return null;
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  if (!pixelId || !isProduction) return null;
 
   return (
-    <noscript>
-      <img
-        height="1"
-        width="1"
-        style={{ display: 'none' }}
-        src={`https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1`}
-        alt=""
+    <>
+      <Script
+        id="fb-pixel"
+        strategy="lazyOnload"
+        dangerouslySetInnerHTML={{
+          __html: `
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '${pixelId}');
+            fbq('track', 'PageView');
+          `,
+        }}
       />
-    </noscript>
+      <noscript>
+        <img
+          height="1"
+          width="1"
+          style={{ display: 'none' }}
+          src={`https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1`}
+          alt=""
+        />
+      </noscript>
+    </>
   );
 }

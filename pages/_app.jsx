@@ -53,6 +53,42 @@ export default function MyApp({ Component, pageProps }) {
   // Defer Google Analytics so it doesn't block the main thread initially
   const [analyticsReady, setAnalyticsReady] = useState(false);
 
+  useEffect(() => {
+    // Set analyticsReady to true when browser is idle to avoid LCP/INP blocking
+    if (typeof window === 'undefined') return;
+    let idleId;
+    let timeoutId;
+    const run = () => setAnalyticsReady(true);
+
+    if ('requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(run, { timeout: 6500 });
+    } else {
+      timeoutId = window.setTimeout(run, 5000);
+    }
+    return () => {
+      if (idleId && window.cancelIdleCallback) window.cancelIdleCallback(idleId);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Set analyticsReady to true when browser is idle to avoid LCP/INP blocking
+    if (typeof window === 'undefined') return;
+    let idleId;
+    let timeoutId;
+    const run = () => setAnalyticsReady(true);
+
+    if ('requestIdleCallback' in window) {
+      idleId = window.requestIdleCallback(run, { timeout: 5000 });
+    } else {
+      timeoutId = window.setTimeout(run, 3000);
+    }
+    return () => {
+      if (idleId && window.cancelIdleCallback) window.cancelIdleCallback(idleId);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, []);
+
   // Initialize performance monitoring (Web Vitals + custom observers) without competing with hydration.
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -135,52 +171,6 @@ export default function MyApp({ Component, pageProps }) {
       cancelled = true;
       if (idleId && window.cancelIdleCallback) window.cancelIdleCallback(idleId);
       if (timeoutId) window.clearTimeout(timeoutId);
-    };
-  }, [isAdminRoute, cookieConsent?.analytics]);
-
-  // Defer Google Analytics aggressively until user interaction or 5 seconds idle
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (process.env.NODE_ENV !== 'production') return;
-    if (isAdminRoute) return;
-    if (!cookieConsent?.analytics) return;
-
-    let timeoutId;
-    let loaded = false;
-
-    const loadAnalytics = () => {
-      if (loaded) return;
-      loaded = true;
-      setAnalyticsReady(true);
-      interactionEvents.forEach(event => {
-        window.removeEventListener(event, handleInteraction);
-      });
-    };
-
-    const handleInteraction = () => {
-      if (timeoutId) clearTimeout(timeoutId);
-      setTimeout(() => {
-        if ('requestIdleCallback' in window) {
-          window.requestIdleCallback(loadAnalytics, { timeout: 2000 });
-        } else {
-          loadAnalytics();
-        }
-      }, 100);
-    };
-
-    const interactionEvents = ['scroll', 'click', 'touchstart', 'mousemove', 'keydown'];
-
-    interactionEvents.forEach(event => {
-      window.addEventListener(event, handleInteraction, { passive: true, once: true });
-    });
-
-    timeoutId = setTimeout(loadAnalytics, 5000);
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-      interactionEvents.forEach(event => {
-        window.removeEventListener(event, handleInteraction);
-      });
     };
   }, [isAdminRoute, cookieConsent?.analytics]);
 
