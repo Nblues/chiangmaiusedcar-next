@@ -3,6 +3,7 @@
 import React, { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import SEO from '../../components/SEO.jsx';
 import CarCard from '../../components/CarCard';
 import { getAllCars } from '../../lib/shopify.mjs';
@@ -273,6 +274,7 @@ export default function UsedCarsChiangMaiBrand({
   homeOgImage,
   structuredData,
 }) {
+  const router = useRouter();
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
 
   const brandFaqs = useMemo(() => buildBrandFaqEntries(brandInfo?.label), [brandInfo?.label]);
@@ -374,6 +376,32 @@ export default function UsedCarsChiangMaiBrand({
       <Breadcrumb />
 
       <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 ipadpro:px-3 py-8">
+        {/* ปุ่มย้อนกลับ */}
+        <div className="mb-4">
+          <button
+            onClick={() => {
+              if (window.history.length > 2) {
+                router?.back();
+              } else {
+                router.push('/all-cars');
+              }
+            }}
+            className="inline-flex items-center text-sm font-medium text-gray-600 hover:text-primary transition-colors focus:outline-none group font-prompt"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="mr-1.5 h-4 w-4 transform group-hover:-translate-x-1 transition-transform"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            ย้อนกลับ
+          </button>
+        </div>
+
         <section className="mb-4">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
             <div>
@@ -445,7 +473,9 @@ export default function UsedCarsChiangMaiBrand({
             {BRAND_DESCRIPTIONS[brandInfo.slug]}
           </p>
           <p className="mt-3 text-gray-700 font-prompt leading-relaxed">
-            ที่ครูหนึ่งรถสวย เราคัดสรรรถมือสอง {brandInfo.label} สภาพดี ไมล์แท้ ตรวจสอบประวัติรถทุกคัน พร้อมรับประกันเครื่องยนต์และเกียร์ 1 ปี ฟรีดาวน์ 0% ผ่อนสบาย และจัดส่งฟรีทั่วประเทศ
+            ที่ครูหนึ่งรถสวย เราคัดสรรรถมือสอง {brandInfo.label} สภาพดี ไมล์แท้
+            ตรวจสอบประวัติรถทุกคัน พร้อมรับประกันเครื่องยนต์และเกียร์ 1 ปี ฟรีดาวน์ 0% ผ่อนสบาย
+            และจัดส่งฟรีทั่วประเทศ
           </p>
         </section>
 
