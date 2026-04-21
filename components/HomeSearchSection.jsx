@@ -31,9 +31,7 @@ const QUICK_PRICE_LINKS = [
  * Extracted from pages/index.jsx to reduce initial bundle size.
  */
 export default function HomeSearchSection() {
-    let _nextRouter = null;
-  try { _nextRouter = useRouter(); } catch(e) {}
-  const router = _nextRouter || { pathname: '', asPath: '', query: {}, isReady: false, push: () => {}, back: () => {}, replace: () => {} };
+    const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState('all');
   const [brandFilter, setBrandFilter] = useState('all');

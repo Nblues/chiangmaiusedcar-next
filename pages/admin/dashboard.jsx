@@ -9,9 +9,7 @@ const ToolsPanel = dynamic(() => import('../../components/admin/ToolsPanel'), { 
 
 // Main dashboard component
 function AdminDashboard() {
-    let _nextRouter = null;
-  try { _nextRouter = useRouter(); } catch(e) {}
-  const router = _nextRouter || { pathname: '', asPath: '', query: {}, isReady: false, push: () => {}, back: () => {}, replace: () => {} };
+    const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState('');

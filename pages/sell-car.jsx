@@ -8,9 +8,7 @@ import proseStyles from '../styles/prose.module.css';
 // Organization JSON-LD is injected centrally by <SEO /> to avoid duplicates
 
 export default function SellCar({ seoSellCar }) {
-    let _nextRouter = null;
-  try { _nextRouter = useRouter(); } catch(e) {}
-  const router = _nextRouter || { pathname: '', asPath: '', query: {}, isReady: false, push: () => {}, back: () => {}, replace: () => {} };
+    const router = useRouter();
   const activeLocale = router?.locale || 'th';
 
   const baseUrl = 'https://www.chiangmaiusedcar.com';

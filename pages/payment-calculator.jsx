@@ -6,9 +6,7 @@ import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
 
 export default function PaymentCalculator({ seoPayment }) {
-    let _nextRouter = null;
-  try { _nextRouter = useRouter(); } catch(e) {}
-  const router = _nextRouter || { pathname: '', asPath: '', query: {}, isReady: false, push: () => {}, back: () => {}, replace: () => {} };
+    const router = useRouter();
   const [carPrice, setCarPrice] = useState('');
   const [downPayment, setDownPayment] = useState('');
   const [interestRate, setInterestRate] = useState('7.50');

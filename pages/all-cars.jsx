@@ -74,9 +74,7 @@ export default function AllCars({
   seoAllCars,
   allCarsFaqs,
 }) {
-    let _nextRouter = null;
-  try { _nextRouter = useRouter(); } catch(e) {}
-  const router = _nextRouter || { pathname: '', asPath: '', query: {}, isReady: false, push: () => {}, back: () => {}, replace: () => {} };
+    const router = useRouter();
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [priceRange, setPriceRange] = useState(initialPriceRange);
   const [brandFilter, setBrandFilter] = useState(initialBrandFilter);
