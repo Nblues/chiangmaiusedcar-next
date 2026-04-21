@@ -18,8 +18,10 @@ export default class MyDocument extends Document {
   }
 
   render() {
-    // Cache busting timestamp (used in meta tags)
+    // Cache busting timestamp (used in meta tags only — NOT for static asset URLs)
     const buildTime = process.env.CUSTOM_BUILD_TIME || new Date().toISOString();
+    // Stable version for favicon/manifest URLs — changes per deployment, not per request
+    const faviconVersion = process.env.VERCEL_DEPLOYMENT_ID || process.env.CUSTOM_BUILD_TIME || '1';
 
     // Use Next.js i18n locale to set correct <html lang> (affects SSR output like en.html)
     const locale = this.props?.__NEXT_DATA__?.locale || 'th';
@@ -88,72 +90,72 @@ export default class MyDocument extends Document {
           {/* ⭐ ลำดับสำคัญ: ICO ก่อน (รองรับทุก browser) แล้วค่อย PNG/SVG */}
 
           {/* 1. Primary: ICO สำหรับ compatibility สูงสุด + cache bust */}
-          <link rel="icon" href={`/favicon.ico?v=${buildTime}`} />
-          <link rel="shortcut icon" href={`/favicon.ico?v=${buildTime}`} />
+          <link rel="icon" href={`/favicon.ico?v=${faviconVersion}`} />
+          <link rel="shortcut icon" href={`/favicon.ico?v=${faviconVersion}`} />
 
           {/* 2. Multi-size PNG icons สำหรับ browsers ที่รองรับ */}
           <link
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href={`/favicon-16x16.png?v=${buildTime}`}
+            href={`/favicon-16x16.png?v=${faviconVersion}`}
           />
           <link
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href={`/favicon-32x32.png?v=${buildTime}`}
+            href={`/favicon-32x32.png?v=${faviconVersion}`}
           />
-          <link rel="icon" type="image/png" sizes="48x48" href={`/favicon-48.png?v=${buildTime}`} />
-          <link rel="icon" type="image/png" sizes="96x96" href={`/favicon-96.png?v=${buildTime}`} />
+          <link rel="icon" type="image/png" sizes="48x48" href={`/favicon-48.png?v=${faviconVersion}`} />
+          <link rel="icon" type="image/png" sizes="96x96" href={`/favicon-96.png?v=${faviconVersion}`} />
           <link
             rel="icon"
             type="image/png"
             sizes="192x192"
-            href={`/android-chrome-192x192.png?v=${buildTime}`}
+            href={`/android-chrome-192x192.png?v=${faviconVersion}`}
           />
           <link
             rel="icon"
             type="image/png"
             sizes="512x512"
-            href={`/android-chrome-512x512.png?v=${buildTime}`}
+            href={`/android-chrome-512x512.png?v=${faviconVersion}`}
           />
 
           {/* 3. Vector favicon (modern browsers) */}
-          <link rel="icon" type="image/svg+xml" href={`/favicon.svg?v=${buildTime}`} />
+          <link rel="icon" type="image/svg+xml" href={`/favicon.svg?v=${faviconVersion}`} />
 
           {/* 4. Apple Touch Icon (standard filename) */}
           <link
             rel="apple-touch-icon"
             sizes="180x180"
-            href={`/apple-touch-icon.png?v=${buildTime}`}
+            href={`/apple-touch-icon.png?v=${faviconVersion}`}
           />
 
           {/* Safari pinned tab (best-effort using existing SVG) */}
-          <link rel="mask-icon" href={`/favicon.svg?v=${buildTime}`} color="#1a237e" />
+          <link rel="mask-icon" href={`/favicon.svg?v=${faviconVersion}`} color="#1a237e" />
 
           {/* Microsoft Tiles - Windows Start Menu */}
-          <meta name="msapplication-TileImage" content={`/mstile-150x150.png?v=${buildTime}`} />
+          <meta name="msapplication-TileImage" content={`/mstile-150x150.png?v=${faviconVersion}`} />
           <meta name="msapplication-TileColor" content="#1a237e" />
           <meta name="msapplication-config" content="/browserconfig.xml" />
 
           {/* 2025 Search Engine Favicon Optimization */}
-          <meta name="msapplication-square70x70logo" content={`/mstile-70x70.png?v=${buildTime}`} />
+          <meta name="msapplication-square70x70logo" content={`/mstile-70x70.png?v=${faviconVersion}`} />
           <meta
             name="msapplication-square150x150logo"
-            content={`/mstile-150x150.png?v=${buildTime}`}
+            content={`/mstile-150x150.png?v=${faviconVersion}`}
           />
           <meta
             name="msapplication-wide310x150logo"
-            content={`/mstile-310x150.png?v=${buildTime}`}
+            content={`/mstile-310x150.png?v=${faviconVersion}`}
           />
           <meta
             name="msapplication-square310x310logo"
-            content={`/mstile-310x310.png?v=${buildTime}`}
+            content={`/mstile-310x310.png?v=${faviconVersion}`}
           />
 
-          {/* PWA Manifest - เพิ่ม cache bust */}
-          <link rel="manifest" href={`/manifest.json?v=${buildTime}`} />
+          {/* PWA Manifest */}
+          <link rel="manifest" href={`/manifest.json?v=${faviconVersion}`} />
 
           {/* PWA Meta Tags - 2025 Standards */}
           <meta name="mobile-web-app-capable" content="yes" />

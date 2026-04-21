@@ -84,6 +84,12 @@
   }
 }
 
+/* Skip layout & paint for off-screen car cards — reduces initial layout cost */
+.car-grid > * {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 380px;
+}
+
 /* Image Hover Effects */
 .image-hover-scale {
   transition: transform 0.3s ease;
