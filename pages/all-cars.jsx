@@ -74,7 +74,9 @@ export default function AllCars({
   seoAllCars,
   allCarsFaqs,
 }) {
-  const router = useRouter();
+    let _nextRouter = null;
+  try { _nextRouter = useRouter(); } catch(e) {}
+  const router = _nextRouter || { pathname: '', asPath: '', query: {}, isReady: false, push: () => {}, back: () => {}, replace: () => {} };
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [priceRange, setPriceRange] = useState(initialPriceRange);
   const [brandFilter, setBrandFilter] = useState(initialBrandFilter);
@@ -408,27 +410,7 @@ export default function AllCars({
         );
       })()}
 
-      <Head>
-        <link
-          rel="preload"
-          as="image"
-          media="(max-width: 767px)"
-          href="/herobanner/heroallcars-828w.webp"
-          imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-828w.webp 828w"
-          imageSizes="100vw"
-          fetchPriority="high"
-        />
-
-        <link
-          rel="preload"
-          as="image"
-          media="(min-width: 768px)"
-          href="/herobanner/heroallcars-1200w.webp"
-          imageSrcSet="/herobanner/heroallcars-828w.webp 828w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1200w.webp 1200w, /herobanner/heroallcars-1400w.webp 1400w"
-          imageSizes="100vw"
-          fetchPriority="high"
-        />
-      </Head>
+      
 
       {process.env.NODE_ENV === 'development' && shopifyError && currentCars.length === 0 && (
         <section className="max-w-7xl mx-auto px-6 mt-4" aria-label="Dev Shopify error">

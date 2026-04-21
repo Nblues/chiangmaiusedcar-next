@@ -8,7 +8,9 @@ import proseStyles from '../styles/prose.module.css';
 // Organization JSON-LD is injected centrally by <SEO /> to avoid duplicates
 
 export default function SellCar({ seoSellCar }) {
-  const router = useRouter();
+    let _nextRouter = null;
+  try { _nextRouter = useRouter(); } catch(e) {}
+  const router = _nextRouter || { pathname: '', asPath: '', query: {}, isReady: false, push: () => {}, back: () => {}, replace: () => {} };
   const activeLocale = router?.locale || 'th';
 
   const baseUrl = 'https://www.chiangmaiusedcar.com';
@@ -39,16 +41,7 @@ export default function SellCar({ seoSellCar }) {
         pageType="sell-car"
       />
 
-      <Head>
-        <link
-          rel="preload"
-          as="image"
-          href="/herobanner/chiangmaiusedcars-1200w.webp"
-          type="image/webp"
-          imageSrcSet="/herobanner/chiangmaiusedcars-640w.webp 640w, /herobanner/chiangmaiusedcars-828w.webp 828w, /herobanner/chiangmaiusedcars-1024w.webp 1024w, /herobanner/chiangmaiusedcars-1200w.webp 1200w, /herobanner/chiangmaiusedcars-1400w.webp 1400w, /herobanner/chiangmaiusedcars-1920w.webp 1920w"
-          imageSizes="(max-width: 414px) 414px, (max-width: 768px) 768px, (max-width: 1200px) 1200px, 1920px"
-        />
-      </Head>
+      
 
       <header className="relative w-full bg-[#f8f9fa] flex justify-center">
         {/* Container สำหรับแบนเนอร์ ใช้สัดส่วนตามภาพจริง (1920x650) ในทุกอุปกรณ์ */}

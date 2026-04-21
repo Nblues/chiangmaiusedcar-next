@@ -43,29 +43,9 @@ export default class MyDocument extends Document {
 
           {/* Mobile viewport moved to _app.jsx to comply with Next.js 14 optimizations */}
 
-          {shouldPreloadHero && (
-            <link
-              rel="preload"
-              as="image"
-              href="/herobanner/newherobanner-414w.webp"
-              type="image/webp"
-              imageSrcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
-              imageSizes="(max-width: 1400px) 100vw, 1400px"
-              fetchPriority="high"
-            />
-          )}
+          
 
-          {shouldPreloadAllCarsHero && (
-            <link
-              rel="preload"
-              as="image"
-              href="/herobanner/heroallcars-414w.webp"
-              type="image/webp"
-              imageSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
-              imageSizes="(max-width: 1400px) 100vw, 1400px"
-              fetchPriority="high"
-            />
-          )}
+          
 
           {/* Preconnect only to the most critical 3rd-party origin (Shopify image CDN). */}
 

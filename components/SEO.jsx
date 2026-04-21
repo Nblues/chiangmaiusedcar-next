@@ -25,7 +25,9 @@ export default function SEO({
   breadcrumbs = null, // เพิ่ม breadcrumbs สำหรับ BreadcrumbList Schema (SEO 2025)
   keywords = null, // ใส่ keywords ลง structured data (แทน meta keywords)
 }) {
-  const router = useRouter();
+    let _nextRouter = null;
+  try { _nextRouter = useRouter(); } catch(e) {}
+  const router = _nextRouter || { pathname: '', asPath: '', query: {}, isReady: false, push: () => {}, back: () => {}, replace: () => {} };
   const activeLocale = (typeof window !== 'undefined' ? router?.locale : null) || 'th';
   const defaultLocale = (typeof window !== 'undefined' ? router?.defaultLocale : null) || 'th';
 

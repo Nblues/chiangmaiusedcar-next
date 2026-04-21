@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+
 
 const navItems = [
   { href: '/', label: 'หน้าแรก' },
@@ -17,11 +17,10 @@ const navItems = [
 
 import { useEffect } from 'react';
 
-export default function Navbar() {
+export default function Navbar({ router }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const isActive = href => mounted && router.pathname === href;
@@ -46,7 +45,7 @@ export default function Navbar() {
                   className="w-full h-full object-cover scale-125"
                   loading="eager"
                   // eslint-disable-next-line react/no-unknown-property
-                  fetchPriority="low"
+                  fetchpriority="low"
                   decoding="async"
                 />
               </picture>
@@ -63,7 +62,7 @@ export default function Navbar() {
                 key={item.href}
                 href={item.href}
                 prefetch={false}
-                className={`px-3 py-2 rounded-md text-sm font-medium font-prompt transition-all duration-200 active:scale-[0.95] ${
+                className={`px-3 py-2 rounded-md text-sm font-medium font-prompt transition-colors transition-transform duration-200 active:scale-[0.95] ${
                   isActive(item.href)
                     ? 'bg-primary text-white'
                     : 'text-primary hover:bg-accent hover:text-white'
@@ -123,7 +122,7 @@ export default function Navbar() {
                   key={item.href}
                   href={item.href}
                   prefetch={false}
-                  className={`block px-3 py-2 rounded-md font-prompt font-semibold text-base tracking-wide transition-all duration-200 active:scale-[0.95] ${
+                  className={`block px-3 py-2 rounded-md font-prompt font-semibold text-base tracking-wide transition-colors transition-transform duration-200 active:scale-[0.95] ${
                     isActive(item.href)
                       ? 'bg-primary text-white'
                       : 'text-primary hover:bg-accent hover:text-white'

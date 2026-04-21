@@ -7,7 +7,9 @@ import { isAuthenticated } from '../../middleware/adminAuth';
 
 // Add displayName for admin layout detection
 function AdminLogin() {
-  const router = useRouter();
+    let _nextRouter = null;
+  try { _nextRouter = useRouter(); } catch(e) {}
+  const router = _nextRouter || { pathname: '', asPath: '', query: {}, isReady: false, push: () => {}, back: () => {}, replace: () => {} };
   const [credentials, setCredentials] = useState({
     username: '',
     password: '',

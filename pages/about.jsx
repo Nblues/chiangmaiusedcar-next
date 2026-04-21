@@ -91,16 +91,7 @@ export default function About({ seoAbout }) {
         }}
       />
 
-      <Head>
-        <link
-          rel="preload"
-          as="image"
-          href="/herobanner/bannerabout-1024w.webp"
-          type="image/webp"
-          imageSrcSet="/herobanner/bannerabout-414w.webp 414w, /herobanner/bannerabout-640w.webp 640w, /herobanner/bannerabout-1024w.webp 1024w, /herobanner/bannerabout-1400w.webp 1400w"
-          imageSizes="100vw"
-        />
-      </Head>
+      
 
       {/* Hero Section with Image */}
       <section>
@@ -122,7 +113,7 @@ export default function About({ seoAbout }) {
               - ใช้อัตราส่วนตามภาพจริง 1400/474 ในทุกอุปกรณ์ เพื่อให้แสดงผลพอดีเป๊ะ ไม่โดนตัดเลยทั้งบนมือถือ แท็บเล็ต และเดสก์ทอป
           */}
           <div className="relative w-full max-w-[1400px] aspect-[1400/474]">
-            <div className="w-full h-full">
+            <div className="relative w-full h-full">
               {!imageLoaded && (
                 <div className="absolute inset-0 flex items-center justify-center z-10">
                   <div className="animate-pulse space-y-4 w-full max-w-md mx-auto p-8">

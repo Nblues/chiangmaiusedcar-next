@@ -3,12 +3,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 export default function MobileBottomNav() {
-  const router = useRouter();
-  const [mounted, setMounted] = useState(false);
+    const nextRouter = useRouter();
+    const router = nextRouter || { pathname: '/', isReady: false };
+    const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+    useEffect(() => {
+      setMounted(true);
+    }, []);
 
   if (!mounted) return null;
 

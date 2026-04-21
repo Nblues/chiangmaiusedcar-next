@@ -274,7 +274,9 @@ export default function UsedCarsChiangMaiBrand({
   homeOgImage,
   structuredData,
 }) {
-  const router = useRouter();
+    let _nextRouter = null;
+  try { _nextRouter = useRouter(); } catch(e) {}
+  const router = _nextRouter || { pathname: '', asPath: '', query: {}, isReady: false, push: () => {}, back: () => {}, replace: () => {} };
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
 
   const brandFaqs = useMemo(() => buildBrandFaqEntries(brandInfo?.label), [brandInfo?.label]);

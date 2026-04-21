@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  const { url } = req.query;
+  const { url, w, q } = req.query;
 
   if (!url) {
     return res.status(400).json({ error: 'Missing url parameter' });
@@ -69,9 +69,11 @@ export default async function handler(req, res) {
     // Mobile view is roughly 237x421, desktop max is 315x560.
     try {
       const sharp = (await import('sharp')).default;
+      const targetWidth = w ? parseInt(w, 10) : 315;
+      const targetQuality = q ? parseInt(q, 10) : 50;
       outputBuffer = await sharp(originalBuffer)
-        .resize({ width: 315, withoutEnlargement: true })
-        .webp({ quality: 50, effort: 4 })
+        .resize({ width: targetWidth > 0 && targetWidth <= 1200 ? targetWidth : 315, withoutEnlargement: true })
+        .webp({ quality: targetQuality > 0 && targetQuality <= 100 ? targetQuality : 50, effort: 4 })
         .toBuffer();
       finalContentType = 'image/webp';
     } catch (sharpError) {

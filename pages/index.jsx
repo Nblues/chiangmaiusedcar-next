@@ -312,7 +312,7 @@ export default function Home({
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             className="w-full h-auto object-contain block mx-auto text-transparent"
             style={{ aspectRatio: '1400/467' }}
-            decoding="async"
+            decoding="sync"
             loading="eager"
             fetchpriority="high"
             width="1400"

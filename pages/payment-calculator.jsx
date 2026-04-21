@@ -6,7 +6,9 @@ import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
 
 export default function PaymentCalculator({ seoPayment }) {
-  const router = useRouter();
+    let _nextRouter = null;
+  try { _nextRouter = useRouter(); } catch(e) {}
+  const router = _nextRouter || { pathname: '', asPath: '', query: {}, isReady: false, push: () => {}, back: () => {}, replace: () => {} };
   const [carPrice, setCarPrice] = useState('');
   const [downPayment, setDownPayment] = useState('');
   const [interestRate, setInterestRate] = useState('7.50');
@@ -232,16 +234,7 @@ export default function PaymentCalculator({ seoPayment }) {
         pageType="payment-calculator"
       />
 
-      <Head>
-        <link
-          rel="preload"
-          as="image"
-          href="/herobanner/paymentcalculator-1024w.webp"
-          type="image/webp"
-          imageSrcSet="/herobanner/paymentcalculator-480w.webp 480w, /herobanner/paymentcalculator-640w.webp 640w, /herobanner/paymentcalculator-828w.webp 828w, /herobanner/paymentcalculator-1024w.webp 1024w, /herobanner/paymentcalculator-1400w.webp 1400w"
-          imageSizes="100vw"
-        />
-      </Head>
+      
 
       {/* Hero Section */}
       <section className="relative bg-primary text-white py-8 md:py-16 border-t border-gray-200">

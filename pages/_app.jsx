@@ -23,7 +23,7 @@ const prompt = Prompt({
 
 // Dynamic imports keep heavy UI out of the initial bundle and avoid hydration mismatches
 const Footer = dynamic(() => import('../components/Footer'), {
-  ssr: false, // Footer doesn't need to be server-rendered for initial LCP
+
   loading: () => (
     <footer className="min-h-[300px] bg-white border-t border-gray-200" aria-hidden="true" />
   ),
@@ -36,8 +36,8 @@ const MobileBottomNav = dynamic(() => import('../components/MobileBottomNav'), {
   ssr: false,
 });
 
-export default function MyApp({ Component, pageProps }) {
-  const router = useRouter();
+export default function MyApp({ Component, pageProps, router }) {
+  // Use router from props instead of useRouter() hook to prevent NextRouter was not mounted during SSG
   const path = router?.asPath || router?.pathname || '';
   const isAdminRoute = path.startsWith('/admin');
 
@@ -239,7 +239,7 @@ export default function MyApp({ Component, pageProps }) {
       // Default layout for public pages
       return (
         <div className={`${prompt.variable} font-prompt flex flex-col min-h-screen`}>
-          <Navbar />
+          <Navbar router={router} />
           <main id="main" role="main" className="flex-1 w-full relative flex flex-col">
             {page}
           </main>
@@ -261,7 +261,7 @@ export default function MyApp({ Component, pageProps }) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </Head>
-      <ErrorBoundary>{getLayout(<Component {...pageProps} />)}</ErrorBoundary>
+      <ErrorBoundary>{getLayout(<Component {...pageProps} router={router} />)}</ErrorBoundary>
       {VercelTools ? <VercelTools /> : null}
       {!isAdminRoute &&
         process.env.NODE_ENV === 'production' &&

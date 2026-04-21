@@ -93,14 +93,7 @@ export default function Contact({ seoContact }) {
         ]}
       />
       <Head>
-        <link
-          rel="preload"
-          as="image"
-          href="/herobanner/contact-1024w.webp"
-          type="image/webp"
-          imageSrcSet="/herobanner/contact-480w.webp 480w, /herobanner/contact-640w.webp 640w, /herobanner/contact-828w.webp 828w, /herobanner/contact-1024w.webp 1024w, /herobanner/contact-1400w.webp 1400w"
-          imageSizes="100vw"
-        />
+        
 
         {/* FAQ Schema */}
         <script

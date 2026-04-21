@@ -72,7 +72,7 @@ export default function TikTokFeed({ videos }) {
             const url = video.url || 'https://www.tiktok.com/@krunueng_usedcar';
             const rawImageUrl = video.image || null;
             const imageUrl = rawImageUrl
-              ? `/api/tiktok-image?url=${encodeURIComponent(rawImageUrl)}&w=360&q=65`
+              ? `/api/tiktok-image?url=${encodeURIComponent(rawImageUrl)}&w=240&q=50`
               : '/herobanner/outdoorbanner-480w.webp';
 
             return (
@@ -91,7 +91,7 @@ export default function TikTokFeed({ videos }) {
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                     fill
                     loading="lazy"
-                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 240px"
                   />
                   {/* Play Button Overlay */}
                   <div className="absolute inset-0 flex items-center justify-center pointer-events-none">

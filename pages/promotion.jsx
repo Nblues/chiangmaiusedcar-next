@@ -27,14 +27,7 @@ export default function Promotion({ seoPromotion }) {
         pageType="promotion"
       />
       <Head>
-        <link
-          rel="preload"
-          as="image"
-          href="/herobanner/cnxcontact-1024w.webp"
-          type="image/webp"
-          imageSrcSet="/herobanner/cnxcontact-480w.webp 480w, /herobanner/cnxcontact-640w.webp 640w, /herobanner/cnxcontact-828w.webp 828w, /herobanner/cnxcontact-1024w.webp 1024w, /herobanner/cnxcontact-1400w.webp 1400w"
-          imageSizes="100vw"
-        />
+        
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

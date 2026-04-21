@@ -15,7 +15,9 @@ export default function HomeDeferredSections({
   getBrandCount,
   homeItemListJsonLd,
 }) {
-  const router = useRouter();
+    let _nextRouter = null;
+  try { _nextRouter = useRouter(); } catch(e) {}
+  const router = _nextRouter || { pathname: '', asPath: '', query: {}, isReady: false, push: () => {}, back: () => {}, replace: () => {} };
 
   // Defer non-critical share widget to reduce long tasks during hydration
   const [showSocialShare, setShowSocialShare] = useState(false);

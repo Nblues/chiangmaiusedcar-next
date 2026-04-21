@@ -420,8 +420,8 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
           width={imageWidth}
           height={imageHeight}
           priority={priority}
-          fetchPriority={priority ? 'auto' : undefined}
-          decoding="async"
+          fetchPriority={priority ? 'high' : 'auto'}
+          decoding={priority ? "sync" : "async"}
           fill
           aspectRatio="4/3"
           imageType="card"
