@@ -43,7 +43,7 @@ const nextConfig = {
 
   // SWC Transform - Target modern browsers (ES2020+) to reduce polyfills
   // This removes unnecessary polyfills for Array.at, Array.flat, Object.fromEntries, etc.
-  experimental: { optimizeCss: true,
+  experimental: { optimizeCss: { preload: 'swap' },
     esmExternals: true,
     scrollRestoration: true,
     serverComponentsExternalPackages: ['shopify-api-node'],

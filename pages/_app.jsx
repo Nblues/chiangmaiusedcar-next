@@ -11,8 +11,8 @@ import { onCookieConsentChange, readCookieConsent } from '../utils/cookieConsent
 
 const prompt = Prompt({
   subsets: ['thai', 'latin'],
-  // Match Tailwind font weights used across the site (e.g. font-medium=500, font-semibold=600, font-extrabold=800)
-  weight: ['400', '500', '600', '700'],
+  // Load only 2 critical weights to reduce font preload bandwidth (was 4 weights = 8 preloads)
+  weight: ['400', '700'],
   display: 'optional',
   adjustFontFallback: true,
   fallback: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
