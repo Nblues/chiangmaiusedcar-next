@@ -212,6 +212,41 @@ export default class MyDocument extends Document {
           {/* Facebook Pixel - Lazy loaded via component in _app.jsx for better performance */}
         </Head>
         <body>
+          {/* SVG sprite — car spec icons referenced by CarCard via <use href="#spec-*"> */}
+          <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }} aria-hidden="true">
+            <defs>
+              <symbol id="spec-year" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 3v2m8-2v2" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M6 21h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z" />
+              </symbol>
+              <symbol id="spec-mileage" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20 13a8 8 0 1 0-16 0" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 13l3-3" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6.5 16h11" />
+              </symbol>
+              <symbol id="spec-transmission" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.4 15a7.9 7.9 0 0 0 .1-2l2-1.2-2-3.5-2.3.7a8.2 8.2 0 0 0-1.7-1L13.8 5h-3.6L8.5 7.9a8.2 8.2 0 0 0-1.7 1l-2.3-.7-2 3.5 2 1.2a7.9 7.9 0 0 0 .1 2l-2 1.2 2 3.5 2.3-.7a8.2 8.2 0 0 0 1.7 1L10.2 23h3.6l1.7-2.9a8.2 8.2 0 0 0 1.7-1l2.3.7 2-3.5-2.1-1.3z" />
+              </symbol>
+              <symbol id="spec-fuelType" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 20V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v15" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 20h12" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10 7h5" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M18 10l2 2v6a2 2 0 0 1-2 2" />
+              </symbol>
+              <symbol id="spec-drivetrain" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h10M7 17h10M9 7v10m6-10v10" />
+                <circle cx="6" cy="7" r="2" />
+                <circle cx="18" cy="7" r="2" />
+                <circle cx="6" cy="17" r="2" />
+                <circle cx="18" cy="17" r="2" />
+              </symbol>
+              <symbol id="spec-arrow" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </symbol>
+            </defs>
+          </svg>
+
           {/* Skip link for accessibility */}
           <a
             href="#main"
