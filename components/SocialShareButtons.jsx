@@ -95,7 +95,7 @@ const SocialShareButtons = ({
             {/* LINE */}
             <button
               onClick={() => handleShare('line')}
-              className="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white w-12 h-12 md:w-auto md:px-4 md:py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+              className="flex items-center justify-center bg-green-500 hover:bg-green-600 text-white w-12 h-12 md:w-auto md:px-4 md:py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group active:scale-[0.97] active:opacity-[0.85]"
               title="แชร์ทาง LINE"
             >
               <svg className="w-5 h-5 md:mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -107,7 +107,7 @@ const SocialShareButtons = ({
             {/* Facebook */}
             <button
               onClick={() => handleShare('facebook')}
-              className="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white w-12 h-12 md:h-auto md:w-auto md:px-4 md:py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+              className="flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white w-12 h-12 md:h-auto md:w-auto md:px-4 md:py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group active:scale-[0.97] active:opacity-[0.85]"
               title="แชร์ทาง Facebook"
             >
               <svg className="w-5 h-5 md:mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -119,7 +119,7 @@ const SocialShareButtons = ({
             {/* Copy Link */}
             <button
               onClick={() => handleShare('copy')}
-              className="flex items-center justify-center bg-gray-600 hover:bg-gray-700 text-white w-12 h-12 md:h-auto md:w-auto md:px-4 md:py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+              className="flex items-center justify-center bg-gray-600 hover:bg-gray-700 text-white w-12 h-12 md:h-auto md:w-auto md:px-4 md:py-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group active:scale-[0.97] active:opacity-[0.85]"
               title="คัดลอกลิงก์"
             >
               <svg
@@ -145,7 +145,7 @@ const SocialShareButtons = ({
           onClick={() => setIsExpanded(!isExpanded)}
           className={`flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 ${
             isExpanded
-              ? 'bg-red-500 hover:bg-red-600 rotate-45'
+              ?  active:scale-[0.97] active:opacity-[0.85]'bg-red-500 hover:bg-red-600 rotate-45'
               : 'bg-gradient-to-br from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600'
           } text-white`}
           title={isExpanded ? 'ปิด' : 'แชร์'}

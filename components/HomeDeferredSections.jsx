@@ -376,7 +376,7 @@ export default function HomeDeferredSections({
                   <button
                     type="button"
                     onClick={handleSearch}
-                    className="w-full bg-accent-800 hover:bg-accent-900 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 font-prompt shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="w-full bg-accent-800 hover:bg-accent-900 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 font-prompt shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-[0.97] active:opacity-[0.85]"
                   >
                     ค้นหา
                   </button>
@@ -388,42 +388,42 @@ export default function HomeDeferredSections({
                 <Link
                   href="/all-cars?price=0-100000"
                   prefetch={false}
-                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
+                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white active:scale-[0.97] active:opacity-[0.85]"
                 >
                   ต่ำกว่า 1 แสน ({'< 100K'})
                 </Link>
                 <Link
                   href="/all-cars?price=100000-200000"
                   prefetch={false}
-                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
+                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white active:scale-[0.97] active:opacity-[0.85]"
                 >
                   1-2 แสน (100K-200K)
                 </Link>
                 <Link
                   href="/all-cars?price=200000-300000"
                   prefetch={false}
-                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
+                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white active:scale-[0.97] active:opacity-[0.85]"
                 >
                   2-3 แสน (200K-300K)
                 </Link>
                 <Link
                   href="/all-cars?price=400000-500000"
                   prefetch={false}
-                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
+                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white active:scale-[0.97] active:opacity-[0.85]"
                 >
                   4-5 แสน (400K-500K)
                 </Link>
                 <Link
                   href="/all-cars?price=600000-700000"
                   prefetch={false}
-                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white"
+                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-primary rounded-xl hover:bg-primary hover:border-primary transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-primary hover:text-white active:scale-[0.97] active:opacity-[0.85]"
                 >
                   6-7 แสน (600K-700K)
                 </Link>
                 <Link
                   href="/all-cars?price=700000"
                   prefetch={false}
-                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-accent rounded-xl hover:bg-accent-800 hover:border-accent-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-accent-800 hover:text-white"
+                  className="text-center p-3 min-h-[48px] flex items-center justify-center bg-white border-2 border-accent rounded-xl hover:bg-accent-800 hover:border-accent-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 font-bold text-sm text-accent-800 hover:text-white active:scale-[0.97] active:opacity-[0.85]"
                 >
                   7 แสนขึ้นไป ({'> 700K'})
                 </Link>
@@ -461,7 +461,7 @@ export default function HomeDeferredSections({
                     href="https://lin.ee/8ugfzstD"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-\[48px\] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+                    className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-\[48px\] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt active:scale-[0.97] active:opacity-[0.85]"
                   >
                     <span>ติดต่อสอบถาม</span>
                   </a>
@@ -630,7 +630,7 @@ export default function HomeDeferredSections({
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
             {/* Feature 1 */}
             <div className="group bg-white rounded-2xl p-4 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
-              <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
+              <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105 active:scale-[0.97] active:opacity-[0.85]">
                 <A11yImage
                   src="/images/kn2.webp"
                   alt="ไอคอนรถบ้านแท้"
@@ -657,7 +657,7 @@ export default function HomeDeferredSections({
 
             {/* Feature 2 */}
             <div className="group bg-white rounded-2xl p-4 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
-              <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
+              <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105 active:scale-[0.97] active:opacity-[0.85]">
                 <A11yImage
                   src="/images/kn1.webp"
                   alt="ไอคอนฟรีดาวน์ 0%"
@@ -683,7 +683,7 @@ export default function HomeDeferredSections({
 
             {/* Feature 3 */}
             <div className="group bg-white rounded-2xl p-4 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
-              <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
+              <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105 active:scale-[0.97] active:opacity-[0.85]">
                 <A11yImage
                   src="/images/kn6.webp"
                   alt="ไอคอนรับประกัน"
@@ -707,7 +707,7 @@ export default function HomeDeferredSections({
 
             {/* Feature 4 */}
             <div className="group bg-white rounded-2xl p-4 sm:p-6 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
-              <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
+              <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105 active:scale-[0.97] active:opacity-[0.85]">
                 <A11yImage
                   src="/images/kn5.webp"
                   alt="ไอคอนส่งฟรี"
@@ -887,7 +887,7 @@ export default function HomeDeferredSections({
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
                   <svg
-                    className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                    className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -913,7 +913,7 @@ export default function HomeDeferredSections({
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
                   <svg
-                    className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                    className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -939,7 +939,7 @@ export default function HomeDeferredSections({
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,152,0,0.2),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
                   <svg
-                    className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                    className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -966,7 +966,7 @@ export default function HomeDeferredSections({
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
                   <svg
-                    className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                    className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -993,7 +993,7 @@ export default function HomeDeferredSections({
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
                   <svg
-                    className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                    className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -1020,7 +1020,7 @@ export default function HomeDeferredSections({
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4">
                   <svg
-                    className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                    className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

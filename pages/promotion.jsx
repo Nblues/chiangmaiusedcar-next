@@ -144,7 +144,7 @@ export default function Promotion({ seoPromotion }) {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
                 {/* ฟรีดาวน์ */}
                 <div className="group bg-white rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-accent/20 hover:border-accent hover:-translate-y-2">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-accent rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-accent rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300 active:scale-[0.97] active:opacity-[0.85]">
                     <svg
                       className="w-6 h-6 sm:w-8 sm:h-8 text-white"
                       fill="none"
@@ -180,7 +180,7 @@ export default function Promotion({ seoPromotion }) {
 
                 {/* อัตราพิเศษ */}
                 <div className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-accent/20 hover:border-accent hover:-translate-y-2">
-                  <div className="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-accent rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 active:scale-[0.97] active:opacity-[0.85]">
                     <svg
                       className="w-8 h-8 text-white"
                       fill="none"
@@ -216,7 +216,7 @@ export default function Promotion({ seoPromotion }) {
 
                 {/* รับประกัน */}
                 <div className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-primary/20 hover:border-primary hover:-translate-y-2">
-                  <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 active:scale-[0.97] active:opacity-[0.85]">
                     <svg
                       className="w-8 h-8 text-white"
                       fill="none"
@@ -251,7 +251,7 @@ export default function Promotion({ seoPromotion }) {
 
                 {/* เงินสด */}
                 <div className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-primary/20 hover:border-primary hover:-translate-y-2">
-                  <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 active:scale-[0.97] active:opacity-[0.85]">
                     <svg
                       className="w-8 h-8 text-white"
                       fill="none"
@@ -531,7 +531,7 @@ export default function Promotion({ seoPromotion }) {
                     rel="noopener noreferrer"
                     className="group bg-accent hover:bg-accent/90 text-white px-6 sm:px-8 py-4 sm:py-5 rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 font-prompt shadow-xl hover:shadow-2xl transform hover:-translate-y-2 flex items-center justify-center gap-3 sm:gap-4"
                   >
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0 active:scale-[0.97] active:opacity-[0.85]">
                       <svg
                         className="w-4 h-4 sm:w-5 sm:h-5"
                         fill="currentColor"
@@ -547,7 +547,7 @@ export default function Promotion({ seoPromotion }) {
                     href="tel:094-0649018"
                     className="group bg-white hover:bg-gray-100 text-gray-900 px-6 sm:px-8 py-4 sm:py-5 rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 font-prompt shadow-xl hover:shadow-2xl transform hover:-translate-y-2 flex items-center justify-center gap-3 sm:gap-4"
                   >
-                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-primary bg-opacity-10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-primary bg-opacity-10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0 active:scale-[0.97] active:opacity-[0.85]">
                       <svg
                         className="w-4 h-4 sm:w-5 sm:h-5 text-primary"
                         fill="none"

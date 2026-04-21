@@ -21,7 +21,7 @@ export default function HomeFaqSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {/* Feature 1 */}
           <div className="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
-            <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
+            <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105 active:scale-[0.97] active:opacity-[0.85]">
               <A11yImage
                 src="/images/kn2.webp"
                 alt="ไอคอนรถบ้านแท้"
@@ -48,7 +48,7 @@ export default function HomeFaqSection() {
 
           {/* Feature 2 */}
           <div className="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
-            <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
+            <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105 active:scale-[0.97] active:opacity-[0.85]">
               <A11yImage
                 src="/images/kn1.webp"
                 alt="ไอคอนฟรีดาวน์ 0%"
@@ -74,7 +74,7 @@ export default function HomeFaqSection() {
 
           {/* Feature 3 */}
           <div className="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-primary/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
-            <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
+            <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105 active:scale-[0.97] active:opacity-[0.85]">
               <A11yImage
                 src="/images/kn6.webp"
                 alt="ไอคอนรับประกัน"
@@ -98,7 +98,7 @@ export default function HomeFaqSection() {
 
           {/* Feature 4 */}
           <div className="group bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 ring-1 ring-black/5 shadow-md hover:border-accent/30 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-row-reverse md:flex-col items-center md:items-start gap-4 md:gap-0">
-            <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105">
+            <div className="relative shrink-0 flex items-center justify-center w-[90px] h-[90px] sm:w-[110px] sm:h-[110px] md:w-20 md:h-20 lg:w-24 lg:h-24 md:mb-4 lg:mb-5 rounded-2xl transition-transform duration-300 group-hover:scale-105 active:scale-[0.97] active:opacity-[0.85]">
               <A11yImage
                 src="/images/kn5.webp"
                 alt="ไอคอนส่งฟรี"
@@ -222,7 +222,7 @@ export default function HomeFaqSection() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
               <svg
-                className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -247,7 +247,7 @@ export default function HomeFaqSection() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
               <svg
-                className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -272,7 +272,7 @@ export default function HomeFaqSection() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,152,0,0.2),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
               <svg
-                className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -298,7 +298,7 @@ export default function HomeFaqSection() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
               <svg
-                className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -324,7 +324,7 @@ export default function HomeFaqSection() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
               <svg
-                className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -350,7 +350,7 @@ export default function HomeFaqSection() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(26,35,126,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2">
               <svg
-                className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110"
+                className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-700 group-hover:rotate-12 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

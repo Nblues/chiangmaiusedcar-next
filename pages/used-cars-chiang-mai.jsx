@@ -424,13 +424,13 @@ export default function UsedCarsChiangMai({
                     <Link
                       href="/all-cars"
                       prefetch={false}
-                      className="btn-hero-primary text-center w-full sm:w-auto max-w-full px-3 py-1.5 xs:py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 text-xs sm:text-sm lg:text-base hover:scale-100"
+                      className="btn-hero-primary text-center w-full sm:w-auto max-w-full px-3 py-1.5 xs:py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 text-xs sm:text-sm lg:text-base hover:scale-100 active:scale-[0.97] active:opacity-[0.85]"
                     >
                       ดูรถทั้งหมด
                     </Link>
                     <a
                       href="https://lin.ee/8ugfzstD"
-                      className="btn-hero-secondary text-center w-full sm:w-auto max-w-full px-3 py-1.5 xs:py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 text-xs sm:text-sm lg:text-base hover:scale-100"
+                      className="btn-hero-secondary text-center w-full sm:w-auto max-w-full px-3 py-1.5 xs:py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 text-xs sm:text-sm lg:text-base hover:scale-100 active:scale-[0.97] active:opacity-[0.85]"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -709,7 +709,7 @@ export default function UsedCarsChiangMai({
           href="https://lin.ee/8ugfzstD"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center w-14 h-14 rounded-full bg-[#06c755] text-white shadow-2xl hover:scale-110 transition-transform"
+          className="flex items-center justify-center w-14 h-14 rounded-full bg-[#06c755] text-white shadow-2xl hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]"
           aria-label="ปรึกษาฟรีทาง LINE"
         >
           <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">

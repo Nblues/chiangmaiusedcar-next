@@ -51,7 +51,7 @@ export default function CarActionButtons({ car }) {
           href="https://lin.ee/8ugfzstD"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center px-6 py-4 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-prompt"
+          className="flex items-center justify-center px-6 py-4 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-prompt active:scale-[0.97] active:opacity-[0.85]"
           title="สอบถามผ่าน LINE Official Account"
           aria-label="ติดต่อผ่าน LINE Official Account"
         >
@@ -64,7 +64,7 @@ export default function CarActionButtons({ car }) {
         {/* Phone Call */}
         <a
           href="tel:0940649018"
-          className="flex items-center justify-center px-6 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-prompt"
+          className="flex items-center justify-center px-6 py-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-prompt active:scale-[0.97] active:opacity-[0.85]"
           title="โทรศัพท์สอบถาม"
           aria-label="โทรศัพท์สอบถาม 094-064-9018"
         >
@@ -77,7 +77,7 @@ export default function CarActionButtons({ car }) {
         {/* Share */}
         <button
           onClick={shareCar}
-          className="flex items-center justify-center px-6 py-4 rounded-xl bg-accent hover:bg-accent-700 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-prompt"
+          className="flex items-center justify-center px-6 py-4 rounded-xl bg-accent hover:bg-accent-700 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-prompt active:scale-[0.97] active:opacity-[0.85]"
           title="แชร์รถคันนี้"
           aria-label="แชร์ข้อมูลรถคันนี้"
         >

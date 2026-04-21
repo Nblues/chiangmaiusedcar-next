@@ -1111,7 +1111,7 @@ export default function CreditCheck({ seoCreditCheck }) {
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-orange-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <svg
-                    className="w-5 h-5 sm:w-6 sm:h-6 relative z-10 transition-transform duration-300 group-hover:scale-110"
+                    className="w-5 h-5 sm:w-6 sm:h-6 relative z-10 transition-transform duration-300 group-hover:scale-110 active:scale-[0.97] active:opacity-[0.85]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

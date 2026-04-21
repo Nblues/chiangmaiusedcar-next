@@ -88,7 +88,7 @@ export default function TikTokFeed({ videos }) {
                   <A11yImage
                     src={imageUrl}
                     alt={`หน้าปกวิดีโอ TikTok: ${title.slice(0, 100)}`}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100 active:scale-[0.97] active:opacity-[0.85]"
                     fill
                     loading="lazy"
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 240px"
@@ -143,7 +143,7 @@ export default function TikTokFeed({ videos }) {
             href="https://www.tiktok.com/@krunueng_usedcar"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-6 py-3 sm:px-8 sm:py-3.5 border border-transparent text-sm sm:text-base font-bold rounded-full text-white bg-gray-900 hover:bg-black hover:scale-105 transition-all shadow-md hover:shadow-lg font-prompt group"
+            className="inline-flex items-center justify-center px-6 py-3 sm:px-8 sm:py-3.5 border border-transparent text-sm sm:text-base font-bold rounded-full text-white bg-gray-900 hover:bg-black hover:scale-105 transition-all shadow-md hover:shadow-lg font-prompt group active:scale-[0.97] active:opacity-[0.85]"
           >
             <svg
               className="w-5 h-5 mr-2 group-hover:animate-pulse"

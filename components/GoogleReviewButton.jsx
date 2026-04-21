@@ -11,7 +11,7 @@ const GoogleReviewButton = ({ reviewUrl = 'https://g.page/r/Ccu3ZhBBWbWcEBM/revi
     >
       <div className="absolute inset-0 -translate-x-[150%] bg-gradient-to-r from-transparent via-blue-50/50 to-transparent group-hover:translate-x-[150%] transition-transform duration-[1.5s] ease-in-out pointer-events-none" />
       <svg
-        className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] mr-3 sm:mr-5 drop-shadow-sm group-hover:scale-110 transition-transform duration-500 ease-out z-10 shrink-0"
+        className="w-[32px] h-[32px] sm:w-[38px] sm:h-[38px] mr-3 sm:mr-5 drop-shadow-sm group-hover:scale-110 transition-transform duration-500 ease-out z-10 shrink-0 active:scale-[0.97] active:opacity-[0.85]"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
       >

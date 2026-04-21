@@ -108,7 +108,7 @@ export default function HomeWhyChooseSection({ getBrandCount }) {
                 >
                   <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-3 flex-1 min-w-0 w-full">
                     <svg
-                      className="w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 transition-transform flex-shrink-0 group-hover:scale-110 sm:mb-0"
+                      className="w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 transition-transform flex-shrink-0 group-hover:scale-110 sm:mb-0 active:scale-[0.97] active:opacity-[0.85]"
                       style={{ color: brand.color || 'currentColor' }}
                       viewBox="0 0 24 24"
                       fill="currentColor"

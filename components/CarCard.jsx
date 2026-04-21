@@ -425,7 +425,7 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
           fill
           aspectRatio="4/3"
           imageType="card"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 active:scale-[0.97] active:opacity-[0.85]"
         />
 
         {/* Status Badges */}

@@ -644,7 +644,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/all-cars"
-              className="inline-flex items-center bg-primary hover:bg-primary-600 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+              className="inline-flex items-center bg-primary hover:bg-primary-600 text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt active:scale-[0.97] active:opacity-[0.85]"
             >
               <span>← ดูรถทั้งหมด</span>
             </Link>
@@ -652,7 +652,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
               href="https://lin.ee/8ugfzstD"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center bg-[#bf360c] hover:bg-[#992b0a] text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+              className="inline-flex items-center bg-[#bf360c] hover:bg-[#992b0a] text-white px-6 py-3 rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt active:scale-[0.97] active:opacity-[0.85]"
             >
               <span>สอบถามรถอื่น</span>
             </a>
@@ -1240,7 +1240,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                       tabIndex={0}
                       className={`relative flex-shrink-0 w-20 h-16 lg:w-24 lg:h-18 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 snap-start ${
                         selectedImageIndex === index
-                          ? 'border-primary ring-2 ring-primary/20'
+                          ?  active:scale-[0.97] active:opacity-[0.85]'border-primary ring-2 ring-primary/20'
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                       type="button"
@@ -1917,7 +1917,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                   <div className="absolute top-0 right-0 bg-gradient-to-bl from-orange-400 to-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-bl-lg shadow-sm">
                     Step {item.step}
                   </div>
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-2 group-hover:scale-105 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-2 group-hover:scale-105 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 active:scale-[0.97] active:opacity-[0.85]">
                     {item.icon}
                   </div>
                   <h3 className="font-bold text-[13px] sm:text-base text-gray-900 font-prompt mb-0.5">

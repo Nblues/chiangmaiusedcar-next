@@ -158,7 +158,7 @@ export function ResponsiveCarImage({
         fill
         priority={priority}
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        className="object-cover hover:scale-105 transition-transform duration-300"
+        className="object-cover hover:scale-105 transition-transform duration-300 active:scale-[0.97] active:opacity-[0.85]"
         {...props}
       />
     </div>
@@ -183,7 +183,7 @@ export function CarGallery({ images = [], context = 'แกลเลอรี่
             alt={image.alt}
             context={context}
             fill
-            className="hover:scale-105 transition-transform duration-300"
+            className="hover:scale-105 transition-transform duration-300 active:scale-[0.97] active:opacity-[0.85]"
           />
         </div>
       ))}

@@ -160,7 +160,7 @@ function AdminDashboard() {
                 onClick={() => router.push('/admin/cars')}
                 className="group relative cursor-pointer overflow-hidden bg-white border border-slate-200 hover:border-blue-500 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
               >
-                <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-blue-100">
+                <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-blue-100 active:scale-[0.97] active:opacity-[0.85]">
                   <svg
                     className="w-7 h-7 drop-shadow-sm"
                     fill="none"
@@ -191,7 +191,7 @@ function AdminDashboard() {
                 onClick={() => router.push('/admin/valuation')}
                 className="group relative cursor-pointer overflow-hidden bg-white border border-slate-200 hover:border-purple-400 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
               >
-                <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-purple-100">
+                <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-purple-100 active:scale-[0.97] active:opacity-[0.85]">
                   <svg
                     className="w-7 h-7 drop-shadow-sm"
                     fill="none"
@@ -222,7 +222,7 @@ function AdminDashboard() {
                 onClick={() => router.push('/')}
                 className="group relative cursor-pointer overflow-hidden bg-white border border-slate-200 hover:border-orange-400 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
               >
-                <div className="w-14 h-14 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-orange-100">
+                <div className="w-14 h-14 bg-orange-50 text-orange-500 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-orange-100 active:scale-[0.97] active:opacity-[0.85]">
                   <svg
                     className="w-7 h-7 drop-shadow-sm"
                     fill="none"
@@ -253,7 +253,7 @@ function AdminDashboard() {
                 onClick={() => window.open('/admin/access-guide', '_blank')}
                 className="group relative cursor-pointer overflow-hidden bg-white border border-slate-200 hover:border-emerald-400 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
               >
-                <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-emerald-100">
+                <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-emerald-100 active:scale-[0.97] active:opacity-[0.85]">
                   <svg
                     className="w-7 h-7 drop-shadow-sm"
                     fill="none"

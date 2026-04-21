@@ -118,7 +118,7 @@ export default function HomeSearchSection() {
               <button
                 type="button"
                 onClick={handleSearch}
-                className="w-full bg-accent-800 hover:bg-accent-900 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 font-prompt shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="w-full bg-accent-800 hover:bg-accent-900 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 font-prompt shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-[0.97] active:opacity-[0.85]"
               >
                 ค้นหา
               </button>

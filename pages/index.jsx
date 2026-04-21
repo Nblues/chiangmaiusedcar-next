@@ -408,7 +408,7 @@ export default function Home({
                       href="https://lin.ee/8ugfzstD"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-[48px] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt"
+                      className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-[48px] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt active:scale-[0.97] active:opacity-[0.85]"
                     >
                       <span>ติดต่อสอบถาม</span>
                     </a>
