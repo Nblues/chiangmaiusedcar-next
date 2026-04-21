@@ -47,7 +47,25 @@ export default class MyDocument extends Document {
 
           
 
-          {/* Preconnect only to the most critical 3rd-party origin (Shopify image CDN). */}
+          {/* Preconnect to critical 3rd-party origins to reduce connection latency */}
+          <link rel="preconnect" href="https://cdn.shopify.com" crossOrigin="anonymous" />
+          <link rel="dns-prefetch" href="https://cdn.shopify.com" />
+          <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+          <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+          {/* LCP Hero image preload — only on pages that render the hero banner.
+              Emitting the hint early (before CSS/JS) lets the browser fetch the image
+              in parallel with render-blocking resources, cutting Render Delay significantly. */}
+          {shouldPreloadHero && (
+            <link
+              rel="preload"
+              as="image"
+              href="/herobanner/newherobanner-414w.webp"
+              imageSrcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
+              imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
+              fetchPriority="high"
+            />
+          )}
 
           {/* Facebook In-App Browser Compatibility */}
           <meta httpEquiv="Accept-CH" content="DPR, Viewport-Width, Width" />
