@@ -77,7 +77,7 @@ export default function CachePanel() {
                 onClick={action.action}
                 disabled={loading}
                 className={`relative overflow-hidden rounded-lg p-6 text-left transition-all duration-200 transform hover:scale-105 ${
-                  loading ?  active:scale-[0.97] active:opacity-[0.85]'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'
+                  loading ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl active:scale-[0.97] active:opacity-[0.85]'
                 }`}
               >
                 <div

@@ -295,7 +295,7 @@ export default function PaymentCalculator({ seoPayment }) {
                           key={calc.years}
                           className={`text-center p-3 md:p-4 rounded-xl transition-all duration-300 hover:scale-105 ${
                             index === 1
-                              ?  active:scale-[0.97] active:opacity-[0.85]'bg-gradient-to-br from-accent/20 to-orange-100 border-2 border-accent shadow-lg'
+                              ? 'bg-gradient-to-br from-accent/20 to-orange-100 border-2 border-accent shadow-lg active:scale-[0.97] active:opacity-[0.85]'
                               : 'bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 hover:shadow-md'
                           }`}
                         >

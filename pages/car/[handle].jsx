@@ -1240,7 +1240,7 @@ function CarDetailPage({ car, recommendedCars = [] }) {
                       tabIndex={0}
                       className={`relative flex-shrink-0 w-20 h-16 lg:w-24 lg:h-18 rounded-lg overflow-hidden border-2 transition-all duration-200 hover:scale-105 focus:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 snap-start ${
                         selectedImageIndex === index
-                          ?  active:scale-[0.97] active:opacity-[0.85]'border-primary ring-2 ring-primary/20'
+                          ? 'border-primary ring-2 ring-primary/20 active:scale-[0.97] active:opacity-[0.85]'
                           : 'border-gray-200 hover:border-gray-300'
                       }`}
                       type="button"

@@ -145,7 +145,7 @@ const SocialShareButtons = ({
           onClick={() => setIsExpanded(!isExpanded)}
           className={`flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 ${
             isExpanded
-              ?  active:scale-[0.97] active:opacity-[0.85]'bg-red-500 hover:bg-red-600 rotate-45'
+              ? 'bg-red-500 hover:bg-red-600 rotate-45 active:scale-[0.97] active:opacity-[0.85]'
               : 'bg-gradient-to-br from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600'
           } text-white`}
           title={isExpanded ? 'ปิด' : 'แชร์'}
