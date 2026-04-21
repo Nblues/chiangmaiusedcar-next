@@ -8,7 +8,7 @@ import proseStyles from '../styles/prose.module.css';
 // Organization JSON-LD is injected centrally by <SEO /> to avoid duplicates
 
 export default function SellCar({ seoSellCar }) {
-    const router = useRouter();
+  const router = useRouter();
   const activeLocale = router?.locale || 'th';
 
   const baseUrl = 'https://www.chiangmaiusedcar.com';
@@ -38,8 +38,6 @@ export default function SellCar({ seoSellCar }) {
         }}
         pageType="sell-car"
       />
-
-      
 
       <header className="relative w-full bg-[#f8f9fa] flex justify-center">
         {/* Container สำหรับแบนเนอร์ ใช้สัดส่วนตามภาพจริง (1920x650) ในทุกอุปกรณ์ */}

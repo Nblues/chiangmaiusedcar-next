@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { Prompt } from 'next/font/google';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import ClientOnly from '../components/ClientOnly';

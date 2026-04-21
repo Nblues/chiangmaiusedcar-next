@@ -17,12 +17,42 @@ const PRICE_RANGES = [
 ];
 
 const QUICK_PRICE_LINKS = [
-  { href: '/all-cars?price=0-100000', label: 'ต่ำกว่า 1 แสน (< 100K)', title: 'รถมือสองเชียงใหม่ ราคาไม่เกิน 1 แสนบาท', accent: false },
-  { href: '/all-cars?price=100000-200000', label: '1-2 แสน (100K-200K)', title: 'รถมือสองเชียงใหม่ ราคา 1-2 แสนบาท ฟรีดาวน์', accent: false },
-  { href: '/all-cars?price=200000-300000', label: '2-3 แสน (200K-300K)', title: 'รถมือสองเชียงใหม่ ราคา 2-3 แสนบาท สภาพดี', accent: false },
-  { href: '/all-cars?price=400000-500000', label: '4-5 แสน (400K-500K)', title: 'รถมือสองเชียงใหม่ ราคา 4-5 แสนบาท รถบ้านมือเดียว', accent: false },
-  { href: '/all-cars?price=600000-700000', label: '6-7 แสน (600K-700K)', title: 'รถมือสองเชียงใหม่ ราคา 6-7 แสนบาท รถครอบครัว', accent: false },
-  { href: '/all-cars?price=700000', label: '7 แสนขึ้นไป (> 700K)', title: 'รถมือสองพรีเมียม เชียงใหม่ ราคา 7 แสนบาทขึ้นไป', accent: true },
+  {
+    href: '/all-cars?price=0-100000',
+    label: 'ต่ำกว่า 1 แสน (< 100K)',
+    title: 'รถมือสองเชียงใหม่ ราคาไม่เกิน 1 แสนบาท',
+    accent: false,
+  },
+  {
+    href: '/all-cars?price=100000-200000',
+    label: '1-2 แสน (100K-200K)',
+    title: 'รถมือสองเชียงใหม่ ราคา 1-2 แสนบาท ฟรีดาวน์',
+    accent: false,
+  },
+  {
+    href: '/all-cars?price=200000-300000',
+    label: '2-3 แสน (200K-300K)',
+    title: 'รถมือสองเชียงใหม่ ราคา 2-3 แสนบาท สภาพดี',
+    accent: false,
+  },
+  {
+    href: '/all-cars?price=400000-500000',
+    label: '4-5 แสน (400K-500K)',
+    title: 'รถมือสองเชียงใหม่ ราคา 4-5 แสนบาท รถบ้านมือเดียว',
+    accent: false,
+  },
+  {
+    href: '/all-cars?price=600000-700000',
+    label: '6-7 แสน (600K-700K)',
+    title: 'รถมือสองเชียงใหม่ ราคา 6-7 แสนบาท รถครอบครัว',
+    accent: false,
+  },
+  {
+    href: '/all-cars?price=700000',
+    label: '7 แสนขึ้นไป (> 700K)',
+    title: 'รถมือสองพรีเมียม เชียงใหม่ ราคา 7 แสนบาทขึ้นไป',
+    accent: true,
+  },
 ];
 
 /**
@@ -31,7 +61,7 @@ const QUICK_PRICE_LINKS = [
  * Extracted from pages/index.jsx to reduce initial bundle size.
  */
 export default function HomeSearchSection() {
-    const router = useRouter();
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState('all');
   const [brandFilter, setBrandFilter] = useState('all');

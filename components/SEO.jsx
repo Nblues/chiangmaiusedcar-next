@@ -1,6 +1,5 @@
-﻿import React, { useMemo } from 'react';
+﻿import React, { useMemo, useState, useEffect } from 'react';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { buildCarJsonLd, buildLocalBusinessJsonLd, buildProductJsonLd } from '../lib/seo/jsonld.js';
 import { getSiteLocation } from '../utils/siteLocation';
 import { BUSINESS_INFO } from '../config/business';
@@ -25,9 +24,14 @@ export default function SEO({
   breadcrumbs = null, // เพิ่ม breadcrumbs สำหรับ BreadcrumbList Schema (SEO 2025)
   keywords = null, // ใส่ keywords ลง structured data (แทน meta keywords)
 }) {
-    const router = useRouter();
-  const activeLocale = (typeof window !== 'undefined' ? router?.locale : null) || 'th';
-  const defaultLocale = (typeof window !== 'undefined' ? router?.defaultLocale : null) || 'th';
+  const [activeLocale, setActiveLocale] = useState('th');
+  const [defaultLocale, setDefaultLocale] = useState('th');
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.__NEXT_DATA__) {
+      setActiveLocale(window.__NEXT_DATA__.locale || 'th');
+      setDefaultLocale(window.__NEXT_DATA__.defaultLocale || 'th');
+    }
+  }, []);
 
   const localeMeta = useMemo(() => {
     const isEnglish = activeLocale === 'en';
@@ -79,7 +83,7 @@ export default function SEO({
           return '/';
         }
       }
-      
+
       // For relative inputs, strip '?xxx' manually
       const qIndex = raw.indexOf('?');
       if (qIndex > -1) {
@@ -91,12 +95,12 @@ export default function SEO({
         }
         return path;
       }
-      
+
       const hIndex = raw.indexOf('#');
       if (hIndex > -1) {
         return raw.substring(0, hIndex);
       }
-      
+
       return raw;
     };
 

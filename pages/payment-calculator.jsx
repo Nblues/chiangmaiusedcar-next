@@ -6,7 +6,7 @@ import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
 
 export default function PaymentCalculator({ seoPayment }) {
-    const router = useRouter();
+  const router = useRouter();
   const [carPrice, setCarPrice] = useState('');
   const [downPayment, setDownPayment] = useState('');
   const [interestRate, setInterestRate] = useState('7.50');
@@ -231,8 +231,6 @@ export default function PaymentCalculator({ seoPayment }) {
         image="https://www.chiangmaiusedcar.com/herobanner/paymentcalculator.webp"
         pageType="payment-calculator"
       />
-
-      
 
       {/* Hero Section */}
       <section className="relative bg-primary text-white py-8 md:py-16 border-t border-gray-200">

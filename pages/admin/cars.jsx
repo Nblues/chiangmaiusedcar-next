@@ -5,7 +5,7 @@ import SEO from '../../components/SEO';
 import { isAuthenticated } from '../../middleware/adminAuth';
 
 function AdminCarsManagement() {
-    const router = useRouter();
+  const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [cars, setCars] = useState([]);

@@ -1,6 +1,5 @@
 ﻿import Head from 'next/head';
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useRouter } from 'next/router';
 import SEO from '../../components/SEO';
 import Breadcrumb from '../../components/Breadcrumb';
 import SimilarCars from '../../components/SimilarCars';
@@ -30,8 +29,7 @@ async function getAllCarsCached() {
   return result;
 }
 
-function CarDetailPage({ car, recommendedCars = [] }) {
-    const router = useRouter();
+function CarDetailPage({ car, recommendedCars = [], router }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
@@ -402,18 +400,20 @@ function CarDetailPage({ car, recommendedCars = [] }) {
 
   // Clean URL - ลบ query parameters ที่ไม่จำเป็น (เช่น ?handle=...)
   useEffect(() => {
-    if (!mounted || !router.isReady) return;
+    if (!mounted || !router?.isReady) return;
+    if (router?.pathname !== '/car/[handle]') return;
 
     // ถ้ามี query parameters ใดๆ ให้ลบออก (เพราะ car detail ไม่ต้องการ query params)
-    if (
+    const hasExtraParams =
       Object.keys(router?.query || {}).length > 1 ||
-      ((router?.query || {}).handle && (router?.asPath || '').includes('?'))
-    ) {
-      const cleanPath = `/car/${(router?.query || {}).handle}`;
-      // ใช้ replace แทน push เพื่อไม่ให้เพิ่มใน history
-      router?.replace(cleanPath, undefined, { shallow: true });
-    }
-  }, [router, mounted]);
+      ((router?.query || {}).handle && (router?.asPath || '').includes('?'));
+
+    if (!hasExtraParams) return;
+
+    const cleanPath = `/car/${(router?.query || {}).handle}`;
+    // ใช้ replace แทน push เพื่อไม่ให้เพิ่มใน history
+    router?.replace(cleanPath, undefined, { shallow: true });
+  }, [router?.isReady, router?.asPath, router?.pathname, mounted]);
 
   // Keyboard navigation for image gallery
   useEffect(() => {

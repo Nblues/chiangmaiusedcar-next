@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
-import Image from 'next/image';
 import CarCard from '../components/CarCard';
 import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
@@ -74,15 +73,13 @@ export default function AllCars({
   seoAllCars,
   allCarsFaqs,
 }) {
-    const router = useRouter();
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [priceRange, setPriceRange] = useState(initialPriceRange);
   const [brandFilter, setBrandFilter] = useState(initialBrandFilter);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [liveStatuses, setLiveStatuses] = useState(null);
   const [showAllCars, setShowAllCars] = useState(false);
-  const heroImgRef = useRef(null);
-
   const { ref: observerRef, inView } = useInView({
     triggerOnce: true,
     rootMargin: '400px 0px',
@@ -98,25 +95,6 @@ export default function AllCars({
     // Fallback: render remaining cars after 2s if intersection observer fails to trigger
     const timer = setTimeout(() => setShowAllCars(true), 2000);
     return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const img = heroImgRef.current;
-    if (!img) return;
-
-    // React/ESLint disagree on `fetchPriority` vs `fetchPriority`.
-    // Set it imperatively so browsers get the hint without React warnings.
-    try {
-      img.setAttribute('fetchPriority', 'high');
-    } catch {
-      // ignore
-    }
-
-    try {
-      img.setAttribute('fetchPriority', 'high');
-    } catch {
-      // ignore
-    }
   }, []);
 
   useEffect(() => {
@@ -296,12 +274,10 @@ export default function AllCars({
         // ใช้ requestAnimationFrame หรือ setTimeout เพื่อดักให้ DOM เรนเดอร์รถชุดใหม่เสร็จก่อน
         // ถึงจะคำนวณตำแหน่งและเลื่อนจอจริงๆ
         setTimeout(() => {
-          // เลื่อนไปที่ตะกร้ารถจริงๆ ไม่ใช่ block SEO ด้านบน
+          // เลื่อนไปที่ตะกร้ารถจริงๆ โดยใช้ scrollIntoView เพื่อไม่ให้เกิด forced reflow
           const grid = document.getElementById('cars-list-top');
           if (grid) {
-            // หักลบความสูง navbar
-            const y = grid.getBoundingClientRect().top + window.scrollY - 80;
-            window.scrollTo({ top: y, behavior: 'auto' });
+            grid.scrollIntoView({ block: 'start', behavior: 'instant' });
           }
         }, 50);
       });
@@ -408,8 +384,6 @@ export default function AllCars({
         );
       })()}
 
-      
-
       {process.env.NODE_ENV === 'development' && shopifyError && currentCars.length === 0 && (
         <section className="max-w-7xl mx-auto px-6 mt-4" aria-label="Dev Shopify error">
           <div className="rounded-2xl border border-red-200 bg-red-50 p-4 font-prompt">
@@ -445,13 +419,17 @@ export default function AllCars({
         {/* Container สำหรับรูปภาพที่ปรับอัตราส่วนตามภาพจริง (1400/474) ในทุกอุปกรณ์ */}
         <div className="relative w-full max-w-[1400px] aspect-[1400/474]">
           <div className="absolute inset-0" aria-hidden="true">
-            <Image
+            <img
               src="/herobanner/heroallcars-1400w.webp"
-              alt="รวมรถยนต์มือสองคุณภาพดี ครูหนึ่งรถสวย เชียงใหม่"
-              className="object-cover object-top"
-              fill
+              srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-828w.webp 828w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
               sizes="100vw"
-              priority
+              alt="รวมรถยนต์มือสองคุณภาพดี ครูหนึ่งรถสวย เชียงใหม่"
+              className="absolute inset-0 w-full h-full object-cover object-top"
+              fetchpriority="high"
+              loading="eager"
+              decoding="async"
+              width="1400"
+              height="474"
             />
           </div>
 
