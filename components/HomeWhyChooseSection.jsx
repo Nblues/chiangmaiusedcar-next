@@ -110,10 +110,9 @@ export default function HomeWhyChooseSection({ getBrandCount }) {
                     <svg
                       className="w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10 transition-transform flex-shrink-0 group-hover:scale-110 sm:mb-0 active:scale-[0.97] active:opacity-[0.85]"
                       style={{ color: brand.color || 'currentColor' }}
-                      viewBox="0 0 24 24"
                       fill="currentColor"
                     >
-                      <path d={brand.icon} />
+                      <use href={`#icon-brand-${brand.id}`} />
                     </svg>
                     <span className="font-bold text-gray-800 text-[11px] sm:text-base md:text-lg font-prompt group-hover:text-primary transition-colors truncate text-center sm:text-left w-full">
                       {brand.name}
