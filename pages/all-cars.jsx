@@ -615,13 +615,13 @@ export default function AllCars({
               {/* Cards Grid - standardized layout */}
               <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
                 {currentCars.map((car, index) => {
-                  const isBelowFold = index >= 8;
+                  const isBelowFold = index >= 12;
 
                   if (isBelowFold && !showAllCars) {
                     return (
                       <div
-                        key={`skeleton-${car.id || index}`}
-                        ref={index === 8 ? observerRef : null}
+                        key={`skeleton-${car.id}`}
+                        ref={index === 12 ? observerRef : null}
                         className="h-[320px] w-full bg-gray-50 animate-pulse rounded-lg border border-gray-100"
                       ></div>
                     );

@@ -390,37 +390,32 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
         {!isCompact && (
           <div className="mt-1 grid grid-cols-2 grid-rows-2 gap-2 min-h-[3.25rem]">
             {quickSpecsFixed.map((spec, idx) => {
-              if (!spec) return null;
-              
+              if (!spec || spec.isPlaceholder) {
+                return (
+                  <div
+                    key={spec?.key || `placeholder-${idx}`}
+                    aria-hidden="true"
+                    className={`rounded bg-gray-200/80 animate-pulse ${
+                      spec?.key === 'year'
+                        ? 'h-4 w-10 sm:h-5 sm:w-12 mt-0.5'
+                        : 'h-4 w-16 sm:h-5 sm:w-20 mt-0.5'
+                    }`}
+                  />
+                );
+              }
+
               return (
-              <span
-                key={spec.key || `placeholder-${idx}`}
-                aria-hidden={spec.isPlaceholder}
-                className={`min-w-0 flex items-center gap-1.5 px-0.5 py-0.5 text-[13px] leading-tight sm:text-sm font-semibold font-prompt ${spec.isPlaceholder ? 'text-gray-400' : 'text-gray-900'}`}
-                title={!spec.isPlaceholder ? spec.value : ''}
+              <div
+                key={spec.key}
+                className="min-w-0 flex items-center gap-1.5 px-0.5 py-0.5 text-[13px] leading-tight sm:text-sm font-semibold font-prompt text-gray-900"
+                title={spec.value}
               >
                 <SpecIcon
                   type={spec.key}
-                  className={spec.isPlaceholder ? 'text-gray-300' : 'text-primary/80'}
+                  className="text-primary/80"
                 />
-                
-                {spec.isPlaceholder ? (
-                  <span
-                    aria-hidden="true"
-                    className={`inline-block animate-pulse rounded bg-gray-200/80 ${
-                      spec.key === 'year'
-                        ? 'h-3 w-10 sm:h-3.5 sm:w-12'
-                        : 'h-3 w-12 sm:h-3.5 sm:w-16'
-                    }`}
-                  />
-                ) : (
-                  <span className="truncate flex-1 min-w-0">{spec.value || '-'}</span>
-                )}
-              </span>
-            )})}
-          </div>
-        )}
-
+                <span className="truncate flex-1 min-w-0">{spec.value || '-'}</span>
+              </div>
         <div className="mt-3.5">
           <div className="flex min-w-0 items-baseline gap-1 font-prompt font-extrabold tabular-nums">
             <span className="text-accent-800 text-sm sm:text-lg leading-none">฿</span>

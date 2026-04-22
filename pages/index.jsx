@@ -415,10 +415,18 @@ export default function Home({
                   </div>
                 ) : (
                   <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
-                      {safeCars.slice(0, 8).map((car, index) => {
-                        const mergedCar = mergeCarSpecs(car, null);
-                        return <CarCard key={car.id} car={mergedCar} priority={index < 2} />;
-                      })}
+                    {safeCars.slice(0, showAllCars ? 8 : 4).map((car, index) => {
+                      const mergedCar = mergeCarSpecs(car, null);
+                      return <CarCard key={car.id} car={mergedCar} priority={index < 4} />;
+                    })}
+                    {!showAllCars &&
+                      safeCars.length > 4 &&
+                      Array.from({ length: Math.min(4, safeCars.length - 4) }).map((_, i) => (
+                        <div
+                          key={`skeleton-${i}`}
+                          className="h-[320px] w-full bg-gray-50 animate-pulse rounded-lg border border-gray-100"
+                        ></div>
+                      ))}
                   </div>
                 )}
               </section>
