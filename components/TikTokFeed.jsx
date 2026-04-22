@@ -121,7 +121,7 @@ export default function TikTokFeed({ videos }) {
                   </h3>
                   {video.date_published && (
                     <p
-                      className="mt-2 text-xs text-gray-500 font-prompt mt-auto"
+                      className="text-xs text-gray-500 font-prompt mt-auto pt-2"
                       suppressHydrationWarning
                     >
                       {new Date(video.date_published).toLocaleDateString('th-TH', {

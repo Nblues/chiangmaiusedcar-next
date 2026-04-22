@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-
 const navItems = [
   { href: '/', label: 'หน้าแรก' },
   { href: '/all-cars', label: 'รถทั้งหมด' },
@@ -62,7 +61,7 @@ export default function Navbar({ router }) {
                 key={item.href}
                 href={item.href}
                 prefetch={false}
-                className={`px-3 py-2 rounded-md text-sm font-medium font-prompt transition-colors transition-transform duration-200 active:scale-[0.95] ${
+                className={`px-3 py-2 rounded-md text-sm font-medium font-prompt transition-all duration-200 active:scale-[0.95] ${
                   isActive(item.href)
                     ? 'bg-primary text-white'
                     : 'text-primary hover:bg-accent hover:text-white'
@@ -122,7 +121,7 @@ export default function Navbar({ router }) {
                   key={item.href}
                   href={item.href}
                   prefetch={false}
-                  className={`block px-3 py-2 rounded-md font-prompt font-semibold text-base tracking-wide transition-colors transition-transform duration-200 active:scale-[0.95] ${
+                  className={`block px-3 py-2 rounded-md font-prompt font-semibold text-base tracking-wide transition-all duration-200 active:scale-[0.95] ${
                     isActive(item.href)
                       ? 'bg-primary text-white'
                       : 'text-primary hover:bg-accent hover:text-white'

@@ -84,7 +84,7 @@ export default function Footer() {
             {/* Contact Info */}
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
-                <div className="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 bg-accent-500 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="flex-shrink-0 w-10 h-10 lg:w-12 lg:h-12 bg-accent-500 rounded-full flex items-center justify-center">
                   <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
