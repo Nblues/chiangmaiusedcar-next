@@ -333,7 +333,7 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
           height={imageHeight}
           priority={priority}
           fetchPriority={priority ? 'high' : 'auto'}
-          decoding={priority ? "sync" : "async"}
+          decoding={priority ? 'sync' : 'async'}
           fill
           aspectRatio="4/3"
           imageType="card"
@@ -405,17 +405,19 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
               }
 
               return (
-              <div
-                key={spec.key}
-                className="min-w-0 flex items-center gap-1.5 px-0.5 py-0.5 text-[13px] leading-tight sm:text-sm font-semibold font-prompt text-gray-900"
-                title={spec.value}
-              >
-                <SpecIcon
-                  type={spec.key}
-                  className="text-primary/80"
-                />
-                <span className="truncate flex-1 min-w-0">{spec.value || '-'}</span>
-              </div>
+                <div
+                  key={spec.key}
+                  className="min-w-0 flex items-center gap-1.5 px-0.5 py-0.5 text-[13px] leading-tight sm:text-sm font-semibold font-prompt text-gray-900"
+                  title={spec.value}
+                >
+                  <SpecIcon type={spec.key} className="text-primary/80" />
+                  <span className="truncate flex-1 min-w-0">{spec.value || '-'}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         <div className="mt-3.5">
           <div className="flex min-w-0 items-baseline gap-1 font-prompt font-extrabold tabular-nums">
             <span className="text-accent-800 text-sm sm:text-lg leading-none">฿</span>
