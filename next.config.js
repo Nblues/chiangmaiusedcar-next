@@ -47,6 +47,8 @@ const nextConfig = {
     esmExternals: true,
     scrollRestoration: true,
     serverComponentsExternalPackages: ['shopify-api-node'],
+    // Tree-shake named exports from large packages to reduce initial bundle
+    optimizePackageImports: ['framer-motion', '@next/third-parties'],
     // Prevent Jest worker errors in development
     ...(process.env.NODE_ENV === 'development' && {
       workerThreads: false,

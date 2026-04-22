@@ -5,17 +5,12 @@ import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-  tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.2 : 1.0,
-  debug: process.env.NODE_ENV === 'development',
-  enabled: process.env.NODE_ENV === 'production',
+  // Low sample rate — only capture a fraction of errors to avoid overhead
+  tracesSampleRate: 0,
+  debug: false,
+  enabled: process.env.NODE_ENV === 'production' && !!process.env.NEXT_PUBLIC_SENTRY_DSN,
   environment: process.env.NODE_ENV,
-  integrations: [
-    new Sentry.BrowserTracing(),
-    new Sentry.Replay({
-      maskAllText: true,
-      blockAllMedia: true,
-    }),
-  ],
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1.0,
+  // No BrowserTracing or Replay — both add significant JS weight (50-100 KB)
+  // and BrowserTracing monkey-patches fetch/XHR, causing TBT regressions.
+  integrations: [],
 });
