@@ -22,7 +22,6 @@ const prompt = Prompt({
 
 // Dynamic imports keep heavy UI out of the initial bundle and avoid hydration mismatches
 const Footer = dynamic(() => import('../components/Footer'), {
-
   loading: () => (
     <footer className="min-h-[300px] bg-white border-t border-gray-200" aria-hidden="true" />
   ),
@@ -265,7 +264,7 @@ export default function MyApp({ Component, pageProps, router }) {
       {!isAdminRoute &&
         process.env.NODE_ENV === 'production' &&
         cookieConsent?.analytics &&
-        analyticsReady && <GoogleAnalytics gaId="G-6X6MT38ML7" />}
+        analyticsReady && <GoogleAnalytics gaId="G-6X6MT38ML7" strategy="lazyOnload" />}
     </>
   );
 }

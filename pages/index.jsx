@@ -52,7 +52,7 @@ const SocialShareButtons = dynamic(() => import('../components/SocialShareButton
 
 // Split large below-the-fold reviews section into a separate chunk
 const HomeAboutInline = dynamic(() => import('../components/HomeAboutInline'), {
-  // SSR enabled for SEO rich text
+  ssr: false, // Below-the-fold: defer to reduce initial DOM size (SEO content still visible via JS rendering)
   loading: () => <div className="min-h-[250px] w-full" aria-hidden="true" />,
 });
 const FacebookReviewsSection = dynamic(() => import('../components/FacebookReviewsSection'), {
@@ -64,7 +64,7 @@ const HomeWhyChooseSection = dynamic(() => import('../components/HomeWhyChooseSe
   loading: () => <div className="min-h-[500px] w-full" aria-hidden="true" />,
 });
 const HomeFaqSection = dynamic(() => import('../components/HomeFaqSection'), {
-  // SSR enabled to ensure FAQ schema matches HTML output immediately
+  ssr: false, // FAQ JSON-LD schema is in <SEO> component, not dependent on HTML; defer to cut DOM size
   loading: () => <div className="min-h-[600px] w-full" aria-hidden="true" />,
 });
 
