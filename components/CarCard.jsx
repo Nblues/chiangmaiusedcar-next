@@ -389,39 +389,35 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
         {/* Quick Specs (hide only in compact variant) */}
         {!isCompact && (
           <div className="mt-1 grid grid-cols-2 grid-rows-2 gap-2 min-h-[3.25rem]">
-            {quickSpecsFixed.map((spec, idx) => (
+            {quickSpecsFixed.map((spec, idx) => {
+              if (!spec) return null;
+              
+              return (
               <span
-                key={spec?.key || `placeholder-${idx}`}
-                aria-hidden={!spec}
-                className={
-                  spec
-                    ? `min-w-0 flex items-center gap-1.5 px-0.5 py-0.5 text-[13px] leading-tight sm:text-sm font-semibold font-prompt ${spec.isPlaceholder ? 'text-gray-400' : 'text-gray-900'}`
-                    : 'min-w-0 flex items-center gap-1.5 px-0.5 py-0.5 text-[13px] leading-tight sm:text-sm font-semibold text-gray-400 font-prompt'
-                }
-                title={spec && !spec.isPlaceholder ? spec.value : ''}
+                key={spec.key || `placeholder-${idx}`}
+                aria-hidden={spec.isPlaceholder}
+                className={`min-w-0 flex items-center gap-1.5 px-0.5 py-0.5 text-[13px] leading-tight sm:text-sm font-semibold font-prompt ${spec.isPlaceholder ? 'text-gray-400' : 'text-gray-900'}`}
+                title={!spec.isPlaceholder ? spec.value : ''}
               >
-                {spec ? (
-                  <SpecIcon
-                    type={spec.key}
-                    className={spec.isPlaceholder ? 'text-gray-300' : 'text-primary/80'}
-                  />
-                ) : null}
-                {spec?.isPlaceholder ? (
+                <SpecIcon
+                  type={spec.key}
+                  className={spec.isPlaceholder ? 'text-gray-300' : 'text-primary/80'}
+                />
+                
+                {spec.isPlaceholder ? (
                   <span
                     aria-hidden="true"
                     className={`inline-block animate-pulse rounded bg-gray-200/80 ${
                       spec.key === 'year'
                         ? 'h-3 w-10 sm:h-3.5 sm:w-12'
-                        : spec.key === 'drivetrain'
-                          ? 'h-3 w-12 sm:h-3.5 sm:w-16'
-                          : 'h-3 w-12 sm:h-3.5 sm:w-16'
+                        : 'h-3 w-12 sm:h-3.5 sm:w-16'
                     }`}
                   />
                 ) : (
-                  <span className="truncate flex-1 min-w-0">{spec?.value || '-'}</span>
+                  <span className="truncate flex-1 min-w-0">{spec.value || '-'}</span>
                 )}
               </span>
-            ))}
+            )})}
           </div>
         )}
 
