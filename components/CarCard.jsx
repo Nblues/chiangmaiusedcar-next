@@ -333,7 +333,7 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
           height={imageHeight}
           priority={priority}
           fetchPriority={priority ? 'high' : 'auto'}
-          decoding={priority ? 'sync' : 'async'}
+          decoding="async"
           fill
           aspectRatio="4/3"
           imageType="card"

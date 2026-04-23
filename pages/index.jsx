@@ -9,7 +9,6 @@ import { readCarStatuses } from '../lib/carStatusStore.js';
 import Link from 'next/link';
 import CarCard from '../components/CarCard';
 import Breadcrumb from '../components/Breadcrumb';
-import HomeSearchSection from '../components/HomeSearchSection';
 import { SEO_HOME } from '../config/seo-keywords';
 import { computeSchemaAvailability } from '../lib/carStatusUtils.js';
 import { COMMON_OFFER_EXTENSIONS } from '../config/business';
@@ -45,6 +44,11 @@ const HOME_FAQS = [
 ];
 
 // Lazy load non-critical components to reduce TBT
+const HomeSearchSection = dynamic(() => import('../components/HomeSearchSection'), {
+  loading: () => (
+    <div className="min-h-[400px] w-full bg-white shadow-xl rounded-2xl md:-translate-y-1/2"></div>
+  ),
+});
 const SocialShareButtons = dynamic(() => import('../components/SocialShareButtons'), {
   ssr: false,
   loading: () => null,
@@ -312,7 +316,7 @@ export default function Home({
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             className="w-full h-auto object-contain block mx-auto text-transparent"
             style={{ aspectRatio: '1400/467' }}
-            decoding="sync"
+            decoding="async"
             loading="eager"
             fetchpriority="high"
             width="1400"
