@@ -474,6 +474,47 @@ export default function Footer() {
           </div>
           {/* End Mobile Wrapper */}
         </div>
+
+        {/* Featured / Trust Signal */}
+        <div className="mt-12 pt-8 border-t border-gray-800/60 flex justify-center">
+          <a
+            href="https://www.thairath.co.th/news/auto/tips/2501667"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-3 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-gray-800/30 hover:bg-gray-800/70 border border-gray-700/40 hover:border-[#00a859]/40 transition-all duration-300 backdrop-blur-md shadow-sm"
+          >
+            {/* 3D-like Verified Icon */}
+            <div className="flex shrink-0 items-center justify-center w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border border-gray-600/50 group-hover:border-[#00a859]/50 shadow-inner">
+              <svg
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-300 group-hover:text-[#00a859] transition-colors"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 2L15.09 5.09L19.5 5.5L18.5 9.87L20.5 13.5L17.5 16.6L18 21L13.87 20L10.5 22L7.4 18.91L3 18.5L4 14.13L2 10.5L5 7.4L4.5 3L8.63 4L12 2ZM10.5 15.5L16.5 9.5L15.09 8.09L10.5 12.67L8.41 10.59L7 12L10.5 15.5Z" />
+              </svg>
+            </div>
+
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="text-gray-400 text-[10px] sm:text-xs font-medium tracking-wide">
+                ได้รับการอ้างอิงจากสื่อชั้นนำ
+              </span>
+              <span className="w-1 h-1 rounded-full bg-gray-600 group-hover:bg-[#00a859] transition-colors"></span>
+              <span className="text-gray-200 text-[11px] sm:text-xs font-semibold tracking-wider group-hover:text-[#00a859] transition-colors">
+                ไทยรัฐออนไลน์
+              </span>
+            </div>
+
+            <svg
+              className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500 group-hover:text-[#00a859] group-hover:translate-x-0.5 transition-all"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+        </div>
       </div>
 
       {/* Copyright */}
