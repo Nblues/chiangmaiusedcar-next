@@ -13,7 +13,7 @@ import { mergeCarSpecs } from '../lib/mergeCarSpecs';
 const UsedCarsChiangMaiDeferred = dynamic(() => import('../components/UsedCarsChiangMaiDeferred'));
 
 const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
-  ssr: false,
+  // Breadcrumb is important for SEO rendering
   loading: () => null,
 });
 

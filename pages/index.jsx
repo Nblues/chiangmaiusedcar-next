@@ -56,7 +56,7 @@ const SocialShareButtons = dynamic(() => import('../components/SocialShareButton
 
 // Split large below-the-fold reviews section into a separate chunk
 const HomeAboutInline = dynamic(() => import('../components/HomeAboutInline'), {
-  ssr: false, // Below-the-fold: defer to reduce initial DOM size (SEO content still visible via JS rendering)
+  // เปิด SSR เพื่อให้ Googlebot เห็นข้อความ SEO ทันทีที่โหลดหน้าแรก (SSR เป็น true โดย default)
   loading: () => <div className="min-h-[250px] w-full" aria-hidden="true" />,
 });
 const FacebookReviewsSection = dynamic(() => import('../components/FacebookReviewsSection'), {
@@ -68,7 +68,7 @@ const HomeWhyChooseSection = dynamic(() => import('../components/HomeWhyChooseSe
   loading: () => <div className="min-h-[500px] w-full" aria-hidden="true" />,
 });
 const HomeFaqSection = dynamic(() => import('../components/HomeFaqSection'), {
-  ssr: false, // FAQ JSON-LD schema is in <SEO> component, not dependent on HTML; defer to cut DOM size
+  // เปิด SSR เพื่อให้เนื้อหา FAQ แสดงใน HTML ของหน้าแรกสำหรับ SEO (Googlebot จะอ่านง่ายกว่า JSON-LD อย่างเดียว)
   loading: () => <div className="min-h-[600px] w-full" aria-hidden="true" />,
 });
 
