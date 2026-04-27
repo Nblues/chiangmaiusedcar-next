@@ -43,9 +43,8 @@ export default function Navbar({ router }) {
                   height="48"
                   className="w-full h-full object-cover scale-125"
                   loading="eager"
-                  // eslint-disable-next-line react/no-unknown-property
-                  fetchpriority="low"
-                  decoding="async"
+                  fetchpriority="high"
+                  decoding="sync"
                 />
               </picture>
             </div>
