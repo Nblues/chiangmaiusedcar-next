@@ -226,9 +226,12 @@ export default function FacebookReviewsSection() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex justify-center items-center w-full bg-white text-blue-600 hover:bg-blue-600 hover:text-white px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 ring-1 ring-inset ring-blue-600/20 hover:ring-transparent font-prompt group/btn"
-                      aria-label={`อ่านรีวิวฉบับเต็มของ ${review.name} บน Facebook`}
+                      aria-labelledby={`review-link-label-${i} review-link-context-${i}`}
                     >
-                      <span>อ่านรีวิวเต็ม</span>
+                      <span id={`review-link-label-${i}`}>อ่านรีวิวเต็ม</span>
+                      <span id={`review-link-context-${i}`} className="sr-only">
+                        {` ของ ${review.name} บน Facebook`}
+                      </span>
                       <svg
                         className="w-4 h-4 ml-1.5 transform group-hover/btn:translate-x-1 transition-transform"
                         fill="none"
@@ -277,8 +280,8 @@ export default function FacebookReviewsSection() {
             href="https://www.facebook.com/KN2car/reviews"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center justify-center bg-[#1877F2] hover:bg-[#166fe5] text-white px-8 py-4 rounded-full font-semibold text-[16px] md:text-[17px] shadow-lg hover:shadow-xl shadow-blue-500/30 hover:shadow-blue-500/40 transform hover:-translate-y-0.5 transition-all duration-300 font-prompt ring-1 ring-[#1877F2]/50"
-            aria-label="ดูรีวิวทั้งหมดบนเพจ Facebook ครูหนึ่งรถสวย"
+            className="group inline-flex items-center justify-center bg-[#1669D9] hover:bg-[#145fc4] text-white px-8 py-4 rounded-full font-semibold text-[16px] md:text-[17px] shadow-lg hover:shadow-xl shadow-blue-500/30 hover:shadow-blue-500/40 transform hover:-translate-y-0.5 transition-all duration-300 font-prompt ring-1 ring-[#1669D9]/50"
+            aria-labelledby="all-facebook-reviews-label all-facebook-reviews-context"
           >
             <div className="flex items-center gap-3">
               <div className="bg-white/20 p-1.5 rounded-full group-hover:bg-white/30 transition-colors">
@@ -286,7 +289,12 @@ export default function FacebookReviewsSection() {
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
               </div>
-              <span className="tracking-wide">ดูรีวิวทั้งหมด</span>
+              <span id="all-facebook-reviews-label" className="tracking-wide">
+                ดูรีวิวทั้งหมด
+              </span>
+              <span id="all-facebook-reviews-context" className="sr-only">
+                บนเพจ Facebook ครูหนึ่งรถสวย
+              </span>
               <svg
                 className="w-4 h-4 ml-0.5 transform group-hover:translate-x-1 transition-transform"
                 fill="none"

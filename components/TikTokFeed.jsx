@@ -11,6 +11,42 @@ const cleanVideoTitle = rawTitle => {
   return cleaned.trim();
 };
 
+const normalizeVideoDate = rawValue => {
+  if (!rawValue) return null;
+
+  if (rawValue instanceof Date) {
+    return Number.isNaN(rawValue.getTime()) ? null : rawValue;
+  }
+
+  let candidate = null;
+
+  if (typeof rawValue === 'number') {
+    candidate = new Date(rawValue > 1e12 ? rawValue : rawValue * 1000);
+  } else if (typeof rawValue === 'string') {
+    const trimmed = rawValue.trim();
+    if (!trimmed) return null;
+
+    if (/^\d+$/.test(trimmed)) {
+      const numericValue = Number(trimmed);
+      candidate = new Date(numericValue > 1e12 ? numericValue : numericValue * 1000);
+    } else {
+      candidate = new Date(trimmed);
+    }
+  }
+
+  return candidate && !Number.isNaN(candidate.getTime()) ? candidate : null;
+};
+
+const formatVideoDate = date => {
+  if (!date) return '';
+
+  return date.toLocaleDateString('th-TH', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+};
+
 export default function TikTokFeed({ videos }) {
   const [selectedVideoUrl, setSelectedVideoUrl] = useState(null);
 
@@ -25,6 +61,7 @@ export default function TikTokFeed({ videos }) {
     itemListElement: displayVideos.map((video, index) => {
       const cleanTitle = cleanVideoTitle(video.title);
       const url = video.url || 'https://www.tiktok.com/@krunueng_usedcar';
+      const publishedDate = normalizeVideoDate(video.date_published);
       return {
         '@type': 'ListItem',
         position: index + 1,
@@ -35,7 +72,7 @@ export default function TikTokFeed({ videos }) {
           thumbnailUrl: [
             video.image || 'https://www.chiangmaiusedcar.com/herobanner/outdoorbanner-480w.webp',
           ],
-          uploadDate: video.date_published || '2024-01-01T12:00:00Z',
+          uploadDate: publishedDate?.toISOString() || '2024-01-01T12:00:00Z',
           contentUrl: url,
           embedUrl: url,
         },
@@ -70,6 +107,8 @@ export default function TikTokFeed({ videos }) {
           {displayVideos.map((video, index) => {
             const title = cleanVideoTitle(video.title);
             const url = video.url || 'https://www.tiktok.com/@krunueng_usedcar';
+            const publishedDate = normalizeVideoDate(video.date_published);
+            const publishedDateLabel = formatVideoDate(publishedDate);
             const rawImageUrl = video.image || null;
             const imageUrl = rawImageUrl
               ? `/api/tiktok-image?url=${encodeURIComponent(rawImageUrl)}&w=240&q=50`
@@ -81,13 +120,12 @@ export default function TikTokFeed({ videos }) {
                 onClick={() => setSelectedVideoUrl(url)}
                 type="button"
                 className="group flex flex-col text-left bg-gray-50 rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
-                aria-label={`${title}${video.date_published ? ` ${new Date(video.date_published * 1000).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' })}` : ''}`}
               >
                 {/* Thumbnail container (9:16 aspect ratio for TikTok) */}
                 <div className="relative w-full aspect-[9/16] bg-black overflow-hidden flex-shrink-0">
                   <A11yImage
                     src={imageUrl}
-                    alt={`หน้าปกวิดีโอ TikTok: ${title.slice(0, 100)}`}
+                    alt=""
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100 active:scale-[0.97] active:opacity-[0.85]"
                     fill
                     loading="lazy"
@@ -119,16 +157,12 @@ export default function TikTokFeed({ videos }) {
                   <h3 className="text-sm sm:text-sm font-semibold text-gray-800 font-prompt line-clamp-3 leading-snug group-hover:text-primary transition-colors">
                     {title}
                   </h3>
-                  {video.date_published && (
+                  {publishedDateLabel && (
                     <p
                       className="text-xs text-gray-500 font-prompt mt-auto pt-2"
                       suppressHydrationWarning
                     >
-                      {new Date(video.date_published).toLocaleDateString('th-TH', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                      })}
+                      {publishedDateLabel}
                     </p>
                   )}
                 </div>
