@@ -76,13 +76,16 @@ html {
   contain-intrinsic-size: 2000px;
 }
 
-/* Mobile reliability: avoid content-visibility rendering gaps on some devices */
+/* Mobile: use smaller intrinsic-size hints to avoid over-reserving space */
 @media (max-width: 639px) {
-  .cv-auto,
-  .cv-auto-md,
+  .cv-auto {
+    contain-intrinsic-size: 400px;
+  }
+  .cv-auto-md {
+    contain-intrinsic-size: 800px;
+  }
   .cv-auto-lg {
-    content-visibility: visible;
-    contain-intrinsic-size: 0px;
+    contain-intrinsic-size: 1200px;
   }
 }
 
