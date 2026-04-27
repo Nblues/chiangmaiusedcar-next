@@ -48,37 +48,35 @@ export default function MyApp({ Component, pageProps, router }) {
   const [analyticsReady, setAnalyticsReady] = useState(false);
 
   useEffect(() => {
-    // Set analyticsReady to true when browser is idle to avoid LCP/INP blocking
+    // Delay heavy 3rd party scripts (GTM) until the user interacts or a max timeout.
+    // This dramatically improves the INP score and frees up the Main Thread.
     if (typeof window === 'undefined') return;
-    let idleId;
-    let timeoutId;
-    const run = () => setAnalyticsReady(true);
 
-    if ('requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(run, { timeout: 6500 });
-    } else {
-      timeoutId = window.setTimeout(run, 5000);
-    }
-    return () => {
-      if (idleId && window.cancelIdleCallback) window.cancelIdleCallback(idleId);
+    let timeoutId;
+    const run = () => {
+      setAnalyticsReady(true);
+      // Clean up listeners once fired
+      window.removeEventListener('scroll', run);
+      window.removeEventListener('mousemove', run);
+      window.removeEventListener('touchstart', run);
+      window.removeEventListener('keydown', run);
       if (timeoutId) window.clearTimeout(timeoutId);
     };
-  }, []);
 
-  useEffect(() => {
-    // Set analyticsReady to true when browser is idle to avoid LCP/INP blocking
-    if (typeof window === 'undefined') return;
-    let idleId;
-    let timeoutId;
-    const run = () => setAnalyticsReady(true);
+    // Load on first interaction (passive to avoid scrolling jank)
+    window.addEventListener('scroll', run, { passive: true, once: true });
+    window.addEventListener('mousemove', run, { passive: true, once: true });
+    window.addEventListener('touchstart', run, { passive: true, once: true });
+    window.addEventListener('keydown', run, { passive: true, once: true });
 
-    if ('requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(run, { timeout: 5000 });
-    } else {
-      timeoutId = window.setTimeout(run, 3000);
-    }
+    // Fallback: Load anyway after 8 seconds if no interaction occurs
+    timeoutId = window.setTimeout(run, 8000);
+
     return () => {
-      if (idleId && window.cancelIdleCallback) window.cancelIdleCallback(idleId);
+      window.removeEventListener('scroll', run);
+      window.removeEventListener('mousemove', run);
+      window.removeEventListener('touchstart', run);
+      window.removeEventListener('keydown', run);
       if (timeoutId) window.clearTimeout(timeoutId);
     };
   }, []);
