@@ -123,12 +123,17 @@ export default function MyApp({ Component, pageProps, router }) {
     if (typeof window === 'undefined') return;
     if (process.env.NODE_ENV !== 'production') return;
     if (isAdminRoute) return;
-    if (!cookieConsent?.analytics) return;
 
     let cancelled = false;
 
     const run = () => {
-      Promise.all([import('@vercel/analytics/react'), import('@vercel/speed-insights/next')])
+      // Load Analytics only if consented; Load SpeedInsights unconditionally (no cookies used)
+      const tasks = [
+        cookieConsent?.analytics ? import('@vercel/analytics/react') : Promise.resolve(null),
+        import('@vercel/speed-insights/next'),
+      ];
+
+      Promise.all(tasks)
         .then(([analyticsMod, speedMod]) => {
           if (cancelled) return;
           const Analytics = analyticsMod?.Analytics;
