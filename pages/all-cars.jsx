@@ -534,6 +534,12 @@ export default function AllCars({
                   ฝากขายราคาดี
                 </Link>
                 <Link
+                  href="/ev-cars-chiang-mai"
+                  className="inline-flex items-center justify-center rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 active:scale-95 transition-all duration-200"
+                >
+                  ⚡ รถ EV มือสอง
+                </Link>
+                <Link
                   href="/contact"
                   prefetch={false}
                   className="inline-flex items-center justify-center rounded-xl border border-primary px-4 py-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white active:scale-95 transition-all duration-200"

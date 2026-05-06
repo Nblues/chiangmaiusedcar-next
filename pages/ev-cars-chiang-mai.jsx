@@ -3,15 +3,29 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import Head from 'next/head';
 import SEO from '../components/SEO.jsx';
 import CarCard from '../components/CarCard';
 import { getHomepageCars } from '../lib/shopify.mjs';
 import A11yImage from '../components/A11yImage';
 import { readCarStatusesByIds } from '../lib/carStatusStore.js';
 import { mergeCarSpecs } from '../lib/mergeCarSpecs';
-const EVFaq = dynamic(() => import('../components/EVFaq'));
-const UsedCarsChiangMaiDeferred = dynamic(() => import('../components/UsedCarsChiangMaiDeferred'));
+const EVFaq = dynamic(() => import('../components/EVFaq'), {
+  ssr: false,
+  loading: () => (
+    <div
+      className="mt-12 min-h-[480px] w-full rounded-3xl bg-gray-100 animate-pulse"
+      aria-hidden="true"
+    />
+  ),
+});
+const UsedCarsChiangMaiDeferred = dynamic(() => import('../components/UsedCarsChiangMaiDeferred'), {
+  loading: () => (
+    <div
+      className="mt-8 min-h-[600px] w-full rounded-2xl bg-gray-100 animate-pulse"
+      aria-hidden="true"
+    />
+  ),
+});
 
 const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
   // Breadcrumb is important for SEO rendering
@@ -44,9 +58,9 @@ export async function getStaticProps() {
         ? rawImage.startsWith('http')
           ? rawImage
           : `${SITE}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
-        : `${SITE}/herobanner/outdoorbanner-1024w.webp`;
+        : `${SITE}/herobanner/ev-car-chiang-mai-banner.webp`;
 
-      const title = car?.title || 'รถมือสองเชียงใหม่';
+      const title = car?.title || 'รถ EV มือสองเชียงใหม่';
       const availabilityValue = computeSchemaAvailability({
         status: car?.status,
         availableForSale: car?.availableForSale,
@@ -93,15 +107,65 @@ export async function getStaticProps() {
           '@type': 'CollectionPage',
           '@id': `${SITE}/ev-cars-chiang-mai#collection`,
           url: `${SITE}/ev-cars-chiang-mai`,
-          name: 'ซื้อ-ขาย รถบ้านมือสอง เชียงใหม่-ลำพูน',
+          inLanguage: 'th',
+          dateModified: new Date().toISOString(),
+          name: 'ซื้อ-ขาย ฝากขาย รถไฟฟ้า EV มือสอง เชียงใหม่-ลำพูน เจ้าของขายเอง',
           description:
-            'รวมรถบ้านมือสองสภาพดีในเชียงใหม่-ลำพูน พร้อมรูปจริง ราคาอัปเดต และบริการฝากขายรถแบบมืออาชีพ',
+            'รวมรถ EV มือสองสภาพดีในเชียงใหม่-ลำพูน พร้อมรูปจริง ราคาอัปเดต บริการฝากขายรถ EV 2 แพ็กเกจ ฟรี หรือ จอดเต็นท์ครบวงจร ให้ราคาสูงสุด ไม่โดนกดราคา',
           mainEntity: {
             '@type': 'ItemList',
-            name: 'รถมือสองเชียงใหม่แนะนำ',
+            name: 'รถ EV มือสอง เชียงใหม่ แนะนำ',
             numberOfItems: itemListElement.length,
             itemListElement,
           },
+        },
+        {
+          '@type': ['LocalBusiness', 'AutoDealer'],
+          '@id': `${SITE}/#localbusiness`,
+          name: 'ครูหนึ่งรถสวย',
+          description:
+            'ศูนย์รับซื้อ ฝากขาย รถไฟฟ้า (EV) มือสอง เชียงใหม่-ลำพูน ให้ราคาสูงสุด บริการครบวงจร',
+          url: SITE,
+          image: `${SITE}/logo/logo_main.png`,
+          telephone: '+66940649018',
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'เลขที่ 324 หมู่ 2 ถนนสมโภชเชียงใหม่ 700 ปี',
+            addressLocality: 'สันพระเนตร',
+            addressRegion: 'สันทราย เชียงใหม่',
+            postalCode: '50210',
+            addressCountry: 'TH',
+          },
+          geo: {
+            '@type': 'GeoCoordinates',
+            latitude: 18.8049109,
+            longitude: 99.0301679,
+          },
+          areaServed: [
+            { '@type': 'City', name: 'เชียงใหม่' },
+            { '@type': 'City', name: 'ลำพูน' },
+          ],
+          openingHoursSpecification: [
+            {
+              '@type': 'OpeningHoursSpecification',
+              dayOfWeek: [
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+                'Sunday',
+              ],
+              opens: '09:00',
+              closes: '20:00',
+            },
+          ],
+          sameAs: [
+            'https://www.facebook.com/KN2car',
+            'https://www.tiktok.com/@krunueng_usedcar',
+            'https://www.youtube.com/@chiangmaiusedcar',
+          ],
         },
         {
           '@type': 'FAQPage',
@@ -109,42 +173,42 @@ export async function getStaticProps() {
           mainEntity: [
             {
               '@type': 'Question',
-              name: 'ฝากขายรถกับครูหนึ่งรถสวยมีเงื่อนไขอะไรบ้าง?',
+              name: 'ฝากขายรถ EV กับครูหนึ่งรถสวยต้องเตรียมตัวอย่างไร?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'เพื่อคัดสภาพให้ได้ตามมาตรฐาน รถที่รับฝากขายจะเน้นรถมือเดียว ไม่มีอุบัติเหตุหนัก/ไม่จมน้ำ มีประวัติดูแลบำรุงรักษาดี เครื่องยนต์/เกียร์/เล่มทะเบียนไม่มีปัญหา โดยสามารถนัดหมายนำรถเข้ามาตรวจสภาพที่เต็นท์ได้ทุกวัน',
+                text: 'เตรียมเล่มทะเบียนรถ บัตรประชาชนเจ้าของ และรูปถ่ายรถ EV ของท่านส่งมาทาง LINE ก่อน ทีมงานจะประเมินราคาเบื้องต้นให้ฟรี จากนั้นนัดนำรถเข้าตรวจสภาพจริงที่เต็นท์ ซึ่งรับรถ EV ทุกยี่ห้อ ไม่ว่าจะ BYD, MG, NETA, Tesla, AION, Changan, Wuling, GWM',
               },
             },
             {
               '@type': 'Question',
-              name: 'ฝากขายต้องเอารถมาจอดที่เต็นท์ไหม?',
+              name: 'รถ EV มือสองซื้อขายใช้เงินสดหรือไฟแนนซ์ได้?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'ไม่จำเป็นต้องเอารถมาจอดไว้ที่เต็นท์ตลอดเวลา โดยส่วนใหญ่คุณยังสามารถใช้รถตามปกติได้ และนัดหมายตามขั้นตอนที่ทีมงานแจ้งเพื่อความสะดวกในการขาย',
+                text: 'ปัจจุบันรถ EV มือสองในประเทศไทยส่วนใหญ่ยังไม่มีสถาบันการเงินรับจัดไฟแนนซ์ให้ การซื้อขายจึงเน้นเงินสดหรือโอนเงินโดยตรง ทำให้ผู้ซื้อได้ราคาที่ดีกว่าการผ่อน และผู้ขายได้รับเงินครบทันที',
               },
             },
             {
               '@type': 'Question',
-              name: 'นัดตรวจสภาพและตั้งราคาฝากขายทำอย่างไร?',
+              name: 'รถ EV มือสองประกันแบตเตอรี่และศูนย์รับประกันอีกหรือไม่?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'นัดหมายล่วงหน้าแล้วนำรถเข้ามาตรวจสภาพที่เต็นท์ได้ทุกวัน หลังตรวจสภาพ ทีมงานจะช่วยประเมินและตั้งราคาให้ใกล้เคียงราคาตลาดมากที่สุดตามสภาพจริงของรถ',
+                text: 'ขึ้นอยู่กับยี่ห้อและอายุรถ เช่น BYD รับประกันแบตเตอรี่ 8 ปี/150,000 กม. หากยังอยู่ในระยะ การันตีจะถ่ายโอนตาม VIN ได้ แนะนำให้ผู้ซื้อตรวจสอบ State of Health (SOH) ของแบตเตอรี่ก่อนตัดสินใจ ทีมงานช่วยตรวจสอบเบื้องต้นให้ได้',
               },
             },
             {
               '@type': 'Question',
-              name: 'ต้องเตรียมเอกสารอะไรบ้างสำหรับฝากขาย/ซื้อขาย?',
+              name: 'ฝากขายรถ EV แบบ 2 แพ็กเกจต่างกันอย่างไร?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'โดยทั่วไปแนะนำเตรียมเล่มทะเบียน/เอกสารรถที่เกี่ยวข้อง บัตรประชาชนผู้ขาย และข้อมูลการดูแลบำรุงรักษา (ถ้ามี) รายการเอกสารอาจแตกต่างตามกรณี สามารถทัก LINE เพื่อให้ทีมงานเช็คให้ได้ก่อนนัดหมาย',
+                text: 'แพ็กเกจ 1 ลงประกาศฟรี เจ้าของยังใช้รถได้ปกติ ผู้ซื้อ-ขายนัดดูรถกันเอง แพ็กเกจ 2 ฝากจอดเต็นท์ครบวงจร ทีมงานดูแล ถ่ายคลิปรีวิว โปรโมทผ่านโซเชียลหลักล้านฟอลโลว์ เจรจา ปิดการขาย จัดการเอกสารโอนให้ครบ สัญญาเดือนต่อเดือน ไม่ผูกมัด',
               },
             },
             {
               '@type': 'Question',
-              name: 'มีบริการส่งรถต่างจังหวัด หรือช่วยดูรถแบบออนไลน์ไหม?',
+              name: 'ซื้อรถ EV มือสองเชียงใหม่จาก BYD, NETA, MG หรือ Tesla ราคาประมาณเท่าไหร่?',
               acceptedAnswer: {
                 '@type': 'Answer',
-                text: 'มีบริการประสานงานจัดส่งรถ (ขึ้นอยู่กับเงื่อนไข) และสามารถช่วยสรุปข้อมูล/รูป/วิดีโอประกอบการตัดสินใจ พร้อมดูแลเอกสารให้ครบก่อนส่งมอบ',
+                text: 'ราคาขึ้นอยู่กับยี่ห้อ รุ่น ปี และสภาพรถ เช่น BYD Atto 3 มือสองปี 2023-2025 ราคาประมาณ 700,000-950,000 บาท NETA V มือสองราคาประมาณ 350,000-550,000 บาท MG EP หรือ MG4 มือสองประมาณ 500,000-750,000 บาท สามารถทัก LINE ให้ทีมงานอัปเดตราคาตลาดปัจจุบันให้ได้ฟรี',
               },
             },
           ],
@@ -202,6 +266,7 @@ export async function getStaticProps() {
       text.includes('aion') ||
       text.includes('changan') ||
       text.includes('wuling') ||
+      text.includes('gwm') ||
       text.includes('ora');
 
     const isMgEv =
@@ -259,7 +324,7 @@ export async function getStaticProps() {
   }
 
   const homeOgImage = `${SITE}/api/og?src=${encodeURIComponent(
-    '/herobanner/outdoorbanner.webp'
+    '/herobanner/ev-car-chiang-mai-banner.webp'
   )}&w=1200&h=630`;
 
   const structuredData = buildChiangMaiLandingItemListJsonLd(cars);
@@ -274,10 +339,20 @@ export async function getStaticProps() {
         keywords: [
           'รถไฟฟ้ามือสอง เชียงใหม่',
           'รถ EV มือสอง',
+          'ซื้อรถไฟฟ้า เชียงใหม่',
           'ฝากขายรถ EV เชียงใหม่',
           'รถไฟฟ้าเจ้าของขายเอง',
-          'ORA มือสอง เชียงใหม่',
           'BYD มือสอง เชียงใหม่',
+          'Tesla มือสอง เชียงใหม่',
+          'NETA มือสอง เชียงใหม่',
+          'MG ZS EV มือสอง',
+          'MG4 มือสอง เชียงใหม่',
+          'GWM มือสอง เชียงใหม่',
+          'AION มือสอง เชียงใหม่',
+          'ORA มือสอง เชียงใหม่',
+          'Changan EV มือสอง',
+          'รถยนต์ไฟฟ้ามือสอง ลำพูน',
+          'ฝากขายรถไฟฟ้า ไม่มีค่าใช้จ่าย',
         ],
       },
       cars,
@@ -412,14 +487,10 @@ export default function EVCarsChiangMai({
         image={homeOgImage}
         type="website"
         pageType="home"
-        keywords={[
-          seoData?.primary || '',
-          ...(seoData?.secondary || []),
-          ...(seoData?.longTail?.slice(0, 5) || []),
-        ].filter(Boolean)}
+        keywords={seoData?.keywords || []}
         breadcrumbs={[
           { name: 'หน้าแรก', url: '/' },
-          { name: 'ซื้อ-ขาย รถบ้านมือสอง เชียงใหม่-ลำพูน', url: '/ev-cars-chiang-mai' },
+          { name: 'รถไฟฟ้า EV มือสอง เชียงใหม่ เจ้าของขายเอง', url: '/ev-cars-chiang-mai' },
         ]}
         structuredData={structuredData}
       />
@@ -444,60 +515,56 @@ export default function EVCarsChiangMai({
 
       <header className="relative overflow-hidden bg-white">
         <div className="max-w-[1400px] mx-auto px-2 sm:px-4 py-3 sm:py-4">
-          <div className="relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-200">
-            {/* Make hero taller on small screens so overlay + CTAs never clip inside the rounded container */}
-            <div className="relative w-full aspect-[16/10] xs:aspect-[16/9] sm:aspect-[1920/800]">
+          <div className="relative rounded-2xl overflow-hidden bg-gray-50 border border-gray-200 shadow-sm">
+            {/* aspect-[33/14] ตรงกับขนาดภาพจริง 3168×1344 — ไม่มีพื้นที่ว่าง/letterbox */}
+            <div className="relative w-full aspect-[33/14]">
               <A11yImage
-                src="/herobanner/outdoorbanner-1024w.webp"
-                srcSet="/herobanner/outdoorbanner-480w.webp 480w, /herobanner/outdoorbanner-640w.webp 640w, /herobanner/outdoorbanner-828w.webp 828w, /herobanner/outdoorbanner-1024w.webp 1024w, /herobanner/outdoorbanner-1280w.webp 1280w, /herobanner/outdoorbanner-1400w.webp 1400w"
-                sizes="(max-width: 1400px) 100vw, 1400px"
-                alt="รถไฟฟ้ามือสอง เชียงใหม่-ลำพูน"
-                aspectRatio="1920/800"
+                src="/herobanner/ev-car-chiang-mai-banner.webp"
+                alt="รถไฟฟ้า EV มือสอง เชียงใหม่ เจ้าของขายเอง | ครูหนึ่งรถสวย"
+                aspectRatio="33/14"
                 fetchPriority="high"
-                priority
+                priority={true}
                 decoding="async"
                 imageType="hero"
-                optimizeImage={false}
-                className="block w-full h-full object-contain object-top"
+                optimizeImage={true}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
+                className="block w-full h-full object-cover object-center"
               />
             </div>
+          </div>
 
-            {/* On mobile: show CTA box below the image so nothing blocks the hero.
-                On sm+: keep it overlayed like the original design. */}
-            <div className="relative flex justify-center p-3 xs:p-4 sm:absolute sm:inset-0 sm:items-center sm:justify-center sm:p-6">
-              <div className="w-full max-w-6xl mx-auto">
-                <div className="mx-auto w-full max-w-[22rem] xs:max-w-sm sm:w-auto sm:max-w-2xl rounded-2xl bg-black/80 sm:bg-black/85 sm:backdrop-blur-md ring-1 ring-white/30 px-3 xs:px-4 sm:px-6 py-3 xs:px-6 py-4 shadow-2xl">
-                  <h1 className="text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white font-prompt text-center leading-tight drop-shadow-lg">
-                    รถไฟฟ้า <span className="text-accent">EV</span> เชียงใหม่ มือสอง เจ้าของขายเอง
-                    <span className="block text-gray-200 mt-1 sm:mt-2 text-lg xs:text-xl sm:text-2xl lg:text-3xl drop-shadow-md font-medium">
-                      ศูนย์รับซื้อและฝากขาย ครูหนึ่งรถสวย
-                    </span>
-                  </h1>
-                  <p className="mt-2.5 xs:mt-3 sm:mt-4 text-gray-50 font-prompt leading-relaxed text-center text-sm sm:text-base md:text-lg font-medium drop-shadow-md">
-                    <span className="sm:hidden">มีให้เลือกทั้งแบบ ฟรี! และ ฝากจอด</span>
-                    <span className="hidden sm:block">
-                      ฝากลงขายรถ EV ของท่านได้ราคาดีกว่าขายด่วน <br className="hidden md:block" />
-                      ทีมงานมืออาชีพดูแลจนจบขั้นตอน โอนย้ายสบายใจ
-                    </span>
-                  </p>
-                  <div className="mt-3 xs:mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2 xs:gap-3 justify-center">
-                    <Link
-                      href="/all-cars"
-                      prefetch={false}
-                      className="btn-hero-primary text-center w-full sm:w-auto max-w-full px-3 py-1.5 xs:py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 text-xs sm:text-sm lg:text-base hover:scale-100 active:scale-[0.97] active:opacity-[0.85]"
-                    >
-                      ดูรถ EV ทั้งหมด
-                    </Link>
-                    <a
-                      href="https://lin.ee/8ugfzstD"
-                      className="btn-hero-secondary text-center w-full sm:w-auto max-w-full px-3 py-1.5 xs:py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 text-xs sm:text-sm lg:text-base hover:scale-100 active:scale-[0.97] active:opacity-[0.85]"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      ปรึกษาเงื่อนไขทาง LINE
-                    </a>
-                  </div>
-                </div>
+          <div className="relative flex justify-center mt-6 sm:mt-10 mb-4 px-4 w-full">
+            <div className="w-full max-w-4xl mx-auto text-center">
+              <h1 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary font-prompt leading-tight">
+                รถไฟฟ้า <span className="text-accent">EV</span> มือสอง เชียงใหม่
+                <br />
+                เจ้าของขายเอง
+                <span className="block text-gray-600 mt-2 sm:mt-3 text-lg xs:text-xl sm:text-2xl lg:text-3xl font-medium">
+                  ศูนย์รับซื้อและฝากขาย ครูหนึ่งรถสวย
+                </span>
+              </h1>
+
+              <p className="mt-4 sm:mt-6 text-gray-600 font-prompt leading-relaxed text-base md:text-lg font-medium max-w-2xl mx-auto">
+                <span className="sm:hidden">
+                  มีให้เลือกทั้งแบบ ฟรี! และ ฝากจอด
+                  <br />
+                </span>
+                ฝากลงขายรถ EV ของท่านได้ราคาดีกว่าขายด่วน <br className="hidden md:block" />
+                ทีมงานมืออาชีพดูแลจนจบขั้นตอน โอนย้ายสบายใจ
+              </p>
+
+              <div className="mt-8 flex justify-center w-full">
+                <a
+                  href="https://lin.ee/8ugfzstD"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-3 bg-[#00B900] hover:bg-[#009900] text-white font-prompt font-semibold tracking-wide text-lg sm:text-xl lg:text-2xl px-8 py-4 sm:px-12 sm:py-5 rounded-full shadow-[0_10px_30px_rgba(0,185,0,0.3)] hover:shadow-[0_15px_40px_rgba(0,185,0,0.4)] transform hover:scale-105 active:scale-95 transition-all duration-300 w-full sm:w-auto max-w-sm sm:max-w-md mx-auto"
+                >
+                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 3.53 8.871 8.441 9.615.358.077.854.238 1.002.544.134.275.086.697.042.97l-.234 1.408c-.062.361-.295 1.413 1.236.768 1.53-.645 8.283-4.887 10.826-8.006 1.764-2.167 2.687-4.484 2.687-5.295z" />
+                  </svg>
+                  ฝากขายรถอีวี ของคุณที่นี่
+                </a>
               </div>
             </div>
           </div>
@@ -532,53 +599,46 @@ export default function EVCarsChiangMai({
           <div className="mt-3 flex flex-wrap gap-2 pb-2">
             <a
               href="#about"
-              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-3 py-1.5 lg:px-2 lg:py-1.5 xl:px-3 xl:py-2 text-xs lg:text-[13px] xl:text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt whitespace-nowrap"
             >
-              ซื้อ-ขาย/ฝากขาย
+              ซื้อ-ขาย/ฝากขายรถ EV
             </a>
             <a
               href="#consign-conditions"
-              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-3 py-1.5 lg:px-2 lg:py-1.5 xl:px-3 xl:py-2 text-xs lg:text-[13px] xl:text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt whitespace-nowrap"
             >
-              เงื่อนไขฝากขาย
+              เงื่อนไขฝากขาย EV
             </a>
             <a
               href="#brands"
-              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-3 py-1.5 lg:px-2 lg:py-1.5 xl:px-3 xl:py-2 text-xs lg:text-[13px] xl:text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt whitespace-nowrap"
             >
-              เลือกดูตามยี่ห้อ
+              เลือกดู EV ตามยี่ห้อ
             </a>
             <a
               href="#featured-cars"
-              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-3 py-1.5 lg:px-2 lg:py-1.5 xl:px-3 xl:py-2 text-xs lg:text-[13px] xl:text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt whitespace-nowrap"
             >
-              รถลงประกาศล่าสุด
+              รถ EV ลงประกาศล่าสุด
             </a>
             <a
               href="#social"
-              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-3 py-1.5 lg:px-2 lg:py-1.5 xl:px-3 xl:py-2 text-xs lg:text-[13px] xl:text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt whitespace-nowrap"
             >
               ติดตามบนโซเชียล
             </a>
             <a
               href="#dealer"
-              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-3 py-1.5 lg:px-2 lg:py-1.5 xl:px-3 xl:py-2 text-xs lg:text-[13px] xl:text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt whitespace-nowrap"
             >
               ข้อมูลเต็นท์/ติดต่อ
             </a>
             <a
               href="#faq"
-              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-3 py-1.5 lg:px-2 lg:py-1.5 xl:px-3 xl:py-2 text-xs lg:text-[13px] xl:text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt whitespace-nowrap"
             >
-              คำถามที่พบบ่อย
+              คำถามที่พบบ่อย (รถ EV)
             </a>
-            <Link
-              href="/all-cars"
-              prefetch={false}
-              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-colors font-prompt"
-            >
-              ดูรถทั้งหมด
-            </Link>
           </div>
         </nav>
 
@@ -590,34 +650,105 @@ export default function EVCarsChiangMai({
             เลือกดูตามยี่ห้อ
           </h2>
           <p className="mt-2 text-gray-700 font-prompt">
-            รวมรถพร้อมรูปจริง แยกตามยี่ห้อ เพื่อค้นหาได้เร็วขึ้น หรือ{' '}
-            <Link
-              href="/all-cars"
-              prefetch={false}
-              className="text-primary hover:underline font-semibold"
-            >
-              ดูรถทั้งหมด
-            </Link>
+            รวมรถพร้อมรูปจริง แยกตามยี่ห้อ เพื่อค้นหาได้เร็วขึ้น
           </p>
 
-          <div className="mt-4 flex flex-wrap gap-2">
+          <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 sm:gap-4">
             {[
-              { slug: 'byd', label: 'BYD' },
-              { slug: 'mg', label: 'MG' },
-              { slug: 'gwm', label: 'GWM' },
-              { slug: 'tesla', label: 'Tesla' },
-              { slug: 'neta', label: 'NETA' },
-              { slug: 'aion', label: 'AION' },
-              { slug: 'changan', label: 'Changan' },
-              { slug: 'wuling', label: 'Wuling' },
+              {
+                slug: 'byd',
+                label: 'BYD',
+                gradient: 'from-[#E31837] to-[#A0001D]',
+                text: 'BYD',
+                shadow: 'shadow-red-500/30',
+              },
+              {
+                slug: 'mg',
+                label: 'MG',
+                gradient: 'from-[#1B2D4F] to-[#0A1728]',
+                text: 'MG',
+                shadow: 'shadow-slate-800/30',
+              },
+              {
+                slug: 'gwm',
+                label: 'GWM',
+                gradient: 'from-[#000000] to-[#333333]',
+                text: 'GWM',
+                shadow: 'shadow-black/20',
+              },
+              {
+                slug: 'tesla',
+                label: 'Tesla',
+                gradient: 'from-[#E31937] to-[#B0001D]',
+                text: 'T',
+                shadow: 'shadow-red-600/30',
+                icon: (
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="w-6 h-6 text-white drop-shadow-md"
+                  >
+                    <path d="M12 2C6.48 2 2 4.02 2 6.5C2 7.7 3.32 8.76 5.37 9.53L12 21L18.63 9.53C20.68 8.76 22 7.7 22 6.5C22 4.02 17.52 2 12 2ZM12 4C16.42 4 20 5.34 20 6.5C20 7.66 16.42 9 12 9C7.58 9 4 7.66 4 6.5C4 5.34 7.58 4 12 4Z" />
+                  </svg>
+                ),
+              },
+              {
+                slug: 'neta',
+                label: 'NETA',
+                gradient: 'from-[#00B4D8] to-[#0077B6]',
+                text: 'NETA',
+                shadow: 'shadow-cyan-500/30',
+              },
+              {
+                slug: 'aion',
+                label: 'AION',
+                gradient: 'from-[#0A9396] to-[#005F73]',
+                text: 'AION',
+                shadow: 'shadow-teal-600/30',
+              },
+              {
+                slug: 'changan',
+                label: 'Changan',
+                gradient: 'from-[#023E8A] to-[#03045E]',
+                text: 'V',
+                shadow: 'shadow-blue-800/30',
+              },
+              {
+                slug: 'wuling',
+                label: 'Wuling',
+                gradient: 'from-[#D90429] to-[#9D0208]',
+                text: 'W',
+                shadow: 'shadow-red-800/30',
+              },
             ].map(b => (
               <Link
                 key={b.slug}
                 href={`/ev-cars-chiang-mai-brand/${b.slug}`}
                 prefetch={false}
-                className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+                className={`group relative flex flex-col items-center justify-center rounded-[1.25rem] border border-gray-200/80 bg-white p-4 shadow-sm hover:shadow-xl hover:${b.shadow} hover:-translate-y-1 transition-all duration-300 overflow-hidden isolate`}
               >
-                {b.label}
+                {/* 2026 Glass/Glossy Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/40 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out z-10 pointer-events-none transform -skew-x-12 translate-x-full group-hover:translate-x-[-100%]" />
+
+                {/* 3D Icon Badge */}
+                <div
+                  className={`w-14 h-14 mb-3 rounded-full flex items-center justify-center bg-gradient-to-br ${b.gradient} shadow-[inset_0_-3px_5px_rgba(0,0,0,0.3),0_4px_10px_rgba(0,0,0,0.15)] ring-1 ring-white/40 relative overflow-hidden`}
+                >
+                  {/* Top inner glow (Skeuomorphic 3D effect) */}
+                  <div className="absolute top-0 inset-x-0 h-1/2 bg-gradient-to-b from-white/30 to-transparent pointer-events-none" />
+
+                  {b.icon ? (
+                    b.icon
+                  ) : (
+                    <span className="text-white font-extrabold text-[12px] sm:text-[13px] tracking-widest z-10 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+                      {b.text}
+                    </span>
+                  )}
+                </div>
+
+                <span className="text-sm font-bold text-gray-700 group-hover:text-primary transition-colors font-prompt relative z-10">
+                  {b.label}
+                </span>
               </Link>
             ))}
           </div>
@@ -649,36 +780,55 @@ export default function EVCarsChiangMai({
               })}
             </div>
           ) : (
-            <div className="mt-4 rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700 font-prompt">
-              ตอนนี้ยังไม่มีรถแนะนำให้แสดง (อาจเกิดจากการเชื่อมต่อข้อมูลชั่วคราว) — ไปที่{' '}
-              <Link
-                href="/all-cars"
-                prefetch={false}
-                className="text-primary font-semibold hover:underline"
-              >
-                ดูรถทั้งหมด
-              </Link>{' '}
-              หรือ{' '}
-              <a
-                href="https://lin.ee/8ugfzstD"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary font-semibold hover:underline"
-              >
-                ทัก LINE
-              </a>{' '}
-              เพื่อให้ช่วยแนะนำรุ่นที่ตรงงบได้เลย
+            <div className="mt-4 rounded-2xl border border-green-100 bg-green-50/50 p-8 text-center text-gray-700 font-prompt relative overflow-hidden">
+              <div className="absolute -top-10 -right-10 w-40 h-40 bg-green-200/20 rounded-full blur-2xl"></div>
+              <div className="mb-5 flex justify-center mt-2 relative z-10">
+                <div className="bg-white p-4 rounded-full shadow-sm ring-4 ring-green-50">
+                  <svg
+                    className="w-12 h-12 text-[#00B900]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-base sm:text-lg font-semibold text-green-800 mb-2 relative z-10">
+                ยังไม่มีรถ EV ลงประกาศในขณะนี้ (กำลังเตรียมอัปเดตรถเข้าใหม่)
+              </p>
+              <p className="text-sm sm:text-base text-gray-600">
+                สนใจเป็นคิวแรกในการส่งรถ EV เสนอราคาเต็นท์ หรือ ฝากขายกับเรา?{' '}
+                <br className="hidden sm:block" />
+                <a
+                  href="https://lin.ee/8ugfzstD"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block mt-2 text-[#00B900] font-bold hover:underline"
+                >
+                  ทัก LINE แชทส่งรูปรถประเมินราคาฟรีได้เลยครับ!
+                </a>
+              </p>
             </div>
           )}
 
-          <div className="mt-8 flex flex-col sm:flex-row justify-center w-full">
-            <Link
-              href="/all-cars"
-              prefetch={false}
-              className="btn-primary text-center w-full sm:w-auto"
+          <div className="mt-8 flex flex-col sm:flex-row justify-center w-full relative z-10">
+            <a
+              href="https://lin.ee/8ugfzstD"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-3 bg-[#00B900] hover:bg-[#009900] text-white font-prompt font-semibold tracking-wide text-lg sm:text-xl px-6 py-3 sm:px-8 sm:py-3.5 rounded-full shadow-[0_5px_15px_rgba(0,185,0,0.4)] hover:shadow-[0_10px_25px_rgba(0,185,0,0.5)] transform hover:scale-105 active:scale-95 transition-all duration-300 w-full sm:w-auto max-w-sm mx-auto"
             >
-              ดูรถทั้งหมดในสต็อก
-            </Link>
+              <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 3.53 8.871 8.441 9.615.358.077.854.238 1.002.544.134.275.086.697.042.97l-.234 1.408c-.062.361-.295 1.413 1.236.768 1.53-.645 8.283-4.887 10.826-8.006 1.764-2.167 2.687-4.484 2.687-5.295z" />
+              </svg>
+              ฝากขายรถอีวี ของคุณที่นี่
+            </a>
           </div>
         </section>
 
@@ -703,25 +853,85 @@ export default function EVCarsChiangMai({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-6">
               {/* Package 1 */}
-              <div className="p-5 sm:p-6 bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col h-full">
-                <h3 className="text-xl font-bold text-primary mb-3">แพ็กเกจ 1: ลงประกาศฟรี 🆓</h3>
-                <ul className="space-y-2 mb-4 flex-grow">
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-500 mt-1">✔️</span>{' '}
-                    <span>
+              <div className="p-5 sm:p-6 bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col h-full hover:shadow-md transition-shadow">
+                <h3 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
+                  แพ็กเกจ 1: ลงประกาศฟรี
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-green-100 text-green-700 text-[13px] border border-green-200 ml-1">
+                    <svg
+                      className="w-3.5 h-3.5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    ฟรี
+                  </span>
+                </h3>
+                <ul className="space-y-3 mb-4 flex-grow">
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-green-500 mt-0.5 flex-shrink-0">
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </span>
+                    <span className="text-gray-700">
                       <strong>เหมาะสำหรับ:</strong> คนที่ยังใช้รถอยู่ แต่เปิดโอกาสขาย
                     </span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-500 mt-1">✔️</span>{' '}
-                    <span>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-green-500 mt-0.5 flex-shrink-0">
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </span>
+                    <span className="text-gray-700">
                       <strong>สิ่งที่เราทำให้:</strong> ตรวจสอบข้อมูลเบื้องต้น
                       และนำขึ้นประกาศบนเว็บไซต์ให้ฟรี!
                     </span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-green-500 mt-1">✔️</span>{' '}
-                    <span>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-green-500 mt-0.5 flex-shrink-0">
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </span>
+                    <span className="text-gray-700">
                       <strong>เงื่อนไข:</strong> ผู้ซื้อและผู้ขาย นัดดูรถและตกลงกันเองโดยตรง
                     </span>
                   </li>
@@ -729,38 +939,107 @@ export default function EVCarsChiangMai({
               </div>
 
               {/* Package 2 */}
-              <div className="p-5 sm:p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl border border-blue-200 shadow-md flex flex-col h-full relative overflow-hidden">
-                <div className="absolute top-0 right-0 bg-accent text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-                  แนะนำ ⭐
+              <div className="p-5 sm:p-6 bg-gradient-to-br from-blue-50/80 to-blue-100/80 rounded-xl border border-blue-200 shadow-md hover:shadow-lg transition-all flex flex-col h-full relative overflow-hidden group">
+                <div className="absolute top-0 right-0 bg-accent text-white text-xs font-bold px-3 py-1.5 rounded-bl-xl shadow-sm flex items-center gap-1.5 z-10">
+                  แนะนำ
+                  <svg
+                    className="w-3.5 h-3.5 text-yellow-200"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
                 </div>
-                <h3 className="text-xl font-bold text-primary mb-3">
-                  แพ็กเกจ 2: ฝากขายจอดเต็นท์ (ครบวงจร) 🏆
+                <h3 className="text-xl font-bold text-primary mb-4 relative z-10 flex items-center flex-wrap gap-x-2">
+                  แพ็กเกจ 2: ฝากขายจอดเต็นท์
+                  <span className="text-accent text-[15px] bg-white/70 px-2 py-0.5 rounded-md border border-accent/20 flex items-center gap-1 shadow-sm shrink-0">
+                    <svg className="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.86L12 17.77l-6.18 3.23L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    ครบวงจร
+                  </span>
                 </h3>
-                <ul className="space-y-2 mb-4 flex-grow">
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1">✔️</span>{' '}
-                    <span>
+                <ul className="space-y-3 mb-4 flex-grow relative z-10">
+                  <li className="flex items-start gap-2.5 group-hover:block-none">
+                    <span className="text-blue-600 mt-0.5 flex-shrink-0">
+                      <svg
+                        className="w-5 h-5 drop-shadow-[0_2px_4px_rgba(37,99,235,0.2)]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </span>
+                    <span className="text-gray-800">
                       <strong>เหมาะสำหรับ:</strong> คนที่ไม่มีเวลาจัดการ จอดรถทิ้งไว้ได้
                       อยากขายออกไวชัวร์ๆ
                     </span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1">✔️</span>{' '}
-                    <span>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-blue-600 mt-0.5 flex-shrink-0">
+                      <svg
+                        className="w-5 h-5 drop-shadow-[0_2px_4px_rgba(37,99,235,0.2)]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </span>
+                    <span className="text-gray-800">
                       <strong>การโปรโมท:</strong> ทีมงานถ่ายทำคลิปรีวิวจัดเต็ม
                       โปรโมทผ่านทุกช่องทางโซเชียล (ผู้ติดตามหลักล้าน) ยกเว้นไม่เสียค่ารถแห่
                     </span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1">✔️</span>{' '}
-                    <span>
-                      <strong>ความสะดวก:</strong> เราเป็นตัวกลางช่วยเจรจา ปิดการขาย ดูแลไฟแนนซ์
-                      และจัดการเอกสารโอนให้ทั้งหมด
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-blue-600 mt-0.5 flex-shrink-0">
+                      <svg
+                        className="w-5 h-5 drop-shadow-[0_2px_4px_rgba(37,99,235,0.2)]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </span>
+                    <span className="text-gray-800">
+                      <strong>ความสะดวก:</strong> เราเป็นตัวกลางช่วยเจรจา ปิดการขาย (เน้นเงินสด
+                      เนื่องจากรถ EV มือสองยังไม่มีไฟแนนซ์รองรับ) และจัดการเอกสารโอนให้ทั้งหมด
                     </span>
                   </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-blue-600 mt-1">✔️</span>{' '}
-                    <span>
+                  <li className="flex items-start gap-2.5">
+                    <span className="text-blue-600 mt-0.5 flex-shrink-0">
+                      <svg
+                        className="w-5 h-5 drop-shadow-[0_2px_4px_rgba(37,99,235,0.2)]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2.5}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </span>
+                    <span className="text-gray-800">
                       <strong>ยืดหยุ่นสูง:</strong> สัญญาเดือนต่อเดือน ขายไม่ออก/เปลี่ยนใจ
                       นำรถกลับได้ ไม่ผูกมัด!
                     </span>

@@ -181,6 +181,15 @@ module.exports = {
     const staticPages = [
       { path: '/', lastmod: new Date().toISOString() }, // Always fresh
       { path: '/used-cars-chiang-mai', lastmod: new Date().toISOString() }, // Primary organic landing
+      { path: '/ev-cars-chiang-mai', lastmod: new Date().toISOString() }, // EV landing page
+      { path: '/ev-cars-chiang-mai-brand/byd', lastmod: new Date().toISOString() },
+      { path: '/ev-cars-chiang-mai-brand/mg', lastmod: new Date().toISOString() },
+      { path: '/ev-cars-chiang-mai-brand/gwm', lastmod: new Date().toISOString() },
+      { path: '/ev-cars-chiang-mai-brand/tesla', lastmod: new Date().toISOString() },
+      { path: '/ev-cars-chiang-mai-brand/neta', lastmod: new Date().toISOString() },
+      { path: '/ev-cars-chiang-mai-brand/aion', lastmod: new Date().toISOString() },
+      { path: '/ev-cars-chiang-mai-brand/changan', lastmod: new Date().toISOString() },
+      { path: '/ev-cars-chiang-mai-brand/wuling', lastmod: new Date().toISOString() },
       { path: '/used-cars-chiang-mai-brand/toyota', lastmod: new Date().toISOString() },
       { path: '/used-cars-chiang-mai-brand/honda', lastmod: new Date().toISOString() },
       { path: '/used-cars-chiang-mai-brand/isuzu', lastmod: new Date().toISOString() },

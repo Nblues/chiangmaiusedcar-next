@@ -436,11 +436,11 @@ export default function Home({
               </section>
             </div>
           </div>
-          <div className="text-center mt-8 sm:mt-12 px-4 sm:px-0">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8 sm:mt-12 px-4 sm:px-0">
             <Link
               href="/all-cars"
               prefetch={false}
-              className="flex w-full justify-center md:inline-flex md:w-auto items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-full sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
+              className="flex w-full sm:w-auto justify-center items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-full sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
               aria-label="ดูรถทั้งหมด ครูหนึ่งรถสวย"
             >
               <span>ดูรถทั้งหมด</span>
@@ -451,6 +451,14 @@ export default function Home({
                   clipRule="evenodd"
                 />
               </svg>
+            </Link>
+            <Link
+              href="/ev-cars-chiang-mai"
+              prefetch={false}
+              className="flex w-full sm:w-auto justify-center items-center bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-full sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95] transition-all duration-300 font-prompt"
+              aria-label="รถไฟฟ้า EV มือสอง เชียงใหม่"
+            >
+              ⚡ รถ EV มือสอง เชียงใหม่
             </Link>
           </div>
         </div>
