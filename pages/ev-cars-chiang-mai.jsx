@@ -581,13 +581,14 @@ export default function EVCarsChiangMai({
 
           <div className="mt-4 flex flex-wrap gap-2">
             {[
-              { slug: 'toyota', label: 'Toyota' },
-              { slug: 'honda', label: 'Honda' },
-              { slug: 'isuzu', label: 'Isuzu' },
-              { slug: 'nissan', label: 'Nissan' },
-              { slug: 'mazda', label: 'Mazda' },
-              { slug: 'mitsubishi', label: 'Mitsubishi' },
-              { slug: 'ford', label: 'Ford' },
+              { slug: 'byd', label: 'BYD' },
+              { slug: 'mg', label: 'MG' },
+              { slug: 'gwm', label: 'GWM' },
+              { slug: 'tesla', label: 'Tesla' },
+              { slug: 'neta', label: 'NETA' },
+              { slug: 'aion', label: 'AION' },
+              { slug: 'changan', label: 'Changan' },
+              { slug: 'wuling', label: 'Wuling' },
             ].map(b => (
               <Link
                 key={b.slug}
