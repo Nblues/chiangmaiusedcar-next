@@ -347,7 +347,6 @@ export default function UsedCarsChiangMai({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      
       <SEO
         title={seoData.title}
         description={seoData.description}
@@ -410,8 +409,8 @@ export default function UsedCarsChiangMai({
             <div className="relative flex justify-center p-3 xs:p-4 sm:absolute sm:inset-0 sm:items-center sm:justify-center sm:p-6">
               <div className="w-full max-w-6xl mx-auto">
                 <div className="mx-auto w-full max-w-[22rem] xs:max-w-sm sm:w-auto sm:max-w-2xl rounded-2xl bg-black/80 sm:bg-black/85 sm:backdrop-blur-md ring-1 ring-white/30 px-3 xs:px-4 sm:px-6 py-3 xs:px-6 py-4 shadow-2xl">
-                  <h1 className="text-lg xs:text-xl sm:text-2xl lg:text-4xl font-extrabold text-white font-prompt text-center leading-tight drop-shadow-md">
-                    ศูนย์รับซื้อและฝากขายรถมือสองเชียงใหม่ | ครูหนึ่งรถสวย
+                  <h1 className="">
+                    รถมือสองเชียงใหม่ ฟรีดาวน์ คัดเกรดพรีเมียม | ศูนย์รับซื้อและฝากขาย ครูหนึ่งรถสวย
                   </h1>
                   <p className="mt-1.5 xs:mt-2 sm:mt-3 text-white font-prompt leading-relaxed text-center text-sm sm:text-base font-semibold">
                     <span className="sm:hidden">ฝากขายรถแบบมืออาชีพ ได้ราคาดี</span>
@@ -443,6 +442,23 @@ export default function UsedCarsChiangMai({
           </div>
         </div>
       </header>
+      {/* Trust Badges */}
+      <section className="max-w-[1400px] mx-auto px-3 sm:px-4 mt-4" id="eeat-trust">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="bg-white rounded-xl p-4 text-center border border-gray-100 shadow-sm">
+            <p className="font-bold text-primary text-base">ประสบการณ์ 10+ ปี</p>
+            <p className="text-sm text-gray-500 mt-1">มืออาชีพเรื่องรถ</p>
+          </div>
+          <div className="bg-white rounded-xl p-4 text-center border border-gray-100 shadow-sm">
+            <p className="font-bold text-primary text-base">ผู้ติดตาม 1M+</p>
+            <p className="text-sm text-gray-500 mt-1">มั่นใจได้ 100%</p>
+          </div>
+          <div className="bg-white rounded-xl p-4 text-center border border-gray-100 shadow-sm">
+            <p className="font-bold text-primary text-base">รถบ้านแท้คัดพรีเมียม</p>
+            <p className="text-sm text-gray-500 mt-1">เช็คสภาพแล้วทุกคัน</p>
+          </div>
+        </div>
+      </section>
 
       <Breadcrumb />
 
@@ -609,7 +625,7 @@ export default function UsedCarsChiangMai({
           className="mt-8 mb-8 bg-blue-50/40 rounded-2xl border border-blue-100 p-5 sm:p-6"
         >
           <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
-            ซื้อ-ขาย รถบ้านมือสอง ในเชียงใหม่-ลำพูน (ฝากขายได้)
+            ซื้อ-ขาย รถบ้านมือสอง ในภาคเหนือ เชียงใหม่-ลำพูน (จัดไฟแนนซ์ได้/ฝากขายได้)
           </h2>
           <div className="mt-3 space-y-3 text-gray-800 font-prompt leading-relaxed">
             <p>
