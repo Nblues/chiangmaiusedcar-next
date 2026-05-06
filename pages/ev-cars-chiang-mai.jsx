@@ -10,6 +10,7 @@ import { getHomepageCars } from '../lib/shopify.mjs';
 import A11yImage from '../components/A11yImage';
 import { readCarStatusesByIds } from '../lib/carStatusStore.js';
 import { mergeCarSpecs } from '../lib/mergeCarSpecs';
+const EVFaq = dynamic(() => import('../components/EVFaq'));
 const UsedCarsChiangMaiDeferred = dynamic(() => import('../components/UsedCarsChiangMaiDeferred'));
 
 const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
@@ -777,10 +778,13 @@ export default function EVCarsChiangMai({
           </div>
         </section>
 
-        <UsedCarsChiangMaiDeferred />
+        <UsedCarsChiangMaiDeferred hideFaq={true} />
 
         {/* TikTok Feed Section */}
         {tiktokVideos && tiktokVideos.length > 0 && <TikTokFeed videos={tiktokVideos} />}
+
+        {/* EV FAQ Section placed after TikTok as requested */}
+        <EVFaq />
       </main>
 
       {/* Floating LINE CTA for mobile conversion */}

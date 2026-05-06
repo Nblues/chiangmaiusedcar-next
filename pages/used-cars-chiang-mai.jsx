@@ -627,16 +627,17 @@ export default function UsedCarsChiangMai({
           id="about"
           className="mt-8 mb-8 bg-blue-50/40 rounded-2xl border border-blue-100 p-5 sm:p-6"
         >
-          <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
-            ซื้อ-ขาย รถบ้านมือสอง ในภาคเหนือ เชียงใหม่-ลำพูน (จัดไฟแนนซ์ได้/ฝากขายได้)
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary font-prompt leading-snug">
+            ซื้อ-ขาย รถบ้านมือสอง ในภาคเหนือ เชียงใหม่-ลำพูน <br className="hidden md:block" />
+            <span className="text-accent text-lg sm:text-xl lg:text-2xl mt-1 block">(จัดไฟแนนซ์ได้ / ฝากขายได้)</span>
           </h2>
-          <div className="mt-3 space-y-3 text-gray-800 font-prompt leading-relaxed">
+          <div className="mt-4 sm:mt-5 space-y-4 sm:space-y-5 text-gray-800 font-prompt leading-relaxed text-sm sm:text-base">
             <p>
               หน้านี้เป็นบริการ “ซื้อ-ขาย รถบ้านมือสอง” ในจังหวัดเชียงใหม่-ลำพูน — ไม่ว่าจะหา{' '}
               <Link
                 href="/all-cars"
                 prefetch={false}
-                className="text-primary font-semibold hover:underline"
+                className="text-primary font-bold hover:underline"
               >
                 รถมือสองเชียงใหม่
               </Link>{' '}
@@ -644,25 +645,29 @@ export default function UsedCarsChiangMai({
               <Link
                 href="/sell-car"
                 prefetch={false}
-                className="text-primary font-semibold hover:underline"
+                className="text-primary font-bold hover:underline"
               >
                 ฝากขายรถเชียงใหม่
               </Link>{' '}
               เราดูแลให้ครบจนจบขั้นตอนซื้อขาย
             </p>
-            <p>
-              ฝากขายกับ “ครูหนึ่งรถสวย” ได้ราคาสูงกว่าขายด่วนเข้าเต็นท์โดยตรงในหลายกรณี
-              และไม่ต้องเอารถมาจอดไว้ที่ร้าน คุณยังสามารถใช้รถตามปกติได้เลย ขายผ่านทีมงานมืออาชีพ
-              ขายง่าย ขายเร็ว ไม่ต้องปวดหัวรับสาย/นัดดูรถที่บ้านเอง
-            </p>
-            <p>
-              ทางเราดำเนินการให้จนจบขั้นตอนซื้อขาย รับเงินกลับบ้านสบายใจ
-              เพราะมีลูกค้ารอซื้อทั่วประเทศ และมีผู้ติดตามจากทุกช่องทางหลักแสน-หลักล้าน
-              ซื้อขายทั่วประเทศมายาวนานมากกว่า 10 ปี
-            </p>
-            <p className="text-gray-700">
-              เหมาะสำหรับคนที่ “ไม่รีบขายเข้าเต็นท์” อยากได้ราคาที่ใกล้เคียงราคาตลาดมากที่สุด
-              และอยากให้ทีมงานช่วยดูแลแทนแบบมืออาชีพ
+
+            <div className="p-4 sm:p-5 bg-white/60 rounded-xl border border-white space-y-3 sm:space-y-4 shadow-sm">
+              <p>
+                <strong>ฝากขายกับ “ครูหนึ่งรถสวย”</strong> ได้ราคาสูงกว่าขายด่วนเข้าเต็นท์โดยตรงในหลายกรณี 
+                <span className="block sm:inline sm:ml-1">และไม่ต้องเอารถมาจอดไว้ที่ร้าน คุณยังสามารถใช้รถตามปกติได้เลย</span> 
+                <span className="block mt-1.5 text-accent font-semibold">ขายผ่านทีมงานมืออาชีพ ขายง่าย ขายเร็ว ไม่ต้องปวดหัวรับสายหรือนัดดูรถเอง</span>
+              </p>
+              <p>
+                ทางเราดำเนินการให้จนจบขั้นตอนซื้อขาย รับเงินกลับบ้านสบายใจ 
+                <span className="block sm:inline sm:ml-1">เพราะมีลูกค้ารอซื้อทั่วประเทศ และมีผู้ติดตามจากทุกช่องทางหลักแสน-หลักล้าน </span>
+                <strong className="block mt-1.5 text-primary">ซื้อขายทั่วประเทศมายาวนานมากกว่า 10 ปี</strong>
+              </p>
+            </div>
+
+            <p className="text-gray-700 font-semibold flex items-start sm:items-center gap-2.5">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-accent shrink-0 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span>เหมาะสำหรับคนที่ <strong>“ไม่รีบขายเข้าเต็นท์”</strong> อยากได้ราคาที่ใกล้เคียงราคาตลาดมากที่สุด และอยากให้ทีมงานช่วยดูแลแทนแบบมืออาชีพ</span>
             </p>
           </div>
 

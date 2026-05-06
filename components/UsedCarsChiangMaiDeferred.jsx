@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { BUSINESS_INFO, createPhoneLink, createPlaceLink } from '../config/business';
 import A11yImage from './A11yImage';
 
-export default function UsedCarsChiangMaiDeferred() {
+export default function UsedCarsChiangMaiDeferred({ hideFaq = false }) {
   return (
     <>
       <section id="social" className="mt-8 bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
@@ -322,273 +322,276 @@ export default function UsedCarsChiangMaiDeferred() {
         </div>
       </section>
 
-      <section
-        id="faq"
-        className="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm"
-      >
-        <div className="bg-gradient-to-r from-primary to-primary-800 px-5 py-4 sm:px-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-white font-prompt">คำถามที่พบบ่อย</h2>
-          <p className="mt-1 text-sm text-white/90 font-prompt">
-            คำตอบสั้นๆ ที่ช่วยให้ตัดสินใจได้เร็วขึ้น
-          </p>
-        </div>
-
-        <div className="p-5 sm:p-6">
-          <div className="space-y-3 font-prompt">
-            <details className="group rounded-2xl border border-gray-200 bg-white px-4 sm:px-5 py-4">
-              <summary className="flex cursor-pointer list-none items-start gap-3">
-                <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M12 21s-7-4.35-7-10a7 7 0 0 1 14 0c0 5.65-7 10-7 10z" />
-                    <path d="M12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
-                  </svg>
-                </span>
-
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                    ฝากขายรถกับครูหนึ่งรถสวยมีเงื่อนไขอะไรบ้าง?
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-600">
-                    เน้นคัดสภาพให้ได้มาตรฐานก่อนรับฝากขาย
-                  </p>
-                </div>
-
-                <span className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition-transform group-open:rotate-180">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </span>
-              </summary>
-
-              <div className="mt-3 text-gray-700 text-sm sm:text-base leading-relaxed">
-                โดยหลักๆ จะเน้นรถมือเดียว ไม่มีอุบัติเหตุหนัก/ไม่จมน้ำ มีประวัติดูแลบำรุงรักษาดี
-                เครื่องยนต์/เกียร์/เล่มทะเบียนไม่มีปัญหา — ดูรายละเอียดเพิ่มเติมได้ที่{' '}
-                <a
-                  href="#consign-conditions"
-                  className="text-primary hover:underline font-semibold"
-                >
-                  เงื่อนไขฝากขาย
-                </a>
-              </div>
-            </details>
-
-            <details className="group rounded-2xl border border-gray-200 bg-white px-4 sm:px-5 py-4">
-              <summary className="flex cursor-pointer list-none items-start gap-3">
-                <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent-800">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M22 12h-4l-3 9-6-18-3 9H2" />
-                  </svg>
-                </span>
-
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                    ฝากขายต้องเอารถมาจอดที่เต็นท์ไหม?
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-600">โดยส่วนใหญ่ยังใช้รถตามปกติได้</p>
-                </div>
-
-                <span className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition-transform group-open:rotate-180">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </span>
-              </summary>
-
-              <div className="mt-3 text-gray-700 text-sm sm:text-base leading-relaxed">
-                ไม่จำเป็นต้องเอารถมาจอดไว้ที่เต็นท์ตลอดเวลา โดยส่วนใหญ่คุณยังสามารถใช้รถตามปกติได้
-                ทีมงานจะนัดหมายตามขั้นตอนที่เหมาะสม (เช่น ตรวจสภาพ/ถ่ายรูป/นัดลูกค้า)
-                เพื่อให้ขายง่ายและสะดวกที่สุด
-              </div>
-            </details>
-
-            <details className="group rounded-2xl border border-gray-200 bg-white px-4 sm:px-5 py-4">
-              <summary className="flex cursor-pointer list-none items-start gap-3">
-                <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gold/20 text-gold-800">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M3 7h13l5 5-5 5H3V7z" />
-                    <path d="M7 12h.01" />
-                  </svg>
-                </span>
-
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                    นัดตรวจสภาพและตั้งราคาฝากขายทำอย่างไร?
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-600">
-                    นัดล่วงหน้า นำรถเข้ามาตรวจสภาพได้ทุกวัน
-                  </p>
-                </div>
-
-                <span className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition-transform group-open:rotate-180">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </span>
-              </summary>
-
-              <div className="mt-3 text-gray-700 text-sm sm:text-base leading-relaxed">
-                นัดหมายล่วงหน้าแล้วนำรถเข้ามาตรวจสภาพที่เต็นท์ได้ทุกวัน หลังตรวจสภาพ
-                ทีมงานจะช่วยประเมินและตั้งราคา ให้ใกล้เคียงราคาตลาดมากที่สุดตามสภาพจริง
-                เพื่อให้ขายได้คุ้มและสบายใจ
-              </div>
-            </details>
-
-            <details className="group rounded-2xl border border-gray-200 bg-white px-4 sm:px-5 py-4">
-              <summary className="flex cursor-pointer list-none items-start gap-3">
-                <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M7 7h10v10H7z" />
-                    <path d="M7 11h10" />
-                    <path d="M9 7V5" />
-                    <path d="M15 7V5" />
-                  </svg>
-                </span>
-
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                    ต้องเตรียมเอกสารอะไรบ้างสำหรับฝากขาย/ซื้อขาย?
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-600">เช็คให้ก่อนนัดหมายได้ทาง LINE</p>
-                </div>
-
-                <span className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition-transform group-open:rotate-180">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </span>
-              </summary>
-
-              <div className="mt-3 text-gray-700 text-sm sm:text-base leading-relaxed">
-                โดยทั่วไปแนะนำเตรียมเล่มทะเบียน/เอกสารรถที่เกี่ยวข้อง บัตรประชาชนผู้ขาย
-                และข้อมูลการดูแลบำรุงรักษา (ถ้ามี) รายการอาจแตกต่างตามกรณี —{' '}
-                <a
-                  href="https://lin.ee/8ugfzstD"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline font-semibold"
-                >
-                  ทัก LINE
-                </a>{' '}
-                เพื่อให้ทีมงานเช็คให้ได้ก่อนนัดหมาย
-              </div>
-            </details>
-
-            <details className="group rounded-2xl border border-gray-200 bg-white px-4 sm:px-5 py-4">
-              <summary className="flex cursor-pointer list-none items-start gap-3">
-                <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-green-50 text-green-700">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M3 7h13l5 5-5 5H3V7z" />
-                    <path d="M7 12h.01" />
-                  </svg>
-                </span>
-
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                    มีบริการส่งรถต่างจังหวัด หรือช่วยดูรถแบบออนไลน์ไหม?
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-600">
-                    ขึ้นอยู่กับเงื่อนไขและความพร้อมของงาน
-                  </p>
-                </div>
-
-                <span className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition-transform group-open:rotate-180">
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </span>
-              </summary>
-
-              <div className="mt-3 text-gray-700 text-sm sm:text-base leading-relaxed">
-                มีบริการประสานงานจัดส่งรถ (ขึ้นอยู่กับเงื่อนไข)
-                และสามารถช่วยสรุปข้อมูล/รูป/วิดีโอประกอบการตัดสินใจ พร้อมดูแลเอกสารให้ครบก่อนส่งมอบ
-                ติดต่อสอบถามได้ที่{' '}
-                <a href={createPhoneLink()} className="text-primary hover:underline font-semibold">
-                  {BUSINESS_INFO.phone}
-                </a>
-              </div>
-            </details>
-          </div>
-
-          <div className="mt-5 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between rounded-2xl border border-gray-200 bg-gray-50 p-4">
-            <div className="text-sm text-gray-700 font-prompt">
-              ถ้ายังไม่แน่ใจ ทักมาถามได้เลย — ตอบไว ช่วยเช็คคันที่เหมาะกับงบ
-            </div>
-            <div className="flex gap-2">
-              <a href={createPhoneLink()} className="btn-primary px-4 py-2 text-sm rounded-xl">
-                โทรเลย
-              </a>
-              <a
-                href="https://lin.ee/8ugfzstD"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-secondary px-4 py-2 text-sm rounded-xl"
+      {!hideFaq && (
+        <section
+                id="faq"
+                className="mt-8 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-sm"
               >
-                ทัก LINE
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+                <div className="bg-gradient-to-r from-primary to-primary-800 px-5 py-4 sm:px-6">
+                  <h2 className="text-xl sm:text-2xl font-bold text-white font-prompt">คำถามที่พบบ่อย</h2>
+                  <p className="mt-1 text-sm text-white/90 font-prompt">
+                    คำตอบสั้นๆ ที่ช่วยให้ตัดสินใจได้เร็วขึ้น
+                  </p>
+                </div>
+        
+                <div className="p-5 sm:p-6">
+                  <div className="space-y-3 font-prompt">
+                    <details className="group rounded-2xl border border-gray-200 bg-white px-4 sm:px-5 py-4">
+                      <summary className="flex cursor-pointer list-none items-start gap-3">
+                        <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M12 21s-7-4.35-7-10a7 7 0 0 1 14 0c0 5.65-7 10-7 10z" />
+                            <path d="M12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
+                          </svg>
+                        </span>
+        
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+                            ฝากขายรถกับครูหนึ่งรถสวยมีเงื่อนไขอะไรบ้าง?
+                          </h3>
+                          <p className="mt-1 text-sm text-gray-600">
+                            เน้นคัดสภาพให้ได้มาตรฐานก่อนรับฝากขาย
+                          </p>
+                        </div>
+        
+                        <span className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition-transform group-open:rotate-180">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M6 9l6 6 6-6" />
+                          </svg>
+                        </span>
+                      </summary>
+        
+                      <div className="mt-3 text-gray-700 text-sm sm:text-base leading-relaxed">
+                        โดยหลักๆ จะเน้นรถมือเดียว ไม่มีอุบัติเหตุหนัก/ไม่จมน้ำ มีประวัติดูแลบำรุงรักษาดี
+                        เครื่องยนต์/เกียร์/เล่มทะเบียนไม่มีปัญหา — ดูรายละเอียดเพิ่มเติมได้ที่{' '}
+                        <a
+                          href="#consign-conditions"
+                          className="text-primary hover:underline font-semibold"
+                        >
+                          เงื่อนไขฝากขาย
+                        </a>
+                      </div>
+                    </details>
+        
+                    <details className="group rounded-2xl border border-gray-200 bg-white px-4 sm:px-5 py-4">
+                      <summary className="flex cursor-pointer list-none items-start gap-3">
+                        <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent-800">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M22 12h-4l-3 9-6-18-3 9H2" />
+                          </svg>
+                        </span>
+        
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+                            ฝากขายต้องเอารถมาจอดที่เต็นท์ไหม?
+                          </h3>
+                          <p className="mt-1 text-sm text-gray-600">โดยส่วนใหญ่ยังใช้รถตามปกติได้</p>
+                        </div>
+        
+                        <span className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition-transform group-open:rotate-180">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M6 9l6 6 6-6" />
+                          </svg>
+                        </span>
+                      </summary>
+        
+                      <div className="mt-3 text-gray-700 text-sm sm:text-base leading-relaxed">
+                        ไม่จำเป็นต้องเอารถมาจอดไว้ที่เต็นท์ตลอดเวลา โดยส่วนใหญ่คุณยังสามารถใช้รถตามปกติได้
+                        ทีมงานจะนัดหมายตามขั้นตอนที่เหมาะสม (เช่น ตรวจสภาพ/ถ่ายรูป/นัดลูกค้า)
+                        เพื่อให้ขายง่ายและสะดวกที่สุด
+                      </div>
+                    </details>
+        
+                    <details className="group rounded-2xl border border-gray-200 bg-white px-4 sm:px-5 py-4">
+                      <summary className="flex cursor-pointer list-none items-start gap-3">
+                        <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gold/20 text-gold-800">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M3 7h13l5 5-5 5H3V7z" />
+                            <path d="M7 12h.01" />
+                          </svg>
+                        </span>
+        
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+                            นัดตรวจสภาพและตั้งราคาฝากขายทำอย่างไร?
+                          </h3>
+                          <p className="mt-1 text-sm text-gray-600">
+                            นัดล่วงหน้า นำรถเข้ามาตรวจสภาพได้ทุกวัน
+                          </p>
+                        </div>
+        
+                        <span className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition-transform group-open:rotate-180">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M6 9l6 6 6-6" />
+                          </svg>
+                        </span>
+                      </summary>
+        
+                      <div className="mt-3 text-gray-700 text-sm sm:text-base leading-relaxed">
+                        นัดหมายล่วงหน้าแล้วนำรถเข้ามาตรวจสภาพที่เต็นท์ได้ทุกวัน หลังตรวจสภาพ
+                        ทีมงานจะช่วยประเมินและตั้งราคา ให้ใกล้เคียงราคาตลาดมากที่สุดตามสภาพจริง
+                        เพื่อให้ขายได้คุ้มและสบายใจ
+                      </div>
+                    </details>
+        
+                    <details className="group rounded-2xl border border-gray-200 bg-white px-4 sm:px-5 py-4">
+                      <summary className="flex cursor-pointer list-none items-start gap-3">
+                        <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M7 7h10v10H7z" />
+                            <path d="M7 11h10" />
+                            <path d="M9 7V5" />
+                            <path d="M15 7V5" />
+                          </svg>
+                        </span>
+        
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+                            ต้องเตรียมเอกสารอะไรบ้างสำหรับฝากขาย/ซื้อขาย?
+                          </h3>
+                          <p className="mt-1 text-sm text-gray-600">เช็คให้ก่อนนัดหมายได้ทาง LINE</p>
+                        </div>
+        
+                        <span className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition-transform group-open:rotate-180">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M6 9l6 6 6-6" />
+                          </svg>
+                        </span>
+                      </summary>
+        
+                      <div className="mt-3 text-gray-700 text-sm sm:text-base leading-relaxed">
+                        โดยทั่วไปแนะนำเตรียมเล่มทะเบียน/เอกสารรถที่เกี่ยวข้อง บัตรประชาชนผู้ขาย
+                        และข้อมูลการดูแลบำรุงรักษา (ถ้ามี) รายการอาจแตกต่างตามกรณี —{' '}
+                        <a
+                          href="https://lin.ee/8ugfzstD"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline font-semibold"
+                        >
+                          ทัก LINE
+                        </a>{' '}
+                        เพื่อให้ทีมงานเช็คให้ได้ก่อนนัดหมาย
+                      </div>
+                    </details>
+        
+                    <details className="group rounded-2xl border border-gray-200 bg-white px-4 sm:px-5 py-4">
+                      <summary className="flex cursor-pointer list-none items-start gap-3">
+                        <span className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-green-50 text-green-700">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="h-5 w-5"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M3 7h13l5 5-5 5H3V7z" />
+                            <path d="M7 12h.01" />
+                          </svg>
+                        </span>
+        
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+                            มีบริการส่งรถต่างจังหวัด หรือช่วยดูรถแบบออนไลน์ไหม?
+                          </h3>
+                          <p className="mt-1 text-sm text-gray-600">
+                            ขึ้นอยู่กับเงื่อนไขและความพร้อมของงาน
+                          </p>
+                        </div>
+        
+                        <span className="mt-1 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-700 transition-transform group-open:rotate-180">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="h-4 w-4"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                          >
+                            <path d="M6 9l6 6 6-6" />
+                          </svg>
+                        </span>
+                      </summary>
+        
+                      <div className="mt-3 text-gray-700 text-sm sm:text-base leading-relaxed">
+                        มีบริการประสานงานจัดส่งรถ (ขึ้นอยู่กับเงื่อนไข)
+                        และสามารถช่วยสรุปข้อมูล/รูป/วิดีโอประกอบการตัดสินใจ พร้อมดูแลเอกสารให้ครบก่อนส่งมอบ
+                        ติดต่อสอบถามได้ที่{' '}
+                        <a href={createPhoneLink()} className="text-primary hover:underline font-semibold">
+                          {BUSINESS_INFO.phone}
+                        </a>
+                      </div>
+                    </details>
+                  </div>
+        
+                  <div className="mt-5 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between rounded-2xl border border-gray-200 bg-gray-50 p-4">
+                    <div className="text-sm text-gray-700 font-prompt">
+                      ถ้ายังไม่แน่ใจ ทักมาถามได้เลย — ตอบไว ช่วยเช็คคันที่เหมาะกับงบ
+                    </div>
+                    <div className="flex gap-2">
+                      <a href={createPhoneLink()} className="btn-primary px-4 py-2 text-sm rounded-xl">
+                        โทรเลย
+                      </a>
+                      <a
+                        href="https://lin.ee/8ugfzstD"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn-secondary px-4 py-2 text-sm rounded-xl"
+                      >
+                        ทัก LINE
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </section>
+      )}
+
     </>
   );
 }

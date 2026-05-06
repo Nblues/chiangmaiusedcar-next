@@ -1,0 +1,1 @@
+﻿const fs = require('fs'); const code = fs.readFileSync('pages/used-cars-chiang-mai.jsx', 'utf8'); const match = code.match(/export async function getStaticProps[\s\S]+?(?=export default function)/); if (match) console.log(match[0]);

@@ -1,0 +1,723 @@
+﻿/* eslint-disable @next/next/no-img-element */
+
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import Head from 'next/head';
+import SEO from '../components/SEO.jsx';
+import CarCard from '../components/CarCard';
+import { getHomepageCars } from '../lib/shopify.mjs';
+import A11yImage from '../components/A11yImage';
+import { readCarStatusesByIds } from '../lib/carStatusStore.js';
+import { mergeCarSpecs } from '../lib/mergeCarSpecs';
+const UsedCarsChiangMaiDeferred = dynamic(() => import('../components/UsedCarsChiangMaiDeferred'));
+
+const Breadcrumb = dynamic(() => import('../components/Breadcrumb'), {
+  // Breadcrumb is important for SEO rendering
+  loading: () => null,
+});
+
+const SITE = 'https://www.chiangmaiusedcar.com';
+
+// NOTE: This page must keep runtime JS enabled because the global Navbar/Footer are
+// client-only (dynamic + ssr:false). Disabling runtime JS makes the mobile menu
+// disappear after a full refresh.
+
+export async function getStaticProps() {
+  // Prefer ISR for performance: serve HTML from CDN and refresh periodically.
+
+  // Server-only requires: these modules will NOT be bundled in the client JS
+  const { getPriceInfo } = require('../lib/carPrice');
+  const { computeSchemaAvailability } = require('../lib/carStatusUtils.js');
+  const { COMMON_OFFER_EXTENSIONS } = require('../config/business.js');
+
+  function buildChiangMaiLandingItemListJsonLd(inputCars) {
+    const cars = Array.isArray(inputCars) ? inputCars : [];
+    const itemListElement = cars.slice(0, 12).map((car, index) => {
+      const handle = car?.handle;
+      const carUrl = handle ? `${SITE}/car/${handle}` : SITE;
+
+      const priceInfo = getPriceInfo(car?.price?.amount || 0);
+      const rawImage = car?.images?.[0]?.url;
+      const imageUrl = rawImage
+        ? rawImage.startsWith('http')
+          ? rawImage
+          : `${SITE}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
+        : `${SITE}/herobanner/outdoorbanner-1024w.webp`;
+
+      const title = car?.title || 'เธฃเธ–เธกเธทเธญเธชเธญเธเน€เธเธตเธขเธเนเธซเธกเน';
+      const availabilityValue = computeSchemaAvailability({
+        status: car?.status,
+        availableForSale: car?.availableForSale,
+      });
+
+      const offer = priceInfo.valid
+        ? {
+            '@type': 'Offer',
+            price: priceInfo.numeric,
+            priceCurrency: 'THB',
+            url: carUrl,
+            itemCondition: 'https://schema.org/UsedCondition',
+            availability: `https://schema.org/${availabilityValue}`,
+            inventoryLevel: {
+              '@type': 'QuantitativeValue',
+              value: availabilityValue === 'InStock' ? 1 : 0,
+              unitCode: 'EA',
+            },
+            seller: COMMON_OFFER_EXTENSIONS.seller,
+            hasMerchantReturnPolicy: COMMON_OFFER_EXTENSIONS.hasMerchantReturnPolicy,
+            shippingDetails: COMMON_OFFER_EXTENSIONS.shippingDetails,
+          }
+        : undefined;
+
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'Product',
+          additionalType: 'https://schema.org/Car',
+          '@id': carUrl,
+          name: title,
+          image: imageUrl,
+          url: carUrl,
+          offers: offer,
+        },
+      };
+    });
+
+    return {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'CollectionPage',
+          '@id': `${SITE}/used-cars-chiang-mai#collection`,
+          url: `${SITE}/used-cars-chiang-mai`,
+          name: 'เธเธทเนเธญ-เธเธฒเธข เธฃเธ–เธเนเธฒเธเธกเธทเธญเธชเธญเธ เน€เธเธตเธขเธเนเธซเธกเน-เธฅเธณเธเธนเธ',
+          description:
+            'เธฃเธงเธกเธฃเธ–เธเนเธฒเธเธกเธทเธญเธชเธญเธเธชเธ เธฒเธเธ”เธตเนเธเน€เธเธตเธขเธเนเธซเธกเน-เธฅเธณเธเธนเธ เธเธฃเนเธญเธกเธฃเธนเธเธเธฃเธดเธ เธฃเธฒเธเธฒเธญเธฑเธเน€เธ”เธ• เนเธฅเธฐเธเธฃเธดเธเธฒเธฃเธเธฒเธเธเธฒเธขเธฃเธ–เนเธเธเธกเธทเธญเธญเธฒเธเธตเธ',
+          mainEntity: {
+            '@type': 'ItemList',
+            name: 'เธฃเธ–เธกเธทเธญเธชเธญเธเน€เธเธตเธขเธเนเธซเธกเนเนเธเธฐเธเธณ',
+            numberOfItems: itemListElement.length,
+            itemListElement,
+          },
+        },
+        {
+          '@type': 'FAQPage',
+          '@id': `${SITE}/used-cars-chiang-mai#faq`,
+          mainEntity: [
+            {
+              '@type': 'Question',
+              name: 'เธเธฒเธเธเธฒเธขเธฃเธ–เธเธฑเธเธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธขเธกเธตเน€เธเธทเนเธญเธเนเธเธญเธฐเนเธฃเธเนเธฒเธ?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'เน€เธเธทเนเธญเธเธฑเธ”เธชเธ เธฒเธเนเธซเนเนเธ”เนเธ•เธฒเธกเธกเธฒเธ•เธฃเธเธฒเธ เธฃเธ–เธ—เธตเนเธฃเธฑเธเธเธฒเธเธเธฒเธขเธเธฐเน€เธเนเธเธฃเธ–เธกเธทเธญเน€เธ”เธตเธขเธง เนเธกเนเธกเธตเธญเธธเธเธฑเธ•เธดเน€เธซเธ•เธธเธซเธเธฑเธ/เนเธกเนเธเธกเธเนเธณ เธกเธตเธเธฃเธฐเธงเธฑเธ•เธดเธ”เธนเนเธฅเธเธณเธฃเธธเธเธฃเธฑเธเธฉเธฒเธ”เธต เน€เธเธฃเธทเนเธญเธเธขเธเธ•เน/เน€เธเธตเธขเธฃเน/เน€เธฅเนเธกเธ—เธฐเน€เธเธตเธขเธเนเธกเนเธกเธตเธเธฑเธเธซเธฒ เนเธ”เธขเธชเธฒเธกเธฒเธฃเธ–เธเธฑเธ”เธซเธกเธฒเธขเธเธณเธฃเธ–เน€เธเนเธฒเธกเธฒเธ•เธฃเธงเธเธชเธ เธฒเธเธ—เธตเนเน€เธ•เนเธเธ—เนเนเธ”เนเธ—เธธเธเธงเธฑเธ',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'เธเธฒเธเธเธฒเธขเธ•เนเธญเธเน€เธญเธฒเธฃเธ–เธกเธฒเธเธญเธ”เธ—เธตเนเน€เธ•เนเธเธ—เนเนเธซเธก?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'เนเธกเนเธเธณเน€เธเนเธเธ•เนเธญเธเน€เธญเธฒเธฃเธ–เธกเธฒเธเธญเธ”เนเธงเนเธ—เธตเนเน€เธ•เนเธเธ—เนเธ•เธฅเธญเธ”เน€เธงเธฅเธฒ เนเธ”เธขเธชเนเธงเธเนเธซเธเนเธเธธเธ“เธขเธฑเธเธชเธฒเธกเธฒเธฃเธ–เนเธเนเธฃเธ–เธ•เธฒเธกเธเธเธ•เธดเนเธ”เน เนเธฅเธฐเธเธฑเธ”เธซเธกเธฒเธขเธ•เธฒเธกเธเธฑเนเธเธ•เธญเธเธ—เธตเนเธ—เธตเธกเธเธฒเธเนเธเนเธเน€เธเธทเนเธญเธเธงเธฒเธกเธชเธฐเธ”เธงเธเนเธเธเธฒเธฃเธเธฒเธข',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'เธเธฑเธ”เธ•เธฃเธงเธเธชเธ เธฒเธเนเธฅเธฐเธ•เธฑเนเธเธฃเธฒเธเธฒเธเธฒเธเธเธฒเธขเธ—เธณเธญเธขเนเธฒเธเนเธฃ?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'เธเธฑเธ”เธซเธกเธฒเธขเธฅเนเธงเธเธซเธเนเธฒเนเธฅเนเธงเธเธณเธฃเธ–เน€เธเนเธฒเธกเธฒเธ•เธฃเธงเธเธชเธ เธฒเธเธ—เธตเนเน€เธ•เนเธเธ—เนเนเธ”เนเธ—เธธเธเธงเธฑเธ เธซเธฅเธฑเธเธ•เธฃเธงเธเธชเธ เธฒเธ เธ—เธตเธกเธเธฒเธเธเธฐเธเนเธงเธขเธเธฃเธฐเน€เธกเธดเธเนเธฅเธฐเธ•เธฑเนเธเธฃเธฒเธเธฒเนเธซเนเนเธเธฅเนเน€เธเธตเธขเธเธฃเธฒเธเธฒเธ•เธฅเธฒเธ”เธกเธฒเธเธ—เธตเนเธชเธธเธ”เธ•เธฒเธกเธชเธ เธฒเธเธเธฃเธดเธเธเธญเธเธฃเธ–',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'เธ•เนเธญเธเน€เธ•เธฃเธตเธขเธกเน€เธญเธเธชเธฒเธฃเธญเธฐเนเธฃเธเนเธฒเธเธชเธณเธซเธฃเธฑเธเธเธฒเธเธเธฒเธข/เธเธทเนเธญเธเธฒเธข?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'เนเธ”เธขเธ—เธฑเนเธงเนเธเนเธเธฐเธเธณเน€เธ•เธฃเธตเธขเธกเน€เธฅเนเธกเธ—เธฐเน€เธเธตเธขเธ/เน€เธญเธเธชเธฒเธฃเธฃเธ–เธ—เธตเนเน€เธเธตเนเธขเธงเธเนเธญเธ เธเธฑเธ•เธฃเธเธฃเธฐเธเธฒเธเธเธเธนเนเธเธฒเธข เนเธฅเธฐเธเนเธญเธกเธนเธฅเธเธฒเธฃเธ”เธนเนเธฅเธเธณเธฃเธธเธเธฃเธฑเธเธฉเธฒ (เธ–เนเธฒเธกเธต) เธฃเธฒเธขเธเธฒเธฃเน€เธญเธเธชเธฒเธฃเธญเธฒเธเนเธ•เธเธ•เนเธฒเธเธ•เธฒเธกเธเธฃเธ“เธต เธชเธฒเธกเธฒเธฃเธ–เธ—เธฑเธ LINE เน€เธเธทเนเธญเนเธซเนเธ—เธตเธกเธเธฒเธเน€เธเนเธเนเธซเนเนเธ”เนเธเนเธญเธเธเธฑเธ”เธซเธกเธฒเธข',
+              },
+            },
+            {
+              '@type': 'Question',
+              name: 'เธกเธตเธเธฃเธดเธเธฒเธฃเธชเนเธเธฃเธ–เธ•เนเธฒเธเธเธฑเธเธซเธงเธฑเธ” เธซเธฃเธทเธญเธเนเธงเธขเธ”เธนเธฃเธ–เนเธเธเธญเธญเธเนเธฅเธเนเนเธซเธก?',
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: 'เธกเธตเธเธฃเธดเธเธฒเธฃเธเธฃเธฐเธชเธฒเธเธเธฒเธเธเธฑเธ”เธชเนเธเธฃเธ– (เธเธถเนเธเธญเธขเธนเนเธเธฑเธเน€เธเธทเนเธญเธเนเธ) เนเธฅเธฐเธชเธฒเธกเธฒเธฃเธ–เธเนเธงเธขเธชเธฃเธธเธเธเนเธญเธกเธนเธฅ/เธฃเธนเธ/เธงเธดเธ”เธตเนเธญเธเธฃเธฐเธเธญเธเธเธฒเธฃเธ•เธฑเธ”เธชเธดเธเนเธ เธเธฃเนเธญเธกเธ”เธนเนเธฅเน€เธญเธเธชเธฒเธฃเนเธซเนเธเธฃเธเธเนเธญเธเธชเนเธเธกเธญเธ',
+              },
+            },
+          ],
+        },
+      ],
+    };
+  }
+
+  // Keep lightweight: we only need a featured set for the landing page.
+  let carsRaw = [];
+  let shopifyError = null;
+  try {
+    carsRaw = await getHomepageCars(12);
+  } catch (error) {
+    carsRaw = [];
+    if (process.env.NODE_ENV === 'development') {
+      shopifyError = error?.message || 'unknown error';
+      // eslint-disable-next-line no-console
+      console.error('getStaticProps(/used-cars-chiang-mai) error:', error);
+    }
+  }
+
+  let cars = Array.isArray(carsRaw) ? carsRaw : [];
+  try {
+    const ids = cars.map(c => c?.id).filter(Boolean);
+    const statuses = await readCarStatusesByIds(ids);
+    cars = cars.map(c => {
+      const id = c?.id;
+      const statusFromKv = id ? statuses?.[id]?.status : undefined;
+      return {
+        ...c,
+        status: statusFromKv || c?.status || 'available',
+      };
+    });
+  } catch {
+    // ignore KV errors; page should still render
+  }
+
+  // Reduce hydration payload: drop fields not used by this page (notably variant/metafield edges).
+  cars = cars.map(c => {
+    if (!c || typeof c !== 'object') return c;
+    const rest = { ...c };
+    delete rest.variant;
+
+    const images = Array.isArray(rest.images)
+      ? rest.images.map(img => ({
+          url: img?.url,
+          width: img?.width,
+          height: img?.height,
+          alt: img?.alt,
+        }))
+      : rest.images;
+
+    return {
+      ...rest,
+      images,
+    };
+  });
+
+  let tiktokVideos = [];
+  try {
+    const rawFeed = await fetch('https://rss.app/feeds/v1.1/MkPoJo3SV77U3XXe.json').then(r =>
+      r.json()
+    );
+    tiktokVideos = rawFeed?.items || [];
+  } catch (error) {
+    tiktokVideos = [];
+  }
+
+  const homeOgImage = `${SITE}/api/og?src=${encodeURIComponent(
+    '/herobanner/outdoorbanner.webp'
+  )}&w=1200&h=630`;
+
+  const structuredData = buildChiangMaiLandingItemListJsonLd(cars);
+
+  return {
+    props: {
+      seoData: require('../config/seo-keyword-map').SEO_KEYWORD_MAP.usedCarsLanding,
+      cars,
+      homeOgImage,
+      structuredData,
+      shopifyError,
+      tiktokVideos,
+    },
+    // Refresh every 5 minutes
+    revalidate: 300,
+  };
+}
+
+const TikTokFeed = dynamic(() => import('../components/TikTokFeed'), {
+  loading: () => <div className="min-h-[400px] w-full" aria-hidden="true" />,
+});
+
+export default function UsedCarsChiangMai({
+  seoData,
+
+  cars,
+  homeOgImage,
+  structuredData,
+  shopifyError,
+  tiktokVideos,
+}) {
+  const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
+  const featuredCars = useMemo(() => safeCars.slice(0, 8), [safeCars]);
+
+  const [specByHandle, setSpecByHandle] = useState({});
+  const requestedSpecHandlesRef = useRef(new Set());
+  const specFetchAttemptsRef = useRef(new Map());
+
+  // Enrich missing specs for featured cards (helps when metafields are not exposed to Storefront API).
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const list = Array.isArray(featuredCars) ? featuredCars : [];
+    if (list.length === 0) return;
+
+    const needs = [];
+    for (const car of list) {
+      const handle = car?.handle;
+      if (!handle) continue;
+      if (requestedSpecHandlesRef.current.has(handle)) continue;
+
+      const attempts = Number(specFetchAttemptsRef.current.get(handle) || 0);
+      if (attempts >= 2) continue;
+
+      const extra = specByHandle?.[handle];
+      const merged = mergeCarSpecs(car, extra);
+
+      const hasYear = merged?.year != null && String(merged.year).trim() !== '';
+      const hasMileage = merged?.mileage != null && String(merged.mileage).trim() !== '';
+      const hasTransmission =
+        merged?.transmission != null && String(merged.transmission).trim() !== '';
+      const drive =
+        merged?.drivetrain ||
+        merged?.drive_type ||
+        merged?.driveType ||
+        merged?.['drive-type'] ||
+        merged?.wheel_drive ||
+        merged?.wheelDrive;
+      const hasDrivetrain = drive != null && String(drive).trim() !== '';
+      const fuel = merged?.fuelType || merged?.fuel_type;
+      const hasFuel = fuel != null && String(fuel).trim() !== '';
+
+      if (!(hasYear && hasMileage && hasTransmission && hasDrivetrain && hasFuel)) {
+        needs.push(handle);
+      }
+    }
+
+    if (needs.length === 0) return;
+    needs.forEach(h => {
+      requestedSpecHandlesRef.current.add(h);
+      specFetchAttemptsRef.current.set(h, Number(specFetchAttemptsRef.current.get(h) || 0) + 1);
+    });
+
+    const fetchSpecs = async () => {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+        const canonical = Array.from(new Set(needs.filter(Boolean))).sort();
+        const params = new URLSearchParams({ handles: canonical.join(',') });
+        const resp = await fetch(`/api/public/car-specs?${params.toString()}`, {
+          cache: 'no-store',
+          credentials: 'same-origin',
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (!resp.ok) {
+          needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+          return;
+        }
+        const data = await resp.json();
+        if (!data?.ok || !data?.specs) {
+          needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+          return;
+        }
+
+        const returned = new Set(Object.keys(data.specs || {}));
+        for (const h of needs) {
+          if (!returned.has(h)) requestedSpecHandlesRef.current.delete(h);
+        }
+
+        setSpecByHandle(prev => ({
+          ...(prev || {}),
+          ...data.specs,
+        }));
+
+        // Treat requestedSpecHandlesRef as in-flight only.
+        // If specs are still incomplete (e.g. drivetrain missing), allow a limited retry.
+        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+      } catch (error) {
+        needs.forEach(h => requestedSpecHandlesRef.current.delete(h));
+        if (process.env.NODE_ENV === 'development') {
+          // eslint-disable-next-line no-console
+          console.warn('Failed to fetch car specs:', error?.message);
+        }
+      }
+    };
+
+    fetchSpecs().catch(() => {});
+  }, [featuredCars, specByHandle]);
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      
+      <SEO
+        title={seoData.title}
+        description={seoData.description}
+        url="/used-cars-chiang-mai"
+        image={homeOgImage}
+        type="website"
+        pageType="home"
+        keywords={[
+          seoData?.primary || '',
+          ...(seoData?.secondary || []),
+          ...(seoData?.longTail?.slice(0, 5) || []),
+        ].filter(Boolean)}
+        breadcrumbs={[
+          { name: 'เธซเธเนเธฒเนเธฃเธ', url: '/' },
+          { name: 'เธเธทเนเธญ-เธเธฒเธข เธฃเธ–เธเนเธฒเธเธกเธทเธญเธชเธญเธ เน€เธเธตเธขเธเนเธซเธกเน-เธฅเธณเธเธนเธ', url: '/used-cars-chiang-mai' },
+        ]}
+        structuredData={structuredData}
+      />
+
+      {process.env.NODE_ENV === 'development' && shopifyError && featuredCars.length === 0 && (
+        <section
+          className="max-w-[1400px] mx-auto px-3 sm:px-4 mt-3"
+          aria-label="Dev Shopify error"
+        >
+          <div className="rounded-2xl border border-red-200 bg-red-50 p-4 font-prompt">
+            <div className="font-bold text-red-900">Dev: เธ”เธถเธเธฃเธ–เนเธเธฐเธเธณเธเธฒเธ Shopify เนเธกเนเธชเธณเน€เธฃเนเธ</div>
+            <div className="mt-1 text-sm text-red-800">
+              เธ•เธฃเธงเธเธชเธญเธเนเธเธฅเน <span className="font-semibold">.env.local</span> เธงเนเธฒเธกเธต{' '}
+              <span className="font-semibold">SHOPIFY_DOMAIN</span> เนเธฅเธฐ{' '}
+              <span className="font-semibold">SHOPIFY_STOREFRONT_TOKEN</span> เนเธฅเนเธงเธฃเธฑเธเนเธซเธกเนเธ”เนเธงเธข{' '}
+              <span className="font-semibold">pnpm dev</span>
+            </div>
+            <div className="mt-1 text-xs text-red-700/80">เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”: {shopifyError}</div>
+          </div>
+        </section>
+      )}
+
+      <header className="relative overflow-hidden bg-white">
+        <div className="max-w-[1400px] mx-auto px-2 sm:px-4 py-3 sm:py-4">
+          <div className="relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-200">
+            {/* Make hero taller on small screens so overlay + CTAs never clip inside the rounded container */}
+            <div className="relative w-full aspect-[16/10] xs:aspect-[16/9] sm:aspect-[1920/800]">
+              <A11yImage
+                src="/herobanner/outdoorbanner-1024w.webp"
+                srcSet="/herobanner/outdoorbanner-480w.webp 480w, /herobanner/outdoorbanner-640w.webp 640w, /herobanner/outdoorbanner-828w.webp 828w, /herobanner/outdoorbanner-1024w.webp 1024w, /herobanner/outdoorbanner-1280w.webp 1280w, /herobanner/outdoorbanner-1400w.webp 1400w"
+                sizes="(max-width: 1400px) 100vw, 1400px"
+                alt="เธฃเธ–เธกเธทเธญเธชเธญเธเน€เธเธตเธขเธเนเธซเธกเน - เธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข"
+                aspectRatio="1920/800"
+                fetchPriority="high"
+                priority
+                decoding="async"
+                imageType="hero"
+                optimizeImage={false}
+                className="block w-full h-full object-contain object-top"
+              />
+            </div>
+
+            {/* On mobile: show CTA box below the image so nothing blocks the hero.
+                On sm+: keep it overlayed like the original design. */}
+            <div className="relative flex justify-center p-3 xs:p-4 sm:absolute sm:inset-0 sm:items-center sm:justify-center sm:p-6">
+              <div className="w-full max-w-6xl mx-auto">
+                <div className="mx-auto w-full max-w-[22rem] xs:max-w-sm sm:w-auto sm:max-w-2xl rounded-2xl bg-black/80 sm:bg-black/85 sm:backdrop-blur-md ring-1 ring-white/30 px-3 xs:px-4 sm:px-6 py-3 xs:px-6 py-4 shadow-2xl">
+                  <h1 className="text-lg xs:text-xl sm:text-2xl lg:text-4xl font-extrabold text-white font-prompt text-center leading-tight drop-shadow-md">
+                    เธจเธนเธเธขเนเธฃเธฑเธเธเธทเนเธญเนเธฅเธฐเธเธฒเธเธเธฒเธขเธฃเธ–เธกเธทเธญเธชเธญเธเน€เธเธตเธขเธเนเธซเธกเน | เธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข
+                  </h1>
+                  <p className="mt-1.5 xs:mt-2 sm:mt-3 text-white font-prompt leading-relaxed text-center text-sm sm:text-base font-semibold">
+                    <span className="sm:hidden">เธเธฒเธเธเธฒเธขเธฃเธ–เนเธเธเธกเธทเธญเธญเธฒเธเธตเธ เนเธ”เนเธฃเธฒเธเธฒเธ”เธต</span>
+                    <span className="hidden sm:inline">
+                      เธเธฒเธเธฅเธเธเธฒเธขเธฃเธ–เธเธญเธเธ—เนเธฒเธเนเธ”เนเธฃเธฒเธเธฒเธ”เธตเธเธงเนเธฒเธเธฒเธขเธ”เนเธงเธ โ€” เธ—เธตเธกเธเธฒเธเธกเธทเธญเธญเธฒเธเธตเธเธ”เธนเนเธฅเธเธเธเธเธเธฑเนเธเธ•เธญเธ
+                      เธเธทเนเธญเธเธฒเธขเธชเธเธฒเธขเนเธ
+                    </span>
+                  </p>
+                  <div className="mt-3 xs:mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2 xs:gap-3 justify-center">
+                    <Link
+                      href="/all-cars"
+                      prefetch={false}
+                      className="btn-hero-primary text-center w-full sm:w-auto max-w-full px-3 py-1.5 xs:py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 text-xs sm:text-sm lg:text-base hover:scale-100 active:scale-[0.97] active:opacity-[0.85]"
+                    >
+                      เธ”เธนเธฃเธ–เธ—เธฑเนเธเธซเธกเธ”
+                    </Link>
+                    <a
+                      href="https://lin.ee/8ugfzstD"
+                      className="btn-hero-secondary text-center w-full sm:w-auto max-w-full px-3 py-1.5 xs:py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 text-xs sm:text-sm lg:text-base hover:scale-100 active:scale-[0.97] active:opacity-[0.85]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      เธเธฃเธถเธเธฉเธฒเธเธฃเธตเธ—เธฒเธ LINE
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <Breadcrumb />
+
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 ipadpro:px-3 py-8">
+        <nav
+          aria-label="เนเธเธขเธฑเธเธชเนเธงเธเธ•เนเธฒเธเน เธเธญเธเธซเธเนเธฒ"
+          className="mb-6 rounded-2xl border border-gray-200 bg-white p-4 sm:p-5"
+        >
+          <div className="text-sm font-semibold text-gray-900 font-prompt">เนเธเธขเธฑเธเธชเนเธงเธเธ—เธตเนเธ•เนเธญเธเธเธฒเธฃ</div>
+          <div className="mt-3 flex flex-wrap gap-2 pb-2">
+            <a
+              href="#about"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              เธเธทเนเธญ-เธเธฒเธข/เธเธฒเธเธเธฒเธข
+            </a>
+            <a
+              href="#consign-conditions"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              เน€เธเธทเนเธญเธเนเธเธเธฒเธเธเธฒเธข
+            </a>
+            <a
+              href="#brands"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              เน€เธฅเธทเธญเธเธ”เธนเธ•เธฒเธกเธขเธตเนเธซเนเธญ
+            </a>
+            <a
+              href="#featured-cars"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              เธฃเธ–เธฅเธเธเธฃเธฐเธเธฒเธจเธฅเนเธฒเธชเธธเธ”
+            </a>
+            <a
+              href="#social"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              เธ•เธดเธ”เธ•เธฒเธกเธเธเนเธเน€เธเธตเธขเธฅ
+            </a>
+            <a
+              href="#dealer"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              เธเนเธญเธกเธนเธฅเน€เธ•เนเธเธ—เน/เธ•เธดเธ”เธ•เนเธญ
+            </a>
+            <a
+              href="#faq"
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+            >
+              เธเธณเธ–เธฒเธกเธ—เธตเนเธเธเธเนเธญเธข
+            </a>
+            <Link
+              href="/all-cars"
+              prefetch={false}
+              className="inline-flex snap-center shrink-0 items-center justify-center rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary/90 transition-colors font-prompt"
+            >
+              เธ”เธนเธฃเธ–เธ—เธฑเนเธเธซเธกเธ”
+            </Link>
+          </div>
+        </nav>
+
+        <section
+          id="brands"
+          className="mt-8 bg-white rounded-2xl border border-gray-200 p-5 sm:p-6"
+        >
+          <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
+            เน€เธฅเธทเธญเธเธ”เธนเธ•เธฒเธกเธขเธตเนเธซเนเธญ
+          </h2>
+          <p className="mt-2 text-gray-700 font-prompt">
+            เธฃเธงเธกเธฃเธ–เธเธฃเนเธญเธกเธฃเธนเธเธเธฃเธดเธ เนเธขเธเธ•เธฒเธกเธขเธตเนเธซเนเธญ เน€เธเธทเนเธญเธเนเธเธซเธฒเนเธ”เนเน€เธฃเนเธงเธเธถเนเธ เธซเธฃเธทเธญ{' '}
+            <Link
+              href="/all-cars"
+              prefetch={false}
+              className="text-primary hover:underline font-semibold"
+            >
+              เธ”เธนเธฃเธ–เธ—เธฑเนเธเธซเธกเธ”
+            </Link>
+          </p>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {[
+              { slug: 'toyota', label: 'Toyota' },
+              { slug: 'honda', label: 'Honda' },
+              { slug: 'isuzu', label: 'Isuzu' },
+              { slug: 'nissan', label: 'Nissan' },
+              { slug: 'mazda', label: 'Mazda' },
+              { slug: 'mitsubishi', label: 'Mitsubishi' },
+              { slug: 'ford', label: 'Ford' },
+            ].map(b => (
+              <Link
+                key={b.slug}
+                href={`/used-cars-chiang-mai-brand/${b.slug}`}
+                prefetch={false}
+                className="inline-flex items-center justify-center rounded-full border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:border-primary hover:text-primary transition-colors font-prompt"
+              >
+                {b.label}
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section id="featured-cars" className="mt-8">
+          {/* Keep the title in a card, but remove the big outer frame around the car grid */}
+          <div className="bg-white rounded-2xl border border-gray-200 p-5 sm:p-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
+              เธฃเธ–เธฅเธเธเธฃเธฐเธเธฒเธจเธฅเนเธฒเธชเธธเธ” (เนเธเธฐเธเธณ)
+            </h2>
+            <p className="text-gray-700 mt-2 font-prompt">
+              เธเธฅเธดเธเธ—เธตเนเธเธฑเธเธ—เธตเนเธชเธเนเธเน€เธเธทเนเธญเธ”เธนเธฃเธนเธ/เธฃเธฒเธขเธฅเธฐเน€เธญเธตเธขเธ”/เธฃเธฒเธเธฒ เนเธฅเธฐเธชเธ–เธฒเธเธฐเธฃเธ–
+            </p>
+          </div>
+
+          {safeCars.length > 0 ? (
+            <div className="mt-4 car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
+              {featuredCars.map((car, index) => {
+                const handle = car?.handle;
+                const extra = handle ? specByHandle?.[handle] : null;
+                return (
+                  <CarCard
+                    key={car?.id || index}
+                    car={mergeCarSpecs(car, extra)}
+                    priority={index < 2}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <div className="mt-4 rounded-2xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700 font-prompt">
+              เธ•เธญเธเธเธตเนเธขเธฑเธเนเธกเนเธกเธตเธฃเธ–เนเธเธฐเธเธณเนเธซเนเนเธชเธ”เธ (เธญเธฒเธเน€เธเธดเธ”เธเธฒเธเธเธฒเธฃเน€เธเธทเนเธญเธกเธ•เนเธญเธเนเธญเธกเธนเธฅเธเธฑเนเธงเธเธฃเธฒเธง) โ€” เนเธเธ—เธตเน{' '}
+              <Link
+                href="/all-cars"
+                prefetch={false}
+                className="text-primary font-semibold hover:underline"
+              >
+                เธ”เธนเธฃเธ–เธ—เธฑเนเธเธซเธกเธ”
+              </Link>{' '}
+              เธซเธฃเธทเธญ{' '}
+              <a
+                href="https://lin.ee/8ugfzstD"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary font-semibold hover:underline"
+              >
+                เธ—เธฑเธ LINE
+              </a>{' '}
+              เน€เธเธทเนเธญเนเธซเนเธเนเธงเธขเนเธเธฐเธเธณเธฃเธธเนเธเธ—เธตเนเธ•เธฃเธเธเธเนเธ”เนเน€เธฅเธข
+            </div>
+          )}
+
+          <div className="mt-8 flex flex-col sm:flex-row justify-center w-full">
+            <Link
+              href="/all-cars"
+              prefetch={false}
+              className="btn-primary text-center w-full sm:w-auto"
+            >
+              เธ”เธนเธฃเธ–เธ—เธฑเนเธเธซเธกเธ”เนเธเธชเธ•เนเธญเธ
+            </Link>
+          </div>
+        </section>
+
+        <section
+          id="about"
+          className="mt-8 mb-8 bg-blue-50/40 rounded-2xl border border-blue-100 p-5 sm:p-6"
+        >
+          <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
+            เธเธทเนเธญ-เธเธฒเธข เธฃเธ–เธเนเธฒเธเธกเธทเธญเธชเธญเธ เนเธเน€เธเธตเธขเธเนเธซเธกเน-เธฅเธณเธเธนเธ (เธเธฒเธเธเธฒเธขเนเธ”เน)
+          </h2>
+          <div className="mt-3 space-y-3 text-gray-800 font-prompt leading-relaxed">
+            <p>
+              เธซเธเนเธฒเธเธตเนเน€เธเนเธเธเธฃเธดเธเธฒเธฃ โ€เธเธทเนเธญ-เธเธฒเธข เธฃเธ–เธเนเธฒเธเธกเธทเธญเธชเธญเธโ€ เนเธเธเธฑเธเธซเธงเธฑเธ”เน€เธเธตเธขเธเนเธซเธกเน-เธฅเธณเธเธนเธ โ€” เนเธกเนเธงเนเธฒเธเธฐเธซเธฒ{' '}
+              <Link
+                href="/all-cars"
+                prefetch={false}
+                className="text-primary font-semibold hover:underline"
+              >
+                เธฃเธ–เธกเธทเธญเธชเธญเธเน€เธเธตเธขเธเนเธซเธกเน
+              </Link>{' '}
+              เธชเธ เธฒเธเธ”เธตเนเธงเนเนเธเนเธเธฒเธ เธซเธฃเธทเธญ{' '}
+              <Link
+                href="/sell-car"
+                prefetch={false}
+                className="text-primary font-semibold hover:underline"
+              >
+                เธเธฒเธเธเธฒเธขเธฃเธ–เน€เธเธตเธขเธเนเธซเธกเน
+              </Link>{' '}
+              เน€เธฃเธฒเธ”เธนเนเธฅเนเธซเนเธเธฃเธเธเธเธเธเธเธฑเนเธเธ•เธญเธเธเธทเนเธญเธเธฒเธข
+            </p>
+            <p>
+              เธเธฒเธเธเธฒเธขเธเธฑเธ โ€เธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธขโ€ เนเธ”เนเธฃเธฒเธเธฒเธชเธนเธเธเธงเนเธฒเธเธฒเธขเธ”เนเธงเธเน€เธเนเธฒเน€เธ•เนเธเธ—เนเนเธ”เธขเธ•เธฃเธเนเธเธซเธฅเธฒเธขเธเธฃเธ“เธต
+              เนเธฅเธฐเนเธกเนเธ•เนเธญเธเน€เธญเธฒเธฃเธ–เธกเธฒเธเธญเธ”เนเธงเนเธ—เธตเนเธฃเนเธฒเธ เธเธธเธ“เธขเธฑเธเธชเธฒเธกเธฒเธฃเธ–เนเธเนเธฃเธ–เธ•เธฒเธกเธเธเธ•เธดเนเธ”เนเน€เธฅเธข เธเธฒเธขเธเนเธฒเธเธ—เธตเธกเธเธฒเธเธกเธทเธญเธญเธฒเธเธตเธ
+              เธเธฒเธขเธเนเธฒเธข เธเธฒเธขเน€เธฃเนเธง เนเธกเนเธ•เนเธญเธเธเธงเธ”เธซเธฑเธงเธฃเธฑเธเธชเธฒเธข/เธเธฑเธ”เธ”เธนเธฃเธ–เธ—เธตเนเธเนเธฒเธเน€เธญเธ
+            </p>
+            <p>
+              เธ—เธฒเธเน€เธฃเธฒเธ”เธณเน€เธเธดเธเธเธฒเธฃเนเธซเนเธเธเธเธเธเธฑเนเธเธ•เธญเธเธเธทเนเธญเธเธฒเธข เธฃเธฑเธเน€เธเธดเธเธเธฅเธฑเธเธเนเธฒเธเธชเธเธฒเธขเนเธ
+              เน€เธเธฃเธฒเธฐเธกเธตเธฅเธนเธเธเนเธฒเธฃเธญเธเธทเนเธญเธ—เธฑเนเธงเธเธฃเธฐเน€เธ—เธจ เนเธฅเธฐเธกเธตเธเธนเนเธ•เธดเธ”เธ•เธฒเธกเธเธฒเธเธ—เธธเธเธเนเธญเธเธ—เธฒเธเธซเธฅเธฑเธเนเธชเธ-เธซเธฅเธฑเธเธฅเนเธฒเธ
+              เธเธทเนเธญเธเธฒเธขเธ—เธฑเนเธงเธเธฃเธฐเน€เธ—เธจเธกเธฒเธขเธฒเธงเธเธฒเธเธกเธฒเธเธเธงเนเธฒ 10 เธเธต
+            </p>
+            <p className="text-gray-700">
+              เน€เธซเธกเธฒเธฐเธชเธณเธซเธฃเธฑเธเธเธเธ—เธตเน โ€เนเธกเนเธฃเธตเธเธเธฒเธขเน€เธเนเธฒเน€เธ•เนเธเธ—เนโ€ เธญเธขเธฒเธเนเธ”เนเธฃเธฒเธเธฒเธ—เธตเนเนเธเธฅเนเน€เธเธตเธขเธเธฃเธฒเธเธฒเธ•เธฅเธฒเธ”เธกเธฒเธเธ—เธตเนเธชเธธเธ”
+              เนเธฅเธฐเธญเธขเธฒเธเนเธซเนเธ—เธตเธกเธเธฒเธเธเนเธงเธขเธ”เธนเนเธฅเนเธ—เธเนเธเธเธกเธทเธญเธญเธฒเธเธตเธ
+            </p>
+          </div>
+
+          <div
+            id="consign-conditions"
+            className="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-4 sm:p-5"
+          >
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 font-prompt">
+              เน€เธเธทเนเธญเธเนเธเธเธฒเธฃเธเธฒเธเธเธฒเธขเธฃเธ–เธเธฑเธเธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธข (เน€เธเธทเนเธญเธเธฑเธ”เธชเธ เธฒเธเนเธซเนเนเธ”เนเธ•เธฒเธกเธกเธฒเธ•เธฃเธเธฒเธ)
+            </h3>
+            <p className="mt-2 text-gray-700 font-prompt leading-relaxed">
+              เธฅเธนเธเธเนเธฒเธ—เธตเนเธเธทเนเธญเธฃเธ–เธเธฑเธเธเธฃเธนเธซเธเธถเนเธเธฃเธ–เธชเธงเธขเธเธฒเธเธ—เธฑเนเธงเธเธฃเธฐเน€เธ—เธจเธเธณเธเธงเธเธกเธฒเธเธ•เธฑเธ”เธชเธดเธเนเธเธเธฒเธเธเธงเธฒเธกเนเธงเนเธงเธฒเธเนเธเธชเธนเธ
+              เน€เธฃเธฒเธเธถเธเธ•เนเธญเธเธเธฑเธ”เธชเธ เธฒเธเธฃเธ–เธ—เธธเธเธเธฑเธเนเธซเนเนเธ”เนเธ•เธฒเธกเธกเธฒเธ•เธฃเธเธฒเธ เธซเธฒเธเธฃเธ–เธเธญเธเธ—เนเธฒเธเธกเธตเธชเธ เธฒเธเธ•เธฒเธกเธเธตเน
+              เธชเธฒเธกเธฒเธฃเธ–เธเธฑเธ”เธซเธกเธฒเธขเธเธณเธฃเธ–เน€เธเนเธฒเธกเธฒเธ•เธฃเธงเธเธชเธ เธฒเธเธ—เธตเนเน€เธ•เนเธเธ—เนเนเธ”เนเธ—เธธเธเธงเธฑเธ
+            </p>
+
+            <ul className="mt-4 list-disc pl-5 space-y-2 text-gray-800 font-prompt">
+              <li>เธฃเธ–เธกเธทเธญเน€เธ”เธตเธขเธง</li>
+              <li>เนเธกเนเธกเธตเธญเธธเธเธฑเธ•เธดเน€เธซเธ•เธธเธซเธเธฑเธ เนเธฅเธฐเนเธกเนเธเธกเธเนเธณ 100%</li>
+              <li>เธกเธตเธเธฃเธฐเธงเธฑเธ•เธดเธ”เธนเนเธฅเธเธณเธฃเธธเธเธฃเธฑเธเธฉเธฒเธกเธฒเน€เธเนเธเธญเธขเนเธฒเธเธ”เธต</li>
+              <li>เน€เธเธฃเธทเนเธญเธเธขเธเธ•เนเนเธฅเธฐเน€เธเธตเธขเธฃเนเนเธกเนเธกเธตเธเธฑเธเธซเธฒ</li>
+              <li>เน€เธฅเนเธกเธ—เธฐเน€เธเธตเธขเธเนเธกเนเธกเธตเธเธฑเธเธซเธฒ</li>
+            </ul>
+
+            <div className="mt-4 space-y-2 text-gray-700 font-prompt leading-relaxed">
+              <p>
+                เธซเธฅเธฑเธเธเธฒเธเธ•เธฃเธงเธเธชเธ เธฒเธเนเธฅเนเธง เธ—เธตเธกเธเธฒเธเธเธฐเธเนเธงเธขเธ•เธฑเนเธเธฃเธฒเธเธฒเนเธซเนเนเธเธฅเนเน€เธเธตเธขเธเธฃเธฒเธเธฒเธ•เธฅเธฒเธ”เธกเธฒเธเธ—เธตเนเธชเธธเธ”
+                เน€เธเธทเนเธญเนเธซเนเธ—เนเธฒเธเธเธฒเธขเนเธ”เนเธเธธเนเธก เนเธกเนเธ•เนเธญเธเธเธฒเธ”เธ—เธธเธเน€เธเนเธเนเธชเธเน€เธซเธกเธทเธญเธเธเธฒเธขเธ”เนเธงเธ เนเธฅเธฐเนเธ”เนเธฃเธฒเธเธฒเธ—เธตเนเธขเธดเนเธกเนเธ”เนเนเธเนเธเธญเธ
+              </p>
+              <p className="text-sm text-gray-600">
+                เธซเธกเธฒเธขเน€เธซเธ•เธธ: เธเธฅเธเธฒเธฃเธเธฃเธฐเน€เธกเธดเธเธเธถเนเธเธญเธขเธนเนเธเธฑเธเธชเธ เธฒเธเธเธฃเธดเธเนเธฅเธฐเน€เธญเธเธชเธฒเธฃเธเธฃเธฐเธเธญเธเธเธญเธเธฃเธ–เนเธ•เนเธฅเธฐเธเธฑเธ
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-col sm:flex-row gap-3">
+            <Link
+              href="/sell-car"
+              prefetch={false}
+              className="btn-primary text-center w-full sm:w-auto px-6 py-2.5"
+            >
+              เธเธฒเธเธเธฒเธขเธฃเธ–เธเธฑเธเธเธฃเธนเธซเธเธถเนเธ (เนเธ”เนเธฃเธฒเธเธฒเธ”เธตเธเธงเนเธฒ)
+            </Link>
+            <Link
+              href="/all-cars"
+              prefetch={false}
+              className="btn-secondary text-center rounded-xl w-full sm:w-auto px-6 py-2.5"
+            >
+              เธ”เธนเธฃเธ–เธ—เธฑเนเธเธซเธกเธ”เธเธญเธเน€เธฃเธฒ
+            </Link>
+          </div>
+        </section>
+
+        <UsedCarsChiangMaiDeferred />
+
+        {/* TikTok Feed Section */}
+        {tiktokVideos && tiktokVideos.length > 0 && <TikTokFeed videos={tiktokVideos} />}
+      </main>
+
+      {/* Floating LINE CTA for mobile conversion */}
+      <div className="fixed bottom-4 right-4 z-50 md:hidden">
+        <a
+          href="https://lin.ee/8ugfzstD"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center w-14 h-14 rounded-full bg-[#06c755] text-white shadow-2xl hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]"
+          aria-label="เธเธฃเธถเธเธฉเธฒเธเธฃเธตเธ—เธฒเธ LINE"
+        >
+          <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  );
+}
+

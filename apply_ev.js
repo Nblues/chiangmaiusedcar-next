@@ -1,0 +1,22 @@
+const fs = require('fs');
+let code = fs.readFileSync('pages/ev-cars-chiang-mai.jsx', 'utf8');
+
+code = code.replace(/export default function UsedCarsChiangMai/g, 'export default function EVCarsChiangMai');
+
+code = code.replace(/seoData:\s*require\('\.\.\/config\/seo-keyword-map'\)\.SEO_KEYWORD_MAP\.usedCarsLanding/g, 
+  "seoData: { title: 'ศูนย์รวม ซื้อ-ขาย ฝากขาย รถไฟฟ้า (EV) มือสอง เชียงใหม่ เจ้าของขายเอง | ครูหนึ่งรถสวย', description: 'รับซื้อ-ฝากขายรถไฟฟ้า (EV) มือสอง เชียงใหม่-ลำพูน ให้ราคาสูงสุด เจ้าของขายเอง มี 2 แพลนบริการ ฟรี! หรือ จอดเต็นท์ฝากขายครบวงจร', keywords: ['รถไฟฟ้ามือสอง เชียงใหม่', 'รถ EV มือสอง', 'ฝากขายรถ EV เชียงใหม่', 'รถไฟฟ้าเจ้าของขายเอง', 'ORA มือสอง เชียงใหม่', 'BYD มือสอง เชียงใหม่'] }");
+
+code = code.replace(/carsRaw = await getHomepageCars\(12\);/g, 'carsRaw = await getHomepageCars(50);');
+
+const filterLogic = `let cars = Array.isArray(carsRaw) ? carsRaw : [];
+  cars = cars.filter(c => {
+    const text = (c.title + ' ' + (c.tags || []).join(' ') + ' ' + (c.fuelType || '') + ' ' + (c.fuel_type || '')).toLowerCase();
+    return text.includes(' ev ') || text.includes('ev ') || text.includes(' ev') || text.includes('electric') || text.includes('ไฟฟ้า') || text.includes('byd') || text.includes('ora') || text.includes('tesla') || text.includes('neta') || text.includes('mg') || text.includes('aion');
+  });`;
+
+code = code.replace(/let cars = Array\.isArray\(carsRaw\) \? carsRaw : \[\];/g, filterLogic);
+
+code = code.replace(/\/used-cars-chiang-mai/g, '/ev-cars-chiang-mai');
+
+fs.writeFileSync('pages/ev-cars-chiang-mai.jsx', code);
+console.log('Base changes done');
