@@ -14,29 +14,33 @@ export default function UsedCarsChiangMaiDeferred() {
           อัปเดตรถเข้าใหม่ รีวิวรถ และโปรโมชัน — เลือกช่องทางที่สะดวกได้เลย
         </p>
 
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
+        <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2 lg:gap-3">
           <a
             href={BUSINESS_INFO.socialMedia.facebook.main}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
+            className="bg-white p-3 xl:p-2.5 flex flex-col justify-center rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
           >
-            <div className="flex items-center mb-3">
-              <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center xl:flex-row flex-col text-center xl:text-left mb-1 xl:mb-2">
+              <div className="w-10 h-10 xl:w-9 xl:h-9 shrink-0 bg-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
+                <svg
+                  className="w-5 h-5 xl:w-4 xl:h-4 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
               </div>
-              <div className="ml-3">
-                <h3 className="font-bold text-gray-800 group-hover:text-blue-600 transition-colors font-prompt">
+              <div className="ml-2 xl:ml-1.5">
+                <h3 className="font-bold text-sm xl:text-xs 2xl:text-sm text-gray-800 group-hover:text-blue-600 transition-colors font-prompt truncate">
                   Facebook
                 </h3>
-                <p className="text-xs text-gray-500 font-prompt">
+                <p className="text-[11px] xl:text-[10px] 2xl:text-[11px] leading-tight text-gray-500 font-prompt truncate">
                   {BUSINESS_INFO.socialFollowStats.facebook.main.label}
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-blue-600 font-prompt">
+            <p className="text-xs 2xl:text-sm font-semibold text-blue-600 font-prompt mt-1 xl:mt-0 text-center xl:text-left">
               {BUSINESS_INFO.socialFollowStats.facebook.main.metricText}
             </p>
           </a>
@@ -45,24 +49,28 @@ export default function UsedCarsChiangMaiDeferred() {
             href={BUSINESS_INFO.socialMedia.facebook.personal}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
+            className="bg-white p-3 xl:p-2.5 flex flex-col justify-center rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
           >
-            <div className="flex items-center mb-3">
-              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center xl:flex-row flex-col text-center xl:text-left mb-1 xl:mb-2">
+              <div className="w-10 h-10 xl:w-9 xl:h-9 shrink-0 bg-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
+                <svg
+                  className="w-5 h-5 xl:w-4 xl:h-4 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
               </div>
-              <div className="ml-3">
-                <h3 className="font-bold text-gray-800 group-hover:text-blue-700 transition-colors font-prompt">
+              <div className="ml-2 xl:ml-1.5">
+                <h3 className="font-bold text-sm xl:text-xs 2xl:text-sm text-gray-800 group-hover:text-blue-700 transition-colors font-prompt truncate">
                   Facebook
                 </h3>
-                <p className="text-xs text-gray-500 font-prompt">
+                <p className="text-[11px] xl:text-[10px] 2xl:text-[11px] leading-tight text-gray-500 font-prompt truncate">
                   {BUSINESS_INFO.socialFollowStats.facebook.personal.label}
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-blue-700 font-prompt">
+            <p className="text-xs 2xl:text-sm font-semibold text-blue-700 font-prompt mt-1 xl:mt-0 text-center xl:text-left">
               {BUSINESS_INFO.socialFollowStats.facebook.personal.metricText}
             </p>
           </a>
@@ -71,24 +79,28 @@ export default function UsedCarsChiangMaiDeferred() {
             href={BUSINESS_INFO.socialMedia.facebook.fcGroup}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
+            className="bg-white p-3 xl:p-2.5 flex flex-col justify-center rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
           >
-            <div className="flex items-center mb-3">
-              <div className="w-12 h-12 bg-blue-700 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center xl:flex-row flex-col text-center xl:text-left mb-1 xl:mb-2">
+              <div className="w-10 h-10 xl:w-9 xl:h-9 shrink-0 bg-blue-700 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
+                <svg
+                  className="w-5 h-5 xl:w-4 xl:h-4 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
               </div>
-              <div className="ml-3">
-                <h3 className="font-bold text-gray-800 group-hover:text-blue-700 transition-colors font-prompt">
+              <div className="ml-2 xl:ml-1.5">
+                <h3 className="font-bold text-sm xl:text-xs 2xl:text-sm text-gray-800 group-hover:text-blue-700 transition-colors font-prompt truncate">
                   Facebook
                 </h3>
-                <p className="text-xs text-gray-500 font-prompt">
+                <p className="text-[11px] xl:text-[10px] 2xl:text-[11px] leading-tight text-gray-500 font-prompt truncate">
                   {BUSINESS_INFO.socialFollowStats.facebook.fcGroup.label}
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-blue-700 font-prompt">
+            <p className="text-xs 2xl:text-sm font-semibold text-blue-700 font-prompt mt-1 xl:mt-0 text-center xl:text-left">
               {BUSINESS_INFO.socialFollowStats.facebook.fcGroup.metricText}
             </p>
           </a>
@@ -97,24 +109,28 @@ export default function UsedCarsChiangMaiDeferred() {
             href={BUSINESS_INFO.socialMedia.tiktok}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
+            className="bg-white p-3 xl:p-2.5 flex flex-col justify-center rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
           >
-            <div className="flex items-center mb-3">
-              <div className="w-12 h-12 bg-gray-900 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center xl:flex-row flex-col text-center xl:text-left mb-1 xl:mb-2">
+              <div className="w-10 h-10 xl:w-9 xl:h-9 shrink-0 bg-gray-900 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
+                <svg
+                  className="w-5 h-5 xl:w-4 xl:h-4 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
                 </svg>
               </div>
-              <div className="ml-3">
-                <h3 className="font-bold text-gray-800 group-hover:text-gray-900 transition-colors font-prompt">
+              <div className="ml-2 xl:ml-1.5">
+                <h3 className="font-bold text-sm xl:text-xs 2xl:text-sm text-gray-800 group-hover:text-gray-900 transition-colors font-prompt truncate">
                   TikTok
                 </h3>
-                <p className="text-xs text-gray-500 font-prompt">
+                <p className="text-[11px] xl:text-[10px] 2xl:text-[11px] leading-tight text-gray-500 font-prompt truncate">
                   {BUSINESS_INFO.socialFollowStats.tiktok.label}
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-gray-900 font-prompt">
+            <p className="text-xs 2xl:text-sm font-semibold text-gray-900 font-prompt mt-1 xl:mt-0 text-center xl:text-left">
               {BUSINESS_INFO.socialFollowStats.tiktok.metricText}
             </p>
           </a>
@@ -123,24 +139,28 @@ export default function UsedCarsChiangMaiDeferred() {
             href={BUSINESS_INFO.socialMedia.youtube}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
+            className="bg-white p-3 xl:p-2.5 flex flex-col justify-center rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
           >
-            <div className="flex items-center mb-3">
-              <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center xl:flex-row flex-col text-center xl:text-left mb-1 xl:mb-2">
+              <div className="w-10 h-10 xl:w-9 xl:h-9 shrink-0 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
+                <svg
+                  className="w-5 h-5 xl:w-4 xl:h-4 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                 </svg>
               </div>
-              <div className="ml-3">
-                <h3 className="font-bold text-gray-800 group-hover:text-red-700 transition-colors font-prompt">
+              <div className="ml-2 xl:ml-1.5">
+                <h3 className="font-bold text-sm xl:text-xs 2xl:text-sm text-gray-800 group-hover:text-red-700 transition-colors font-prompt truncate">
                   YouTube
                 </h3>
-                <p className="text-xs text-gray-500 font-prompt">
+                <p className="text-[11px] xl:text-[10px] 2xl:text-[11px] leading-tight text-gray-500 font-prompt truncate">
                   {BUSINESS_INFO.socialFollowStats.youtube.label}
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-red-700 font-prompt">
+            <p className="text-xs 2xl:text-sm font-semibold text-red-700 font-prompt mt-1 xl:mt-0 text-center xl:text-left">
               {BUSINESS_INFO.socialFollowStats.youtube.metricText}
             </p>
           </a>
@@ -149,24 +169,28 @@ export default function UsedCarsChiangMaiDeferred() {
             href={BUSINESS_INFO.socialMedia.lemon8}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
+            className="bg-white p-3 xl:p-2.5 flex flex-col justify-center rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
           >
-            <div className="flex items-center mb-3">
-              <div className="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center xl:flex-row flex-col text-center xl:text-left mb-1 xl:mb-2">
+              <div className="w-10 h-10 xl:w-9 xl:h-9 shrink-0 bg-yellow-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
+                <svg
+                  className="w-5 h-5 xl:w-4 xl:h-4 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M12 2L13.09 8.26L19.82 5.63L16.55 11.37L23 12L16.55 12.63L19.82 18.37L13.09 15.74L12 22L10.91 15.74L4.18 18.37L7.45 12.63L1 12L7.45 11.37L4.18 5.63L10.91 8.26L12 2Z" />
                 </svg>
               </div>
-              <div className="ml-3">
-                <h3 className="font-bold text-gray-800 group-hover:text-yellow-700 transition-colors font-prompt">
+              <div className="ml-2 xl:ml-1.5">
+                <h3 className="font-bold text-sm xl:text-xs 2xl:text-sm text-gray-800 group-hover:text-yellow-700 transition-colors font-prompt truncate">
                   Lemon8
                 </h3>
-                <p className="text-xs text-gray-500 font-prompt">
+                <p className="text-[11px] xl:text-[10px] 2xl:text-[11px] leading-tight text-gray-500 font-prompt truncate">
                   {BUSINESS_INFO.socialFollowStats.lemon8.label}
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-yellow-700 font-prompt">
+            <p className="text-xs 2xl:text-sm font-semibold text-yellow-700 font-prompt mt-1 xl:mt-0 text-center xl:text-left">
               {BUSINESS_INFO.socialFollowStats.lemon8.metricText}
             </p>
           </a>
@@ -175,24 +199,28 @@ export default function UsedCarsChiangMaiDeferred() {
             href={BUSINESS_INFO.lineUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group sm:col-span-2 lg:col-span-1"
+            className="bg-white p-3 xl:p-2.5 flex flex-col justify-center rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 group"
           >
-            <div className="flex items-center mb-3">
-              <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center xl:flex-row flex-col text-center xl:text-left mb-1 xl:mb-2">
+              <div className="w-10 h-10 xl:w-9 xl:h-9 shrink-0 bg-green-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
+                <svg
+                  className="w-5 h-5 xl:w-4 xl:h-4 text-white"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
                 </svg>
               </div>
-              <div className="ml-3">
-                <h3 className="font-bold text-gray-800 group-hover:text-green-700 transition-colors font-prompt">
+              <div className="ml-2 xl:ml-1.5">
+                <h3 className="font-bold text-sm xl:text-xs 2xl:text-sm text-gray-800 group-hover:text-green-700 transition-colors font-prompt truncate">
                   LINE
                 </h3>
-                <p className="text-xs text-gray-500 font-prompt">
+                <p className="text-[11px] xl:text-[10px] 2xl:text-[11px] leading-tight text-gray-500 font-prompt truncate">
                   {BUSINESS_INFO.socialFollowStats.line.label}
                 </p>
               </div>
             </div>
-            <p className="text-sm font-semibold text-green-700 font-prompt">
+            <p className="text-xs 2xl:text-sm font-semibold text-green-700 font-prompt mt-1 xl:mt-0 text-center xl:text-left">
               {BUSINESS_INFO.socialFollowStats.line.metricText}
             </p>
           </a>
