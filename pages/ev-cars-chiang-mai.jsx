@@ -168,28 +168,48 @@ export async function getStaticProps() {
 
   let cars = Array.isArray(carsRaw) ? carsRaw : [];
   cars = cars.filter(c => {
-    const text = (
-      c.title +
-      ' ' +
-      (c.tags || []).join(' ') +
-      ' ' +
-      (c.fuelType || '') +
-      ' ' +
-      (c.fuel_type || '')
-    ).toLowerCase();
-    return (
+    const title = (c.title || '').toLowerCase();
+    const tags = (c.tags || []).join(' ').toLowerCase();
+    const fuel = ((c.fuelType || '') + ' ' + (c.fuel_type || '')).toLowerCase();
+
+    // Explicitly exclude hybrids to prevent matching e:HEV, PHEV, Hybrid
+    if (
+      title.includes('hev') ||
+      tags.includes('hev') ||
+      fuel.includes('hev') ||
+      title.includes('hybrid') ||
+      tags.includes('hybrid') ||
+      fuel.includes('ไฮบริด')
+    ) {
+      return false;
+    }
+
+    const text = title + ' ' + tags + ' ' + fuel;
+
+    // Pure BEV text matches
+    const isEv =
       text.includes(' ev ') ||
-      text.includes('ev ') ||
-      text.includes(' ev') ||
       text.includes('electric') ||
       text.includes('ไฟฟ้า') ||
+      text.includes('100%');
+
+    // Specific EV brands/models
+    const isPureEvBrand =
       text.includes('byd') ||
-      text.includes('ora') ||
       text.includes('tesla') ||
       text.includes('neta') ||
-      text.includes('mg') ||
-      text.includes('aion')
-    );
+      text.includes('aion') ||
+      text.includes('changan') ||
+      text.includes('wuling') ||
+      text.includes('ora');
+
+    const isMgEv =
+      text.includes('mg4') ||
+      text.includes('mg ep') ||
+      text.includes('mg zs ev') ||
+      text.includes('mg maxus');
+
+    return isEv || isPureEvBrand || isMgEv;
   });
   try {
     const ids = cars.map(c => c?.id).filter(Boolean);
