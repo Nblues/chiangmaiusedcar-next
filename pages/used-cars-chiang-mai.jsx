@@ -409,14 +409,17 @@ export default function UsedCarsChiangMai({
             <div className="relative flex justify-center p-3 xs:p-4 sm:absolute sm:inset-0 sm:items-center sm:justify-center sm:p-6">
               <div className="w-full max-w-6xl mx-auto">
                 <div className="mx-auto w-full max-w-[22rem] xs:max-w-sm sm:w-auto sm:max-w-2xl rounded-2xl bg-black/80 sm:bg-black/85 sm:backdrop-blur-md ring-1 ring-white/30 px-3 xs:px-4 sm:px-6 py-3 xs:px-6 py-4 shadow-2xl">
-                  <h1 className="">
-                    รถมือสองเชียงใหม่ ฟรีดาวน์ คัดเกรดพรีเมียม | ศูนย์รับซื้อและฝากขาย ครูหนึ่งรถสวย
+                  <h1 className="text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white font-prompt text-center leading-tight drop-shadow-lg">
+                    รถมือสองเชียงใหม่ ฟรีดาวน์ คัดเกรดพรีเมียม
+                    <span className="block text-accent mt-1 sm:mt-2 text-lg xs:text-xl sm:text-2xl lg:text-3xl drop-shadow-md">
+                      ศูนย์รับซื้อและฝากขาย ครูหนึ่งรถสวย
+                    </span>
                   </h1>
-                  <p className="mt-1.5 xs:mt-2 sm:mt-3 text-white font-prompt leading-relaxed text-center text-sm sm:text-base font-semibold">
-                    <span className="sm:hidden">ฝากขายรถแบบมืออาชีพ ได้ราคาดี</span>
-                    <span className="hidden sm:inline">
-                      ฝากลงขายรถของท่านได้ราคาดีกว่าขายด่วน — ทีมงานมืออาชีพดูแลจนจบขั้นตอน
-                      ซื้อขายสบายใจ
+                  <p className="mt-2.5 xs:mt-3 sm:mt-4 text-gray-50 font-prompt leading-relaxed text-center text-sm sm:text-base md:text-lg font-medium drop-shadow-md">
+                    <span className="sm:hidden">ฝากขายรถแบบมืออาชีพ ได้ราคาดี — ซื้อขายสบายใจ</span>
+                    <span className="hidden sm:block">
+                      ฝากลงขายรถของท่านได้ราคาดีกว่าขายด่วน <br className="hidden md:block" />
+                      ทีมงานมืออาชีพดูแลจนจบขั้นตอน ซื้อขายสบายใจ
                     </span>
                   </p>
                   <div className="mt-3 xs:mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2 xs:gap-3 justify-center">
