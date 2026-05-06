@@ -521,10 +521,12 @@ export default function EVCarsChiangMai({
               <A11yImage
                 src="/herobanner/ev-car-chiang-mai-banner.webp"
                 alt="รถไฟฟ้า EV มือสอง เชียงใหม่ เจ้าของขายเอง | ครูหนึ่งรถสวย"
+                width={1400}
+                height={594}
                 aspectRatio="33/14"
                 fetchPriority="high"
                 priority={true}
-                decoding="async"
+                decoding="sync"
                 imageType="hero"
                 optimizeImage={true}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
