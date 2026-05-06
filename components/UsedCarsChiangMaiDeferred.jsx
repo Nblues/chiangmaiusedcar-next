@@ -14,7 +14,7 @@ export default function UsedCarsChiangMaiDeferred() {
           อัปเดตรถเข้าใหม่ รีวิวรถ และโปรโมชัน — เลือกช่องทางที่สะดวกได้เลย
         </p>
 
-        <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2 lg:gap-3">
+        <div className="mt-6 grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-2 sm:gap-3">
           <a
             href={BUSINESS_INFO.socialMedia.facebook.main}
             target="_blank"
