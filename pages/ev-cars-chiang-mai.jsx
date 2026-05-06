@@ -538,7 +538,7 @@ export default function EVCarsChiangMai({
           <div className="relative flex justify-center mt-6 sm:mt-10 mb-4 px-4 w-full">
             <div className="w-full max-w-4xl mx-auto text-center">
               <h1 className="text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary font-prompt leading-tight">
-                รถไฟฟ้า <span className="text-accent">EV</span> มือสอง เชียงใหม่
+                รถไฟฟ้า <span className="text-orange-700">EV</span> มือสอง เชียงใหม่
                 <br />
                 เจ้าของขายเอง
                 <span className="block text-gray-600 mt-2 sm:mt-3 text-lg xs:text-xl sm:text-2xl lg:text-3xl font-medium">
@@ -560,7 +560,7 @@ export default function EVCarsChiangMai({
                   href="https://lin.ee/8ugfzstD"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-3 bg-[#00B900] hover:bg-[#009900] text-white font-prompt font-semibold tracking-wide text-lg sm:text-xl lg:text-2xl px-8 py-4 sm:px-12 sm:py-5 rounded-full shadow-[0_10px_30px_rgba(0,185,0,0.3)] hover:shadow-[0_15px_40px_rgba(0,185,0,0.4)] transform hover:scale-105 active:scale-95 transition-all duration-300 w-full sm:w-auto max-w-sm sm:max-w-md mx-auto"
+                  className="flex items-center justify-center gap-3 bg-[#006600] hover:bg-[#005500] text-white font-prompt font-semibold tracking-wide text-lg sm:text-xl lg:text-2xl px-8 py-4 sm:px-12 sm:py-5 rounded-full shadow-[0_10px_30px_rgba(0,102,0,0.3)] hover:shadow-[0_15px_40px_rgba(0,102,0,0.4)] transform hover:scale-105 active:scale-95 transition-all duration-300 w-full sm:w-auto max-w-sm sm:max-w-md mx-auto"
                 >
                   <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 3.53 8.871 8.441 9.615.358.077.854.238 1.002.544.134.275.086.697.042.97l-.234 1.408c-.062.361-.295 1.413 1.236.768 1.53-.645 8.283-4.887 10.826-8.006 1.764-2.167 2.687-4.484 2.687-5.295z" />
@@ -580,7 +580,7 @@ export default function EVCarsChiangMai({
             <p className="text-sm text-gray-500 mt-1">โปรโมทให้ทั่วประเทศ</p>
           </div>
           <div className="bg-white rounded-xl p-4 text-center border border-gray-100 shadow-sm">
-            <p className="font-bold text-accent text-base">2 แพ็กเกจโดนใจ</p>
+            <p className="font-bold text-orange-700 text-base">2 แพ็กเกจโดนใจ</p>
             <p className="text-sm text-gray-500 mt-1">ลงฟรี / ฝากจอดดูแลโอนย้ายครบ</p>
           </div>
           <div className="bg-white rounded-xl p-4 text-center border border-gray-100 shadow-sm">
@@ -787,7 +787,7 @@ export default function EVCarsChiangMai({
               <div className="mb-5 flex justify-center mt-2 relative z-10">
                 <div className="bg-white p-4 rounded-full shadow-sm ring-4 ring-green-50">
                   <svg
-                    className="w-12 h-12 text-[#00B900]"
+                    className="w-12 h-12 text-green-700"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -811,7 +811,7 @@ export default function EVCarsChiangMai({
                   href="https://lin.ee/8ugfzstD"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block mt-2 text-[#00B900] font-bold hover:underline"
+                  className="inline-block mt-2 text-green-700 font-bold hover:underline"
                 >
                   ทัก LINE แชทส่งรูปรถประเมินราคาฟรีได้เลยครับ!
                 </a>
@@ -824,7 +824,7 @@ export default function EVCarsChiangMai({
               href="https://lin.ee/8ugfzstD"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-3 bg-[#00B900] hover:bg-[#009900] text-white font-prompt font-semibold tracking-wide text-lg sm:text-xl px-6 py-3 sm:px-8 sm:py-3.5 rounded-full shadow-[0_5px_15px_rgba(0,185,0,0.4)] hover:shadow-[0_10px_25px_rgba(0,185,0,0.5)] transform hover:scale-105 active:scale-95 transition-all duration-300 w-full sm:w-auto max-w-sm mx-auto"
+              className="flex items-center justify-center gap-3 bg-[#006600] hover:bg-[#005500] text-white font-prompt font-semibold tracking-wide text-lg sm:text-xl px-6 py-3 sm:px-8 sm:py-3.5 rounded-full shadow-[0_5px_15px_rgba(0,102,0,0.4)] hover:shadow-[0_10px_25px_rgba(0,102,0,0.5)] transform hover:scale-105 active:scale-95 transition-all duration-300 w-full sm:w-auto max-w-sm mx-auto"
             >
               <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 3.53 8.871 8.441 9.615.358.077.854.238 1.002.544.134.275.086.697.042.97l-.234 1.408c-.062.361-.295 1.413 1.236.768 1.53-.645 8.283-4.887 10.826-8.006 1.764-2.167 2.687-4.484 2.687-5.295z" />
@@ -839,7 +839,7 @@ export default function EVCarsChiangMai({
           className="mt-8 mb-8 bg-blue-50/40 rounded-2xl border border-blue-100 p-5 sm:p-6"
         >
           <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary font-prompt leading-snug">
-            บริการฝากขายรถ <span className="text-accent">EV</span> เชียงใหม่-ลำพูน{' '}
+            บริการฝากขายรถ <span className="text-orange-700">EV</span> เชียงใหม่-ลำพูน{' '}
             <br className="hidden md:block" />
             <span className="text-gray-800 text-lg sm:text-xl lg:text-2xl mt-1 block">
               เราเป็นตัวกลางจัดการให้ครบ จบทุกขั้นตอน
@@ -858,7 +858,7 @@ export default function EVCarsChiangMai({
               <div className="p-5 sm:p-6 bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col h-full hover:shadow-md transition-shadow">
                 <h3 className="text-xl font-bold text-primary mb-4 flex items-center gap-2">
                   แพ็กเกจ 1: ลงประกาศฟรี
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-green-100 text-green-700 text-[13px] border border-green-200 ml-1">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-green-100 text-green-800 text-[13px] border border-green-200 ml-1">
                     <svg
                       className="w-3.5 h-3.5"
                       fill="none"
@@ -877,7 +877,7 @@ export default function EVCarsChiangMai({
                 </h3>
                 <ul className="space-y-3 mb-4 flex-grow">
                   <li className="flex items-start gap-2.5">
-                    <span className="text-green-500 mt-0.5 flex-shrink-0">
+                    <span className="text-green-700 mt-0.5 flex-shrink-0">
                       <svg
                         className="w-5 h-5"
                         fill="none"
@@ -897,7 +897,7 @@ export default function EVCarsChiangMai({
                     </span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <span className="text-green-500 mt-0.5 flex-shrink-0">
+                    <span className="text-green-700 mt-0.5 flex-shrink-0">
                       <svg
                         className="w-5 h-5"
                         fill="none"
@@ -918,7 +918,7 @@ export default function EVCarsChiangMai({
                     </span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <span className="text-green-500 mt-0.5 flex-shrink-0">
+                    <span className="text-green-700 mt-0.5 flex-shrink-0">
                       <svg
                         className="w-5 h-5"
                         fill="none"
@@ -942,7 +942,7 @@ export default function EVCarsChiangMai({
 
               {/* Package 2 */}
               <div className="p-5 sm:p-6 bg-gradient-to-br from-blue-50/80 to-blue-100/80 rounded-xl border border-blue-200 shadow-md hover:shadow-lg transition-all flex flex-col h-full relative overflow-hidden group">
-                <div className="absolute top-0 right-0 bg-accent text-white text-xs font-bold px-3 py-1.5 rounded-bl-xl shadow-sm flex items-center gap-1.5 z-10">
+                <div className="absolute top-0 right-0 bg-orange-700 text-white text-xs font-bold px-3 py-1.5 rounded-bl-xl shadow-sm flex items-center gap-1.5 z-10">
                   แนะนำ
                   <svg
                     className="w-3.5 h-3.5 text-yellow-200"
@@ -954,8 +954,12 @@ export default function EVCarsChiangMai({
                 </div>
                 <h3 className="text-xl font-bold text-primary mb-4 relative z-10 flex items-center flex-wrap gap-x-2">
                   แพ็กเกจ 2: ฝากขายจอดเต็นท์
-                  <span className="text-accent text-[15px] bg-white/70 px-2 py-0.5 rounded-md border border-accent/20 flex items-center gap-1 shadow-sm shrink-0">
-                    <svg className="w-4 h-4 text-accent" fill="currentColor" viewBox="0 0 24 24">
+                  <span className="text-orange-700 text-[15px] bg-white/70 px-2 py-0.5 rounded-md border border-orange-200 flex items-center gap-1 shadow-sm shrink-0">
+                    <svg
+                      className="w-4 h-4 text-orange-700"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.86L12 17.77l-6.18 3.23L7 14.14 2 9.27l6.91-1.01L12 2z" />
                     </svg>
                     ครบวงจร
