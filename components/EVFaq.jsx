@@ -46,7 +46,7 @@ export default function EVFaq() {
         </span>
         <h2 className="text-3xl sm:text-4xl font-extrabold text-primary font-prompt tracking-tight">
           คำถามที่พบบ่อย{' '}
-          <span className="text-accent underline decoration-2 underline-offset-8">รถ EV</span>
+          <span className="text-orange-700 underline decoration-2 underline-offset-8">รถ EV</span>
         </h2>
         <p className="mt-4 text-gray-500 font-prompt max-w-2xl mx-auto text-base sm:text-lg">
           ข้อควรรู้เพิ่มเติมเกี่ยวกับการซื้อรถไฟฟ้ามือสอง เพื่อความมั่นใจก่อนตัดสินใจ
