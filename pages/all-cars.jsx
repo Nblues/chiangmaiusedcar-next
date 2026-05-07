@@ -862,18 +862,18 @@ export async function getServerSideProps(context) {
       tags: car.tags,
       price: car.price,
       // Keep quick specs for CarCard (ปี/ไมล์/เกียร์/เชื้อเพลิง/ขับเคลื่อน)
-      year: car.year,
-      mileage: car.mileage,
-      transmission: car.transmission,
-      drivetrain: car.drivetrain || car.drive_type || car.wheel_drive,
-      drive_type: car.drive_type || car.drivetrain || car.wheel_drive,
-      installment: car.installment,
-      fuelType: car.fuelType || car.fuel_type,
-      fuel_type: car.fuel_type || car.fuelType,
+      year: car.year ?? null,
+      mileage: car.mileage ?? null,
+      transmission: car.transmission ?? null,
+      drivetrain: car.drivetrain || car.drive_type || car.wheel_drive || null,
+      drive_type: car.drive_type || car.drivetrain || car.wheel_drive || null,
+      installment: car.installment ?? null,
+      fuelType: car.fuelType || car.fuel_type || null,
+      fuel_type: car.fuel_type || car.fuelType || null,
       // Keep metaobject-backed display labels for cards (ประเภทรถ/ประเภทตัวถัง)
       // so mobile Safari doesn't depend on deferred client enrichment to show them.
-      category: car.category,
-      body_type: car.body_type,
+      category: car.category ?? null,
+      body_type: car.body_type ?? null,
       images: car.images?.slice(0, 1) || [], // เก็บแค่รูปแรกสำหรับ listing
       availableForSale: car.availableForSale,
       status: carStatuses[car.id]?.status || 'available', // Add status from file
