@@ -368,6 +368,20 @@ export default function Home({
             >
               ขายด่วน!
             </Link>
+            <Link
+              href="/ev-cars-chiang-mai"
+              prefetch={false}
+              className="flex-1 flex justify-center items-center gap-1.5 font-bold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-green-600 text-white hover:bg-green-700 transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
+            >
+              <svg
+                className="w-4 h-4 md:w-5 md:h-5 text-yellow-300"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" />
+              </svg>
+              รถ EV
+            </Link>
           </div>
         </div>
       </section>
