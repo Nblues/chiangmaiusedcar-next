@@ -190,14 +190,9 @@ export default function Home({
   // Facebook reviews: render only client
   const [showFbReviews, setShowFbReviews] = useState(false);
 
-  // Lazy render for lower car cards to improve TBT
-  const [showAllCars, setShowAllCars] = useState(false);
-  useEffect(() => {
-    // Delays the rendering of the secondary row of cards to keep the main thread free
-    // during the critical initial hydration phase.
-    const timer = setTimeout(() => setShowAllCars(true), 1500);
-    return () => clearTimeout(timer);
-  }, []);
+  // Lazy render for lower car cards removed to fix browser Back button scroll restoration
+  // Next.js scroll restoration needs the DOM to have accurate height on hydration.
+  const showAllCars = true;
 
   // Defer large below-the-fold sections to reduce initial DOM/style/layout work.
   // (showDeferredSections removed to display content immediately)
