@@ -7,6 +7,7 @@ import Head from 'next/head';
 import SEO from '../components/SEO.jsx';
 import CarCard from '../components/CarCard';
 import { getHomepageCars } from '../lib/shopify.mjs';
+import { isEvCar } from '../lib/evFilter.js';
 import A11yImage from '../components/A11yImage';
 import { readCarStatusesByIds } from '../lib/carStatusStore.js';
 import { mergeCarSpecs } from '../lib/mergeCarSpecs';
@@ -166,7 +167,7 @@ export async function getStaticProps() {
     }
   }
 
-  let cars = Array.isArray(carsRaw) ? carsRaw : [];
+  let cars = (Array.isArray(carsRaw) ? carsRaw : []).filter(c => !isEvCar(c));
   try {
     const ids = cars.map(c => c?.id).filter(Boolean);
     const statuses = await readCarStatusesByIds(ids);
@@ -409,17 +410,14 @@ export default function UsedCarsChiangMai({
             <div className="relative flex justify-center p-3 xs:p-4 sm:absolute sm:inset-0 sm:items-center sm:justify-center sm:p-6">
               <div className="w-full max-w-6xl mx-auto">
                 <div className="mx-auto w-full max-w-[22rem] xs:max-w-sm sm:w-auto sm:max-w-2xl rounded-2xl bg-black/80 sm:bg-black/85 sm:backdrop-blur-md ring-1 ring-white/30 px-3 xs:px-4 sm:px-6 py-3 xs:px-6 py-4 shadow-2xl">
-                  <h1 className="text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white font-prompt text-center leading-tight drop-shadow-lg">
-                    รถมือสองเชียงใหม่ ฟรีดาวน์ คัดเกรดพรีเมียม
-                    <span className="block text-accent mt-1 sm:mt-2 text-lg xs:text-xl sm:text-2xl lg:text-3xl drop-shadow-md">
-                      ศูนย์รับซื้อและฝากขาย ครูหนึ่งรถสวย
-                    </span>
+                  <h1 className="text-lg xs:text-xl sm:text-2xl lg:text-4xl font-extrabold text-white font-prompt text-center leading-tight drop-shadow-md">
+                    ศูนย์รับซื้อและฝากขายรถมือสองเชียงใหม่ | ครูหนึ่งรถสวย
                   </h1>
-                  <p className="mt-2.5 xs:mt-3 sm:mt-4 text-gray-50 font-prompt leading-relaxed text-center text-sm sm:text-base md:text-lg font-medium drop-shadow-md">
-                    <span className="sm:hidden">ฝากขายรถแบบมืออาชีพ ได้ราคาดี — ซื้อขายสบายใจ</span>
-                    <span className="hidden sm:block">
-                      ฝากลงขายรถของท่านได้ราคาดีกว่าขายด่วน <br className="hidden md:block" />
-                      ทีมงานมืออาชีพดูแลจนจบขั้นตอน ซื้อขายสบายใจ
+                  <p className="mt-1.5 xs:mt-2 sm:mt-3 text-white font-prompt leading-relaxed text-center text-sm sm:text-base font-semibold">
+                    <span className="sm:hidden">ฝากขายรถแบบมืออาชีพ ได้ราคาดี</span>
+                    <span className="hidden sm:inline">
+                      ฝากลงขายรถของท่านได้ราคาดีกว่าขายด่วน — ทีมงานมืออาชีพดูแลจนจบขั้นตอน
+                      ซื้อขายสบายใจ
                     </span>
                   </p>
                   <div className="mt-3 xs:mt-4 sm:mt-6 flex flex-col sm:flex-row gap-2 xs:gap-3 justify-center">
@@ -445,23 +443,6 @@ export default function UsedCarsChiangMai({
           </div>
         </div>
       </header>
-      {/* Trust Badges */}
-      <section className="max-w-[1400px] mx-auto px-3 sm:px-4 mt-4" id="eeat-trust">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-white rounded-xl p-4 text-center border border-gray-100 shadow-sm">
-            <p className="font-bold text-primary text-base">ประสบการณ์ 10+ ปี</p>
-            <p className="text-sm text-gray-500 mt-1">มืออาชีพเรื่องรถ</p>
-          </div>
-          <div className="bg-white rounded-xl p-4 text-center border border-gray-100 shadow-sm">
-            <p className="font-bold text-primary text-base">ผู้ติดตาม 1M+</p>
-            <p className="text-sm text-gray-500 mt-1">มั่นใจได้ 100%</p>
-          </div>
-          <div className="bg-white rounded-xl p-4 text-center border border-gray-100 shadow-sm">
-            <p className="font-bold text-primary text-base">รถบ้านแท้คัดพรีเมียม</p>
-            <p className="text-sm text-gray-500 mt-1">เช็คสภาพแล้วทุกคัน</p>
-          </div>
-        </div>
-      </section>
 
       <Breadcrumb />
 
@@ -627,17 +608,16 @@ export default function UsedCarsChiangMai({
           id="about"
           className="mt-8 mb-8 bg-blue-50/40 rounded-2xl border border-blue-100 p-5 sm:p-6"
         >
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-primary font-prompt leading-snug">
-            ซื้อ-ขาย รถบ้านมือสอง ในภาคเหนือ เชียงใหม่-ลำพูน <br className="hidden md:block" />
-            <span className="text-accent text-lg sm:text-xl lg:text-2xl mt-1 block">(จัดไฟแนนซ์ได้ / ฝากขายได้)</span>
+          <h2 className="text-xl sm:text-2xl font-bold text-primary font-prompt">
+            ซื้อ-ขาย รถบ้านมือสอง ในเชียงใหม่-ลำพูน (ฝากขายได้)
           </h2>
-          <div className="mt-4 sm:mt-5 space-y-4 sm:space-y-5 text-gray-800 font-prompt leading-relaxed text-sm sm:text-base">
+          <div className="mt-3 space-y-3 text-gray-800 font-prompt leading-relaxed">
             <p>
               หน้านี้เป็นบริการ “ซื้อ-ขาย รถบ้านมือสอง” ในจังหวัดเชียงใหม่-ลำพูน — ไม่ว่าจะหา{' '}
               <Link
                 href="/all-cars"
                 prefetch={false}
-                className="text-primary font-bold hover:underline"
+                className="text-primary font-semibold hover:underline"
               >
                 รถมือสองเชียงใหม่
               </Link>{' '}
@@ -645,29 +625,25 @@ export default function UsedCarsChiangMai({
               <Link
                 href="/sell-car"
                 prefetch={false}
-                className="text-primary font-bold hover:underline"
+                className="text-primary font-semibold hover:underline"
               >
                 ฝากขายรถเชียงใหม่
               </Link>{' '}
               เราดูแลให้ครบจนจบขั้นตอนซื้อขาย
             </p>
-
-            <div className="p-4 sm:p-5 bg-white/60 rounded-xl border border-white space-y-3 sm:space-y-4 shadow-sm">
-              <p>
-                <strong>ฝากขายกับ “ครูหนึ่งรถสวย”</strong> ได้ราคาสูงกว่าขายด่วนเข้าเต็นท์โดยตรงในหลายกรณี 
-                <span className="block sm:inline sm:ml-1">และไม่ต้องเอารถมาจอดไว้ที่ร้าน คุณยังสามารถใช้รถตามปกติได้เลย</span> 
-                <span className="block mt-1.5 text-accent font-semibold">ขายผ่านทีมงานมืออาชีพ ขายง่าย ขายเร็ว ไม่ต้องปวดหัวรับสายหรือนัดดูรถเอง</span>
-              </p>
-              <p>
-                ทางเราดำเนินการให้จนจบขั้นตอนซื้อขาย รับเงินกลับบ้านสบายใจ 
-                <span className="block sm:inline sm:ml-1">เพราะมีลูกค้ารอซื้อทั่วประเทศ และมีผู้ติดตามจากทุกช่องทางหลักแสน-หลักล้าน </span>
-                <strong className="block mt-1.5 text-primary">ซื้อขายทั่วประเทศมายาวนานมากกว่า 10 ปี</strong>
-              </p>
-            </div>
-
-            <p className="text-gray-700 font-semibold flex items-start sm:items-center gap-2.5">
-              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-accent shrink-0 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              <span>เหมาะสำหรับคนที่ <strong>“ไม่รีบขายเข้าเต็นท์”</strong> อยากได้ราคาที่ใกล้เคียงราคาตลาดมากที่สุด และอยากให้ทีมงานช่วยดูแลแทนแบบมืออาชีพ</span>
+            <p>
+              ฝากขายกับ “ครูหนึ่งรถสวย” ได้ราคาสูงกว่าขายด่วนเข้าเต็นท์โดยตรงในหลายกรณี
+              และไม่ต้องเอารถมาจอดไว้ที่ร้าน คุณยังสามารถใช้รถตามปกติได้เลย ขายผ่านทีมงานมืออาชีพ
+              ขายง่าย ขายเร็ว ไม่ต้องปวดหัวรับสาย/นัดดูรถที่บ้านเอง
+            </p>
+            <p>
+              ทางเราดำเนินการให้จนจบขั้นตอนซื้อขาย รับเงินกลับบ้านสบายใจ
+              เพราะมีลูกค้ารอซื้อทั่วประเทศ และมีผู้ติดตามจากทุกช่องทางหลักแสน-หลักล้าน
+              ซื้อขายทั่วประเทศมายาวนานมากกว่า 10 ปี
+            </p>
+            <p className="text-gray-700">
+              เหมาะสำหรับคนที่ “ไม่รีบขายเข้าเต็นท์” อยากได้ราคาที่ใกล้เคียงราคาตลาดมากที่สุด
+              และอยากให้ทีมงานช่วยดูแลแทนแบบมืออาชีพ
             </p>
           </div>
 

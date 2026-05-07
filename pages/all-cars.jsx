@@ -6,6 +6,7 @@ import A11yImage from '../components/A11yImage';
 import { useRouter } from 'next/router';
 import SEO from '../components/SEO';
 import { getAllCars } from '../lib/shopify.mjs';
+import { isEvCar } from '../lib/evFilter.js';
 import { readCarStatuses } from '../lib/carStatusStore.js';
 import { getCachedStatuses, setCachedStatuses } from '../lib/carStatusCache';
 import { scheduleAfterLoadThenIdle } from '../utils/scheduler';
@@ -850,7 +851,7 @@ export async function getServerSideProps(context) {
     mark('getAllCars:end');
     mark('readCarStatuses:end');
     if (fetchError) throw fetchError;
-    cars = Array.isArray(result) ? result : [];
+    cars = (Array.isArray(result) ? result : []).filter(c => !isEvCar(c));
 
     // ลดขนาดข้อมูลโดยเก็บเฉพาะฟิลด์ที่จำเป็น
     cars = cars.map(car => ({

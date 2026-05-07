@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import SEO from '../../components/SEO.jsx';
 import CarCard from '../../components/CarCard';
 import { getAllCars } from '../../lib/shopify.mjs';
+import { isEvCar } from '../../lib/evFilter.js';
 import { readCarStatuses } from '../../lib/carStatusStore.js';
 import { computeSchemaAvailability } from '../../lib/carStatusUtils.js';
 import { COMMON_OFFER_EXTENSIONS } from '../../config/business';
@@ -193,7 +194,7 @@ export async function getServerSideProps(context) {
       getAllCars().catch(() => []),
       readCarStatuses().catch(() => null),
     ]);
-    const allCars = Array.isArray(result) ? result : [];
+    const allCars = (Array.isArray(result) ? result : []).filter(c => !isEvCar(c));
 
     const tokens = brandInfo.tokens;
     cars = allCars
@@ -274,7 +275,7 @@ export default function UsedCarsChiangMaiBrand({
   homeOgImage,
   structuredData,
 }) {
-    const router = useRouter();
+  const router = useRouter();
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
 
   const brandFaqs = useMemo(() => buildBrandFaqEntries(brandInfo?.label), [brandInfo?.label]);
