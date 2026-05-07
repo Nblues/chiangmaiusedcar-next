@@ -500,7 +500,7 @@ export async function getStaticProps() {
   let homeItemListJsonLd = null;
   let tiktokVideos = [];
 
-  const carsPromise = getHomepageCars(8).catch(() => []);
+  const carsPromise = getHomepageCars(16).catch(() => []);
   const statusesPromise = readCarStatuses().catch(() => ({}));
   const brandCountsPromise = getBrandCounts().catch(() => ({}));
   const tiktokPromise = fetch('https://rss.app/feeds/v1.1/MkPoJo3SV77U3XXe.json')
@@ -515,7 +515,7 @@ export async function getStaticProps() {
     tiktokPromise,
   ]);
 
-  cars = (Array.isArray(carsRaw) ? carsRaw : []).filter(c => !isEvCar(c));
+  cars = (Array.isArray(carsRaw) ? carsRaw : []).filter(c => !isEvCar(c)).slice(0, 8);
   brandCounts = counts || {};
   tiktokVideos = tiktokRaw || [];
 

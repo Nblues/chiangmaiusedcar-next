@@ -157,7 +157,7 @@ export async function getStaticProps() {
   let carsRaw = [];
   let shopifyError = null;
   try {
-    carsRaw = await getHomepageCars(12);
+    carsRaw = await getHomepageCars(20);
   } catch (error) {
     carsRaw = [];
     if (process.env.NODE_ENV === 'development') {
@@ -167,7 +167,7 @@ export async function getStaticProps() {
     }
   }
 
-  let cars = (Array.isArray(carsRaw) ? carsRaw : []).filter(c => !isEvCar(c));
+  let cars = (Array.isArray(carsRaw) ? carsRaw : []).filter(c => !isEvCar(c)).slice(0, 12);
   try {
     const ids = cars.map(c => c?.id).filter(Boolean);
     const statuses = await readCarStatusesByIds(ids);
