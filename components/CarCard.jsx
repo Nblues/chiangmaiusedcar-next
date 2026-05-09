@@ -310,7 +310,7 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
     <Link
       href={href}
       prefetch={false}
-      className={`group block rounded-3xl border border-accent-800/60 bg-white ring-1 ring-black/5 shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-accent-800 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30 motion-reduce:transition-none motion-reduce:hover:transform-none ${className}`}
+      className={`group block rounded-3xl border border-accent-800/60 bg-white ring-1 ring-black/5 shadow-md overflow-hidden transition-colors duration-200 hover:-translate-y-1 hover:shadow-xl hover:border-accent-800 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/30 motion-reduce:transition-none motion-reduce:hover:transform-none ${className}`}
       onClick={() => {
         try {
           if (typeof window !== 'undefined') {
@@ -431,7 +431,7 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
           <span className="min-w-0 text-sm text-gray-600 font-prompt font-semibold transition-colors group-hover:text-gray-800 group-focus-visible:text-gray-800">
             ดูรายละเอียด
           </span>
-          <span className="shrink-0 inline-flex h-9 w-9 items-center justify-center rounded-full bg-gray-50 border border-gray-200 text-gray-500 transition-all duration-300 group-hover:bg-accent group-hover:text-white group-hover:border-accent group-focus-visible:bg-accent group-focus-visible:text-white group-focus-visible:border-accent group-focus-visible:ring-2 group-focus-visible:ring-accent/30">
+          <span className="shrink-0 inline-flex h-9 w-9 items-center justify-center rounded-full bg-gray-50 border border-gray-200 text-gray-500 transition-colors duration-200 group-hover:bg-accent group-hover:text-white group-hover:border-accent group-focus-visible:bg-accent group-focus-visible:text-white group-focus-visible:border-accent group-focus-visible:ring-2 group-focus-visible:ring-accent/30">
             <svg
               viewBox="0 0 24 24"
               className="h-4 w-4"

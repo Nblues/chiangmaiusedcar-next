@@ -93,8 +93,6 @@ export default function Contact({ seoContact }) {
         ]}
       />
       <Head>
-        
-
         {/* FAQ Schema */}
         <script
           type="application/ld+json"
@@ -169,7 +167,7 @@ export default function Contact({ seoContact }) {
 
           {/* Contact Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <div className="bg-white border-2 border-primary/20 hover:border-primary p-6 rounded-xl shadow-lg transition-all duration-300">
+            <div className="bg-white border-2 border-primary/20 hover:border-primary p-6 rounded-xl shadow-lg transition-colors duration-200">
               <h3 className="font-bold text-primary mb-3 text-lg">โทรศัพท์</h3>
               <a
                 href="tel:0940649018"
@@ -181,7 +179,7 @@ export default function Contact({ seoContact }) {
                 094-064-9018
               </a>
             </div>
-            <div className="bg-white border-2 border-accent/20 hover:border-accent p-6 rounded-xl shadow-lg transition-all duration-300">
+            <div className="bg-white border-2 border-accent/20 hover:border-accent p-6 rounded-xl shadow-lg transition-colors duration-200">
               <h3 className="font-bold text-primary mb-3 text-lg">LINE</h3>
               <a
                 href="https://lin.ee/8ugfzstD"
@@ -192,7 +190,7 @@ export default function Contact({ seoContact }) {
                 @kruneungcar
               </a>
             </div>
-            <div className="bg-white border-2 border-primary/20 hover:border-primary p-6 rounded-xl shadow-lg transition-all duration-300">
+            <div className="bg-white border-2 border-primary/20 hover:border-primary p-6 rounded-xl shadow-lg transition-colors duration-200">
               <h3 className="font-bold text-primary mb-3 text-lg">อีเมล (Email)</h3>
               <a
                 href="mailto:info@chiangmaiusedcar.com"
@@ -201,7 +199,7 @@ export default function Contact({ seoContact }) {
                 info@chiangmaiusedcar.com
               </a>
             </div>
-            <div className="bg-white border-2 border-primary/20 hover:border-primary p-6 rounded-xl shadow-lg transition-all duration-300">
+            <div className="bg-white border-2 border-primary/20 hover:border-primary p-6 rounded-xl shadow-lg transition-colors duration-200">
               <h3 className="font-bold text-primary mb-3 text-lg">เวลาทำการ</h3>
               <p className="text-gray-700 font-medium">จันทร์ - อาทิตย์ เวลา 9:00 - 20:00 น.</p>
             </div>
@@ -211,7 +209,7 @@ export default function Contact({ seoContact }) {
           <div className="flex justify-center mb-12">
             <Link
               href="/all-cars"
-              className="px-8 py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300"
+              className="px-8 py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-[0.98] transition-colors duration-200"
             >
               ดูรถทั้งหมด
             </Link>
@@ -228,7 +226,7 @@ export default function Contact({ seoContact }) {
                 href={BUSINESS_INFO.socialMedia.facebook.main}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-600 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-600 hover:shadow-xl transform hover:scale-105 active:scale-[0.98] transition-colors duration-200 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
@@ -255,7 +253,7 @@ export default function Contact({ seoContact }) {
                 href={BUSINESS_INFO.socialMedia.facebook.personal}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-500 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-500 hover:shadow-xl transform hover:scale-105 active:scale-[0.98] transition-colors duration-200 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
@@ -282,7 +280,7 @@ export default function Contact({ seoContact }) {
                 href={BUSINESS_INFO.socialMedia.facebook.fcGroup}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-700 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-blue-700 hover:shadow-xl transform hover:scale-105 active:scale-[0.98] transition-colors duration-200 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-blue-700 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
@@ -309,7 +307,7 @@ export default function Contact({ seoContact }) {
                 href={BUSINESS_INFO.socialMedia.tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-gray-900 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-gray-900 hover:shadow-xl transform hover:scale-105 active:scale-[0.98] transition-colors duration-200 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-gray-900 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
@@ -336,7 +334,7 @@ export default function Contact({ seoContact }) {
                 href={BUSINESS_INFO.socialMedia.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-red-600 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-red-600 hover:shadow-xl transform hover:scale-105 active:scale-[0.98] transition-colors duration-200 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
@@ -363,7 +361,7 @@ export default function Contact({ seoContact }) {
                 href={BUSINESS_INFO.socialMedia.lemon8}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-yellow-500 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-yellow-500 hover:shadow-xl transform hover:scale-105 active:scale-[0.98] transition-colors duration-200 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
@@ -390,7 +388,7 @@ export default function Contact({ seoContact }) {
                 href={BUSINESS_INFO.lineUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-green-500 hover:shadow-xl transform hover:scale-105 active:scale-[0.95] transition-all duration-300 group"
+                className="bg-white p-4 rounded-xl shadow-lg border-l-4 border-green-500 hover:shadow-xl transform hover:scale-105 active:scale-[0.98] transition-colors duration-200 group"
               >
                 <div className="flex items-center mb-3">
                   <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform active:scale-[0.97] active:opacity-[0.85]">
@@ -448,7 +446,7 @@ export default function Contact({ seoContact }) {
                     href={mapOpenUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-full font-semibold hover:bg-primary-600 transform hover:scale-105 active:scale-[0.95] transition-all duration-300"
+                    className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-full font-semibold hover:bg-primary-600 transform hover:scale-105 active:scale-[0.98] transition-colors duration-200"
                   >
                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                       <path
@@ -530,7 +528,7 @@ export default function Contact({ seoContact }) {
                     href={createMapOpenUrl()}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-xl text-sm font-semibold transform hover:scale-105 active:scale-[0.95] transition-all duration-300"
+                    className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-xl text-sm font-semibold transform hover:scale-105 active:scale-[0.98] transition-colors duration-200"
                   >
                     Google Maps
                   </a>
@@ -538,7 +536,7 @@ export default function Contact({ seoContact }) {
                     href="https://g.co/kgs/Fe9dhXt"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-accent hover:bg-accent/90 text-white rounded-xl text-sm font-semibold transform hover:scale-105 active:scale-[0.95] transition-all duration-300"
+                    className="px-4 py-2 bg-accent hover:bg-accent/90 text-white rounded-xl text-sm font-semibold transform hover:scale-105 active:scale-[0.98] transition-colors duration-200"
                   >
                     รีวิว Google
                   </a>
@@ -555,7 +553,7 @@ export default function Contact({ seoContact }) {
               คำถามที่พบบ่อย (FAQ)
             </h2>
             <div className="space-y-4">
-              <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
+              <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-colors duration-200">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
                   <span className="text-accent font-extrabold text-lg">Q:</span>
                   ติดต่อครูหนึ่งรถสวยได้อย่างไร?
@@ -567,7 +565,7 @@ export default function Contact({ seoContact }) {
                   </p>
                 </div>
               </details>
-              <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
+              <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-colors duration-200">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
                   <span className="text-accent font-extrabold text-lg">Q:</span>
                   เวลาทำการของร้าน?
@@ -578,7 +576,7 @@ export default function Contact({ seoContact }) {
                   </p>
                 </div>
               </details>
-              <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
+              <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-colors duration-200">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
                   <span className="text-accent font-extrabold text-lg">Q:</span>
                   สามารถนัดดูรถได้ไหม?
@@ -590,7 +588,7 @@ export default function Contact({ seoContact }) {
                   </p>
                 </div>
               </details>
-              <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
+              <details className="bg-white p-6 rounded-2xl shadow-lg border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-colors duration-200">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent flex items-center gap-3 text-lg">
                   <span className="text-accent font-extrabold text-lg">Q:</span>
                   ครูหนึ่งรถสวยมีช่องทางโซเชียลมีเดียอะไรบ้าง?

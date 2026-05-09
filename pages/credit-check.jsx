@@ -1004,7 +1004,7 @@ export default function CreditCheck({ seoCreditCheck }) {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="w-full py-4 sm:py-5 px-6 rounded-2xl font-bold text-white text-lg sm:text-xl bg-gradient-to-r from-primary to-primary-600 hover:from-primary-600 hover:to-primary-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-2xl transform hover:-translate-y-1 active:translate-y-0"
+                  className="w-full py-4 sm:py-5 px-6 rounded-2xl font-bold text-white text-lg sm:text-xl bg-gradient-to-r from-primary to-primary-600 hover:from-primary-600 hover:to-primary-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-2xl transform hover:-translate-y-1 active:translate-y-0"
                 >
                   {sending ? (
                     <span className="flex items-center justify-center gap-3">
@@ -1045,7 +1045,7 @@ export default function CreditCheck({ seoCreditCheck }) {
                   สิทธิพิเศษสำหรับเครดิตดี
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-                  <div className="group bg-white rounded-2xl p-5 sm:p-6 md:p-8 border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
+                  <div className="group bg-white rounded-2xl p-5 sm:p-6 md:p-8 border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-colors duration-200">
                     <div className="flex items-center gap-3 sm:gap-4 mb-3">
                       <div className="w-5 h-5 sm:w-6 sm:h-6 bg-primary rounded-full flex-shrink-0"></div>
                       <div className="font-bold text-primary text-lg sm:text-xl">
@@ -1056,14 +1056,14 @@ export default function CreditCheck({ seoCreditCheck }) {
                       สำหรับลูกค้าเครดิตดี
                     </div>
                   </div>
-                  <div className="group bg-white rounded-2xl p-5 sm:p-6 md:p-8 border-2 border-accent/20 hover:border-accent hover:shadow-xl transition-all duration-300">
+                  <div className="group bg-white rounded-2xl p-5 sm:p-6 md:p-8 border-2 border-accent/20 hover:border-accent hover:shadow-xl transition-colors duration-200">
                     <div className="flex items-center gap-3 sm:gap-4 mb-3">
                       <div className="w-5 h-5 sm:w-6 sm:h-6 bg-accent rounded-full flex-shrink-0"></div>
                       <div className="font-bold text-accent-800 text-lg sm:text-xl">ผ่อนยาวสุด</div>
                     </div>
                     <div className="text-gray-700 text-base sm:text-lg font-medium">84 เดือน</div>
                   </div>
-                  <div className="group bg-white rounded-2xl p-5 sm:p-6 md:p-8 border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300">
+                  <div className="group bg-white rounded-2xl p-5 sm:p-6 md:p-8 border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-colors duration-200">
                     <div className="flex items-center gap-3 sm:gap-4 mb-3">
                       <div className="w-5 h-5 sm:w-6 sm:h-6 bg-primary rounded-full flex-shrink-0"></div>
                       <div className="font-bold text-primary text-lg sm:text-xl">อนุมัติเร็ว</div>
@@ -1072,7 +1072,7 @@ export default function CreditCheck({ seoCreditCheck }) {
                       ภายใน 1 วัน
                     </div>
                   </div>
-                  <div className="group bg-white rounded-2xl p-5 sm:p-6 md:p-8 border-2 border-accent/20 hover:border-accent hover:shadow-xl transition-all duration-300">
+                  <div className="group bg-white rounded-2xl p-5 sm:p-6 md:p-8 border-2 border-accent/20 hover:border-accent hover:shadow-xl transition-colors duration-200">
                     <div className="flex items-center gap-3 sm:gap-4 mb-3">
                       <div className="w-5 h-5 sm:w-6 sm:h-6 bg-accent rounded-full flex-shrink-0"></div>
                       <div className="font-bold text-accent-800 text-lg sm:text-xl">ไม่ต้องค้ำ</div>
@@ -1087,7 +1087,7 @@ export default function CreditCheck({ seoCreditCheck }) {
               <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-5">
                 <Link
                   href="/all-cars"
-                  className="group relative overflow-hidden bg-accent hover:bg-accent/90 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-[0.95] inline-flex items-center justify-center gap-3 text-base sm:text-lg"
+                  className="group relative overflow-hidden bg-accent hover:bg-accent/90 text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-colors duration-200 hover:shadow-xl hover:scale-105 active:scale-[0.98] inline-flex items-center justify-center gap-3 text-base sm:text-lg"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-accent to-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <svg
@@ -1107,7 +1107,7 @@ export default function CreditCheck({ seoCreditCheck }) {
                 </Link>
                 <Link
                   href="/payment-calculator"
-                  className="group relative overflow-hidden bg-white hover:bg-gray-50 text-accent-800 border-2 border-accent font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-[0.95] inline-flex items-center justify-center gap-3 text-base sm:text-lg"
+                  className="group relative overflow-hidden bg-white hover:bg-gray-50 text-accent-800 border-2 border-accent font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-colors duration-200 hover:shadow-xl hover:scale-105 active:scale-[0.98] inline-flex items-center justify-center gap-3 text-base sm:text-lg"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-orange-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <svg
@@ -1137,7 +1137,7 @@ export default function CreditCheck({ seoCreditCheck }) {
                     href="https://lin.ee/8ugfzstD"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-accent hover:bg-accent/90 text-white font-bold px-6 sm:px-8 py-4 sm:py-5 rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-[0.95] inline-flex items-center justify-center gap-3 text-base sm:text-lg"
+                    className="bg-accent hover:bg-accent/90 text-white font-bold px-6 sm:px-8 py-4 sm:py-5 rounded-2xl transition-colors duration-200 hover:shadow-xl hover:scale-105 active:scale-[0.98] inline-flex items-center justify-center gap-3 text-base sm:text-lg"
                     aria-label="แชท LINE ครูหนึ่งรถสวย"
                   >
                     <svg
@@ -1151,7 +1151,7 @@ export default function CreditCheck({ seoCreditCheck }) {
                   </a>
                   <a
                     href="tel:0940649018"
-                    className="bg-primary hover:bg-primary-600 text-white font-bold px-6 sm:px-8 py-4 sm:py-5 rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-[0.95] inline-flex items-center justify-center gap-3 text-base sm:text-lg"
+                    className="bg-primary hover:bg-primary-600 text-white font-bold px-6 sm:px-8 py-4 sm:py-5 rounded-2xl transition-colors duration-200 hover:shadow-xl hover:scale-105 active:scale-[0.98] inline-flex items-center justify-center gap-3 text-base sm:text-lg"
                     aria-label="โทร 094-064-9018"
                   >
                     <svg
@@ -1185,7 +1185,7 @@ export default function CreditCheck({ seoCreditCheck }) {
               </p>
             </div>
             <div className="space-y-4 sm:space-y-5">
-              <details className="bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300 group">
+              <details className="bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-colors duration-200 group">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent-800 flex items-center gap-3 text-base sm:text-lg md:text-xl">
                   <span className="text-accent text-xl sm:text-2xl font-extrabold group-open:hidden">
                     ➕
@@ -1203,7 +1203,7 @@ export default function CreditCheck({ seoCreditCheck }) {
                 </div>
               </details>
 
-              <details className="bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300 group">
+              <details className="bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-colors duration-200 group">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent-800 flex items-center gap-3 text-base sm:text-lg md:text-xl">
                   <span className="text-accent text-xl sm:text-2xl font-extrabold group-open:hidden">
                     ➕
@@ -1220,7 +1220,7 @@ export default function CreditCheck({ seoCreditCheck }) {
                 </div>
               </details>
 
-              <details className="bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300 group">
+              <details className="bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-colors duration-200 group">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent-800 flex items-center gap-3 text-base sm:text-lg md:text-xl">
                   <span className="text-accent text-xl sm:text-2xl font-extrabold group-open:hidden">
                     ➕
@@ -1238,7 +1238,7 @@ export default function CreditCheck({ seoCreditCheck }) {
                 </div>
               </details>
 
-              <details className="bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-all duration-300 group">
+              <details className="bg-white p-5 sm:p-6 md:p-8 rounded-2xl shadow-md border-2 border-primary/20 hover:border-primary hover:shadow-xl transition-colors duration-200 group">
                 <summary className="font-bold text-primary cursor-pointer hover:text-accent-800 flex items-center gap-3 text-base sm:text-lg md:text-xl">
                   <span className="text-accent text-xl sm:text-2xl font-extrabold group-open:hidden">
                     ➕

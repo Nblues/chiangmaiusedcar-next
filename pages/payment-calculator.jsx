@@ -291,7 +291,7 @@ export default function PaymentCalculator({ seoPayment }) {
                       {result.calculations.map((calc, index) => (
                         <div
                           key={calc.years}
-                          className={`text-center p-3 md:p-4 rounded-xl transition-all duration-300 hover:scale-105 ${
+                          className={`text-center p-3 md:p-4 rounded-xl transition-colors duration-200 hover:scale-105 ${
                             index === 1
                               ? 'bg-gradient-to-br from-accent/20 to-orange-100 border-2 border-accent shadow-lg active:scale-[0.97] active:opacity-[0.85]'
                               : 'bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 hover:shadow-md'
@@ -511,7 +511,7 @@ export default function PaymentCalculator({ seoPayment }) {
                   <button
                     type="button"
                     onClick={() => calculatePayment()}
-                    className="w-full text-sm md:text-base py-3 md:py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 font-prompt disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.95]"
+                    className="w-full text-sm md:text-base py-3 md:py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-colors duration-200 font-prompt disabled:opacity-50 disabled:cursor-not-allowed transform  active:scale-[0.98]"
                     disabled={!carPrice}
                   >
                     คำนวนค่างวด
@@ -522,7 +522,7 @@ export default function PaymentCalculator({ seoPayment }) {
                     <button
                       type="button"
                       onClick={() => router.back()}
-                      className="w-full mt-2 md:mt-4 px-4 py-2 md:py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl transition-all duration-300 active:scale-[0.95] font-prompt text-sm md:text-base"
+                      className="w-full mt-2 md:mt-4 px-4 py-2 md:py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl transition-colors duration-200 active:scale-[0.98] font-prompt text-sm md:text-base"
                     >
                       ← กลับไปหน้ารายละเอียดรถ
                     </button>
@@ -730,14 +730,14 @@ export default function PaymentCalculator({ seoPayment }) {
               href="https://lin.ee/8ugfzstD"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-primary hover:bg-primary/90 text-white px-6 md:px-8 py-3 rounded-2xl font-semibold transition-all duration-300 font-prompt text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95]"
+              className="bg-primary hover:bg-primary/90 text-white px-6 md:px-8 py-3 rounded-2xl font-semibold transition-colors duration-200 font-prompt text-sm md:text-base shadow-lg hover:shadow-xl transform  active:scale-[0.98]"
               aria-label="แชท LINE ครูหนึ่งรถสวย"
             >
               สอบถามผ่าน LINE
             </a>
             <a
               href="tel:094-0649018"
-              className="bg-white text-orange-700 hover:bg-gray-50 border-2 border-accent hover:border-accent/80 px-6 md:px-8 py-3 rounded-2xl font-semibold transition-all duration-300 font-prompt text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95]"
+              className="bg-white text-orange-700 hover:bg-gray-50 border-2 border-accent hover:border-accent/80 px-6 md:px-8 py-3 rounded-2xl font-semibold transition-colors duration-200 font-prompt text-sm md:text-base shadow-lg hover:shadow-xl transform  active:scale-[0.98]"
               aria-label="โทร 094-064-9018"
             >
               โทร 094-064-9018

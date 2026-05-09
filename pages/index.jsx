@@ -345,37 +345,23 @@ export default function Home({
             <Link
               href="/all-cars"
               prefetch={false}
-              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-accent-800 text-white hover:bg-accent-900 transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
+              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-accent-800 text-white hover:bg-accent-900 transition-colors duration-200 shadow-sm hover:shadow-lg transform  active:scale-[0.98]"
             >
               เลือกซื้อรถยนต์
             </Link>
             <Link
               href="/used-cars-chiang-mai"
               prefetch={false}
-              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-orange-700 text-orange-800 hover:bg-orange-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
+              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-orange-700 text-orange-800 hover:bg-orange-700 hover:text-white transition-colors duration-200 shadow-sm hover:shadow-lg transform  active:scale-[0.98]"
             >
               ฝากขายรถ
             </Link>
             <Link
               href="/sell-car"
               prefetch={false}
-              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
+              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-200 shadow-sm hover:shadow-lg transform  active:scale-[0.98]"
             >
               ขายด่วน!
-            </Link>
-            <Link
-              href="/ev-cars-chiang-mai"
-              prefetch={false}
-              className="flex-1 flex justify-center items-center gap-1.5 font-bold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-green-700 text-white hover:bg-green-800 transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
-            >
-              <svg
-                className="w-4 h-4 md:w-5 md:h-5 text-yellow-300"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" />
-              </svg>
-              รถ EV
             </Link>
           </div>
         </div>
@@ -422,7 +408,7 @@ export default function Home({
                       href="https://lin.ee/8ugfzstD"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-[48px] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt active:scale-[0.97] active:opacity-[0.85]"
+                      className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-[48px] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-colors duration-200 space-x-2 font-prompt active:scale-[0.97] active:opacity-[0.85]"
                     >
                       <span>ติดต่อสอบถาม</span>
                     </a>
@@ -446,11 +432,11 @@ export default function Home({
               </section>
             </div>
           </div>
-          <div className="text-center mt-8 sm:mt-12 px-4 sm:px-0">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8 sm:mt-12 px-4 sm:px-0">
             <Link
               href="/all-cars"
               prefetch={false}
-              className="flex w-full justify-center md:inline-flex md:w-auto items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-full sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
+              className="flex w-full justify-center md:inline-flex md:w-auto items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-full sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transform transition-transform active:scale-[0.98] duration-150 space-x-2 border-2 border-transparent hover:border-accent font-prompt"
               aria-label="ดูรถทั้งหมด ครูหนึ่งรถสวย"
             >
               <span>ดูรถทั้งหมด</span>
@@ -462,14 +448,29 @@ export default function Home({
                 />
               </svg>
             </Link>
+            <Link
+              href="/ev-cars-chiang-mai"
+              prefetch={false}
+              className="flex w-full justify-center md:inline-flex md:w-auto items-center bg-green-700 hover:bg-green-800 text-white px-8 py-4 rounded-full sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transform transition-transform active:scale-[0.98] duration-150 space-x-2 border-2 border-transparent hover:border-green-600 font-prompt"
+              aria-label="รถ EV มือสอง เชียงใหม่"
+            >
+              <svg className="w-5 h-5 text-yellow-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" />
+              </svg>
+              <span>รถ EV มือสอง</span>
+            </Link>
           </div>
         </div>
         <div className="pb-8 md:pb-12">
-          {/* TikTok Feed Section */}
-          {tiktokVideos && tiktokVideos.length > 0 && <TikTokFeed videos={tiktokVideos} />}
-
-          {/* รีวิว Facebook 9 รีวิวจริง (โหลดเมื่อใกล้ viewport) */}
+          {/* Trigger point for lazy-loading heavy social feeds (TikTok + Facebook) */}
           <div id="fb-reviews-anchor" className="h-px w-full" aria-hidden="true" />
+
+          {/* TikTok Feed Section */}
+          {showFbReviews && tiktokVideos && tiktokVideos.length > 0 && (
+            <TikTokFeed videos={tiktokVideos} />
+          )}
+
+          {/* รีวิว Facebook 9 รีวิวจริง */}
           {showFbReviews && <FacebookReviewsSection />}
 
           {/* Why Choose Us Section - SEO Content (extracted) */}

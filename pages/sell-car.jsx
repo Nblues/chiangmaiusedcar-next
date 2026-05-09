@@ -76,13 +76,13 @@ export default function SellCar({ seoSellCar }) {
                 href="https://lin.ee/8ugfzstD"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base bg-green-500 text-white hover:bg-green-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base bg-green-500 text-white hover:bg-green-600 transition-colors duration-200 shadow-lg hover:shadow-xl transform  active:scale-[0.98]"
               >
                 ติดต่อทาง LINE
               </a>
               <a
                 href="tel:0940649018"
-                className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base border-2 border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-200 shadow-lg hover:shadow-xl transform  active:scale-[0.98]"
               >
                 โทร 094-064-9018
               </a>
