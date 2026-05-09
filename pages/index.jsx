@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import A11yImage from '../components/A11yImage';
 import SEO from '../components/SEO.jsx';
 import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
 import { isEvCar } from '../lib/evFilter.js';
@@ -298,25 +299,26 @@ export default function Home({
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-[1400px] mx-auto">
           {/* LCP Optimized: Native responsive img for critical hero banner */}
-          {/* HTML img tag for Hero Banner because Next Image unoptimized handles srcSet poorly */}
-          <img
+          <A11yImage
             src="/herobanner/newherobanner-1400w.webp"
-            srcSet="
+            customSrcSet="
               /herobanner/newherobanner-414w.webp 414w,
               /herobanner/newherobanner-640w.webp 640w,
               /herobanner/newherobanner-828w.webp 828w,
               /herobanner/newherobanner-1024w.webp 1024w,
               /herobanner/newherobanner-1400w.webp 1400w
             "
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
+            customSizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             className="w-full h-auto object-contain block mx-auto text-transparent"
-            style={{ aspectRatio: '1400/467' }}
-            decoding="async"
+            aspectRatio="1400/467"
+            decoding="sync"
             loading="eager"
             fetchpriority="high"
-            width="1400"
-            height="467"
+            width={1400}
+            height={467}
+            optimizeImage={false}
+            priority
           />
         </div>
       </header>

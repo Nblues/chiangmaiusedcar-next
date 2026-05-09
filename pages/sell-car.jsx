@@ -44,13 +44,13 @@ export default function SellCar({ seoSellCar }) {
         <div className="relative w-full max-w-[1920px] aspect-[1920/650]">
           <A11yImage
             src="/herobanner/chiangmaiusedcars-1200w.webp"
-            srcSet="/herobanner/chiangmaiusedcars-640w.webp 640w, /herobanner/chiangmaiusedcars-828w.webp 828w, /herobanner/chiangmaiusedcars-1024w.webp 1024w, /herobanner/chiangmaiusedcars-1200w.webp 1200w, /herobanner/chiangmaiusedcars-1400w.webp 1400w, /herobanner/chiangmaiusedcars-1920w.webp 1920w"
+            customSrcSet="/herobanner/chiangmaiusedcars-640w.webp 640w, /herobanner/chiangmaiusedcars-828w.webp 828w, /herobanner/chiangmaiusedcars-1024w.webp 1024w, /herobanner/chiangmaiusedcars-1200w.webp 1200w, /herobanner/chiangmaiusedcars-1400w.webp 1400w, /herobanner/chiangmaiusedcars-1920w.webp 1920w"
             alt="ขายรถยนต์มือสอง - ครูหนึ่งรถสวย ประเมินราคายุติธรรม แลกเทิร์นรถ"
             fill
             className="w-full h-full object-cover md:object-contain"
             priority
-            quality={75}
-            sizes="(max-width: 414px) 100vw, (max-width: 768px) 100vw, (max-width: 1200px) 120vw, 1920px"
+            optimizeImage={false}
+            customSizes="(max-width: 414px) 100vw, (max-width: 768px) 100vw, (max-width: 1200px) 120vw, 1920px"
           />
         </div>
       </header>

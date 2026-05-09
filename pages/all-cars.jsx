@@ -423,12 +423,13 @@ export default function AllCars({
           <div className="absolute inset-0" aria-hidden="true">
             <A11yImage
               src="/herobanner/heroallcars-1400w.webp"
-              srcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-828w.webp 828w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
-              sizes="100vw"
+              customSrcSet="/herobanner/heroallcars-414w.webp 414w, /herobanner/heroallcars-640w.webp 640w, /herobanner/heroallcars-828w.webp 828w, /herobanner/heroallcars-1024w.webp 1024w, /herobanner/heroallcars-1400w.webp 1400w"
+              customSizes="100vw"
               alt="รวมรถยนต์มือสองคุณภาพดี ครูหนึ่งรถสวย เชียงใหม่"
               className="absolute inset-0 w-full h-full object-cover object-top"
               fetchPriority="high"
               priority
+              decoding="sync"
               fill
               imageType="hero"
               optimizeImage={false}
