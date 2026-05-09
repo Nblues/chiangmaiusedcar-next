@@ -33,6 +33,8 @@ export default class MyDocument extends Document {
     const requestPath = String(requestPathRaw).split('?')[0] || '';
     const shouldPreloadHero =
       requestPath === '/' || requestPath === '/en' || requestPath === '/en/';
+    const shouldPreloadEvHero =
+      requestPath === '/ev-cars-chiang-mai' || requestPath === '/ev-cars-chiang-mai/';
 
     return (
       <Html lang={htmlLang}>
@@ -55,6 +57,16 @@ export default class MyDocument extends Document {
               href="/herobanner/newherobanner-414w.webp"
               imageSrcSet="/herobanner/newherobanner-414w.webp 414w, /herobanner/newherobanner-640w.webp 640w, /herobanner/newherobanner-828w.webp 828w, /herobanner/newherobanner-1024w.webp 1024w, /herobanner/newherobanner-1400w.webp 1400w"
               imageSizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
+              fetchpriority="high"
+            />
+          )}
+          {shouldPreloadEvHero && (
+            <link
+              rel="preload"
+              as="image"
+              href="/herobanner/ev-car-chiang-mai-banner-414w.webp"
+              imageSrcSet="/herobanner/ev-car-chiang-mai-banner-414w.webp 414w, /herobanner/ev-car-chiang-mai-banner-640w.webp 640w, /herobanner/ev-car-chiang-mai-banner-828w.webp 828w, /herobanner/ev-car-chiang-mai-banner-1024w.webp 1024w, /herobanner/ev-car-chiang-mai-banner.webp 1400w"
+              imageSizes="100vw"
               fetchpriority="high"
             />
           )}

@@ -10,7 +10,6 @@ import A11yImage from '../components/A11yImage';
 import { readCarStatusesByIds } from '../lib/carStatusStore.js';
 import { mergeCarSpecs } from '../lib/mergeCarSpecs';
 const EVFaq = dynamic(() => import('../components/EVFaq'), {
-  ssr: false,
   loading: () => (
     <div
       className="mt-12 min-h-[480px] w-full rounded-3xl bg-gray-100 animate-pulse"
@@ -516,21 +515,18 @@ export default function EVCarsChiangMai({
       <header className="relative overflow-hidden bg-white">
         <div className="max-w-[1400px] mx-auto px-2 sm:px-4 py-3 sm:py-4">
           <div className="relative rounded-2xl overflow-hidden bg-gray-50 border border-gray-200 shadow-sm">
-            {/* aspect-[33/14] ตรงกับขนาดภาพจริง 3168×1344 — ไม่มีพื้นที่ว่าง/letterbox */}
+            {/* aspect-[33/14] ตรงกับขนาดภาพจริง 3168×1344 — ป้องกัน CLS */}
             <div className="relative w-full aspect-[33/14]">
-              <A11yImage
+              {/* ใช้ <img> โดยตรงเพื่อให้ srcSet responsive ทำงานจริง (NextImage ignores custom srcSet) */}
+              <img
                 src="/herobanner/ev-car-chiang-mai-banner.webp"
+                srcSet="/herobanner/ev-car-chiang-mai-banner-414w.webp 414w, /herobanner/ev-car-chiang-mai-banner-640w.webp 640w, /herobanner/ev-car-chiang-mai-banner-828w.webp 828w, /herobanner/ev-car-chiang-mai-banner-1024w.webp 1024w, /herobanner/ev-car-chiang-mai-banner.webp 1400w"
+                sizes="100vw"
                 alt="รถไฟฟ้า EV มือสอง เชียงใหม่ เจ้าของขายเอง | ครูหนึ่งรถสวย"
-                width={1400}
-                height={594}
-                aspectRatio="33/14"
-                fetchPriority="high"
-                priority={true}
+                fetchpriority="high"
                 decoding="sync"
-                imageType="hero"
-                optimizeImage={true}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
-                className="block w-full h-full object-cover object-center"
+                loading="eager"
+                className="absolute inset-0 w-full h-full object-cover object-center"
               />
             </div>
           </div>
