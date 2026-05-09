@@ -163,9 +163,13 @@ const A11yImage = forwardRef<HTMLImageElement, A11yImageProps>(
     // เพิ่ม srcSet และ sizes ถ้ามี
     if (generatedSrcSet) {
       imgAttributes.srcSet = generatedSrcSet;
+    } else if (customSrcSet) {
+      imgAttributes.srcSet = customSrcSet;
     }
     if (generatedSizes) {
       imgAttributes.sizes = generatedSizes;
+    } else if (customSizes) {
+      imgAttributes.sizes = customSizes;
     }
 
     // Add fetchpriority as React prop (React 18.3+ supported)
