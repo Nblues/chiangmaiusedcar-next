@@ -356,7 +356,7 @@ export default function EvCarsBrand({ brandInfo, cars, structuredData }) {
 
       {/* Hero */}
       <header id="hero" className="relative w-full overflow-hidden border-b border-gray-200">
-        <div className="relative w-full aspect-[33/14]">
+        <div className="relative w-full min-h-[360px] sm:min-h-[400px] md:aspect-[33/14]">
           <img
             src="/herobanner/ev-car-chiang-mai-banner.webp"
             alt={`รถ EV มือสอง ${brandInfo.label} เชียงใหม่ - ครูหนึ่งรถสวย`}
