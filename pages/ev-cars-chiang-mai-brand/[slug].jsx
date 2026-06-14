@@ -101,6 +101,12 @@ function getBrandInfo(slug) {
 function filterEvCars(cars) {
   return cars.filter(c => {
     const title = (c.title || '').toLowerCase();
+
+    // SEO Guard: Filter out placeholder/test listings
+    if (title.includes('พื้นที่ลงประกาศฟรี') || title.includes('ไม่มีชื่อ')) {
+      return false;
+    }
+
     const tags = (c.tags || []).join(' ').toLowerCase();
     const fuel = ((c.fuelType || '') + ' ' + (c.fuel_type || '')).toLowerCase();
 
@@ -355,7 +361,7 @@ export default function EvCarsBrand({ brandInfo, cars, structuredData }) {
             src="/herobanner/ev-car-chiang-mai-banner.webp"
             alt={`รถ EV มือสอง ${brandInfo.label} เชียงใหม่ - ครูหนึ่งรถสวย`}
             className="block w-full h-full object-cover object-center"
-            decoding="async"
+            decoding="sync"
             fetchpriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/40 to-black/70" />
