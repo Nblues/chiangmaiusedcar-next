@@ -1075,7 +1075,7 @@ export default function EVCarsChiangMai({
       </main>
 
       {/* Floating LINE CTA for mobile conversion */}
-      <div className="fixed bottom-4 right-4 z-50 md:hidden">
+      <div className="fixed bottom-[80px] right-4 z-50 md:hidden pb-[env(safe-area-inset-bottom,0px)]">
         <a
           href="https://lin.ee/8ugfzstD"
           target="_blank"
