@@ -86,12 +86,16 @@ function buildHomeItemListJsonLd(inputCars) {
     const handle = car?.handle;
     const carUrl = handle ? `${site}/car/${handle}` : site;
 
-    const rawImage = car?.images?.[0]?.url;
-    const imageUrl = rawImage
-      ? rawImage.startsWith('http')
-        ? rawImage
-        : `${site}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
-      : `${site}/herobanner/cnxcar.webp`;
+    const imageUrls = car?.images?.length
+      ? car.images
+          .slice(0, 3)
+          .map(img =>
+            img.url.startsWith('http')
+              ? img.url
+              : `${site}${img.url.startsWith('/') ? '' : '/'}${img.url}`
+          )
+          .filter(Boolean)
+      : [`${site}/herobanner/cnxcar.webp`];
 
     const vendorOrBrand = car?.vendor || car?.brand || car?.title?.split(' ')?.[0] || 'รถยนต์';
     const model = car?.model || car?.title || '';
@@ -119,7 +123,7 @@ function buildHomeItemListJsonLd(inputCars) {
           name: vendorOrBrand,
         },
         sku: car?.id || handle,
-        image: imageUrl,
+        image: imageUrls,
         url: carUrl,
         offers: {
           '@type': 'Offer',

@@ -39,12 +39,16 @@ export async function getStaticProps() {
       const carUrl = handle ? `${SITE}/car/${handle}` : SITE;
 
       const priceInfo = getPriceInfo(car?.price?.amount || 0);
-      const rawImage = car?.images?.[0]?.url;
-      const imageUrl = rawImage
-        ? rawImage.startsWith('http')
-          ? rawImage
-          : `${SITE}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
-        : `${SITE}/herobanner/outdoorbanner-1024w.webp`;
+      const imageUrls = car?.images?.length
+        ? car.images
+            .slice(0, 3)
+            .map(img =>
+              img.url.startsWith('http')
+                ? img.url
+                : `${SITE}${img.url.startsWith('/') ? '' : '/'}${img.url}`
+            )
+            .filter(Boolean)
+        : [`${SITE}/herobanner/outdoorbanner-1024w.webp`];
 
       const title = car?.title || 'รถมือสองเชียงใหม่';
       const availabilityValue = computeSchemaAvailability({
@@ -79,7 +83,7 @@ export async function getStaticProps() {
           additionalType: 'https://schema.org/Car',
           '@id': carUrl,
           name: title,
-          image: imageUrl,
+          image: imageUrls,
           url: carUrl,
           offers: offer,
         },

@@ -1001,11 +1001,14 @@ export async function getServerSideProps(context) {
               ? `https://www.chiangmaiusedcar.com/car/${car.handle}`
               : 'https://www.chiangmaiusedcar.com/all-cars';
 
-            const imageUrl = car?.images?.[0]?.url
-              ? car.images[0].url.startsWith('/')
-                ? `https://www.chiangmaiusedcar.com${car.images[0].url}`
-                : car.images[0].url
-              : 'https://www.chiangmaiusedcar.com/herobanner/allusedcars.webp';
+            const imageUrls = car?.images?.length
+              ? car.images
+                  .slice(0, 3)
+                  .map(img =>
+                    img.url.startsWith('/') ? `https://www.chiangmaiusedcar.com${img.url}` : img.url
+                  )
+                  .filter(Boolean)
+              : ['https://www.chiangmaiusedcar.com/herobanner/allusedcars.webp'];
 
             return {
               '@type': 'ListItem',
@@ -1015,7 +1018,7 @@ export async function getServerSideProps(context) {
                 '@id': carUrl,
                 url: carUrl,
                 name: car?.title || 'รถมือสอง',
-                image: imageUrl,
+                image: imageUrls,
                 brand: car?.vendor ? { '@type': 'Brand', name: car.vendor } : undefined,
                 modelDate: car?.year || undefined,
                 vehicleTransmission: car?.transmission || undefined,
