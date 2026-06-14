@@ -81,23 +81,26 @@ export default function AllCars({
   const [brandFilter, setBrandFilter] = useState(initialBrandFilter);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [liveStatuses, setLiveStatuses] = useState(null);
-  const [showAllCars, setShowAllCars] = useState(false);
+  const [showAllCars, setShowAllCars] = useState(true);
   const { ref: observerRef, inView } = useInView({
     triggerOnce: true,
     rootMargin: '400px 0px',
   });
 
-  useEffect(() => {
-    if (inView) {
-      setShowAllCars(true);
-    }
-  }, [inView]);
+  // Render all cars immediately to ensure SEO crawlability (Googlebot sees all 24 links)
+  // We keep the state for compatibility but default to true.
 
-  useEffect(() => {
-    // Fallback: render remaining cars after 2s if intersection observer fails to trigger
-    const timer = setTimeout(() => setShowAllCars(true), 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  // useEffect(() => {
+  //   if (inView) {
+  //     setShowAllCars(true);
+  //   }
+  // }, [inView]);
+
+  // useEffect(() => {
+  //   // Fallback
+  //   const timer = setTimeout(() => setShowAllCars(true), 2000);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -621,7 +624,7 @@ export default function AllCars({
               {/* จุดปักหมุดสำหรับด้านบนของรายการรถจริงๆ (ไม่รวม text SEO ด้านบน) */}
               <div id="cars-list-top" className="scroll-mt-24"></div>
 
-              {/* Cards Grid - standardized layout */}
+              {/* Cards Grid - standardized layout, content-visibility added for performance */}
               <div className="car-grid grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-4 xl:gap-6">
                 {currentCars.map((car, index) => {
                   const isBelowFold = index >= 12;
@@ -637,12 +640,21 @@ export default function AllCars({
                   }
 
                   return (
-                    <CarCard
-                      key={car.id}
-                      car={car}
-                      liveStatus={liveStatuses?.[car.id]?.status}
-                      priority={index < 2}
-                    />
+                    <div
+                      key={`wrapper-${car.id}`}
+                      className={isBelowFold ? 'content-visibility-auto' : ''}
+                      style={
+                        isBelowFold
+                          ? { contentVisibility: 'auto', containIntrinsicSize: '320px' }
+                          : undefined
+                      }
+                    >
+                      <CarCard
+                        car={car}
+                        liveStatus={liveStatuses?.[car.id]?.status}
+                        priority={index < 2}
+                      />
+                    </div>
                   );
                 })}
               </div>

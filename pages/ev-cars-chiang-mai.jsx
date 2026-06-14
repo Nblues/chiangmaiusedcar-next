@@ -233,6 +233,12 @@ export async function getStaticProps() {
   let cars = Array.isArray(carsRaw) ? carsRaw : [];
   cars = cars.filter(c => {
     const title = (c.title || '').toLowerCase();
+
+    // SEO Guard: Filter out placeholder/test listings like "พื้นที่ลงประกาศฟรี" or "ไม่มีชื่อ"
+    if (title.includes('พื้นที่ลงประกาศฟรี') || title.includes('ไม่มีชื่อ')) {
+      return false;
+    }
+
     const tags = (c.tags || []).join(' ').toLowerCase();
     const fuel = ((c.fuelType || '') + ' ' + (c.fuel_type || '')).toLowerCase();
 

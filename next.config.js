@@ -334,6 +334,16 @@ const nextConfig = {
     ];
 
     return [
+      // Force public caching for all-cars since getServerSideProps header might get stripped
+      {
+        source: '/all-cars',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, s-maxage=900, stale-while-revalidate=3600',
+          },
+        ],
+      },
       // Global headers
       {
         source: '/(.*)',
