@@ -175,6 +175,28 @@ export async function getStaticProps() {
   try {
     const ids = cars.map(c => c?.id).filter(Boolean);
     const statuses = await readCarStatusesByIds(ids);
+
+    // --- STANDARD SORTING FOR USED CARS HOMEPAGE ---
+    const { isReservedCar, isSoldCar } = require('../lib/carStatusUtils.js');
+    cars.sort((a, b) => {
+      // We look at both backend KV statuses AND embedded tags to determine unavailability
+      const aId = a?.id;
+      const bId = b?.id;
+      const aBackendStatus = aId ? statuses?.[aId]?.status : a?.status;
+      const bBackendStatus = bId ? statuses?.[bId]?.status : b?.status;
+
+      const aUnavail =
+        isReservedCar({ ...a, status: aBackendStatus }) ||
+        isSoldCar({ ...a, status: aBackendStatus });
+      const bUnavail =
+        isReservedCar({ ...b, status: bBackendStatus }) ||
+        isSoldCar({ ...b, status: bBackendStatus });
+
+      if (aUnavail && !bUnavail) return 1;
+      if (!aUnavail && bUnavail) return -1;
+      return 0;
+    });
+
     cars = cars.map(c => {
       const id = c?.id;
       const statusFromKv = id ? statuses?.[id]?.status : undefined;

@@ -534,6 +534,16 @@ export async function getStaticProps() {
   // Add status to homepage cars (do not filter; show badge instead)
   try {
     cars = cars.map(c => ({ ...c, status: carStatuses?.[c.id]?.status || 'available' }));
+
+    // --- STANDARD SORTING FOR HOMEPAGE ---
+    const { isReservedCar, isSoldCar } = require('../lib/carStatusUtils.js');
+    cars.sort((a, b) => {
+      const aUnavail = isReservedCar(a) || isSoldCar(a);
+      const bUnavail = isReservedCar(b) || isSoldCar(b);
+      if (aUnavail && !bUnavail) return 1;
+      if (!aUnavail && bUnavail) return -1;
+      return 0;
+    });
   } catch {
     // ignore status merge errors
   }

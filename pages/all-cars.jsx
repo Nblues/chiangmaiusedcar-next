@@ -917,6 +917,18 @@ export async function getServerSideProps(context) {
   mark('ssr:filtering:start');
   let filtered = Array.isArray(cars) ? cars : [];
 
+  // --- BEST PRACTICE SORTING FOR LARGE USED CAR WEBSITES ---
+  // Push "Reserved" or "Sold" cars to the absolute bottom of the catalog.
+  // This ensures buyers always see 'InStock' inventory at the very top.
+  const { isReservedCar, isSoldCar } = require('../lib/carStatusUtils.js');
+  filtered.sort((a, b) => {
+    const aUnavailable = isReservedCar(a) || isSoldCar(a);
+    const bUnavailable = isReservedCar(b) || isSoldCar(b);
+    if (aUnavailable && !bUnavailable) return 1; // Push A down
+    if (!aUnavailable && bUnavailable) return -1; // Push B down
+    return 0; // Keep order
+  });
+
   if (initialSearchTerm) {
     const term = String(initialSearchTerm).toLowerCase();
     filtered = filtered.filter(car => {
