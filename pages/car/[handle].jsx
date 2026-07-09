@@ -33,6 +33,14 @@ function CarDetailPage({ car, recommendedCars = [], router }) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
+  // Status checks for the global component scope
+  const isReserved = useMemo(
+    () => isReservedCar({ status: car?.status, tags: car?.tags || [] }),
+    [car]
+  );
+  const isSold = useMemo(() => isSoldCar({ status: car?.status, tags: car?.tags || [] }), [car]);
+  const isUnavailable = isReserved || isSold;
+
   // รีเซ็ตรูปกลับไปภาพแรกเสมอ
   useEffect(() => {
     setSelectedImageIndex(0);
@@ -1038,27 +1046,18 @@ function CarDetailPage({ car, recommendedCars = [], router }) {
                 }}
               />
 
-              {/* Reserved Badge */}
-              {(() => {
-                const viewCar = {
-                  status: safeGet(car, 'status'),
-                  tags: safeGet(car, 'tags', []),
-                };
-                const reserved = isReservedCar(viewCar);
-                const sold = isSoldCar(viewCar);
-                if (!reserved && !sold) return null;
-
-                return (
+              {/* Reserved/Sold Overlay Badge */}
+              {isUnavailable && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center p-4 bg-black/40 backdrop-blur-[2px] transition-all">
                   <div
-                    className={
-                      sold
-                        ? 'absolute top-4 left-4 bg-gray-900/90 text-white px-6 py-3 rounded-xl text-base sm:text-lg font-bold shadow-2xl font-prompt z-10 flex items-center gap-2'
-                        : 'absolute top-4 left-4 bg-red-600 text-white px-6 py-3 rounded-xl text-base sm:text-lg font-bold shadow-2xl animate-pulse font-prompt z-10 flex items-center gap-2'
-                    }
+                    className={`transform -rotate-12 select-none border-4 sm:border-8 border-current px-6 py-2 sm:px-10 sm:py-4 rounded-xl sm:rounded-3xl shadow-2xl flex items-center gap-2 ${
+                      isSold
+                        ? 'text-gray-900 bg-white/95'
+                        : 'text-red-600 bg-white/95 animate-pulse'
+                    }`}
                   >
-                    {/* White ban icon for high contrast */}
                     <svg
-                      className="w-5 h-5"
+                      className="w-12 h-12 sm:w-20 sm:h-20"
                       viewBox="0 0 24 24"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -1067,10 +1066,12 @@ function CarDetailPage({ car, recommendedCars = [], router }) {
                       <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
                       <line x1="5" y1="19" x2="19" y2="5" stroke="currentColor" strokeWidth="2" />
                     </svg>
-                    <span>{sold ? 'ขายแล้ว' : 'จองแล้ว'}</span>
+                    <span className="text-4xl sm:text-7xl font-bold font-prompt tracking-wider uppercase">
+                      {isSold ? 'ขายแล้ว' : 'ติดจอง'}
+                    </span>
                   </div>
-                );
-              })()}
+                </div>
+              )}
 
               {/* Loading hint for slow images (non-blocking) */}
               {isHeroLoading && showHeroLoading && (
@@ -1512,32 +1513,54 @@ function CarDetailPage({ car, recommendedCars = [], router }) {
 
               {/* ปุ่มหลัก Modern 2025 */}
               <div className="flex flex-col gap-3">
-                <Link
-                  href={`/payment-calculator?price=${safeGet(car, 'price.amount', 0)}&from=car&carTitle=${encodeURIComponent(safeGet(car, 'title', 'รถมือสองคุณภาพดี'))}`}
-                  className="bg-primary hover:bg-blue-700 text-white text-center py-4 px-6 rounded-lg font-bold text-lg transition-colors font-prompt w-full"
-                >
-                  คำนวณสินเชื่อแบบเปรียบเทียบ
-                </Link>
-                <div className="text-xs text-center text-gray-500 font-prompt mb-2">
-                  ดูเปรียบเทียบอัตราปกติ vs เครดิตดี พร้อมรายละเอียดครบถ้วน
-                </div>
+                {isUnavailable ? (
+                  <>
+                    <a
+                      href="https://lin.ee/8ugfzstD"
+                      className="bg-[#bf360c] hover:bg-[#992b0a] text-white text-center py-4 px-6 rounded-lg font-bold text-lg transition-colors font-prompt w-full"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      สอบถาม / ให้เราช่วยหารถรุ่นนี้
+                    </a>
+                    <div className="text-xs text-center text-red-600 font-bold font-prompt mb-2">
+                      รถคันนี้ปัจจุบันไม่ว่างแล้ว (ขายแล้วหรือติดจอง)
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href={`/payment-calculator?price=${safeGet(car, 'price.amount', 0)}&from=car&carTitle=${encodeURIComponent(safeGet(car, 'title', 'รถมือสองคุณภาพดี'))}`}
+                      className="bg-primary hover:bg-blue-700 text-white text-center py-4 px-6 rounded-lg font-bold text-lg transition-colors font-prompt w-full"
+                    >
+                      คำนวณสินเชื่อแบบเปรียบเทียบ
+                    </Link>
+                    <div className="text-xs text-center text-gray-500 font-prompt mb-2">
+                      ดูเปรียบเทียบอัตราปกติ vs เครดิตดี พร้อมรายละเอียดครบถ้วน
+                    </div>
+                  </>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <a
-                    href="tel:0940649018"
-                    className="bg-white hover:bg-gray-50 text-black border border-gray-200 text-center py-3 px-4 rounded-lg font-bold transition-colors font-prompt w-full"
-                    aria-label="โทรหาฉัน"
-                  >
-                    โทรหาฉัน
-                  </a>
-                  <a
-                    href="https://lin.ee/8ugfzstD"
-                    className="bg-[#bf360c] hover:bg-[#992b0a] text-white text-center py-3 px-4 rounded-lg font-bold transition-colors font-prompt w-full"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="ทดลองขับฟรี"
-                  >
-                    ทดลองขับฟรี
-                  </a>
+                  {isUnavailable ? null : (
+                    <>
+                      <a
+                        href="tel:0940649018"
+                        className="bg-white hover:bg-gray-50 text-black border border-gray-200 text-center py-3 px-4 rounded-lg font-bold transition-colors font-prompt w-full"
+                        aria-label="โทรหาฉัน"
+                      >
+                        โทรหาฉัน
+                      </a>
+                      <a
+                        href="https://lin.ee/8ugfzstD"
+                        className="bg-[#bf360c] hover:bg-[#992b0a] text-white text-center py-3 px-4 rounded-lg font-bold transition-colors font-prompt w-full"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="ทดลองขับฟรี"
+                      >
+                        ทดลองขับฟรี
+                      </a>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -1561,6 +1584,23 @@ function CarDetailPage({ car, recommendedCars = [], router }) {
                 ✓ ไม่มีข้อบกพร่อง ✓ ไม่ชนหนัก ✓ ไม่เคยผ่านน้ำท่วม ✓ ไม่มีความเสียหายจากไฟไหม้
               </div>
             </div>
+            {/* UPFRONT SIMILAR CARS IF UNAVAILABLE */}
+            {isUnavailable && (
+              <div className="mt-8 mb-8 border border-red-200 bg-red-50 rounded-xl p-4 sm:p-6 overflow-hidden">
+                <h2 className="text-lg font-bold text-red-700 font-prompt mb-4">
+                  🚗 พลาดคันนี้ไปแล้ว? เรามีรถรุ่นใกล้เคียงมาแนะนำ:
+                </h2>
+                <div className="-mx-4 sm:mx-0">
+                  {/* We reuse the SimilarCars component but isolate it to match the layout constraint */}
+                  <SimilarCars
+                    currentCar={car}
+                    recommendations={recommendedCars?.slice(0, 4)}
+                    compact
+                  />
+                </div>
+              </div>
+            )}
+
             {/* ข้อมูลรายละเอียดรถ */}
             <div>
               <h2 className="text-xl font-bold text-black mb-4 font-prompt">รายละเอียดรถยนต์</h2>
@@ -1803,7 +1843,7 @@ function CarDetailPage({ car, recommendedCars = [], router }) {
           </div>
 
           {/* Similar Cars Section */}
-          <SimilarCars currentCar={car} recommendations={recommendedCars} />
+          {!isUnavailable && <SimilarCars currentCar={car} recommendations={recommendedCars} />}
 
           {/* FAQ (AEO) - visible content to match FAQPage schema */}
           {carFaqs?.length > 0 && (
