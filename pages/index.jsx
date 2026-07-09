@@ -210,15 +210,15 @@ export default function Home({
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
 
   // Load Facebook reviews only when the user is near that section.
-  // This avoids loading a heavy client-only chunk during the initial render (helps LCP).
+  // This avoids loading a heavy client-only chunk during the initial render.
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (showFbReviews) return;
 
     const anchor = document.getElementById('fb-reviews-anchor');
     if (!anchor) {
-      const t = window.setTimeout(() => setShowFbReviews(true), 8000);
-      return () => window.clearTimeout(t);
+      setShowFbReviews(true);
+      return;
     }
 
     if (!('IntersectionObserver' in window)) {
@@ -233,15 +233,15 @@ export default function Home({
           observer.disconnect();
         }
       },
-      { rootMargin: '200px 0px' }
+      { rootMargin: '400px 0px' }
     );
 
     observer.observe(anchor);
     return () => observer.disconnect();
   }, [showFbReviews]);
 
-  // Load SocialShareButtons after the page is idle or when user interacts.
-  // This prevents downloading/executing its chunk during the critical render/hydration window.
+  // Load SocialShareButtons after the user interacts, or when scrolling down.
+  // This completely removes the hard 8s timeout that caused the INP spike.
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (showSocialShare) return;
@@ -273,12 +273,8 @@ export default function Home({
       window.addEventListener(ev, onInteraction, { passive: true, once: true });
     }
 
-    // Only rely on interaction or a long fallback timeout to prevent blocking LCP paint
-    const hardTimeoutId = window.setTimeout(enable, 8000);
-
     return () => {
       cleanupListeners();
-      window.clearTimeout(hardTimeoutId);
     };
   }, [showSocialShare]);
 
