@@ -39,6 +39,7 @@ export default async function handler(req, res) {
     parsed.protocol !== 'https:' ||
     !(
       parsed.hostname.endsWith('.tiktokcdn-us.com') ||
+      parsed.hostname.endsWith('.tiktokcdn-eu.com') ||
       parsed.hostname.endsWith('.tiktokcdn.com') ||
       parsed.hostname.endsWith('.tiktok.com') ||
       ALLOWED_HOSTNAMES.includes(parsed.hostname)
@@ -72,8 +73,14 @@ export default async function handler(req, res) {
       const targetWidth = w ? parseInt(w, 10) : 315;
       const targetQuality = q ? parseInt(q, 10) : 50;
       outputBuffer = await sharp(originalBuffer)
-        .resize({ width: targetWidth > 0 && targetWidth <= 1200 ? targetWidth : 315, withoutEnlargement: true })
-        .webp({ quality: targetQuality > 0 && targetQuality <= 100 ? targetQuality : 50, effort: 4 })
+        .resize({
+          width: targetWidth > 0 && targetWidth <= 1200 ? targetWidth : 315,
+          withoutEnlargement: true,
+        })
+        .webp({
+          quality: targetQuality > 0 && targetQuality <= 100 ? targetQuality : 50,
+          effort: 4,
+        })
         .toBuffer();
       finalContentType = 'image/webp';
     } catch (sharpError) {
