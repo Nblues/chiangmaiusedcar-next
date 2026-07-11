@@ -326,6 +326,10 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
     >
       <span className="sr-only">ดูรายละเอียด</span>
       <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden">
+        {/* Grey Overlay for Reserved/Sold */}
+        {(isReserved || isSold) && (
+          <div className="absolute inset-0 bg-gray-900/40 z-10" aria-hidden="true" />
+        )}
         <A11yImage
           src={imageUrl}
           alt={carAlt(car)}
@@ -337,7 +341,7 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
           fill
           aspectRatio="4/3"
           imageType="card"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 active:scale-[0.97] active:opacity-[0.85]"
+          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 active:scale-[0.97] active:opacity-[0.85] ${isReserved || isSold ? 'grayscale-[0.5] opacity-90' : ''}`}
         />
 
         {/* Status Badges */}
