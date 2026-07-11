@@ -1588,13 +1588,15 @@ function CarDetailPage({ car, recommendedCars = [], router }) {
             {isUnavailable && (
               <div className="mt-8 mb-8 border border-red-200 bg-red-50 rounded-xl p-4 sm:p-6 overflow-hidden">
                 <h2 className="text-lg font-bold text-red-700 font-prompt mb-4">
-                  🚗 พลาดคันนี้ไปแล้ว? เรามีรถรุ่นใกล้เคียงมาแนะนำ:
+                  พลาดคันนี้ไปแล้ว? เรามีรถรุ่นใกล้เคียงมาแนะนำ:
                 </h2>
                 <div className="-mx-4 sm:mx-0">
                   {/* We reuse the SimilarCars component but isolate it to match the layout constraint */}
                   <SimilarCars
                     currentCar={car}
-                    recommendations={recommendedCars?.slice(0, 4)}
+                    recommendations={recommendedCars
+                      ?.filter(c => !isReservedCar(c) && !isSoldCar(c))
+                      .slice(0, 4)}
                     compact
                   />
                 </div>
@@ -1843,7 +1845,12 @@ function CarDetailPage({ car, recommendedCars = [], router }) {
           </div>
 
           {/* Similar Cars Section */}
-          {!isUnavailable && <SimilarCars currentCar={car} recommendations={recommendedCars} />}
+          {!isUnavailable && (
+            <SimilarCars
+              currentCar={car}
+              recommendations={recommendedCars?.filter(c => !isReservedCar(c) && !isSoldCar(c))}
+            />
+          )}
 
           {/* FAQ (AEO) - visible content to match FAQPage schema */}
           {carFaqs?.length > 0 && (
