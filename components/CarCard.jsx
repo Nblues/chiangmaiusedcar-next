@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import A11yImage from './A11yImage';
 import { carAlt } from '../utils/a11y';
-import { isReservedStatus, isSoldStatus } from '../lib/carStatusUtils';
+import { isReservedStatus, isSoldStatus, isReservedCar, isSoldCar } from '../lib/carStatusUtils';
 import { safeGet } from '../utils/safe';
 import { getPriceInfo } from '../lib/carPrice';
 
@@ -127,8 +127,10 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
   // Check tags safely
   const tags = Array.isArray(car.tags) ? car.tags : [];
 
-  const isReserved = isReservedStatus(status);
-  const isSold = isSoldStatus(status);
+  // Use full isReservedCar/isSoldCar to check BOTH status AND Shopify tags
+  // (same logic as detail page - fixes mismatch when car is tagged in Shopify but KV not updated)
+  const isReserved = isReservedStatus(status) || isReservedCar({ status, tags });
+  const isSold = isSoldStatus(status) || isSoldCar({ status, tags });
   const isNew = tags.includes('ใหม่');
 
   // Image logic
