@@ -188,7 +188,9 @@ function AdminDashboard() {
               <div
                 role="button"
                 tabIndex={0}
-                onClick={() => router.push('/admin/valuation')}
+                onClick={() =>
+                  alert('ฟีเจอร์ AI ประเมินราคากลางรถยนต์ กำลังเปิดให้ใช้งานในเวอร์ชั่นถัดไปครับ')
+                }
                 className="group relative cursor-pointer overflow-hidden bg-white border border-slate-200 hover:border-purple-400 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-300 text-left flex flex-col items-start"
               >
                 <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 border border-purple-100 active:scale-[0.97] active:opacity-[0.85]">
