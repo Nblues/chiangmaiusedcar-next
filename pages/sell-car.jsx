@@ -1,11 +1,20 @@
-﻿import React from 'react';
+import React from 'react';
 import SEO from '../components/SEO';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import A11yImage from '../components/A11yImage';
+import {
+  BadgeCheck,
+  Banknote,
+  CarFront,
+  FileText,
+  CheckCircle2,
+  ChevronRight,
+  Calculator,
+  CreditCard,
+} from 'lucide-react';
 import proseStyles from '../styles/prose.module.css';
-// Organization JSON-LD is injected centrally by <SEO /> to avoid duplicates
 
 export default function SellCar({ seoSellCar }) {
   const router = useRouter();
@@ -43,8 +52,7 @@ export default function SellCar({ seoSellCar }) {
         pageType="sell-car"
       />
 
-      <header className="relative w-full bg-[#f8f9fa] flex justify-center">
-        {/* Container สำหรับแบนเนอร์ ใช้สัดส่วนตามภาพจริง (1920x650) ในทุกอุปกรณ์ */}
+      <header className="relative w-full bg-white flex justify-center border-b border-gray-100">
         <div className="relative w-full max-w-[1920px] aspect-[1920/650]">
           <A11yImage
             src="/herobanner/chiangmaiusedcars-1200w.webp"
@@ -59,298 +67,287 @@ export default function SellCar({ seoSellCar }) {
         </div>
       </header>
 
-      <main className="min-h-screen bg-gray-50" suppressHydrationWarning>
-        {/* Hero Section - Same style as homepage */}
-        <section id="hero" className="relative py-8">
-          <div className="hero-card max-w-4xl w-[90%] mx-auto my-6 flex flex-col md:flex-row items-center gap-6 px-6 py-8 rounded-2xl border border-orange-300 bg-white/95 shadow-lg">
-            <div className="flex-1">
-              <h1 className="text-3xl md:text-4xl font-extrabold text-primary mb-2 font-prompt">
-                ขายรถยนต์มือสอง • ประเมินราคายุติธรรม
+      <main className="min-h-screen bg-gray-50/50 pb-20" suppressHydrationWarning>
+        {/* Modern Hero Section */}
+        <section id="hero" className="relative -mt-8 md:-mt-16 z-10 px-4">
+          <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8 px-6 md:px-10 py-10 rounded-[2rem] border border-gray-100 bg-white shadow-xl shadow-gray-200/40">
+            <div className="flex-1 text-center md:text-left">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-primary text-sm font-medium mb-4">
+                <CheckCircle2 size={16} /> ประเมินราคาฟรี ไม่มีค่าใช้จ่าย
+              </div>
+              <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-3 tracking-tight font-prompt">
+                ขายรถยนต์มือสอง <br className="hidden md:block" />
+                <span className="text-primary">ประเมินราคายุติธรรม</span>
               </h1>
-              <h2 className="text-xl md:text-2xl font-bold text-orange-700 mb-4 font-prompt">
-                แลกเทิร์น รับซื้อทุกสภาพ
+              <h2 className="text-base md:text-lg font-medium text-gray-500 mb-6 font-prompt">
+                แลกเทิร์น รับซื้อทุกสภาพ ให้ราคาสูงสุดตามตลาด
               </h2>
-              <p className="text-base leading-relaxed text-gray-900">
-                ครูหนึ่งรถสวย รับซื้อรถมือสองทุกยี่ห้อ ประเมินราคาฟรี แลกเทิร์นรถยนต์
-                ให้ราคายุติธรรม จ่ายเงินสดทันที ดำเนินการเอกสารให้ครบถ้วน
+              <p className="text-base leading-relaxed text-gray-600 mb-8 max-w-xl">
+                ครูหนึ่งรถสวย รับซื้อรถมือสองทุกยี่ห้อ จ่ายเงินสดทันที ดำเนินการเอกสารให้ครบถ้วน
+                สะดวกรวดเร็ว เชื่อถือได้ 100%
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <a
+                  href="https://lin.ee/8ugfzstD"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 font-semibold rounded-2xl px-8 py-4 text-base bg-[#00B900] text-white hover:bg-[#009900] transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98]"
+                >
+                  ประเมินราคาผ่าน LINE <ChevronRight size={18} />
+                </a>
+                <a
+                  href="tel:0940649018"
+                  className="inline-flex items-center justify-center gap-2 font-semibold rounded-2xl px-8 py-4 text-base bg-white border border-gray-200 text-gray-700 hover:border-primary hover:text-primary transition-all duration-200 shadow-sm hover:shadow active:scale-[0.98]"
+                >
+                  โทร 094-064-9018
+                </a>
+              </div>
             </div>
-            <div className="flex flex-col gap-4 w-full md:w-auto md:min-w-[200px]">
-              <a
-                href="https://lin.ee/8ugfzstD"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base bg-green-500 text-white hover:bg-green-600 transition-colors duration-200 shadow-lg hover:shadow-xl transform  active:scale-[0.98]"
-              >
-                ติดต่อทาง LINE
-              </a>
-              <a
-                href="tel:0940649018"
-                className="inline-block text-center font-semibold rounded-2xl px-6 py-3 text-base border-2 border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-200 shadow-lg hover:shadow-xl transform  active:scale-[0.98]"
-              >
-                โทร 094-064-9018
-              </a>
+
+            {/* Trust Badges */}
+            <div className="w-full md:w-auto grid grid-cols-2 md:flex md:flex-col gap-4">
+              <div className="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-xl border border-gray-100">
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary shrink-0">
+                  <Banknote size={20} />
+                </div>
+                <div className="text-sm font-medium text-gray-900">รับเงินสดทันที</div>
+              </div>
+              <div className="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-xl border border-gray-100">
+                <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-500 shrink-0">
+                  <CarFront size={20} />
+                </div>
+                <div className="text-sm font-medium text-gray-900">รับซื้อทุกยี่ห้อ</div>
+              </div>
+              <div className="flex items-center gap-3 bg-gray-50 px-4 py-3 rounded-xl border border-gray-100 md:col-span-1 col-span-2">
+                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 shrink-0">
+                  <FileText size={20} />
+                </div>
+                <div className="text-sm font-medium text-gray-900">จัดการเอกสารให้จบ</div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* SEO Article Section */}
-        <section className="py-16 bg-gray-50">
+        {/* Steps Section */}
+        <section className="py-16 md:py-24">
           <div className="max-w-6xl mx-auto px-6">
-            <article className="bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-3xl font-bold text-primary mb-6 font-prompt">
-                ขายรถยนต์มือสอง ราคายุติธรรม ขายเร็ว ไว้ใจได้
-              </h2>
+            <div className="text-center mb-16">
+              <h3 className="text-3xl font-bold text-primary mb-4 font-prompt">
+                ขั้นตอนการขายรถกับเรา
+              </h3>
+              <p className="text-gray-500 max-w-2xl mx-auto">
+                สะดวกรวดเร็ว ไม่กี่ขั้นตอนก็รับเงินสดกลับบ้านได้เลย ดำเนินการโปร่งใสในทุกกระบวนการ
+              </p>
+            </div>
 
-              <div className={`prose prose-lg max-w-none ${proseStyles.prose}`}>
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  การขายรถบ้านในภาคเหนือต้องเลือกศูนย์ที่เชื่อถือได้
-                  ครูหนึ่งรถสวยเป็นแพลตฟอร์มซื้อขายรถยนต์คุณภาพดี มีประสบการณ์มากกว่า 10
-                  ปีในธุรกิจรถยนต์ พร้อมให้บริการขายรถ ประเมินราคา และแลกเทิร์นรถยนต์ทุกยี่ห้อ ดู
-                  <Link href="/" className="text-primary hover:underline">
-                    หน้าแรก
-                  </Link>
-                  ของเราเพื่อข้อมูลเพิ่มเติม
-                </p>
-
-                <h3 className="text-2xl font-bold text-primary mb-4 font-prompt">
-                  บริการรับซื้อขายรถยนต์ครบวงจร
-                </h3>
-
-                <div className="grid md:grid-cols-2 gap-8 mb-8">
-                  <div>
-                    <h4 className="text-xl font-semibold text-gray-900 mb-3">ขายรถทุกยี่ห้อ</h4>
-                    <ul className="text-gray-700 space-y-2">
-                      <li>รับซื้อรถยนต์ทุกยี่ห้อ ทุกรุ่น</li>
-                      <li>ประเมินราคายุติธรรม ตามราคาตลาด</li>
-                      <li>จ่ายเงินสดทันที ไม่มีค่าธรรมเนียม</li>
-                      <li>ดำเนินการเอกสารให้ครบถ้วน</li>
-                    </ul>
+            <div className="grid md:grid-cols-4 gap-8 md:gap-6 relative">
+              <div className="hidden md:block absolute top-12 left-[12%] right-[12%] h-[2px] bg-gray-100 z-0"></div>
+              <div className="relative group z-10">
+                <div className="bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col items-center text-center">
+                  <div className="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-6 ring-[10px] ring-white group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <span className="text-2xl font-bold font-prompt">1</span>
                   </div>
-
-                  <div>
-                    <h4 className="text-xl font-semibold text-gray-900 mb-3">ประเมินราคาฟรี</h4>
-                    <ul className="text-gray-700 space-y-2">
-                      <li>ตรวจสอบสภาพรถโดยผู้เชี่ยวชาญ</li>
-                      <li>ให้ราคาประเมินที่แม่นยำ</li>
-                      <li>ไม่มีค่าใช้จ่ายในการประเมิน</li>
-                      <li>ให้คำปรึกษาการซื้อขายฟรี</li>
-                    </ul>
-                  </div>
-                </div>
-
-                <h3 className="text-2xl font-bold text-primary mb-4 font-prompt">
-                  ทำไมต้องเลือกครูหนึ่งรถสวย
-                </h3>
-
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  ด้วยประสบการณ์ยาวนานในธุรกิจรถยนต์ เรามีลูกค้าประจำมากมาย
-                  และเครือข่ายการขายที่กว้างขวาง ทำให้สามารถขายรถของคุณได้อย่างรวดเร็ว ภายใน 7 วัน
-                  พร้อมทั้งให้ราคาที่ดีที่สุด ตรวจสอบ
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    สต็อกรถมือสอง
-                  </Link>
-                  ของเราหรืออ่าน
-                  <Link href="/promotion" className="text-primary hover:underline">
-                    โปรโมชั่นพิเศษ
-                  </Link>
-                  เพิ่มเติม
-                </p>
-
-                <div className="bg-blue-50 border-l-4 border-primary p-6 mb-8">
-                  <h4 className="text-xl font-semibold text-primary mb-3">
-                    ข้อดีของการขายรถกับเรา
+                  <h4 className="font-bold text-gray-900 mb-2 text-lg font-prompt">
+                    ติดต่อประเมินราคา
                   </h4>
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-accent mb-2">10+</div>
-                      <p className="text-gray-700">ปีประสบการณ์</p>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-accent mb-2">1M+</div>
-                      <p className="text-gray-700">ผู้ติดตาม Facebook</p>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-accent mb-2">7</div>
-                      <p className="text-gray-700">วัน ขายได้</p>
-                    </div>
-                  </div>
-                </div>
-
-                <h3 className="text-2xl font-bold text-primary mb-4 font-prompt">
-                  ขั้นตอนการขายรถกับเรา
-                </h3>
-
-                <div className="grid md:grid-cols-4 gap-6 mb-8">
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                      1
-                    </div>
-                    <h4 className="font-semibold text-gray-900 mb-2">ติดต่อ LINE</h4>
-                    <p className="text-gray-600 text-sm">ส่งรูปรถและรายละเอียด</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                      2
-                    </div>
-                    <h4 className="font-semibold text-gray-900 mb-2">นัดดูรถ</h4>
-                    <p className="text-gray-600 text-sm">ตรวจสอบสภาพรถจริง</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                      3
-                    </div>
-                    <h4 className="font-semibold text-gray-900 mb-2">ประเมินราคา</h4>
-                    <p className="text-gray-600 text-sm">ให้ราคาที่ยุติธรรม</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
-                      4
-                    </div>
-                    <h4 className="font-semibold text-gray-900 mb-2">จ่ายเงิน</h4>
-                    <p className="text-gray-600 text-sm">รับเงินสดทันที</p>
-                  </div>
-                </div>
-
-                <h3 className="text-2xl font-bold text-primary mb-4 font-prompt">
-                  รถยี่ห้อไหนที่เรารับซื้อ
-                </h3>
-
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  เรารับซื้อรถยนต์ทุกยี่ห้อ ไม่ว่าจะเป็น{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Toyota
-                  </Link>
-                  ,{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Honda
-                  </Link>
-                  ,{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Nissan
-                  </Link>
-                  ,{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Mazda
-                  </Link>
-                  ,{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Mitsubishi
-                  </Link>
-                  ,
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Isuzu
-                  </Link>
-                  ,{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Ford
-                  </Link>
-                  ,{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Chevrolet
-                  </Link>
-                  ,{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    BMW
-                  </Link>
-                  ,{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Mercedes-Benz
-                  </Link>
-                  ,{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Audi
-                  </Link>
-                  ,{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Hyundai
-                  </Link>
-                  ,{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Kia
-                  </Link>
-                  ,{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    Suzuki
-                  </Link>
-                  หรือยี่ห้ออื่นๆ รวมถึง
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    รถปิคอัพ
-                  </Link>{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    รถ SUV
-                  </Link>{' '}
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    รถเก๋ง
-                  </Link>{' '}
-                  และ
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    รถคอมแพค
-                  </Link>
-                </p>
-
-                <div className="bg-gray-100 p-6 rounded-lg mb-8">
-                  <h4 className="text-xl font-semibold text-gray-900 mb-3">เอกสารที่ต้องเตรียม</h4>
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <ul className="text-gray-700 space-y-2">
-                      <li>สำเนาบัตรประชาชนเจ้าของรถ</li>
-                      <li>สำเนาทะเบียนบ้าน</li>
-                      <li>เล่มทะเบียนรถ (หนังสือรับรองการจดทะเบียน)</li>
-                    </ul>
-                    <ul className="text-gray-700 space-y-2">
-                      <li>ใบตรวจสภาพรถ (ถ้ามี)</li>
-                      <li>กรมธรรม์ประกันภัย (ถ้ามี)</li>
-                      <li>ใบเสร็จค่างวด (กรณีผ่อน)</li>
-                    </ul>
-                  </div>
-                  <p className="text-gray-600 text-sm mt-4">
-                    ต้องการข้อมูลเพิ่มเติม? ดู
-                    <Link href="/payment-calculator" className="text-primary hover:underline">
-                      คำนวณค่างวด
-                    </Link>
-                    หรือ
-                    <Link href="/credit-check" className="text-primary hover:underline">
-                      ตรวจสอบเครดิต
-                    </Link>
+                  <p className="text-gray-500 text-sm leading-relaxed">
+                    ส่งรูปรถ รุ่น ปี และรายละเอียดเข้ามาทาง LINE ฟรีไม่มีค่าใช้จ่าย
                   </p>
                 </div>
+              </div>
 
-                <h3 className="text-2xl font-bold text-primary mb-4 font-prompt">
-                  ติดต่อขายรถวันนี้ รับเงินเร็ว
-                </h3>
-
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  หากคุณต้องการขายรถด่วน หรือต้องการประเมินราคารถฟรี สามารถติดต่อเราได้ทันทีผ่าน
-                  LINE หรือโทรศัพท์ ทีมงานของเราพร้อมให้คำปรึกษาและบริการที่ดีที่สุด
-                  เพื่อให้คุณขายรถได้ในราคาที่คุ้มค่าและรวดเร็ว ดูตัวอย่าง
-                  <Link href="/all-cars" className="text-primary hover:underline">
-                    รถมือสองคุณภาพดี
-                  </Link>
-                  ที่เรามีจำหน่าย หรือเรียนรู้เพิ่มเติมเกี่ยวกับ
-                  <Link href="/about" className="text-primary hover:underline">
-                    เรื่องราวของเรา
-                  </Link>
-                  และ
-                  <Link href="/contact" className="text-primary hover:underline">
-                    ช่องทางติดต่อ
-                  </Link>
-                </p>
-
-                <div className="text-center mt-8">
-                  <a
-                    href="https://lin.ee/8ugfzstD"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-8 rounded-lg transition-colors space-x-2"
-                  >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
-                    </svg>
-                    <span>ติดต่อเราเลย</span>
-                  </a>
+              <div className="relative group z-10">
+                <div className="bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col items-center text-center">
+                  <div className="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-6 ring-[10px] ring-white group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <span className="text-2xl font-bold font-prompt">2</span>
+                  </div>
+                  <h4 className="font-bold text-gray-900 mb-2 text-lg font-prompt">นัดดูรถจริง</h4>
+                  <p className="text-gray-500 text-sm leading-relaxed">
+                    ทีมงานผู้เชี่ยวชาญจะทำการตรวจสอบสภาพรถจริงอย่างละเอียด
+                  </p>
                 </div>
               </div>
-            </article>
+
+              <div className="relative group z-10">
+                <div className="bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col items-center text-center">
+                  <div className="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-6 ring-[10px] ring-white group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <span className="text-2xl font-bold font-prompt">3</span>
+                  </div>
+                  <h4 className="font-bold text-gray-900 mb-2 text-lg font-prompt">ตกลงรับราคา</h4>
+                  <p className="text-gray-500 text-sm leading-relaxed">
+                    เสนอราคาให้สูงที่สุดตามสภาพและราคาตลาดยุติธรรม
+                  </p>
+                </div>
+              </div>
+
+              <div className="relative group z-10">
+                <div className="bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col items-center text-center">
+                  <div className="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-6 ring-[10px] ring-white group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <span className="text-2xl font-bold font-prompt">4</span>
+                  </div>
+                  <h4 className="font-bold text-gray-900 mb-2 text-lg font-prompt">
+                    รับเงินสดทันที
+                  </h4>
+                  <p className="text-gray-500 text-sm leading-relaxed">
+                    ทำสัญญาซื้อขายและรับเงินสดหรือโอนเข้าบัญชีทันที
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Info & Requirements Section */}
+        <section className="py-16 bg-white border-y border-gray-100">
+          <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-orange-50 text-orange-500 mb-6">
+                <BadgeCheck size={28} />
+              </div>
+              <h3 className="text-3xl font-bold text-primary mb-4 font-prompt">
+                การเตรียมเอกสารขายรถ
+              </h3>
+              <p className="text-gray-500 mb-8 leading-relaxed">
+                เพื่อให้การดำเนินการซื้อขายเป็นไปอย่างรวดเร็วและถูกต้องตามกฎหมาย
+                กรุณาเตรียมเอกสารพื้นฐานเหล่านี้ไว้ให้พร้อมในวันนัดหมาย
+              </p>
+
+              <ul className="space-y-5">
+                <li className="flex items-start gap-4">
+                  <div className="bg-green-50 p-1.5 rounded-full shrink-0 mt-0.5">
+                    <CheckCircle2 size={18} className="text-green-500" />
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-900 block mb-1">
+                      เล่มทะเบียนรถตัวจริง
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      หรือสำเนา และใบเสร็จค่างวดล่าสุด (กรณีรถติดไฟแนนซ์)
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="bg-green-50 p-1.5 rounded-full shrink-0 mt-0.5">
+                    <CheckCircle2 size={18} className="text-green-500" />
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-900 block mb-1">
+                      บัตรประชาชนเจ้าของรถ
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      สำหรับทำสัญญาซื้อขายและโอนกรรมสิทธิ์
+                    </span>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="bg-green-50 p-1.5 rounded-full shrink-0 mt-0.5">
+                    <CheckCircle2 size={18} className="text-green-500" />
+                  </div>
+                  <div>
+                    <span className="font-medium text-gray-900 block mb-1">
+                      เอกสารหน้าสัญญาไฟแนนซ์
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      กรณีต้องการให้เราดำเนินการปิดยอดและรับซื้อดาวน์ให้
+                    </span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-gray-50 rounded-[2.5rem] p-8 md:p-10 border border-gray-100 text-center relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100 rounded-full blur-3xl opacity-50 -mr-10 -mt-10"></div>
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-orange-100 rounded-full blur-3xl opacity-50 -ml-10 -mb-10"></div>
+
+              <div className="relative z-10">
+                <h4 className="text-2xl font-bold text-gray-900 mb-4 font-prompt">
+                  ต้องการขายรถติดไฟแนนซ์?
+                </h4>
+                <p className="text-gray-600 mb-8 leading-relaxed">
+                  เรามีบริการปิดบัญชีไฟแนนซ์ให้คุณทันที พร้อมดำเนินการเรื่องเอกสารโอนทุกขั้นตอน
+                  ไม่ต้องกังวลเรื่องการจัดการหนี้คงค้าง
+                </p>
+
+                <div className="grid grid-cols-2 gap-4 mb-2">
+                  <Link
+                    href="/payment-calculator"
+                    className="flex flex-col items-center justify-center gap-3 bg-white py-5 px-4 rounded-2xl shadow-sm hover:shadow border border-gray-100 transition-all font-medium text-gray-700 hover:text-primary hover:border-blue-100 group"
+                  >
+                    <div className="bg-gray-50 p-3 rounded-xl group-hover:bg-blue-50 transition-colors">
+                      <Calculator size={24} className="text-primary" />
+                    </div>
+                    <span className="text-sm">คำนวณค่างวด</span>
+                  </Link>
+                  <Link
+                    href="/credit-check"
+                    className="flex flex-col items-center justify-center gap-3 bg-white py-5 px-4 rounded-2xl shadow-sm hover:shadow border border-gray-100 transition-all font-medium text-gray-700 hover:text-primary hover:border-blue-100 group"
+                  >
+                    <div className="bg-gray-50 p-3 rounded-xl group-hover:bg-blue-50 transition-colors">
+                      <CreditCard size={24} className="text-primary" />
+                    </div>
+                    <span className="text-sm">เช็คเครดิต</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SEO Bottom Section */}
+        <section className="py-16">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-10">
+              <h3 className="text-2xl font-bold text-gray-900 font-prompt">
+                รับซื้อรถยนต์มือสองคุณภาพดีทุกยี่ห้อ
+              </h3>
+              <p className="text-gray-500 mt-2">ศูนย์รวมรถบ้านคุณภาพในเชียงใหม่และภาคเหนือ</p>
+            </div>
+
+            <div className="flex flex-wrap gap-2 justify-center">
+              {[
+                'Toyota',
+                'Honda',
+                'Nissan',
+                'Mazda',
+                'Mitsubishi',
+                'Isuzu',
+                'Ford',
+                'Chevrolet',
+                'BMW',
+                'Mercedes-Benz',
+                'Audi',
+                'Hyundai',
+                'Kia',
+                'Suzuki',
+              ].map(brand => (
+                <Link
+                  key={brand}
+                  href="/all-cars"
+                  className="px-5 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-600 hover:border-primary hover:text-primary hover:bg-blue-50 transition-all"
+                >
+                  {brand}
+                </Link>
+              ))}
+            </div>
+
+            <div className="mt-12 text-center text-sm text-gray-400">
+              <p>
+                ประสบการณ์มากกว่า 10 ปีในธุรกิจรถยนต์ เรามีเครือข่ายและการให้บริการที่ลูกค้าไว้วางใจ
+              </p>
+              <div className="mt-5 flex justify-center items-center gap-4 flex-wrap">
+                <Link href="/" className="text-primary font-medium hover:underline">
+                  หน้าแรก
+                </Link>
+                <span className="w-1 h-1 rounded-full bg-gray-300"></span>
+                <Link href="/all-cars" className="text-primary font-medium hover:underline">
+                  สต็อกรถมือสอง
+                </Link>
+                <span className="w-1 h-1 rounded-full bg-gray-300"></span>
+                <Link href="/promotion" className="text-primary font-medium hover:underline">
+                  โปรโมชั่นพิเศษ
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
       </main>
@@ -358,10 +355,9 @@ export default function SellCar({ seoSellCar }) {
   );
 }
 
-// ISR for performance
 export async function getStaticProps() {
   return {
     props: { seoSellCar: require('../config/seo-keyword-map').SEO_KEYWORD_MAP.sellCar },
-    revalidate: 86400, // 24 hours
+    revalidate: 86400,
   };
 }
