@@ -95,7 +95,7 @@ export default function SellCar({ seoSellCar }) {
                   href="https://lin.ee/8ugfzstD"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 font-semibold rounded-2xl px-8 py-4 text-base bg-[#00B900] text-white hover:bg-[#009900] transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98]"
+                  className="inline-flex items-center justify-center gap-2 font-semibold rounded-2xl px-8 py-4 text-base bg-[#048004] text-white hover:bg-[#036c03] transition-all duration-200 shadow-md hover:shadow-lg active:scale-[0.98]"
                 >
                   ประเมินราคาผ่าน LINE <ChevronRight size={18} />
                 </a>
@@ -365,3 +365,6 @@ export async function getStaticProps() {
     revalidate: 86400,
   };
 }
+
+
+
