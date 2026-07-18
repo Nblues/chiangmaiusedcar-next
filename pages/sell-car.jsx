@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import SEO from '../components/SEO';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -36,6 +36,10 @@ export default function SellCar({ seoSellCar }) {
             url: baseUrl,
           },
         }}
+        breadcrumbs={[
+          { name: 'หน้าแรก', url: '/' },
+          { name: 'รับซื้อรถยนต์', url: '/sell-car' },
+        ]}
         pageType="sell-car"
       />
 
