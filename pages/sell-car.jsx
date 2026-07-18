@@ -83,7 +83,7 @@ export default function SellCar({ seoSellCar }) {
                 ขายรถยนต์มือสอง <br className="hidden md:block" />
                 <span className="text-primary">ประเมินราคายุติธรรม</span>
               </h1>
-              <h2 className="text-base md:text-lg font-medium text-gray-500 mb-6 font-prompt">
+              <h2 className="text-base md:text-lg font-medium text-gray-700 mb-6 font-prompt">
                 แลกเทิร์น รับซื้อทุกสภาพ ให้ราคาสูงสุดตามตลาด
               </h2>
               <p className="text-base leading-relaxed text-gray-600 mb-8 max-w-xl">
@@ -139,7 +139,7 @@ export default function SellCar({ seoSellCar }) {
               <h3 className="text-3xl font-bold text-primary mb-4 font-prompt">
                 ขั้นตอนการขายรถกับเรา
               </h3>
-              <p className="text-gray-500 max-w-2xl mx-auto">
+              <p className="text-gray-700 max-w-2xl mx-auto">
                 สะดวกรวดเร็ว ไม่กี่ขั้นตอนก็รับเงินสดกลับบ้านได้เลย ดำเนินการโปร่งใสในทุกกระบวนการ
               </p>
             </div>
@@ -154,7 +154,7 @@ export default function SellCar({ seoSellCar }) {
                   <h4 className="font-bold text-gray-900 mb-2 text-lg font-prompt">
                     ติดต่อประเมินราคา
                   </h4>
-                  <p className="text-gray-500 text-sm leading-relaxed">
+                  <p className="text-gray-700 text-sm leading-relaxed">
                     ส่งรูปรถ รุ่น ปี และรายละเอียดเข้ามาทาง LINE ฟรีไม่มีค่าใช้จ่าย
                   </p>
                 </div>
@@ -166,7 +166,7 @@ export default function SellCar({ seoSellCar }) {
                     <Search size={28} strokeWidth={2.5} />
                   </div>
                   <h4 className="font-bold text-gray-900 mb-2 text-lg font-prompt">นัดดูรถจริง</h4>
-                  <p className="text-gray-500 text-sm leading-relaxed">
+                  <p className="text-gray-700 text-sm leading-relaxed">
                     ทีมงานผู้เชี่ยวชาญจะทำการตรวจสอบสภาพรถจริงอย่างละเอียด
                   </p>
                 </div>
@@ -178,7 +178,7 @@ export default function SellCar({ seoSellCar }) {
                     <Handshake size={28} strokeWidth={2.5} />
                   </div>
                   <h4 className="font-bold text-gray-900 mb-2 text-lg font-prompt">ตกลงรับราคา</h4>
-                  <p className="text-gray-500 text-sm leading-relaxed">
+                  <p className="text-gray-700 text-sm leading-relaxed">
                     เสนอราคาให้สูงที่สุดตามสภาพและราคาตลาดยุติธรรม
                   </p>
                 </div>
@@ -192,7 +192,7 @@ export default function SellCar({ seoSellCar }) {
                   <h4 className="font-bold text-gray-900 mb-2 text-lg font-prompt">
                     รับเงินสดทันที
                   </h4>
-                  <p className="text-gray-500 text-sm leading-relaxed">
+                  <p className="text-gray-700 text-sm leading-relaxed">
                     ทำสัญญาซื้อขายและรับเงินสดหรือโอนเข้าบัญชีทันที
                   </p>
                 </div>
@@ -211,7 +211,7 @@ export default function SellCar({ seoSellCar }) {
               <h3 className="text-3xl font-bold text-primary mb-4 font-prompt">
                 การเตรียมเอกสารขายรถ
               </h3>
-              <p className="text-gray-500 mb-8 leading-relaxed">
+              <p className="text-gray-700 mb-8 leading-relaxed">
                 เพื่อให้การดำเนินการซื้อขายเป็นไปอย่างรวดเร็วและถูกต้องตามกฎหมาย
                 กรุณาเตรียมเอกสารพื้นฐานเหล่านี้ไว้ให้พร้อมในวันนัดหมาย
               </p>
@@ -225,7 +225,7 @@ export default function SellCar({ seoSellCar }) {
                     <span className="font-medium text-gray-900 block mb-1">
                       เล่มทะเบียนรถตัวจริง
                     </span>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-gray-700">
                       หรือสำเนา และใบเสร็จค่างวดล่าสุด (กรณีรถติดไฟแนนซ์)
                     </span>
                   </div>
@@ -238,7 +238,7 @@ export default function SellCar({ seoSellCar }) {
                     <span className="font-medium text-gray-900 block mb-1">
                       บัตรประชาชนเจ้าของรถ
                     </span>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-gray-700">
                       สำหรับทำสัญญาซื้อขายและโอนกรรมสิทธิ์
                     </span>
                   </div>
@@ -251,7 +251,7 @@ export default function SellCar({ seoSellCar }) {
                     <span className="font-medium text-gray-900 block mb-1">
                       เอกสารหน้าสัญญาไฟแนนซ์
                     </span>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-gray-700">
                       กรณีต้องการให้เราดำเนินการปิดยอดและรับซื้อดาวน์ให้
                     </span>
                   </div>
@@ -304,7 +304,7 @@ export default function SellCar({ seoSellCar }) {
               <h3 className="text-2xl font-bold text-gray-900 font-prompt">
                 รับซื้อรถยนต์มือสองคุณภาพดีทุกยี่ห้อ
               </h3>
-              <p className="text-gray-500 mt-2">ศูนย์รวมรถบ้านคุณภาพในเชียงใหม่และภาคเหนือ</p>
+              <p className="text-gray-700 mt-2">ศูนย์รวมรถบ้านคุณภาพในเชียงใหม่และภาคเหนือ</p>
             </div>
 
             <div className="flex flex-wrap gap-2 justify-center">
@@ -334,7 +334,7 @@ export default function SellCar({ seoSellCar }) {
               ))}
             </div>
 
-            <div className="mt-12 text-center text-sm text-gray-400">
+            <div className="mt-12 text-center text-sm text-gray-600">
               <p>
                 ประสบการณ์มากกว่า 10 ปีในธุรกิจรถยนต์ เรามีเครือข่ายและการให้บริการที่ลูกค้าไว้วางใจ
               </p>
