@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import SEO from '../components/SEO';
 import Head from 'next/head';
 import A11yImage from '../components/A11yImage';
@@ -24,10 +24,13 @@ export default function Promotion({ seoPromotion }) {
           ...seoPromotion.longTail.slice(0, 5),
         ]}
         image={pageImage}
+        breadcrumbs={[
+          { name: 'หน้าแรก', url: '/' },
+          { name: 'โปรโมชั่นรถมือสอง', url: '/promotion' },
+        ]}
         pageType="promotion"
       />
       <Head>
-        
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

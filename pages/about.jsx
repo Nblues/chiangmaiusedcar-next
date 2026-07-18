@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import A11yImage from '../components/A11yImage';
 import SEO from '../components/SEO';
 import Head from 'next/head';
@@ -42,6 +42,10 @@ export default function About({ seoAbout }) {
         keywords={[seoAbout.primary, ...seoAbout.secondary, ...seoAbout.longTail.slice(0, 5)]}
         image="https://www.chiangmaiusedcar.com/herobanner/bannerabout-1400w.webp"
         type="profile"
+        breadcrumbs={[
+          { name: 'หน้าแรก', url: '/' },
+          { name: 'เกี่ยวกับครูหนึ่งรถสวย', url: '/about' },
+        ]}
         pageType="about"
         structuredData={{
           '@context': 'https://schema.org',
@@ -90,8 +94,6 @@ export default function About({ seoAbout }) {
           ],
         }}
       />
-
-      
 
       {/* Hero Section with Image */}
       <section>
