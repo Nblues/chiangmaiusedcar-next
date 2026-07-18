@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import SEO from '../components/SEO';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -13,6 +13,10 @@ import {
   ChevronRight,
   Calculator,
   CreditCard,
+  Smartphone,
+  Search,
+  Handshake,
+  Wallet,
 } from 'lucide-react';
 import proseStyles from '../styles/prose.module.css';
 
@@ -145,7 +149,7 @@ export default function SellCar({ seoSellCar }) {
               <div className="relative group z-10">
                 <div className="bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col items-center text-center">
                   <div className="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-6 ring-[10px] ring-white group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                    <span className="text-2xl font-bold font-prompt">1</span>
+                    <Smartphone size={28} strokeWidth={2.5} />
                   </div>
                   <h4 className="font-bold text-gray-900 mb-2 text-lg font-prompt">
                     ติดต่อประเมินราคา
@@ -159,7 +163,7 @@ export default function SellCar({ seoSellCar }) {
               <div className="relative group z-10">
                 <div className="bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col items-center text-center">
                   <div className="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-6 ring-[10px] ring-white group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                    <span className="text-2xl font-bold font-prompt">2</span>
+                    <Search size={28} strokeWidth={2.5} />
                   </div>
                   <h4 className="font-bold text-gray-900 mb-2 text-lg font-prompt">นัดดูรถจริง</h4>
                   <p className="text-gray-500 text-sm leading-relaxed">
@@ -171,7 +175,7 @@ export default function SellCar({ seoSellCar }) {
               <div className="relative group z-10">
                 <div className="bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col items-center text-center">
                   <div className="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-6 ring-[10px] ring-white group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                    <span className="text-2xl font-bold font-prompt">3</span>
+                    <Handshake size={28} strokeWidth={2.5} />
                   </div>
                   <h4 className="font-bold text-gray-900 mb-2 text-lg font-prompt">ตกลงรับราคา</h4>
                   <p className="text-gray-500 text-sm leading-relaxed">
@@ -183,7 +187,7 @@ export default function SellCar({ seoSellCar }) {
               <div className="relative group z-10">
                 <div className="bg-white rounded-[2rem] p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow h-full flex flex-col items-center text-center">
                   <div className="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mb-6 ring-[10px] ring-white group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                    <span className="text-2xl font-bold font-prompt">4</span>
+                    <Wallet size={28} strokeWidth={2.5} />
                   </div>
                   <h4 className="font-bold text-gray-900 mb-2 text-lg font-prompt">
                     รับเงินสดทันที
