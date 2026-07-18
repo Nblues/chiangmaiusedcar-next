@@ -249,7 +249,7 @@ export default function MyApp({ Component, pageProps, router }) {
             showOnShallow={true}
             options={{ showSpinner: false }}
           />
-          `n <Navbar router={router} />
+          <Navbar router={router} />
           <main id="main" role="main" className="flex-1 w-full relative flex flex-col">
             {page}
           </main>
