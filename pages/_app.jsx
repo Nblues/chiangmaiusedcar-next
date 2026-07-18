@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { Prompt } from 'next/font/google';
@@ -6,6 +6,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import ClientOnly from '../components/ClientOnly';
 import ErrorBoundary from '../components/ErrorBoundary';
 import Navbar from '../components/Navbar';
+import NextNProgress from 'nextjs-progressbar';
 import '../styles/globals.css';
 import { onCookieConsentChange, readCookieConsent } from '../utils/cookieConsent';
 
@@ -240,7 +241,15 @@ export default function MyApp({ Component, pageProps, router }) {
       // Default layout for public pages
       return (
         <div className={`${prompt.variable} font-prompt flex flex-col min-h-screen`}>
-          <Navbar router={router} />
+          <NextNProgress
+            color="#1a237e"
+            startPosition={0.3}
+            stopDelayMs={200}
+            height={4}
+            showOnShallow={true}
+            options={{ showSpinner: false }}
+          />
+          `n <Navbar router={router} />
           <main id="main" role="main" className="flex-1 w-full relative flex flex-col">
             {page}
           </main>
