@@ -235,20 +235,26 @@ export default function AllCars({
   // Removed heavy car-specs polling fetch loop for performance.
 
   // Determine if current view is filtered (query params affecting list)
-  // Updated: Allow price and brand to be indexed
+  // Free-text search creates unbounded, low-value URL variations -> noindex + canonicalize to base catalog.
+  // Brand/price filters are a finite, high-value set of long-tail landing pages -> keep them indexable
+  // with their own canonical URL (each combo gets a unique title/description via getDynamicSEO() below).
   const isFiltered = useMemo(() => {
     const hasSearch = !!(searchTerm && String(searchTerm).trim());
-    const hasBrand = brandFilter !== 'all';
-    const hasPrice = priceRange !== 'all';
-    return hasSearch || hasBrand || hasPrice; // Prevent duplicate indexing of filtered queries
-  }, [searchTerm, brandFilter, priceRange]);
+    return hasSearch; // Only free-text search is noindexed; brand/price combos stay indexable
+  }, [searchTerm]);
 
   // Canonical URL for SEO component
   const seoPath = useMemo(() => {
-    // filtered pages are intentionally non-indexed and canonicalized to the base catalog
+    // Search queries are unbounded and can create infinite thin-content variations -> canonicalize to base catalog.
     if (isFiltered) return '/all-cars';
-    return safePage > 1 ? `/all-cars?page=${safePage}` : '/all-cars';
-  }, [isFiltered, safePage]);
+    // Preserve brand/price/page state so each combination is indexed as its own landing page.
+    const params = new URLSearchParams();
+    if (priceRange !== 'all') params.set('price', priceRange);
+    if (brandFilter !== 'all') params.set('brand', brandFilter);
+    if (safePage > 1) params.set('page', String(safePage));
+    const qs = params.toString();
+    return qs ? `/all-cars?${qs}` : '/all-cars';
+  }, [isFiltered, priceRange, brandFilter, safePage]);
 
   // ฟังก์ชันสำหรับสร้างลิงก์ SEO-friendly
   const getPageUrl = page => {
@@ -987,10 +993,50 @@ export async function getServerSideProps(context) {
     const hasSearch = !!(initialSearchTerm && String(initialSearchTerm).trim());
     const hasPrice = initialPriceRange !== 'all';
     const hasBrand = initialBrandFilter !== 'all';
-    const isFiltered = hasSearch || hasBrand || hasPrice; // Prevent duplicate indexing of filtered queries
+    // Free-text search creates unbounded URL variations -> noindex. Brand/price filters are a finite,
+    // high-value set of long-tail landing pages and should stay indexable (kept in sync with the
+    // client-side isFiltered logic below in this same file).
+    const isFiltered = hasSearch;
 
     if (!isFiltered) {
-      const seoPath = safePage > 1 ? `/all-cars?page=${safePage}` : '/all-cars';
+      const seoParams = new URLSearchParams();
+      if (hasPrice) seoParams.set('price', initialPriceRange);
+      if (hasBrand) seoParams.set('brand', initialBrandFilter);
+      if (safePage > 1) seoParams.set('page', String(safePage));
+      const seoQs = seoParams.toString();
+      const seoPath = seoQs ? `/all-cars?${seoQs}` : '/all-cars';
+
+      // Build a unique name/description per brand+price combo so newly-indexable filtered pages
+      // don't all share identical JSON-LD (avoids reinforcing duplicate-content signals).
+      const ALL_CARS_BRAND_LABELS = {
+        toyota: 'Toyota',
+        honda: 'Honda',
+        nissan: 'Nissan',
+        mazda: 'Mazda',
+        mitsubishi: 'Mitsubishi',
+        isuzu: 'Isuzu',
+        ford: 'Ford',
+      };
+      const ALL_CARS_PRICE_LABELS = {
+        '0-100000': 'ราคาไม่เกิน 1 แสน',
+        '100000-200000': 'ราคา 1-2 แสน',
+        '200000-300000': 'ราคา 2-3 แสน',
+        '300000-400000': 'ราคา 3-4 แสน',
+        '400000-500000': 'ราคา 4-5 แสน',
+        '500000-600000': 'ราคา 5-6 แสน',
+        '600000-700000': 'ราคา 6-7 แสน',
+        700000: 'ราคา 7 แสนขึ้นไป',
+      };
+      const filterNameParts = [];
+      if (hasBrand && ALL_CARS_BRAND_LABELS[initialBrandFilter]) {
+        filterNameParts.push(`รถ${ALL_CARS_BRAND_LABELS[initialBrandFilter]}`);
+      } else {
+        filterNameParts.push('รถมือสองทั้งหมด');
+      }
+      if (hasPrice && ALL_CARS_PRICE_LABELS[initialPriceRange]) {
+        filterNameParts.push(ALL_CARS_PRICE_LABELS[initialPriceRange]);
+      }
+      const collectionName = filterNameParts.join(' ');
 
       const topCarImages = pageCars
         .slice(0, 4)
@@ -1001,9 +1047,9 @@ export async function getServerSideProps(context) {
         '@context': 'https://schema.org',
         image: topCarImages.length > 0 ? topCarImages : undefined,
         '@type': 'CollectionPage',
-        name: `รถมือสองทั้งหมด${totalPages > 1 ? ` - หน้า ${safePage}` : ''}`,
-        description: `รถมือสองคุณภาพดี ${Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ`,
-        url: `https://www.chiangmaiusedcar.com/all-cars${safePage > 1 ? `?page=${safePage}` : ''}`,
+        name: `${collectionName}${totalPages > 1 ? ` - หน้า ${safePage}` : ''}`,
+        description: `${collectionName} คุณภาพดี ${Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ`,
+        url: `https://www.chiangmaiusedcar.com${seoPath}`,
         mainEntity: {
           '@type': 'ItemList',
           name: 'รายการรถมือสอง',
