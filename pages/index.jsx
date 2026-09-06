@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import A11yImage from '../components/A11yImage';
 import SEO from '../components/SEO.jsx';
 import { getHomepageCars, getBrandCounts } from '../lib/shopify.mjs';
 import { isEvCar } from '../lib/evFilter.js';
@@ -58,7 +57,7 @@ const SocialShareButtons = dynamic(() => import('../components/SocialShareButton
 
 // Split large below-the-fold reviews section into a separate chunk
 const HomeAboutInline = dynamic(() => import('../components/HomeAboutInline'), {
-  // SSR enabled to ensure Googlebot reads SEO content immediately in raw HTML
+  ssr: false, // Below-the-fold: defer to reduce initial DOM size (SEO content still visible via JS rendering)
   loading: () => <div className="min-h-[250px] w-full" aria-hidden="true" />,
 });
 const FacebookReviewsSection = dynamic(() => import('../components/FacebookReviewsSection'), {
@@ -70,7 +69,7 @@ const HomeWhyChooseSection = dynamic(() => import('../components/HomeWhyChooseSe
   loading: () => <div className="min-h-[500px] w-full" aria-hidden="true" />,
 });
 const HomeFaqSection = dynamic(() => import('../components/HomeFaqSection'), {
-  // SSR enabled for SEO text visibility (JSON-LD isn't always enough)
+  ssr: false, // FAQ JSON-LD schema is in <SEO> component, not dependent on HTML; defer to cut DOM size
   loading: () => <div className="min-h-[600px] w-full" aria-hidden="true" />,
 });
 
@@ -86,16 +85,12 @@ function buildHomeItemListJsonLd(inputCars) {
     const handle = car?.handle;
     const carUrl = handle ? `${site}/car/${handle}` : site;
 
-    const imageUrls = car?.images?.length
-      ? car.images
-          .slice(0, 3)
-          .map(img =>
-            img.url.startsWith('http')
-              ? img.url
-              : `${site}${img.url.startsWith('/') ? '' : '/'}${img.url}`
-          )
-          .filter(Boolean)
-      : [`${site}/herobanner/cnxcar.webp`];
+    const rawImage = car?.images?.[0]?.url;
+    const imageUrl = rawImage
+      ? rawImage.startsWith('http')
+        ? rawImage
+        : `${site}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
+      : `${site}/herobanner/cnxcar.webp`;
 
     const vendorOrBrand = car?.vendor || car?.brand || car?.title?.split(' ')?.[0] || 'รถยนต์';
     const model = car?.model || car?.title || '';
@@ -123,7 +118,7 @@ function buildHomeItemListJsonLd(inputCars) {
           name: vendorOrBrand,
         },
         sku: car?.id || handle,
-        image: imageUrls,
+        image: imageUrl,
         url: carUrl,
         offers: {
           '@type': 'Offer',
@@ -210,15 +205,15 @@ export default function Home({
   const safeCars = useMemo(() => (Array.isArray(cars) ? cars : []), [cars]);
 
   // Load Facebook reviews only when the user is near that section.
-  // This avoids loading a heavy client-only chunk during the initial render.
+  // This avoids loading a heavy client-only chunk during the initial render (helps LCP).
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (showFbReviews) return;
 
     const anchor = document.getElementById('fb-reviews-anchor');
     if (!anchor) {
-      setShowFbReviews(true);
-      return;
+      const t = window.setTimeout(() => setShowFbReviews(true), 8000);
+      return () => window.clearTimeout(t);
     }
 
     if (!('IntersectionObserver' in window)) {
@@ -233,15 +228,15 @@ export default function Home({
           observer.disconnect();
         }
       },
-      { rootMargin: '400px 0px' }
+      { rootMargin: '200px 0px' }
     );
 
     observer.observe(anchor);
     return () => observer.disconnect();
   }, [showFbReviews]);
 
-  // Load SocialShareButtons after the user interacts, or when scrolling down.
-  // This completely removes the hard 8s timeout that caused the INP spike.
+  // Load SocialShareButtons after the page is idle or when user interacts.
+  // This prevents downloading/executing its chunk during the critical render/hydration window.
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (showSocialShare) return;
@@ -273,8 +268,12 @@ export default function Home({
       window.addEventListener(ev, onInteraction, { passive: true, once: true });
     }
 
+    // Only rely on interaction or a long fallback timeout to prevent blocking LCP paint
+    const hardTimeoutId = window.setTimeout(enable, 8000);
+
     return () => {
       cleanupListeners();
+      window.clearTimeout(hardTimeoutId);
     };
   }, [showSocialShare]);
 
@@ -299,26 +298,25 @@ export default function Home({
       <header className="relative w-full h-auto flex items-center justify-center bg-gradient-to-r from-orange-100 to-blue-100">
         <div className="relative w-full max-w-[1400px] mx-auto">
           {/* LCP Optimized: Native responsive img for critical hero banner */}
-          <A11yImage
+          {/* HTML img tag for Hero Banner because Next Image unoptimized handles srcSet poorly */}
+          <img
             src="/herobanner/newherobanner-1400w.webp"
-            customSrcSet="
+            srcSet="
               /herobanner/newherobanner-414w.webp 414w,
               /herobanner/newherobanner-640w.webp 640w,
               /herobanner/newherobanner-828w.webp 828w,
               /herobanner/newherobanner-1024w.webp 1024w,
               /herobanner/newherobanner-1400w.webp 1400w
             "
-            customSizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1400px"
             alt="ปกเว็บ ครูหนึ่งรถสวย รถมือสองเชียงใหม่"
             className="w-full h-auto object-contain block mx-auto text-transparent"
-            aspectRatio="1400/467"
-            decoding="sync"
+            style={{ aspectRatio: '1400/467' }}
+            decoding="async"
             loading="eager"
             fetchpriority="high"
-            width={1400}
-            height={467}
-            optimizeImage={false}
-            priority
+            width="1400"
+            height="467"
           />
         </div>
       </header>
@@ -347,23 +345,37 @@ export default function Home({
             <Link
               href="/all-cars"
               prefetch={false}
-              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-accent-800 text-white hover:bg-accent-900 transition-colors duration-200 shadow-sm hover:shadow-lg transform  active:scale-[0.98]"
+              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-accent-800 text-white hover:bg-accent-900 transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
             >
               เลือกซื้อรถยนต์
             </Link>
             <Link
               href="/used-cars-chiang-mai"
               prefetch={false}
-              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-orange-700 text-orange-800 hover:bg-orange-700 hover:text-white transition-colors duration-200 shadow-sm hover:shadow-lg transform  active:scale-[0.98]"
+              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-orange-700 text-orange-800 hover:bg-orange-700 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
             >
               ฝากขายรถ
             </Link>
             <Link
               href="/sell-car"
               prefetch={false}
-              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-200 shadow-sm hover:shadow-lg transform  active:scale-[0.98]"
+              className="flex-1 inline-block text-center font-semibold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
             >
               ขายด่วน!
+            </Link>
+            <Link
+              href="/ev-cars-chiang-mai"
+              prefetch={false}
+              className="flex-1 flex justify-center items-center gap-1.5 font-bold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-green-600 text-white hover:bg-green-700 transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
+            >
+              <svg
+                className="w-4 h-4 md:w-5 md:h-5 text-yellow-300"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" />
+              </svg>
+              รถ EV
             </Link>
           </div>
         </div>
@@ -410,7 +422,7 @@ export default function Home({
                       href="https://lin.ee/8ugfzstD"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-[48px] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-colors duration-200 space-x-2 font-prompt active:scale-[0.97] active:opacity-[0.85]"
+                      className="inline-flex items-center bg-accent-800 hover:bg-accent-900 text-white px-6 py-3 min-h-[48px] justify-center rounded-full font-semibold text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 space-x-2 font-prompt active:scale-[0.97] active:opacity-[0.85]"
                     >
                       <span>ติดต่อสอบถาม</span>
                     </a>
@@ -434,11 +446,11 @@ export default function Home({
               </section>
             </div>
           </div>
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-8 sm:mt-12 px-4 sm:px-0">
+          <div className="text-center mt-8 sm:mt-12 px-4 sm:px-0">
             <Link
               href="/all-cars"
               prefetch={false}
-              className="flex w-full justify-center md:inline-flex md:w-auto items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-full sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transform transition-transform active:scale-[0.98] duration-150 space-x-2 border-2 border-transparent hover:border-accent font-prompt"
+              className="flex w-full justify-center md:inline-flex md:w-auto items-center bg-gray-900 hover:bg-accent-800 text-white px-8 py-4 rounded-full sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.95] transition-all duration-300 space-x-2 border-2 border-accent font-prompt"
               aria-label="ดูรถทั้งหมด ครูหนึ่งรถสวย"
             >
               <span>ดูรถทั้งหมด</span>
@@ -450,29 +462,14 @@ export default function Home({
                 />
               </svg>
             </Link>
-            <Link
-              href="/ev-cars-chiang-mai"
-              prefetch={false}
-              className="flex w-full justify-center md:inline-flex md:w-auto items-center bg-green-700 hover:bg-green-800 text-white px-8 py-4 rounded-full sm:rounded-2xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl transform transition-transform active:scale-[0.98] duration-150 space-x-2 border-2 border-transparent hover:border-green-600 font-prompt"
-              aria-label="รถ EV มือสอง เชียงใหม่"
-            >
-              <svg className="w-5 h-5 text-yellow-300 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" />
-              </svg>
-              <span>รถ EV มือสอง</span>
-            </Link>
           </div>
         </div>
         <div className="pb-8 md:pb-12">
-          {/* Trigger point for lazy-loading heavy social feeds (TikTok + Facebook) */}
-          <div id="fb-reviews-anchor" className="h-px w-full" aria-hidden="true" />
-
           {/* TikTok Feed Section */}
-          {showFbReviews && tiktokVideos && tiktokVideos.length > 0 && (
-            <TikTokFeed videos={tiktokVideos} />
-          )}
+          {tiktokVideos && tiktokVideos.length > 0 && <TikTokFeed videos={tiktokVideos} />}
 
-          {/* รีวิว Facebook 9 รีวิวจริง */}
+          {/* รีวิว Facebook 9 รีวิวจริง (โหลดเมื่อใกล้ viewport) */}
+          <div id="fb-reviews-anchor" className="h-px w-full" aria-hidden="true" />
           {showFbReviews && <FacebookReviewsSection />}
 
           {/* Why Choose Us Section - SEO Content (extracted) */}
@@ -534,16 +531,6 @@ export async function getStaticProps() {
   // Add status to homepage cars (do not filter; show badge instead)
   try {
     cars = cars.map(c => ({ ...c, status: carStatuses?.[c.id]?.status || 'available' }));
-
-    // --- STANDARD SORTING FOR HOMEPAGE ---
-    const { isReservedCar, isSoldCar } = require('../lib/carStatusUtils.js');
-    cars.sort((a, b) => {
-      const aUnavail = isReservedCar(a) || isSoldCar(a);
-      const bUnavail = isReservedCar(b) || isSoldCar(b);
-      if (aUnavail && !bUnavail) return 1;
-      if (!aUnavail && bUnavail) return -1;
-      return 0;
-    });
   } catch {
     // ignore status merge errors
   }
