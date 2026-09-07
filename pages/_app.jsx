@@ -32,6 +32,7 @@ const CookieConsent = dynamic(() => import('../components/CookieConsent'), {
   loading: () => null,
 });
 const MobileBottomNav = dynamic(() => import('../components/MobileBottomNav'), {
+  ssr: false,
   loading: () => null,
 });
 

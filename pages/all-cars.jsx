@@ -1119,8 +1119,8 @@ export async function getServerSideProps(context) {
         url: seoPath,
         faqs: ALL_CARS_FAQS,
       });
-      const { ['@context']: ctx, ...faqNode } = faq;
-      void ctx;
+      const faqNode = { ...faq, '@type': 'FAQPage' };
+      delete faqNode['@context'];
 
       structuredDataJson = JSON.stringify({
         '@context': 'https://schema.org',

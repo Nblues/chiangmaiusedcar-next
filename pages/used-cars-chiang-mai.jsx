@@ -39,16 +39,12 @@ export async function getStaticProps() {
       const carUrl = handle ? `${SITE}/car/${handle}` : SITE;
 
       const priceInfo = getPriceInfo(car?.price?.amount || 0);
-      const imageUrls = car?.images?.length
-        ? car.images
-            .slice(0, 3)
-            .map(img =>
-              img.url.startsWith('http')
-                ? img.url
-                : `${SITE}${img.url.startsWith('/') ? '' : '/'}${img.url}`
-            )
-            .filter(Boolean)
-        : [`${SITE}/herobanner/outdoorbanner-1024w.webp`];
+      const rawImage = car?.images?.[0]?.url;
+      const imageUrl = rawImage
+        ? rawImage.startsWith('http')
+          ? rawImage
+          : `${SITE}${rawImage.startsWith('/') ? '' : '/'}${rawImage}`
+        : `${SITE}/herobanner/outdoorbanner-1024w.webp`;
 
       const title = car?.title || 'รถมือสองเชียงใหม่';
       const availabilityValue = computeSchemaAvailability({
@@ -83,7 +79,7 @@ export async function getStaticProps() {
           additionalType: 'https://schema.org/Car',
           '@id': carUrl,
           name: title,
-          image: imageUrls,
+          image: imageUrl,
           url: carUrl,
           offers: offer,
         },
@@ -418,13 +414,13 @@ export default function UsedCarsChiangMai({
             <div className="relative w-full aspect-[16/10] xs:aspect-[16/9] sm:aspect-[1920/800]">
               <A11yImage
                 src="/herobanner/outdoorbanner-1024w.webp"
-                customSrcSet="/herobanner/outdoorbanner-480w.webp 480w, /herobanner/outdoorbanner-640w.webp 640w, /herobanner/outdoorbanner-828w.webp 828w, /herobanner/outdoorbanner-1024w.webp 1024w, /herobanner/outdoorbanner-1280w.webp 1280w, /herobanner/outdoorbanner-1400w.webp 1400w"
-                customSizes="(max-width: 1400px) 100vw, 1400px"
+                srcSet="/herobanner/outdoorbanner-480w.webp 480w, /herobanner/outdoorbanner-640w.webp 640w, /herobanner/outdoorbanner-828w.webp 828w, /herobanner/outdoorbanner-1024w.webp 1024w, /herobanner/outdoorbanner-1280w.webp 1280w, /herobanner/outdoorbanner-1400w.webp 1400w"
+                sizes="(max-width: 1400px) 100vw, 1400px"
                 alt="รถมือสองเชียงใหม่ - ครูหนึ่งรถสวย"
                 aspectRatio="1920/800"
                 fetchPriority="high"
                 priority
-                decoding="sync"
+                decoding="async"
                 imageType="hero"
                 optimizeImage={false}
                 className="block w-full h-full object-contain object-top"

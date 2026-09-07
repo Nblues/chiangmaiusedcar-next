@@ -25,12 +25,10 @@
   "typescript.tsserver.experimental.enableProjectDiagnostics": false,
   "typescript.updateImportsOnFileMove.enabled": "always",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-
   // File associations for JSX in .js files
   "files.associations": {
     "*.js": "javascriptreact"
   },
-
   // ESLint configuration
   "eslint.validate": [
     "javascript",
@@ -38,7 +36,6 @@
     "typescript",
     "typescriptreact"
   ],
-
   // Editor performance
   "editor.semanticHighlighting.enabled": false,
   "editor.inlayHints.enabled": "off",
@@ -49,7 +46,6 @@
     "comments": false,
     "strings": false
   },
-
   // File watching optimization
   "files.exclude": {
     "**/node_modules": true,
@@ -98,43 +94,34 @@
     "**/lighthouse-prod-latest/**": true,
     "**/deployment_source/**": true
   },
-
   // Avoid pnpm symlink fan-out during search/indexing
   "search.followSymlinks": false,
-
   // Memory optimization - เพิ่ม RAM เต็มที่ (12GB RAM system)
-  "extensions.autoUpdate": false,
-  "extensions.autoCheckUpdates": false,
   "javascript.suggest.enabled": true,
   "typescript.suggest.enabled": true,
   "editor.minimap.enabled": false,
   "editor.codeLens": false,
   "problems.decorations.enabled": true,
-  
   // Disable problematic extensions features that may cause crashes
   "github.copilot.advanced": {},
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
   "postman.disableInlayHints": true,
-
   // Terminal settings
   "terminal.integrated.enablePersistentSessions": false,
   "terminal.integrated.persistentSessionReviveProcess": "never",
   "terminal.integrated.scrollback": 5000,
-
   // Git performance
   "git.enabled": true,
   "git.autorefresh": false,
   "git.autofetch": false,
   "git.statusLimit": 2000,
   "git.decorations.enabled": false,
-
   // Format and lint
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-
   // Next.js specific
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -148,14 +135,18 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  
   // Disable webhint to prevent crashes
   "webhint.enable": false,
-  
   // Tailwind CSS IntelliSense configuration
   "tailwindCSS.experimental.classRegex": [
-    ["class[n]?Name[s]?\\s*[:=]\\s*['\"]([^'\"]*)['\"]", "([^'\"]*)"],
-    ["tw`([^`]*)", "([^`]*)"]
+    [
+      "class[n]?Name[s]?\\s*[:=]\\s*['\"]([^'\"]*)['\"]",
+      "([^'\"]*)"
+    ],
+    [
+      "tw`([^`]*)",
+      "([^`]*)"
+    ]
   ],
   "tailwindCSS.includeLanguages": {
     "typescript": "javascript",
@@ -171,5 +162,4 @@
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
-
 }

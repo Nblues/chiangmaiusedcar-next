@@ -43,8 +43,11 @@ const nextConfig = {
 
   // SWC Transform - Target modern browsers (ES2020+) to reduce polyfills
   // This removes unnecessary polyfills for Array.at, Array.flat, Object.fromEntries, etc.
-  experimental: { optimizeCss: { preload: 'swap' },
-    esmExternals: true,
+  experimental: {
+    // NOTE: optimizeCss (critters) disabled — it causes a non-deterministic
+    // "Error: <Html> should not be imported outside of pages/_document" crash
+    // during `next build` static generation on a random subset of pages.
+    esmExternals: false,
     scrollRestoration: true,
     serverComponentsExternalPackages: ['shopify-api-node'],
     // Tree-shake named exports from large packages to reduce initial bundle
@@ -239,7 +242,7 @@ const nextConfig = {
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net *.cloudflare.com *.facebook.com *.shopify.com",
       "font-src 'self' fonts.gstatic.com cdn.jsdelivr.net data:",
       "img-src 'self' data: blob: *.shopify.com *.myshopify.com cdn.shopify.com files.myshopify.com images.unsplash.com *.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net *.googletagmanager.com *.google-analytics.com",
-      "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com *.googletagmanager.com vercel.live *.vercel.live api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com *.googleapis.com *.gstatic.com *.cloudflare.com *.facebook.com *.facebook.net connect.facebook.net",
+      "connect-src 'self' *.supabase.co supabase.co api-buyer.roddonjai.com *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com *.googletagmanager.com vercel.live *.vercel.live api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com *.googleapis.com *.gstatic.com *.cloudflare.com *.facebook.com *.facebook.net connect.facebook.net",
       "frame-src 'self' vercel.live *.vercel.live *.facebook.com *.line.me *.google.com maps.google.com *.cloudflare.com challenges.cloudflare.com *.tiktok.com tiktok.com",
       "object-src 'none'",
       "base-uri 'self'",
@@ -256,7 +259,7 @@ const nextConfig = {
       "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net *.cloudflare.com *.facebook.com *.shopify.com",
       "font-src 'self' fonts.gstatic.com cdn.jsdelivr.net data:",
       "img-src 'self' data: blob: *.shopify.com *.myshopify.com cdn.shopify.com files.myshopify.com images.unsplash.com *.cloudflare.com *.facebook.com *.facebook.net *.fbcdn.net *.googletagmanager.com *.google-analytics.com",
-      "connect-src 'self' *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com *.googletagmanager.com vercel.live *.vercel.live api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com *.googleapis.com *.gstatic.com *.cloudflare.com *.facebook.com *.facebook.net connect.facebook.net",
+      "connect-src 'self' *.supabase.co supabase.co api-buyer.roddonjai.com *.shopify.com *.myshopify.com *.vercel-analytics.com *.google-analytics.com *.googletagmanager.com vercel.live *.vercel.live api.emailjs.com *.emailjs.com fonts.googleapis.com fonts.gstatic.com *.googleapis.com *.gstatic.com *.cloudflare.com *.facebook.com *.facebook.net connect.facebook.net",
       "frame-src 'self' vercel.live *.vercel.live *.facebook.com *.line.me *.google.com maps.google.com *.cloudflare.com challenges.cloudflare.com *.tiktok.com tiktok.com",
       "object-src 'none'",
       "base-uri 'self'",

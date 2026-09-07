@@ -15,6 +15,9 @@ CREATE TABLE IF NOT EXISTS valuations (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Note: Ensure Row Level Security (RLS) is disabled for this table if you're using Service Role Keys solely from Server Actions,
--- OR add appropriate policies to allow inserts and reads from authenticated server logic.
-ALTER TABLE valuations DISABLE ROW LEVEL SECURITY;
+-- Note: All application access to this table goes through the authenticated
+-- server-side API route (pages/api/admin/valuation.ts) using the Supabase
+-- service role key, which always bypasses RLS. RLS is enabled here with NO
+-- policies as defense-in-depth, so the public anon key can never read/write
+-- this table directly (e.g. if it were ever used client-side by mistake).
+ALTER TABLE valuations ENABLE ROW LEVEL SECURITY;
