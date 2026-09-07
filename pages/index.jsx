@@ -366,7 +366,7 @@ export default function Home({
             <Link
               href="/ev-cars-chiang-mai"
               prefetch={false}
-              className="flex-1 flex justify-center items-center gap-1.5 font-bold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-green-600 text-white hover:bg-green-700 transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
+              className="flex-1 flex justify-center items-center gap-1.5 font-bold rounded-lg md:rounded-2xl px-4 py-2 md:px-6 md:py-3 text-sm md:text-base bg-green-700 text-white hover:bg-green-800 transition-all duration-300 shadow-sm hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.95]"
             >
               <svg
                 className="w-4 h-4 md:w-5 md:h-5 text-yellow-300"
