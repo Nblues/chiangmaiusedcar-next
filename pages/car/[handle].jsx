@@ -2299,6 +2299,12 @@ export async function getStaticProps({ params }) {
           destination,
           permanent: true, // 301 Redirect ให้ Google รู้ว่ารถคันนี้ย้ายไปรวมอยู่ในหมวดหมู่นี้แล้ว
         },
+        // สำคัญ: ต้องมี revalidate แม้จะเป็น redirect เพราะถ้าไม่ใส่ Next.js จะ "ปักหมุด" หน้านี้
+        // ให้เป็น redirect ตลอดไปแบบไม่มีวันเช็คซ้ำ (ไม่ใช่แค่ browser cache แบบ 301 เท่านั้น
+        // แต่ ISR ฝั่ง server เองก็จะไม่ re-run getStaticProps อีกเลย) ถ้าเคยเกิดจาก error
+        // ชั่วคราวหลุดมาปนกับกรณีนี้ (เคสก่อนแก้ getCarByHandle ให้ throw แทน return null)
+        // ค่านี้ช่วยให้หน้าที่เคย redirect ผิดมีโอกาส "ฟื้น" กลับมาแสดงรถได้เองภายในไม่กี่นาที
+        revalidate: 300, // 5 minutes
       };
     };
 
