@@ -3,6 +3,27 @@ import fs from 'fs';
 import path from 'path';
 import { pathToFileURL } from 'url';
 
+// Same slug rule as createPrettyUrl in utils/urlHelper.js, so <loc> is the canonical /car/ URL.
+function toPrettyHandle(handle) {
+  let h = String(handle);
+  try {
+    h = decodeURIComponent(h);
+  } catch {
+    // keep the raw handle
+  }
+  for (const word of ['ปี', 'รุ่น', 'ปีนี้', 'ปีนั้น']) {
+    h = h.replace(new RegExp(`-${word}-`, 'g'), '-');
+  }
+  h = h
+    .replace(/[\u0E00-\u0E7F]+/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^a-zA-Z0-9-]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '');
+  return h || String(handle);
+}
+
 function hasShopifyStorefrontEnv() {
   const domain =
     process.env.SHOPIFY_DOMAIN ||
@@ -95,9 +116,12 @@ async function generateImageSitemap() {
       const cars = await getAllCars();
 
       const maxImagesPerCar = 5;
+      const seenCarUrls = new Set();
       for (const car of cars) {
         if (!car?.handle) continue;
-        const carUrl = `${siteUrl}/car/${encodeURIComponent(car.handle)}`;
+        const carUrl = `${siteUrl}/car/${encodeURIComponent(toPrettyHandle(car.handle))}`;
+        if (seenCarUrls.has(carUrl)) continue;
+        seenCarUrls.add(carUrl);
         const images = Array.isArray(car.images) ? car.images.slice(0, maxImagesPerCar) : [];
         if (images.length === 0) continue;
 

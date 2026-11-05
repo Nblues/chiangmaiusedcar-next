@@ -65,6 +65,7 @@ function normalizePageNumber(input) {
 export default function AllCars({
   cars,
   totalCount,
+  availableCount,
   totalPages,
   initialSearchTerm,
   initialPriceRange,
@@ -145,6 +146,8 @@ export default function AllCars({
   // SSR already provides only current page cars + totalCount/totalPages.
   // Keep client work minimal to reduce hydration cost (TBT).
   const safeTotalPages = Number.isFinite(totalPages) && totalPages > 0 ? totalPages : 1;
+  const safeAvailableCount =
+    Number.isFinite(availableCount) && availableCount > 0 ? availableCount : 0;
   const safePage = Math.min(Math.max(1, currentPage), safeTotalPages);
   const currentCars = useMemo(() => {
     const list = Array.isArray(cars) ? cars : [];
@@ -372,7 +375,7 @@ export default function AllCars({
             description={
               dynamicSEO.isSpecific
                 ? dynamicSEO.desc + ' โทร 094-064-9018'
-                : `ดูรถยนต์มือสองคุณภาพดีทั้งหมด ${Number.isFinite(totalCount) ? totalCount : 0} คัน ในเชียงใหม่และภาคเหนือ คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda นัดหมายดูรถโทร 094-064-9018`
+                : `ดูรถยนต์มือสองคุณภาพดี${safeAvailableCount > 0 ? `ที่พร้อมขายตอนนี้ ${safeAvailableCount} คัน` : ''} ในเชียงใหม่และภาคเหนือ คัดสรรทุกคัน ฟรีดาวน์ 0% รับประกัน 1 ปี ส่งฟรีทั่วไทย Toyota Honda Nissan Mazda นัดหมายดูรถโทร 094-064-9018`
             }
             keywords={[
               seoAllCars.primary,
@@ -468,7 +471,7 @@ export default function AllCars({
                       '2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8)',
                   }}
                 >
-                  รถคุณภาพดี {Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ
+                  รถคุณภาพดี พร้อมขายตอนนี้ {safeAvailableCount} คัน
                 </p>
                 {safeTotalPages > 1 && (
                   <p
@@ -604,12 +607,13 @@ export default function AllCars({
             </h2>
             <div className="text-sm md:text-base text-gray-600 font-prompt space-y-2 relative z-10 max-w-4xl">
               <p>
-                เรามีรถคุณภาพพร้อมใช้งานให้เลือกชมมากกว่า{' '}
-                <strong className="text-accent text-lg">
-                  {Number.isFinite(totalCount) ? totalCount : 0} คัน
-                </strong>{' '}
+                ตอนนี้มีรถคุณภาพพร้อมขายให้เลือกชม{' '}
+                <strong className="text-accent text-lg">{safeAvailableCount} คัน</strong>{' '}
                 ที่ครอบคลุมทุกไลฟ์สไตล์ รถทุกคันผ่านการตรวจเช็คสภาพ ไมล์แท้ โครงสร้างเดิม
                 พร้อมบริการจัดไฟแนนซ์ อนุมัติไว ฟรีดาวน์ 0%
+                {totalCount > safeAvailableCount
+                  ? ' (รถที่จองแล้วหรือขายแล้วจะแสดงต่อท้ายรายการ เพื่อเป็นแนวทางราคา)'
+                  : ''}
               </p>
             </div>
           </div>
@@ -926,7 +930,11 @@ export async function getServerSideProps(context) {
   // --- BEST PRACTICE SORTING FOR LARGE USED CAR WEBSITES ---
   // Push "Reserved" or "Sold" cars to the absolute bottom of the catalog.
   // This ensures buyers always see 'InStock' inventory at the very top.
-  const { isReservedCar, isSoldCar } = require('../lib/carStatusUtils.js');
+  const {
+    isReservedCar,
+    isSoldCar,
+    computeSchemaAvailability,
+  } = require('../lib/carStatusUtils.js');
   filtered.sort((a, b) => {
     const aUnavailable = isReservedCar(a) || isSoldCar(a);
     const bUnavailable = isReservedCar(b) || isSoldCar(b);
@@ -981,7 +989,10 @@ export async function getServerSideProps(context) {
   mark('ssr:filtering:end');
 
   const totalCount = filtered.length;
+  const availableCount = filtered.filter(c => !(isReservedCar(c) || isSoldCar(c))).length;
   const totalPages = totalCount > 0 ? Math.ceil(totalCount / carsPerPage) : 1;
+  // Skipped when the catalog is empty so a Shopify hiccup does not 404 every page
+  if (totalCount > 0 && initialPage > totalPages) return { notFound: true };
   const safePage = Math.min(Math.max(1, initialPage), totalPages);
   const startIndex = (safePage - 1) * carsPerPage;
   let pageCars = filtered.slice(startIndex, startIndex + carsPerPage);
@@ -1048,7 +1059,7 @@ export async function getServerSideProps(context) {
         image: topCarImages.length > 0 ? topCarImages : undefined,
         '@type': 'CollectionPage',
         name: `${collectionName}${totalPages > 1 ? ` - หน้า ${safePage}` : ''}`,
-        description: `${collectionName} คุณภาพดี ${Number.isFinite(totalCount) ? totalCount : 0} คัน พร้อมส่งมอบ`,
+        description: `${collectionName} พร้อมขายตอนนี้ ${availableCount} คัน`,
         url: `https://www.chiangmaiusedcar.com${seoPath}`,
         mainEntity: {
           '@type': 'ItemList',
@@ -1095,9 +1106,11 @@ export async function getServerSideProps(context) {
                   priceCurrency: 'THB',
                   price: car?.price?.amount || 0,
                   itemCondition: 'https://schema.org/UsedCondition',
-                  availability: car?.availableForSale
-                    ? 'https://schema.org/InStock'
-                    : 'https://schema.org/OutOfStock',
+                  availability: `https://schema.org/${computeSchemaAvailability({
+                    status: car?.status,
+                    tags: car?.tags,
+                    availableForSale: car?.availableForSale,
+                  })}`,
                   url: carUrl,
                   seller: {
                     '@type': 'AutoDealer',
@@ -1163,6 +1176,7 @@ export async function getServerSideProps(context) {
     props: {
       cars: pageCars,
       totalCount,
+      availableCount,
       totalPages,
       initialSearchTerm,
       initialPriceRange,

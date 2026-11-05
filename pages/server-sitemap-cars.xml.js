@@ -1,4 +1,5 @@
 import { getAllCars } from '../lib/shopify.mjs';
+import { isEvCar } from '../lib/evFilter.js';
 
 function escapeXml(unsafe) {
   if (!unsafe) return '';
@@ -78,8 +79,9 @@ export async function getServerSideProps({ res }) {
       })
       .join('');
 
-    const carsPerPage = 8;
-    const totalPages = Math.ceil((cars?.length || 0) / carsPerPage);
+    const carsPerPage = 24; // must match pages/all-cars.jsx
+    const catalogCount = (cars || []).filter(car => !isEvCar(car)).length;
+    const totalPages = Math.ceil(catalogCount / carsPerPage);
     const catalogNodes = Array.from({ length: Math.max(0, totalPages - 1) }, (_, i) => {
       const page = i + 2;
       return `

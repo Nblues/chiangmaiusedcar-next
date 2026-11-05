@@ -156,6 +156,9 @@ module.exports = {
     '/secret*',
     '/private*',
     '/drafts*',
+    // Car pages come from /server-sitemap-cars.xml (real updatedAt, includes cars added after the build).
+    '/car/*',
+    '/server-sitemap-cars.xml',
     // i18n: Exclude locale-prefixed routes from sitemap entries.
     // We publish the default-locale URL as <loc> and provide /en variants via hreflang alternates.
     '/en*',

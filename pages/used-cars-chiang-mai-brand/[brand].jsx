@@ -9,7 +9,7 @@ import CarCard from '../../components/CarCard';
 import { getAllCars } from '../../lib/shopify.mjs';
 import { isEvCar } from '../../lib/evFilter.js';
 import { readCarStatuses } from '../../lib/carStatusStore.js';
-import { computeSchemaAvailability } from '../../lib/carStatusUtils.js';
+import { computeSchemaAvailability, isReservedCar, isSoldCar } from '../../lib/carStatusUtils.js';
 import { COMMON_OFFER_EXTENSIONS } from '../../config/business';
 import { getPriceInfo } from '../../lib/carPrice';
 
@@ -103,6 +103,7 @@ function buildBrandStructuredDataJsonLd({ brandLabel, brandSlug, cars, page, per
     const title = car?.title || `รถมือสอง ${brandLabel} เชียงใหม่`;
     const availabilityValue = computeSchemaAvailability({
       status: car?.status,
+      tags: car?.tags,
       availableForSale: car?.availableForSale,
     });
 
@@ -229,6 +230,7 @@ export async function getServerSideProps(context) {
   }
 
   const totalCars = cars.length;
+  const availableCars = cars.filter(c => !(isReservedCar(c) || isSoldCar(c))).length;
   const totalPages = Math.max(1, Math.ceil(totalCars / perPage));
   const safePage = Math.min(page, totalPages);
   const start = (safePage - 1) * perPage;
@@ -258,6 +260,7 @@ export async function getServerSideProps(context) {
       brandInfo,
       cars: pageCars,
       totalCars,
+      availableCars,
       safePage,
       totalPages,
       homeOgImage,
@@ -270,6 +273,7 @@ export default function UsedCarsChiangMaiBrand({
   brandInfo,
   cars,
   totalCars,
+  availableCars,
   safePage,
   totalPages,
   homeOgImage,
@@ -289,7 +293,7 @@ export default function UsedCarsChiangMaiBrand({
     <div className="min-h-screen bg-gray-50">
       <SEO
         title={`รถมือสอง ${brandInfo.label} เชียงใหม่ สภาพสวย ฟรีดาวน์${safePage > 1 ? ` หน้า ${safePage}` : ''} | ครูหนึ่งรถสวย`}
-        description={`รวมรถ ${brandInfo.label} มือสอง เชียงใหม่ สภาพนางฟ้า ไมล์แท้ ฟรีดาวน์ มีให้เลือก ${totalCars} คัน รับประกันเครื่องยนต์และเกียร์ ออกรถ 0 บาท ที่ครูหนึ่งรถสวย`}
+        description={`รวมรถ ${brandInfo.label} มือสอง เชียงใหม่ สภาพนางฟ้า ไมล์แท้ ฟรีดาวน์ ${availableCars > 0 ? `พร้อมขายตอนนี้ ${availableCars} คัน` : 'อัปเดตรถใหม่ทุกวัน'} รับประกันเครื่องยนต์และเกียร์ ออกรถ 0 บาท ที่ครูหนึ่งรถสวย`}
         url={url}
         image={homeOgImage}
         type="website"

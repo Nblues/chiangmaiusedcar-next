@@ -844,6 +844,7 @@ function CarDetailPage({ car, recommendedCars = [], router }) {
           },
           availableForSale:
             typeof car?.availableForSale === 'boolean' ? car.availableForSale : true,
+          status: isUnavailable ? 'reserved' : car?.status,
         }}
         keywords={[
           safeGet(car, 'title'),
