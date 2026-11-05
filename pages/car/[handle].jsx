@@ -2271,15 +2271,6 @@ export async function getStaticProps({ params }) {
       }
     }
 
-    // 3) เผื่อมีคำต่อท้าย เช่น -รุ่นท็อป ให้แมทช์แบบ prefix ที่ยาวสุด
-    if (!carMeta) {
-      const candidates = safeCars
-        .filter(c => typeof c?.handle === 'string')
-        .filter(c => requestedRaw.startsWith(c.handle) || requested.startsWith(c.handle))
-        .sort((a, b) => b.handle.length - a.handle.length);
-      carMeta = candidates[0] || null;
-    }
-
     // ถ้ารถถูกลบไปแล้ว (ขายไปแล้วและถูกลบจาก Shopify) ให้ Redirect ไปหน้ารวมแทนที่จะขึ้น 404 (ช่วย SEO GSC 114 pages errors)
     const handleFallbackRedirect = handle => {
       const lowerHandle = handle.toLowerCase();
@@ -2308,19 +2299,35 @@ export async function getStaticProps({ params }) {
       };
     };
 
-    // ไม่พบจริง ๆ ใน cache ให้ลองดึงตรงจาก Shopify เผื่อเป็นรถใหม่เพิ่งลง
+    // ไม่พบใน cache ให้ถาม Shopify ด้วย handle ตรงตัวก่อนเดา prefix (รถใหม่ที่เพิ่งลงยังไม่อยู่ใน cache)
     let car = null;
     if (!carMeta) {
       car = await getCarByHandle(requestedRaw);
       if (!car && requested !== requestedRaw) {
         car = await getCarByHandle(requested);
       }
-      if (!car) {
-        return handleFallbackRedirect(requestedRaw || requested);
+      if (car) {
+        // สร้าง proxy carMeta ให้ทำงานไปต่อได้
+        carMeta = { handle: car.handle };
       }
-      // สร้าง proxy carMeta ให้ทำงานไปต่อได้
-      carMeta = { handle: car.handle };
-    } else {
+    }
+
+    // 3) เผื่อมีคำต่อท้าย เช่น -รุ่นท็อป ให้แมทช์แบบ prefix ที่ยาวสุด
+    // ต้องตัดที่ "-" และเลขท้ายล้วน (-1, -2) คือรถอีกคันที่ Shopify ตั้ง handle ซ้ำ ห้ามไปจับคันแรก
+    if (!carMeta) {
+      const isExtensionOf = (base, req) =>
+        req.startsWith(`${base}-`) && !/^\d+$/.test(req.slice(base.length + 1));
+      const candidates = safeCars
+        .filter(c => typeof c?.handle === 'string' && c.handle)
+        .filter(c => isExtensionOf(c.handle, requestedRaw) || isExtensionOf(c.handle, requested))
+        .sort((a, b) => b.handle.length - a.handle.length);
+      carMeta = candidates[0] || null;
+    }
+
+    if (!carMeta) {
+      return handleFallbackRedirect(requestedRaw || requested);
+    }
+    if (!car) {
       car = await getCarByHandle(carMeta.handle);
       if (!car) {
         return handleFallbackRedirect(carMeta.handle);
@@ -2346,6 +2353,8 @@ export async function getStaticProps({ params }) {
           destination: `/car/${encodeURIComponent(canonicalPretty)}`,
           permanent: true,
         },
+        // ไม่มี revalidate = ISR จำ redirect นี้ตลอดไป ถ้าเคยจับคู่ผิดคันจะไม่หายจนกว่าจะ deploy ใหม่
+        revalidate: 600,
       };
     }
 
