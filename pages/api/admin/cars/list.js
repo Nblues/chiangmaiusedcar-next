@@ -64,12 +64,19 @@ export default async function handler(req, res) {
     // Transform products to car format with status from KV
     const carsWithStatus = cars.map(car => {
       // Get status from KV or default to 'available'
-      const tagFallback =
-        Array.isArray(car.tags) && car.tags.includes('reserved') ? 'reserved' : 'available';
-      const statusRaw = kvStatuses[car.id]?.status ?? tagFallback;
-      // Normalize status to allowed set: 'available' | 'reserved'
+      const hasReservedTag =
+        Array.isArray(car.tags) &&
+        car.tags.some(t => {
+          const s = String(t || '')
+            .trim()
+            .toLowerCase();
+          return s === 'reserved' || s.includes('จอง');
+        });
+      const statusRaw = kvStatuses[car.id]?.status;
+      // Same rule as the public site: reserved if KV or a reserved tag says so
       let status = typeof statusRaw === 'string' ? statusRaw.trim().toLowerCase() : 'available';
       if (status !== 'available' && status !== 'reserved') status = 'available';
+      if (hasReservedTag) status = 'reserved';
 
       return {
         id: car.id,

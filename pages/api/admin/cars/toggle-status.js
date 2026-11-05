@@ -146,12 +146,19 @@ export default async function handler(req, res) {
         return { ok: false, error: 'Shopify tags query returned no tags', adminDomain, apiVersion };
       }
 
-      const hasReserved = tags.includes(reservedTag);
+      // เว็บนับแท็ก reserved/จอง แบบไม่สนตัวพิมพ์ ต้องลบให้ครบ (เช่น "Reserved" ที่ใส่เองใน Shopify)
+      const isReservedTag = t => {
+        const s = String(t || '')
+          .trim()
+          .toLowerCase();
+        return s === reservedTag || s.includes('จอง');
+      };
+      const hasReserved = tags.some(isReservedTag);
       const nextTags = shouldHaveReserved
         ? hasReserved
           ? tags
           : [...tags, reservedTag]
-        : tags.filter(t => t !== reservedTag);
+        : tags.filter(t => !isReservedTag(t));
 
       // No changes needed
       if (nextTags.length === tags.length && hasReserved === shouldHaveReserved) {
@@ -283,14 +290,12 @@ export default async function handler(req, res) {
 
     const { statusRecord, storage, warning } = result;
 
-    // If KV didn't persist (e.g., Upstash max requests exceeded), fallback to Shopify tags for persistence
+    // Keep the Shopify tag in sync: the public site treats a reserved tag as reserved even when KV says available
     let shopifyTag = null;
-    if (storage !== 'vercel-kv') {
-      try {
-        shopifyTag = await updateShopifyReservedTag(carId, statusRecord.status);
-      } catch (shopifyError) {
-        shopifyTag = { ok: false, error: shopifyError?.message || 'Shopify tag update failed' };
-      }
+    try {
+      shopifyTag = await updateShopifyReservedTag(carId, statusRecord.status);
+    } catch (shopifyError) {
+      shopifyTag = { ok: false, error: shopifyError?.message || 'Shopify tag update failed' };
     }
 
     // Log success
