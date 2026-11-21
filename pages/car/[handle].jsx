@@ -1770,17 +1770,12 @@ function CarDetailPage({ car, recommendedCars = [], router }) {
                                       : []),
                                   ])
                                 ).map((hashtag, index) => (
-                                  <a
+                                  <span
                                     key={`tag-${hashtag}-${index}`}
-                                    href={`/all-cars?search=${encodeURIComponent(hashtag.substring(1))}`}
-                                    className="inline-block bg-primary text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer font-prompt"
-                                    onClick={e => {
-                                      e.preventDefault();
-                                      window.location.href = `/all-cars?search=${encodeURIComponent(hashtag.substring(1))}`;
-                                    }}
+                                    className="inline-block bg-primary text-white px-3 py-1 rounded-full text-sm font-medium font-prompt"
                                   >
                                     {hashtag}
-                                  </a>
+                                  </span>
                                 ))}
                               </div>
                             </div>
