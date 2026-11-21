@@ -5,6 +5,7 @@ import { carAlt } from '../utils/a11y';
 import { isReservedStatus, isSoldStatus, isReservedCar, isSoldCar } from '../lib/carStatusUtils';
 import { safeGet } from '../utils/safe';
 import { getPriceInfo } from '../lib/carPrice';
+import { getCarSlug } from '../utils/urlHelper';
 
 function SpecIcon({ type, className = '' }) {
   if (!type) return null;
@@ -117,7 +118,7 @@ function CarCard({ car, liveStatus, priority = false, className = '', variant = 
   if (!car) return null;
 
   const handle = car.handle || '';
-  const href = handle ? `/car/${handle}` : '/all-cars';
+  const href = handle ? `/car/${encodeURIComponent(getCarSlug(car))}` : '/all-cars';
   const priceInfo = getPriceInfo(safeGet(car, 'price.amount'));
 
   // Status check - prefer liveStatus if available (prevents hydration thrashing)

@@ -3,55 +3,10 @@
  * เชียงใหม่รถมือสอง - ครูหนึ่งรถสวย
  */
 
-/**
- * สร้าง Pretty URL โดยลบคำภาษาไทยและอักขระพิเศษออก
- * @param {string} handle - Shopify handle ที่มีภาษาไทย encoded
- * @returns {string} URL ที่สะอาดและสั้นกว่า
- *
- * @example
- * Input:  "isuzu-d-max-v-cross-3-0-ddi-vgs-turbo-4x4-mt-ปี-2014"
- * Output: "isuzu-d-max-v-cross-3-0-ddi-vgs-turbo-4x4-mt-2014"
- */
-export function createPrettyUrl(handle) {
-  if (!handle) return '';
+import { createPrettyUrl, getCarSlug } from './carSlug.mjs';
 
-  const safeDecode = value => {
-    try {
-      return decodeURIComponent(String(value));
-    } catch {
-      return String(value);
-    }
-  };
-
-  // Decode percent-encoded handles (Shopify handles sometimes contain encoded Thai)
-  let cleanHandle = safeDecode(handle);
-
-  // ลบคำภาษาไทยที่ไม่จำเป็นออก (เช่น "ปี")
-  const thaiWords = ['ปี', 'รุ่น', 'ปีนี้', 'ปีนั้น'];
-
-  thaiWords.forEach(word => {
-    // ลบทั้งแบบ encoded และแบบไม่ encoded
-    cleanHandle = cleanHandle.replace(new RegExp(`-${word}-`, 'g'), '-');
-    cleanHandle = cleanHandle.replace(new RegExp(`-${encodeURIComponent(word)}-`, 'gi'), '-');
-  });
-
-  // Remove remaining Thai characters (helps avoid long %E0%B8.. sequences in shared URLs)
-  cleanHandle = cleanHandle.replace(/[\u0E00-\u0E7F]+/g, '');
-
-  // Normalize separators and remove any non URL-safe characters
-  // Keep only letters/numbers/dashes to ensure clean, short, shareable URLs.
-  cleanHandle = cleanHandle
-    .replace(/[\s_]+/g, '-')
-    .replace(/[^a-zA-Z0-9-]+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-+/, '')
-    .replace(/-+$/, '');
-
-  // ลบ dash ซ้ำซ้อน
-  // (kept above; left here for backward-compat readability)
-
-  return cleanHandle || safeDecode(handle);
-}
+// Slug logic lives in carSlug.mjs (shared with the sitemap scripts); re-exported for existing imports.
+export { createPrettyUrl, getCarSlug };
 
 /**
  * สร้าง Short URL สำหรับแชร์

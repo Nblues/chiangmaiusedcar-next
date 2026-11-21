@@ -10,6 +10,7 @@ import { isEvCar } from '../lib/evFilter.js';
 import { readCarStatuses } from '../lib/carStatusStore.js';
 import { getCachedStatuses, setCachedStatuses } from '../lib/carStatusCache';
 import { scheduleAfterLoadThenIdle } from '../utils/scheduler';
+import { getCarSlug } from '../utils/urlHelper';
 import { mergeCarSpecs } from '../lib/mergeCarSpecs';
 import { useInView } from 'react-intersection-observer';
 
@@ -881,6 +882,7 @@ export async function getServerSideProps(context) {
     cars = cars.map(car => ({
       id: car.id,
       handle: car.handle,
+      canonicalHandle: car.canonicalHandle ?? null,
       title: car.title,
       vendor: car.vendor,
       tags: car.tags,
@@ -1067,7 +1069,7 @@ export async function getServerSideProps(context) {
           numberOfItems: pageCars.length,
           itemListElement: pageCars.map((car, index) => {
             const carUrl = car?.handle
-              ? `https://www.chiangmaiusedcar.com/car/${car.handle}`
+              ? `https://www.chiangmaiusedcar.com/car/${encodeURIComponent(getCarSlug(car))}`
               : 'https://www.chiangmaiusedcar.com/all-cars';
 
             const imageUrls = car?.images?.length

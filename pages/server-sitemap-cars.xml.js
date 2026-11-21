@@ -1,5 +1,6 @@
 import { getAllCars } from '../lib/shopify.mjs';
 import { isEvCar } from '../lib/evFilter.js';
+import { getCarSlug } from '../utils/carSlug.mjs';
 
 function escapeXml(unsafe) {
   if (!unsafe) return '';
@@ -17,31 +18,6 @@ function escapeXml(unsafe) {
         return '&quot;';
     }
   });
-}
-
-function createPrettyUrl(handle) {
-  if (!handle) return '';
-  const safeDecode = value => {
-    try {
-      return decodeURIComponent(String(value));
-    } catch {
-      return String(value);
-    }
-  };
-  let cleanHandle = safeDecode(handle);
-  const thaiWords = ['ปี', 'รุ่น', 'ปีที่', 'ปีคศ', 'เกียร์'];
-  thaiWords.forEach(word => {
-    cleanHandle = cleanHandle.replace(new RegExp(`-${word}-`, 'g'), '-');
-    cleanHandle = cleanHandle.replace(new RegExp(`-${encodeURIComponent(word)}-`, 'gi'), '-');
-  });
-  cleanHandle = cleanHandle.replace(/[\u0E00-\u0E7F]+/g, '');
-  cleanHandle = cleanHandle
-    .replace(/[\s_]+/g, '-')
-    .replace(/[^a-zA-Z0-9-]+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-+/, '')
-    .replace(/-+$/, '');
-  return cleanHandle.toLowerCase() || handle;
 }
 
 export default function Sitemap() {}
@@ -66,7 +42,7 @@ export async function getServerSideProps({ res }) {
     const carNodes = cars
       .filter(car => car.availableForSale)
       .map(car => {
-        const cleanCarUrl = createPrettyUrl(car.handle);
+        const cleanCarUrl = encodeURIComponent(getCarSlug(car));
         const lastModified = car.updatedAt || new Date().toISOString();
         return `
             <url>

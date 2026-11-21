@@ -8,7 +8,12 @@ import { safeGet, safeFormatPrice } from '../../utils/safe';
 import Link from 'next/link';
 import A11yImage from '../../components/A11yImage';
 import { carAlt } from '../../utils/a11y';
-import { createPrettyUrl, createShareText, createShortShareUrl } from '../../utils/urlHelper';
+import {
+  createPrettyUrl,
+  createShareText,
+  createShortShareUrl,
+  getCarSlug,
+} from '../../utils/urlHelper';
 import { optimizeShopifyImage } from '../../utils/imageOptimizer';
 import { readCarStatuses } from '../../lib/carStatusStore.js';
 import { isReservedCar, isSoldCar } from '../../lib/carStatusUtils.js';
@@ -756,9 +761,7 @@ function CarDetailPage({ car, recommendedCars = [], router }) {
 
   // Server-rendered Open Graph essentials (SSR-safe, no client-only logic)
   // Build canonical URL and primary OG image directly from props to guarantee tags on first HTML
-  const rawHandle = safeGet(car, 'handle', '');
-  const prettyHandle = createPrettyUrl(rawHandle) || rawHandle;
-  const canonicalUrl = `https://www.chiangmaiusedcar.com/car/${prettyHandle}`;
+  const canonicalUrl = `https://www.chiangmaiusedcar.com/car/${encodeURIComponent(getCarSlug(car))}`;
 
   // Final fallback to guaranteed local hero image
   const defaultOgImage = 'https://www.chiangmaiusedcar.com/herobanner/chiangmaiusedcar.webp';
@@ -2218,10 +2221,7 @@ export async function getStaticPaths() {
 
     const paths = safeCars
       .filter(car => car?.handle)
-      .map(car => {
-        const prettyHandle = createPrettyUrl(car.handle) || car.handle;
-        return { params: { handle: prettyHandle } };
-      });
+      .map(car => ({ params: { handle: getCarSlug(car) } }));
 
     return {
       paths,
@@ -2264,7 +2264,11 @@ export async function getStaticProps({ params }) {
     if (!carMeta) {
       const target = requestedPrettyRaw || requestedPretty;
       if (target) {
-        carMeta = safeCars.find(c => c?.handle && createPrettyUrl(c.handle) === target) || null;
+        // canonicalHandle first: when two cars share a pretty slug only one of them owns it
+        carMeta =
+          safeCars.find(c => c?.canonicalHandle === target) ||
+          safeCars.find(c => c?.handle && createPrettyUrl(c.handle) === target) ||
+          null;
       }
     }
 
@@ -2343,7 +2347,8 @@ export async function getStaticProps({ params }) {
     const isNewCarNotInCache = !safeCars.find(
       c => decodeURIComponent(c?.handle || '') === decodeURIComponent(car.handle || '')
     );
-    const canonicalPretty = createPrettyUrl(car.handle) || car.handle;
+    const canonicalPretty = carMeta?.canonicalHandle || createPrettyUrl(car.handle) || car.handle;
+    car.canonicalHandle = canonicalPretty;
     if (!isNewCarNotInCache && requestedRaw !== canonicalPretty && requested !== canonicalPretty) {
       return {
         redirect: {
@@ -2430,6 +2435,7 @@ export async function getStaticProps({ params }) {
         status: carStatuses?.[c.id]?.status || 'available',
         tags: Array.isArray(c.tags) ? c.tags : [],
         handle: c.handle || null,
+        canonicalHandle: c.canonicalHandle || null,
         title: c.title || null,
         vendor: c.vendor || c.brand || null,
         brand: c.brand || null,

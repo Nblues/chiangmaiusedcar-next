@@ -12,6 +12,7 @@ import { readCarStatuses } from '../../lib/carStatusStore.js';
 import { computeSchemaAvailability, isReservedCar, isSoldCar } from '../../lib/carStatusUtils.js';
 import { COMMON_OFFER_EXTENSIONS } from '../../config/business';
 import { getPriceInfo } from '../../lib/carPrice';
+import { getCarSlug } from '../../utils/urlHelper';
 
 const Breadcrumb = dynamic(() => import('../../components/Breadcrumb'), {
   loading: () => null,
@@ -90,7 +91,9 @@ function buildBrandStructuredDataJsonLd({ brandLabel, brandSlug, cars, page, per
 
   const listItems = safeCars.map((car, index) => {
     const handle = car?.handle;
-    const carUrl = handle ? `${SITE}/car/${handle}` : `${SITE}/all-cars`;
+    const carUrl = handle
+      ? `${SITE}/car/${encodeURIComponent(getCarSlug(car))}`
+      : `${SITE}/all-cars`;
 
     const priceInfo = getPriceInfo(car?.price?.amount || 0, { allowZero: false });
     const rawImage = car?.images?.[0]?.url;
@@ -206,6 +209,7 @@ export async function getServerSideProps(context) {
       .map(car => ({
         id: car.id,
         handle: car.handle,
+        canonicalHandle: car.canonicalHandle ?? null,
         title: car.title,
         vendor: car.vendor,
         tags: car.tags,
