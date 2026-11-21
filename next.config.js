@@ -608,6 +608,20 @@ const nextConfig = {
   // Redirects for SEO and domain consistency
   async redirects() {
     return [
+      // Thai-only site: /en/* duplicates the Thai pages (locale: false matches the raw /en prefix)
+      // Bare /en needs its own rule: ':path*' compiles to an empty Location header there.
+      {
+        source: '/en',
+        destination: '/',
+        locale: false,
+        permanent: true,
+      },
+      {
+        source: '/en/:path+',
+        destination: '/:path+',
+        locale: false,
+        permanent: true,
+      },
       // Legacy terms route -> canonical terms-of-service
       {
         source: '/terms',

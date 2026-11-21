@@ -130,21 +130,12 @@ export default function SEO({
     const basePath = normalizeInputToPath(url || '/');
 
     const canonicalPath = localizePath(basePath, activeLocale, defaultLocale);
-    const thPath = localizePath(basePath, 'th', defaultLocale);
-    const enPath = localizePath(basePath, 'en', defaultLocale);
 
     const canonicalUrl = canonicalPath.startsWith('http')
       ? canonicalPath
       : `${site}${canonicalPath}`;
-    const thUrl = `${site}${thPath}`;
-    const enUrl = `${site}${enPath}`;
 
-    return {
-      canonicalUrl,
-      thUrl,
-      enUrl,
-      xDefaultUrl: `${site}${localizePath(basePath, defaultLocale, defaultLocale)}`,
-    };
+    return { canonicalUrl };
   }, [url, activeLocale, defaultLocale]);
 
   // Memoize static values to prevent unnecessary re-renders
@@ -442,16 +433,7 @@ export default function SEO({
 
       {/* ถ้ามี noindex ไม่ใส่ canonical เพราะ Google อาจนำ noindex ไปใช้กับหน้าหลัก (Canonical link merging issues) */}
       {!noindex && <link rel="canonical" href={localizedUrls.canonicalUrl} />}
-      {!noindex && (
-        <>
-          {/* Hreflang alternates for i18n locales */}
-          <link rel="alternate" hrefLang="th" href={localizedUrls.thUrl} />
-          <link rel="alternate" hrefLang="th-TH" href={localizedUrls.thUrl} />
-          <link rel="alternate" hrefLang="en" href={localizedUrls.enUrl} />
-          <link rel="alternate" hrefLang="en-US" href={localizedUrls.enUrl} />
-          <link rel="alternate" hrefLang="x-default" href={localizedUrls.xDefaultUrl} />
-        </>
-      )}
+      {/* No hreflang: Thai-only site; /en/* redirects to the Thai URL (next.config.js) */}
 
       {/* Enhanced Open Graph Meta Tags for Better Link Sharing */}
       <meta property="og:type" content={type} />

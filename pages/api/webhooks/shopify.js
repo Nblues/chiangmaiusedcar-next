@@ -54,7 +54,7 @@ function verifyShopifyHmac(rawBody, headerHmac, secret) {
   }
 }
 
-async function revalidatePaths(res, handle, locales = ['th', 'en']) {
+async function revalidatePaths(res, handle, locales = ['th']) {
   try {
     if (typeof res.revalidate !== 'function') return;
     // Always revalidate core listing pages

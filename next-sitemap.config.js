@@ -159,8 +159,7 @@ module.exports = {
     // Car pages come from /server-sitemap-cars.xml (real updatedAt, includes cars added after the build).
     '/car/*',
     '/server-sitemap-cars.xml',
-    // i18n: Exclude locale-prefixed routes from sitemap entries.
-    // We publish the default-locale URL as <loc> and provide /en variants via hreflang alternates.
+    // i18n: Exclude locale-prefixed routes (/en/* redirects to the Thai URL).
     '/en*',
     '/404',
     '/500',
@@ -238,30 +237,7 @@ return paths;
       lastmod: formattedLastmod, // Only field that matters for Bing 2025
       // Removed: changefreq (ignored by Bing)
       // Removed: priority (ignored by Bing)
-      // NOTE: next-sitemap treats alternateRefs.href as a base URL and appends the loc/path.
-      // Keep these as bases to avoid duplicated paths (e.g. /all-cars/all-cars).
-      alternateRefs: [
-        {
-          href: 'https://www.chiangmaiusedcar.com',
-          hreflang: 'th',
-        },
-        {
-          href: 'https://www.chiangmaiusedcar.com',
-          hreflang: 'th-TH',
-        },
-        {
-          href: 'https://www.chiangmaiusedcar.com/en',
-          hreflang: 'en',
-        },
-        {
-          href: 'https://www.chiangmaiusedcar.com/en',
-          hreflang: 'en-US',
-        },
-        {
-          href: 'https://www.chiangmaiusedcar.com',
-          hreflang: 'x-default',
-        },
-      ],
+      // Removed: alternateRefs (Thai-only site, no hreflang)
       images: undefined, // Prevents undefined URLs
     };
   },
