@@ -13,6 +13,14 @@ export default function PaymentCalculator({ seoPayment }) {
   const [loanTerm, setLoanTerm] = useState('72');
   const [customerAge, setCustomerAge] = useState('35');
   const [result, setResult] = useState(null);
+  // Car pages link with #price=..&from=car&carTitle=.. (no per-car URLs); old ?query links still work
+  const [hashParams, setHashParams] = useState({});
+  useEffect(() => {
+    setHashParams(Object.fromEntries(new URLSearchParams(window.location.hash.slice(1))));
+  }, []);
+  const priceParam = router.query.price ?? hashParams.price;
+  const carTitleParam = router.query.carTitle ?? hashParams.carTitle;
+  const fromParam = router.query.from ?? hashParams.from;
 
   const calculatePayment = (price = carPrice) => {
     const carPriceValue = parseFloat(price);
@@ -118,7 +126,7 @@ export default function PaymentCalculator({ seoPayment }) {
 
   // ดึงราคาจาก URL parameter เมื่อมาจากหน้ารายละเอียดรถ (พร้อม sanitize)
   useEffect(() => {
-    const qp = router.query?.price;
+    const qp = priceParam;
     if (qp) {
       const sanitized = String(qp)
         .replace(/[^0-9.]/g, '')
@@ -215,7 +223,7 @@ export default function PaymentCalculator({ seoPayment }) {
         }, 300);
       }
     }
-  }, [router.query.price]);
+  }, [priceParam]);
 
   const formatNumber = num => {
     return new Intl.NumberFormat('th-TH').format(Math.round(num));
@@ -263,12 +271,12 @@ export default function PaymentCalculator({ seoPayment }) {
             </div>
 
             {/* แสดงข้อความและผลคำนวณเมื่อมาจากหน้ารายละเอียดรถ */}
-            {router.query.price && (
+            {priceParam && (
               <div className="mt-4 md:mt-6 bg-white bg-opacity-15 backdrop-blur-md border border-white border-opacity-40 rounded-2xl p-4 md:p-6 max-w-5xl mx-auto shadow-2xl">
                 <div className="bg-black bg-opacity-30 rounded-xl p-3 md:p-4 mb-3 md:mb-4">
                   <p className="text-sm md:text-lg font-prompt text-center text-white font-medium">
-                    {router.query.carTitle &&
-                      `${(typeof router.query.carTitle === 'string' ? router.query.carTitle : '').replace(/</g, '&lt;').replace(/>/g, '&gt;')} - `}
+                    {carTitleParam &&
+                      `${(typeof carTitleParam === 'string' ? carTitleParam : '').replace(/</g, '&lt;').replace(/>/g, '&gt;')} - `}
                     <span className="block md:inline mt-1 md:mt-0">
                       ราคา:{' '}
                       <span className="font-bold text-white text-lg md:text-xl drop-shadow-lg">
@@ -518,7 +526,7 @@ export default function PaymentCalculator({ seoPayment }) {
                   </button>
 
                   {/* ปุ่มกลับไปหน้ารถ (ถ้ามาจากหน้ารายละเอียดรถ) */}
-                  {router.query.from && (
+                  {fromParam && (
                     <button
                       type="button"
                       onClick={() => router.back()}

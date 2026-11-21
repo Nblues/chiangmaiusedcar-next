@@ -1530,8 +1530,9 @@ function CarDetailPage({ car, recommendedCars = [], router }) {
                   </>
                 ) : (
                   <>
+                    {/* Hash instead of ?query: no per-car crawlable URL */}
                     <Link
-                      href={`/payment-calculator?price=${safeGet(car, 'price.amount', 0)}&from=car&carTitle=${encodeURIComponent(safeGet(car, 'title', 'รถมือสองคุณภาพดี'))}`}
+                      href={`/payment-calculator#price=${safeGet(car, 'price.amount', 0)}&from=car&carTitle=${encodeURIComponent(safeGet(car, 'title', 'รถมือสองคุณภาพดี'))}`}
                       className="bg-primary hover:bg-blue-700 text-white text-center py-4 px-6 rounded-lg font-bold text-lg transition-colors font-prompt w-full"
                     >
                       คำนวณสินเชื่อแบบเปรียบเทียบ
